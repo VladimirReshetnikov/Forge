@@ -184,5 +184,5 @@ conservative reading.
 
 ## Licence
 
-MIT, see [`LICENSE`](LICENSE). Cited works and referenced projects retain their
+MIT-0, see [`LICENSE`](LICENSE). Cited works and referenced projects retain their
 own terms; no third-party source, archive, or font file is redistributed here.
