@@ -74,6 +74,159 @@ extraction, metavariable changes, and equality propagation through every enabled
 local theory. Until that adapter is reliable, restarting a local tactic with
 explicit checked facts is preferable to a fast but incoherent shared state.
 
+\subsection{The tactic is the interface; it need not be the executor}
+\label{sec:worker-split}
+
+\S\ref{sec:integration} so far has assumed one axis of choice: how deeply the
+tactic reaches into \grind{}'s internals. There is a second axis, and it is
+arguably more consequential --- \emph{where the search runs}.
+
+The obvious arrangement is that a native tactic performs the search in the Lean
+server process. That has real advantages: exact access to the local context,
+open namespaces, options and reducibility settings; direct return of an
+\code{Expr} with no serialisation; natural integration with the language
+server, tactic traces and source positions; automatic compilation against the
+project's own toolchain; and invocation at an actual proof hole rather than at
+a separate prompt. Any usable front end wants all of that.
+
+But running the search there carries costs that a long-running planner feels
+much more than an ordinary tactic does:
+
+\begin{itemize}[leftmargin=1.4em]
+\item a long or allocating search competes with elaboration and editor
+  responsiveness;
+\item cooperative cancellation only works if the search polls often enough;
+\item a crash, an FFI failure, or a memory blow-up takes down the Lean server
+  process;
+\item keeping expensive search sessions alive \emph{across commands} requires
+  environment extensions or external state whose lifecycle has to cooperate
+  with incremental recompilation.
+\end{itemize}
+
+The last one deserves attention, because a persistent obligation graph spanning
+a whole proof is exactly the thing this design wants and exactly the thing
+incremental recompilation is entitled to discard.
+
+The resolution is to keep the native tactic as the \emph{interface} while
+moving execution into a project-local worker:
+
+\begin{itemize}[leftmargin=1.4em]
+\item a \textbf{controller} --- the tactic front end, or a standalone
+  session --- owns user intent, settings, history, protocol framing, deadlines,
+  process supervision and presentation. It holds \emph{no authority to declare
+  a candidate well-typed, a goal unprovable, or a solver observation valid};
+\item a \textbf{worker}, compiled under the target project's Lake environment,
+  owns the \code{Environment}, elaboration, exact identities, reification,
+  search, lowering to \code{Expr}, and kernel checking;
+\item an optional \textbf{solver process} receives only a canonical query and
+  returns bounded observations.
+\end{itemize}
+
+The tactic then prepares the exact goal, hands a \emph{pure prepared problem}
+to the worker, and kernel-checks the returned expression in the server. A worker
+crash loses process-local state only; the controller rebuilds from an import
+root and a replay log.
+
+This also answers a question \S\ref{sec:trust} raised and did not settle: where
+the sandboxing boundary should be. It is not primarily about soundness --- an
+exact certificate rejects a bad proposal wherever it was produced --- but about
+not letting a numerical search take the editor with it.
+
+\subsection{Three levels of identity}
+\label{sec:identity}
+
+\S\ref{sec:architecture} required scope keys to carry expression, type,
+universe levels, instance identity, context fingerprint and scope, and warned
+that printed text is not a safe key. That is right but under-specified: it
+treats identity as one thing with several fields. It is better understood as
+three distinct kinds of identity with different lifetimes and different
+authority.
+
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{Lean identity} --- exact \code{Name}, local declaration identity,
+  environment generation, source \code{Expr}. Valid only inside one worker, one
+  toolchain, one session generation.
+\item \textbf{Neutral semantic identity} --- stable variable, global,
+  constructor and provider IDs in a checked inventory. Serialisable,
+  fingerprintable, independent of elaborator allocation.
+\item \textbf{Presentation identity} --- delaborated syntax, qualified
+  spelling, candidate ordinal, rendering route. \emph{Never sufficient to
+  recover an authority.}
+\end{enumerate}
+
+A mapping from Lean identity to neutral identity is built during preparation
+and kept in a private origin table; lowering uses the inverse mapping only
+\emph{after} the neutral candidate has passed its checker; presentation is
+derived last. The rule that falls out is sharper than anything in
+\S\ref{sec:trust}'s protocol discussion:
+
+\begin{invariant}[The origin table never leaves the worker]
+\label{inv:origin}
+An external process receives a sealed neutral problem and returns a neutral
+candidate. No raw \code{Expr}, environment pointer, free-variable identifier,
+process-local handle or certificate carrier crosses that boundary. Origin
+resolution and kernel checking remain with the worker.
+\end{invariant}
+
+Environment generations make rollback safe in a way cache invalidation does
+not. Attach a monotonically fresh generation token to every committed
+environment state and index every cache, prepared origin, candidate token and
+inventory by it. Undo then restores an older environment \emph{object} while
+issuing a \emph{new} generation token, so stale capabilities cannot be reused
+by accident --- which is a better answer to the stale-state failure mode of
+\S\ref{sec:trust} than ``invalidate the affected caches'', because it fails
+closed rather than depending on the invalidation being complete.
+
+Durable snapshots, correspondingly, retain project and toolchain identity, root
+imports, schema fingerprints, replay history and settings --- and retain no raw
+\code{Expr}, no \code{FVarId}, no environment pointer, no process handle, no
+candidate token, and no certificate carrier.
+
+\subsection{Do not search in \texorpdfstring{\code{Expr}}{Expr}}
+\label{sec:search-ir}
+
+A related temptation is to drop the typed view entirely and search directly in
+Lean's expression and metavariable machinery, on the grounds that this buys
+definitional equality and typeclass synthesis for free. For a \emph{tactic}
+step that is right. For a bounded, accounted, certificate-producing
+\emph{search} it costs several properties this design depends on:
+
+\begin{itemize}[leftmargin=1.4em]
+\item a small, auditable fragment with an explicit completeness ledger
+  (\S\ref{sec:negative});
+\item stable alpha-normal fingerprints independent of elaborator allocation
+  identifiers;
+\item deterministic serialisation, and differential testing against an
+  independent implementation;
+\item independent checking, rather than replaying the search's own mutations;
+\item exact accounting of steps, choices, pruning and plans --- without which
+  \code{exhausted} cannot be distinguished from \code{truncated};
+\item the ability to keep an unsupported dependent region opaque without it
+  being normalised away under an aggressive reducibility setting;
+\item decoupling from changes in Lean's metavariable implementation.
+\end{itemize}
+
+The metavariable context is excellent for final elaboration and for local
+tactic work, and awkward as an authoritative branch representation: it is
+optimised for elaborator workflows and is hard to serialise, fingerprint,
+compare, replay and branch under an exact resource policy. The recommendation
+is a Lean-oriented \emph{neutral} IR that may reference \code{Name}s, binder
+kinds and exact declaration handles at the worker boundary, while owning its
+own recursive structure and substitution rules --- and a pure branch-state
+model for search, with \code{Expr} entering only at lowering.
+
+\begin{remark}[Deduplication can discard the authority]
+One consequence is worth spelling out because it is a silent failure. If
+candidates are deduplicated by a lossy key --- pretty-printed text,
+alpha-equivalence, eta, reducible unfolding, proof irrelevance --- a container
+keyed by that equality can discard the representative that carries the checked
+evidence and keep a look-alike that does not. Finish ranking and display
+grouping over explicit keys, keep a separate pointer to the exact origin, and
+do not define equality or ordering on the opaque authority merely for
+convenience. Exact normalised neutral-tree identity is the safe default; text
+remains useful as the user's observed grouping key and nothing more.
+\end{remark}
+
 \subsection{A typed semantic boundary for each worker}
 
 A reifier does more than turn Lean expressions into strings. For a polynomial
