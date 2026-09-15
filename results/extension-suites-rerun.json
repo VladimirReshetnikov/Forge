@@ -1,0 +1,40 @@
+{
+  "note": "Independent re-run of all nine extension proposals' test suites in the merge environment. Unlike the nine design-round runs, whose environments were not available here, every extension suite could be executed and every recorded count could be checked.",
+  "date": "2026-09-15",
+  "environment": {
+    "python": "3.14.4",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1",
+    "sympy": "1.14.0",
+    "pytest": "9.0.3",
+    "platform": "Windows"
+  },
+  "authoring_environment_reported_by_the_proposals": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41"
+  },
+  "caveat": "The interpreter and library versions differ from the authoring environment, so a match is a reproduction of the recorded count on different versions, not a bit-identical replay. Timings were not compared and no timing claim is made.",
+  "runs": [
+    {"run": "e1", "slug": "e1-relational-closure",       "command": "pytest -q test_closure.py",      "cwd": "prototype", "recorded": "40 regression tests passed",        "observed": "40 passed",                        "match": true},
+    {"run": "e2", "slug": "e2-algorithmic-extensions",   "command": "pytest -q test_regressions.py",  "cwd": "prototype", "recorded": "13 named unittest methods",         "observed": "13 passed, 69 subtests passed",    "match": true},
+    {"run": "e3", "slug": "e3-closure-extensions",       "command": "pytest -q tests",                "cwd": "prototype", "recorded": "12-method unit suite",              "observed": "12 passed, 313 subtests passed",   "match": true},
+    {"run": "e4", "slug": "e4-delta-countermodels",      "command": "pytest -q tests",                "cwd": ".",         "recorded": "151 pytest tests passed",           "observed": "151 passed",                       "match": true},
+    {"run": "e5", "slug": "e5-finite-certificates",      "command": "pytest -q tests",                "cwd": ".",         "recorded": "117 regression test items pass",    "observed": "117 passed",                       "match": true},
+    {"run": "e6", "slug": "e6-finite-certificates-b",    "command": "pytest -q tests",                "cwd": ".",         "recorded": "318 passed in 3.46s",               "observed": "318 passed",                       "match": true},
+    {"run": "e7", "slug": "e7-capability-extensions",    "command": "pytest -q test_extensions.py",   "cwd": "prototype", "recorded": "29 portable test methods passed",   "observed": "29 passed, 140 subtests passed",   "match": true},
+    {"run": "e8", "slug": "e8-invariant-ideals",         "command": "python -S -m unittest test_prototypes", "cwd": "prototype", "recorded": "unit-tests.txt",             "observed": "21 passed",                        "match": true},
+    {"run": "e9", "slug": "e9-finite-summaries",         "command": "pytest -q tests",                "cwd": "prototype", "recorded": "All 41 unit tests pass",            "observed": "41 passed",                        "match": true}
+  ],
+  "summary": {
+    "suites_run": 9,
+    "suites_passing": 9,
+    "recorded_counts_reproduced": 9,
+    "failures": 0
+  },
+  "notes": [
+    "e8 runs under `python -S`, confirming its stdlib-only claim: no site packages are reachable.",
+    "e9's suite must be run from prototype/; run from the package root it fails collection with ModuleNotFoundError: forge_summaries. That is a path convention, not a defect.",
+    "Counts are per suite and are NOT poolable across proposals, for the same reasons set out in results/README.md.",
+    "This establishes that the suites pass and that the recorded counts are accurate. It does not establish that any checker is correct, and it is not a Lean result."
+  ]
+}

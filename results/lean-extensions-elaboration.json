@@ -1,0 +1,68 @@
+{
+  "status": "RUN",
+  "mode": "elaborate",
+  "lean_version": "Lean (version 4.34.0, x86_64-w64-windows-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+  "lake_version": null,
+  "platform": "Windows-11-10.0.26340-SP0",
+  "project": null,
+  "counts": {
+    "elaborated": 8
+  },
+  "files": [
+    {
+      "file": "proposals/e1-relational-closure/lean/Core.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 82.109
+    },
+    {
+      "file": "proposals/e3-closure-extensions/lean/BridgeSpec.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 220.674
+    },
+    {
+      "file": "proposals/e4-delta-countermodels/lean/Reachability.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 14.744,
+      "stdout": "'ForgeDelta.reachableInvariant' does not depend on any axioms\n'ForgeDelta.runInvariant' does not depend on any axioms\n'ForgeDelta.runRelation' does not depend on any axioms"
+    },
+    {
+      "file": "proposals/e6-finite-certificates-b/lean/ProofPrinciples.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 10.165,
+      "stdout": "'ForgeExtensions.reachableInvariant' does not depend on any axioms\n'ForgeExtensions.runWordInvariant' does not depend on any axioms\n'ForgeExtensions.simulateWord' does not depend on any axioms"
+    },
+    {
+      "file": "proposals/e7-capability-extensions/lean/Specimens.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 9.479,
+      "stdout": "'ForgeExtensions.foldR_index' does not depend on any axioms\n'ForgeExtensions.churchIndex_encode' does not depend on any axioms\n'ForgeExtensions.invariant_on_reachable' does not depend on any axioms\n'ForgeExtensions.close_ranked_calls' does not depend on any axioms"
+    },
+    {
+      "file": "proposals/e8-invariant-ideals/lean/CoreSoundness.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 8.765,
+      "stdout": "'ForgeExtensions.reach_invariant' does not depend on any axioms\n'ForgeExtensions.tree_cover' does not depend on any axioms\n'ForgeExtensions.tree_property' does not depend on any axioms"
+    },
+    {
+      "file": "proposals/e8-invariant-ideals/lean/IndexingSketch.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 30.776,
+      "stdout": "'ForgeExtensions.foldIndex_eq_recursiveIndex' does not depend on any axioms"
+    },
+    {
+      "file": "proposals/e9-finite-summaries/lean/WordSimulation.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 2.203,
+      "stdout": "'ForgeFiniteSummaries.run_simulation' does not depend on any axioms\n'ForgeFiniteSummaries.observation_of_summary' does not depend on any axioms"
+    }
+  ],
+  "note": "Successful elaboration is not a full transitive-axiom audit and is not a comparison against any Lean tactic."
+}

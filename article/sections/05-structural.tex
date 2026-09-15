@@ -704,14 +704,101 @@ a \emph{weaker} slot than lattice elimination, which hands back a certificate
 whose checker verifies $\det U=\pm1$ without calling the elimination that
 produced $U$.
 
-\begin{remark}[An available contribution]
-That gap is a genuine opportunity rather than a fact of nature. \textsf{LJT} is
-contraction-free and terminating, so a failed search tree is \emph{finite} and
-could be reified into a checkable refutation object. Nobody appears to have
-built that. Doing so would give this design a second
-\emph{certificate-producing} infeasibility worker, in a fragment --- arrows,
-products, constructor-tagged sums, empty types, over opaque atoms --- where
-users regularly believe something is impossible and get no confirmation.
+\emph{Finite Kripke countermodels} (implemented). The gap just described is
+real but it is not the only route, and the alternative turns out to be both
+smaller and easier to check. Rather than reifying a failed search tree, exhibit
+a \emph{finite model} in which the hypotheses hold and the goal does not.
+
+A model is a finite set of worlds with a least root $w_0$, a partial order, and
+one Boolean valuation per atom, subject to \emph{persistence}: if $w\le v$ and
+an atom holds at $w$, it holds at $v$. Forcing is the usual Kripke semantics,
+\begin{align*}
+ w\Vdash P &\iff P\text{ holds at }w, &
+ w&\nVdash\bot, \\
+ w\Vdash A\land B &\iff w\Vdash A\text{ and }w\Vdash B, &
+ w\Vdash A\lor B &\iff w\Vdash A\text{ or }w\Vdash B, \\
+ w\Vdash A\to B &\iff \forall v\ge w,\ v\Vdash A\Rightarrow v\Vdash B.
+\end{align*}
+The implication clause must quantify over \emph{successors}; evaluating it at
+the current world alone collapses the semantics to something essentially
+classical and is simply the wrong check.
+
+The certificate is accepted exactly when the order and persistence conditions
+hold, every assumption in $\Gamma$ is forced at the root, and the goal is not.
+The checker \emph{recomputes forcing}; a truth table supplied alongside the
+model is unnecessary and untrusted.
+
+\begin{lemma}[Persistence]
+If $w\le v$ and $w\Vdash A$ then $v\Vdash A$.
+\end{lemma}
+\begin{proof}
+Induct on $A$. Atoms use valuation persistence and $\bot$ is never forced;
+conjunction and disjunction use the induction hypotheses. For implication, let
+$t\ge v$; transitivity gives $t\ge w$, so the implication forced at $w$ applies
+at $t$.
+\end{proof}
+
+\begin{theorem}[Countermodel soundness]
+\label{thm:kripke}
+An accepted model for $\Gamma$ and $G$ rules out any derivation of $G$ from
+$\Gamma$ in intuitionistic natural deduction.
+\end{theorem}
+\begin{proof}
+Show by induction on a derivation that every world forcing its assumptions
+forces its conclusion. Assumptions, the conjunction rules and the disjunction
+introductions are immediate. Disjunction elimination uses the forced disjunct
+at the current world and the induction hypothesis for the corresponding branch.
+Implication elimination applies the forcing clause with $v=w$ by reflexivity.
+For implication introduction, move to an arbitrary successor forcing the
+antecedent; persistence carries the undischarged assumptions there and the
+induction hypothesis gives the consequent. Falsity elimination is vacuous, as
+no world forces $\bot$. A derivation of $G$ would therefore force $G$ at the
+root, contradicting the checked model.
+\end{proof}
+
+This \emph{is} the checkable refutation object, and it is small: a relation
+matrix and a valuation, with a checker that re-evaluates forcing bottom-up.
+
+\begin{remark}[The semantic ceiling, and why it is load-bearing]
+\label{rem:kripke-ceiling}
+What an accepted model establishes is precisely \emph{no derivation of $G$ from
+$\Gamma$ in the named object calculus}. It does \emph{not} mean that Lean can
+prove $\neg G$, that no Lean term of $G$ exists, or that classical reasoning
+cannot prove $G$. It says nothing about domain hypotheses omitted from the
+object sequent.
+
+The classical tautologies are the enforcement tests, not decoration. Excluded
+middle $P\lor\neg P$ falls to two worlds $0<1$ with $P$ false at the root and
+true above: the root forces neither disjunct. The same chain refutes
+$\neg\neg P\to P$, and with $Q$ false everywhere it refutes Peirce's formula
+$((P\to Q)\to P)\to P$. All three are classically valid. An interface that
+turned these models into proofs of the \emph{negated Lean formulas} would be
+visibly unsound, and keeping them in the corpus is what stops that interface
+from being built by accident.
+\end{remark}
+
+Two further points of design. Chains are not enough: with a root and two
+incomparable successors making $P$ and $Q$ true respectively, neither $P\to Q$
+nor $Q\to P$ holds at the root, so $(P\to Q)\lor(Q\to P)$ is refuted --- and no
+chain of any length refutes it. A proposer should enumerate rooted trees and a
+checker should accept arbitrary rooted finite partial orders.
+
+And the bound is a bound. When the world budget is exhausted the result is
+\unknown{}. Valid schemas in a corpus are \emph{positive controls against an
+invalid refuter}, not theorems proved by the absence of a small countermodel:
+that intuitionistic propositional logic has the finite model property does not
+turn a three-world cap into a decision procedure. The same applies to a SAT
+backend for the model search --- a solver's \code{unsat} at fixed $n$ carries no
+unbounded authority, and that remains true even if the solver is correct.
+
+\begin{remark}[Composition with the classical fallback]
+Theorem~\ref{thm:kripke} and Glivenko's theorem answer complementary halves of
+the same question, and together they give a complete propositional verdict. A
+countermodel says $G$ is not constructively derivable; the double-negation
+search then says whether it is classically provable, and returns the witness if
+so. Peirce's formula is exactly the case where the first says \emph{no} and the
+second says \emph{yes, here it is} --- which is far more useful to a user than
+either answer alone.
 \end{remark}
 
 Two properties make this unusually good value here. First, it operates on the
