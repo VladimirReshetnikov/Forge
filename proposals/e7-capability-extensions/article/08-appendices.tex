@@ -1,0 +1,133 @@
+\section{Certificate conventions}
+\label{app:certificates}
+
+\subsection{Exact polynomials}
+
+The transport representation of a rational is the pair
+\code{[numerator, denominator]}, with positive denominator and relatively prime
+entries. A polynomial is a list of pairs \code{[exponentVector, rational]}.
+The zero polynomial is the empty list. Exponents are nonnegative integers;
+zero coefficients and repeated monomials are rejected. The variable arity is
+supplied by the externally owned problem, not inferred from a certificate.
+
+For instance, in variable order $(x,y)$, $\tfrac12x^2-3y$ is
+\begin{lstlisting}
+[
+  [[2, 0], [1, 2]],
+  [[0, 1], [-3, 1]]
+]
+\end{lstlisting}
+The checker need not require a particular monomial ordering for acceptance.
+The searcher uses a deterministic order for row reduction and graded
+lexicographic order for its Gr\"obner routine. These are algorithmic choices,
+not mathematical assumptions about the polynomial identities.
+
+\subsection{Action records}
+
+For \code{pullback-space-v1}, \code{basis} is a list of $r$ polynomials,
+\code{actions[a][i][j]} is a rational scalar, and
+\code{target\_coefficients[i]} is a rational scalar. For
+\code{pullback-ideal-v1}, \code{generators} replaces \code{basis}, and the
+entries of \code{actions} and \code{target\_coefficients} are polynomials.
+The former is the constant-multiplier special case of the latter, but keeping
+separate tags makes malformed scalar/polynomial payloads easier to reject.
+
+The problem owns initialization, transitions, and the target. The certificate
+cannot change the target by returning a different convenient equation. Empty
+or redundant invariant families may be valid, but they prove a nonzero target
+only when the checked target combination actually reconstructs it.
+
+\subsection{Ranking records}
+
+An affine expression is encoded constant-first:
+\[
+ [b,w_1,\ldots,w_n]\quad\longleftrightarrow\quad b+\sum_iw_ix_i.
+\]
+Every \code{layers[k]} maps every node tag to its affine rank at that layer.
+Every edge has one witness record with its pivot, a decrease combination, and
+one nonnegativity combination per updated coordinate. Multipliers are ordered
+against explicit edge guards, then $x_1,\ldots,x_n$, then $1$.
+
+The two-phase example uses
+\begin{lstlisting}
+"layers": [ { "P": [1, 2], "Q": [0, 2] } ]
+\end{lstlisting}
+The checker verifies all edges in their original order. Dropping a hard edge
+from the certificate is rejected by the coverage check; adding another easy
+edge's witness in its place fails the exact coefficient identity.
+
+\subsection{Orbit records}
+
+An orbit counterexample contains rational initialization parameters and a list
+of transition indices in \emph{execution order}. It is checked by direct exact
+evaluation of the problem's maps. For the noncommuting fixture,
+\[
+ F_0(x,y)=(y,0),\qquad F_1(x,y)=(0,1),\qquad (x,y)_0=(0,0),
+\]
+the target is $x=0$. Word $[1,0]$ reaches $(1,0)$ and violates it; word $[0,1]$
+ends at $(0,1)$ and does not. This is why reversing the word is a meaningful
+corruption rather than another valid counterexample.
+
+\section{Why the finite synthesis counts have the reported shape}
+
+With $n$ distractor element binders, the four hole grammars have sizes
+$n+1,n+2,n+2,n+8$. The first locally valid base is last, the valid negative
+branch is last, the valid zero branch is second-to-last, and the valid positive
+continuation application is last. In the fixed tuple order, the successful
+complete term therefore has ordinal
+\[
+ (n+1)(n+2)^2(n+8)-(n+8).
+\]
+For $n=12$ this is $50\,940$. Local filtering tests every component once, so its
+component count is
+\[
+ (n+1)+2(n+2)+(n+8)=4n+13,
+\]
+and each hole retains one candidate, yielding one assembled term.
+
+The contrast is quartic versus linear in this deliberately controlled family.
+It is not a complexity theorem for unrestricted synthesis. Its assumptions are
+visible: fixed sketch, independent exact local contracts, finite grammars,
+distinct distractors, and the stated order. Correlated holes need a join, and
+local contract discovery itself can be expensive.
+
+\section{Reproducing the package}
+
+From the archive root, use:
+\begin{lstlisting}
+python -S -m unittest discover -s prototype -p "test_*.py" -v
+python -S prototype/run_experiments.py --out reproduced-results
+python -S prototype/replay.py reproduced-results/certificates.json
+\end{lstlisting}
+The optional independent CAS comparison is:
+\begin{lstlisting}
+python prototype/validate_sympy.py --out reproduced-results/sympy-validation.json
+\end{lstlisting}
+It requires SymPy; the recorded comparison used version 1.14.0. The other commands
+do not. The archived \code{results/} directory contains the original evidence,
+while reruns default to \code{reproduced-results/} to avoid overwriting it.
+
+To rebuild this article:
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error main.tex
+pdflatex -interaction=nonstopmode -halt-on-error main.tex
+pdflatex -interaction=nonstopmode -halt-on-error main.tex
+\end{lstlisting}
+The distributed PDF is named \code{forge-extensions.pdf}. A fresh build produces
+\code{main.pdf}; the build script copies it to the distributed name. The required
+LaTeX packages are listed by the preamble. No font files are distributed.
+
+\subsection{A first Lean verification session}
+
+In a project with the repository's pinned Lean toolchain, the first experiment
+should be to compile \code{lean/Specimens.lean}, inspect the printed axiom sets,
+and retain the compiler output as a new receipt. This archive supplies no such
+receipt. Next, lower one small invariant certificate to a theorem using the
+pinned Mathlib environment and prove the source reification lemma for that exact
+fixture. Only then count it as a Lean acceptance.
+
+The proof specimens cover fold correctness for an explicit list encoding,
+invariant propagation along a reachability derivation, and closing recursive
+calls by a well-founded induction hypothesis. They deliberately do not define
+a pretend \forge{} tactic that succeeds by calling an unimplemented backend.

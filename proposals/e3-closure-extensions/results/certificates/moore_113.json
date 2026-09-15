@@ -1,0 +1,67 @@
+{
+  "case": "moore_113",
+  "certificate": {
+    "kind": "moore_counterexample_v1",
+    "word": []
+  },
+  "problem": {
+    "alphabet_size": 3,
+    "kind": "moore_equivalence_v1",
+    "left": {
+      "initial": 1,
+      "outputs": [
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "transitions": [
+        [
+          2,
+          4,
+          3
+        ],
+        [
+          2,
+          1,
+          4
+        ],
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          0,
+          3,
+          3
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    "right": {
+      "initial": 0,
+      "outputs": [
+        1,
+        0
+      ],
+      "transitions": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ]
+    }
+  }
+}

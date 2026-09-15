@@ -1,0 +1,97 @@
+{
+  "case": "moore_214",
+  "certificate": {
+    "kind": "moore_bisimulation_v1",
+    "relation": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  "problem": {
+    "alphabet_size": 2,
+    "kind": "moore_equivalence_v1",
+    "left": {
+      "initial": 4,
+      "outputs": [
+        2,
+        0,
+        2,
+        2,
+        1
+      ],
+      "transitions": [
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    "right": {
+      "initial": 0,
+      "outputs": [
+        1,
+        2,
+        0,
+        2,
+        2,
+        999
+      ],
+      "transitions": [
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    }
+  }
+}

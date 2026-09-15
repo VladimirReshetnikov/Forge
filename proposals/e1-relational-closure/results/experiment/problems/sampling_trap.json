@@ -1,0 +1,82 @@
+{
+  "edges": [
+    {
+      "dst": 0,
+      "inputs": 1,
+      "src": 0,
+      "update": [
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              "2",
+              "1"
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              "-3",
+              "1"
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "initial": [
+    {
+      "location": 0,
+      "state": [
+        []
+      ]
+    }
+  ],
+  "locations": 1,
+  "n": 1,
+  "name": "sampling_trap",
+  "parameters": 0,
+  "schema": "forge-polynomial-system-v1",
+  "targets": [
+    {
+      "location": 0,
+      "polynomial": [
+        [
+          [
+            1
+          ],
+          [
+            "1",
+            "1"
+          ]
+        ]
+      ]
+    }
+  ]
+}

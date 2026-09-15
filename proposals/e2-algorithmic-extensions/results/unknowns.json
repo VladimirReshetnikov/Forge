@@ -1,0 +1,85 @@
+[
+  {
+    "details": {
+      "basis": [],
+      "dimensions": [
+        1,
+        0
+      ],
+      "features": 2,
+      "target_in_span": false
+    },
+    "id": "nonlinear_degree_escape",
+    "kind": "invariant",
+    "status": "UNKNOWN"
+  },
+  {
+    "details": {
+      "basis": [],
+      "dimensions": [
+        2,
+        1,
+        0
+      ],
+      "features": 3,
+      "target_in_span": false
+    },
+    "id": "false_reachable_target",
+    "kind": "invariant",
+    "status": "UNKNOWN"
+  },
+  {
+    "details": {
+      "basis": [],
+      "dimensions": [
+        1,
+        0
+      ],
+      "features": 2,
+      "target_in_span": false
+    },
+    "id": "omitted_guard",
+    "kind": "invariant",
+    "status": "UNKNOWN"
+  },
+  {
+    "details": {
+      "status": "UNKNOWN",
+      "trials": 18
+    },
+    "id": "factorial_unknown",
+    "kind": "gosper",
+    "status": "UNKNOWN"
+  },
+  {
+    "details": {
+      "status": "UNKNOWN",
+      "trials": 18
+    },
+    "id": "harmonic_unknown",
+    "kind": "gosper",
+    "status": "UNKNOWN"
+  },
+  {
+    "details": {
+      "columns": 0,
+      "degree_cap": 5,
+      "rank": 0,
+      "status": "UNKNOWN"
+    },
+    "id": "commutativity_not_given",
+    "kind": "two_sided",
+    "status": "UNKNOWN"
+  },
+  {
+    "details": {
+      "columns": 49,
+      "degree_cap": 5,
+      "rank": 42,
+      "status": "UNKNOWN"
+    },
+    "id": "one_sided_trap",
+    "kind": "two_sided",
+    "status": "UNKNOWN"
+  }
+]

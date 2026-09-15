@@ -1,0 +1,40 @@
+{
+  "evidence": {
+    "initial": 0,
+    "parameters": [],
+    "schema": "forge-counterexample-v1",
+    "steps": [
+      {
+        "edge": 0,
+        "inputs": []
+      },
+      {
+        "edge": 1,
+        "inputs": []
+      }
+    ],
+    "target": 0
+  },
+  "mode": "ideal",
+  "process_seconds": 1.3415080309999894,
+  "replay": {
+    "accepted": true,
+    "arithmetic_operations": 10,
+    "kind": "counterexample",
+    "length": 2,
+    "value": [
+      "1",
+      "1"
+    ]
+  },
+  "stats": {
+    "elapsed_seconds": 0.0025149760000431343,
+    "generators": 3,
+    "grid_evaluations": 0,
+    "groebner_calls": 0,
+    "max_generated_degree": 1,
+    "membership_queries": 3,
+    "pullbacks": 2
+  },
+  "status": "refuted"
+}

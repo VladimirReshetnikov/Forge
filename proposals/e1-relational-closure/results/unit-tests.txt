@@ -1,0 +1,45 @@
+test_boolean_exponent (test_closure.CheckerControls.test_boolean_exponent) ... ok
+test_certificate_selects_target (test_closure.CheckerControls.test_certificate_selects_target) ... ok
+test_checker_budget (test_closure.CheckerControls.test_checker_budget) ... ok
+test_duplicate_json_key (test_closure.CheckerControls.test_duplicate_json_key) ... ok
+test_duplicate_monomial (test_closure.CheckerControls.test_duplicate_monomial) ... ok
+test_empty_basis (test_closure.CheckerControls.test_empty_basis) ... ok
+test_float_coefficient (test_closure.CheckerControls.test_float_coefficient) ... ok
+test_missing_transition_column (test_closure.CheckerControls.test_missing_transition_column) ... ok
+test_missing_transition_matrix (test_closure.CheckerControls.test_missing_transition_matrix) ... ok
+test_missing_transition_row (test_closure.CheckerControls.test_missing_transition_row) ... ok
+test_multiple_locations (test_closure.CheckerControls.test_multiple_locations) ... ok
+test_multiple_targets (test_closure.CheckerControls.test_multiple_targets) ... ok
+test_negative_denominator (test_closure.CheckerControls.test_negative_denominator) ... ok
+test_noncanonical_rational (test_closure.CheckerControls.test_noncanonical_rational) ... ok
+test_nonfinite_json (test_closure.CheckerControls.test_nonfinite_json) ... ok
+test_rational_negative_zero (test_closure.CheckerControls.test_rational_negative_zero) ... ok
+test_two_inputs_and_swapping (test_closure.CheckerControls.test_two_inputs_and_swapping) ... ok
+test_unsorted_monomials (test_closure.CheckerControls.test_unsorted_monomials) ... ok
+test_vacuous_unreachable_location (test_closure.CheckerControls.test_vacuous_unreachable_location) ... ok
+test_valid_certificate (test_closure.CheckerControls.test_valid_certificate) ... ok
+test_wrong_basis_dimension (test_closure.CheckerControls.test_wrong_basis_dimension) ... ok
+test_wrong_initial (test_closure.CheckerControls.test_wrong_initial) ... ok
+test_wrong_multiplier (test_closure.CheckerControls.test_wrong_multiplier) ... ok
+test_wrong_target (test_closure.CheckerControls.test_wrong_target) ... ok
+test_wrong_transition (test_closure.CheckerControls.test_wrong_transition) ... ok
+test_zero_term (test_closure.CheckerControls.test_zero_term) ... ok
+test_degree_cap_unknown (test_closure.SearchControls.test_degree_cap_unknown) ... ok
+test_exact_rational_coefficients (test_closure.SearchControls.test_exact_rational_coefficients) ... ok
+test_grid_cap_unknown (test_closure.SearchControls.test_grid_cap_unknown) ... ok
+test_independent_simultaneous_substitution (test_closure.SearchControls.test_independent_simultaneous_substitution) ... ok
+test_small_random_scalar_differential (test_closure.SearchControls.test_small_random_scalar_differential) ... ok
+test_zero_generator_budget_unknown (test_closure.SearchControls.test_zero_generator_budget_unknown) ... ok
+test_zero_pullback_budget_unknown (test_closure.SearchControls.test_zero_pullback_budget_unknown) ... ok
+test_bad_control_order (test_closure.WitnessControls.test_bad_control_order) ... ok
+test_certificate_cannot_change_program (test_closure.WitnessControls.test_certificate_cannot_change_program) ... ok
+test_delete_last_step (test_closure.WitnessControls.test_delete_last_step) ... ok
+test_empty_trace_parameter_witness (test_closure.WitnessControls.test_empty_trace_parameter_witness) ... ok
+test_mutant_length_two (test_closure.WitnessControls.test_mutant_length_two) ... ok
+test_sample_trap (test_closure.WitnessControls.test_sample_trap) ... ok
+test_wrong_input_arity (test_closure.WitnessControls.test_wrong_input_arity) ... ok
+
+----------------------------------------------------------------------
+Ran 40 tests in 0.346s
+
+OK

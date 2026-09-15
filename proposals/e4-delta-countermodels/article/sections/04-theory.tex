@@ -1,0 +1,189 @@
+\section{Soundness, completeness, and a constructive negative result}
+\label{sec:theory}
+
+\subsection{Soundness for arbitrary polynomial updates}
+\begin{theorem}[Finite closure certificate]\label{thm:closure}
+For the machine of Section~\ref{sec:model}, suppose the polynomial identities
+\eqref{eq:goalcert}--\eqref{eq:initcert} hold. Then every reachable state
+satisfies all its demanded output equalities.
+\end{theorem}
+\begin{proof}
+Induct on the length of an execution. Equation~\eqref{eq:initcert} proves that
+all initial generators vanish. Suppose $P_q(x)=0$ and an edge with payload $u$
+moves the state to $F_e(x,u)$ at $q'$. Evaluating
+\eqref{eq:edgecert} at this particular $x,u$ yields
+$P_{q'}(F_e(x,u))=M_e(u)0=0$. Thus the generators vanish after every finite
+execution. At its endpoint, \eqref{eq:goalcert} gives $G_q(x)=C_q0=0$.
+No assumption that the update is affine, invertible, or terminating beyond the
+finite input word was used.
+\end{proof}
+
+The quantifier over input words is unbounded. The certificate proves all word
+lengths at once; it is not an extrapolation from a bounded execution trace.
+The argument also explains why matrices need not be nonnegative: these are
+zero equalities, not order inequalities.
+
+\begin{corollary}[Relational fold verification]
+Suppose a faithful product-machine translation of two folds has output goals
+$o_f(s)-o_h(t)=0$ and admits a closure certificate. Then their outputs agree
+on every finite input list in the translated input domain.
+\end{corollary}
+\begin{proof}
+A simultaneous step of the product updates each component on the same payload.
+Induction on the input list identifies the product's endpoint with the pair of
+fold endpoints. Apply Theorem~\ref{thm:closure} to its output difference.
+\end{proof}
+
+\subsection{What the constructed space means}
+\begin{lemma}[Path-coefficient characterization]\label{lem:path}
+For a control node $q$, the least space $W_q$ is spanned by the coefficient
+polynomials of all expressions obtained by pulling a demanded output backward
+along a finite path beginning at $q$. Every time step uses its own fresh tuple
+of payload indeterminates.
+\end{lemma}
+\begin{proof}
+Length-zero paths contribute precisely the requested goals. Extending a path
+backward by one edge first substitutes that edge's update, then extracts
+coefficients in its fresh inputs. Coefficient extraction for the other time
+steps commutes with this operation because their variables are distinct.
+Consequently the span of all path coefficients contains the goals and is
+closed under every $T_{e,\alpha}$. Conversely, repeated closure applied to a
+goal produces only such coefficients or their rational linear combinations.
+Every closed family containing the goals contains them all. This proves both
+inclusions and leastness.
+\end{proof}
+
+Leastness is a vector-space statement. It does not say this is the smallest
+inductive invariant as a set of states, or a basis of the ideal of all reachable
+polynomial equalities. The distinction matters for nonlinear updates.
+
+\subsection{Constructing a counterexample instead of merely rejecting a basis}
+\begin{lemma}[A finite separating grid]\label{lem:grid}
+Let $f\in\Q[u_1,\ldots,u_m]$ be nonzero and let $d_i$ be its degree in $u_i$.
+There is a point in $\prod_i\{0,1,\ldots,d_i\}$ at which $f$ is nonzero.
+For $m=0$, the grid consists of the unique empty tuple.
+\end{lemma}
+\begin{proof}
+For one variable, a nonzero degree-$d$ polynomial has at most $d$ roots. For
+several variables, write $f$ as a polynomial in the last variable. If it
+vanished on the whole grid, then at every choice of the earlier coordinates
+all its coefficients in the last variable would vanish. Induction on the
+number of variables would make every coefficient polynomial zero, contrary to
+$f\ne0$.
+\end{proof}
+
+Suppose a retained polynomial $p\in P_{q_0}$ has $p(x_0)\ne0$. If its origin
+is a requested goal, the empty trace already refutes the property. Otherwise
+its origin records an edge $e:q_0\to q'$ and an older polynomial $h\in P_{q'}$
+for which $p$ is one payload coefficient of $h(F_e(x,u))$. At the concrete
+current state $x_0$, that coefficient is nonzero. The polynomial
+$u\mapsto h(F_e(x_0,u))$ is therefore nonzero. Lemma~\ref{lem:grid} supplies a
+concrete payload $u_0$ making it nonzero. Execute the edge and repeat with $h$.
+
+Each parent was retained before its child. Following parents must therefore
+terminate at a demanded goal. The resulting certificate is a finite sequence
+of original edge indices and rational payload tuples, together with the index
+of the final output that is nonzero. A separate checker executes the original
+updates and verifies the final discrepancy. It does not need the basis,
+provenance graph, or root-bound argument.
+
+\begin{proposition}[Negative evidence from a retained origin]
+With unrestricted rational payloads and complete original-generator provenance,
+a nonvanishing generator at the initial state yields a genuine finite
+execution counterexample. A budget cutoff while constructing its payloads
+justifies only \unknown{}, not an accepted counterexample.
+\end{proposition}
+\begin{proof}
+At each selected step the preceding paragraph preserves the assertion that
+the current retained observation is nonzero. The provenance order is strictly
+decreasing. Its last node is an original demanded goal, and all traversed
+edges start at the current control node. The constructed trace is therefore
+an execution whose endpoint violates that goal. Independent execution replay
+checks this final claim directly.
+\end{proof}
+
+\subsection{A complete fragment with a finite dimension bound}
+\begin{definition}[State-affine update]
+An update is state-affine when
+\[
+ F_e(x,u)=A_e(u)x+b_e(u),
+\]
+where the entries of $A_e$ and $b_e$ are rational polynomials in the fresh
+payloads. It need not be affine in the payloads.
+\end{definition}
+
+\begin{theorem}[Exact decision in the state-affine fragment]\label{thm:complete}
+Assume all updates are state-affine and every demanded output has state degree
+at most $D$. In exact arithmetic, with no resource truncation, observable
+closure stabilizes after at most
+\[
+ B=|Q|\binom{r+D}{D}
+\]
+independent generator insertions. The procedure either returns a positive
+certificate for \eqref{eq:task} or returns a concrete execution counterexample.
+\end{theorem}
+\begin{proof}
+Substitution of state-affine expressions into a degree-$D$ observation does not
+increase its degree in $x$. Extracting coefficients in $u$ cannot increase that
+degree either. All spaces therefore remain in
+$V_D=\{p\in\Q[x]:\deg p\le D\}$, whose monomial basis has cardinality
+$N=\binom{r+D}{D}$. Each insertion strictly increases the dimension of one
+node's space. There are at most $|Q|N$ such increases, each generating finitely
+many coefficient obligations. The finite worklist eventually empties unless
+an initial generator is found nonzero.
+
+If an initial generator is nonzero, provenance reconstruction gives a
+counterexample. Otherwise all initial generators vanish. At stabilization,
+exact linear dependence supplies the matrices in \eqref{eq:goalcert} and
+\eqref{eq:edgecert}; hence Theorem~\ref{thm:closure} proves the property.
+Equivalently, Lemma~\ref{lem:path} shows that a valid property forces every
+path-coefficient generator to vanish initially, since a polynomial vanishing
+on every rational payload assignment has zero coefficients.
+\end{proof}
+
+\begin{corollary}[A short counterexample word]
+If a property in Theorem~\ref{thm:complete}'s fragment is false, the retained
+origin construction can produce a counterexample with at most $B-1$ edges.
+This bounds the word length, not the bit size of its rational states.
+\end{corollary}
+\begin{proof}
+A nonzero retained initial generator has an ancestry chain ending in an
+original goal. Each edge on that chain moves to a strictly earlier retained
+generator. At most $B$ generators can be retained in the whole control graph,
+so such a chain contains at most $B-1$ coefficient steps.
+\end{proof}
+
+The code enforces practical degree and basis bounds. The mathematical theorem
+is not a promise that those defaults are large enough for every legal input.
+For example, if $B$ exceeds the configured per-node capacity, a valid problem
+can still produce \unknown{}.
+
+\subsection{Nonlinear success and nonlinear failure are both informative}
+For $s'=s+u$ and $t'=t+3s^2u+3su^2+u^3$, the degree-three observation
+$t-s^3$ is conserved. The nonlinear-state fragment succeeds immediately.
+But for $x'=x^2$, $x_0=0$, and goal $x=0$, closure generates
+\[
+ x,\ x^2,\ x^4,\ x^8,\ldots
+\]
+which are linearly independent as polynomials. The property is true, yet the
+implemented degree cap correctly returns \unknown{}.
+
+The ideal generated by $x$ would handle this last example because $x^2=x\cdot x$.
+That observation points to a complementary use of Forge's existing
+polynomial-multiplier machinery, not an excuse to describe vector-space closure
+as a general invariant decision procedure.
+
+\subsection{Cost and specialization}
+Let $N=\binom{r+D}{D}$, and suppose every pullback has at most $U$ distinct
+payload monomials. Each edge is processed once for every retained generator at
+its destination, giving at most $EN$ pullbacks and $ENU$ coefficient
+candidates for $E$ edges. A crude dense echelon bound is $O(EUN^3)$ rational
+operations, plus the cost of polynomial expansion. Dense space and coordinate
+storage requires $O(|Q|N^2)$ coefficients. Coefficient bit growth is not
+included in those arithmetic-operation counts.
+
+The advantage of demand direction is that the actual dimensions $k_q$ can be
+much smaller than $N$. The delayed example uses two generators out of five
+possible affine monomials, and the square-of-sum example uses one out of six
+quadratic monomials. These are exact dimension comparisons, not claims of a
+measured runtime advantage over a full-lifting implementation.

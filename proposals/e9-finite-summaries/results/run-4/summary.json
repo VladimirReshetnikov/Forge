@@ -1,0 +1,48 @@
+{
+  "seed": 681437,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "sympy": "1.14.0",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "status": "PASS",
+  "lean_status": "NOT_RUN_NO_EXECUTABLE",
+  "elapsed_seconds": 5.557954007000035,
+  "certificate_entries": 245,
+  "by_checker": {
+    "counterexample": 115,
+    "linear": 54,
+    "telescoper": 23,
+    "singularities": 47,
+    "ore": 6
+  },
+  "differential_models": 100,
+  "exhaustive_word_evaluations": 1140,
+  "direct_recurrence_checks": 483,
+  "mutation_cases": 245,
+  "rejected_mutations": 245,
+  "unknown_requests": [
+    {
+      "name": "telescope-p3-q1-r1-a1-f1",
+      "order": 1,
+      "operator_degree": 1,
+      "flux_degree": 1,
+      "rows": 17,
+      "boundary_rows": 2,
+      "columns": 7,
+      "nullity": 0,
+      "search_seconds": 0.01009346800003641,
+      "status": "UNKNOWN_FIXED_ANSATZ"
+    },
+    {
+      "name": "telescope-p4-q1-r1-a1-f1",
+      "order": 1,
+      "operator_degree": 1,
+      "flux_degree": 1,
+      "rows": 22,
+      "boundary_rows": 2,
+      "columns": 7,
+      "nullity": 0,
+      "search_seconds": 0.012363982000010765,
+      "status": "UNKNOWN_FIXED_ANSATZ"
+    }
+  ]
+}

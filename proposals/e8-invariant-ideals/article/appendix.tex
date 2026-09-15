@@ -1,0 +1,189 @@
+\section{Reproduction and source revisions}
+\label{app:repro}
+
+\subsection{Archive layout}
+\begin{lstlisting}
+article/       this PDF, editable TeX, bibliography, generated result counts
+prototype/     exact arithmetic, four algorithm modules, tests, run and replay
+results/       certificates, structured ledger, test and replay transcripts
+lean/          two uncompiled specimens, pinned toolchain, check script, status
+docs/          source provenance and acceptance ledger
+README.md      commands and scope
+LICENSE        MIT-0 for the new supplementary material
+\end{lstlisting}
+The archive does not redistribute the original Forge article, the neighboring
+repositories, third-party papers, external library source, or font files.
+
+\subsection{Commands}
+From the extracted archive root:
+\begin{lstlisting}
+cd prototype
+python -S -m unittest -v test_prototypes
+python -S verify.py
+python -S run_experiments.py --output ../reproduced-results
+\end{lstlisting}
+The final command writes a new directory by default; it does not overwrite the
+recorded results. All these commands use the standard library only. Python 3.9
+or later is the intended syntax/API baseline; the recorded execution used
+Python 3.13.5, not a cross-version CI matrix.
+
+Build the article with ordinary pdfLaTeX:
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-extensions.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-extensions.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-extensions.tex
+\end{lstlisting}
+The document uses stock TeX packages, no shell escape, no bibliography tool,
+and no separately distributed system fonts.
+
+Optional Lean elaboration, after installing the pinned toolchain:
+\begin{lstlisting}
+python lean/check.py
+\end{lstlisting}
+This command writes \code{lean/status.json} with actual outcomes and exits
+unsuccessfully when the compiler is absent or a specimen fails. The producing
+run records absence of the Lean executable. The specimens are neither generated
+certificates nor an implementation of a tactic.
+
+\subsection{Pinned audit references}
+\begin{description}[style=nextline]
+\item[Forge]
+\path{674521027d968d59f7b83220ed52304a85cb55e2}.
+The read material comprises the README, the Leant/Djex review, the structural
+search chapter, the first 200 lines of the integration chapter, and the
+conclusion. A recursive repository tree was inspected and the additional
+keyword searches are recorded in \code{docs/provenance.json}.
+\item[Leant]
+\path{6bf05ad78c467989e68290f2d08bbed40802d485}.
+The opening README material and the full dated indexing-composition diagnostic
+were read. That report identifies its Djex runtime/dependency as
+\code{e237e866}; this is not the same as the separately inspected Djex head.
+\item[Djex]
+\path{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}.
+The opening 105 README lines and current branch identity were inspected. No
+Djex source modification or live synthesis run was performed.
+\item[Forge's reported target toolchain]
+Lean \code{v4.34.0}; Mathlib
+\path{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
+These are repository baseline identities, not a claim that the supplementary
+Lean files compiled against them.
+\end{description}
+
+The repositories were read through the connected GitHub interface. No files,
+branches, issues, or pull requests in them were changed. The contribution is the
+standalone supplementary archive.
+
+\section{Certificate schemas and small API examples}
+\label{app:schemas}
+
+\subsection{Exact polynomials}
+A polynomial is a list of terms
+\begin{lstlisting}
+[exponent_vector, numerator, positive_denominator]
+\end{lstlisting}
+with nonnegative integer exponents. Rational coefficients are reduced, nonzero,
+and exact. The writer sorts exponents; the decoder rejects duplicates,
+noncanonical coefficients, incorrect arities, and invalid numeric types.
+Mathematical equality is polynomial equality, not equality of formatted text.
+
+\subsection{Invariant packets}
+A constant packet has schema \code{forge.pullback-space/1}, a complete problem,
+a generator list, and rational transition matrices. A polynomial packet has
+schema \code{forge.ideal-space/1}; its problem also includes the multiplier
+bound and its matrix entries are polynomials. The matrix convention is
+\[
+ p_i\circ T_a=\sum_j H_{aij}p_j.
+\]
+The caller supplies the expected problem separately to the checker. The copy in
+the certificate is compared with that expected problem; it is not allowed to
+define the caller's proof obligation by itself.
+
+A minimal nonlinear example:
+\begin{lstlisting}[language=Python]
+import exact as ex
+import ideal_space as ideal
+
+x, y = ex.var(2, 0), ex.var(2, 1)
+certificate, statistics = ideal.synthesize(
+    2, 1, 1,                       # variables, generator degree, multiplier degree
+    [[x, x]],                      # initial diagonal, parameterized exactly
+    [[ex.mul(x, x), ex.mul(y, y)]]  # squaring transition
+)
+assert ideal.check(certificate['problem'], certificate)
+print(statistics)
+\end{lstlisting}
+An empty generator list is legal but only certifies a vacuous invariant packet.
+The source-level user interface should report that no useful packet was
+returned, not that the target is false.
+
+\subsection{Finite algebras}
+The problem records the number of states, each constructor's name and arity, its
+row-major transition table, and the set of good states. A cover certificate lists
+states. A counterexample certificate lists constructor nodes with earlier child
+indices and a root index. Arity checks and the earlier-index discipline are
+necessary for interpreting the node list as a finite constructor tree.
+
+\begin{lstlisting}[language=Python]
+import finite_cover as fc
+
+problem = fc.binary_tree_counts(7)
+certificate, statistics = fc.synthesize(problem)
+assert certificate['kind'] == 'cover'
+assert fc.check(problem, certificate)
+\end{lstlisting}
+The transition budget's \code{unknown} output is not a certificate and is
+rejected by \code{check}. Table construction and parsing need additional
+production resource limits beyond this prototype's evaluation counter.
+
+\subsection{Integer projection}
+An affine parameter expression is stored as
+$[b,a_1,\ldots,a_n]$, denoting $b+\sum a_ix_i$. An inequality row represents
+$a\,y\le\beta(x)$; a congruence row represents
+$a\,y\equiv\beta(x)\pmod m$. The certificate stores two Bezout receipts per
+congruence, one for coefficient normalization and one for its CRT merge.
+
+\begin{lstlisting}[language=Python]
+import presburger as pb
+
+problem = {
+    'parameters': 1,
+    'inequalities': [
+        {'a': -1, 'rhs': [0, 0]},   # y >= 0
+        {'a':  1, 'rhs': [10, 0]}   # y <= 10
+    ],
+    'congruences': [{'a': 2, 'rhs': [0, 1], 'm': 6}]
+}
+certificate = pb.synthesize(problem)
+assert pb.check(problem, certificate)
+feasible, witness = pb.evaluate_program(certificate['program'], [8])
+assert feasible and pb.holds(problem, [8], witness)
+\end{lstlisting}
+Evaluation is intended for a program already accepted by the checker. The
+concrete evaluator does not itself revalidate an arbitrary untrusted instruction
+stream on every call.
+
+\section{Acceptance ledger}
+\label{app:status}
+\begingroup\small
+\begin{longtable}{@{}p{0.30\textwidth}p{0.18\textwidth}p{0.45\textwidth}@{}}
+\toprule
+Claim & Status & Evidence or remaining gate \\
+\midrule
+\endhead
+Constant-packet construction and replay & Executed & 51 stored certificates; exact identity checker \\
+Polynomial-multiplier fixed point and replay & Executed & 14 stored certificates; degree and identity checks \\
+Finite covers and concrete counterexamples & Executed & 136 certificates and a separate random closure oracle \\
+One-output integer projection & Executed & 221 certificates; 3,400 small-parameter differential valuations \\
+Search-free replay & Executed & All 422 certificates pass after search entry points are disabled \\
+Certificate corruption checks & Executed & 19 explicit mutated certificates rejected within 21 test methods \\
+Mathematical soundness of the formats & Proved in text & Induction, polynomial identities, and integer congruence lemmas \\
+Correctness of the Python implementation & Tested, not formalized & Shared polynomial arithmetic and shared integer assembler remain \\
+Lean specimens & Not run & Compiler absent; status recorded explicitly \\
+Lean source reifiers and native checkers & Designed only & Must produce complete checked source theorems \\
+Contract-directed Djex integration & Designed only & Must preserve and pass the original outer query \\
+Cross-worker binary-tree witness example & Designed only & Mathematical derivation included; no end-to-end Lean run \\
+Performance versus existing tactics & Not measured & Requires matched source goals, budgets, and premise inventories \\
+\bottomrule
+\end{longtable}
+\endgroup

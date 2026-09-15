@@ -1,0 +1,310 @@
+\section{Worker II: creative telescoping without boundary fiction}
+\label{sec:telescoping}
+
+\subsection{A different problem from polynomial antidifferencing}
+
+Forge already searches for polynomial $q$ satisfying $q(n+1)-q(n)=f(n)$ for a
+polynomial increment $f$. This is useful, but it is not a method for sums whose
+summands contain factorial or binomial quotients. The present worker targets
+\begin{equation}\label{eq:sum}
+S_{p,q}(n)=\sum_{k=0}^{n}q^k\binom nk^p,
+\qquad n\in\N,\quad p\in\{1,2,\ldots\},\quad q\in\Q.
+\end{equation}
+The concrete implementation bounds $p\le8$, recurrence order at most six, and
+polynomial degrees through a specified search request. Its experimental corpus
+uses $p\le4$. There is no claim that every possible request inside those decoder
+bounds will succeed.
+
+Creative telescoping seeks a recurrence for $S$ by proving a local identity for
+the summand. It is a mature method rather than a new proposed theory. The
+production recommendation is to reuse HolonomicFunctions for broader
+multivariate telescoping and \code{ore_algebra} for operator computations,
+while retaining a small independently checked certificate language~\cite{holonomic,ore}.
+The prototype is intentionally more limited and easier to audit.
+
+\subsection{Why a rational multiplier is not enough}
+
+The usual presentation writes $G(n,k)=R(n,k)F(n,k)$ with a rational function $R$
+and a hypergeometric term $F$. Away from poles, a rational identity can show
+\[
+\sum_i a_i(n)F(n+i,k)=G(n,k+1)-G(n,k).
+\]
+At a support boundary, however, $F$ may vanish while $R$ has a pole. Declaring
+$R F=0$ there because ``the summand is zero'' is not a valid argument. Cancelling
+a rational expression on an interior domain does not choose its extension at a
+singular endpoint.
+
+For example, even the relation
+\[
+\binom n{k-1}=\frac{k}{n-k+1}\binom nk
+\]
+requires care at $k=n+1$. Its left side is $1$, while the right presentation has
+a zero denominator multiplied by a zero binomial coefficient. The shifted
+binomial is the well-defined object. The rational presentation is only a tool
+for algebra on the interior.
+
+The safe certificate therefore stores the flux as a sum of \emph{shifted
+summands}, not as an unevaluated singular product.
+
+\subsection{The shifted-support ansatz}
+
+Extend the binomial coefficient to a signed lower index by
+\[
+\binom nk=0\quad\text{when }k<0\text{ or }k>n,
+\]
+with its ordinary value otherwise. For an order $r\ge1$ recurrence, search for
+univariate polynomials $a_0,\ldots,a_r\in\Q[n]$, with $a_r\ne0$, and bivariate
+polynomials $P_0,\ldots,P_{r-1}\in\Q[n,k]$. Define, for $k\ge0$,
+\begin{equation}\label{eq:flux}
+G(n,k)=\sum_{j=0}^{r-1}P_j(n,k)q^k\binom{n+j}{k-1}^{p}.
+\end{equation}
+The desired summand identity is
+\begin{equation}\label{eq:tel-id}
+\sum_{i=0}^{r}a_i(n)q^k\binom{n+i}{k}^{p}
+ =G(n,k+1)-G(n,k),\qquad 0\le k\le n+r.
+\end{equation}
+The two end fluxes are structurally zero:
+\begin{equation}\label{eq:ends}
+G(n,0)=0,\qquad G(n,n+r+1)=0.
+\end{equation}
+Indeed, the first uses the signed index $-1$, and in the second
+$k-1=n+r>n+j$ for every $j<r$. No limiting argument is involved.
+
+The fixed summation family is part of the authoritative problem. A certificate
+contains only the coefficient polynomials. It cannot choose a different
+summand, change $p$ or $q$, or assert its own support convention.
+
+\subsection{Interior verification by a polynomial identity}
+
+On $0\le k\le n$, every factor of
+\[
+D(n,k)=\prod_{h=1}^{r}(n+h-k)^p
+\]
+is positive. Put
+\begin{align}
+R_i(n,k)&=\prod_{h=1}^{i}(n+h)^p
+          \prod_{h=i+1}^{r}(n+h-k)^p,\label{eq:Ri}\\
+T_j(n,k)&=k^p\prod_{h=1}^{j}(n+h)^p
+          \prod_{h=j+2}^{r}(n+h-k)^p.\label{eq:Tj}
+\end{align}
+Empty products are one. The binomial quotient identities give
+\[
+R_i=D\frac{\binom{n+i}k^p}{\binom nk^p},\qquad
+T_j=D\frac{\binom{n+j}{k-1}^p}{\binom nk^p}.
+\]
+The checker verifies the exact sparse-polynomial equality
+\begin{equation}\label{eq:interior}
+\sum_{i=0}^{r}a_iR_i
+-\sum_{j=0}^{r-1}qP_j(n,k+1)R_j
++\sum_{j=0}^{r-1}P_j(n,k)T_j=0.
+\end{equation}
+This implies \eqref{eq:tel-id} on the interior. Only nonzero binomial and
+$D$ factors are used in the rational derivation. The factor $q^k$ is multiplied
+back, \emph{never divided out}. Therefore the proof also covers $q=0$, with the
+ordinary convention $0^0=1$.
+
+All arithmetic in the acceptance checker is addition and multiplication of
+sparse rational polynomials. Search-generated residual expressions are not
+accepted on assertion: the checker reconstructs the residual from the
+authoritative problem and the supplied coefficients, then requires its
+canonical dictionary to be empty.
+
+\subsection{Every exceptional boundary is a separate checked identity}
+
+The interior covers $k\le n$, but \eqref{eq:tel-id} is needed through $n+r$.
+For each $t=1,\ldots,r$, set $k=n+t$. Define the polynomial
+\[
+B_{j,t}(n)=
+\begin{cases}
+\displaystyle\binom{n+j}{j-t},&j-t\ge0,\\
+0,&j-t<0.
+\end{cases}
+\]
+When the lower index is nonnegative, it is fixed and the binomial is a
+polynomial in $n$ with rational coefficients:
+\[
+\binom{n+j}{d}=\frac{1}{d!}\prod_{h=0}^{d-1}(n+j-h).
+\]
+The checker verifies, for every $t=1,\ldots,r$,
+\begin{equation}\label{eq:boundary}
+\begin{split}
+0={}&\sum_{i=0}^{r}a_i(n)B_{i,t}(n)^p\\
+&-q\sum_{j=0}^{r-1}P_j(n,n+t+1)B_{j,t}(n)^p\\
+&+\sum_{j=0}^{r-1}P_j(n,n+t)B_{j,t-1}(n)^p.
+\end{split}
+\end{equation}
+This is again a polynomial identity, now univariate. Multiplying it by
+$q^{n+t}$ gives the exact boundary summand identity. There is no assumption
+$q\ne0$. Complementing the binomial lower index is justified because $n\ge0$
+and the nonnegative fixed lower indices are no larger than the upper indices.
+
+\begin{theorem}[Boundary-safe telescoping]\label{thm:tel}
+If $a_r\ne0$ and the polynomials satisfy \eqref{eq:interior} and all $r$
+identities \eqref{eq:boundary}, then
+\begin{equation}\label{eq:recurrence}
+\sum_{i=0}^{r}a_i(n)S_{p,q}(n+i)=0\qquad(n\in\N).
+\end{equation}
+\end{theorem}
+\begin{proof}
+The interior calculation and the $r$ boundary calculations establish
+\eqref{eq:tel-id} at every integer $k$ in $[0,n+r]$. Sum that identity over this
+whole interval. Each summand $\binom{n+i}k^p$ vanishes above $n+i$, so its sum
+is exactly $S_{p,q}(n+i)$, even though the different shifted sums have different
+natural support endpoints. The flux telescopes to
+$G(n,n+r+1)-G(n,0)=0$ by \eqref{eq:ends}. This proves \eqref{eq:recurrence}.
+\end{proof}
+
+The theorem is a deliberate alternative to a general-purpose rational
+singularity solver. A restricted flux language makes the endpoints and support
+coverage cheap to prove. Broader summands should enter through additional
+proved support schemas, not by weakening this theorem's side conditions.
+
+\subsection{How the search is implemented}
+
+For chosen bounds $d_a,d_P$, write
+\[
+a_i(n)=\sum_{a=0}^{d_a}c_{i,a}n^a,\qquad
+P_j(n,k)=\sum_{a+b\le d_P}d_{j,a,b}n^ak^b.
+\]
+Substitute these templates into \eqref{eq:interior} and every identity
+\eqref{eq:boundary}. Equating coefficients produces a homogeneous rational
+linear system. Its number of unknowns is
+\begin{equation}\label{eq:ansatz-size}
+(r+1)(d_a+1)+r\binom{d_P+2}{2}.
+\end{equation}
+The producer computes its exact nullspace using SymPy, selects a basis vector
+with nonzero highest recurrence coefficient, clears rational denominators,
+removes the common integer content, and chooses a positive leading coefficient
+for $a_r$. It then sends the certificate through the independent checker.
+
+Including the boundary equations in the search is important for completeness
+within this ansatz. Computing only the interior nullspace and testing its
+individual basis vectors against the boundaries could miss a useful linear
+combination. The delivered implementation includes all those equations before
+nullspace calculation. If every nullspace basis vector has $a_r=0$, so does
+every linear combination, and this particular order and degree request has no
+admissible solution. The worker reports \texttt{UNKNOWN\_FIXED\_ANSATZ}, not
+``no recurrence exists'' or ``the theorem is false''.
+
+For the fixed finite linear system, the selection of a top-nonzero nullspace
+vector is complete. This does \emph{not} imply completeness of the union of
+this particular flux language over all bounds, nor of creative telescoping
+for arbitrary expressions. The number of monomials and coefficient bit sizes
+can also make an exact nullspace calculation expensive. The quartic-power
+example below already takes most of the measured telescoping search time.
+
+\subsection{Recovered certificates, not just guessed recurrences}
+
+\paragraph{Binomial theorem.}
+For $p=1$, one certificate is
+\[
+a_0=-(1+q),\qquad a_1=1,\qquad P_0=-1.
+\]
+Thus $S(n+1)=(1+q)S(n)$ and $S(0)=1$. The flux is
+$-q^k\binom n{k-1}$. This is a simple sanity case, not evidence that Forge
+needs to rediscover an identity already available in Mathlib's binomial
+library~\cite{mathlib-choose}. A production router should prefer a direct
+library theorem when it matches.
+
+\paragraph{Squared binomials.}
+For $p=2,q=1$, the search returns
+\begin{equation}\label{eq:squarecert}
+a_0=-2(2n+1),\quad a_1=n+1,\quad P_0=2k-3n-3.
+\end{equation}
+The recurrence is
+$(n+1)S(n+1)=2(2n+1)S(n)$. Combined with the elementary factorial recurrence
+of $\binom{2n}n$ and the initial value $1$, it proves
+\[
+\sum_{k=0}^{n}\binom nk^2=\binom{2n}n.
+\]
+The artifact establishes the summation certificate, not an already integrated
+Lean proof of this closed form. At $n=0$, the boundary cell $k=1$ contributes
+exactly the term needed for the recurrence. Dropping it is not harmless
+simplification of a zero tail.
+
+More generally, the following formula can be checked by the displayed
+polynomial identities for every rational $q$:
+\begin{align*}
+a_0&=(q-1)^2(n+1),&a_1&=-(q+1)(2n+3),&a_2&=n+2,\\
+P_0&=(q-1)(n+1),&P_1&=2k-3n-6.
+\end{align*}
+Substitution into \eqref{eq:interior} and \eqref{eq:boundary} proves the
+parametric statement by polynomial expansion. The executed search fixes $q$
+before solving its rational system; it did not infer this as a universal
+parameterised theorem. A separate supplied SymPy script also expands all three
+residuals with symbolic $q$ and obtains zero; this check is outside the main
+rational-certificate corpus. The corpus checks nine order-two rational instances,
+including $0$, negative values, and nonintegral values, in addition to the
+order-one $q=1$ instance.
+
+\paragraph{Alternating squared binomials.}
+For $q=-1$ the order-two recurrence becomes
+\[
+(n+2)S(n+2)+4(n+1)S(n)=0,
+\]
+with flux polynomials
+\[
+P_0=-2(n+1),\qquad P_1=2k-3n-6.
+\]
+The initial values are $S(0)=1,S(1)=0$. Consequently odd values vanish, and the
+even subsequence is $S(2m)=(-1)^m\binom{2m}m$. The stride-two nature of this
+example illustrates why a worker should retain the whole recurrence operator,
+including a zero middle coefficient, rather than assume every identity reduces
+to a first-order ratio.
+
+\paragraph{Franel numbers.}
+For $p=3,q=1$, the emitted operator is
+\begin{equation}\label{eq:franel}
+(n+2)^2S(n+2)-(7n^2+21n+16)S(n+1)-8(n+1)^2S(n)=0.
+\end{equation}
+Its explicit safe flux uses
+\begin{align*}
+P_0(n,k)&=-4(n+1)^2,\\
+P_1(n,k)&=-6k^2+15kn+30k-10n^2-40n-40.
+\end{align*}
+This request has $r=2,d_a=d_P=2$, a $54\times21$ search matrix, nine boundary
+rows, and a one-dimensional nullspace. A smaller first-order request with
+$d_a=d_P=1$ has nullity zero and is preserved as an unknown result.
+The initial values are $1,2$, and the leading coefficient $(n+2)^2$ has no
+natural zero. Thus this particular recurrence needs no additional singular
+seed values.
+
+\paragraph{A larger, nonminimal certificate.}
+For $p=4,q=1$, the chosen bounds $r=d_a=d_P=3$ produce a valid order-three
+operator. Its last coefficient is $7(n+3)^3$; the full operator and three flux
+polynomials are stored in the JSON corpus. The $159\times46$ matrix has a
+two-dimensional nullspace. This is an acceptance of a correct recurrence, not
+a claim that order three is minimal. Requiring minimal order in the checker
+would add cost without strengthening the theorem established by a valid
+annihilator.
+
+\subsection{Lean-specific traps and the initial support library}
+
+The most important translation trap is the lower index $k-1$. In Lean's
+\code{Nat}, subtraction is truncated: $0-1=0$. Therefore translating
+$\binom n{k-1}$ with a natural lower index would make the supposedly zero
+left flux nonzero. The safe interface needs a signed lower index, for example
+an explicitly defined \code{chooseZ : Nat -> Int -> Rat}, zero for negative
+indices, with proved connections to \code{Nat.choose} on nonnegative inputs.
+Alternatively, pattern match on $k$ before using natural subtraction. Either
+choice must be reflected in the denotation proof.
+
+An initial Lean support library should prove: zero outside the binomial
+support; the interior shift-ratio identities with their inequalities; the
+complement symmetry needed at the top boundary; the fixed-lower-index
+polynomial product formula; finite-sum interchange; and the telescoping
+endpoint theorem. Mathlib's choose and finite-sum libraries supply relevant
+building blocks, but the exact certificate theorem still has to be written and
+compiled. A generic \code{field_simp} invocation is not a substitute for the
+missing domain proofs.
+
+The source reifier must also distinguish the finite range
+$\{0,\ldots,n\}$ from $\{0,\ldots,n-1\}$. In a \code{Finset.range} encoding,
+\eqref{eq:sum} uses \code{n + 1}. The common support used in the proof has
+length $n+r+1$. Off-by-one changes to either range alter the theorem.
+
+The first support schema is intentionally finite. Infinite sums would require
+convergence and limiting boundary proofs. Products of factorials with several
+moving bounds require a richer support partition. Neither is admitted by the
+present checker; neither should be approximated by checking a large finite
+range and silently invoking the finite theorem.

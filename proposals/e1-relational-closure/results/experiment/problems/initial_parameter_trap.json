@@ -1,0 +1,60 @@
+{
+  "edges": [],
+  "initial": [
+    {
+      "location": 0,
+      "state": [
+        [
+          [
+            [
+              1
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "locations": 1,
+  "n": 1,
+  "name": "initial_parameter_trap",
+  "parameters": 1,
+  "schema": "forge-polynomial-system-v1",
+  "targets": [
+    {
+      "location": 0,
+      "polynomial": [
+        [
+          [
+            1
+          ],
+          [
+            "2",
+            "1"
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            "-3",
+            "1"
+          ]
+        ],
+        [
+          [
+            3
+          ],
+          [
+            "1",
+            "1"
+          ]
+        ]
+      ]
+    }
+  ]
+}

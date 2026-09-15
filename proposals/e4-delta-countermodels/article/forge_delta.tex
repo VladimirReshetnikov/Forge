@@ -1,0 +1,121 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,array,enumitem}
+\usepackage{xcolor,listings,microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{fancyhdr}
+\usepackage[hyphens]{url}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{pdftitle={Forge Delta: Exact Observable Closure and Constructive Countermodels},pdfauthor={Research proposal prepared for Vladimir Reshetnikov}}
+\definecolor{ink}{HTML}{172B3A}
+\definecolor{soft}{HTML}{F3F5F7}
+\definecolor{dim}{HTML}{696969}
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{soft},frame=single,
+  rulecolor=\color{black!15},breaklines=true,columns=fullflexible,keepspaces=true,
+  showstringspaces=false,aboveskip=0.8em,belowskip=0.8em}
+\setlist{nosep,leftmargin=1.6em}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\textsc{Forge Delta}}
+\fancyhead[R]{\small Exact closure and countermodels}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Span}{\operatorname{span}_{\Q}}
+\newcommand{\coeff}{\operatorname{coeff}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\unknown}{{\normalfont\textsc{unknown}}}
+\newcommand{\ipc}{\mathsf{IPC}}
+\newcommand{\smallpath}[1]{{\small\path{#1}}}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.5in}
+{\large\color{dim}\textsc{An incremental research and implementation proposal}}\par
+\vspace{0.5in}
+{\Huge\bfseries\color{ink}Forge Delta}\par
+\vspace{0.22in}
+{\LARGE Exact Observable Closure\par and Constructive Countermodels}\par
+\vspace{0.35in}
+{\large Universal fold verification, relational invariant synthesis,\par and independently replayable intuitionistic diagnostics}\par
+\vspace{0.5in}
+Prepared for Vladimir Reshetnikov\par
+September 15, 2026\par
+\vspace{0.55in}
+\begin{minipage}{0.93\textwidth}
+\textbf{The proposed increment.} Replace a search for individually conserved
+expressions with an exact, goal-directed closure of polynomial observations.
+This proves properties of all finite input sequences and discovers the
+relational invariants needed to compare accumulator programs. Add finite Kripke
+countermodels as semantic certificates for a precisely delimited constructive
+proof-search diagnostic.
+
+\textbf{Executed evidence.} The accompanying package contains 151 passing
+Python tests, 37 accepted closure certificates, 28 concrete execution
+counterexamples, and 8 accepted Kripke countermodels. All 73 certificates replay
+with Python site packages disabled. Nine bounded cases carry no conclusion.
+
+\textbf{Boundary.} This is not an installed Lean tactic. No included Lean source
+was compiled here; 222 generated local identity obligations and three generic
+induction bridges are supplied as integration targets. There is no measured
+comparison against \code{grind} or any other Lean tactic.
+\end{minipage}
+\vfill
+{\small Reviewed Forge baseline: \code{674521027d968d59f7b83220ed52304a85cb55e2}.\par
+Source snapshots, precise scope, results, and reproduction commands are recorded
+inside this article and the accompanying archive.}
+\end{titlepage}
+\begin{abstract}
+Forge already proposes a certificate-producing controller above Lean's local
+reasoning engines. Repeating that architecture would not advance the project.
+This article instead supplies two operational additions. The first computes the
+least family of polynomial vector spaces containing the demanded observations
+and closed under coefficientwise pullback along control-flow edges. It emits
+finite matrix identities that prove unbounded, arbitrary-input executions by
+induction. For updates affine in state, though polynomial in fresh inputs, the
+procedure is a decision method in exact arithmetic: a space of dimension at
+most $|Q|\binom{r+D}{D}$ suffices for degree-$D$ goals. A failed initial
+obligation has a constructive execution witness, not merely a failed invariant
+candidate. The second addition proposes and independently checks finite Kripke
+countermodels. It establishes nonderivability in a named intuitionistic object
+logic, never the negation of an arbitrary Lean proposition. We give complete
+mathematical arguments, algorithms, certificate schemas, source-to-Lean
+integration plans, implementation constraints, and reproducible synthetic
+experiments. The conceptual ingredients are established mathematics; the
+contribution is their concrete, incremental application to Forge with a tested
+search/checker separation.
+\end{abstract}
+\tableofcontents
+\newpage
+\input{sections/01-delta}
+\input{sections/02-model}
+\input{sections/03-algorithm}
+\input{sections/04-theory}
+\input{sections/05-examples}
+\input{sections/06-countermodels}
+\input{sections/07-integration}
+\input{sections/08-evidence}
+\input{sections/09-engineering}
+\input{sections/10-conclusion}
+\appendix
+\input{sections/A-formats}
+\clearpage
+\input{sections/B-audit}
+\input{references}
+\end{document}

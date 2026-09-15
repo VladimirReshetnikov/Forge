@@ -1,0 +1,236 @@
+\section{Worker III: recurrence transport with singularity-aware seeds}
+\label{sec:recurrences}
+
+\subsection{Why two good recurrence proofs may not meet}
+
+Suppose one worker proves that a sequence $f$ is annihilated by $A$, while a
+different derivation proves that $g$ is annihilated by $B$. Matching their first
+several values does not automatically establish equality. One needs a common
+induction rule and an exact account of the indices where that rule cannot
+propagate equality.
+
+Use the forward shift $E$, acting by $(Ef)(n)=f(n+1)$. A polynomial-coefficient
+operator is
+\[
+A=\sum_{i=0}^{r}a_i(n)E^i,
+\qquad (Af)(n)=\sum_{i=0}^{r}a_i(n)f(n+i).
+\]
+The coefficients lie in $\Q[n]$, and all recurrence hypotheses in the prototype
+are intended for every natural $n$. The order is the largest index with a
+nonzero coefficient polynomial.
+
+\subsection{Noncommutative multiplication is part of the certificate}
+
+Because shifting changes a coefficient, operator multiplication obeys
+\begin{equation}\label{eq:ore}
+\bigl(a_i(n)E^i\bigr)\bigl(b_j(n)E^j\bigr)
+=a_i(n)b_j(n+i)E^{i+j}.
+\end{equation}
+In particular $En=(n+1)E$, not $nE$. The supplied checker expands this identity
+coefficientwise using exact polynomial shift. A dedicated unit test rejects
+commutative multiplication as a substitute.
+
+A certificate of a common \emph{left} multiple consists of three operators
+$L,U,V$ such that
+\begin{equation}\label{eq:left-multiple}
+L=UA=VB.
+\end{equation}
+The problem supplies $A,B$; the certificate cannot redefine them. The checker
+requires all three polynomials-in-$E$ to be canonical with nonzero final
+coefficients and verifies both products by \eqref{eq:ore}. It does not claim
+$L$ is a least common left multiple.
+
+\begin{proposition}[Annihilator transport]
+If $Af=0$ and $Bg=0$ on $\N$, and \eqref{eq:left-multiple} holds with polynomial
+coefficients and nonnegative shifts, then $Lf=Lg=0$ on $\N$.
+\end{proposition}
+\begin{proof}
+For all $n$, $(UA)f(n)=U(Af)(n)=0$, since every shifted index remains natural.
+The analogous calculation applies to $V(Bg)$. Identity \eqref{eq:ore} is exactly
+what makes composition of actions agree with operator multiplication.
+\end{proof}
+
+The prototype searches for $U,V$ of bounded order and coefficient degree,
+forms the linear equations for $UA-VB=0$, and solves them exactly. Any nonzero
+solution yields an acceptable $L$. In a production system, \code{ore_algebra}
+can supply more sophisticated left-multiple and desingularisation algorithms;
+its output should still pass this simpler polynomial identity check~\cite{ore,ore-paper}.
+Rational-function operator coefficients would require a denominator policy and
+validity-domain ledger. The implemented format excludes them.
+
+\subsection{A concrete common multiple}
+
+Let
+\[
+A=E-(n+1),\qquad B=E-2(n+1).
+\]
+The search returns
+\[
+U=E-2(n+2),\qquad V=E-(n+2),
+\]
+and
+\[
+L=E^2-3(n+2)E+2(n+1)(n+2).
+\]
+Expanding $UA$ and $VB$ with \eqref{eq:ore} verifies the result. Treating $E$
+as a commuting indeterminate would produce the wrong middle coefficient.
+This example is a general operator-composition test, not a claim that the
+nonzero factorial and doubled-factorial solutions of the two first-order
+operators are equal. Equality still needs the relevant initial-value proofs.
+
+The certificate also permits a deliberate nonminimal common multiple. This
+helps separate discovery from acceptance: if a producer finds a larger $L$
+quickly, the checker can accept it without proving an optimality theorem.
+The cost is potentially more seed obligations and additional apparent
+singularities, which must be accounted for rather than cancelled informally.
+
+\subsection{The singularity problem}
+
+Write a common recurrence as
+\begin{equation}\label{eq:common-rec}
+\sum_{i=0}^{r}p_i(n)f(n+i)=0,\qquad p_r\not\equiv0,\quad r\ge1.
+\end{equation}
+At an index $n$ with $p_r(n)\ne0$, the preceding $r$ values determine $f(n+r)$.
+At a root of $p_r$, that argument fails. Merely knowing that $p_r$ is a nonzero
+polynomial is insufficient: a polynomial can be nonzero as an expression and
+zero at a specific natural index.
+
+\begin{example}[A missed singularity invalidates prefix reasoning]
+Consider
+\[
+(n-5)\bigl(f(n+1)-2f(n)\bigr)=0.
+\]
+The zero sequence and
+\[
+g(n)=\begin{cases}0,&n<6,\\2^{n-6},&n\ge6\end{cases}
+\]
+both satisfy it. They agree at indices $0$ through $5$ and disagree at index $6$.
+Thus even six matching initial values do not justify equality for this
+first-order recurrence unless the singular step is handled. This countermodel
+is exercised by the unit tests.
+\end{example}
+
+\subsection{A selective seed theorem}
+
+Let
+\[
+\Sigma=\{s\in\N:p_r(s)=0\},\qquad
+I=\{0,1,\ldots,r-1\}\cup\{s+r:s\in\Sigma\}.
+\]
+Because $p_r$ is a nonzero polynomial over a field, $\Sigma$ is finite.
+
+\begin{theorem}[Singularity-aware recurrence equality]\label{thm:seeds}
+Let $f,g:\N\to\Q$ both satisfy \eqref{eq:common-rec}. If $f(i)=g(i)$ for every
+$i\in I$, then $f(n)=g(n)$ for every $n\in\N$.
+\end{theorem}
+\begin{proof}
+Set $h=f-g$. It satisfies the same homogeneous recurrence. Use strong induction
+on $m$. If $m<r$, then $h(m)=0$ by the seed assumptions. Otherwise write
+$m=n+r$. If $p_r(n)=0$, then $m\in I$ and the seed assumption again applies.
+If $p_r(n)\ne0$, the recurrence at $n$ reads
+\[
+p_r(n)h(m)=-\sum_{i=0}^{r-1}p_i(n)h(n+i)=0,
+\]
+because $n+i<m$ for every $i<r$. Cancellation in the field gives $h(m)=0$.
+\end{proof}
+
+This set of seeds is sufficient, not asserted minimal. Additional recurrence
+relations can sometimes determine a value that this theorem requests
+separately. Its advantage over demanding every value through the largest
+singular index is that it asks only for the initial window and the exceptional
+pivots. Repeated roots do not cause duplicate seed obligations.
+
+For the example above, the required set is $\{0,6\}$. For a third-order
+recurrence with natural leading roots $0,1,5$, it is
+$\{0,1,2,3,4,8\}$. A seed at $s$ instead of $s+r$ is an off-by-order error;
+it does not repair the missing pivot.
+
+\subsection{A complete finite cover of natural singularities}
+
+The checker must not trust a producer-supplied list of roots. Let
+\[
+p_r(n)=a_dn^d+\cdots+a_0,\qquad a_d\ne0.
+\]
+For $d>0$, choose an integer
+\begin{equation}\label{eq:cauchy}
+B\ge1+\max_{0\le i<d}|a_i/a_d|.
+\end{equation}
+Every complex root has absolute value at most this bound. For completeness,
+if $|z|>1+C$ with $C=\max_{i<d}|a_i/a_d|$, then a zero would imply
+\[
+|z|^d\le C\sum_{i=0}^{d-1}|z|^i
+\le\frac{C}{|z|-1}|z|^d<|z|^d,
+\]
+a contradiction. The constant-polynomial case has no roots and uses $B=0$.
+
+A singularity-cover certificate supplies $B$, the claimed natural roots, and
+the proposed seed set. The checker verifies \eqref{eq:cauchy}, evaluates $p_r$
+exactly at every integer in $[0,B]$, compares the complete sorted root list, and
+recomputes $I$. It performs no floating-point root approximation and does not
+trust a solver's assertion that all roots were found.
+
+This enumeration is intentionally simple and sometimes inefficient. Large
+coefficients can make $B$ enormous. The prototype refuses bounds above
+$100\,000$, returning unknown from the producer. That is a resource policy,
+not a root-existence conclusion. A later positive-factor or Sturm cover could
+reduce work. Forge already proposes Sturm machinery, so reusing a proved
+version is preferable to declaring another root-counting implementation new.
+
+\status{The 47 executed singularity objects verify complete seed \emph{plans}
+for their encoded operators. They do not contain proofs that two arbitrary
+sequences satisfy the recurrences, and they do not prove the seed equalities.}
+
+\subsection{Apparent singularities introduced by transport}
+
+A second recorded example starts from
+$A=E-(n+1)$ and $B=E-2$. The producer returns a polynomial common multiple with
+leading coefficient $n-1$:
+\[
+L=(n-1)E^2+(-n^2-3n+2)E+2n(n+1).
+\]
+Its multipliers are
+\[
+U=(n-1)E-2n,\qquad V=(n-1)E-n(n+1).
+\]
+Although both original operators are monic, this common multiple has a natural
+singularity at $1$. The safe equality plan includes the additional seed at
+$1+2=3$. One may be able to choose another operator or exploit the originals to
+avoid that extra work. One may not simply discard the factor or omit the seed
+because the singularity ``came from the algorithm''.
+
+This observation gives the scheduler a concrete optimisation criterion:
+compare candidate common multiples by checked operator size, estimated
+verification cost, and the number and difficulty of their residual seed goals.
+It is not necessary to introduce a new global scheduling architecture to use
+that cost signal.
+
+\subsection{Connecting all three workers}
+
+For a unary rational matrix $M$, the rows
+$u,uM,\ldots,uM^d$ are linearly dependent. Exact search can propose scalars
+$c_i$ with $\sum_i c_i uM^i=0$. Multiplication by $M^nv$ gives a
+constant-coefficient recurrence for the output sequence. This is another small
+identity certificate, and can also be obtained through a characteristic
+polynomial. That extraction is a proposed extension, not part of the recorded
+runner.
+
+A hypergeometric sum can independently receive a telescoping recurrence.
+A claimed closed form, generating-function coefficient sequence, or library
+sequence may carry yet another annihilator. Their verified operators meet
+through \eqref{eq:left-multiple}; Theorem~\ref{thm:seeds} supplies the final
+obligations. In the simplest squared-binomial example, both sides already share
+a first-order operator, so common-multiple search should be skipped.
+
+The resulting proof plan is explicit:
+\[
+\begin{gathered}
+\text{source correspondence}\;\longrightarrow\;
+\text{two proved annihilation statements}\\
+\longrightarrow\;\text{checked common operator}\;
+\longrightarrow\;\text{complete singularity cover}\\
+\longrightarrow\;\text{proved seed equalities}\;
+\longrightarrow\;\forall n,\ f(n)=g(n).
+\end{gathered}
+\]
+Each arrow has an independent obligation. No stage is allowed to stand in for
+one of the stages after it.

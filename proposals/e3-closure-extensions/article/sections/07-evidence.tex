@@ -1,0 +1,84 @@
+\section{Executed experiments and what they establish}
+\label{sec:evidence}
+
+\subsection{The recorded run}
+
+The experiments were executed with Python 3.13.5 and SymPy 1.14.0 on the Linux environment recorded in \code{results/run.json}. The deterministic corpus generator uses seed \code{20260915}. All mathematical coefficients are exact rationals. There is no floating-point numerical solver in this package; floating-point numbers occur only in elapsed-time measurements.
+
+There are 317 producer cases. Of these, 178 return positive certificates, 135 return concrete counterexample certificates, and four return \unknown{}. Thus 313 certificate bundles are stored. They were all replayed in a second invocation using Python's \code{-S} option, which disables site-package initialization. The checker imports no search module and no SymPy module.
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Producer & Cases & Positive & Counterexample & Unknown\\
+\midrule
+PRC: vector closure & 44 & 26 & 17 & 1\\
+GI: ideal closure & 19 & 18 & 1 & 0\\
+FRC: finite contracts & 242 & 124 & 117 & 1\\
+BFT: binomial flux & 12 & 10 & 0 & 2\\
+\midrule
+Total in this one run & 317 & 178 & 135 & 4\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The total is a count of cases in this one explicitly generated corpus. It is not added to any of Forge's existing proposal runs. It is also not a ``solved Lean goals'' count: the corpus starts from mathematical problem data, before any source-to-IR extraction or Lean replay.
+
+\subsection{What was generated}
+
+The vector corpus contains two named positive examples, 24 generated synchronized affine pairs, 17 false recurrence assertions, and the repeated-squaring degree-ceiling control. The affine pairs have two arbitrary integer-coefficient affine updates on a two-component state and a synchronized copy, with a randomly chosen quadratic observation difference. They are intentionally structured positives rather than uniformly sampled arbitrary polynomial claims.
+
+The ideal corpus contains repeated squaring, a joint-generator product example, 16 synchronized nonlinear scalar pairs with two update symbols, and the word-order counterexample. Generator discovery and multiplier reconstruction are both exercised. It is not a large Gr\"obner stress test: the examples have low dimension and small coefficients, and most nonlinear positives admit one obvious algebraic relation even though the multiplier varies.
+
+The main finite-state corpus has 240 cases. Half are constructed equivalent by relabeling a machine and adding an unreachable junk state; half are independently generated pairs. State counts of the original machines range from two through eight, with alphabet sizes one through three. The generated pairs are compared with an independent greatest-fixed-point procedure over the full product relation. It repeatedly deletes output-disagreeing or successor-inconsistent pairs, rather than using the producer's forward BFS. All 240 outcomes agree: 124 equivalent pairs and 116 inequivalent pairs.
+
+The finite-state controls add the length-17 distinguishing-word example and its pair-budget truncation. The telescoping corpus contains ten positive moment families: powers $m=1,2$ with weights $1,k,k^2,k^3$, plus $2k^2+3k+1$ for both powers. The two unknown controls are the lower-degree cubic-moment search and the capped cubic-power first-order search.
+
+\subsection{The meaningful ablations}
+
+Three small comparisons illustrate different gains without claiming a comparison against Lean tactics.
+
+\paragraph{Conservation versus coupled invariance.}
+For the two named vector examples, the target polynomial is not conserved. The supplied matrix identities prove preservation of the joint zero condition. This separates the proposed certificate language from the narrower test $I\circ F=I$; it does not prove that another existing invariant-search strategy could not find the same result.
+
+\paragraph{Vector closure versus ideal closure.}
+Repeated squaring produces independent pullbacks of degrees $1,2,4,8,16,\ldots$. PRC returns \unknown{} at its degree limit. GI returns one generator and the multiplier $x+y$. This is supported both by an exact algebraic obstruction and by the recorded runs, rather than merely by a timing difference.
+
+\paragraph{Finite samples versus an all-words contract.}
+All nine sampled word lengths from zero through eight agree for the delayed-difference machine, but its shortest distinguishing word has length 17. A complete product exploration finds it. An eight-pair truncated exploration remains \unknown{}. This directly tests that neither sampling nor a resource stop is mistaken for universal evidence.
+
+\subsection{Mutation tests and independent arithmetic tests}
+
+All 25 targeted invalid mutations are rejected. These include a wrong vector coefficient, a missing transition, a changed initial state, a changed target, a floating or Boolean coefficient, a zero denominator, a noncanonical rational, a removed ideal generator, a wrong polynomial multiplier, a reversed execution word, missing or duplicate relation entries, changed observations, an invalid input symbol, an altered flux, an altered summand, an unsupported binomial power, and a false recurrence-regularity start.
+
+These are \emph{targeted invalid} mutations. It would be mathematically wrong to demand rejection of every conceivable edit: a redundant invariant, a different valid relation, or a changed informational origin annotation may still constitute a sound certificate. One unit test deliberately changes the origin annotations while preserving all proof identities, and acceptance remains valid. The checker must verify mathematics, not that a certificate was generated by a particular run.
+
+The separate unit suite has 12 test methods. One method replays all 313 stored bundles. Another performs 200 deterministic random rational-polynomial cases, comparing the independent checker's addition, multiplication, and simultaneous substitution against SymPy: 600 operation comparisons. Other methods check empty-word counterexamples, a zero target requiring an empty basis, exact parsing, the distinction between generator and multiplier ceilings, and fixed-generator reconstruction. These test counts are different units and are not combined into an inflated ``number of proofs''.
+
+\subsection{Symbolic certificates versus numerical diagnostics}
+
+Each of the ten moment recurrences is also evaluated directly at $n=0,\ldots,20$, for 210 diagnostic comparisons using exact binomial integers. This checks the connection between the experiment's input convention and the derived recurrence on a small range. It is not the basis of acceptance: a corrupted flux is rejected by the polynomial identity checker regardless of whether a finite sample happens to agree.
+
+The stronger evidence is the exact identity plus the fully stated mathematical bridge in Section~\ref{sec:telescoping}. The remaining formalization task is to express and prove that bridge in Lean and bind it to the original sum expression. The diagnostic table must not be cited as a substitute for that task.
+
+\subsection{Resource settings and one retained failed development run}
+
+Default algebraic discovery ceilings are 32 retained generators, polynomial degree 12, 10,000 terms per processed polynomial, and 1,000 generated pullbacks. Ideal multiplier reconstruction is capped at degree four. The ordinary finite-state pair ceiling is 10,000. Positive telescoping experiments use coefficient degree at most six and total flux degree at most nine; the negative controls deliberately use smaller bounds.
+
+An initial experiment incorrectly expected the ordinary cubic-binomial moment to fit a total flux degree bound of five. It returned \unknown{}. A larger run found a degree-six flux. The original failure is retained in \code{results/initial-cap-failure.txt}; the lower-cap case is now an expected unknown regression. No identity check was weakened to make the experiment pass. This is useful evidence about the required ansatz size, not a failure of mathematical correctness.
+
+The checker has its own representation and intermediate-arithmetic ceilings. A search may theoretically find a certificate that those ceilings refuse. Production should report this as a resource or replay outcome, not silently raise a trust ceiling. The supplied functions are research interfaces and do not yet normalize every possible resource exception into a production-grade result type.
+
+\subsection{Timing and its limitations}
+
+The CSV contains per-case producer and replay durations. Producer timers include construction of the search object, coefficient solving or traversal, certificate construction, and the producer's final Python replay. A second timer measures another checker invocation on the in-memory data. Timers exclude Python startup, SymPy import, original problem construction, JSON file writing, source reification, Lean elaboration, and Lean kernel checking.
+
+In the recorded run, the 24 generated vector cases take about 4.24 seconds in total inside the producer timers; the 16 generated ideal cases about 0.11 seconds; and the ten positive telescoping cases about 3.02 seconds. The 240 small finite-state cases together take only a few milliseconds and are below a useful granularity for detailed performance inference in this environment. Exact values remain in the CSV and JSON rather than being rounded into a speedup claim.
+
+These are one-run component observations, not stable latency estimates. The families differ in structure and difficulty; their times cannot rank the general usefulness of the workers. Most importantly, \emph{no experiment invokes \texttt{grind}, Aesop, \texttt{nlinarith}, or any other Lean tactic}. There is no measured end-to-end solved-goal gain, no Lean proof-size measurement, and no compiled trust-profile comparison.
+
+\subsection{What the evidence does and does not support}
+
+The evidence supports the existence of working certificate discovery algorithms for the stated fragments, the successful replay of their outputs by a separately implemented arithmetic checker, several sharp distinctions between the certificate languages, and rejection of specified malformed or false inputs. It also supports the feasibility of avoiding a trusted Gr\"obner backend in the positive acceptance path.
+
+It does not establish that the Python checker is formally verified, that the JSON boundary is hardened against hostile resource exhaustion, that the source-to-IR bridges are correct, or that the proposed Lean tactic solves more real-world goals under a fixed budget. Those remaining tasks are explicit development gates rather than hidden assumptions.

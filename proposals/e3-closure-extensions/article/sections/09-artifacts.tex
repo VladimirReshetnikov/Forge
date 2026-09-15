@@ -1,0 +1,98 @@
+\section{Artifact inventory and reproduction}
+\label{sec:artifacts}
+
+\subsection{Files in the archive}
+
+\begin{lstlisting}
+Forge_Closure_Extensions/
+  article/forge_closure.tex       main LaTeX source
+  article/forge_closure.pdf       rendered article
+  article/sections/*.tex          article sections
+  article/references.tex          ordinary LaTeX bibliography
+  prototype/forge_closure/
+    search.py                    four untrusted producers
+    checker.py                   independent exact checker
+    verify.py                    checker-only command line
+  prototype/run_experiments.py    deterministic corpus and mutations
+  prototype/tests/test_closure.py unit and arithmetic tests
+  prototype/requirements-search.txt
+  results/run.json               environment, configuration, outcomes
+  results/cases.csv               individual case records
+  results/certificates/*.json     313 replayable problem/certificate pairs
+  results/diagnostics.json        discovered recurrences and sample control
+  results/mutations.json          25 targeted-invalid results
+  results/unit-tests.txt          executed unit-test log
+  results/stdlib-replay.txt       checker-only replay log
+  results/initial-cap-failure.txt retained development failure
+  lean/BridgeSpec.lean            uncompiled generic bridge specimen
+  audit/review.json               exact review scope and source identities
+  README.md                      entry points and status
+  build_article.py               reproducible LaTeX build command
+\end{lstlisting}
+
+The code is original package code. No upstream repository checkout, third-party paper PDF, font file, or external search dependency is redistributed. The package does not install itself into the user's Forge repository and does not modify any remote repository.
+
+\subsection{Replaying certificates without the producer dependencies}
+
+From the package's \code{prototype} directory, run
+\begin{lstlisting}
+python -S -m forge_closure.verify ../results/certificates
+\end{lstlisting}
+The command accepts a directory and enumerates its JSON files, so it does not depend on a shell expanding a wildcard. It validates the stored mathematical problem and certificate pair. For a production tactic the problem must instead come from the trusted source reifier; receiving both fields from an external producer would let that producer change the question.
+
+The checker returns success only for a supported certificate kind. Malformed exact numbers, missing dimensions, invalid indices, wrong identities, and configured representation ceilings raise a rejection. This is a research parser with several defensive limits, not a promise of robustness against every maliciously expensive input.
+
+\subsection{Reproducing discovery and the tests}
+
+Install the search dependency, then run the generator and unit tests:
+\begin{lstlisting}
+cd prototype
+python -m pip install -r requirements-search.txt
+python run_experiments.py --out reproduced-results
+python -m unittest discover -s tests -v
+python -S -m forge_closure.verify reproduced-results/certificates
+\end{lstlisting}
+The generator defaults to a new \code{reproduced-results} directory rather than the recorded evidence directory. Re-running it preserves the seed and mathematical construction, but timing values may differ. The unit test replay targets the shipped corpus and also runs independently generated arithmetic cases.
+
+The package was tested on Python 3.13.5. It uses modern standard-library features such as strict \code{zip}; older Python releases are not a tested compatibility target. SymPy is pinned to the executed version. There are no optional search dependencies required to replay certificates.
+
+\subsection{Building the article}
+
+With pdfLaTeX available, run from the package root:
+\begin{lstlisting}
+python build_article.py
+\end{lstlisting}
+The script performs three pdfLaTeX passes. It uses stock LaTeX packages and Latin Modern fonts supplied through TeX, with no shell escape, online service, or separately distributed font file. The editable source is split into sections to make later changes manageable.
+
+\section{Wire format and checking obligations}
+\label{sec:wire}
+
+\subsection{Exact arithmetic}
+
+A rational number is a pair of literal integers \code{[numerator, denominator]}, with positive denominator and reduced form. Booleans and floating-point numbers are rejected even though some host-language conversions would treat them as integers. A sparse polynomial is a list of pairs consisting of an exponent vector and an exact rational coefficient. Duplicate monomials and zero coefficient entries are rejected; the empty list represents zero.
+
+For instance, in variable order $(x,y)$,
+\begin{lstlisting}
+[[[1,0],[1,1]], [[0,1],[-1,1]]]
+\end{lstlisting}
+represents $x-y$. The complete variable ordering is part of the problem schema. The source frontend must preserve the interpretation of that ordering; changing the order without changing the interpretation changes the theorem.
+
+The checker bounds dimensions, term counts, exponents, coefficient bit lengths, basis sizes, and finite-state counts. Some intermediate products are materialized before all resource checks complete. A production service therefore still requires process-level resource isolation and a validated input-size policy.
+
+\subsection{Polynomial closure bundles}
+
+The problem kind is \code{polynomial_transition_system_v1}. It contains dimension, rational initial state, the full list of polynomial coordinate updates for each transition, and every target polynomial. The positive kinds are \code{pullback_closure_v1} and \code{pullback_ideal_v1}. Both contain a basis, a step matrix for every original transition, and target reconstruction rows. Matrix entries are rationals in PRC and polynomials in GI.
+
+The informational \code{origins} entries help explain discovery, but positive replay does not trust them. The negative kind \code{transition_word_counterexample_v1} instead contains a target index and an execution word. Its checker executes the original transition system exactly and tests the indicated target at the final state. It does not accept a producer-supplied final state as evidence.
+
+\subsection{Finite-state and telescoping bundles}
+
+The finite-state problem contains both complete machines, their initial indices, output tables, and a common alphabet size. A positive certificate lists related state pairs; a negative one lists a word. Every transition symbol is checked, including symbols not encountered in a sample suite.
+
+The summation problem kind is \code{binomial_moment_v1}, carrying $m$ and $w$. The certificate kind \code{binomial_flux_v1} carries $a,b,U,N_0,\sigma$. Replay reconstructs \eqref{eq:flux-cert} and \eqref{eq:regularity}. It does not accept a precomputed zero residual, a numerical table of the sum, or a stored claim that the recurrence was checked elsewhere.
+
+\section{Review ledger and provenance limits}
+
+The audit file records Forge's README, \code{article/sections/05-structural.tex}, selected ranges of \code{06-nonlinear.tex} and \code{07-boolean-and-external.tex}, and \code{docs/IDEAS-FROM-LEANT-DJEX.md}. It also records the neighboring READMEs, Leant's \code{docs/behavioral-synthesis.md}, and the pinned Mathlib binomial source. Some connector responses were truncated; those are explicitly marked as partial reads.
+
+The bibliography points to pinned repository revisions where available, and to official library documentation or primary research sources for outside facts. The non-duplication comparison is against the reviewed merged design at the recorded snapshot, not a guarantee that no related sentence appears anywhere in all historical submissions. The code and experiments were developed for this report and do not claim inherited acceptance from any prior Forge, Leant, or Djex run.

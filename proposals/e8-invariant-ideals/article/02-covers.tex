@@ -1,0 +1,214 @@
+\section{Finite-algebra covers for recursive objects}
+\label{sec:covers}
+\status{Implemented in \code{finite_cover.py}; deterministic algebras with
+constructor arities zero, one, and two; positive covers and concrete negative
+certificates.}
+
+\subsection{Replace unbounded syntax by the finite summary the goal needs}
+A recursive datatype may contain arbitrarily large values while a property of
+interest depends on a finite summary. Examples include counts modulo a fixed
+integer, a finite-state parser's final state, a bounded flag configuration, and
+equality of two folds into a finite algebra. Unrolling constructors to a fixed
+depth is not a proof over all values. A finite summary with proved constructor
+laws supplies a different route: compute an inductive cover of summary states.
+
+Let $\Sigma$ be a finite ranked signature. A constructor $c$ has an arity
+$a(c)$, and $\mathcal T_\Sigma$ is the set of finite ground trees built from
+these constructors. A deterministic finite algebra consists of a finite set $Q$
+and functions
+\[
+ \delta_c:Q^{a(c)}\longrightarrow Q.
+\]
+Every ground tree has a uniquely determined summary $\llbracket t\rrbracket$,
+computed from the leaves upwards. Given $G\subseteq Q$, the decision problem is
+\begin{equation}
+\label{eq:tree-goal}
+ \forall t\in\mathcal T_\Sigma,\quad \llbracket t\rrbracket\in G.
+\end{equation}
+This is a standard finite-tree-automata problem. The contribution to Forge is the
+certificate form, source-level bridge, and scheduling as an alternative to
+unbounded structural search. Lammich's machine-checked tree-automata development
+provides a mature reference for the underlying algorithms and witness
+construction, albeit in Isabelle rather than Lean~\cite{afp-tree}.
+
+\subsection{Positive certificates are closed sets, not search logs}
+\begin{definition}[Inductive cover]
+A set $R\subseteq Q$ is an inductive cover if for every constructor $c$ and every
+tuple $q_1,\ldots,q_{a(c)}\in R$,
+\[
+ \delta_c(q_1,\ldots,q_{a(c)})\in R.
+\]
+For a nullary constructor this requires its designated state to belong to $R$.
+\end{definition}
+
+\begin{theorem}[Finite-cover soundness]
+\label{thm:finite-cover}
+If $R$ is an inductive cover and $R\subseteq G$, then \eqref{eq:tree-goal} holds.
+\end{theorem}
+\begin{proof}
+Induct on a finite constructor tree. The induction hypotheses put every child
+summary in $R$. The closure check for its constructor puts the parent summary
+in $R$. For nullary constructors this is exactly the required initial-state
+check. Finally use $R\subseteq G$.
+\end{proof}
+
+The positive certificate can therefore be only a list of state identifiers.
+The checker verifies membership, distinctness, all constructor closures, and
+$R\subseteq G$. It does not need to trust how the proposer found $R$ and does
+not need to recompute the least reachable set. A larger closed cover is just as
+sound as the least one, provided it stays inside $G$.
+
+\subsection{Search and a genuine counterexample}
+The proposer computes the least constructor-closed set by saturation. Every
+new state retains a witness tree node whose children refer to previously
+constructed witness nodes. If a state outside $G$ is discovered, its witness is
+returned immediately. The witness is a directed acyclic graph that denotes an
+ordinary finite tree, possibly with shared subtrees.
+
+\begin{lstlisting}
+reachable := empty state-to-witness map
+repeat:
+    for each constructor c:
+        for each tuple of already reachable child states:
+            q := delta_c(tuple)
+            if q is new:
+                record q with a node pointing to child witnesses
+                if q not in good:
+                    return concrete_tree_DAG(q)
+    if no new state was added:
+        return inductive_cover(keys(reachable))
+    if resource budget is exhausted:
+        return unknown
+\end{lstlisting}
+
+The negative checker requires every child index to be strictly smaller than the
+index of its parent. It evaluates each node using the input algebra and checks
+that the designated root state is outside $G$. No search result tag is accepted
+as a substitute for this tree. A malformed self-reference is rejected even if
+its proposed summary state happens to be bad.
+
+\begin{theorem}[Completeness for the explicit finite algebra]
+Without a resource cutoff, saturation either returns an inductive cover inside
+$G$ or a finite tree whose summary is outside $G$.
+\end{theorem}
+\begin{proof}
+At most $|Q|$ new states can appear. Every stored state is realized by its
+recorded finite tree. Conversely, induction on tree height shows that the
+summary of every finite tree eventually enters the closure. Therefore the
+fixed point is exactly the set of realizable summaries. If it contains a bad
+state, the associated finite tree refutes the universal claim; otherwise it is
+a positive cover.
+\end{proof}
+
+This completeness statement is for the supplied finite algebra. It is not a
+claim that arbitrary recursive functions admit a sufficiently precise finite
+abstraction or that finite-model reasoning decides all Lean inductive goals.
+
+\subsection{Example: two related counts in all binary trees}
+For a full binary tree let $L(t)$ be its number of leaves and $N(t)$ its number
+of internal nodes. Fix $m\ge1$. Use state space
+\[
+ Q=(\Z/m\Z)^2,
+\]
+with leaf summary $(1,0)$ and node transition
+\[
+ (\ell_1,n_1),(\ell_2,n_2)
+ \longmapsto (\ell_1+\ell_2,n_1+n_2+1).
+\]
+The desired good set is
+\[
+ G=\{(\ell,n):\ell-n\equiv1\pmod m\}.
+\]
+The prototype discovers this set as its reachable cover. The rule closes
+because
+\[
+ (\ell_1+\ell_2)-(n_1+n_2+1)
+ =(\ell_1-n_1)+(\ell_2-n_2)-1\equiv1.
+\]
+This is a theorem about \emph{all} finite binary trees, not just the trees used
+to reach the $m$ states during search.
+
+At $m=12$ the explicit product has 144 states and the binary transition table
+has $144^2=20{,}736$ entries. The recorded search reaches 12 states, evaluates
+145 distinct constructor/child-state tuples, and visits 235 tuples including
+revisits. These are separate quantities. Building and validating the entire
+explicit transition table still costs work proportional to its 20,736 entries;
+145 is not an end-to-end complexity claim. A native implementation can use a
+proved modular transition function instead of an explicit table, but then that
+function's connection to the source fold must be checked.
+
+The finite certificate establishes the selected congruence. It does not justify
+upgrading that congruence to the integer equality $L=N+1$ merely because the
+same equality motivated the choice of states.
+
+\subsection{Example: equality of folds without assuming associativity}
+Let $(A,\star)$ be an arbitrary finite magma: an operation on a finite set, with
+no associativity or identity assumption. A tree has leaf labels in $A$. Compare
+its fold with the fold of its mirror. The product summary is
+\[
+ (u,v)=\bigl(\operatorname{fold}(t),
+               \operatorname{fold}(\operatorname{mirror}(t))\bigr).
+\]
+A leaf $a$ has summary $(a,a)$. For child summaries $(u_1,v_1),(u_2,v_2)$, the
+node summary is
+\[
+ (u_1\star u_2,\ v_2\star v_1).
+\]
+The good states are the diagonal pairs. Saturation either certifies that every
+reachable pair is diagonal or constructs an actual tree with unequal folds.
+
+If $\star$ is commutative, the diagonal is closed; associativity is irrelevant.
+If some $a\star b\ne b\star a$, the tree with leaves $a,b$ already provides a
+counterexample. The experiment includes both classes, as well as unrelated
+random algebras checked against a separately written closure oracle. This is a
+small but meaningful regression suite for product construction, constructor
+order, and witness reconstruction.
+
+\subsection{The source-level bridge is a proved commuting diagram}
+\label{sec:finite-bridge}
+A finite table is not automatically a model of a Lean definition. For a source
+datatype $D$ and summary $\alpha:D\to Q$, each constructor must have a proved
+compatibility theorem
+\[
+ \alpha\bigl(c_D(t_1,\ldots,t_a)\bigr)
+ =\delta_c\bigl(\alpha(t_1),\ldots,\alpha(t_a)\bigr).
+\]
+The final target must follow from $\alpha(t)\in G$. These bridge theorems are
+part of preparation. With them, Theorem~\ref{thm:finite-cover} becomes a source
+proof through ordinary structural induction.
+
+For an infinite payload type, such as integer-labelled trees, a finite
+classification of labels needs its own exhaustive coverage proof. A positive
+cover can safely over-approximate possible labels and transitions. A bad
+\emph{abstract} state does not then automatically give a concrete source
+counterexample: its abstract labels or transitions might be unrealizable.
+Negative export requires reconstructing actual source constructors and values
+and checking the resulting tree. The current prototype uses a finite explicit
+signature and exact transition tables, so it avoids this extra abstraction
+layer.
+
+A Lean implementation should begin with non-indexed datatypes and registered
+summary homomorphisms. Mutual recursion, dependent indices, quotient
+representations, coinductive streams, and general well-founded recursion need
+additional semantics and should not be silently flattened into this signature.
+
+\subsection{How this becomes a Forge worker}
+A preparation pass recognizes a goal about a fold into \code{Fin m}, a finite
+product, or another explicitly enumerated type. It searches the registered
+summary laws, constructs the relevant product algebra, and sends its pure
+finite description to the proposer. The returned cover is checked using
+\code{Finset}/\code{Fintype} data or an array-based reflected checker. The
+resulting theorem is then introduced as an ordinary local fact.
+
+The first implementation does not need a general automata library. A worklist,
+a dense or sparse state table, and the small cover checker suffice. A more
+general library may become useful for nondeterministic summaries or language
+operations, but importing such a library does not replace the Lean source
+bridge. The reference formalization is useful as an algorithm and refinement
+model, not as automatically transferable Lean authority~\cite{afp-tree}.
+
+Use a budget in state discoveries, tuple evaluations, table size, and certificate
+size. The explicit prototype implements a transition-evaluation cutoff; it is
+not hardened against arbitrary hostile table sizes. State-product blow-up is the
+main structural limit. Goal-directed products should include only the summaries
+needed by the target, while any omission must still leave a sound abstraction.

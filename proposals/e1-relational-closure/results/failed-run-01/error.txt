@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/data/forge-relational-closure/prototype/run_experiments.py", line 101, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/data/forge-relational-closure/prototype/run_experiments.py", line 74, in main
+    row.update(accepted=True,check_seconds=time.perf_counter()-t,**receipt)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: dict.update() got multiple values for keyword argument 'accepted'

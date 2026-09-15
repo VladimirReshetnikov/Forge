@@ -1,0 +1,231 @@
+\section{Coupled invariants by descending linear spaces}
+\label{sec:spaces}
+
+\subsection{Conservation is stronger than induction needs}
+
+An equation $p(x)=0$ can be invariant even if $p(F(x))\ne p(x)$ as a polynomial.
+For example, $p(F(x))=2p(x)$ preserves zero. More generally, a family of equations
+can preserve its common zero set while its individual components mix:
+\begin{equation}\label{eq:matrix-action}
+ \mathbf p(F_a(x))=M_a\mathbf p(x),\qquad
+ \mathbf p=(p_1,\ldots,p_r)^{\mathsf T},\quad M_a\in\Q^{r\times r}.
+\end{equation}
+This is a genuine step beyond searching only for conserved quantities.
+
+Forge explicitly recognizes the still more general relation
+$p_i(F(x))=\sum_j h_{ij}(x)p_j(x)$ and correctly warns that jointly discovering
+unknown $p_j$ and unknown multipliers is bilinear \cite{forge-structural}.
+The algorithm in this section does not pretend otherwise. It restricts the
+multipliers to constants and computes a greatest stable subspace by linear
+preimages, never solving for a new invariant basis and its action matrix in one
+bilinear system. Section~\ref{sec:ideals} removes the constant-multiplier
+restriction by a different, target-seeded algorithm.
+
+\subsection{Problem statement}
+
+Fix finitely many polynomial maps
+$F_1,\ldots,F_s:\Q^n\to\Q^n$ and a polynomial initialization
+$\phi:\Q^k\to\Q^n$. Every finite word in the maps is allowed; thus the problem
+includes arbitrary switching between transitions. The desired target is an
+equation $q(x)=0$ along every resulting orbit.
+
+Let $P_d=\Q[x_1,\ldots,x_n]_{\le d}$. Its dimension is
+\[
+ N=\binom{n+d}{d}.
+\]
+The initialization induces a linear map
+$E_\phi:P_d\to\Q[t_1,\ldots,t_k]$, $p\mapsto p\circ\phi$.
+Each transition induces a linear pullback map $F_a^*:p\mapsto p\circ F_a$.
+Pullback is linear in the polynomial being transformed, even when $F_a$ itself
+is nonlinear. Its image need not lie in $P_d$.
+
+Define
+\begin{align}
+ V_0&=\kerop E_\phi,\label{eq:V0}\\
+ V_{j+1}&=V_j\cap\bigcap_{a=1}^{s}(F_a^*)^{-1}(V_j).
+ \label{eq:descending}
+\end{align}
+All spaces on the right are subspaces of $P_d$. Membership of a pullback in
+$V_j$ is tested as an equality of full polynomials, not after projection back
+to degree $d$.
+
+\begin{theorem}[Greatest stable bounded-degree space]\label{thm:space}
+Iteration \eqref{eq:descending} stabilizes after at most $N$ strict dimension
+decreases. Its fixed point $V_*$ is the greatest subspace of $P_d$ whose
+polynomials vanish on $\phi(\Q^k)$ and which is stable under every $F_a^*$.
+Every polynomial in $V_*$ vanishes on every reachable state.
+\end{theorem}
+\begin{proof}
+The sequence is descending in the finite-dimensional space $P_d$. A proper
+inclusion decreases dimension by at least one; once equality occurs, applying
+the same operator again leaves the space unchanged.
+
+At a fixed point, $V_*\subseteq V_0$ and $F_a^*(V_*)\subseteq V_*$ for every
+$a$. Let $W\subseteq P_d$ have those two properties. Then $W\subseteq V_0$.
+If $W\subseteq V_j$, stability gives $F_a^*W\subseteq W\subseteq V_j$, so
+$W\subseteq V_{j+1}$. Hence $W\subseteq V_*$.
+
+Finally, all elements of $V_*$ vanish initially. If they all vanish at $x$,
+then for $p\in V_*$, the polynomial $p\circ F_a$ also belongs to $V_*$, so
+$p(F_a(x))=0$. Induction on the length of an arbitrary transition word proves
+the reachability assertion.
+\end{proof}
+
+\subsection{An executable preimage computation}
+
+Choose an ordered monomial basis for $P_d$ and keep $V_j$ in reduced row-echelon
+form, with row basis $b_1,\ldots,b_r$. For each $a$ and $i$, expand
+$b_i\circ F_a$ exactly. Eliminate its coefficients at the pivot monomials of
+$V_j$ using the basis rows, retaining all remaining monomials. Denote the
+remainder by $u_{a,i}$.
+
+A combination $p=\sum_i c_i b_i$ has its pullback in $V_j$ exactly when
+\[
+ \sum_i c_i u_{a,i}=0
+ \quad\text{for each }a.
+\]
+Stack the coefficient equations for all remainder monomials and transitions.
+Their nullspace gives the allowed vectors $c$. Multiply that nullspace basis by
+the old row basis and row-reduce once more. This computes
+\eqref{eq:descending} with ordinary exact linear algebra.
+
+\begin{lstlisting}
+V := nullspace(coefficients(monomialBasis o initialization))
+repeat:
+  residuals := []
+  for transition F:
+    for basis polynomial b in V:
+      residuals.append(fullRemainder(b o F, vectorSpace = V))
+  C := simultaneousCoefficientNullspace(residuals)
+  next := canonicalRowSpace(C * V)
+  if next = V: break
+  V := next
+return V, exactActionMatrices(V), targetCoordinates(V)
+\end{lstlisting}
+
+The phrase \emph{full remainder} is load-bearing. If $x'=x^2$ and $d=1$,
+then $x\circ F=x^2$ is not a degree-one polynomial. Replacing it by zero would
+falsely make $\Span\{x\}$ look stable. The prototype retains the $x^2$
+coefficient and rejects this proposed stability. Failure to find a stable
+space is a search limitation, not a proof that $x=0$ fails on the orbit.
+
+\subsection{A coupled nonlinear example}
+
+Take the parameterized initial state
+\[
+ (x,y,z)=(t,t^2,2t^2),\qquad t\in\Q,
+\]
+and allow either transition
+\begin{align*}
+ F_1(x,y,z)&=(2x,\;2y+z,\;y+3z+x^2),\\
+ F_2(x,y,z)&=(-x,\;2x^2-y,\;y+z-x^2).
+\end{align*}
+We want to prove $z=2y$ after every finite sequence of these updates.
+
+Set $e_1=y-x^2$ and $e_2=z-2x^2$. Direct expansion gives
+\[
+ \begin{pmatrix}e_1\circ F_1\\e_2\circ F_1\end{pmatrix}
+ =\begin{pmatrix}2&1\\1&3\end{pmatrix}
+ \begin{pmatrix}e_1\\e_2\end{pmatrix},\qquad
+ \begin{pmatrix}e_1\circ F_2\\e_2\circ F_2\end{pmatrix}
+ =\begin{pmatrix}-1&0\\1&1\end{pmatrix}
+ \begin{pmatrix}e_1\\e_2\end{pmatrix}.
+\]
+The target is $e_2-2e_1$. Neither equation needs to remain numerically unchanged
+outside its zero set; only the pair's common zero set needs to be preserved.
+
+The degree-two search has 10 monomials. Initialization leaves a five-dimensional
+vanishing space, and one strict refinement reduces it to the two-dimensional
+stable space generated by $e_1,e_2$. The stored canonical basis happens to use
+the order $(e_2,e_1)$; its action matrices are correspondingly permuted. The
+conservation-only ablation, with the same degree and initialization, has dimension
+zero. A degree-one search also has zero stable dimension and misses the target.
+
+These are exact nullspace calculations, not fits to sampled trajectories.
+Initialization is checked after substituting the symbolic parameter $t$, and
+each step relation is checked coefficient by coefficient.
+
+\subsection{A stronger completeness statement for affine transitions}
+
+For nonlinear transitions, $V_*$ may omit valid degree-$d$ invariants because
+preserving them can require higher-degree multiples. If every $F_a$ is affine,
+then $P_d$ is itself pullback-stable, and a sharper statement holds.
+
+\begin{theorem}[Affine-fragment completeness]\label{thm:affine}
+For affine transitions and polynomial initialization over $\Q$, $V_*$ is exactly
+the set of degree-at-most-$d$ polynomials that vanish on all reachable states.
+\end{theorem}
+\begin{proof}
+Let $W$ be that set. It is a subspace of $P_d$ and vanishes initially.
+If $p\in W$, then $p\circ F_a$ has degree at most $d$. For any reachable $x$,
+$F_a(x)$ is also reachable because every transition is enabled, so
+$(p\circ F_a)(x)=0$. Thus $W$ is pullback-stable and is contained in $V_*$ by
+Theorem~\ref{thm:space}. The reverse inclusion is its soundness conclusion.
+\end{proof}
+
+The prototype tests this theorem by a second, forward formulation. Let
+$m(x)$ be the column of all monomials through degree $d$. For an affine map,
+$m(F_a(x))=L_a m(x)$ for an exact rational matrix $L_a$. Start from the span of
+coefficient vectors of the parameterized feature column $m(\phi(t))$, and close
+that span under all $L_a$. Its annihilator is the space of polynomial relations.
+
+Why use coefficient vectors rather than only a few initial feature values?
+A rational linear functional vanishes on all evaluations of a polynomial vector
+if and only if the resulting polynomial is identically zero, which over the
+infinite field $\Q$ is equivalent to every coefficient vanishing. Thus the two
+spans have the same annihilator. Forward reachable-span closure and backward
+stable-space refinement must therefore agree.
+
+They agree on all 72 generated affine test systems. Of these, 24 have a nonzero
+relation space; the others are useful zero-space controls, not additional
+nontrivial theorems. The two algorithms share the exact scalar-arithmetic helper,
+so this is algorithmic differential testing, not two wholly independent
+implementations of rational arithmetic.
+
+\subsection{The certificate and its proof cost}
+
+A positive certificate contains the polynomials $p_i$, one constant matrix
+$M_a$ per transition, and target coordinates $q=\sum_i c_i p_i$. The checker
+verifies
+\begin{equation}\label{eq:space-certificate}
+ p_i\circ\phi=0,\qquad
+ p_i\circ F_a=\sum_j (M_a)_{ij}p_j,\qquad
+ q=\sum_i c_i p_i.
+\end{equation}
+It neither recomputes the fixed point nor trusts the searcher's claim of
+maximality. Linear independence of the listed polynomials is also unnecessary
+for certificate soundness; redundant generators merely cost space.
+
+A Lean implementation can express the invariant as a finite conjunction of
+polynomial equations and use a single generic reachability-induction lemma.
+For small certificates, generating direct expressions and discharging the
+identities with \code{ring} or \code{ring\_nf} is the simplest bridge. For larger
+ones, a reflected sparse-polynomial checker should use an established polynomial
+semantics such as \code{MvPolynomial.eval\textsubscript{2}}, whose definition and evaluation
+lemmas are present at the pinned Mathlib revision \cite{mathlib-eval}.
+
+The expensive work is not the theorem above but coefficient growth and
+substitution. At degree $d$, a transition of degree $D$ can produce monomials
+through degree $dD$, with ambient count $\binom{n+dD}{n}$. There are at most
+$N$ strict refinements, but this bound does not make the arithmetic polynomial
+in the input bit length or keep the intermediate polynomials small. Cache
+monomial pullbacks, exploit sparse rows, and use fraction-free or modular exact
+linear algebra in production. Python-FLINT supplies rational row reduction and
+integer nullspace facilities that can serve the proposer; acceptance still
+uses the exact identities \cite{flint-q,flint-z}.
+
+\subsection{Guards and control locations}
+
+Ignoring guards enlarges the transition relation. An invariant proved for the
+enlarged system is valid for the guarded system, but failure in the enlarged
+system says nothing negative about the guarded source program. Parameters in
+$\phi$ are likewise universally unconstrained in this fragment.
+
+A useful unimplemented extension is one space $V_\ell$ per control location.
+For an edge $e:\ell\to m$, require $F_e^*V_m\subseteq V_\ell$, with separate
+initial constraints at entry locations. Simultaneous descending refinement in
+$\prod_\ell P_d$ still terminates after at most $|L|N$ strict dimension drops.
+The certificate becomes a family of rectangular action matrices, one per edge.
+This is the natural representation for mutually recursive helpers whose
+invariants differ by phase; it is preferable to artificially embedding every
+control location in the same polynomial equation list.

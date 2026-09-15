@@ -1,0 +1,263 @@
+\section{Worker I: finite-dimensional proofs for all words}
+\label{sec:words}
+
+\subsection{Model and certificate}
+
+Let $A$ be a finite alphabet and $d\ge1$. A rational linear word model consists of
+an initial row $u\in\Q^{1\times d}$, a matrix $M_a\in\Q^{d\times d}$ for every
+$a\in A$, and an output column $v\in\Q^{d\times1}$. For
+$w=a_1\cdots a_m$, put
+\[
+M_w=M_{a_1}\cdots M_{a_m},\qquad M_\epsilon=I,
+\qquad f(w)=uM_wv.
+\]
+The worker decides whether $f(w)=0$ for every finite word. Equality of two models
+reduces to this problem by block-diagonal composition:
+\[
+u=(u_1,u_2),\quad M_a=\operatorname{diag}(M_{1,a},M_{2,a}),\quad
+v=\begin{pmatrix}v_1\\-v_2\end{pmatrix}.
+\]
+This reduction requires the same alphabet and an exact correspondence between
+its symbols. It does not identify two source constructors because they have
+similar printed names.
+
+A positive certificate contains an arbitrary matrix $B\in\Q^{b\times d}$,
+a row $\alpha\in\Q^{1\times b}$, and matrices
+$C_a\in\Q^{b\times b}$ satisfying
+\begin{equation}\label{eq:word-cert}
+u=\alpha B,\qquad BM_a=C_aB\quad(a\in A),\qquad Bv=0.
+\end{equation}
+The search usually chooses independent rows for $B$, but the checker does
+\emph{not} need to prove independence, minimality, or even reachability of those
+rows. Any finite simulation satisfying these identities suffices. The rank-zero
+case is legitimate: it certifies exactly the zero initial row.
+
+\begin{theorem}[Soundness of the word certificate]\label{thm:word-sound}
+If \eqref{eq:word-cert} holds, then $uM_wv=0$ for every $w\in A^*$.
+\end{theorem}
+\begin{proof}
+Induction on the word gives $BM_w=C_wB$, where $C_w$ is the analogous product
+of the small matrices. Consequently
+$uM_wv=\alpha BM_wv=\alpha C_wBv=0$. The empty word uses the identity matrices.
+Every equality is a matrix identity over the same rational field.
+\end{proof}
+
+The certificate says more than ``these examples worked''. It provides a finite
+state representation that is closed under every transition and whose entire
+represented space has output zero. This is the missing universal argument.
+
+\subsection{Search: exact reachable-space closure}
+
+Define the reachable row space
+\[
+\mathcal R=\Span_\Q\{uM_w:w\in A^*\}.
+\]
+A breadth-first agenda stores a row basis for this space together with a word
+that generates each stored row. The procedure is elementary.
+
+\begin{lstlisting}
+check u * v; return the empty word if it is nonzero
+insert u if independent; queue its basis index
+while the queue is nonempty:
+    take one stored row b with generating word w
+    for each letter a:
+        y := b * M[a]
+        if y * v != 0: return the concrete word w ++ [a]
+        if y is independent of the stored rows:
+            insert y and queue it, retaining w ++ [a]
+solve u = alpha * B and B * M[a] = C[a] * B
+return B, alpha, C
+\end{lstlisting}
+
+The implementation incrementally maintains echelon rows and their exact
+coordinates in the original, word-labelled rows. It never uses a floating-point
+rank tolerance. A word is checked against the original model, not against the
+normalised echelon rows, which need not themselves be reachable by a single
+word.
+
+\begin{theorem}[Termination and completeness of the rational fragment]
+Without a resource interruption, reachable-space search terminates and returns
+either a valid certificate \eqref{eq:word-cert} or a word with nonzero output.
+A separating word exists of length at most $d-1$ whenever the universal identity
+is false.
+\end{theorem}
+\begin{proof}
+Every admitted row is independent of the previous rows, so at most $d$ rows
+are admitted. Each is expanded once under each letter. At agenda exhaustion,
+the stored span contains $u$ and is closed under all $M_a$, so it contains every
+reachable row. Conversely, every admitted row is reachable. Thus it equals
+$\mathcal R$, and the coordinate equations for the certificate are solvable.
+Every stored or tested row is checked against $v$; if none separates, the
+certificate satisfies $Bv=0$.
+
+For the length bound, let $R_j$ be the span of reachable rows from words of
+length at most $j$. If $R_j=R_{j+1}$, it is already transition-closed and all
+later spaces agree. Starting with dimension at most one, the ascending chain
+must either stabilise earlier or reach its maximum dimension by $j=d-1$.
+Therefore $R_{d-1}=\mathcal R$. A nonzero linear functional on $\mathcal R$
+is nonzero on at least one of the word generators of $R_{d-1}$.
+\end{proof}
+
+This is the standard weighted-automaton argument, specialised to a small
+certificate interface~\cite{kiefer}. The new checker deliberately does less
+than the search: it multiplies rational matrices and compares the results.
+It need not trust how Gaussian elimination was implemented.
+
+\subsection{Complexity, proof size, and useful nonminimal certificates}
+
+Incremental reduction and dense matrix-vector multiplication take $O(d^2)$
+field operations per candidate row. There are at most $|A|d$ expansions, so the
+basic search is $O(|A|d^3)$ field operations. Dense verification of
+\eqref{eq:word-cert} costs
+\[
+O\bigl(|A|(bd^2+b^2d)+bd\bigr),\qquad b\le d
+\]
+for certificates emitted by this search. Storage is
+$O(bd+|A|b^2)$ rational entries, in addition to the original model.
+These are \emph{field-operation} bounds, not constant-time bit bounds.
+Intermediate rational numerators and denominators can grow substantially.
+
+In a production search, fraction-free elimination or modular discovery with
+exact reconstruction is worth considering. In the acceptance path, however,
+reconstruction must be followed by the same exact identities. A modular rank
+calculation is not evidence that a rational equality holds. The proposed FLINT
+backend is only a faster producer of candidates.
+
+Minimising $B$ is optional. A small nonminimal certificate can be much easier to
+find than an absolutely minimal one, and its algebraic checks remain sound.
+For example, the Cassini lift below has dimension ten and an emitted reachable
+basis of rank eight; no claim of output-minimal automaton construction is made.
+A later certificate optimiser can reduce rows if it provides another valid
+simulation. Proof size, not minimality terminology, is the practical objective.
+
+\subsection{Infinite input alphabets by polynomial interpolation}
+\label{sec:alphabet}
+
+Many relevant folds consume arbitrary integers or rationals, not letters from a
+small enumerated datatype. Suppose the transition matrix depends polynomially
+on an input $x$:
+\begin{equation}\label{eq:poly-transition}
+M(x)=\sum_{j=0}^{D}x^jM_j,\qquad M_j\in\Q^{d\times d}.
+\end{equation}
+A positive certificate checks $BM_j=C_jB$ for every coefficient matrix. Then
+\[
+BM(x)=\left(\sum_{j=0}^{D}x^jC_j\right)B
+\]
+for every rational $x$, so Theorem~\ref{thm:word-sound} proves the identity for
+every finite sequence of rational inputs. The same positive algebraic argument
+transports to a compatible characteristic-zero field through its rational
+embedding; the source adapter must prove that transport.
+
+There is also a complete finite search alphabet.
+
+\begin{theorem}[Interpolation alphabet]\label{thm:interp}
+For \eqref{eq:poly-transition}, choose $D+1$ distinct rationals
+$t_0,\ldots,t_D$. The reachable space generated by all $M(x)$, $x\in\Q$, equals
+the reachable space generated by $M(t_0),\ldots,M(t_D)$.
+\end{theorem}
+\begin{proof}
+Every grid transition is an allowed rational transition, giving one inclusion.
+The Vandermonde matrix $(t_i^j)_{0\le i,j\le D}$ is invertible, so each
+coefficient matrix $M_j$ is a rational linear combination of the grid matrices.
+A row space closed under every grid matrix is consequently closed under every
+$M_j$ and hence every $M(x)$. This gives the other inclusion.
+\end{proof}
+
+The implementation uses the grid $0,1,\ldots,D$. It searches with those actual
+transitions, then emits closure actions for the \emph{coefficient} matrices.
+A negative result is therefore a concrete list of grid inputs. This detail
+matters: directly searching the coefficient matrices could produce a sequence
+of coefficient indices that is not a legal sequence of source inputs.
+
+The grid is not an empirical sample. Completeness rests on the proved degree
+bound. If that bound is understated, the conclusion is false. The test
+\[
+s' = s+x(x-1),\qquad s_0=0
+\]
+is zero for every word over inputs $0$ and $1$, but one input $2$ yields output
+$2$. The compiler computes degree two, and the worker returns $[2]$ as a
+separating input. This is a regression control against treating a small input
+set as universal without checking interpolation hypotheses.
+
+For several input coordinates, a rectangular interpolation grid is a valid
+extension, but its size is a product of degree bounds. A sparse multivariate
+unisolvent set could improve search. Neither extension is implemented here.
+
+\subsection{Affine state updates and polynomial observations}
+\label{sec:lift}
+
+A useful front end need not ask users to write matrices. Let the state be
+$z=(z_1,\ldots,z_m)$, let each update be affine in $z$, and let the desired
+output relation be a polynomial $H(z)$ of degree at most $e$. Form the feature
+row
+\[
+\Phi_e(z)=(z^\alpha)_{|\alpha|\le e},\qquad
+\dim\Phi_e=\binom{m+e}{e}.
+\]
+Substitution of an affine update into a polynomial of degree at most $e$ does
+not increase its state degree. Thus each update $T_a$ has a matrix satisfying
+\begin{equation}\label{eq:lift}
+\Phi_e(T_a(z))=\Phi_e(z)M_a,
+\qquad H(z)=\Phi_e(z)v.
+\end{equation}
+The initial feature row is $u=\Phi_e(z_0)$. Equations \eqref{eq:lift}, followed
+by the matrix certificate, prove $H$ vanishes on every reachable state.
+
+Coefficients of an affine state update may themselves be polynomial in an
+input $x$. Substitution then gives matrices of form \eqref{eq:poly-transition}.
+The relevant input degree is the degree \emph{after lifting}; it can exceed the
+degree in the unlifted update. The supplied compiler expands substitutions,
+extracts state monomial coefficients, determines input degree, and checks the
+symbolic substitution identities with SymPy. Its positive certificates are
+checked in the matrix model. This compiler is not yet an independently proved
+Lean reifier.
+
+\begin{example}[Two related Horner folds]\label{ex:horner}
+Start at $(h,j,g)=(0,0,0)$ and consume a list through
+\[
+h'=bh+x,\qquad j'=bj+2x+3,\qquad g'=bg+1,
+\]
+where $b$ is a fixed rational. The desired identity is $j=2h+3g$ after every
+list. The degree-one features $(1,g,j,h)$ give a four-dimensional model with
+input degree one. The tested instances $b=-2,0,1,3$ each emit a rank-three
+closure certificate after six basis-letter expansions. A direct handwritten
+induction is short; the important automatic step is deriving and certifying
+the hidden state relation without being given that induction proof.
+\end{example}
+
+\begin{example}[A polynomial observer, not a polynomial sequence]
+Start with $(a,b,c)=(0,1,1)$ and allow either transition
+\[
+T_1(a,b,c)=(b,a+b,-c),\qquad
+T_2(a,b,c)=(a+b,a+2b,c).
+\]
+The observer is $H=b^2-ab-a^2-c$. Since $T_2=T_1^2$, words describe arbitrary
+blocks of one or two Fibonacci advances, and the identity is the Cassini
+relation with the parity sign carried in $c$. Degree-two lifting has ten
+features. Exact search emits a rank-eight certificate after sixteen expansions.
+This proves an output identity for an infinite collection of transition words;
+it does not claim that the Fibonacci values themselves are polynomials in the
+word length.
+\end{example}
+
+\subsection{What the front end must reject or leave as an obligation}
+
+The first source fragment should be deliberately narrow: fixed rational
+coefficients, affine state updates, polynomial observations, and either an
+explicit finite transition alphabet or one polynomial input coordinate.
+A state update such as $z'=z^2$ is rejected by the supplied compiler. A broader
+Koopman-style lift may exist for some nonlinear systems, but a finite closure is
+not automatic and must not be presumed from a finite set of experiments.
+
+Natural subtraction, integer division, overflow arithmetic, and tests on state
+values do not become rational affine operations merely because their notation
+resembles them. Casts require homomorphism proofs; a branch requires an exact
+case split or a documented over-approximation. If all branch actions are allowed
+in arbitrary order, positive closure is sound for the resulting larger model,
+but a negative word may be infeasible in the source program. Such a word is only
+guidance until source execution or a proved feasibility argument confirms it.
+
+An unknown or unsupported translation is not a disproof. For a translated
+exact model, by contrast, a separating word is genuine positive evidence of an
+inequality. The certificate interface distinguishes these cases instead of
+routing both through a single ``failed'' result.

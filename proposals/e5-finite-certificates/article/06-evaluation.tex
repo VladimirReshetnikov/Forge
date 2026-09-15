@@ -1,0 +1,161 @@
+\section{Implementation and experimental evidence}
+\label{sec:experiments}
+
+\subsection{What was executed}
+
+The archive contains two intentionally different implementations of the
+mathematical operations. \code{prototype/search.py} uses SymPy 1.14.0 for exact
+matrix solving, polynomial bases, division, and nullspaces.
+\code{prototype/checkers.py} uses only the Python standard library, representing
+polynomials as sparse exponent maps with \code{Fraction} coefficients. The
+checker neither imports the search module nor calls a symbolic simplifier. It
+can replay saved bundles with Python's site packages disabled.
+
+The environment was Python 3.13.5 on x86-64 Linux. The deterministic corpus seed
+is \code{2026091507}. Search time is measured once per case with
+\code{perf\_counter\_ns}; checker time is the median of five warm invocations.
+Process startup, imports, JSON parsing, and any Lean work are excluded from those
+timings. This is a small deterministic research corpus, not a production
+performance study.
+
+\begin{table}[ht]
+\centering\small
+\input{metrics}
+\caption{Recorded outcomes. Timing columns are medians over the successful
+instances in each family; the checker entry for each instance is itself a median
+of five warm runs. Cex. means independently replayed counterexample.}
+\label{tab:metrics}
+\end{table}
+
+Across 59 cases, 38 yield certificates, 17 yield concrete counterexamples, and
+four retain \Unknown. The unknown cases are expected budget or template
+controls, not failed cases reclassified as successes. The exact per-instance
+results, options, and timings are in \code{results/summary.json},
+\code{results/problems.json}, and \code{results/measurements.csv}.
+
+\subsection{Corpus construction and what each part tests}
+
+The 36 linear cases comprise 18 exact invariant systems in dimensions two
+through seven, four product-equivalence systems related by invertible changes
+of coordinates, seven delayed-error shift systems, six guaranteed nonzero
+random controls, and a dedicated noncommuting two-action orientation test.
+The positive invariant fixtures deliberately contain unobserved coordinates;
+this tests demand-directed closure rather than forcing the basis to equal the
+entire state space.
+
+The 13 polynomial cases comprise the mutual-squares example, its budget control,
+two mutants, four scaled product relations under square/cube actions, a Cassini
+relation and its mutant, and three strengthening chains. The target-only
+initial ideals are not supplied with the final auxiliary generators. In the
+largest chain, five generators are discovered after four strict extensions.
+
+The ten summation cases comprise seven successful binomial-moment recurrences,
+two smaller-template versions that remain unknown, and a bounded order-one
+attempt for the cubic-binomial sum. The numerical cross-checks evaluate each
+accepted recurrence for $n=0,\ldots,30$. Those evaluations are independent
+consistency tests; the universal argument is the polynomial certificate plus
+Theorem~\ref{thm:sum}, not those 31 values.
+
+No instance was imported from a benchmark and then represented as unseen.
+These cases are intentionally constructed to distinguish exact scope, boundary
+behavior, and implementation failure modes. They do not estimate coverage on
+arbitrary Lean developments. Likewise, the linear and polynomial case counts
+are not compared with the many different historical runs already stored in
+Forge's repository.
+
+\subsection{Selected measurements and certificate sizes}
+
+The largest product-equivalence example has total state dimension ten and an
+observable basis of size five. The search processes eleven queued rows. Its
+recorded search time is $18.576$ ms and median checker time $1.785$ ms. The
+mutual-squares ideal example takes $10.862$ ms to search and $0.214$ ms to replay;
+its complete compact problem-and-certificate JSON bundle is 562 bytes.
+
+The length-five polynomial strengthening chain uses five generators and 15
+pullback reductions. Its search takes $55.934$ ms and replay $0.810$ ms. The
+squared-binomial zeroth moment is found after five template trials with seven
+unknown columns; its recorded search is $19.534$ ms and replay $0.261$ ms. The
+binomial third moment requires total certificate degree six in the successful
+run and takes $220.754$ ms to search.
+
+All 38 successful compact JSON bundles total 27,814 bytes before ZIP
+compression. The raw column named \code{certificate\_bytes} counts the entire
+serialized bundle, including its problem and case name; it is not the size of a
+Lean proof term or the certificate payload alone. Actual Lean reconstruction
+and kernel-check costs remain unmeasured.
+
+These small measurements support one modest conclusion: for this corpus,
+finding an explanation is more expensive than replaying its finite identities,
+and the saved explanations are compact. They do not support a general speedup
+claim, an asymptotic scaling claim about SymPy's implementation, or a comparison
+with \code{grind}.
+
+\subsection{Independent replay, mutations, and schema controls}
+
+The command
+\begin{lstlisting}
+python -S prototype/checkers.py results/certificates results/counterexamples
+\end{lstlisting}
+replays 55 bundles: 38 invariant or recurrence certificates and 17 concrete
+counterexamples. The retained output reports zero failures and
+\code{site\_packages\_enabled: false}. The four unknown outcomes have no proof or
+counterexample certificate and are not included in this replay count.
+
+For every successful certificate, the mutation harness adds one to each stored
+matrix entry or nonzero polynomial coefficient, one position at a time. All
+818 resulting mutations are rejected. Some mutations create a noncanonical
+explicit zero monomial, while others preserve the encoding and break an
+algebraic identity. This is a finite adversarial corpus, not a proof that every
+possible forgery is rejected.
+
+The 117 pytest items additionally cover target binding, altered initial states,
+missing action coverage, duplicate JSON keys, floating-point tokens,
+bool-as-integer confusion, unreduced rationals, duplicate or unordered
+monomials, negative exponents, excessive declared degree, empty linear bases,
+word direction, a nonlinear budget cutoff, zero binomial endpoints, and the
+singular-recurrence nonuniqueness example. One item performs 60 independently
+seeded sparse-arithmetic differential trials against SymPy. These are different
+units: 117 test items are not 117 distinct mathematical theorems, and 818
+mutations are not 818 new source goals.
+
+\subsection{Failures retained rather than hidden}
+
+Development exposed two substantive mistakes in the initial test expectations.
+First, a randomly generated matrix system was labeled negative without ensuring
+that its target ever became nonzero. The solver correctly certified it. The
+fixture generator was repaired to force an observed nonzero update, and a
+separate length-two case was added for word ordering. This was a fixture error,
+not a failed mathematical certificate.
+
+Second, the first moment-three summation expectation assumed that a degree-four
+$r$ template would suffice. It did not. The smaller-template unknown remains in
+the final corpus; the successful run explicitly permits degree six. The same
+paired control was added for the squared-binomial second moment. Reporting only
+the later successful run would obscure the actual search limitation.
+
+Two test-development failures are also logged: a collection-time bracket error,
+and an assertion that incorrectly required both recurrence coefficients to
+vanish at the singular index. Only the leading coefficient needs to vanish to
+lose the next-value constraint; the other coefficient can multiply a zero
+current value. The corrected regression still checks two different sequences
+with the same recurrence and first seed.
+
+The retained diagnostic files explain these changes. They are not counted as
+accepted runs, and they do not contain full historical source snapshots.
+\code{docs/validation.md} states that distinction explicitly.
+
+\subsection{Limitations of the executed artifact}
+
+The Python checker has input limits: at most 16 scalar dimensions, bounded
+integer encodings, at most 20,000 monomials per admitted polynomial, degree at
+most 128, and a file-size ceiling. It checks intermediate polynomial growth as
+well. These are pragmatic rejection conditions, not a formal resource theorem.
+External process isolation remains necessary for adversarial use, particularly
+because exact arithmetic and symbolic search can consume significant memory
+before the next boundary check.
+
+The supplied Lean code was not compiled, the source reifier was not built,
+and none of the source-to-IR bridges was machine-verified. No claim is made that
+117 Python tests remove the possibility of a checker bug. What is available
+now is a reproducible mathematical implementation and a small, sharply specified
+set of theorems that the Lean implementation should prove.

@@ -1,0 +1,110 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor,listings,enumitem,fancyhdr}
+\usepackage[hyphens]{url}
+\usepackage[colorlinks=true,linkcolor=blue!40!black,citecolor=blue!40!black,urlcolor=blue!40!black]{hyperref}
+\usepackage{bookmark,needspace}
+\definecolor{ink}{HTML}{183248}
+\definecolor{light}{HTML}{F4F6F8}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,breaklines=true,
+  frame=single,rulecolor=\color{black!15},backgroundcolor=\color{light},showstringspaces=false,
+  xleftmargin=2mm,xrightmargin=2mm,aboveskip=9pt,belowskip=9pt}
+\setlist{nosep,leftmargin=1.5em}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\textsc{Forge: finite certificates for infinite behaviors}}
+\fancyhead[R]{\small September 2026}
+\fancyfoot[C]{\thepage}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\R}{\mathbb R}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\Ideal}[1]{\left\langle #1\right\rangle}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\NF}{\operatorname{NF}}
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\Unknown}{\textsc{unknown}}
+\newcommand{\forge}{\texttt{forge}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\hypersetup{pdftitle={Forge: Finite Certificates for Infinite Behaviors},pdfauthor={OpenAI},pdfsubject={Observable closure, target-generated polynomial ideals, and pole-free summation certificates}}
+\begin{document}
+\begin{titlepage}
+\vspace*{18mm}
+{\Large\sffamily\color{ink} A RESEARCH AND IMPLEMENTATION PROPOSAL}\par
+\vspace{13mm}
+{\Huge\bfseries\color{ink} Forge:\\[3mm] Finite Certificates for\\[3mm] Infinite Behaviors}\par
+\vspace{9mm}
+{\LARGE Observable closure, target-generated polynomial ideals,\\[2mm]
+ and boundary-safe symbolic summation}\par
+\vspace{13mm}
+{\large Three executable extensions beyond the current design}\par
+\vspace{11mm}
+Prepared for Vladimir Reshetnikov\par
+15 September 2026\par
+\vfill
+\begin{minipage}{0.96\linewidth}
+\textbf{What accompanies this article.} Exact Python searches, independently
+implemented standard-library checkers, 38 proof-certificate bundles, 17 concrete
+counterexamples, a 59-instance experimental corpus, mutation records, and Lean
+source specimens. The 117 regression tests pass.\par\medskip
+\textbf{Evidence boundary.} The Python prototypes were executed. The Lean source
+was not compiled: no Lean executable was available. This is not an installed
+\forge{} tactic, a kernel-verification result, or a measured improvement over
+\code{grind}.\par\medskip
+\textbf{Novelty boundary.} The contribution is an incremental design and tested
+implementation for Forge, not a claim to have invented weighted-automaton
+equivalence, polynomial-ideal analysis, or creative telescoping.
+\end{minipage}
+\end{titlepage}
+\begin{abstract}
+The present Forge design already contains a substantial proof-planning layer,
+induction and lemma discovery, polynomial recurrence synthesis, arithmetic
+witness construction, and several exact certificate families. Recommending
+another scheduler or another generic invariant template would not advance it.
+This article develops three narrower but substantially stronger mechanisms.
+First, observable-space closure decides a finite-dimensional rational
+linear-behavior fragment and returns either small matrix certificates or an
+explicit distinguishing input word. Second, target-generated pullback ideals
+construct mutually supporting polynomial invariants from the goal itself,
+avoiding the bilinear search caused by simultaneously guessing invariants and
+multipliers. An ascending-ideal argument establishes termination and completeness
+for the stated unguarded polynomial fragment, while practical budgets remain
+explicit. Third, a pole-free binomial-sum worker synthesizes recurrence and
+syzygy certificates by exact linear algebra, preserving endpoints that rational
+Gosper certificates can obscure. We give soundness proofs, failure examples,
+Lean and Leant integration contracts, concrete library choices, a staged
+implementation plan, and reproducible experiments. The recorded run has 38
+certificate successes, 17 replayed counterexamples, and four bounded unknowns;
+818 single-entry mutations are rejected. None of these counts is a Lean tactic
+success rate. The central proposal is to add mathematical closure mechanisms
+whose output explains an entire infinite family of executions using finitely
+many identities.
+\end{abstract}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\newpage
+\input{01-scope}
+\input{02-observable}
+\input{03-ideals}
+\input{04-summation}
+\input{05-integration}
+\input{06-evaluation}
+\input{07-roadmap}
+\appendix
+\input{08-appendices}
+\input{references}
+\end{document}

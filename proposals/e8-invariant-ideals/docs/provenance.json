@@ -1,0 +1,25 @@
+{
+  "audit_date": "2026-09-15",
+  "repositories": {
+    "Forge": {
+      "commit": "674521027d968d59f7b83220ed52304a85cb55e2",
+      "read": ["README.md", "docs/IDEAS-FROM-LEANT-DJEX.md", "article/sections/05-structural.tex", "article/sections/08-integration.tex", "article/sections/11-conclusion.tex"],
+      "additional_searches": ["pullback", "automata", "Cooper"],
+      "search_note": "No matches returned by connector searches; this is not an exhaustive proof of absence in all frozen proposals."
+    },
+    "Leant": {
+      "commit": "6bf05ad78c467989e68290f2d08bbed40802d485",
+      "read": ["README.md (opening material)", "docs/reports/2026-09-14-indexing-composition-diagnostics.md"],
+      "pinned_Djex_dependency_reported": "e237e866"
+    },
+    "Djex": {
+      "commit": "e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5",
+      "read": ["README.md (lines 1-105)"],
+      "note": "Current Djex head is distinct from Leant's pinned dependency. No Djex or Leant runtime benchmark was performed."
+    }
+  },
+  "baseline_toolchain_reported_by_Forge": "leanprover/lean4:v4.34.0",
+  "baseline_mathlib_reported_by_Forge": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+  "third_party_source_redistributed": false,
+  "repository_mutations": false
+}

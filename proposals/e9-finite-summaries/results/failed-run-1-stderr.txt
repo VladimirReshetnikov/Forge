@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/mnt/data/Forge_Finite_Summaries/prototype/run_experiments.py", line 158, in <module>
+    ap=argparse.ArgumentParser();ap.add_argument('--out',required=True);args=ap.parse_args();main(args.out)
+                                                                                             ~~~~^^^^^^^^^^
+  File "/mnt/data/Forge_Finite_Summaries/prototype/run_experiments.py", line 120, in main
+    t=time.perf_counter(); cert,stats=common_left_multiple(A,B,mo,md)
+                                      ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/mnt/data/Forge_Finite_Summaries/prototype/forge_summaries/ore_search.py", line 17, in common_left_multiple
+    for j,aj in enumerate(op): col[i+j]=s.expand(sgn*n**d*aj.subs(n,n+i))
+                                                          ^^^^^^^
+AttributeError: 'int' object has no attribute 'subs'

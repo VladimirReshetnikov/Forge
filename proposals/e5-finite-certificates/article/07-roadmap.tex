@@ -1,0 +1,191 @@
+\section{A concrete implementation sequence}
+\label{sec:roadmap}
+
+\subsection{Milestones with acceptance gates}
+
+The first production objective should be \emph{one source-level theorem closed
+end to end}, not a dashboard that can dispatch to every proposed worker. The
+following sequence keeps the new work separable and measurable.
+
+\Needspace{16\baselineskip}
+\begin{longtable}{@{}p{0.12\linewidth}p{0.34\linewidth}p{0.46\linewidth}@{}}
+\toprule
+Stage & Deliverable & Acceptance gate\\
+\midrule\endhead
+A1 & Linear semantic theorem and certificate replay &
+At the pinned Lean revision, prove the matrix certificate theorem, compile
+positive and negative replay fixtures, and record the permitted axioms.\\
+A2 & Explicit rational fold reifier &
+Reconstruct the bit-accumulator example from its original fold definitions;
+reject integer division and nonexhaustive inputs.\\
+A3 & Observable search integration &
+Load a certificate from an untrusted process, close the exact source goal,
+and replay a distinguishing word on the original source function.\\
+B1 & Polynomial certificate theorem &
+Check the mutual-squares and product examples using supplied multipliers; no
+Gr\"obner computation inside the trusted proof boundary.\\
+B2 & Target-generated ideal search &
+Discover the auxiliary generator without a hint; preserve unknown on the
+extension-budget control; reject both source mutants.\\
+C1 & Binomial primitive bridge and finite telescoping &
+Prove predecessor-zero semantics, cross multiplication, support, and endpoints;
+close the squared-binomial recurrence in Lean.\\
+C2 & Recurrence comparison &
+Close the central-binomial closed form; reject the false base-only proof for
+the first moment until its additional seed is provided.\\
+L1 & Leant behavior adapter &
+Check an exact candidate universally at its original permitted specification;
+keep inconclusive outcomes and all source identities intact.\\
+\bottomrule
+\end{longtable}
+
+These are implementation gates, not calendar promises. The source bridge and
+Lean replay are the critical path. Building a second symbolic algebra engine is
+not. SymPy can remain the first untrusted proposer while the Lean layer matures.
+
+\subsection{Suggested module decomposition}
+
+The names below are proposed additions, not claims about modules already
+present in Forge:
+\begin{lstlisting}
+Forge/Behavior/StepIR.lean          -- exact scalar-state model
+Forge/Behavior/FoldBridge.lean      -- source simulation theorems
+Forge/Observable/Certificate.lean  -- G, t, and action matrices
+Forge/Observable/Replay.lean       -- finite matrix identity proofs
+Forge/Invariant/IdealCert.lean     -- generator/multiplier identities
+Forge/Invariant/Replay.lean        -- simultaneous invariant induction
+Forge/Summation/BinomialBridge.lean
+Forge/Summation/Telescope.lean
+Forge/Summation/RecurrenceCompare.lean
+Forge/Behavior/LeantAdapter.lean   -- exact-candidate behavior hook
+\end{lstlisting}
+
+The search side should serialize canonical problem data rather than executable
+Lean source. Initially a Lean-side decoder can reconstruct explicit literals
+and invoke existing proof-producing normalizers. Once profile data shows proof
+construction dominating, replace repeated normalizations with a reflected
+checker while leaving the problem schema and semantic theorems unchanged.
+
+Do not add all discovered auxiliary invariants as mutually assumed lemmas.
+Instead, prove the conjunction inductively with one simultaneous invariant
+theorem and only then publish its consequences. A cyclic preservation matrix is
+sound because the induction hypothesis makes the entire previous-state vector
+available. It is not permission to accept a circular proof graph without
+induction.
+
+\subsection{A cheap exact adapter for polynomial targets of affine systems}
+
+There is a useful middle ground between Workers A and B. If every update is
+affine and the target has degree at most $d$, collect all monomials in $D$
+variables of total degree at most $d$. Their number is
+\[
+ N=\binom{D+d}{d}.
+\]
+Substitution of an affine map preserves this degree bound. Hence the monomial
+vector $v_d(s)$ obeys a finite linear update
+\[
+ v_d(F_a(s))=L_av_d(s)
+\]
+for exactly computable rational matrices $L_a$. Express the target as a row in
+this basis and use Worker A in dimension $N$.
+
+The adapter requires a checked monomial-evaluation identity for each matrix
+$L_a$, then reuses the existing observable certificate theorem. It avoids
+Gr\"obner search and is complete for this fixed-degree polynomial target under
+affine updates. It can nevertheless be impractical when $N$ is large; the
+classifier should estimate $N$ before materializing the lifted matrices. This
+is a concrete proposed optimization, not an executed fourth worker in the
+reported counts.
+
+\subsection{Multiple control locations without inventing cyclic proofs}
+
+For an unguarded finite control-flow graph, assign an ideal $J_v$ to each
+location $v$. For an edge $e:u\to v$ with polynomial update $F_e$, close the
+family under
+\[
+ g\in J_v\quad\Longrightarrow\quad g\circ F_e\in J_u.
+\]
+Targets seed the appropriate locations. The finite product of ascending ideal
+chains stabilizes because each component ring is Noetherian. A certificate for
+each edge has the form
+\[
+ g_{v,i}\circ F_e=\sum_j H_{e,ij}g_{u,j}.
+\]
+Initial generator identities at each entry location and ordinary induction on a
+finite execution path prove the location-specific observations. Counterexamples
+must be reconstructed as actual graph paths, not arbitrary words through the
+edge set.
+
+This is a natural extension of the single-location worker. It adds a finite
+control index without changing the algebraic leaf checker. With guards, the
+same warning as in Section~\ref{sec:ideal-limits} applies: treating every edge
+as enabled is sound for positive proofs but can generate infeasible negative
+traces. The graph extension is not included in the current prototype.
+
+\subsection{Selection and performance without another scheduler design}
+
+Use Forge's existing demand and budget mechanism. The new classifier supplies
+only the domain facts needed to select a worker: state dimension, action count,
+state degree, target degree, initial-parameter degree, summand template, and
+presence of unsupported operations. A sensible initial policy is:
+
+\begin{enumerate}
+\item Try direct existing simplification and known lemmas under the current
+Forge policy; avoid paying for algebra when a theorem application suffices.
+\item Prefer observable closure for linear targets and updates, or an affordable
+fixed-degree affine lift.
+\item Use ideal closure for admitted nonlinear polynomial systems, with explicit
+extension, degree, term, coefficient, wall-time, and memory limits.
+\item Route recognized binomial sums to the pole-free template, increasing
+bounds within the caller's existing budget rather than resetting it per trial.
+\end{enumerate}
+
+The polynomial and summation searches should cache substitutions and reduced
+columns under exact problem and basis identities. An ideal-basis change
+invalidates normal forms from the old basis unless a checked conversion is
+performed. Summation matrix columns can be extended incrementally as the
+template grows, but a new coefficient domain or different primitive relation
+requires a new cache identity.
+
+For linear closure, implement incremental rational echelon reduction before
+adding complicated portfolio machinery. For ideals, try returning a smaller
+valid generating family after success, but do not require minimality for
+acceptance. For large multiplier expressions, share subexpressions in proof
+construction and measure kernel time separately from search time. These are
+specific optimization opportunities whose effect can be assessed without
+changing the mathematical claim proved by a certificate.
+
+\subsection{What a convincing comparison should look like}
+
+A future Lean evaluation should use identical source theorems, identical library
+availability, and a fixed versioned environment. It should compare at least:
+existing Forge behavior; Forge plus the new worker but with supplied invariants;
+and Forge plus automatic closure. That separation distinguishes the benefit of
+new certificate replay from the benefit of invariant discovery.
+
+The negative suite should include nonexhaustive alphabets, reversed action
+words, altered initial maps, unavailable source witnesses, incorrect casts,
+truncated subtraction at a binomial endpoint, a rational pole at the support
+boundary, and missing recurrence seeds. Timeouts must stay unknown. Report
+search, decoding, proof construction, and kernel checking separately. None of
+these production measurements is replaced by the Python timings in this
+article.
+
+\section{Conclusion}
+
+The central recommendation is to make Forge stronger by giving it new finite
+mathematical explanations, not by adding more unstructured search. Observable
+closure turns infinitely many linear executions into a small invariant row
+space. Pullback-ideal closure derives the polynomial strengthening needed by a
+goal and certifies it with fixed multiplier identities. Pole-free summation
+turns a class of nonpolynomial finite sums into checked recurrences without
+losing the troublesome endpoints.
+
+All three mechanisms have explicit input fragments, exact algorithms, compact
+certificate formats, and soundness arguments. Two have completeness arguments
+for the precisely stated unbounded fragments; the third has fixed-template
+coverage. Their Python prototypes and independent replay code are available now.
+The remaining engineering work is sharply identified: source compilation,
+Lean replay, and the recurrence-comparison boundary. Completing those gates
+would add real capabilities to Forge without rebranding the concepts its
+repository already contains.

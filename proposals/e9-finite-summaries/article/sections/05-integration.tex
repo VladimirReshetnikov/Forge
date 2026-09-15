@@ -1,0 +1,265 @@
+\section{Concrete Lean integration, with no new global controller}
+\label{sec:integration}
+
+\subsection{Reuse Forge's boundary; add worker-specific semantics}
+
+Forge already specifies a neutral intermediate representation, exact origin
+ownership, worker isolation, and checked-fact publication. Repeating those
+requirements at length would not improve the design~\cite{forge-integration,forge-transfer}.
+The new implementation work is the mathematical meaning of the three prepared
+problem types and the proofs connecting them to source expressions.
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 7mm,box/.style={draw=ink,rounded corners=2pt,align=center,font=\small,minimum height=10mm,text width=36mm},>=Stealth]
+\node[box] (source) {Lean source goal\\and exact context};
+\node[box,right=of source] (model) {Prepared model\\plus denotation proof};
+\node[box,right=of model] (check) {Lean certificate\\checker and theorem};
+\node[box,below=of model] (search) {Untrusted exact search\\Python / CAS};
+\draw[->] (source)--(model);
+\draw[->] (model)--(check);
+\draw[->] (model)--(search);
+\draw[->] (search.east)-|(check.south);
+\end{tikzpicture}
+\end{center}
+
+The denotation proof belongs to preparation, before the external answer exists.
+The external search supplies coefficients and indices, not executable Lean
+source. Its positive result has to satisfy the checker's own reconstructed
+identities for the already prepared model. The final proof is transported back
+to the original goal. This instantiates Forge's existing boundary rather than
+inventing a competing one.
+
+\subsection{The smallest useful word-fold reifier}
+
+Begin with equalities of rational-valued computations over the \emph{same}
+\code{List Rat} input and fixed rational initial states. Recognise either an
+explicit state fold or a pair of folds that can be synchronised into a product
+state. The first implementation can restrict all state fields to rationals and
+all updates to affine expressions in those fields. Do not start with arbitrary
+recursive Lean functions.
+
+A practical preparation algorithm is:
+
+\begin{lstlisting}
+prepareWordGoal(goal):
+    expose the equality and its exact quantified list binder
+    recognize approved fold definitions and their traversal direction
+    synchronize same-input folds using a proved product-fold lemma
+    reify initial state, update, and output difference
+    reject unsupported operations and unresolved coefficient parameters
+    choose the output-degree monomial lift
+    generate update and observation denotation proofs
+    return fixed matrices, variable origins, and correspondence theorem
+\end{lstlisting}
+
+The expression reifier accepts rational literals, addition, subtraction,
+multiplication, and fixed natural powers, with degree bookkeeping. Division is
+initially accepted only when it is part of a rational literal with a proved
+nonzero numeral denominator. A multiplication of two state-dependent affine
+expressions fails the affine-update test, although it can be valid in the
+observer. A polynomial input variable can occur in update coefficients; its
+post-lift degree must be calculated, not guessed.
+
+A fold-right computation and a fold-left computation are not synchronised by
+merely using the same list variable. Their relationship needs a proved
+traversal lemma. Likewise a mapped, reversed, filtered, or indexed input is not
+the original word unless a source-level transformation theorem justifies that
+view. The initial source subset should refuse these cases, then add them with
+explicit correspondence lemmas.
+
+For a goal with arbitrary initial parameters, there are two principled future
+routes. One can introduce a finite polynomial coefficient family of initial
+rows and share a reachable-space closure across those rows. Or one can ask
+Forge's existing generalisation planner to propose and prove a stronger state
+invariant. The current runner uses concrete initial states; it does not
+implement either extension as a source tactic.
+
+\subsection{The matrix soundness theorem is smaller than the search}
+
+In Lean, represent the rectangular certificate matrix using finite index types,
+for example \code{Matrix (Fin b) (Fin d) Rat}. Define the embedding
+\[
+\operatorname{embed}(x)=xB,
+\]
+the full transition $s\mapsto sM_a$, and the small transition $x\mapsto xC_a$.
+The identity $BM_a=C_aB$ proves that the embedding commutes with transition.
+The identity $Bv=0$ proves the observation vanishes on the embedded state.
+This is exactly the generic word-simulation argument.
+
+The bundle includes \code{lean/WordSimulation.lean}, a proposed core Lean proof
+of that generic argument, with no matrix search hidden in it. It is marked
+\emph{uncompiled}; the working environment did not provide Lean. It is not a
+reflected checker, a tactic, or an evidence receipt. Its intended use is to
+separate the straightforward induction lemma from the subsequently required
+matrix implementation.
+
+For a first compiled implementation, construct a proof of each finite matrix
+identity with ordinary rational normalisation and instantiate the soundness
+lemma. For larger certificates, implement a reflected Boolean checker and
+prove its correctness once. The latter optimisation should come after a real
+small-certificate end-to-end path works. Exact elimination need never be
+verified inside Lean merely to check the returned matrix identities.
+
+\subsection{Summation preparation and residual obligations}
+
+A summation preparer must recognise the exact range, integer exponent $p$,
+rational weight $q$, cast structure, and binomial family. The first entry point
+should accept the literal form \eqref{eq:sum}; equivalent-looking factorial
+quotients become eligible only through proved rewrite lemmas. It returns the
+family parameters and a theorem equating the source sum with its prepared
+semantics.
+
+The checked telescope publishes a recurrence theorem as an intermediate fact.
+It should not pretend to close an arbitrary requested closed form. Forge can
+then use an available target recurrence, ask an appropriate library adapter for
+one, or leave that target-side recurrence as an explicit obligation. If the
+source goal already asks for the recurrence, publication closes that part
+directly.
+
+The recurrence equality worker should generate a proof graph containing both
+annihilation proofs, the operator-product equality proof, the singularity cover,
+and every seed equality. A seed proof may come from \code{norm_num}, direct
+finite computation through the kernel, a library lemma, or another worker.
+If one seed remains unresolved, the result is a partial proof plan, not a
+positive theorem result. This is a direct use of Forge's existing obligation
+graph, not a new graph data structure.
+
+\subsection{Proposed modules and concrete responsibilities}
+
+The following paths are proposed additions to Forge; they do not denote files
+already installed in the repository.
+
+\begin{longtable}{@{}p{0.40\linewidth}p{0.55\linewidth}@{}}
+\toprule
+Module & Responsibility and acceptance invariant\\
+\midrule\endhead
+\path{Forge/Summary/WordModel.lean} & Rational row-state semantics; word evaluation; finite alphabet identity.\\
+\path{Forge/Summary/WordCertificate.lean} & Typed $B,\alpha,C$ data; dimension-safe identity checker; proved soundness.\\
+\path{Forge/Summary/PolynomialInput.lean} & Coefficient-matrix semantics; interpolation theorem; actual-grid counterexample reconstruction.\\
+\path{Forge/Reify/AffineFold.lean} & Exact approved fold grammar; monomial lift; source denotation proof; explicit refusals.\\
+\path{Forge/Summary/BinomialSupport.lean} & Signed-lower-index binomial; support, ratio, complement, and endpoint lemmas.\\
+\path{Forge/Summary/Telescoper.lean} & Polynomial identities and boundary partition; recurrence theorem for the fixed sum family.\\
+\path{Forge/Summary/ShiftOperator.lean} & Polynomial Ore product and sequence action; left-multiple transport theorem.\\
+\path{Forge/Summary/RecurrenceSeeds.lean} & Complete natural-singularity cover and strong-induction equality theorem.\\
+\path{Forge/Worker/FiniteSummary.lean} & Bind prepared goals to solver requests; check results; publish proofs or residual obligations through existing interfaces.\\
+\bottomrule
+\end{longtable}
+
+Keep the first three mathematical modules independent of \grind{} internals.
+Their output is an ordinary theorem. A controller can feed that theorem into a
+fresh local \grind{} call through Forge's already proposed conservative bridge.
+No changes to congruence closure or the Boolean search loop are necessary for
+these first capabilities.
+
+\subsection{Library map: use existing mathematics and search engines}
+
+\begin{longtable}{@{}p{0.25\linewidth}p{0.38\linewidth}p{0.30\linewidth}@{}}
+\toprule
+Library & Concrete use & Status in this study\\
+\midrule\endhead
+Lean core / Mathlib & Finite indices, lists, matrices, rational arithmetic, polynomial evaluation, finite sums, choose identities, and proof tactics & API/module documentation inspected; no local Lean build.\\
+SymPy 1.14.0 & Exact polynomial expansion and rational nullspaces for bounded telescoping and operator search & Executed by the delivered producer.\\
+Python standard library & Rational matrix and sparse-polynomial certificate checking with \code{Fraction}; canonical JSON decoding & Executed in isolated \code{python -S} replay.\\
+\code{python-flint} & Optional fast dense rational matrices, inversion, characteristic polynomials, and elimination backend & Official \code{fmpq_mat} documentation consulted; adapter not implemented.\\
+Sage \code{ore_algebra} & Optional LCLM, operator arithmetic, and desingularisation search, returning polynomial certificates & Official capabilities inspected; not installed or benchmarked here.\\
+HolonomicFunctions & Optional broader multivariate creative-telescoping search and Ore computations & Official package description inspected; no Wolfram execution in this study.\\
+\bottomrule
+\end{longtable}
+
+The referenced Mathlib matrix-to-linear-map and span modules contain the
+infrastructure relevant to the simulation theorem. The choose-sum module
+already includes direct binomial identities, so those should be tried before
+expensive rediscovery~\cite{mathlib-matrix,mathlib-span,mathlib-choose}.
+SymPy's matrix API supplies the nullspace operation used here; its role is
+proposal generation, not proof acceptance~\cite{sympy}.
+The rational matrix type in \code{python-flint} is an appropriate candidate for
+larger exact searches, but no speedup has been measured~\cite{flint}.
+
+Forge's Lean-status ledger pins Lean 4.34.0 and a Mathlib revision, while also
+warning that other proposed dependencies are not automatically build-compatible
+with that pin~\cite{forge-lean}. The Lean release itself is recorded as
+4.34.0~\cite{lean-release}. The new workers should use the repository's resolved
+project environment rather than independently chasing current versions of all
+libraries. The delivered Python requirement is separately pinned to the actual
+executed version. No fabricated Lake manifest is supplied.
+
+\section{A specific Leant/Djex extension: quantified equivalence of eligible folds}
+\label{sec:leant}
+
+\subsection{The gap to target}
+
+Leant already generates source-typed candidates and checks supplied behavioral
+assertions on the exact candidate. Its documented assertion strategy uses
+positive and negative decision attempts and bounded simplification; finite
+observations establish only the stated observations. A universal assertion can
+remain inconclusive when it needs a mathematical argument beyond those
+procedures~\cite{leant-behavior}.
+Djex's source-typed evidence graph preserves exact source ownership and the
+relationship between a candidate and its checked graph~\cite{djex-graph}.
+Forge already incorporates the generic ownership lessons from those
+projects~\cite{forge-transfer}. The addition proposed here is a particular
+semantic consumer: an exact affine-fold equivalence check.
+
+Given two eligible rational-valued list folds at the same source type, translate
+each to a linear word model with correspondence proofs. Form their block
+comparison model and invoke Worker I. A valid closure certificate gives equality
+for every list, not just the finite list test set. A separating word is a useful
+new behavioral discriminator, subject to the source correspondence discipline.
+
+\subsection{An operational candidate pipeline}
+
+\begin{lstlisting}
+for each exact, source-typed candidate occurrence:
+    try the proved affine-fold interpretation
+    if unsupported: preserve the ordinary behavioral-check route
+    otherwise compare to the approved specification model
+    if a matrix closure certificate is returned:
+        kernel-check it and transport to the exact candidate proposition
+    if a separating word is returned:
+        reconstruct the actual source input and verify its observed failure
+    preserve candidate ownership, original budgets, and residual goals
+\end{lstlisting}
+
+The specification model must not be inferred from the candidate's own type
+alone. A type such as \code{List Rat -> Rat} admits many different behaviors.
+The user assertion or an approved specification theorem determines the intended
+observation. Likewise, a candidate's exact occurrence must not borrow a graph
+or proof receipt from another candidate with the same rendering.
+
+The source bridge should begin with ordinary list folds, not arbitrary
+polymorphic Church encodings. A theorem about encoded finite lists is not
+automatically a theorem about all inhabitants of an abstract Church type.
+Extending the bridge to those inputs needs the appropriate source semantics or
+parametricity argument; it must not be assumed from a type-directed search
+result. The original Leant integer-indexing and simultaneous-universe search
+queries are outside the tested fragment and are not claimed solved here.
+
+\subsection{Semantic deduplication that does not discard evidence}
+
+A proved functional equality can justify sharing future \emph{extensional}
+behavioral checks between eligible candidates. Maintain an equivalence class
+whose edges are actual equalities, while retaining each candidate's own origin
+and source typing evidence. A chosen representative does not acquire the
+others' metadata. Transport an assertion along an equality only when the
+assertion has the correct source type and Lean accepts that transport.
+
+It is unsafe to use a matrix-model equality as a universal deduplication key for
+arbitrary typed programs. The translation may cover only one observer, one
+input domain, or one source specialisation. Even a full extensional equality is
+not definitional equality and does not justify rewriting unrelated provider or
+universe metadata. The useful optimization is narrower: avoid repeating a
+behavioral proof that can actually be transported through a checked equality.
+
+\subsection{Counterexamples improve search without becoming oracles of truth}
+
+For an exact model, a separating word can be returned directly with a proof of
+the relevant source inequality once the source bridge is in place. For an
+over-approximate model, rerun the candidate on the reconstructed input before
+using the observation to reject it. An infeasible abstract transition sequence
+must not eliminate a source-correct candidate.
+
+This provides a concrete feedback loop: previously found counterexample words
+are cheap tests for later candidates; surviving candidates still need the
+universal matrix certificate. Passing the accumulated examples never replaces
+that proof. The new work is the finite-dimensional universal argument, not the
+already proposed general counterexample-guided synthesis architecture.

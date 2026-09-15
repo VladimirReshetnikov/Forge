@@ -1,0 +1,178 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=24mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{stmaryrd}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{xcolor,listings,enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\definecolor{Ink}{HTML}{374134}
+\definecolor{Muted}{HTML}{696969}
+\definecolor{PaperTint}{HTML}{F3F4EF}
+\hypersetup{colorlinks=true,linkcolor=Ink,citecolor=Ink,urlcolor=Ink,
+ pdftitle={Forge Extensions: Invariant Ideals, Finite Covers, and Constructive Projection},
+ pdfauthor={Prepared for Vladimir Reshetnikov}}
+\urlstyle{tt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textsc{Forge extensions}}
+\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\sectionmark}[1]{\markboth{\thesection\quad #1}{}}
+\setcounter{tocdepth}{2}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{1.25em}
+\setlist{nosep,leftmargin=1.6em}
+\lstset{basicstyle=\small\ttfamily,backgroundcolor=\color{PaperTint},
+ frame=single,rulecolor=\color{black!18},columns=fullflexible,
+ keepspaces=true,breaklines=true,showstringspaces=false,
+ xleftmargin=0.6em,xrightmargin=0.6em,aboveskip=0.8em,belowskip=0.8em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Reach}{\operatorname{Reach}}
+\newcommand{\degp}{\operatorname{deg}}
+\newcommand{\lc}{\operatorname{lcm}}
+\newcommand{\Unknown}{\textsc{unknown}}
+\newcommand{\status}[1]{\par\noindent\textcolor{Ink}{\textbf{Status.}} #1\par}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\input{generated-results.tex}
+\begin{document}
+\begin{titlepage}
+\color{Ink}
+\noindent\textsc{Technical research and reproducible prototypes}\par
+\vspace{1.4cm}
+{\Huge\bfseries Forge Extensions\par}
+\vspace{0.6cm}
+{\LARGE Invariant ideals, finite covers,\par constructive integer projection,\par and proof-directed synthesis\par}
+\vspace{1cm}
+{\large Prepared for Vladimir Reshetnikov\par}
+{\large 15 September 2026\par}
+\vspace{1cm}
+\color{black}
+\begin{abstract}
+Forge already has a broad design for proof planning above Lean's \code{grind}.
+This article develops additional algorithms rather than another description of
+that architecture. The central addition computes the greatest finite-dimensional
+space of invariant generators whose transition pullbacks admit degree-bounded
+polynomial multipliers. A descending linear-algebra calculation replaces the
+apparently bilinear simultaneous search for generators and multipliers. Two
+further workers prove properties of all finite recursively constructed trees by
+finite-algebra covers, and eliminate one existential integer variable while
+constructing a symbolic witness without modulus-sized residue tables. A fourth,
+unimplemented integration proposal decomposes higher-order synthesis into
+proof-directed fold contracts, motivated by a specific open composition problem
+in Leant and Djex.
+
+The archive contains exact standard-library Python implementations, checks of
+\ConstCertificates{} constant-multiplier packets, \IdealCertificates{}
+polynomial-multiplier packets, \FiniteCertificates{} finite-algebra certificates,
+and \IntegerCertificates{} symbolic integer projections. It also contains
+\UnitTestCount{} passing test methods, a differential integer experiment with
+\IntegerValuations{} concrete parameter valuations, and explicit incompleteness
+and corruption controls. These are Python-checked research artifacts, not Lean
+kernel proofs or a measured improvement over an existing tactic. The mathematical
+soundness and fragment-completeness claims are proved in the text; the remaining
+Lean implementation work is specified separately.
+\end{abstract}
+\vfill
+\noindent\small Baseline audit: Forge \code{6745210}; Leant \code{6bf05ad}; Djex
+\code{e8778f4}. Full revisions and evidence boundaries appear in Appendix~\ref{app:repro}.
+\end{titlepage}
+{\small\tableofcontents}
+\clearpage
+\section{The delta: what this article adds}
+\label{sec:delta}
+
+\subsection{The starting point is already ambitious}
+At the audited revision, Forge's merged article already specifies an outer
+proof-planning layer, demand-directed theorem use, induction and accumulator
+generalization, lemma discovery, arithmetic witness synthesis, exact algebraic
+certificates, and a carefully scoped verification boundary. Its structural
+chapter implements polynomial recurrence discovery and conserved quantities;
+it explicitly identifies more general simultaneous invariant preservation as a
+next step. The repository also implements finite residue tables for integer
+witnesses. Those are the immediate baselines for this article, not capabilities
+being proposed again~\cite{forge-readme,forge-structural,forge-conclusion}.
+
+The Leant/Djex review already incorporated into Forge is substantial. It covers
+source-owned evidence, negative-verdict restrictions, kernel-checking options,
+process boundaries, neutral identities, and budget accounting. Repeating that
+material would not make the tactic more powerful~\cite{forge-neighbors}.
+Here the additions are concrete, separately checkable inference mechanisms.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}YY@{}}
+\toprule
+Area & Audited baseline & Addition developed here \\
+\midrule
+Polynomial invariants & Conserved quantities; general multiplier identities suggested but not synthesized & A greatest-fixed-point algorithm for simultaneous generators with bounded polynomial multipliers \\
+Recursive finite summaries & General structural induction and lemma search & Finite-algebra closure certificates and concrete counterexample trees \\
+Integer witnesses & Lattice certificates, affine templates, finite residue tables & Exact one-output projection with a straight-line floor/modulus witness and feasibility guard \\
+Higher-order synthesis & Typed candidate search; a documented composition miss & Contract-first fold sketches, executable/ghost context separation, and reusable hole theorems \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The first three rows have executable prototypes in the archive. The fourth is a
+detailed integration design and two hand-written Lean specimens; it is not a
+claim that the original Leant query has been solved. Repository searches for
+\code{pullback}, \code{automata}, and \code{Cooper} returned no matches, but that
+is not an exhaustive proof of absence from every frozen proposal. The novelty
+claim is a concrete extension of the reviewed merged design and implementation,
+not invention of tree automata, Presburger arithmetic, or abstract interpretation.
+
+\subsection{A common problem, not another common framework}
+The new workers address three different reasons local proof search gets stuck.
+A true equality may need to be proved \emph{together with} other equalities that
+change under the transition. A recursive object may be unbounded while its
+relevant semantic summary is finite. An existential integer may require a
+piecewise, periodic function of parameters rather than a rational affine term.
+The higher-order proposal addresses a fourth issue: a correct component can
+exist in the search space yet be buried by irrelevant same-typed alternatives.
+
+Each worker changes the mathematical object searched for. It does not merely
+increase a timeout or select a larger theorem collection. Successful output is,
+respectively, an invariant packet, an inductive cover or concrete tree, and a
+witness program with a guard. Their source-level meanings are distinct and
+must remain distinct in Forge's result types.
+
+\subsection{Evidence and scope}
+All experiments in this archive ran in one environment and are reproducible
+with Python's standard library. The checkers use exact integers and rational
+numbers. They do not use numerical tolerances. Nevertheless, shared arithmetic
+code and shared certificate elaboration remain possible common-mode failure
+sources. The archive has no Lean executable available, no implementation of the
+\code{forge} tactic, and no benchmark against \code{grind}, Aesop, or another
+Lean automation tool. The optional Lean files are explicitly marked
+\textsc{not run}. These distinctions are essential when interpreting the tables
+in Section~\ref{sec:experiments}.
+
+\input{01-invariants.tex}
+\input{02-covers.tex}
+\input{03-projection.tex}
+\input{04-synthesis.tex}
+\input{05-integration-evaluation.tex}
+\appendix
+\input{appendix.tex}
+\input{references.tex}
+\end{document}

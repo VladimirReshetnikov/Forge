@@ -1,0 +1,101 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext}
+\usepackage{mathtools,amsthm}
+\usepackage{newtxmath}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor,booktabs,longtable,tabularx,array}
+\usepackage{enumitem,listings,xurl,hyperref,fancyhdr}
+\usepackage[most]{tcolorbox}
+\definecolor{oliveink}{HTML}{465238}
+\definecolor{softolive}{HTML}{F2F4EC}
+\definecolor{quiet}{HTML}{62695E}
+\hypersetup{colorlinks=true,linkcolor=oliveink,citecolor=oliveink,urlcolor=oliveink,
+ pdftitle={Forge: Continuation-Local Synthesis, Inductive Algebra, and Cyclic Proof Compilation},
+ pdfauthor={OpenAI | Technical research prepared for Vladimir Reshetnikov}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\textsc{Forge / Capability Extensions}}
+\fancyhead[R]{\small September 2026}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt plus 1pt}
+\setcounter{tocdepth}{2}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb{Q}}\newcommand{\N}{\mathbb{N}}\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}\newcommand{\Span}{\operatorname{span}}
+\newcommand{\rank}{\operatorname{rank}}\newcommand{\kerop}{\operatorname{ker}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\forge}{\texttt{forge}}\newcommand{\grind}{\texttt{grind}}
+\newcommand{\status}[1]{\begin{tcolorbox}[colback=softolive,colframe=oliveink,boxrule=.35pt,arc=0pt,left=6pt,right=6pt,top=4pt,bottom=4pt]\small\textbf{Evidence status.} #1\end{tcolorbox}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\lstset{basicstyle=\ttfamily\footnotesize,columns=fullflexible,keepspaces=true,
+ breaklines=true,frame=single,framerule=.25pt,rulecolor=\color{quiet},
+ backgroundcolor=\color{softolive},showstringspaces=false,aboveskip=8pt,belowskip=8pt,
+ xleftmargin=3pt,xrightmargin=3pt,tabsize=2}
+\setlist[itemize]{leftmargin=1.3em,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=2pt,topsep=3pt}
+\begin{document}
+\begin{titlepage}
+\vspace*{13mm}
+{\color{oliveink}\large\scshape A technical extension study}\par
+\vspace{9mm}
+{\fontsize{31}{35}\selectfont\bfseries Forge}\par
+\vspace{4mm}
+{\fontsize{19}{24}\selectfont Continuation-local synthesis,\par inductive algebra, and\par cyclic proof compilation}\par
+\vspace{7mm}
+{\color{oliveink}\rule{\textwidth}{.8pt}}\par
+\vspace{4mm}
+{\large Concrete algorithms, exact certificates,\par executable prototypes, and a Lean integration plan}\par
+\vspace{12mm}
+\textbf{Prepared for Vladimir Reshetnikov}\par
+15 September 2026\par
+\vspace{8mm}
+\begin{abstract}
+Forge already has a substantial design for orchestration, proof acceptance,
+arithmetic witnesses, induction planning, and certificate-producing backends.
+The useful next step is not another orchestration layer. It is a set of workers
+that construct proof structure which the existing workers do not yet construct.
+
+This article develops three such extensions. Continuation-local synthesis derives
+fold algebras from residual specifications and searches their holes separately,
+with an explicit treatment of correlations. Inductive algebra combines a fast
+pullback-stable vector-space algorithm with target-seeded ideal completion,
+which can discover mutually supporting polynomial equations and generate exact
+orbit counterexamples. Cyclic proof compilation treats a recursive obligation
+graph as a candidate for ordinary well-founded induction, using synthesized
+phase-sensitive or lexicographic rankings rather than accepting a circular proof.
+
+The archive contains runnable Python implementations, an independent exact
+replayer, 135 replayed encoded certificates, 31 rejected corruptions, and detailed
+experimental records. The results establish the specified finite-fragment
+algorithms, not an end-to-end Lean tactic. Lean bridge code and proof specimens
+are explicitly separated from executed work.
+\end{abstract}
+\vfill
+{\small\color{quiet}Repository-relative additions; not a replacement for Forge's existing article.\par
+Primary sources and repository revisions are pinned in the bibliography and source audit.}
+\end{titlepage}
+\begingroup
+\small
+\setlength{\parskip}{0pt}
+\tableofcontents
+\endgroup
+\newpage
+\input{01-scope.tex}
+\input{02-continuations.tex}
+\input{03-spaces.tex}
+\input{04-ideals.tex}
+\input{05-cycles.tex}
+\input{06-integration.tex}
+\input{07-evaluation.tex}
+\appendix
+\input{08-appendices.tex}
+\clearpage
+\input{references.tex}
+\end{document}

@@ -1,0 +1,171 @@
+\section{Finite Kripke certificates for constructive diagnostics}
+\label{sec:kripke}
+
+\subsection{The question this worker actually answers}
+The input is a sequent $\Gamma\vdash_{\ipc}G$ in a named intuitionistic
+propositional object calculus. Its formulas contain atoms, $\bot$, conjunction,
+disjunction, and implication. A successful negative result means:
+\[
+ \text{there is no derivation of }G\text{ from }\Gamma\text{ in that calculus}.
+\]
+It does \emph{not} mean that Lean can prove $\neg G$, that no Lean term of
+$G$ exists, or that classical reasoning cannot prove $G$. It says nothing about
+additional domain-specific hypotheses that were omitted from the object sequent.
+
+This separation is indispensable for integration with Djex. Its formula
+representation distinguishes ordinary atoms, opaque source-type atoms, and
+dictionary atoms. The object checker can validate the propositional structure
+once it is supplied, but it does not establish that erasing an arbitrary Lean
+type or typeclass environment preserves all possible inhabitants
+\cite{djex-formula}. The initial implementation should display an IPC
+countermodel without promoting it to unrestricted source-level uninhabitance.
+
+\subsection{The certificate and its forcing semantics}
+A finite model consists of worlds $\{0,\ldots,n-1\}$, a root $w_0$, a partial
+order $\le$, and one Boolean valuation per atom. The root must be least.
+Atomic truth is persistent: if $w\le v$ and an atom is true at $w$, it is
+true at $v$.
+
+Forcing is defined recursively:
+\begin{align*}
+ w\Vdash P &\quad\Longleftrightarrow\quad P\text{ is true at }w,\\
+ w\nVdash\bot,&\\
+ w\Vdash A\land B &\quad\Longleftrightarrow\quad w\Vdash A\text{ and }w\Vdash B,\\
+ w\Vdash A\lor B &\quad\Longleftrightarrow\quad w\Vdash A\text{ or }w\Vdash B,\\
+ w\Vdash A\to B &\quad\Longleftrightarrow\quad
+ \forall v\ge w,\ v\Vdash A\Longrightarrow v\Vdash B.
+\end{align*}
+Checking implication at the current world only would reduce the semantics to
+something essentially classical and would be wrong for this purpose.
+
+The certificate is accepted exactly when the order and persistence conditions
+hold, every assumption in $\Gamma$ is forced at the root, and $G$ is not forced
+there. The checker recomputes forcing; any solver-provided table of formula
+truth values is unnecessary and untrusted.
+
+\begin{lemma}[Persistence]
+If $w\le v$ and $w\Vdash A$, then $v\Vdash A$.
+\end{lemma}
+\begin{proof}
+Induct on $A$. Atoms use valuation persistence, and $\bot$ is never forced.
+Conjunction and disjunction use the induction hypotheses. For implication,
+let $t\ge v$. Transitivity gives $t\ge w$, so the implication forced at $w$
+applies to $t$ as required.
+\end{proof}
+
+\begin{theorem}[Countermodel soundness]\label{thm:kripke}
+An accepted model for $\Gamma,G$ rules out a derivation
+$\Gamma\vdash_{\ipc}G$ in intuitionistic natural deduction.
+\end{theorem}
+\begin{proof}
+Prove by induction on a derivation that every world forcing the derivation's
+assumptions forces its conclusion. Assumptions, conjunction rules, and
+ disjunction introductions are immediate from the forcing clauses. Disjunction
+elimination uses the forced disjunct at the current world and the induction
+hypothesis for its corresponding branch. Implication elimination applies the
+forcing clause with $v=w$, using reflexivity. For implication introduction,
+move to an arbitrary successor world satisfying its antecedent. Persistence
+carries the undischarged assumptions there; the induction hypothesis for the
+body establishes the consequent. Falsity elimination is vacuous because no
+world forces $\bot$. These cases cover the natural-deduction rules. Thus any
+derivation of $G$ from $\Gamma$ would force $G$ at the certificate's root,
+contradicting the checked result.
+\end{proof}
+
+This is a mathematical proof of the certificate format. To obtain a Lean
+receipt, connect the finite evaluator to an existing formalization's forcing
+relation and apply its soundness theorem. Completeness is not needed to check
+an individual countermodel. Existing Lean formalizations should be reused for
+this metatheory rather than rewritten merely to attach a Forge name
+\cite{trufas}.
+
+\subsection{Why classical tautologies are essential negative tests}
+For excluded middle $P\lor\neg P$, use two worlds $0<1$, with $P$ false at
+world $0$ and true at world $1$. The root does not force $P$, and it does not
+force $\neg P$ because a successor forces $P$. Hence it does not force their
+disjunction.
+
+The same chain refutes double-negation elimination
+$\neg\neg P\to P$. At the root, every successor forcing $\neg P$ would have
+to force $\bot$, but no successor forces $\neg P$; thus $\neg\neg P$ holds
+while $P$ does not. Taking $Q$ false everywhere also refutes Peirce's formula
+$((P\to Q)\to P)\to P$.
+
+All three are classically valid. Consequently an interface that turns these
+countermodels into proofs of the \emph{negated Lean formulas} is visibly
+unsound. These examples are not ornamental: they enforce the worker's
+semantic ceiling.
+
+\subsection{A branching model catches what chains miss}
+Let the root have two incomparable terminal successors. Make $P$ true only on
+the left successor and $Q$ true only on the right. At the root neither
+$P\to Q$ nor $Q\to P$ holds. Thus
+\[
+ (P\to Q)\lor(Q\to P)
+\]
+is refuted. With one successor making $P$ true and the other keeping it false,
+the root also refutes $\neg P\lor\neg\neg P$.
+
+The prototype finds both at three worlds. Restricting search to linear chains
+would miss these examples regardless of its chain-length budget. The
+implemented proposer enumerates rooted trees, not just chains; the checker
+accepts arbitrary rooted finite partial orders, including a separately tested
+diamond.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth,node distance=1.2cm]
+\node[draw,circle,minimum size=0.7cm] (root) {$0$};
+\node[draw,circle,above left=1cm and 1.4cm of root] (left) {$1$};
+\node[draw,circle,above right=1cm and 1.4cm of root] (right) {$2$};
+\draw[->] (root) -- (left);\draw[->] (root) -- (right);
+\node[left=0.2cm of left] {$P,\ \neg Q$};
+\node[right=0.2cm of right] {$Q,\ \neg P$};
+\node[below=0.25cm of root] {neither implication holds};
+\end{tikzpicture}
+\caption{A three-world branching countermodel to propositional linearity.
+Arrows point toward information extensions; reflexive order edges are omitted.}
+\end{figure}
+
+\subsection{The executable bounded proposer}
+The proposer increases $n$ from one to a configured world bound. For each
+rooted tree it enumerates atomic upward-closed truth sets, evaluates formulas
+using bit masks, and proposes a model as soon as the root satisfies the context
+but not the goal. Nodes are numbered with parents preceding children. This
+may enumerate isomorphic trees more than once; no minimality or symmetry
+optimization is claimed.
+
+Replay is separate: it validates the explicit Boolean relation matrix and uses
+a cached recursive forcing function that quantifies over all successors.
+Randomly generated formulas are evaluated through both paths in the test
+suite. Stored models are replayed without the proposer and without site
+packages.
+
+When the model budget or world bound is exhausted, the result is \unknown{}.
+In particular, the eight familiar IPC-valid schemas in the corpus are not
+``proved'' by absence of a bounded countermodel. They serve as positive controls
+against an invalid refuter. The fact that IPC has suitable finite models does
+not turn an arbitrary three-world cap into a decision procedure.
+
+\subsection{A concrete scalable SAT backend, proposed but not executed}
+For a fixed $n$, introduce relation variables $R_{ij}$, atomic valuation
+variables $V_{i,p}$, and formula-value variables $T_{i,A}$ for each subformula.
+Require reflexivity, transitivity, antisymmetry, a least root, and
+\[
+ R_{ij}\land V_{i,p}\Longrightarrow V_{j,p}.
+\]
+Constrain the Boolean connectives by biconditionals, and use
+\[
+ T_{i,A\to B}\ \longleftrightarrow\
+ \bigwedge_{j<n}(\neg R_{ij}\lor\neg T_{j,A}\lor T_{j,B}).
+\]
+Finally assert every $T_{0,A}$ for $A\in\Gamma$ and $\neg T_{0,G}$. Standard
+Tseitin variables turn the conjunctions into clauses without exponential
+formula expansion. This encoding has $O(n^3)$ transitivity constraints and
+$O(n^2s)$ implication work for $s$ subformulas.
+
+A SAT library such as PySAT is a replaceable \emph{model proposer}; its
+satisfying assignment is decoded into the existing certificate and independently
+checked \cite{pysat}. An UNSAT answer for a fixed $n$ carries no unbounded
+noninhabitation or validity authority in this design. That is true even when
+the SAT solver itself is correct.

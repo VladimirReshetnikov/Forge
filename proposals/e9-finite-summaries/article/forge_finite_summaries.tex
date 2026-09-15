@@ -1,0 +1,81 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor,listings,enumitem,fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{hyperref}
+\definecolor{ink}{HTML}{17324D}
+\definecolor{muted}{HTML}{536575}
+\definecolor{light}{HTML}{F2F5F8}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,pdftitle={Forge: Certified Finite Summaries for Infinite Proofs},pdfauthor={Research proposal prepared for Vladimir Reshetnikov}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\textsc{Forge / finite summaries}}\fancyhead[R]{\small Research increment}\fancyfoot[C]{\thepage}
+\setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
+\setlist{itemsep=2pt,topsep=4pt,leftmargin=1.5em}
+\newcommand{\Q}{\mathbb Q}\newcommand{\N}{\mathbb N}\newcommand{\Z}{\mathbb Z}\newcommand{\R}{\mathbb R}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\forge}{\texttt{forge}}\newcommand{\grind}{\texttt{grind}}
+\newcommand{\Span}{\operatorname{span}}\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\eval}{\operatorname{eval}}\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\status}[1]{\par\smallskip\noindent\colorbox{light}{\parbox{0.96\linewidth}{\small\textbf{Evidence status.} #1}}\par\smallskip}
+\newtheorem{theorem}{Theorem}[section]\newtheorem{proposition}[theorem]{Proposition}\newtheorem{lemma}[theorem]{Lemma}\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,rulecolor=\color{muted},backgroundcolor=\color{light},aboveskip=8pt,belowskip=8pt,xleftmargin=3pt,xrightmargin=3pt}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\begin{document}
+\begin{titlepage}
+\vspace*{12mm}
+{\color{muted}\Large A CONCRETE EXTENSION TO THE FORGE DESIGN\par}
+\vspace{12mm}
+{\color{ink}\Huge\bfseries Certified Finite Summaries\\[4pt] for Infinite Proofs\par}
+\vspace{8mm}
+{\LARGE Weighted words, boundary-safe telescoping,\\[3pt] and singular recurrence transport\par}
+\vspace{13mm}
+{\large Prepared for Vladimir Reshetnikov\par}
+{\large 15 September 2026\par}
+\vspace{12mm}
+\begin{abstract}
+Forge already proposes a broad certificate-producing planner around Lean's
+\grind{}. This article adds three concrete mathematical capabilities rather than
+another planner architecture: exact equivalence checking for finite-dimensional
+word computations, creative telescoping with explicitly safe support boundaries,
+and recurrence proof composition that accounts for singular leading
+coefficients. A finite matrix simulation can prove an identity for every list,
+including lists over an infinite polynomial input alphabet. A shifted-binomial
+flux can prove a recurrence for a definite hypergeometric sum without treating
+an undefined product at a boundary as zero. Checked left multiples of Ore
+operators then let independently obtained recurrences meet, while a finite
+singularity cover determines which additional values must be proved equal.
+
+The accompanying Python implementation produces 245 checkable entries in one
+recorded corpus: 54 matrix closure certificates, 115 separating words, 23
+summation certificates, six Ore identities, and 47 singularity plans. All replay
+with Python site packages disabled. The corpus includes 100 differential
+word-model tests, 245 rejected invalidating mutations, and two honestly recorded
+insufficient-ansatz outcomes; 41 additional unit tests pass. These are exact
+Python checks, not Lean proofs. The article gives soundness arguments, precise
+fragment boundaries, a library map, proposed Lean modules, and implementation
+acceptance gates. No integrated tactic, kernel-checked certificate, or performance
+comparison against an existing Lean tactic is claimed.
+\end{abstract}
+\vfill
+{\small\color{muted}Audited Forge baseline: \texttt{674521027d968d59f7b83220ed52304a85cb55e2}.\\
+Companion bundle: source, executable prototypes, raw certificates, tests, and run history.}
+\end{titlepage}
+\tableofcontents\newpage
+\input{sections/01-position}
+\input{sections/02-words}
+\input{sections/03-telescoping}
+\input{sections/04-recurrences}
+\input{sections/05-integration}
+\input{sections/06-evidence}
+\input{sections/07-conclusion}
+\appendix
+\input{sections/A-protocol}
+\input{references}
+\end{document}

@@ -1,0 +1,277 @@
+\section{Worker C: pole-free symbolic summation certificates}
+\label{sec:sum}
+
+\subsection{Why a rational certificate is not the whole proof}
+
+A Gosper or creative-telescoping calculation can produce a rational function
+that makes a summand telescope away from its poles. The exceptional points may
+be exactly the endpoints of the finite sum. Cancelling symbolic denominators
+and then substituting those endpoints is not a proof of the original sum.
+SymPy provides a useful Gosper implementation for exploration, while more
+general telescoping algorithms and Ore-algebra libraries supply broader
+proposal mechanisms~\cite{sympy-concrete,brochet-salvy,ore-algebra}. Forge should
+accept the resulting identity only with its domain and boundary obligations.
+
+The implemented worker deliberately chooses a smaller domain in which the
+certificate can be made polynomial from the outset. It handles
+\begin{equation}\label{eq:sum-family}
+ S_{m,W}(n)=\sum_{k=0}^{n}W(k)\binom nk^m,
+ \qquad m\ge1,\quad W\in\Q[k].
+\end{equation}
+The checker accepts powers $1\le m\le6$ within its resource limits. The recorded
+successful searches use $m=1,2$ and polynomial moments $W(k)=k^j$.
+The family does not presently include $W(n,k)$: that extension requires shifting
+its first argument in the $n+1$ summand, and cannot be simulated by keeping the
+same $W$ on both sides.
+
+\subsection{A boundary-safe binomial basis}
+
+For nonnegative integers $n,k$, interpret the following quantities in $\Q$:
+\[
+ B(n,k)=\binom nk,
+ \qquad
+ A(n,k)=
+ \begin{cases}0,&k=0,\\\binom n{k-1},&k>0.
+ \end{cases}
+\]
+As usual $\binom nk=0$ for $k>n$. Two identities hold on the entire nonnegative
+index domain:
+\begin{align}
+ \binom{n+1}{k}&=A(n,k)+B(n,k),\label{eq:pascal-safe}\\
+ (n+1-k)A(n,k)-kB(n,k)&=0.\label{eq:cross-safe}
+\end{align}
+Here $n+1-k$ is subtraction after embedding in $\Q$, not truncated subtraction
+in $\N$. For $k>n+1$, both binomial factors vanish. At $k=0$, the separate
+zero definition of $A$ is essential. Defining $A(n,0)$ using
+\code{Nat.choose n (0 - 1)} would give $\binom n0=1$, because natural
+subtraction truncates. That is precisely the wrong endpoint.
+
+The pinned Mathlib source provides \code{Nat.choose}, the successor/Pascal
+identity, and vanishing above the top index~\cite{mathlib-choose}. A Lean bridge
+should prove \eqref{eq:pascal-safe} and \eqref{eq:cross-safe} once, splitting
+$k=0$, $1\le k\le n+1$, and $k>n+1$ as needed. These primitive theorems can then
+be reused for every certificate in the family.
+
+\subsection{The exact certificate language}
+
+Search for $p_0,p_1\in\Q[n]$, a polynomial $r\in\Q[n,k]$, and a polynomial
+$h\in\Q[A,B,n,k]$ such that
+\begin{align}
+ &p_1(n)W(k)(A+B)^m+p_0(n)W(k)B^m \notag\\[-1mm]
+ &\quad-r(n,k+1)B^m+r(n,k)A^m
+ =h(A,B,n,k)\big((n+1-k)A-kB\big),\label{eq:sum-cert}
+\end{align}
+with $p_1\not\equiv0$. Every symbol here is a polynomial indeterminate. In
+particular, the coefficient field is $\Q$, not $\Q(n,k)$. Division by a
+polynomial in $n$ or $k$ is not allowed to hide inside the coefficient domain.
+
+The certificate stores the four polynomials $p_0,p_1,r,h$. The problem supplies
+$m$ and $W$. The checker independently expands both sides of
+\eqref{eq:sum-cert} by sparse rational arithmetic. It does not need to run
+Gosper's algorithm, test a rational-function identity, or trust a simplifier's
+handling of singular values.
+
+\begin{theorem}[Pole-free sum recurrence]\label{thm:sum}
+If \eqref{eq:sum-cert} holds for $m\ge1$, then
+\begin{equation}\label{eq:sum-rec}
+ p_1(n)S_{m,W}(n+1)+p_0(n)S_{m,W}(n)=0
+ \qquad(n\in\N).
+\end{equation}
+\end{theorem}
+\begin{proof}
+Substitute $A=A(n,k)$ and $B=B(n,k)$ into the polynomial certificate. The
+right-hand side vanishes by \eqref{eq:cross-safe}. Define
+\[
+ T(n,k)=r(n,k)A(n,k)^m.
+\]
+Since $A(n,k+1)=B(n,k)$, the remaining identity is
+\[
+ p_1(n)W(k)\binom{n+1}k^m+
+ p_0(n)W(k)\binom nk^m=T(n,k+1)-T(n,k).
+\]
+Sum this equality for $k=0,\ldots,n+1$. The first term is exactly
+$p_1(n)S_{m,W}(n+1)$. The extra $k=n+1$ term from the second row is zero, so the
+second term is $p_0(n)S_{m,W}(n)$. The right side is
+$T(n,n+2)-T(n,0)$. Both endpoints vanish: $A(n,0)=0$ and
+$A(n,n+2)=\binom n{n+1}=0$, and $m\ge1$. This proves the recurrence without
+any denominator cancellation.
+\end{proof}
+
+The condition $m\ge1$ is mathematical, not just a convenient validation rule.
+For $m=0$ the endpoint factors would be $0^0=1$ in the usual algebraic power
+convention, so the argument would not establish zero boundary terms. The checker
+rejects that input rather than silently reusing the theorem.
+
+\subsection{Synthesis by a finite nullspace computation}
+
+Choose degree bounds $d_p,d_r$ and the templates
+\[
+ p_i(n)=\sum_{j=0}^{d_p}c_{ij}n^j,\qquad
+ r(n,k)=\sum_{a+b\le d_r}d_{ab}n^ak^b.
+\]
+There are
+\[
+ N=2(d_p+1)+\binom{d_r+2}{2}
+\]
+unknown coefficients. The residual on the left of \eqref{eq:sum-cert} is
+linear in these unknowns.
+
+Reduce each coefficient column modulo the principal ideal generated by
+$\rho=(n+1-k)A-kB$ in $\Q[A,B,n,k]$. Collect the coefficients of all remaining
+monomials into an exact rational matrix $M$. A vector in $\ker M$ describes a
+residual that lies in $\Ideal\rho$. Retain a vector only if its $p_1$ component
+is nonzero. Multiply by a common denominator, remove the integer content, and
+choose a positive leading coefficient of $p_1$ for a deterministic display.
+Finally, divide the completed residual by $\rho$ to obtain $h$ and replay
+\eqref{eq:sum-cert} independently.
+
+\begin{proposition}[Fixed-template coverage]
+Exact nullspace computation finds a nontrivial order-one certificate of this
+form whenever one exists within the chosen $p_i$ and $r$ templates.
+\end{proposition}
+\begin{proof}
+Normal-form reduction by a fixed Gr\"obner basis is $\Q$-linear. Thus the matrix
+kernel is exactly the coefficient vectors whose residual has zero normal form,
+which is exactly membership in the principal ideal. The projection of a kernel
+basis onto the $p_1$ coefficients is nonzero precisely when that projection is
+nonzero for some kernel vector. Hence inspecting a full kernel basis suffices
+to find a permitted nonzero $p_1$ component.
+\end{proof}
+
+The synthesis loop tries degree pairs in increasing total template cost. It is
+not a general creative-telescoping decision procedure: it fixes recurrence
+order one, a particular pole-free certificate form, and finite degree bounds.
+A missing certificate means \Unknown for the sum identity, even if the finite
+linear template search was fully exhausted. The successful larger-template
+runs and the unsuccessful smaller-template runs are both retained in the
+experimental corpus.
+
+\subsection{Worked example: the squared-binomial identity}
+\label{sec:binomial-square}
+
+For $m=2$, $W=1$, the search produces
+\[
+ p_1=n+1,\qquad p_0=-2(2n+1),\qquad r=2k-3n-3,
+ \qquad h=2(B-A).
+\]
+The complete local certificate is
+\begin{align*}
+ &(n+1)(A+B)^2-2(2n+1)B^2\\
+ &\quad-\bigl(2(k+1)-3n-3\bigr)B^2
+       +(2k-3n-3)A^2\\
+ &=2(B-A)\bigl((n+1-k)A-kB\bigr).
+\end{align*}
+It can be verified by an ordinary ring normalization. Theorem~\ref{thm:sum}
+then gives
+\[
+ (n+1)S(n+1)=2(2n+1)S(n),\qquad S(0)=1.
+\]
+The sequence $H(n)=\binom{2n}{n}$ has the same initial value and recurrence:
+for example its factorial ratio gives
+\[
+ \frac{H(n+1)}{H(n)}=
+ \frac{(2n+2)(2n+1)}{(n+1)^2}
+ =\frac{2(2n+1)}{n+1},
+\]
+where the positive integer denominators are nonzero. Since $n+1\ne0$ on
+$\N$, induction establishes
+\[
+ \boxed{\displaystyle\sum_{k=0}^n\binom nk^2=\binom{2n}{n}.}
+\]
+This last comparison is a mathematical derivation in the article. The executed
+Python certificate certifies the recurrence, not a Lean theorem about the closed
+form.
+
+A rational Gosper representation of the same telescoping term is
+\[
+ \frac{k^2(2k-3n-3)}{(n+1-k)^2}\binom nk^2.
+\]
+Its denominator vanishes at $k=n+1$. Rewriting the \emph{entire term} as
+$(2k-3n-3)A(n,k)^2$ gives a value on that boundary and permits a direct pointwise
+proof there. This is not the assertion that two partial rational expressions
+agree at a pole. It is a new total expression accompanied by an identity valid
+at every required index.
+
+For $m=1$, $W=1$, the search finds $p_1=1$, $p_0=-2$, $r=-1$ and the primitive
+relation multiplier $h=0$. The corresponding recurrence is $S(n+1)=2S(n)$;
+with $S(0)=1$ it gives the usual $2^n$ sum.
+
+\subsection{Initial values and singular leading coefficients}
+\label{sec:singular}
+
+A recurrence is not a uniqueness theorem without a nonvanishing condition or
+additional seeds. The first-moment case produces
+\[
+ nS(n+1)-2(n+1)S(n)=0.
+\]
+At $n=0$, this equation forces $S(0)=0$ but says nothing about $S(1)$. The true
+sequence $S(n)=\sum_k k\binom nk$ and the wrong sequence $2S(n)$ satisfy the
+same recurrence and the same $n=0$ seed. The regression suite explicitly checks
+this counterexample to a base-only acceptance rule.
+
+\begin{proposition}[Order-one recurrence comparison]\label{prop:seeds}
+Suppose $u,v$ satisfy the same recurrence
+$a(n)z(n+1)+b(n)z(n)=0$ on $\N$. Let
+$E=\{e\in\N:a(e)=0\}$. If $u(0)=v(0)$ and
+$u(e+1)=v(e+1)$ for every $e\in E$, then $u=v$ on $\N$.
+\end{proposition}
+\begin{proof}
+Induct on $n$. To obtain equality at $n+1$, use the corresponding extra seed
+when $a(n)=0$. Otherwise subtract the two recurrence equations, use equality at
+$n$, and cancel the nonzero scalar $a(n)$.
+\end{proof}
+
+For nonzero rational-polynomial $a$, $E$ is finite. A production comparator can
+clear constant denominators, remove the power of $n$, and enumerate possible
+integer roots using divisibility of the constant coefficient. Each proposed
+root is checked by evaluation, and the divisibility argument accounts for all
+remaining roots. A simpler but potentially expensive checker can use a Cauchy
+root bound and evaluate every integer below it. Either route requires a proof
+of coverage; a CAS list of roots is not itself that proof.
+
+The prototype records nonnegative roots of $p_1$ as \emph{search diagnostics}.
+The independent recurrence checker does not use those diagnostics to accept a
+closed form. The Lean recurrence-comparison layer and certified seed-coverage
+check are proposed work, not implemented artifacts.
+
+\subsection{The seven synthesized recurrences}
+
+Table~\ref{tab:recurrences} reports the actual recurrences, with
+$S_{m,j}(n)=\sum_{k=0}^n k^j\binom nk^m$ and $k^0=1$. They all have the form
+$p_1(n)S_{m,j}(n+1)+p_0(n)S_{m,j}(n)=0$. Common factors are not silently
+cancelled, because cancellation could alter the exceptional-index obligations.
+
+\begingroup\small
+\input{recurrences}
+\endgroup
+
+
+The two highest-moment searches fail under $d_r\le4$ and succeed when the
+explicitly stated bound is enlarged. An order-one attempt for $m=3,W=1$ remains
+\Unknown at the recorded small bounds. No claim is made that the sequence lacks
+a higher-order recurrence or that the search has exhausted creative telescoping
+in general.
+
+\subsection{A route to general creative telescoping}
+
+The next interface should accept a telescoper
+$L=\sum_{i=0}^\ell p_i(n)E_n^i$, a finite set of pointwise summand relations,
+and a certificate for
+\[
+ \sum_{i=0}^\ell p_i(n)f(n+i,k)=G(n,k+1)-G(n,k).
+\]
+The acceptance pipeline must also prove a common summation range, any added or
+removed tail terms, endpoint values of $G$, and enough initial data to compare
+the resulting recurrence with the target sequence. Nonzero denominators become
+explicit subgoals; singular indices become separate branches. When endpoints
+are not zero, their exact difference belongs on the right-hand side of the
+recurrence rather than being discarded.
+
+A Sage \code{ore\_algebra} process is a concrete optional proposal backend:
+its documented functionality includes creative telescoping, desingularization,
+and operations on D-finite descriptions~\cite{ore-algebra}. The compact
+certificate methods of Brochet and Salvy provide an additional algorithmic
+reference~\cite{brochet-salvy}. Neither is a Lean oracle. Their output still has
+to be translated into the pointwise relations and boundary certificate accepted
+by Forge. This interface is designed here, whereas the delivered code implements
+only the polynomial binomial template.

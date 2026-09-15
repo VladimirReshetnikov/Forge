@@ -1,0 +1,120 @@
+\section{Certificate formats and executable entry points}
+\label{app:formats}
+
+\subsection{Canonical rational polynomials}
+A rational is encoded as \code{[numerator, denominator]}, with positive
+ denominator and relatively prime integers. Booleans are not accepted as
+integers, even though Python's type hierarchy normally allows that coercion.
+A polynomial is a lexicographically sorted list of nonzero terms
+\begin{lstlisting}
+[ [exponent_vector, [numerator, denominator]], ... ]
+\end{lstlisting}
+with unique monomials. The empty list is zero. Exponent vectors have the
+externally specified arity. The decoder rejects duplicate JSON keys,
+floating-point values, unreduced rationals, explicit zero coefficients, and
+unknown fields at mathematical boundaries.
+
+The current implementation limits raw polynomial lists to 2,048 terms, encoded
+total degree to 64, and rational numerator/denominator sizes to 4,096 bits.
+Intermediate sparse arithmetic has a separate 20,000-term cap. A machine has
+at most 16 state variables, 3 payload variables, 16 control nodes, and 64 edges;
+a certificate basis has at most 128 entries per node. Default search limits
+are smaller in several dimensions. These engineering limits are not part of
+the mathematical completeness theorem.
+
+These checks are not a hardened sandbox. Symbolic expansion, JSON nesting,
+big-integer work, and adversarial expression sizes still require process-level
+memory/time isolation before use on untrusted external inputs.
+
+\subsection{Machine and positive certificate}
+The source problem fixes its state and input dimensions, initial node and
+state, all original edges and updates, and output goals at every control node.
+Its semantics tag is exactly \code{rational-unrestricted-input}. The certificate
+cannot change those choices.
+\begin{lstlisting}
+{
+  "kind": "observable_closure",
+  "basis": [ /* one polynomial list per node */ ],
+  "goal_coordinates": [ /* every original goal */ ],
+  "edge_coordinates": [ /* every original edge, in original order */ ]
+}
+\end{lstlisting}
+Each edge row lists payload exponent vectors and rational coordinate vectors
+in the source basis. The checker reconstructs the whole polynomial identity.
+Omitting a row, edge, or goal does not weaken the task: it makes the certificate
+invalid. Basis independence is deliberately not required for soundness.
+
+\subsection{Execution certificate}
+\begin{lstlisting}
+{
+  "kind": "execution_counterexample",
+  "steps": [ {"edge": 0, "input": [[0,1]]}, ... ],
+  "goal_index": 0
+}
+\end{lstlisting}
+Replay starts from the original initial state. It checks edge applicability by
+control node and evaluates all updates simultaneously. The indexed final goal
+must be nonzero. There is no trusted final-state field, no user-supplied
+residual value, and no need to trust the producer's invariant search.
+
+\subsection{IPC problem and countermodel}
+The problem has fields \code{version}, \code{kind}, \code{logic},
+\code{context}, and \code{goal}, with \code{logic = "IPC"}. Formula nodes are
+\code{["var", name]}, \code{["bot"]}, or a three-entry list beginning with
+\code{"and"}, \code{"or"}, or \code{"imp"}.
+\begin{lstlisting}
+{
+  "kind": "finite_kripke_countermodel",
+  "worlds": 2,
+  "root": 0,
+  "relation": [[true,true],[false,true]],
+  "valuation": {"P": [false,true]}
+}
+\end{lstlisting}
+This particular model refutes excluded middle as an IPC formula. The checker
+accepts at most 32 worlds; the recorded proposer uses at most 3. A changed logic
+tag is rejected instead of being interpreted as a compatible proof system.
+
+\subsection{Reproduce the experiment}
+From the archive's root directory:
+\begin{lstlisting}
+python -m pip install -r requirements.txt
+python -m pytest -q
+python -S replay.py
+python -m forge_delta.experiment --output reproduced-results --repeats 3
+python emit_lean.py
+\end{lstlisting}
+The experiment refuses to overwrite a nonempty output directory. Its timings
+will vary across machines; its deterministic problems and accepted certificate
+contents should not. The full corpus is available directly to callers that
+prefer the Python API:
+\begin{lstlisting}
+from forge_delta.cases import machine_cases
+from forge_delta.search import solve
+from forge_delta.checker import verify_positive
+
+case = machine_cases()[0]
+result = solve(case["problem"], case["limits"])
+assert result["status"] == "proved"
+assert verify_positive(case["problem"], result["certificate"])
+\end{lstlisting}
+Here ``proved'' is the prototype's machine-property status. It does not mean
+that a Lean proof was constructed. For portable standalone replay use the
+explicit checker rather than interpreting status strings as authority.
+
+\subsection{Build the article and attempt the Lean gates}
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge_delta.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge_delta.tex
+\end{lstlisting}
+The second pass resolves cross-references and the table of contents. The
+archive includes all article source sections. It does not redistribute fonts
+or third-party repositories.
+
+For Lean, use an existing project with the intended pinned Mathlib revision,
+then run \code{lake env lean} on each supplied file using its absolute path.
+The repository's recorded target was Lean \code{v4.34.0} with Mathlib
+\code{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}. This package did not download,
+compile, or certify that toolchain. The provided instructions do not silently
+install dependencies or assert that generated files already pass.

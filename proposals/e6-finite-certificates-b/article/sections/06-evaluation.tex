@@ -1,0 +1,198 @@
+\Needspace{8\baselineskip}
+\section{Executed experiments and what they establish}
+\label{sec:experiments}
+
+\subsection{Recorded environment and reproducibility}
+
+The package records one ordered local run with seed \code{20260915}, Python
+3.13.5, SymPy 1.14.0, and pytest 9.0.2 on Linux x86-64. Search and independent
+replay are timed separately using a monotonic performance counter. The raw
+records are in \code{results/experiments.json}; the full original problems and
+certificates are in \code{results/certificates.json}. Reproduction writes to a
+new directory by default rather than overwriting those records.
+
+The search implementations do not import the checker. They use SymPy expressions
+and matrices. The checker uses its own sparse polynomial dictionaries and
+standard-library rational arithmetic, without SymPy. A separate invocation
+\code{python -S replay.py} accepts all 78 stored artifacts with site packages
+disabled. This is implementation diversity at the finite arithmetic boundary,
+not a proof that the checker contains no bug.
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}\toprule
+Worker & Attempts & Positive certificates & Counterexamples & Unknown \\
+\midrule
+Inductive ideals & 29 & 27 & 0 & 2 \\
+Weighted representations & 48 & 23 & 25 & 0 \\
+Binomial telescoping & 5 & 3 & 0 & 2 \\
+\bottomrule\end{tabular}
+\end{center}
+
+These are counts of different artifact types, not a theorem-proving success
+rate. In particular, the twenty-five weighted counterexamples are successful
+\emph{inequivalence decisions}, while an ideal unknown is not a counterexample.
+The problem families are deliberately constructed to exercise mechanisms and
+rejection boundaries; they are not an unbiased sample of Lean developments.
+
+\subsection{Invariant corpus and ablation}
+
+The ideal corpus contains nine named controls and twenty generated curve
+families. The generated cases apply random small rational-coordinate changes to
+a parameterized quadratic curve and construct polynomial transitions that
+preserve it with a nonconstant multiplier. This gives planted, mathematically
+known invariants while varying the expanded coefficients and update syntax.
+The search is still given the initial map and transition, not the planted
+invariant as a basis element.
+
+The restricted ablation solves only global conservation equations
+$p(T_e)=p$ together with initial vanishing. It ignores guards as an aid to the
+conservation search, so it is deliberately narrower than a full
+implication-based invariant method. The important observations are qualitative:
+
+\begin{center}
+\begin{tabular}{@{}lrrl@{}}\toprule
+Case & Conserved dim. & Inductive dim. & Descent dimensions \\
+\midrule
+Curve scaling & 0 & 1 & $1,1$ \\
+Nonlinear squaring & 0 & 1 & $1,1$ \\
+Two transition branches & 0 & 1 & $1,1$ \\
+Mutual swap & 1 & 2 & $2,2$ \\
+Guarded update & 0 & 1 & $1,1$ \\
+Finite orbit, degree two & 1 & 1 & $2,1,1$ \\
+Finite orbit, degree one & 0 & 0 & $1,0$ \\
+False invariant control & 0 & 0 & $2,1,0$ \\
+\bottomrule\end{tabular}
+\end{center}
+
+For the mutual-swap case, the one-dimensional conservation space contains
+$x+y$, which does not imply the desired $x=0$. The two-dimensional inductive
+space contains both $x$ and $y$, and does imply it. This is why comparing only
+whether the two spaces are nonempty would miss an important distinction.
+
+The false-invariant control starts at zero and increments the state while
+asking for $x=0$. Its empty fixed point is consistent with the false target,
+but the worker still reports unknown rather than pretending its restricted
+search proved a counterexample. The degree-one finite-orbit miss is a true
+target with the same unknown status. Together they enforce the intended result
+semantics.
+
+\subsection{Weighted corpus}
+
+The weighted corpus contains the subsequence-count identity, twenty
+change-of-basis equivalence pairs of component dimensions two through five,
+twenty perturbed pairs that agree on the empty word but disagree later, five
+nilpotent-chain examples, and the zero-initial and empty-alphabet edge cases.
+
+For the equivalence pairs, a rational invertible matrix $P$ transforms
+\[
+ (\alpha,M_a,\beta)\longmapsto
+ (\alpha P,P^{-1}M_aP,P^{-1}\beta).
+\]
+These pairs are equivalent by construction, but their matrices are not
+syntactically equal. The perturbations change the final vector in a direction
+orthogonal to the initial row, ensuring that a check of only the empty word
+cannot distinguish them. Every returned nonempty word is independently
+reevaluated.
+
+The five one-letter nilpotent chains of dimensions three through seven have
+first distinguishing word lengths two through six, respectively. They attain
+the $N-1$ bound and test that the implementation does not cut search short after
+several zero outputs. The separate differential tests enumerate all words up
+to length $N-1$ in sixty randomly generated representations of dimensions one
+through four, comparing the complete finite oracle with the closure search.
+
+\subsection{Telescoping corpus}
+
+\begin{center}
+\begin{tabular}{@{}lrrrrrl@{}}\toprule
+Family & $r$ & $a$ & $b$ & Unknowns & Equations & Result \\
+\midrule
+$\binom nk$ & 1 & 0 & 0 & 3 & 3 & Certificate \\
+$\binom nk^2$ & 1 & 1 & 1 & 7 & 9 & Certificate \\
+$\binom nk^3$ & 2 & 2 & 5 & 30 & 45 & Certificate \\
+$\binom nk^2$, narrow & 1 & 0 & 0 & 3 & 6 & Unknown \\
+$\binom nk^3$, order one & 1 & 2 & 2 & 12 & 21 & Unknown \\
+\bottomrule\end{tabular}
+\end{center}
+
+The successful systems each have nullity one. The two narrow systems have
+nullity zero. This demonstrates the importance of recurrence order and
+numerator degree, but it does not establish a generally optimal scheduling
+policy or a minimal-order theorem for every summand family.
+
+The certificate checker accepts powers one through eight and orders one
+through five as data bounds, but only the three named positive families above
+were synthesized and recorded. Decoder support for a parameter range must not
+be reported as experimental success on every member of that range.
+
+\subsection{Mutation and differential tests}
+
+The test suite reports \textbf{318 passed}. Its decomposition is useful:
+\begin{center}
+\begin{tabular}{@{}lr@{}}\toprule
+Test class & Count \\
+\midrule
+Replay of stored original-problem/certificate pairs & 78 \\
+Rejection controls, including semantic and input mutations & 148 \\
+Tracked-Gr\"obner differential cases & 24 \\
+Weighted exhaustive differential cases & 60 \\
+Additional direct-sum recurrence regressions & 3 \\
+Bounded misses, degree distinction, budgets, import separation & 5 \\
+\bottomrule\end{tabular}
+\end{center}
+
+The 148 rejections include changing an ideal goal while keeping its old
+certificate, altering a transition multiplier, altering initial-span or closure
+coordinates, replacing an actual distinguishing word by a nondistinguishing
+one, corrupting telescoping numerators or initial values, and introducing a
+singular leading coefficient while preserving all algebraic identities. They
+also include malformed rationals, booleans used as integers, floating-point
+JSON tokens, duplicate object keys, duplicate or unordered polynomial terms,
+missing guards, missing letters, and an unsupported summand family.
+
+The twenty-four Gr\"obner cases compare ideal-membership behavior with SymPy's
+Gr\"obner implementation and independently expand extracted original-generator
+lifts. The search basis need not be reduced, so the test does not incorrectly
+require two different normal-form implementations to print identical
+remainders. It checks agreement on zero membership and equivalence of
+remainders modulo the ideal.
+
+These controls test meaningful failure modes, but the decoder is still a
+research implementation. Its byte, term, dimension, exponent, and input-bit
+limits are not a complete defense against every expensive intermediate
+arithmetic computation. A production worker should enforce wall-clock,
+allocation, and total-operation budgets in addition to validating data.
+
+\subsection{Recorded costs, without a tactic-speed claim}
+
+The sum of per-case search times in the one recorded run was approximately
+$0.571$ seconds for ideals, $0.421$ seconds for weighted representations, and
+$0.319$ seconds for telescoping. The corresponding sums of independent replay
+times for returned artifacts were $0.026$, $0.040$, and $0.012$ seconds. These
+times exclude process startup and are not repeated-run estimates.
+
+Compact JSON certificate payloads ranged from 134 to 202 bytes for ideal
+certificates; from 46 to 887 bytes for weighted artifacts, where many are short
+counterexample words; and from 139 to 504 bytes for the three telescopers.
+Those sizes exclude the original problem descriptions, pretty-printing, and
+future Lean proof terms. The full JSON corpus is larger because it retains
+those original problems and readable indentation.
+
+The numbers establish that the small examples and their finite checks are
+practical in this environment. They do not predict Gr\"obner performance on
+large programs, optimized matrix performance, Lean elaboration time, kernel
+checking cost, or success rates against \grind{}, Aesop, LeanHammer, or any
+other tactic. None of those head-to-head experiments was performed.
+
+\subsection{The remaining evidence gap}
+
+The executed work establishes implementation behavior for the included Python
+fragments, finite certificate replay, and concrete counterexamples to some
+restricted precursors. The written proofs establish why the specified
+certificates imply their encoded mathematical claims.
+
+The unfilled gap is source formalization: compile the generic Lean soundness
+principles, implement proved source bridges, generate actual theorem terms,
+and replay them under the pinned Lean/Mathlib environment. The two supplied
+Lean files are specimens for that work. Their presence is not evidence that
+those steps have already succeeded.

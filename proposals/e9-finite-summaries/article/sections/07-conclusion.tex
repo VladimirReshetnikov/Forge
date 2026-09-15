@@ -1,0 +1,119 @@
+\section{Implementation priorities and acceptance gates}
+\label{sec:priorities}
+
+\subsection{First increment: one real matrix proof path}
+
+The first pull request should not introduce every proposed worker. It should
+compile a word semantics module, a matrix simulation theorem, a checked finite
+certificate format, and one approved fold reifier. The existing Forge
+controller can invoke this through ordinary theorem construction.
+
+A convincing first acceptance contains a theorem about \emph{every} list, such
+as Example~\ref{ex:horner}, proved from a generated certificate for the exact
+original goal. It also contains a wrong-update control that is genuinely
+rejected and a separating input that evaluates to an actual source inequality.
+A successful proof for a prewritten auxiliary matrix problem is useful but does
+not close the source-reifier acceptance gate.
+
+The first release can admit only rational source state and inputs. This avoids
+simultaneously implementing ring-homomorphism transports, natural-number cast
+normalisation, and guarded branches. A deliberately small implemented fragment
+is more valuable than a large interface that silently abstracts unsupported
+operations.
+
+\subsection{Second increment: the signed-support telescoping theorem}
+
+Formalise the signed-lower-index binomial semantics and prove
+Theorem~\ref{thm:tel}. Then reconstruct the squared-binomial and Franel
+certificates from the exact emitted polynomials. Acceptance must include
+$n=0$, $q=0$, $k=0$, and $k=n+r$ cases, not just a generic interior calculation.
+A test that changes natural subtraction into the signed predecessor semantics
+must fail unless an appropriate case lemma justifies it.
+
+Only after that theorem compiles should an external CAS adapter admit additional
+hypergeometric summands. Each new support schema needs its own interior domain,
+exceptional set, and endpoint proof. A universal ``simplify the rational
+certificate'' adapter is not an acceptable replacement for those obligations.
+
+\subsection{Third increment: operator action and selective seeds}
+
+Prove that polynomial Ore multiplication agrees with sequence-operator
+composition, then prove Theorem~\ref{thm:seeds}. Start with already matched
+operators; add common-multiple search after the simpler equality pipeline is
+working. The singularity cover should be checked independently of the
+producer's root-finding method.
+
+Acceptance must include an operator with a natural singularity and a
+countermodel agreeing on the ordinary initial window. The positive proof must
+explicitly use the additional pivot seed. A certificate that omits it must not
+close the goal. A common multiple that introduces an apparent singularity must
+remain subject to the same rule.
+
+\subsection{Fourth increment: the Leant consumer}
+
+Integrate only the approved fold fragment through the exact candidate and
+source-graph interface. The acceptance result should be a universally
+quantified assertion about an actual emitted candidate, with its own original
+context and type, not a theorem about a hand-supplied reference implementation.
+Keep the ordinary assertion checker as a fallback for unsupported candidates.
+
+A semantic-equivalence cache becomes useful only after equality transport is
+implemented and measured on real candidate streams. Begin with a small
+counterexample-word bank; it offers cheap early rejections while leaving
+positive acceptance to the universal proof. Do not alter existing candidate
+budgets or count a larger observation window as the success of this worker.
+
+\subsection{A fair future tactic evaluation}
+
+There are two different claims to test. \emph{Coverage} asks whether the new
+worker proves original goals that the existing configured system does not prove
+within its declared budget. \emph{Efficiency} asks what the additional worker
+costs, including preparation, search, proof reconstruction, and kernel checking.
+Both require actual Lean runs.
+
+A useful comparison uses four fixed configurations: the existing local
+baseline; Forge without the new workers; Forge with the word worker; and Forge
+with all successfully integrated summary workers. Keep imports, available
+lemmas, heartbeats, wall-clock limits, and source goals identical. Record a
+separate configuration when a generic enabling lemma is supplied. Do not turn a
+failed original goal into an accepted easier auxiliary statement.
+
+The benchmark should contain renamed and structurally varied fold examples,
+changing rational coefficients, higher observation degrees inside the admitted
+lift, moving-support sums, parameter edge cases, and singular recurrences. It
+must also include unsupported and false inputs, where the right result is
+refusal or a checked counterexample rather than a fabricated proof. Keep
+synthetic unit families separate from held-out repository theorems.
+
+A useful engineering metric is the distribution of \emph{final proof-checking}
+cost against certificate dimension, polynomial term count, and coefficient bit
+length. Another is the fraction of candidate models rejected by the reifier
+before search. Those measurements will indicate whether to prioritise a faster
+external solver, a reflected checker, or a broader source fragment. The present
+Python timings cannot choose among those Lean bottlenecks.
+
+\section{Conclusion}
+
+The most valuable expansion of Forge is not an unbounded promise to ``do more
+induction''. It is a collection of precise finite objects that make particular
+infinite proofs routine. A transition-closed row space proves an identity for
+all words. A polynomial coefficient decomposition extends that proof to an
+infinite input alphabet. A shifted-support flux removes a hypergeometric sum
+without inventing values at singular products. A common Ore operator and a
+complete singularity cover turn independent sequence proofs into a finite,
+explicit list of remaining equality obligations.
+
+These additions fit Forge's existing architecture. They reuse ordinary Lean
+proofs as the publication interface, retain the separation between search and
+acceptance, and exploit established mathematical software rather than
+reimplementing every solver. They also give Leant and Djex a sharply defined
+new behavioral capability: proving equality of eligible folds for every input,
+not merely observing agreement on a finite test set.
+
+The experiments establish that the proposed discovery and checking mechanisms
+are executable, that a separate exact replay does not need the symbolic search
+package, and that the specified false certificates are rejected. They do not
+establish a working Lean tactic. The next decisive step is therefore concrete:
+compile the finite matrix soundness theorem, connect it to one exact source
+fold, and obtain a kernel-checked proof for that original universally quantified
+goal. The other workers can then grow behind equally explicit acceptance gates.

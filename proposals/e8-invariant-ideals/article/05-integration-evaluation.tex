@@ -1,0 +1,334 @@
+\section{Lean implementation plan and concrete dependencies}
+\label{sec:integration-new}
+
+\subsection{Use the existing outer boundary}
+Forge already recommends starting with ordinary Lean goals and feeding checked
+facts to a fresh local \code{grind} run. The current Lean documentation describes
+\code{grind} as cooperating local solvers with proof construction; these workers
+should augment that machinery, not reimplement it~\cite{forge-integration,grind}.
+No new shared congruence-closure database is required for the first version.
+
+Use four focused modules behind the existing worker interface:
+\begin{lstlisting}
+Forge.Worker.InvariantSpace    // constant and polynomial multipliers
+Forge.Worker.FiniteCover       // cover or concrete tree
+Forge.Worker.IntProjection     // guard and uniform witness
+Forge.Planner.ContractSketch  // proof-directed hole decomposition
+\end{lstlisting}
+These are proposed module names. None is present as an implemented Lean worker
+in this archive.
+
+\subsection{A minimal certificate-to-proof path for each worker}
+\paragraph{Invariant packets.}
+Reification returns a polynomial syntax for each source expression together with
+a theorem relating its evaluation to that expression. A sparse normalizer proves
+that equality of canonical coefficient maps implies equality of evaluations.
+The checker validates initial substitutions and multiplier identities, then
+instantiates a generic reachability-induction theorem. To derive a particular
+goal equality from the packet, supply and check its coordinates as a constant
+or polynomial combination of the generators. A packet is useful only after this
+last target connection is made.
+
+For rational coefficients interpreted in an ordered field or another
+characteristic-zero field, use an explicit coefficient homomorphism. For integer
+source states, clearing denominators is often simpler than transporting many
+rational divisions. Neither method licenses dropping a source cast or treating
+natural subtraction as integer subtraction. The reifier must reject unsupported
+operations rather than silently interpreting them as polynomial operations.
+
+\paragraph{Finite covers.}
+A positive certificate is a finite set of states; a reflected checker establishes
+the constructor closure and good-state inclusion. A generic structural theorem
+then yields the source property using the registered summary laws. A negative
+certificate is a constructor DAG, evaluated and reconstructed as a concrete
+source term. The two result forms must have different proof goals.
+
+The included \code{CoreSoundness.lean} states the generic reachability and tree
+cover theorems in a small core-only form. It does not include the reflected
+finite checker or source reifier. Finite verification can begin with ordinary
+\code{decide} on small explicit instances; larger arrays may justify a dedicated
+reflected checker with a proved interpreter. An unchecked native computation
+must not be substituted for that theorem.
+
+\paragraph{Integer projection.}
+The first implementation can elaborate each receipt by theorem application rather
+than formalizing the entire search algorithm. Prove the congruence normalization,
+CRT merge, floor-bound, and nearest-point lemmas once. Decode the program as a
+shared expression with positive constant divisors. Return both an equivalence
+proof for the feasibility guard and a proof for the selected witness under that
+guard. Keeping only the second loses useful negative and routing information;
+keeping only the first loses constructive synthesis.
+
+\paragraph{Contract sketches.}
+A registered schema supplies the proof of composition. Hole candidates are
+elaborated at exact source types and checked against their full contracts.
+Assemble the final expression and theorem only after all contracts are proved.
+The source-typed Djex boundary is a sensible candidate-provider API; the
+behavioral observations in its diagnostic reports are filters, not replacements
+for these universal contracts~\cite{djex-readme,leant-readme}.
+
+\subsection{Library choices, with their roles kept narrow}
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}YY@{}}
+\toprule
+Component & Concrete dependency & Role and boundary \\
+\midrule
+Local proof closure & Lean \code{grind}, \code{omega}; Mathlib \code{ring} & Close ordinary proof obligations after explicit side conditions are supplied \\
+Polynomial semantics & Mathlib \code{MvPolynomial}, especially evaluation homomorphisms & Source denotation and correctness lemmas; not external search authority \\
+Finite certificates & Lean/Mathlib \code{Array}, \code{Fin}, \code{Fintype}, \code{Finset} & Enumerate finite states and prove a checker correct \\
+Exact proposer algebra & \code{fractions.Fraction} now; optional \code{python-flint.fmpq_mat} & Nullspaces and rational solving outside the kernel \\
+Integer proposer & Extended Euclid plus the included DAG assembler & Deterministic construction; every arithmetic lemma reconstructed in Lean \\
+Typed component search & Djex's checked public synthesis boundary & Supply source-owned hole candidates, preserving polymorphism and providers \\
+Optional grammar search & cvc5 SyGuS & Propose first-order arithmetic candidates; replay their contracts in Lean \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The table names implementation components, not a tested dependency matrix.
+Mathlib's current documentation uses the path
+\path{Mathlib/Algebra/MvPolynomial/Eval.lean}; names and imports must be checked
+against the project's pinned Mathlib revision, not inferred from a historical
+\code{Data/MvPolynomial} path~\cite{mvpoly}. The pinned Forge baseline reports
+Lean 4.34.0 and a specific Mathlib commit; the Python prototypes do not depend on
+that installation and do not establish adapter compatibility with it.
+
+\subsection{Mathematical contracts for the native interface}
+The prepared problem should describe which interpretation theorem the worker is
+allowed to produce. A useful separation is:
+\begin{lstlisting}
+InvariantProblem -> packet identities -> reachable-state theorem
+FiniteProblem    -> cover proof | concrete-tree proof
+IntegerProblem   -> (guard equivalence, witness correctness)
+HoleProblem      -> candidate term with full contract proof
+\end{lstlisting}
+A closed packet about an auxiliary transition system is not yet a proof of an
+unrelated target. A finite cover for an abstraction is not a concrete
+counterexample. A projection guard is not an existential witness until its
+premise is proved. These are worker-specific proof obligations beyond the
+identity and scope discipline already specified by Forge.
+
+For replay, retain the re-checkable problem and certificate, not a producer's
+cached verdict. The existing Forge contracts for exact source identity,
+rollback, and proof acceptance remain applicable; this article does not replace
+them with a second protocol.
+
+\subsection{One particularly useful proof-reuse boundary}
+Compile a successful search into a theorem specialized to its transition maps,
+finite algebra, or arithmetic coefficients. The general checker theorem can be
+shared, while the certificate itself becomes finite checked data. Recompilation
+then need not rerun Gaussian elimination, reachability search, or a synthesis
+solver. This applies equally to a reusable hole theorem from the sketch planner.
+
+Avoid serializing expanded polynomial normal forms into a huge source script
+when a coefficient vector and a generic normalization proof suffice. Conversely,
+for a small example, a short ordinary proof may be simpler and faster than a
+new reflected interpreter. Measure both source size and kernel-checking cost at
+the actual target before choosing the permanent representation.
+
+\section{Executed experiments and what they establish}
+\label{sec:experiments}
+
+\subsection{Environment and units}
+The recorded run used Python 3.13.5 on Linux x86-64. The command line used
+\code{python -S}, disabling site-package initialization. The implementations
+import only the standard library. Neither \code{lean} nor \code{lake} was
+available, and the Lean status file records \textsc{not run} rather than a
+successful elaboration.
+
+There is one new experiment ledger, separate from Forge's nine historical runs.
+A certificate, a unit-test method, a parameter valuation, a state, and a tuple
+evaluation are different units. The tables keep them separate. In particular,
+these records must not be appended to a historical solved-goal total.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}lrrY@{}}
+\toprule
+Lane & Stored certificates & Replay accepted & Contents \\
+\midrule
+Constant multipliers & \ConstCertificates & \ConstCertificates & Cyclic packet, recurrence, 48 affine cases, one expected miss \\
+Polynomial multipliers & \IdealCertificates & \IdealCertificates & Squaring, union, parabola, false-line control, powers 2 through 9 \\
+Finite algebra & \FiniteCertificates & \FiniteCertificates & Count covers, mirror examples, and random exact algebras \\
+Integer projection & \IntegerCertificates & \IntegerCertificates & 220 random symbolic systems and one large-period system \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+There are 422 stored certificates in this one corpus. Some are concrete
+counterexamples and some contain an empty invariant packet. The count is not
+422 proved Lean theorems, and it is not a solved-goal benchmark.
+
+\subsection{Invariant tests and ablations}
+The cyclic-differences case returns a dimension-two invariant space while its
+conserved-linear subspace has dimension zero. The nonlinear squaring-diagonal
+case returns no generator with multiplier degree zero and one generator with
+multiplier degree one. The union-of-axes case changes from zero to one generator
+when the multiplier bound rises from one to two. The false-line control confirms
+that an initially true relation is not retained merely because it fits the
+initial parameterization.
+
+The 48 affine-diagonal instances have three state variables, one to three
+transitions, and alternating template degrees one and two. Random affine maps
+are constructed to preserve the diagonal. The computed dimensions are two and
+seven, respectively. These engineered cases exercise simultaneous invariants,
+multiple transitions, and coefficient handling; they are not a representative
+sample of all programs.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}YrrY@{}}
+\toprule
+Example & $d$ & $e$ & Recorded result \\
+\midrule
+Cyclic differences & 1 & 0 & Two generators; no nonzero conserved linear generator \\
+Sums of squares & 3 & 0 & One generator after dimensions $9,5,3,2,1,1$ \\
+Squaring, initial $x=y$ & 1 & 0 & Empty packet: expected certificate-language miss \\
+Squaring, initial $x=y$ & 1 & 1 & $y-x$ with multiplier $x+y$ \\
+Squaring, initial $xy=0$ & 2 & 1 & Empty packet: multiplier bound too small \\
+Squaring, initial $xy=0$ & 2 & 2 & $xy$ with multiplier $xy$ \\
+Squaring, initial $y=x^2$ & 2 & 2 & $y-x^2$ with multiplier $y+x^2$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Displayed generators can differ by sign or rational scaling from the stored
+row-reduced basis. The actual basis and exact multiplier matrices remain in the
+certificate file. The table explains their mathematics rather than rewriting
+the recorded evidence.
+
+\subsection{Finite-algebra differential checks}
+The count family covers moduli 1 through 12. Each case returns a cover with
+exactly $m$ states in a product of size $m^2$. The mirror family has 24 magma
+instances: 12 commutative cases return covers and 12 deliberately noncommutative
+cases return counterexample trees. The 100 random finite algebras return 33
+covers and 67 counterexamples, agreeing with a separately written full-closure
+oracle.
+
+The oracle computes all reachable states even when the production proposer has
+already found a bad state. Thus the comparison checks the verdict against the
+whole exact algebra, not only against the first explored tree. The positive
+certificate checker separately enumerates all constructor tuples in the
+returned cover. The negative checker independently evaluates its acyclic tree.
+Both still share input-table semantics with the search, a much smaller shared
+surface than the worklist algorithm but not a formal verification of it.
+
+\subsection{Integer differential checks}
+The 220 random symbolic systems use one or two parameters, fixed output
+coefficients in $[-4,4]$, moduli from 1 through 8, up to four inequalities, and
+up to three congruences. At each parameter valuation from
+$\{-4,-1,0,2,5\}^n$, the generated feasibility guard is compared with a complete
+finite enumeration for that \emph{concrete} problem.
+
+Let $B$ be one plus the largest absolute right-side value, and let $P$ be the
+lcm of the input moduli, or one if there are none. Every finite bound endpoint
+lies in $[-B,B]$. The congruence solution set is periodic with period dividing
+$P$. Therefore any satisfiable interval, including a one-sided or fully
+unbounded interval, has a witness in $[-B-P,B+P]$. Enumerating that range is a
+complete concrete oracle for the generated test inputs, not merely an arbitrary
+small box.
+
+Across 3,400 valuations, the guard reports 1,368 feasible and 2,032 infeasible
+instances, all agreeing with the oracle. Every feasible valuation also checks
+the selected witness directly against the original input constraints. The
+large-period case is tested separately at five values, including
+$\pm10^{100}$; it is not subjected to impossible modulus-sized enumeration.
+
+\subsection{Corruption and implementation controls}
+All 21 unit-test methods pass. Their internal cases include malformed rational
+coefficients, matrix and multiplier corruption, wrong initial behavior, changed
+problem subjects, an insufficient multiplier budget, an empty or unsafe cover,
+a self-referential tree, a good state falsely designated as a counterexample,
+changed Bezout coefficients, deleted feasibility guards, a changed witness node,
+and floating-point or Boolean values where exact integers are required.
+There are 19 explicit certificate-mutation cases in those methods, in addition
+to malformed-polynomial and semantic differential cases.
+
+The replay script disables synthesis, row reduction, nullspace, coordinate
+search, and extended-gcd construction by replacing their entry points with
+exceptions before checking the stored corpus. Every certificate still replays.
+This demonstrates separation from those search routines; it does not make
+shared polynomial arithmetic or the integer assembler formally verified.
+
+\subsection{Timings are diagnostic only}
+The raw ledger includes one observed duration per lane. In the recorded run,
+constant-multiplier experiments took approximately 0.613 seconds, polynomial
+multipliers 0.037 seconds, finite algebras 0.023 seconds, and integer projections
+0.260 seconds. These figures include that lane's construction, checks, and
+specified oracles, but exclude process startup and final JSON serialization.
+The lanes perform different work, and there are no repeated trials, confidence
+intervals, or matched Lean baselines. The figures are useful for detecting gross
+reproduction problems, not for claiming comparative performance.
+
+\section{Implementation order and acceptance gates}
+\label{sec:roadmap}
+
+\subsection{First: one source theorem per certificate family}
+Begin by elaborating the supplied generic Lean specimens under the pinned
+project and implementing one actual source bridge per family. A good minimum
+set is the cyclic packet, a binary-tree count congruence, and a guarded
+non-coprime integer witness. Require a complete proof of the exact source goal,
+with recorded axiom dependencies, and then rerun it without the proposer.
+This establishes something the Python corpus cannot: a certificate really can
+cross the source-language boundary into a Lean proof.
+
+\subsection{Second: native certificate checkers, not native searches}
+Port the deterministic checker first. The external Python proposer can continue
+to supply exact finite data. For finite covers, prove a table-closure checker
+sound. For integer projection, compose the four generic arithmetic lemmas. For
+invariant packets, finish polynomial reification and identity checking. Only
+then optimize or reimplement the external searches in Lean, FLINT, or another
+language if measurements justify it.
+
+The polynomial multiplier algorithm is mathematically the most substantial
+addition, but its source polynomial bridge is also the most delicate. The finite
+cover checker is a useful smaller first end-to-end milestone. This is an
+engineering order, not a ranking of the algorithms' eventual importance.
+
+\subsection{Third: benchmark the actual new capability}
+Build source-goal families that isolate the extension: simultaneous invariants
+without conserved generators; invariant ideals requiring positive multiplier
+degree; arbitrarily deep trees summarized by a finite algebra; and integer
+witnesses with large symbolic periods. Include true goals outside the supported
+fragments and false goals whose counterexamples are checked.
+
+Compare against \code{grind} with the same definitions and permitted theorem
+inventory, a reasonable hand-orchestrated baseline, and relevant specialized
+tactics. Report separately preparation, search, certificate size, reconstruction,
+kernel checking, and cached replay. Hold out theorem families rather than only
+renaming variables, and prevent retrieval from importing the exact target
+lemma. None of those controlled Lean measurements is claimed by this article.
+
+\subsection{Fourth: test the original higher-order query unchanged}
+Integrate the contract-sketch branch into the actual Leant/Djex path and run the
+original indexing query with its original source type, provider inventory,
+integer semantics, observations, and resource limits. Retain exact branch traces
+showing carrier choice, hole inventories, and candidate order. The list-fold
+specimen and isolated step successes are useful controls; neither substitutes
+for this gate. The simultaneous two-universe query remains a separate target.
+
+\section{Assessment}
+The strongest addition is the bounded-multiplier fixed point. It provides a
+finite, exact way to synthesize entire invariant packets, rather than asking a
+bilinear solver to guess generators and their closure multipliers at once.
+Finite-algebra covers give another precise form of induction: a small closure
+certificate stands for all finite constructor trees. Constructive projection
+turns one-output integer feasibility into a compact program instead of a residue
+table. Contract-first sketches explain how these mathematical workers can
+cooperate with a sophisticated type-directed synthesizer without reducing the
+problem to a larger unstructured candidate stream.
+
+The mathematical claims are deliberately local and useful. The invariant worker
+is complete for its bounded certificate space; affine transitions admit the
+stronger degree-bounded equality result. The finite worker decides its explicit
+finite algebra. The integer worker exactly projects its stated one-output
+conjunctive fragment. None is a complete general Lean prover, and none needs to
+be one to add a qualitatively different successful proof route.
+
+The executable archive establishes that the core constructions work on the
+recorded cases, reject the specified corruptions, and replay without their
+search routines. The next decisive result is not a larger Python pass count: it
+is a checked source theorem from each family, followed by a fair measurement in
+the actual Forge environment. The article supplies the algorithms, certificate
+contracts, proofs, concrete implementation choices, and reproducible artifacts
+needed to take that step.

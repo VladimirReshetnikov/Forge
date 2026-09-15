@@ -1,0 +1,253 @@
+\section{Constructive integer projection without residue tables}
+\label{sec:projection}
+\status{Implemented in \code{presburger.py}; exact symbolic witness programs,
+feasibility guards, Bezout receipts, and differential checks.}
+
+\subsection{The exact supported fragment}
+Let $x=(x_1,\ldots,x_n)\in\Z^n$ be parameters and let $y\in\Z$ be the output.
+The input is a conjunction
+\begin{equation}
+\label{eq:projection-input}
+ \Phi(x,y)\equiv
+ \bigwedge_i a_i y\le\beta_i(x)
+ \quad\land\quad
+ \bigwedge_j c_jy\equiv\delta_j(x)\pmod{m_j},
+\end{equation}
+where the coefficients $a_i,c_j,m_j$ are fixed integers, $m_j>0$, and the right
+sides are integer affine expressions in $x$. Coefficients may be negative or
+zero. An empty conjunction is allowed. There is exactly one existential output
+variable in this initial fragment.
+
+The worker returns an integer expression $w(x)$ and a quantifier-free guard
+$C(x)$ such that
+\begin{equation}
+\label{eq:projection-contract}
+ C(x)\ \Longleftrightarrow\ \exists y\in\Z,\Phi(x,y),
+ \qquad C(x)\ \Longrightarrow\ \Phi(x,w(x)).
+\end{equation}
+The expression uses affine operations, positive-denominator floor division,
+remainder, minimum, and maximum. It is a single program for all parameters, not
+a table of unrelated witnesses for sampled inputs.
+
+This directly extends the useful area between Forge's integer-lattice worker
+and its finite-residue witness tables. A finite table can cost proportional to a
+modulus whose binary representation is short. The construction here uses the
+arithmetic structure of the congruences instead.
+
+\subsection{Normalize arbitrary fixed coefficients in congruences}
+For one congruence
+\[
+ c y\equiv\delta\pmod m,
+\]
+let $g=\gcd(c,m)>0$ and choose integers $u,v$ with $uc+vm=g$. A solution exists
+only if $g\mid\delta$. Under that condition the congruence is equivalent to
+\begin{equation}
+\label{eq:normalize-congruence}
+ y\equiv u\frac{\delta}{g}\pmod{m/g}.
+\end{equation}
+The quotient is an exact integer quotient under the guard. In the program it
+is computed with floor division, but the divisibility guard is never discarded.
+When $c=0$, the normalization reduces to the guard $m\mid\delta$ and a modulus
+of one, imposing no restriction on $y$.
+
+The certificate does not ask the checker to run the extended Euclidean
+algorithm. It supplies $(g,u,v)$, and the checker verifies
+\[
+ g>0,\quad g\mid c,\quad g\mid m,\quad uc+vm=g.
+\]
+These conditions imply that $g$ is the positive gcd: every common divisor divides
+the displayed integer combination, while $g$ itself is a common divisor.
+
+\subsection{Merge congruences with non-coprime moduli}
+Suppose the current system has been reduced to $y\equiv r\pmod M$, and the next
+normalized congruence is $y\equiv s\pmod N$, with $M,N>0$. Put
+\[
+ h=\gcd(M,N),\qquad pM+qN=h.
+\]
+Compatibility requires $h\mid(s-r)$. Under that guard, set
+\begin{align}
+ k&=\left(p\frac{s-r}{h}\right)\bmod(N/h),\label{eq:crt-k}\\
+ M'&=M(N/h)=\lc(M,N),\nonumber\\
+ r'&=(r+Mk)\bmod M'.\label{eq:crt-r}
+\end{align}
+The two congruences are equivalent to $y\equiv r'\pmod{M'}$. In the total program, the displayed quotient $(s-r)/h$ is floor division; compatibility makes it exact. The residue expression therefore remains defined even when the compatibility guard is false.
+
+\begin{lemma}[Guarded CRT merge]
+\label{lem:crt}
+For the definitions above,
+\[
+ (y\equiv r\pmod M\ \land\ y\equiv s\pmod N)
+ \Longleftrightarrow
+ (h\mid(s-r)\ \land\ y\equiv r'\pmod{M'}).
+\]
+\end{lemma}
+\begin{proof}
+If both congruences hold, writing $y-r=M\ell$ and $y-s=Nj$ shows
+$s-r=M\ell-Nj$, hence compatibility. Dividing by $h$, the equation for
+$\ell$ modulo $N/h$ has inverse $p$ for $M/h$, because
+$p(M/h)+q(N/h)=1$. Therefore $\ell\equiv k\pmod{N/h}$, which is equivalent
+to $y\equiv r+Mk\pmod{M'}$. Conversely, compatibility and that last
+congruence give the first congruence directly and the second by substituting
+\eqref{eq:crt-k}. Reducing $r+Mk$ modulo $M'$ does not change its class.
+\end{proof}
+
+Start with residue $r=0$ and period $M=1$, then merge every congruence. This
+produces a fixed final period and a symbolic residue program $r(x)$, together
+with divisibility guards. The moduli need not be prime, pairwise coprime, or
+small. Every normalized modulus and every merge uses its own checked Bezout
+receipt.
+
+\subsection{Convert inequalities into an interval}
+For $a y\le\beta$:
+\[
+ \begin{array}{rcll}
+ a>0 &\Rightarrow& y\le\lfloor\beta/a\rfloor, &\text{an upper bound},\\[2pt]
+ a=-c<0 &\Rightarrow& y\ge-\lfloor\beta/c\rfloor, &\text{a lower bound},\\[2pt]
+ a=0 &\Rightarrow& 0\le\beta, &\text{a parameter guard}.
+ \end{array}
+\]
+The negative-coefficient case is easy to get wrong. It uses
+$\lceil-\beta/c\rceil=-\lfloor\beta/c\rfloor$, with $c>0$. Truncation toward
+zero would give incorrect answers for negative parameters.
+
+Let $L(x)$ be the maximum of the lower bounds when any exist, and $U(x)$ the
+minimum of the upper bounds when any exist. Do not invent sentinel values for
+missing endpoints: the problem is over unbounded integers, not a machine range.
+
+\subsection{Choose the nearest congruent point}
+After normalization, all solutions to the congruences have the form $r+Mz$.
+If a lower bound exists, define
+\begin{equation}
+\label{eq:lower-witness}
+ w=L+((r-L)\bmod M).
+\end{equation}
+This is the smallest integer at least $L$ in the required residue class. If an
+upper bound also exists, add the final guard $w\le U$.
+
+If there is no lower bound but there is an upper bound, define instead
+\begin{equation}
+\label{eq:upper-witness}
+ w=U-((U-r)\bmod M).
+\end{equation}
+This is the largest congruent integer at most $U$, so no extra interval
+feasibility guard is required. With neither bound, use $w=r$.
+
+\begin{theorem}[Constructive projection]
+\label{thm:projection}
+The conjunction of the normalization guards, CRT compatibility guards,
+zero-coefficient inequality guards, and the optional $w\le U$ guard satisfies
+\eqref{eq:projection-contract}, with the witness defined above.
+\end{theorem}
+\begin{proof}
+The normalization and CRT lemmas establish an equivalence between the original
+congruences and their guards together with $y\equiv r\pmod M$. The inequality
+transformations are equivalences over integers, including the zero-coefficient
+cases. It remains to intersect one arithmetic progression with one possibly
+unbounded interval.
+
+With a lower endpoint, \eqref{eq:lower-witness} is congruent to $r$ and lies in
+$[L,L+M)$. Any other congruent integer at least $L$ differs from it by a
+nonnegative multiple of $M$. Thus an upper endpoint can be satisfied precisely
+when $w\le U$. With only an upper endpoint, \eqref{eq:upper-witness} always
+provides a suitable congruent point. With no endpoints, $r$ itself suffices.
+These arguments prove both feasibility equivalence and correctness of the
+constructed witness, for every parameter valuation.
+\end{proof}
+
+\subsection{A witness program, not an exponentially large normal form}
+The implementation stores expressions as a hash-consed directed acyclic graph.
+A node refers only to earlier nodes and is one of:
+\begin{lstlisting}
+const(z)        var(i)          scale(z, node)
+add(a, b)       div(a, d)       mod(a, d)     // d > 0
+max(a, b)       min(a, b)
+\end{lstlisting}
+Guards are divisibility tests or comparisons of node values. There is no floating
+point operation, no variable denominator, and no implicit conversion to machine
+integers. Shared affine expressions and intermediate residues need not be
+copied into a large tree-shaped term.
+
+For fixed parameter arity, program-node count grows linearly with the number of
+constraints, apart from sharing effects. More explicitly, assembling affine
+right sides costs $O((p+q)(n+1))$ nodes for $p$ inequalities and $q$
+congruences. Integer coefficient bit lengths and the cost of division still
+matter. The final period can be a product of many moduli, but its bit length is
+at most the sum of their bit lengths before normalization. No loop runs once
+per residue class.
+
+\begin{example}[A 60-bit period in 42 nodes]
+The recorded large case has
+\[
+ m_1=1{,}000{,}000{,}007,\qquad m_2=1{,}000{,}000{,}009,
+\]
+\[
+ M=m_1m_2=1{,}000{,}000{,}016{,}000{,}000{,}063,
+\]
+and constraints
+\[
+ x\le y\le x+M-1,\qquad
+ y\equiv2x+1\pmod{m_1},\qquad
+ y\equiv5x-3\pmod{m_2}.
+\]
+The generated program has 42 nodes. The final interval has exactly one
+representative of every residue class, so the theorem establishes feasibility
+for all $x$. At $x=0$ the generated witness is $2{,}000{,}000{,}015$. The
+experiment also checks the program concretely at $x=\pm10^{100}$. Those large
+values are implementation tests; the universal claim follows from the
+construction theorem, not from their size or number.
+\end{example}
+
+A residue table for this combined period is not a sensible representation.
+This is a representation-size contrast, not a measured speed comparison with
+Forge's existing residue implementation.
+
+\subsection{How to discharge a quantified Lean goal}
+For a goal
+\[
+ \forall x,\quad D(x)\longrightarrow\exists y:\Z,\Phi(x,y),
+\]
+introduce $x$ and the domain assumptions, generate $(C,w)$, and create the
+remaining obligation $D(x)\Rightarrow C(x)$. Once this is proved, the generic
+projection theorem supplies the existential with witness $w(x)$. A local
+arithmetic solver can attempt the guard, while another worker may supply a
+missing congruence or bound. There is no reason to enumerate witnesses after
+the exact projection has already constructed one.
+
+Conversely, a valuation of $x$ violating $C$ is useful only after checking the
+domain $D$ and replaying the projection equivalence. A raw solver model for an
+unrelated abstraction is not evidence that the original universally quantified
+goal is false.
+
+For natural-number output, first add $0\le y$ and prove that the selected
+integer can be transported to \code{Nat}. For rational or real parameters,
+this integer theorem is not the correct source semantics. Existential
+quantifier order also matters: a witness may depend only on parameters in
+scope before its binder.
+
+\subsection{The remaining verification work}
+The Python checker validates the Bezout receipts and deterministically
+reconstructs the witness program and guards from the input. It then compares
+this reconstruction with the supplied program. Search and checking share that
+assembler. Thus replay detects modified receipts or programs but cannot,
+by itself, detect an arithmetic mistake common to both uses of the assembler.
+The direct constraint evaluator and exhaustive concrete oracle in the test suite
+address that risk by a different route; they do not amount to a formal proof.
+
+The Lean implementation should prove normalization, guarded CRT, bound
+conversion, and nearest-congruent-point lemmas once. Certificate elaboration
+then composes these lemmas, with positive-divisor facts explicit. A reflected
+program interpreter is an optional later optimization; an initial version can
+emit a shared \code{let}-term and ordinary proof applications. \code{omega}
+is an appropriate solver to try on residual linear integer obligations, but
+acceptance of this exact generated syntax must be measured rather than assumed.
+The mathematical construction does not require any SMT solver.
+
+\subsection{Limits that must survive the interface}
+Variable coefficients such as $x\,y\le z$, variable moduli, nonlinear parameter
+right sides in the current input grammar, general Boolean combinations, and
+several mutually constrained existential outputs are outside the implemented
+fragment. Disequalities can be handled by explicit branching in a future layer,
+but they are not silently dropped. Repeatedly projecting several variables may
+cause large piecewise expressions and requires a separate supported-language
+argument after each elimination. A one-output completeness theorem must not be
+advertised as complete arbitrary Presburger synthesis.

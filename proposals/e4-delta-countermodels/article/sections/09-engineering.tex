@@ -1,0 +1,147 @@
+\section{Implementation plan, libraries, and acceptance gates}
+\label{sec:engineering}
+
+\subsection{Concrete library choices}
+\begin{longtable}{@{}P{0.20\textwidth}P{0.31\textwidth}P{0.41\textwidth}@{}}
+\toprule
+Component & Library or module & Exact role and status \\
+\midrule
+\endhead
+Prototype algebra & SymPy 1.14.0 \code{Poly}, \code{QQ}; custom span manager & Executed. Proposes exact polynomials and coordinates; never used by standalone replay. \\
+Prototype replay & Python \code{Fraction}; \code{checker.py} & Executed. Canonical sparse arithmetic, complete edge coverage, original-target checks. \\
+Larger rational systems & SymPy \code{DomainMatrix.rref_den}; FLINT \code{fmpq_mat_rref} & Proposed search optimization. Both have documented exact-linear-algebra interfaces; emitted coordinates must still be multiplied back exactly \cite{domainmatrix,flint}. \\
+Lean identity semantics & Mathlib \code{MvPolynomial}; \code{ring}, \code{norm_num} & Proposed/partly source-emitted. Local identities can be reconstructed before investing in reflection \cite{mvpoly}. \\
+Positive IPC search & Existing \code{itauto} or Djex LJT & Reuse; not implemented again here \cite{itauto,djex-formula}. \\
+Finite-model search & Included rooted-tree enumerator & Executed. Small bounded proposer with independent forcing replay. \\
+Larger finite models & PySAT solver interface & Proposed only. Produces a model for the same checker; UNSAT at a finite bound is not a proof of validity \cite{pysat}. \\
+Lean IPC metatheory & Existing Kripke soundness formalization & Proposed reuse. Connect finite Boolean forcing to the selected library's semantics and derivation type \cite{trufas}. \\
+\bottomrule
+\end{longtable}
+
+FLINT and \code{DomainMatrix} are not runtime dependencies of the supplied
+checker, and PySAT was not installed or run. Their entries are concrete next
+implementations, not hidden explanations of the observed timings. A production
+integration must pin actual compatible library revisions; current documentation
+is not a compatibility guarantee for Forge's pinned Lean toolchain.
+
+\subsection{Suggested module additions}
+The following names are proposed additions, not claims about files already
+present in Forge:
+\begin{lstlisting}
+Forge/Worker/Observable/IR.lean
+Forge/Worker/Observable/ReifyFold.lean
+Forge/Worker/Observable/Certificate.lean
+Forge/Worker/Observable/Reconstruct.lean
+Forge/Worker/Observable/Reachability.lean
+Forge/Diagnostic/IPC/FiniteModel.lean
+Forge/Diagnostic/IPC/Check.lean
+Forge/Diagnostic/IPC/SoundnessBridge.lean
+\end{lstlisting}
+
+Keep the source-to-machine bridge in a separate module from certificate
+checking. A correct polynomial checker attached to an incorrect translation is
+not a proof of the user's theorem. Similarly, separate the IPC object formula
+and its atom origins from any source-level completeness claim.
+
+\subsection{Gate 1: the first actual Lean milestone}
+Use the Lean and Mathlib pair recorded by the reviewed Forge baseline as the
+initial target, then resolve any real API differences during compilation. First
+compile \code{Reachability.lean} and all 222 generated identity obligations in
+a project using that pinned Mathlib revision. Preserve compiler output and
+transitive axiom reports. No source file containing \code{sorry} or a
+placeholder axiom is an acceptable substitute for this gate.
+
+Next construct \emph{one complete} machine-soundness theorem by combining the
+identities with the induction bridge, and prove the original delayed-fold
+statement from it. A compilation of only the local polynomial identities does
+not close this milestone. Its negative counterpart must produce and check the
+actual length-two source execution, not merely fail to prove the positive
+statement.
+
+The supplied Lean files contain no \code{sorry} or added axioms, but their
+textual absence is only a preflight property. Compilation and a positive kernel
+acceptance signal remain necessary, under Forge's existing acceptance policy.
+
+\subsection{Gate 2: a real reifier with exact-source controls}
+Implement only the monomorphic tuple/list fragment first. Require each
+supported expression to carry a proved denotation equation. Test constants,
+negative coefficients, rational denominators, old-state projections, powers,
+multiple payloads, and finite control branches. Reject unsupported operations
+rather than silently abstracting them away.
+
+Use pairs of examples differing in one material source detail: simultaneous
+versus sequential updates, rational versus natural subtraction, one input versus
+two independent inputs, a missing constructor case, or a different initial
+parameter dependency. Reuse of a certificate across these pairs must fail
+unless a new semantic bridge is proved. The anti-substitution principle is
+particularly important for the product construction: sharing one payload is
+what states the intended equivalence theorem.
+
+\subsection{Gate 3: universal behavioral acceptance in Leant}
+Add the dispatcher described in Section~\ref{sec:integration}. At unchanged
+candidate-search limits, require one exact candidate to satisfy an unbounded
+fold assertion that the existing bounded simplification route leaves open.
+Retain the candidate's type replay, the complete behavioral proof, and the
+machine certificate. Also retain a type-correct wrong candidate with a concrete
+source counterexample, and a supported-but-truncated case with an inconclusive
+verdict.
+
+Finding a different candidate at a much larger synthesis budget may be useful,
+but it does not demonstrate that this new verifier closes the original bounded
+behavioral query. Keep synthesis coverage and proof-checking capability as
+separate measurements.
+
+\subsection{Gate 4: IPC diagnostics that cannot refute classical Lean}
+Connect the finite checker to the chosen Lean IPC soundness theorem. Require
+Lean proofs of object-level nonderivability for the eight stored countermodels,
+including excluded middle and Peirce's formula. In the same project, allow the
+corresponding classical source formulas to be proved normally. The coexistence
+of those results is a correctness test, not a contradiction.
+
+Reject a changed atom map, a missing contextual hypothesis, a nonmonotone
+valuation, and a changed object calculus. A timeout in model search must leave
+\unknown{}. This gate does not assert a full translation-completeness theorem
+for Djex's higher-rank or dictionary-bearing source language.
+
+\subsection{Gate 5: evaluate real capability, then optimize}
+Build a held-out collection of list folds, small recurrences, stream summaries,
+and equivalent accumulator representations from actual Lean developments.
+Keep source files and target theorems fixed before tuning. Compare at least:
+ordinary baseline tactics, the same tactics with a hand-supplied invariant,
+and Forge with automatic observable closure. This isolates the value of
+invariant discovery from arithmetic reconstruction.
+
+Measure reification time, search time, emitted identity count, certificate
+bytes, proof-term size, kernel time, peak memory, and solved-source-theorem
+count. Keep malformed-input refusals and budget exhaustion out of solved
+counts. Only such a benchmark can support a claim that the new \emph{Lean}
+worker is practically more capable than its baseline.
+
+\subsection{Optimizations that preserve the certificate language}
+\textbf{Sparse and fraction-free elimination.} The current span manager is
+small and readable. For larger spaces, use sparse monomial columns and
+fraction-free row operations; retain original-generator coordinate witnesses.
+Check candidate dependencies exactly even when modular arithmetic proposes a
+rank or pivot structure.
+
+\textbf{Strongly connected components.} Condense the control graph. Goals in
+successor components can propagate backward in reverse topological order;
+only cyclic components need a local fixed point. This avoids revisiting an
+acyclic prefix after its downstream spaces have stabilized. The certificate
+still lists every original edge.
+
+\textbf{Proof-aware basis changes.} A different basis can make $M_e$ sparser or
+reduce coefficient size. Supply a rational change-of-basis matrix and check it
+by multiplication, then emit identities in the cheaper basis. Do not select a
+numerically approximate basis or remove an observation merely because its
+sampled values appear dependent.
+
+\textbf{Resource-aware counterexamples.} The degree grid is complete locally
+but can be large in many payload coordinates. Try simple exact points first,
+then use the proved grid as a fallback. A SAT/SMT proposal can accelerate witness
+choice, but the final execution trace must still replay in the original source
+semantics.
+
+These are implementation options, not measured improvements in the current
+package. The simple baseline was retained so that the certificate mechanism is
+auditable and its failures are easy to reproduce.

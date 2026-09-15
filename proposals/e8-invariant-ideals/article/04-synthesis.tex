@@ -1,0 +1,251 @@
+\section{Proof-directed higher-order sketch decomposition}
+\label{sec:sketches}
+\status{Integration design, not an implemented synthesizer. The archive includes a
+hand-written, uncompiled \code{List}/\code{Int} fold specimen. It does not close
+Leant's original Church-encoded indexing query.}
+
+\subsection{The specific obstruction in Leant and Djex}
+The inspected Leant report describes an unusually useful diagnostic. Under the
+original bounded Haskell Exference indexing query, all 256 inspected candidates
+were behaviorally falsified. Yet a suitable integer-case step synthesized in
+isolation at candidate 5, and a corresponding step in a larger ambient context
+appeared at candidate 219. Function-valued folds also appeared separately.
+These observations locate a composition and ordering problem, not simply a
+missing source-language construct~\cite{leant-indexing}.
+
+The report explicitly warns that candidate 219 is not the internal ordinal of
+that step in the original fold search. Partial terms, pending goals, usage
+history, and context differ. Accordingly, the proposal here is not to infer a
+magic ranking penalty from those two numbers. It is to make a proof schema
+expose smaller, semantically specified synthesis problems before complete
+candidate terms are enumerated.
+
+\subsection{The proof rule should determine the holes}
+For a right fold, choose a carrier type $B$ and a relation
+\[
+ \mathcal R:\operatorname{List}(A)\to B\to\operatorname{Prop}.
+\]
+The two proof obligations are
+\begin{align}
+ &\mathcal R([],b_0),\label{eq:fold-base}\\
+ &\forall a,\ell,b,\quad
+   \mathcal R(\ell,b)\Longrightarrow
+   \mathcal R(a::\ell,\operatorname{step}(a,b)).\label{eq:fold-step}
+\end{align}
+They imply
+\begin{equation}
+\label{eq:fold-rule}
+ \forall\ell,\quad
+ \mathcal R\bigl(\ell,\operatorname{foldr}(\operatorname{step},b_0,\ell)\bigr)
+\end{equation}
+by structural induction. Forge can register this as a reusable proof theorem.
+The synthesis task is then to construct $b_0$ and \code{step} satisfying these
+contracts, not an entire recursive program from a bare outer type.
+
+The relation is the key. Merely choosing the fold combinator and leaving its
+holes constrained only by types reproduces the original ambiguity. Conversely,
+choosing an arbitrary expressive relation and asking a solver to discover it is
+not yet an algorithm. A first implementation should use an explicit inventory
+of specification templates: equality with a reference fold, a size equation, a
+pointwise relation for function carriers, a predicate preserved by constructors,
+or a packet of arithmetic invariants discovered by Section~\ref{sec:ideals}.
+
+\subsection{Indexing explains why the carrier must be a function}
+Let $d:A$ be a default. Define a total reference operation on ordinary lists and
+mathematical integers by
+\[
+ \operatorname{at}(d,[],i)=d,
+\]
+\[
+ \operatorname{at}(d,a::\ell,i)=
+ \begin{cases}
+ d,&i<0,\\
+ a,&i=0,\\
+ \operatorname{at}(d,\ell,i-1),&i>0.
+ \end{cases}
+\]
+The source list is the structural argument, while the index changes during
+processing. Lambda-lifting the index into the fold result suggests
+\[
+ B=\Z\to A,
+ \qquad \mathcal R(\ell,k)\equiv
+       \forall i,\ k(i)=\operatorname{at}(d,\ell,i).
+\]
+The base hole has the contract $\forall i,b_0(i)=d$. The step hole has the
+contract
+\begin{equation}
+\label{eq:index-contract}
+ \operatorname{step}(a,k)(i)=
+ \begin{cases}
+ d,&i<0,\\
+ a,&i=0,\\
+ k(i-1),&i>0.
+ \end{cases}
+\end{equation}
+The simple solution is therefore
+\begin{lstlisting}
+base = fun i => default
+step = fun head continuation i =>
+    if i < 0 then default
+    else if i = 0 then head
+    else continuation (i - 1)
+answer = foldr step base xs index
+\end{lstlisting}
+
+When an approved integer-case primitive already has exactly this contract, as in
+the Leant diagnostic, it should be tried as a whole component before synthesizing
+its branch structure. This is a concrete use for Djex: solve a small typed
+component problem under an explicit semantic contract, then return the candidate
+through its existing source-typed boundary. Forge supplies the fold theorem and
+the proof obligations that the type-directed search alone does not express.
+
+The carrier heuristic is also specific: when a non-structural argument changes
+in a recursive specification and the result type is $R$, try the corresponding
+function type $I\to R$ as a fold carrier. For several changing arguments, try a
+curried or product carrier with the original dependency order. This is an OR
+alternative, not a theorem that all such functions are folds.
+
+\subsection{Separate executable context from specification context}
+The step program in \eqref{eq:index-contract} needs $d,a,k,i$, but not the
+original whole list or the original outer index. The proof of its contract may
+still quantify over the tail list $\ell$ and use
+$\mathcal R(\ell,k)$. Thus there are two contexts:
+\[
+ \Gamma_{\mathrm{code}}=(d,a,k,i),
+ \qquad
+ \Gamma_{\mathrm{proof}}=\Gamma_{\mathrm{code}},\ell,
+                         h:\mathcal R(\ell,k).
+\]
+A ghost variable may occur in the specification without being available as a
+program component. Erasing it from the proof context would lose the induction
+hypothesis; making it available as an executable value could let the synthesizer
+bypass the intended fold by calling a reference function on the tail.
+
+Context projection therefore operates on the executable inventory and closes
+under all type dependencies. If a retained variable's type mentions another
+local, that dependency is retained or abstracted explicitly. The full source
+context remains available to the proof checker. The small-context search is a
+particular grammar restriction, not a globally sound reason to prune every
+larger-context search branch. A separate broader alternative can remain queued.
+
+This proposal sharpens the diagnosed context effect without claiming that the
+specific Leant miss has already been traced to one variable or one penalty.
+It also makes an implementation experiment precise: retain the original outer
+query, but replace the internal monolithic branch with the registered fold
+schema and separately constrained holes.
+
+\subsection{A concrete search protocol}
+\begin{lstlisting}
+prepare_specification(goal):
+    recover source function, recursive argument, result, and laws
+    retrieve approved recursor/fold schemas by input and result shape
+    propose carriers by dependency-preserving lambda lifting
+    for each schema and carrier:
+        instantiate a registered relation template
+        derive base and step contracts by applying the schema theorem
+        compute executable inventories for the holes
+        retain ghost variables and assumptions in proof contexts
+        enqueue this plan as an alternative
+
+solve_plan(plan):
+    request typed candidates for each hole from Djex or native search
+    reject concrete counterexamples where evaluation is available
+    prove the candidate's whole hole contract in Lean
+    retain a universally quantified hole theorem, not a sample verdict
+    apply the schema theorem to assemble the original proof
+    replay at the exact original goal and source inventory
+\end{lstlisting}
+
+The initial component grammar should contain local values, constructors,
+projections, applications of approved providers, and the selected integer-case
+primitive. For first-order arithmetic holes, the constructive projection worker
+can replace candidate enumeration. More general finite arithmetic grammars can
+be sent to cvc5's SyGuS interface as proposal problems, followed by Lean proof
+of the returned candidate's contract. The documented cvc5 API provides
+\code{synthFun}, \code{addSygusInvConstraint}, and synthesis-result extraction;
+no cvc5 adapter was executed in this work~\cite{cvc5}.
+
+The relation to refinement-type synthesis is direct: semantic types decompose
+the specification before full programs are built. Synquid is a primary example
+of this approach. TYGAR provides a complementary example of using an abstract
+type graph and refinement to guide component composition~\cite{synquid,tygar}.
+The proposed Forge specialization is to use already proved Lean recursor laws
+as the decomposition authority and to make the resulting hole theorems reusable
+in the original proof. It is not a new claim of decidability for dependent or
+impredicative synthesis.
+
+\subsection{Church encodings require an explicit representation law}
+\label{sec:church}
+The original diagnostic uses a Church-encoded list, not Lean's inductive
+\code{List}. A theorem about \code{List.foldr} alone does not close that query.
+To transfer the sketch, require a relation such as
+\[
+ \operatorname{Rep}(c,\ell)\Longrightarrow
+ c\ B\ \operatorname{step}\ b_0
+ =\operatorname{foldr}(\operatorname{step},b_0,\ell),
+\]
+at the exact carrier and universe selection in use. For an explicit encoding
+of an ordinary list, this is a straightforward fold law. For an arbitrary
+polymorphic value, it must not be inferred merely from its displayed type.
+Parametricity, representability, totality, and available eliminations are
+substantive assumptions, especially across Haskell and Lean.
+
+The source Haskell \code{Int} is not automatically the same object as Lean's
+unbounded \code{Int}. The actual branch primitive, source binder order,
+polymorphic selections, and dictionary payloads must be retained. The archive's
+\code{IndexingSketch.lean} intentionally proves only a proposed equation between
+two ordinary-list definitions at mathematical integers. It is hand-written and
+uncompiled, and it is not substituted for acceptance of the original query.
+
+\subsection{What should be measured in the real integration}
+Record the number of schema alternatives, candidate holes, full contract checks,
+reusable hole theorems, and reconstructed whole programs. Compare the same outer
+query, source inventory, budgets, and acceptance predicate. An isolated hole
+success is diagnostic evidence, not a solved original benchmark. Preserve a
+negative control that actually reaches predicate checking, rather than calling a
+zero-candidate timeout a successful rejection.
+
+The important hypothesis is that proof-directed decomposition reduces wasted
+whole-program verification and context-induced branching. This hypothesis is
+plausible from the inspected diagnostic but remains unmeasured here. It should
+be tested before changing Djex's global search penalties or claiming a broader
+Church-encoding milestone.
+
+\section{A cross-worker proof, with a precise division of labor}
+\label{sec:composition}
+Consider a full binary tree $t$, with $L=L(t)$ leaves and $N=N(t)$ internal
+nodes. A goal combining structural and arithmetic reasoning is
+\begin{equation}
+\label{eq:combined-goal}
+ \exists y\in\Z,\quad
+ N\le y<N+15
+ \ \land\ 2y\equiv L-N+1\pmod6
+ \ \land\ y\equiv N\pmod5.
+\end{equation}
+Here natural counts are explicitly cast to integers.
+
+The finite-algebra worker, using counts modulo six, proves
+$L-N\equiv1\pmod6$ for all trees. Hence $L-N+1\equiv2\pmod6$, supplying the
+divisibility guard required to normalize the first arithmetic congruence.
+The integer worker reduces it to $y\equiv1\pmod3$, merges it with
+$y\equiv N\pmod5$, and chooses the first such integer at least $N$. Its period
+is 15, so the chosen value is strictly below $N+15$.
+
+For example, with a normalized residue representative
+\[
+ r(N)=\bigl(1+3(2(N-1)\bmod5)\bigr)\bmod15,
+\]
+one possible displayed witness is
+\[
+ w(N)=N+((r(N)-N)\bmod15).
+\]
+The factor 2 is the inverse of 3 modulo 5. This is a hand-simplified explanatory
+witness; the generic prototype retains its own instruction graph rather than
+claiming that the simplification was discovered automatically.
+
+The structural component supplies a proved property of all trees. The arithmetic
+component supplies one uniform witness and proves its constraints. Neither
+worker invents assumptions to make the other succeed. The existing Forge
+controller only needs to route the missing divisibility demand to the finite
+summary worker and then introduce the resulting proof. This composition is a
+specified end-to-end target, not a Lean run in the archive.

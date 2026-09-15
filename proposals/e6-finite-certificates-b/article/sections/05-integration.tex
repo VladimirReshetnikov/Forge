@@ -1,0 +1,285 @@
+\Needspace{8\baselineskip}
+\section{Concrete integration into Forge, Leant, and Djex}
+\label{sec:integration}
+
+\subsection{Reuse the existing controller; add three semantic front ends}
+
+Forge already has proposed obligation, candidate, and conditional-candidate
+contracts. In particular, its runtime specimen has a
+\code{ConditionalCandidate} carrying premises and a constructor term, and an
+\code{EngineReply} that can return progress or a reasoned failure~\cite{forge-runtime}.
+The workers in this report fit that contract. They do not require a replacement
+for Forge's scheduler or an embedded second Lean kernel.
+
+The missing layer is a \emph{proved extraction} from a source expression into
+one of the three fragments. A certificate about an independently invented
+transition system is not a proof of the user's recursive function. The
+following proposed module split isolates this work:
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+Forge/Behavior/PolynomialState.lean   -- source transition descriptions
+Forge/Behavior/Weighted.lean          -- affine/linear fold descriptions
+Forge/Behavior/BinomialSum.lean       -- summand and finite-support bridges
+Forge/Certificate/InductiveIdeal.lean -- finite identities and soundness
+Forge/Certificate/Weighted.lean       -- closure matrices and word replay
+Forge/Certificate/Telescoping.lean    -- regularized summation, uniqueness
+Forge/Worker/InductiveIdeal.lean      -- problem extraction and CAS adapter
+Forge/Worker/Weighted.lean            -- exact reachable-space search
+Forge/Worker/Telescoping.lean         -- coefficient search and proof assembly
+Forge/Export/BehaviorProof.lean       -- stable theorem/lemma output
+\end{lstlisting}
+\end{minipage}\par
+
+These are proposed files, not files asserted to exist in the reviewed
+repository. The supplied Python files implement the corresponding search and
+finite replay functions; the Lean source front ends remain to be implemented.
+
+\subsection{Polynomial extraction and replay}
+
+For the first version, accept explicit polynomial-state descriptions rather
+than arbitrary recursive programs. A description contains an exact coordinate
+telescope, initial polynomial maps, update polynomials, equality-guard
+polynomials, a goal polynomial, and Lean proof obligations tying these to the
+source.
+
+For an ordinary recursive function, derive its transition view from checked
+equations. A natural-number loop can package its loop index into the state,
+for example $(i,s)\mapsto(i+1,F(i,s))$. A list fold can use one update per
+finite letter class. The equation compiler must use simultaneous substitution:
+under $(x,y)\mapsto(y,x)$, both right sides refer to the old state. A sequential
+substitution routine would silently implement a different transition.
+
+Mathlib's \code{MvPolynomial} evaluation interface provides
+\code{eval}, \code{eval₂}, \code{eval₂Hom}, and \code{aeval}; evaluation and
+substitution lemmas support the mathematical interpretation of coefficient
+identities~\cite{mathlib-mvpoly}. A replay theorem can evaluate each serialized
+polynomial in the source coordinates, use the checked identities to prove the
+invariant conjunction's step, and apply ordinary reachability induction.
+The core-only \code{reachableInvariant} specimen in this package shows the
+last induction principle independently of any polynomial implementation.
+
+There are two practical replay implementations. For a narrow first release,
+translate each coefficient list to an ordinary Lean polynomial expression,
+prove the finite identities with \code{ring} and rational normalization, and
+apply the generic soundness theorem. For a faster later release, implement a
+small reflected sparse-polynomial evaluator and prove its correctness once.
+Both routes end in a Lean proof term. The latter is an optimization of repeated
+identity checking, not a prerequisite for testing the mathematical fragment.
+
+Avoid making a proof of Gr\"obner-basis correctness an early dependency. The
+final certificate never requires that fact. It only requires original-generator
+identities. The uncompiled \code{ReplayTargets.lean} file includes the concrete
+nonlinear-curve identity and its invariant step, illustrating the small output
+that the search can leave behind.
+
+\subsection{Weighted extraction and replay}
+
+Start with an explicit weighted representation over \code{Rat}. Its dimensions
+should be type-indexed by \code{Fin N} and \code{Fin r}, not represented by
+unchecked array lengths inside the mathematical theorem. The external decoder
+first establishes the lengths, then constructs the corresponding Lean values.
+The theorem consumes $B,c_0,C_a$ and proofs of the three identities in
+Equation~\eqref{eq:weighted-cert}.
+
+Mathlib documents \code{Matrix.vecMul}, \code{Matrix.mulVec}, and associativity
+lemmas including \code{Matrix.vecMul_vecMul}~\cite{mathlib-matrix}. These give a
+straightforward row-vector proof. The supplied \code{simulateWord} specimen
+abstracts the argument: if an embedding commutes with each letter step, then it
+commutes with running any word. For the matrix certificate, that embedding is
+$c\mapsto cB$, and the commuting square is $BM_a=C_aB$.
+
+The first source front end should support a finite enumerated alphabet and
+explicit tuples of rational affine accumulators. Syntactic recognition can
+propose the matrices, but Lean must prove the source step equals the proposed
+affine map for every letter and state. After that bridge is established, the
+worker can compare independently structured folds, not just normalized copies
+of one expression.
+
+The negative route returns a concrete word and a proved inequality between its
+source observations. For source programs with executable data, this can be
+shown as a diagnostic even when the goal itself is not a proposition asserting
+universal equality. It does not authorize a global non-inhabitation conclusion
+about an unrelated synthesis type.
+
+\subsection{Summation extraction and replay}
+
+The initial sum front end should recognize exactly
+\[
+ \sum_{k\in\operatorname{range}(n+1)} (\operatorname{Nat.choose}(n,k):\Q)^m
+\]
+for a literal supported $m$. It can later add source-equivalent spellings by
+proved rewrites. Recognition must preserve the cast location: a natural power
+cast into $\Q$ can be related to the rational power by a theorem, but neither
+expression should be guessed from surface syntax.
+
+Useful Mathlib ingredients include \code{Nat.choose_eq_zero_of_lt},
+\code{Nat.choose_pos}, \code{Nat.choose_symm}, and
+\code{Nat.choose_mul_factorial_mul_factorial}~\cite{mathlib-choose}. The last is
+especially useful for cross-multiplied ratio proofs, avoiding premature field
+division. Finite-sum lemmas in the \code{Finset} big-operator API provide the
+reindexing and induction infrastructure~\cite{mathlib-finset}. The package does
+not assume an existing theorem with exactly the pole-safe certificate signature;
+that theorem is one of the explicit implementation tasks.
+
+Prove the regularized summation principle once for arbitrary $r,m,p,U$ satisfying
+the finite obligations. Then a particular certificate supplies only rational
+polynomial identities, fixed boundary-index calculations, positivity data, and
+initial values. To prove equality with another expression, attach a second
+recurrence proof and invoke the shared uniqueness principle. Do not recompute
+the entire sum for a large numerical range during Lean replay.
+
+The concrete Lean specimen includes the first-power, square, and cube
+\emph{interior polynomial identities}. It does not contain a full Lean proof of
+the binomial support bridges or Equation~\eqref{eq:franel}. Keeping this
+boundary explicit prevents the short algebraic specimen from being mistaken
+for a completed formalization of the sum theorem.
+
+\subsection{A practical worker transaction}
+
+A complete worker invocation should behave as follows. The frontend first
+constructs a typed fragment problem and the bridge obligations. It calls a
+search backend with the problem's immutable coefficient data. The result is
+decoded into finite certificate data. The appropriate replay theorem proves
+the fragment result. Finally, a proof constructor combines that result with
+\emph{all} bridge proofs to produce the original goal.
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+runBehaviorWorker(sourceGoal):
+    fragment, bridges := extractSupportedFragment(sourceGoal)
+    candidate := search(fragment)
+    if no candidate: return NoResult(reason)
+    finiteProof := replayFiniteCertificate(fragment, candidate)
+    if bridges are already proved:
+        return Candidate(transport(finiteProof, bridges))
+    return ConditionalCandidate(
+        premises = bridges,
+        constructor = transportConstructor(finiteProof))
+\end{lstlisting}
+\end{minipage}\par
+
+This is pseudocode for the proposed adapter, not a claim about an existing API
+function named \code{runBehaviorWorker}. Forge's current controller vocabulary
+already has the needed conditional shape~\cite{forge-runtime}. The new content
+is the fragment extraction and the replay theorems, not the existence of a
+conditional work item.
+
+The result should usually be exported as a local or named lemma that ordinary
+\grind{} can consume. The current Lean reference describes \grind{} as a
+combination of equality and theory reasoning producing proof terms~\cite{lean-grind}.
+The new lemma changes the facts available to that engine: a global invariant,
+a fold equivalence, or a sum recurrence is information that a larger local
+arithmetic budget would not necessarily discover.
+
+\subsection{Concrete library choices}
+
+\begin{longtable}{@{}p{0.20\textwidth}p{0.34\textwidth}p{0.40\textwidth}@{}}
+\toprule
+Layer & Choice & Exact role and boundary \\
+\midrule\endhead
+Prototype search & Python 3.13.5; SymPy 1.14.0 & Polynomial expansion, rational
+coefficient matrices, exact nullspaces; tracked Buchberger search supplied in
+this package. Executed. \\
+Independent replay & Python standard library \code{fractions.Fraction} &
+Canonical rational and sparse polynomial data, matrix arithmetic, exact finite
+checks. Runs with \code{python -S}. Executed. \\
+Larger ideal search & Sage/Singular & Use \code{I.groebner_basis()} and
+\code{f.lift(I.gens())}; export original-generator multipliers and verify their
+identity. Proposed, not executed here~\cite{sage-ideals}. \\
+Larger linear algebra & FLINT-backed exact arithmetic & Replace repeated
+rational solves with fraction-free or modular computations, then reconstruct
+and recheck the same closure identities. Proposed~\cite{flint}. \\
+Broader summation & SymPy Gosper; Sage \code{ore_algebra} & Antidifferences or
+operator/certificate proposals; preserve source support and boundary proofs.
+Proposed~\cite{sympy-concrete,ore}. \\
+Lean replay & Lean and pinned Mathlib & Prove polynomial interpretation,
+finite-space simulation, binomial support, telescoping, and uniqueness. Not run
+in this package. \\
+\bottomrule
+\end{longtable}
+
+A useful Sage adapter can be very small: create the exact rational polynomial
+ring with a fixed variable order, construct $I$ from the original generators,
+request \code{f.lift(I.gens())}, and serialize the returned polynomial list.
+The documentation explicitly illustrates reconstructing $f$ by multiplying
+that list by the generator list~\cite{sage-ideals}. Failure to lift is a search
+failure; a malformed or incorrect returned identity is replay rejection.
+There is no need to transmit a complete Gr\"obner trace to Lean.
+
+The archive does not bundle these external systems or their licenses. Its own
+code is released under MIT-0. Backend packaging and license compatibility
+should be handled separately from the mathematical certificate format; the
+format itself does not depend on the chosen search library.
+
+\subsection{Leant and Djex: add behavior domains, not another candidate authority}
+
+Djex's documented semantic layer consumes a source-owned typed candidate graph
+rather than manufacturing a new term identity. Its current length domain
+tracks a supported list-spine behavior through checked problem descriptions and
+replay~\cite{djex-semantic}. Two additional domains fit this arrangement:
+
+\emph{Polynomial-state contracts} assign a proved polynomial transition summary
+to a source fold or recursive accumulator. The ideal worker can prove
+postconditions about that state. \emph{Weighted-observation contracts} assign a
+proved weighted representation to a scalar observable. The weighted worker can
+prove equality or return a finite distinguishing input for that observable.
+
+Each summary must carry its full source type, the exact chosen instances and
+providers, and the theorem connecting the candidate's semantics to the
+representation. These are not extra versions of the type certificate. They are
+additional theorems about the same candidate. When a provider is polymorphic,
+instantiate the summary at the same source-level type and universe selections
+as the retained candidate graph; substituting a conveniently similar monomorphic
+provider changes the problem.
+
+The benefit is more than post-hoc scoring. A verified summary can discharge a
+behavioral obligation for all inputs in its fragment. A counterexample can
+reject a candidate quickly. But neither domain should prune unrelated
+higher-order alternatives merely because their current partial terms lack an
+extractable summary. Unsupported analysis remains absence of information.
+
+\subsection{A targeted composition experiment for the remaining indexing gap}
+
+Leant's current diagnosis is unusually concrete. The isolated integer-indexing
+fold step is found at candidate 5, and the same step in a larger outer context
+at candidate 219, while the original full indexing query still fails all 256
+checked candidates in its recorded window~\cite{leant-indexing}. These are not
+equivalent benchmark tasks, and the diagnosis explicitly leaves full indexing
+unaccepted.
+
+A focused follow-on experiment is to introduce a \emph{typed composition cut}.
+When a candidate skeleton contains a function-valued fold, expose its step and
+base as named synthesis obligations using their exact source types. Search the
+step obligation first under a dependency-closed subset of the local telescope,
+and retain a successful step as a candidate component. Reinsert it by applying
+the original fold provider and independently checking the complete term.
+
+The dependency-closed telescope is computable: start from variables occurring
+in the hole's type, explicit behavioral contract, and selected provider
+arguments; repeatedly add free variables occurring in the types and local
+values of those variables, including instance dictionaries. Search this reduced
+context as an additional lane, not as a completeness-preserving replacement for
+the full-context lane. A solution found in the reduced context is valid in the
+full context after checked weakening; failure in the reduced context proves
+nothing about the larger query.
+
+For the documented step type
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+forall a. a -> a -> (Int -> a) -> Int -> a
+\end{lstlisting}
+\end{minipage}\par
+a reusable component should still distinguish negative, zero, and positive
+indices and retain the supplied default behavior. Cache the generalized checked
+component under its complete source type and provider inventory. Do not reuse
+an ordinal such as ``candidate 5'' as an identity, and do not assume the same
+component cost in the outer search: usage history and pending holes can change
+that cost.
+
+This experiment is proposed, not implemented or accepted here. Its success
+criterion is the \emph{original} indexing query at its recorded signature,
+behavior observations, candidate window, and limits, with the exact displayed
+term replayed. It is included because the repository now identifies a specific
+composition bottleneck to investigate, rather than because another generic
+suggestion to improve ranking would add much value.

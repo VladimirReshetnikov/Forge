@@ -1,0 +1,128 @@
+\section{Executed experiments and their limits}
+\label{sec:evidence}
+
+\subsection{Protocol and retained artifacts}
+The tests ran under Python 3.13.5 and SymPy 1.14.0 on the Linux environment
+recorded in \code{results/environment.json}. The case generator uses seed
+\code{20260915}. Each of 82 corpus cases was run three times in one process;
+the certificate bytes, not merely the status, were required to agree between
+repetitions. Search and independent replay were separately timed. Imports and
+machine-case construction are outside the per-case search timings.
+
+\code{results/corpus.json} contains the exact problems, limits, and returned
+certificates or inconclusive reasons. \code{measurements.csv} contains one row
+per case. \code{trials.json} preserves individual timings and search statistics.
+These observation files are separate because mathematical inputs reject
+floating-point JSON values while timing measurements are naturally floating
+point.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Workload & Cases & Closure accepted & Trace accepted & Unknown \\
+\midrule
+Worked machine cases & 18 & 13 & 4 & 1 \\
+Affine conjugacies & 24 & 24 & 0 & 0 \\
+Mutated conjugacies & 24 & 0 & 24 & 0 \\
+\midrule
+All rational machines & 66 & 37 & 28 & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Exact-machine results. ``Accepted'' means independent Python replay,
+not a Lean kernel proof. The true nonlinear-growth case is intentionally unknown.}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+IPC workload & Cases & Countermodel accepted & Unknown \\
+\midrule
+Expected nonderivable sequents & 8 & 8 & 0 \\
+Valid-schema controls & 8 & 0 & 8 \\
+\bottomrule
+\end{tabular}
+\caption{The bounded IPC worker has no positive theorem verdict. The eight
+unknown controls are not counted as proved by this experiment.}
+\end{table}
+
+All 73 certificates replay under
+\begin{lstlisting}
+python -S replay.py
+\end{lstlisting}
+with no SymPy, NumPy, SciPy, or Z3 module loaded. The command reports 37 closure
+receipts, 28 execution-counterexample receipts, 8 IPC-countermodel receipts,
+and 9 cases carrying no conclusion. The largest certificate is 915 bytes in
+compact canonical JSON. That number excludes its original problem, metadata,
+pretty-printing whitespace, and generated Lean source.
+
+\subsection{Mechanism ablation, not a tactic comparison}
+A deliberately narrow comparator, \code{conserved_target_only}, accepts a
+single-control-node problem only when every requested target is itself
+conserved by every edge and initially zero. It does not synthesize additional
+observations or accept finite control flow. It succeeds on 8 of the 37 valid
+machine cases, whereas observable closure succeeds on all 37.
+
+This result shows that the test suite distinguishes the new mechanism from
+that comparator. It is \emph{not} a measured gain over all previous Forge
+prototypes, which include stronger candidate-generation mechanisms, and it is
+not a comparison with \code{grind}, Aesop, \code{nlinarith}, or a theorem
+prover. The cases were designed to expose specific mechanisms, including
+control-indexed relations and hidden auxiliary equalities.
+
+\subsection{Adversarial and differential checks}
+The retained pytest run reports \textbf{151 passed}. Its parameterized tests
+include all 82 corpus cases; 36 direct certificate/trace/model mutations;
+nontransitive and nonmonotone model rejection; invalid numeric encodings;
+missing edge and goal coverage; wrong problem reuse; control-flow mismatch;
+empty and unreachable cases; resource cutoffs; and an explicit regression for
+the seven-sample trap.
+
+Polynomial substitution is tested against SymPy on 200 generated sparse
+polynomial instances. The checker expands and evaluates with its own rational
+arithmetic, while the reference computes simultaneous symbolic substitution.
+Random small formulas and finite frames exercise both bitset and recursive
+forcing; those loops also call the actual countermodel checker on each
+root-level result. These tests can expose representation and implementation
+errors. They do not replace a formal correctness proof of the Python programs.
+
+Every one of the eight named nonderivable IPC cases was found at its expected
+smallest world count within the enumerated tree family: one, two, or three
+worlds. This is an observation on these cases, not a general minimal-model
+algorithm or a promise that a world bound is complete.
+
+\subsection{Timing observations are intentionally secondary}
+The median of the machine cases' three-run median search times was about
+$2.0$ milliseconds; the corresponding IPC statistic was about $0.045$
+milliseconds. These are small in-process synthetic instances, with symbolic
+caches potentially warmed, and are not predictions for Lean reification,
+subprocess startup, certificate reconstruction, or kernel checking. The raw
+per-case values are retained rather than being converted into a headline
+speedup claim. The complete experiment driver, excluding initial construction
+of the machine case list, took under a second in this run.
+
+\subsection{A failed attempt retained, rather than erased}
+The first standalone replay failed before checking any mathematics. Timing
+floats had been placed in the same JSON envelope as exact certificate data;
+the strict decoder correctly rejected them. The repair separated observation
+files from the exact corpus. The policy rejecting mathematical floats was
+\emph{not} relaxed. A diagnostic description is retained at
+\smallpath{results/diagnostics/initial-replay-failure.txt}, and the successful
+replay log is a different file.
+
+This packaging failure is not a rejected mathematical theorem, but recording it
+prevents a reader from mistaking every historical run for successful evidence.
+
+\subsection{What these experiments establish, and what they do not}
+They establish that the supplied producers and independent replay paths agree
+on this explicit corpus; that the new closure mechanism handles the stated
+examples; and that specified corruption and semantic-scope tests reject their
+invalid inputs. They also provide concrete data for the next Lean integration
+step.
+
+They do not establish correctness for every input, a production-grade parser,
+a formally verified checker, a dependent Lean reifier, a compiled Forge tactic,
+or an advantage on a representative Lean theorem distribution. Neither Lean,
+Lake, nor Elan was present in the execution environment. The uncompiled Lean
+files cannot fill that evidentiary gap by their mere existence.

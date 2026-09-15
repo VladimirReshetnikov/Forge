@@ -1,0 +1,149 @@
+\Needspace{8\baselineskip}
+\section{An implementation order with falsifiable acceptance gates}
+\label{sec:roadmap}
+
+\subsection{First gate: one complete weighted proof in Lean}
+
+The weighted worker is the most economical first production slice. Its search
+is elementary exact linear algebra, its certificate has three equations, and
+its source fragment can initially be explicit rational matrices. Implement the
+matrix closure theorem and a decoder that constructs dimension-indexed Lean
+values. Then replay the stored subsequence-product certificate against an
+explicit Lean definition of the two folds and a proved affine/tensor bridge.
+
+The acceptance gate is not ``the matrices simplify''. It is a theorem over
+\emph{all source words}, produced from the certificate, compiled in the pinned
+environment, with the exact final theorem and axiom inventory retained. Change
+one transition coefficient, omit a letter, and alter one closure entry; the
+same replay path must reject each stale artifact. A distinguishing-word test
+must produce a Lean-checked inequality on an actual source input.
+
+Only after that gate should the source front end recognize a larger family of
+folds automatically. Starting with explicit representation annotations isolates
+semantic extraction from linear-algebra debugging and makes failures easier to
+locate.
+
+\subsection{Second gate: a non-conserved invariant from source code}
+
+Port the invariant soundness theorem and the coefficient-expression replay
+route. Use the nonlinear squaring curve as the minimum positive example, with
+a natural-number iteration count and a rational state. The output theorem must
+show the invariant for every iteration, not merely prove the one-step identity.
+
+Require a second test with two possible transitions and a third with an equality
+guard. Those prevent the implementation from accidentally specializing to
+single-map conservation. Retain the degree-one finite-orbit miss as an unknown
+control and the degree-two success as a separate acceptance. Do not make the
+frontend's degree bound depend on seeing the target theorem's known proof.
+
+For the CAS adapter, start with the included Python worker or the documented
+Sage lifting interface. The final Lean proof should depend on the decoded
+multipliers, not on which external search produced them. Changing the search
+backend should require new performance tests, not a new trusted theorem.
+
+\subsection{Third gate: the square sum with all endpoints}
+
+Formalize the zero-extended binomial semantics or an equivalent piecewise
+natural-index formulation. Prove the regularized summation theorem. Then use
+the recorded square-sum certificate to prove the recurrence, prove the
+candidate sequence $\binom{2n}{n}$ satisfies the same recurrence, and apply
+uniqueness.
+
+The negative gates should include the old rational expression evaluated at a
+pole, a dropped endpoint contribution, a wrong range upper bound, and the
+$(n-2)$-multiplied recurrence offered as an unrestricted uniqueness certificate.
+The latter is especially valuable because its polynomial algebra is correct;
+it tests semantic completeness of the acceptance obligations rather than
+whether \code{ring} can detect a typo.
+
+Next, replay the cube-sum recurrence and its two initial values. This acceptance
+must remain labeled as a recurrence theorem unless a separate target sequence
+has been proved to share the recurrence. A general-summation milestone should
+add at least one nonzero-boundary example before expanding the recognized
+summand grammar substantially.
+
+\subsection{Controller integration and proof export}
+
+Initially run each worker as a bounded child of the existing obligation
+controller. Use the conditional-candidate path when source bridges remain.
+Once a worker proves a useful consequence, assert that consequence as an
+ordinary theorem and let the baseline tactic continue. An incremental
+\grind{} extension is not necessary to validate the new mathematics.
+
+Export should preserve three pieces: the source bridge theorem, the finite
+certificate data, and the theorem applying the soundness principle to those
+data. Ordinary recompilation should not need the external solver. A compact
+local lemma is usually preferable to replaying search inside the final tactic
+script.
+
+For observability, attach worker-specific diagnostics rather than only a single
+``failed'' counter. The ideal worker should report the degree, descent
+dimensions, Gr\"obner budget status, and whether goal lifting failed. The
+weighted worker should report ambient dimension, independent row count,
+examined row count, and any distinguishing word. The telescoping worker should
+report order, degree caps, coefficient-matrix size, nullity, and the first
+unproved support or nonvanishing obligation. These are directly actionable
+reasons to change a budget or repair a source bridge.
+
+\subsection{Evaluation after the formalized slice exists}
+
+Build a held-out Lean corpus grouped by the reason the worker should help:
+nonconserved invariant families, independently implemented affine folds,
+tensor-composed observations, constant-coefficient recurrences, and definite
+hypergeometric sums with moving support. Include true unsupported goals and
+false variants in each family. Record source theorem statements before tuning
+the worker and exclude target theorems or equivalent lemmas from retrieval.
+
+Compare the baseline tactic under the same imports, premises, and resource
+limits with the baseline plus each worker individually and all workers
+combined. Also compare against a simple portfolio of existing tactics, since
+an advantage over a deliberately weak baseline would not establish the value
+of the new algorithms. Record search time, elaboration time, kernel checking
+time, proof size, solver startup, and replay-only cost separately.
+
+The important ablation is semantic. Remove polynomial multipliers from the
+ideal certificate language. Disable tensor composition from the weighted
+frontend. Disable support regularization from the sum worker while retaining
+its strict rejection of undefined obligations. These variants test the
+incremental capabilities described in this report. Merely lowering a generic
+search budget would not identify which mathematical mechanism caused success.
+
+\subsection{Further directions that fit the same boundaries}
+
+The most natural next invariant extension is a product of location-specific
+spaces, followed by equality-aware treatment of piecewise polynomial updates.
+For stronger semantic consequences, radical or real-radical certificates could
+be added as a separate proof language; they should not be smuggled into ordinary
+ideal membership.
+
+For weighted behavior, add symbolic finite classifiers, several simultaneous
+scalar observations, and proved reachable/observable minimization. For a vector
+output, the certificate condition becomes $BB_{\mathrm{out}}=0$ with several
+output columns, so the same closure search supports multiple contracts at
+once. Polynomial outputs may be tensor-lifted selectively, but a dimension
+budget is essential.
+
+For sums, support inhomogeneous recurrences, exceptional initial parameter
+ranges, and certificates expressed by a small operator basis rather than a
+single hypergeometric ratio. A broader CAS backend should increase search
+power while leaving the Lean summation obligations explicit.
+
+These directions should follow, rather than postpone, the three complete Lean
+acceptance gates. The present prototypes already provide enough exact data to
+make those gates concrete.
+
+\subsection{Assessment}
+
+The proposed capability increase is specific. Forge would acquire a method for
+finding invariant \emph{equations} that are not conserved quantities; a complete
+finite-dimensional equivalence method for rational weighted behaviors; and a
+method for deriving uniform recurrences for non-polynomial finite sums without
+ignoring their support. Each returns small mathematical objects that ordinary
+induction or finite summation can consume.
+
+The most valuable next artifact is a compiled source-level theorem using one
+of these certificates. The package makes that artifact substantially more
+specified: the finite data, independent replay, mathematical soundness proof,
+source fragment, relevant library interfaces, and rejection controls are all
+present. What remains is the Lean implementation and its measurement, not an
+unspecified request to make automation more powerful.

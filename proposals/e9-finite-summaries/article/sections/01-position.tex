@@ -1,0 +1,101 @@
+\section{The increment: new finite proof objects, not a second planner}
+
+\subsection{What the repository already supplies}
+
+At the audited revision, Forge is a design and research-prototype repository,
+not an installed tactic. Its merged article already covers induction with
+accumulator generalisation, polynomial recurrence and invariant synthesis,
+several arithmetic witness engines, nonlinear certificates, demand-directed
+Horn reasoning, proof-logging Boolean search, and the separation between search
+and checked evidence. Its integration section already advocates a conservative
+bridge through ordinary Lean goals and explicitly proved facts. Those ideas are
+prerequisites here, not contributions of this article~\cite{forge-readme,forge-status,forge-structural,forge-integration}.
+
+The useful next question is not ``which extra tactic should a scheduler try?''
+It is: \emph{which large families of proof obligations admit a finite object
+whose verification is much simpler than discovering the proof?} This question
+leads to three workers with sharp input and output contracts.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}YYY@{}}
+\toprule
+Worker & Input family & Returned object & New scope relative to the audited design\\
+\midrule
+Linear words & A finite-dimensional rational state model and an output identity & An invariant row-space simulation, or a separating word & All words, not just an additive polynomial sequence or one proposed invariant\\
+Safe telescoping & A definite binomial-power sum & A recurrence plus a shifted-support flux & Hypergeometric summands and moving support, not polynomial antidifferencing\\
+Recurrence transport & Two annihilating operators & A common left multiple and singularity/seed plan & Composition of nonconstant recurrences without silently cancelling singular leading terms\\
+\bottomrule
+\end{tabularx}
+\caption{The three mathematical additions. A singularity plan still leaves explicit equality obligations.}
+\end{table}
+
+The workers also connect. A unary linear word model yields a constant-coefficient
+recurrence. A telescoper yields a polynomial-coefficient recurrence. A common
+left multiple gives both objects one recurrence, and singularity-aware induction
+reduces equality to finitely many proved values. None of these connections
+requires replacing \grind{}'s equality or arithmetic engines.
+
+\subsection{A precise non-duplication claim}
+
+The comparison was made against Forge's README, implementation-status ledger,
+Leant/Djex transfer guide, structural-search and integration sections,
+conclusion, and provenance appendix at commit
+\texttt{674521027d968d59f7b83220ed52304a85cb55e2}. The provenance appendix maps the
+merged proposals to their nine original submissions~\cite{forge-provenance}.
+This is not a claim to have read every line of all nine frozen originals.
+Repository code search returned no matches even for a term visibly present in
+the sources, so negative search results were not used to establish absence.
+The companion \code{docs/NON_DUPLICATION.md} records this limitation.
+
+The underlying mathematics is not presented as new. Field-weighted automaton
+equivalence and invariant-space algorithms are established methods; Kiefer's
+notes give a particularly direct account~\cite{kiefer}. Creative telescoping
+and Ore-operator computation likewise have mature implementations~\cite{holonomic,ore}.
+The contribution is the concrete selection of fragments, the proof-object
+interfaces, the boundary-aware implementation, and their proposed use inside
+Forge. An existing polynomial-invariant engine could prove some overlapping
+examples after a suitable invariant was supplied. What changes here is the
+automatic reduction to a finite closure calculation, with a completeness theorem
+for an explicitly stated fragment.
+
+\subsection{What an actual gain would look like}
+
+Consider a theorem about two different arithmetic folds over an arbitrary list.
+A local saturation engine may simplify their definitions, but simplification
+does not itself invent the relation connecting their hidden states. The linear
+worker computes an invariant space in which that relation becomes a single
+orthogonality check. Its proof is independent of list length.
+
+Now consider a sum of cubes of binomial coefficients. A polynomial template in
+$n$ is inappropriate: the sequence is not being claimed polynomial. The
+summation worker instead proposes a recurrence and a flux whose finite
+difference is the desired combination of summands. The sum disappears only
+after both support boundaries have been justified.
+
+Finally, two valid recurrence proofs need not use the same operator. Their
+common left multiple provides a shared induction rule. If that operator has a
+zero leading coefficient at a natural index, the proof must request an extra
+value rather than pretend that its usual recurrence step still determines the
+next term. This is a mathematical obligation, not a larger search budget.
+
+\subsection{Evidence levels used in this article}
+
+\status{All Python workers and tests described as executed were run. The Lean
+source supplied in the bundle is an uncompiled semantic-lemma candidate. Lean,
+Lake, and Elan were not available in the working runtime; attempted retrieval
+routes did not establish an executable toolchain.}
+
+A mathematical proof below establishes the stated theorem under its hypotheses.
+A passing Python checker establishes that this implementation accepted a
+particular encoded object. Neither alone establishes that an arbitrary Lean
+expression was faithfully encoded, or that a Lean kernel accepted the resulting
+proof. The proposed Lean acceptance path must discharge all of those separate
+requirements. The raw ledger never upgrades ``plan accepted'' into ``theorem
+proved''.
+
+Forge's own conclusion correctly distinguishes additional prototype results
+from closing its Lean-integration gap~\cite{forge-conclusion}. This article does
+not erase that gap. Its first implementation milestone is correspondingly a
+small matrix soundness theorem and source bridge, not three simultaneous large
+integrations.

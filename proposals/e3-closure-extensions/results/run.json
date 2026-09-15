@@ -1,0 +1,132 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "sympy": "1.14.0",
+  "lean_status": "NOT_RUN: no Lean executable available",
+  "comparison_against_lean_tactics": "NOT_RUN",
+  "case_count": 317,
+  "certificate_bundles": 313,
+  "outcomes": {
+    "proved": 178,
+    "unknown": 4,
+    "refuted": 135
+  },
+  "independent_finite_state_oracle_comparisons": 240,
+  "diagnostic_moment_evaluations": 210,
+  "targeted_invalid_mutations": 25,
+  "all_targeted_invalid_mutations_rejected": true,
+  "families": {
+    "finite_state": {
+      "cases": 240,
+      "outcomes": {
+        "proved": 124,
+        "refuted": 116
+      },
+      "search_seconds_total": 0.004904887000293456,
+      "replay_seconds_total": 0.0028213669982051215
+    },
+    "finite_state_ablation": {
+      "cases": 1,
+      "outcomes": {
+        "refuted": 1
+      },
+      "search_seconds_total": 2.6709999929153128e-05,
+      "replay_seconds_total": 9.126999884756515e-06
+    },
+    "finite_state_budget": {
+      "cases": 1,
+      "outcomes": {
+        "unknown": 1
+      },
+      "search_seconds_total": 7.333999974434846e-06,
+      "replay_seconds_total": 0
+    },
+    "ideal_generated": {
+      "cases": 16,
+      "outcomes": {
+        "proved": 16
+      },
+      "search_seconds_total": 0.10531887600041046,
+      "replay_seconds_total": 0.0050389620000714785
+    },
+    "ideal_named": {
+      "cases": 2,
+      "outcomes": {
+        "proved": 2
+      },
+      "search_seconds_total": 0.02080145399986577,
+      "replay_seconds_total": 0.0004522809999798483
+    },
+    "ideal_negative": {
+      "cases": 1,
+      "outcomes": {
+        "refuted": 1
+      },
+      "search_seconds_total": 0.002386107000120319,
+      "replay_seconds_total": 5.206700006965548e-05
+    },
+    "telescoping": {
+      "cases": 10,
+      "outcomes": {
+        "proved": 10
+      },
+      "search_seconds_total": 3.022018836999905,
+      "replay_seconds_total": 0.010339346999444388
+    },
+    "telescoping_budget": {
+      "cases": 2,
+      "outcomes": {
+        "unknown": 2
+      },
+      "search_seconds_total": 0.13719952399992508,
+      "replay_seconds_total": 0
+    },
+    "vector_ablation": {
+      "cases": 1,
+      "outcomes": {
+        "unknown": 1
+      },
+      "search_seconds_total": 0.014536184999997204,
+      "replay_seconds_total": 0
+    },
+    "vector_generated": {
+      "cases": 24,
+      "outcomes": {
+        "proved": 24
+      },
+      "search_seconds_total": 4.243401309999399,
+      "replay_seconds_total": 0.17129743800001052
+    },
+    "vector_named": {
+      "cases": 2,
+      "outcomes": {
+        "proved": 2
+      },
+      "search_seconds_total": 0.041104006000068694,
+      "replay_seconds_total": 0.0009286069998779567
+    },
+    "vector_negative": {
+      "cases": 17,
+      "outcomes": {
+        "refuted": 17
+      },
+      "search_seconds_total": 0.030200287000297976,
+      "replay_seconds_total": 0.0009766989996933262
+    }
+  },
+  "limits": {
+    "closure": {
+      "basis": 32,
+      "degree": 12,
+      "terms": 10000,
+      "pullbacks": 1000
+    },
+    "ideal_multiplier_degree": 4,
+    "moore_pairs": 10000,
+    "moment_coefficient_degree": 6,
+    "moment_flux_degree": 9,
+    "negative_moment_coefficient_degree": 1,
+    "negative_moment_flux_degree": 2
+  }
+}

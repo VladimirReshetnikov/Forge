@@ -1,0 +1,118 @@
+[
+  {
+    "kind": "bounded_sampling_ablation",
+    "sampled_lengths": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "all_samples_agree": true,
+    "shortest_counterexample_length": 17
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_00",
+    "power": 1,
+    "weight": "1",
+    "a": "1",
+    "b": "2",
+    "u": "-1",
+    "start": 0
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_01",
+    "power": 1,
+    "weight": "k",
+    "a": "n",
+    "b": "2*n + 2",
+    "u": "-k*n - k + n + 1",
+    "start": 1
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_02",
+    "power": 1,
+    "weight": "k**2",
+    "a": "n",
+    "b": "2*n + 4",
+    "u": "-k**2*n - 2*k**2 + 2*k*n + 3*k - n - 1",
+    "start": 1
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_03",
+    "power": 1,
+    "weight": "k**3",
+    "a": "n**3 + 3*n**2",
+    "b": "2*n**3 + 12*n**2 + 18*n + 8",
+    "u": "-k**3*n**3 - 6*k**3*n**2 - 9*k**3*n - 4*k**3 + 3*k**2*n**3 + 15*k**2*n**2 + 20*k**2*n + 8*k**2 - 3*k*n**3 - 11*k*n**2 - 12*k*n - 4*k + n**3 + 2*n**2 + n",
+    "start": 1
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_04",
+    "power": 2,
+    "weight": "1",
+    "a": "n + 1",
+    "b": "4*n + 2",
+    "u": "2*k - 3*n - 3",
+    "start": 0
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_05",
+    "power": 2,
+    "weight": "k",
+    "a": "n**2",
+    "b": "4*n**2 + 2*n",
+    "u": "2*k**2*n + k**2 - 3*k*n**2 - 6*k*n - 2*k + 3*n**2 + 4*n + 1",
+    "start": 1
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_06",
+    "power": 2,
+    "weight": "k**2",
+    "a": "n**3",
+    "b": "4*n**3 + 6*n**2 - 2",
+    "u": "2*k**3*n**2 + 4*k**3*n + 2*k**3 - 3*k**2*n**3 - 12*k**2*n**2 - 15*k**2*n - 6*k**2 + 6*k*n**3 + 18*k*n**2 + 18*k*n + 6*k - 3*n**3 - 8*n**2 - 7*n - 2",
+    "start": 1
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_07",
+    "power": 2,
+    "weight": "k**3",
+    "a": "n**4 - n**3",
+    "b": "4*n**4 + 6*n**3 - 8*n**2 - 6*n + 4",
+    "u": "2*k**4*n**3 + 5*k**4*n**2 + k**4*n - 2*k**4 - 3*k**3*n**4 - 15*k**3*n**3 - 21*k**3*n**2 - 3*k**3*n + 6*k**3 + 9*k**2*n**4 + 33*k**2*n**3 + 36*k**2*n**2 + 6*k**2*n - 6*k**2 - 9*k*n**4 - 29*k*n**3 - 29*k*n**2 - 7*k*n + 2*k + 3*n**4 + 9*n**3 + 9*n**2 + 3*n",
+    "start": 2
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_08",
+    "power": 1,
+    "weight": "2*k**2 + 3*k + 1",
+    "a": "n**2 + 4*n + 2",
+    "b": "2*n**2 + 12*n + 14",
+    "u": "-2*k**2*n**2 - 12*k**2*n - 14*k**2 + k*n**2 + k*n - 2*k + 3*n + 4",
+    "start": 0
+  },
+  {
+    "kind": "moment_formula",
+    "name": "moment_09",
+    "power": 2,
+    "weight": "2*k**2 + 3*k + 1",
+    "a": "2*n**5 + 8*n**4 + 7*n**3 - n**2 - 2*n",
+    "b": "8*n**5 + 44*n**4 + 52*n**3 - 10*n**2 - 14*n",
+    "u": "8*k**3*n**4 + 48*k**3*n**3 + 76*k**3*n**2 + 28*k**3*n - 12*k**2*n**5 - 84*k**2*n**4 - 192*k**2*n**3 - 192*k**2*n**2 - 99*k**2*n - 21*k**2 + 6*k*n**5 + 40*k*n**4 + 117*k*n**3 + 185*k*n**2 + 146*k*n + 42*k - 18*n**3 - 60*n**2 - 63*n - 21",
+    "start": 1
+  }
+]

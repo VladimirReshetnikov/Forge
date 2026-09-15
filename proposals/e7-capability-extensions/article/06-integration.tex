@@ -1,0 +1,258 @@
+\section{Putting the workers into Forge}
+\label{sec:integration}
+
+\subsection{Three new payloads, not a new authority model}
+
+Forge's proposed runtime already distinguishes an ordinary candidate from a
+conditional candidate whose premises still need proofs. The extension should
+reuse that distinction and the existing acceptance boundary, rather than create
+a second notion of accepted proof \cite{forge-runtime,forge-integration}.
+The new data is the \emph{shape of the candidate}:
+\begin{lstlisting}
+AlgebraRegion:
+  sourceFoldOccurrence
+  selectedCarrierAndInstantiation
+  localHoleTelescopes
+  residualContracts
+  sharedHoleConstraints
+  reconstructionTerm
+
+InductiveAlgebraCandidate:
+  stateSchema
+  initialSubstitution
+  labeledTransitions
+  equations
+  actionMatricesOrPolynomialMultipliers
+  targetCombination
+
+RankedSCCCandidate:
+  nodeTelescopes
+  propositionFamilies
+  branchProofConstructors
+  typedCallSubstitutions
+  rankAndDescentCertificates
+\end{lstlisting}
+These are proposed records. They are not currently wired into
+\code{ForgeDesign.EngineReply}, and their fields do not themselves enforce
+soundness. Their advantage is that every unresolved field corresponds to a
+specific next action: prove a local contract, verify a polynomial identity,
+transport a dependent argument, or discharge a descent condition.
+
+\subsection{A target-directed worker protocol}
+
+The polynomial worker receives an already reified transition problem and a
+specific target equation. It may return a proved inductive family, an exact
+encoded-model counterexample, a degree-escape report, or a bounded miss. The
+first can become a conditional candidate for the original theorem once
+initialization, transition semantics, and the target transport are supplied.
+A degree-escape report can trigger the ideal lane; it cannot close the goal.
+
+The continuation worker receives a fold occurrence and a residual specification.
+It returns a typed term plus algebra-contract obligations. Successful local
+search does not replace the final source elaboration. A term that fits the
+neutral carrier but fails the source universe constraints is rejected, even if
+its Python interpretation works on every test list.
+
+The cyclic worker receives a candidate SCC and returns a ranked proof-program
+skeleton. It does not emit ordinary checked facts for individual nodes before
+the whole component has been lowered through well-founded induction. Its local
+constructors can use algebraic facts from the invariant worker, but only after
+those facts have been proved in the appropriate node context.
+
+\subsection{A cooperative proof trace}
+
+Consider a helper that performs either of the two polynomial updates from
+Section~\ref{sec:spaces}, selected by a list of commands, and returns its final
+state. The desired theorem is that the final state satisfies $z=2y$ when the
+initial state is $(t,t^2,2t^2)$.
+
+A direct induction on commands reaches two arithmetic step goals. Inducting only
+on the target equation is insufficient: $z=2y$ alone does not imply that either
+update preserves it for arbitrary $x,y,z$. The failed step is exactly the useful
+signal to send to inductive algebra.
+
+The space lane returns $e_1=e_2=0$ and the two constant action matrices.
+Alternatively, target-seeded ideal completion begins with $z-2y$ and adds the
+missing pullback equation. Forge strengthens the induction motive to the
+resulting conjunction, proves the initialization by substitution, proves each
+step by the action identities, and derives the original target as a linear
+combination. No arbitrary induction predicate needs to be guessed beyond the
+polynomial fragment.
+
+Now split execution into two mutually recursive phases, with a transition
+between phases that does not consume a command and a second transition that
+consumes one. A plain ``list length decreases on every call'' gate fails. The
+cyclic worker attaches phase-sensitive rank $2\,\operatorname{length}(xs)+b_v$,
+then compiles the same strengthened motive through well-founded induction.
+The action certificates solve arithmetic preservation; the rank certificates
+solve recursion admissibility. These are different obligations with different
+proof artifacts.
+
+This combined end-to-end proof is an \emph{integration target}, not an executed
+benchmark. The archive executes its algebra and descent components separately.
+That separation is useful: it tells the implementer whether a later failure is
+in mathematics, reification, dependent transport, or proof construction.
+
+\subsection{Dependent contexts require explicit call morphisms}
+
+A cyclic edge must map the callee's entire dependent telescope, not just the
+visible arguments in its displayed goal. For example, if a node contains
+$n:\N$, $xs:\operatorname{Vector}(A,n)$, and a hypothesis about $xs$, an edge
+changing $n$ cannot keep the old vector or hypothesis by identity. It must supply
+a vector at the new index and transport or reconstruct the dependent premise.
+
+Similarly, a proof established under a hypothesis $H(n_0)$ about one fixed
+current value cannot be silently generalized into a proof under $H(n)$ for all
+$n$. The compiler should separate ambient parameters, which remain fixed for the
+whole SCC, from state-dependent inputs and hypotheses, which are packaged in
+$S_v$ or explicit premise arguments. Matching a back edge then constructs a
+morphism of these packages and asks Lean to check it.
+
+This is where a source-aware neutral representation earns its cost. Printed
+variable names do not identify a telescope, and an alpha-normalized goal body
+alone does not determine which hypotheses can be moved to a recursive call.
+The necessary infrastructure is already part of Forge's identity design;
+cyclic compilation adds a precise consumer that requires those identities to be
+carried through a typed substitution.
+
+\subsection{Reification obligations specific to these algorithms}
+
+The polynomial algorithms operate over $\Q$ with simultaneous updates. A source
+adapter must prove that its extracted map has those semantics. Sequential source
+assignments need an SSA-style substitution pass before they become one map:
+\code{x := x + 1; y := x + y} means $(x,y)\mapsto(x+1,x+y+1)$, not
+$(x+1,x+y)$. This is an important negative integration fixture.
+
+A natural-number subtraction is not unrestricted ring subtraction. It can be
+translated into integer subtraction only under the appropriate comparison
+premise, with that premise retained in the edge's guard and proved where the
+edge is used. Division by a variable is not a polynomial update. Floating-point
+arithmetic is not rational arithmetic. The first adapter should refuse these
+unproved translations rather than send a nearby polynomial problem to a worker.
+
+For a source recurrence over naturals, proving a polynomial identity after an
+embedding into a characteristic-zero field can be useful, but the embedding and
+reflection of the final equality are source-level obligations. A counterexample
+with rational initialization parameters is not a counterexample to a theorem
+quantified only over naturals unless those parameters are also shown to lie in
+the source domain.
+
+\subsection{Concrete module boundaries}
+
+\begin{longtable}{@{}p{.40\textwidth}p{.55\textwidth}@{}}
+\toprule
+Proposed module & Responsibility and first acceptance condition \\
+\midrule
+\endhead
+\code{Forge/Synthesis/AlgebraRegion.lean} & Extract one source fold occurrence, retain carrier/universe evidence, and construct local telescopes without losing binder identity. \\
+\code{Forge/Synthesis/ContractJoin.lean} & Join shared-hole constraints; a correlated-hole fixture must reject incompatible projection products. \\
+\code{Forge/Invariant/StateSchema.lean} & Reify a simultaneous rational-polynomial transition with a proved source interpretation. Sequential assignment and natural subtraction are mandatory controls. \\
+\code{Forge/Invariant/PullbackSpace.lean} & Consume exact constant-action certificates; the coupled example must produce the original target theorem after kernel replay. \\
+\code{Forge/Invariant/IdealReplay.lean} & Consume polynomial multipliers and exact orbit traces without invoking a CAS in the proof checker. \\
+\code{Forge/Recursion/CallGraph.lean} & Construct typed node families and call substitutions, initially from explicit annotations. \\
+\code{Forge/Recursion/RankReplay.lean} & Prove natural-domain and strict/lexicographic descent, including node phases. \\
+\code{Forge/Recursion/CompileSCC.lean} & Lower all local constructors through one well-founded theorem; reject a missing branch even when the graph ranks successfully. \\
+\bottomrule
+\end{longtable}
+
+The file names specify new responsibilities, not files claimed to exist in the
+reviewed repository. A first implementation may combine modules, but it should
+not combine their acceptance conditions.
+
+\subsection{Library choices and substitutions}
+
+\begin{table}[ht]
+\small
+\begin{tabularx}{\textwidth}{@{}p{.22\textwidth}YY@{}}
+\toprule
+Layer & Concrete choice & What still has to be implemented \\
+\midrule
+Exact matrix proposer & Python-FLINT \code{fmpq\_mat.rref}; integer nullspaces with \code{fmpz\_mat} & Preimage assembly, rational reconstruction where used, and action-certificate extraction. \\
+Ideal proposer & Singular \code{lift}/\code{liftstd}; traced Buchberger for a minimal prototype & Original-generator provenance, substitutions, resource control, and multiplier serialization. \\
+Small arithmetic holes & cvc5's SyGuS engine, optional & Source-scoped grammar and contract translation; candidate terms still need replay. \\
+Lean polynomial semantics & Mathlib \code{MvPolynomial} evaluation and ring normalization & A reifier with interpretation lemmas and certificate-to-proof lowering. \\
+Lean recursive proof & Core well-founded induction and recursive-definition elaboration & Tagged goal families, local proof constructors, source-level call transport. \\
+\bottomrule
+\end{tabularx}
+\caption{Libraries are components, not finished adapters. References: \cite{flint-q,flint-z,singular,cvc5,mathlib-eval,lean-recursion}.}
+\end{table}
+
+The executable package does not require these proposer libraries. Its exact
+search uses the Python standard library; SymPy 1.14.0 was used only for the
+optional differential test. This keeps the evidence reproducible while making
+the production replacement points explicit.
+
+\subsection{Resource allocation that follows the mathematics}
+
+The new workers should consume different budgets. The space worker is naturally
+bounded by degree, monomial count, coefficient size, and elimination work. The
+ideal worker needs generator, degree, basis-pair, coefficient, and process-memory
+budgets. The synthesis worker needs local-candidate, join-row, whole-term, and
+verification budgets. The cyclic worker needs graph-size, ranking-template,
+solver, and proof-lowering budgets.
+
+A useful escalation order is deterministic and explainable. Try a small algebra
+region before enlarging the whole-term synthesis window. Try a low-degree space
+before invoking ideal completion. Try scalar rankings with phases before
+lexicographic tuples. Return the reason for escalation in the trace: an escaped
+pullback degree, a failed local contract, or an SCC requiring more than one
+ranking coordinate. These reasons are concrete mathematical diagnostics, not
+an opaque score presented as evidence.
+
+\section{Development sequence and release gates}
+\label{sec:plan}
+
+\subsection{First release: exact inductive algebra}
+
+Implement \code{StateSchema} for explicit rational-polynomial recurrences and
+lower the certificate identities to Lean proofs. Start with direct generated
+\code{ring} proofs before investing in reflection. The entry theorem should
+quantify over arbitrary transition words, not a sampled number of iterations.
+Replay the coupled example using both the space and ideal certificates, and the
+power-curve example using nonconstant multipliers.
+
+The release gate is an ordinary theorem at the original target type, with
+initialization and every transition label accounted for. Record proof construction
+time, kernel checking time, and proof-term size separately. No successful
+Python certificate should count toward this gate.
+
+\subsection{Second release: one source-preserving algebra region}
+
+Add continuation-local synthesis for the specific integer-indexing schema.
+Preserve the exact source fold, default, integer domain, available primitives,
+and dependent/universe evidence. Prove the derived local contract, then apply a
+checked theorem for the source representation.
+
+The original Leant indexing query is the acceptance target. Its isolated step
+and the finite Python grammar are diagnostic fixtures only. First record the
+original search branch's lexical identities, pending goals, and usage history;
+then compare the same branch with and without region-local scheduling. This
+isolates whether the new decomposition improves the actual miss rather than
+merely making a different query easier.
+
+\subsection{Third release: explicit cyclic skeletons}
+
+Accept a user- or tactic-supplied cyclic skeleton with explicit branch constructors
+and synthesize only its rank. Prove the two-phase, swapped-argument, and
+lexicographic-growth examples in Lean. Reject the identity cycle, the alternating
+replenishment cycle, and a graph with a missing logical base branch.
+
+Only after these pass should Forge infer back edges from recurring obligations.
+The first automatic mode should be limited to source families with straightforward
+telescope transport. General dependent cyclic matching is a subsequent capability,
+not a silent assumption of the initial compiler.
+
+\subsection{What would constitute a meaningful improvement}
+
+A production evaluation should have separate ablations for carrier selection,
+local contracts, compatibility joins, invariant-space closure, ideal completion,
+phase ranks, and lexicographic ranks. Each benchmark should retain its original
+statement and source context. Measure solved goals under a fixed total budget,
+not only candidate ordinals or search-only CPU time.
+
+For mathematics-heavy recurrences, the key comparison is target-only induction
+versus automatically discovered simultaneous invariants. For higher-order
+construction, it is whole-term enumeration versus locally constrained assembly
+under the same global accounting. For recursive proofs, it is fixed structural
+induction versus a successfully lowered ranked SCC. A single aggregate score
+would hide which new capability actually supplied the proof.

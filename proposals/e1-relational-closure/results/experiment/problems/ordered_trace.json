@@ -1,0 +1,87 @@
+{
+  "edges": [
+    {
+      "dst": 1,
+      "inputs": 0,
+      "src": 0,
+      "update": [
+        [
+          [
+            [
+              0
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ],
+          [
+            [
+              1
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "dst": 2,
+      "inputs": 0,
+      "src": 1,
+      "update": [
+        [
+          [
+            [
+              1
+            ],
+            [
+              "2",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "initial": [
+    {
+      "location": 0,
+      "state": [
+        []
+      ]
+    }
+  ],
+  "locations": 3,
+  "n": 1,
+  "name": "ordered_trace",
+  "parameters": 0,
+  "schema": "forge-polynomial-system-v1",
+  "targets": [
+    {
+      "location": 2,
+      "polynomial": [
+        [
+          [
+            0
+          ],
+          [
+            "-1",
+            "1"
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            "1",
+            "1"
+          ]
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+\section{Finite relational contracts for unbounded folds}
+\label{sec:machines}
+
+\subsection{From sampled behavior to a finite invariant}
+
+Leant's documented behavioral entrance checks a proposition for the exact type-correct candidate, using bounded attempts with \texttt{decide} and \texttt{simp}; it distinguishes passing, falsification, and inconclusive outcomes~\cite{leant-behavior}. The proposed addition is a worker for a universal proposition when the candidate and the reference have finite-state semantics. It is not another sample filter.
+
+A deterministic Moore machine is a tuple
+\[
+ M=(Q,A,\delta,q_0,o),
+\]
+where $Q$ and $A$ are finite sets, $\delta:Q\times A\to Q$ is total, and $o:Q\to O$ is an observation function. Reading a word updates the state with a left fold. The implemented output set consists of exact integers; equality is the only operation needed on outputs.
+
+For two machines sharing $A$, the contract is
+\begin{equation}
+ \forall w\in A^*,\quad
+ o_L(\run_L(q_{L0},w))=o_R(\run_R(q_{R0},w)).
+ \label{eq:machine-contract}
+\end{equation}
+This covers recognizers, finite protocol states, modular counters represented by finite tables, and finite-control folds. It does not directly cover arbitrary list transducers returning unbounded lists, general Church encodings, or infinite-state accumulators.
+
+\subsection{The relation certificate}
+
+A certificate is a finite relation $\mathcal R\subseteq Q_L\times Q_R$ satisfying
+\begin{align}
+ (q_{L0},q_{R0})&\in\mathcal R,\label{eq:machine-root}\\
+ (p,q)\in\mathcal R&\Longrightarrow o_L(p)=o_R(q),\label{eq:machine-out}\\
+ (p,q)\in\mathcal R&\Longrightarrow
+   (\delta_L(p,a),\delta_R(q,a))\in\mathcal R\quad(a\in A).
+ \label{eq:machine-step}
+\end{align}
+The checker verifies all three conditions against the independently supplied transition and output tables. It need not check that the relation is minimal, that every listed pair is reachable, or that a particular traversal produced it.
+
+\begin{theorem}[Finite relational contract]
+A relation satisfying \eqref{eq:machine-root}--\eqref{eq:machine-step} proves \eqref{eq:machine-contract}.
+\end{theorem}
+\begin{proof}
+The initial pair is related. Every common input symbol sends a related pair to another related pair. Induction on the input word therefore relates the final states. Their observations agree by \eqref{eq:machine-out}.
+\end{proof}
+
+This is a finite certificate for infinitely many finite words. The induction theorem is small; the finite table checks do not themselves enumerate those words.
+
+\subsection{Discovery and shortest counterexamples}
+
+The producer performs BFS on the product transition system, starting from the initial pair. A visited pair with unequal outputs immediately yields a distinguishing word by following parent pointers. If the queue empties without a mismatch, the visited relation is a positive certificate.
+
+\begin{lstlisting}
+queue := [initial_pair]; parent[initial_pair] := none
+while queue nonempty:
+    pair := pop_front(queue)
+    if outputs disagree:
+        return independently checked parent-path word
+    for symbol in alphabet:
+        successor := product_step(pair, symbol)
+        if successor is new:
+            if pair budget exhausted: return UNKNOWN
+            record parent and enqueue successor
+return independently checked visited relation
+\end{lstlisting}
+
+\begin{proposition}[Finite-state decision and cost]
+Without a pair ceiling, the algorithm terminates and decides \eqref{eq:machine-contract}. A returned distinguishing word has minimum length. The traversal uses $O(|A|\,|Q_L|\,|Q_R|)$ transition inspections and $O(|Q_L|\,|Q_R|)$ stored pairs in the worst case.
+\end{proposition}
+\begin{proof}
+Each product pair is visited at most once. BFS processes pairs by nondecreasing distance from the root, so the first mismatch has shortest distance. If no mismatch is reachable, the visited set is closed under every transition and satisfies the relation certificate. Conversely any output mismatch reached by a word falsifies the contract.
+\end{proof}
+
+Faster equivalence algorithms are known~\cite{automata-equivalence}; the prototype does not claim their complexity. Product BFS was chosen because it provides a transparent relation and a shortest witness with almost no extra machinery. A more sophisticated producer can retain the same checker.
+
+\subsection{An explicit finite-testing failure}
+
+Construct a unary machine with states $0,1,\ldots,17$, transitions $i\mapsto\min(i+1,17)$, and output $1$ only at state $17$. Compare it with a one-state machine constantly outputting $0$. The observations agree at every length from zero through eight, so the selected finite sample suite passes. BFS finds the first difference at length $17$.
+
+The experiment also runs with a pair budget of eight. That run returns \unknown{}, not equivalence. Thus the same example exercises both errors that a behavioral integration must avoid: promoting successful samples to a universal result, and promoting an incomplete exploration to a universal result. The complete run returns an actual word, not merely a message that a search branch failed.
+
+\subsection{The source-to-machine bridge is the real integration work}
+
+A certificate about a table is not automatically a certificate about a Lean function. Let the source state type be $S$, its step function be $f:S\to A\to S$, and let $\eta:S\to Q$ map source states to machine states. To transfer a finite-state contract, require
+\begin{align}
+ \eta(s_{\mathrm{init}})&=q_0,\label{eq:bridge-init}\\
+ \eta(f(s,a))&=\delta(\eta(s),a),\label{eq:bridge-step}\\
+ o_{\mathrm{source}}(s)&=o(\eta(s)).\label{eq:bridge-out}
+\end{align}
+A restricted source invariant may be threaded through these conditions when the equalities are not valid for every source state. The corresponding induction must carry that invariant explicitly.
+
+\begin{theorem}[Fold transport]
+If \eqref{eq:bridge-step} holds, then
+\[
+ \eta(\run_f(s,w))=\run_\delta(\eta(s),w)
+\]
+for every finite word $w$.
+\end{theorem}
+\begin{proof}
+Induct on $w$. The empty case is reflexivity. In the constructor case, apply the induction hypothesis from $f(s,a)$, then rewrite $\eta(f(s,a))$ using the commuting-step equality.
+\end{proof}
+
+The source bridge should be produced from a \emph{restricted, recognized fold syntax}, not inferred from a suggestive pretty-printed type. The first implementation should accept explicit finite state types, exact constructor cases, and a visibly structural fold. It can then generate the finite table by evaluation and prove each source-step equation by reduction or a short local proof. Defunctionalization of higher-order closures is a later extension: every closure constructor and environment component needs a simulation rule.
+
+Djex's source-owned term evidence and Leant's exact-candidate verification are useful at this entrance~\cite{djex-readme,leant-readme}. They identify which candidate is being analyzed. They do not, by themselves, establish the commuting square. Universe choices, dependent fields, and dictionary-carried data must survive until the source bridge is proved. A Church-like polymorphic type alone is not authorization to replace the term by a finite automaton or to assume a parametricity theorem.
+
+\subsection{How to use counterexamples during synthesis}
+
+A distinguishing word can reject the \emph{particular} candidate-reference pair after its source bridge is validated and the candidate is evaluated on that word. It can also enrich a reusable pool of behavioral tests for later candidates. A replay must always bind the test to the exact new candidate before rejecting it.
+
+No finite set of such rejected candidates proves that the requested type has no inhabitant satisfying the contract. The universal positive result for one candidate and the universal negative result for a synthesis grammar are different problems. This worker provides the former, and a concrete behavioral falsification of individual candidates. It does not extend Djex's non-inhabitation authority by implication.
+
+\subsection{Relational products with the algebraic worker}
+
+Many programs combine finite control with rational data. A natural next worker stores a polynomial generator family for each reachable control-state pair. Each product transition requires a polynomial multiplier certificate between the appropriate families. This combines the proof structure of \eqref{eq:machine-step} with \eqref{eq:ideal-step}.
+
+A simple first version handles unconditional polynomial updates on a finite control graph; a guard-dependent version must retain proof obligations for guards. The prototype does not implement this combined worker. Nevertheless, the formats already align: finite relation edges identify which transition identity must be checked, and the polynomial certificate proves that identity. The resulting proof can still be one induction over the input word rather than separate, mutually trusting analyses.

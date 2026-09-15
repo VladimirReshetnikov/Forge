@@ -1,0 +1,325 @@
+\Needspace{8\baselineskip}
+\section{Worker III: pole-safe creative telescoping}
+\label{sec:telescoping}
+
+\subsection{Beyond polynomial antidifferences}
+
+Forge's polynomial recurrence worker solves identities such as
+$q(n+1)-q(n)=p(n)$ for polynomial $p$~\cite{forge-structural}. That mechanism is
+well suited to sums of powers. It does not, by itself, cover a summand like
+$\binom nk^3$, where the parameter $n$ changes both the summand and the range of
+summation.
+
+Creative telescoping instead seeks a linear recurrence in $n$ whose summand is
+a difference in $k$. The method is classical; reduction-based algorithms also
+provide compact certificates for more general D-finite summands~\cite{brochet}.
+For Forge, the useful deliverable is not an opaque recurrence guessed by a CAS.
+It is a recurrence together with finite identities and explicit support
+obligations sufficient to prove it in Lean.
+
+The prototype specializes to
+\[
+ F_m(n,k)=\binom nk^m,\qquad
+ S_m(n)=\sum_{k=0}^{n}F_m(n,k),\qquad n\in\N,
+\]
+with fixed positive integer $m$. The mathematical convention is that
+$\binom nk=0$ for integer $k<0$ or $k>n$. A Lean front end can implement this
+zero extension explicitly, or avoid negative indices through a separate
+$k=0$ branch. It must not interpret $k-1$ as truncated natural subtraction in a
+formula whose derivation assumed an integer index.
+
+\subsection{A fully explicit bounded ansatz}
+
+Choose an order $r\ge1$, a coefficient-degree bound $a$, and a total-degree
+bound $b$ for a bivariate numerator. Search for
+\[
+ p_0(n),\ldots,p_r(n)\in\Q[n],\quad \deg p_j\le a,
+ \qquad U(n,k)\in\Q[n,k],\quad\deg U\le b,
+\]
+with $p_r\ne0$, satisfying
+\begin{equation}
+\begin{split}
+ &\sum_{j=0}^{r}p_j(n)
+   \left(\prod_{t=1}^{j}(n+t)\right)^m
+   \left(\prod_{t=j+1}^{r}(n+t-k)\right)^m\\
+ &\hspace{1cm}=(n+r-k)^mU(n,k+1)-k^mU(n,k).
+\end{split}
+\label{eq:cleared-telescope}
+\end{equation}
+Empty products are one. The certificate equation is an identity in the
+polynomial ring $\Q[n,k]$.
+
+Write each unknown polynomial in the specified monomial basis and equate
+coefficients. This is a homogeneous rational linear system with
+\[
+ (r+1)(a+1)+\binom{b+2}{2}
+\]
+unknowns. A nullspace basis describes all solutions in that ansatz. If any
+solution has nonzero $p_r$, at least one nullspace basis vector does. Common
+polynomial factors, rational denominators, and integer content can then be
+removed consistently from all $p_j$ and $U$ to obtain a compact representative.
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+for a scheduled order r and degree bounds a, b:
+    introduce coefficients for p[0..r](n) and U(n,k)
+    form the difference of the two sides of the polynomial identity
+    M := its exact coefficient matrix
+    for a nullspace basis vector with p[r] != 0:
+        normalize common factors and rational content
+        regularize the summation certificate
+        check lower boundary and every upper support boundary
+        check the leading coefficient and initial values
+        return the finite certificate if all checks succeed
+return UNKNOWN for the exhausted scheduled ansatz
+\end{lstlisting}
+\end{minipage}\par
+
+The implementation is a bounded coefficient search, not a full implementation
+of Gosper's or Zeilberger's algorithms. A failed ansatz is not evidence that no
+recurrence exists. The exact linear system is complete for its chosen
+coefficient space; the scheduled degree bounds and the final leading-coefficient
+recognizer impose additional restrictions.
+
+\subsection{Where the apparent poles come from}
+
+Introduce
+\[
+ D(n,k)=\prod_{t=1}^{r}(n+t-k),\qquad
+ A(n)=\prod_{t=1}^{r-1}(n+t).
+\]
+A conventional rational certificate suggested by the ansatz is
+\[
+ R(n,k)=\frac{k^mU(n,k)}{D(n,k)^m}.
+\]
+Formally, away from poles, one would use
+$G(n,k)=R(n,k)F_m(n,k)$ and seek
+\[
+ \sum_{j=0}^{r}p_j(n)F_m(n+j,k)=G(n,k+1)-G(n,k).
+\]
+But $D(n,k)$ vanishes at $k=n+1,\ldots,n+r$, precisely where the shifted
+summands can still be nonzero. Substituting a pole and claiming that a
+zero-valued $F_m$ cancels it is invalid. In Lean, where field division is total,
+blind evaluation can be even more misleading: the totalized expression is not
+the removable extension used in the mathematical derivation.
+
+The remedy is to change the certificate representation before specializing it.
+Define the \emph{regularized} quantity
+\begin{equation}
+ H(n,k)=U(n,k)\binom{n+r-1}{k-1}^{m}.
+ \label{eq:regularized-H}
+\end{equation}
+It is defined for every integer $k$ by the zero-extension convention. The
+identity we actually prove is
+\begin{equation}
+ A(n)^m\sum_{j=0}^{r}p_j(n)F_m(n+j,k)
+   =H(n,k+1)-H(n,k).
+ \label{eq:regularized-telescope}
+\end{equation}
+No rational pole appears in this statement.
+
+\subsection{Deriving the interior identity without illegal cancellation}
+
+For $1\le k\le n$, all factors of $D(n,k)$ are positive integers. Factorial
+identities give
+\begin{align*}
+ \frac{\binom{n+j}{k}}{\binom nk}
+ &=\frac{\prod_{t=1}^{j}(n+t)}{\prod_{t=1}^{j}(n+t-k)},\\
+ \frac{\binom{n+r-1}{k-1}}{\binom nk}
+ &=\frac{kA(n)}{D(n,k)},\\
+ \frac{\binom{n+r-1}{k}}{\binom nk}
+ &=\frac{A(n)(n+r-k)}{D(n,k)}.
+\end{align*}
+These identities are used only where their denominators are nonzero. In
+particular, the last two are applied directly to $H$; they do not evaluate
+$R(n,k+1)$ at its possible pole when $k=n$.
+
+Divide the proposed identity by the nonzero $\binom nk^m$, substitute these
+ratios, and multiply by $D(n,k)^m$. The result is $A(n)^m$ times
+Equation~\eqref{eq:cleared-telescope}. Since $A(n)\ne0$ for $n\ge0$, the
+polynomial identity establishes the interior case. In a Lean proof, the same
+argument should preferably be organized as cross-multiplied factorial lemmas,
+with the positivity hypotheses explicit, rather than as a sequence of loosely
+controlled rational simplifications.
+
+\subsection{Boundary equations are part of the certificate}
+
+The ratio argument does not cover $k=0$ or $k=n+t$ for $1\le t\le r$. These
+are handled symbolically, not by evaluating finitely many numerical $n$.
+
+At $k=0$, every $F_m(n+j,0)=1$, $H(n,0)=0$, and $H(n,1)=U(n,1)$. The required
+identity is therefore
+\begin{equation}
+ A(n)^m\sum_{j=0}^{r}p_j(n)=U(n,1).
+ \label{eq:lower-boundary}
+\end{equation}
+At $k=n+t$, only shifts $j\ge t$ contribute. Symmetry of binomial coefficients
+reduces them to fixed-lower-index polynomials:
+\[
+ \binom{n+j}{n+t}=\binom{n+j}{j-t}.
+\]
+For a fixed nonnegative integer $q$, the expression
+\[
+ \binom{n+c}{q}=\frac{1}{q!}\prod_{u=0}^{q-1}(n+c-u)
+\]
+is a rational polynomial in $n$ on the required natural domain. The two
+boundary terms from $H$ similarly involve
+$\binom{n+r-1}{r-t-1}$ and $\binom{n+r-1}{r-t}$, with a negative lower index
+interpreted as zero. Thus each of the $r$ upper-boundary conditions becomes a
+univariate rational polynomial identity.
+
+The independent checker explicitly expands and verifies all these identities.
+Their cost is small compared with the coefficient search, and they prevent the
+most obvious mismatch between generic hypergeometric algebra and the intended
+finite sum.
+
+\begin{theorem}[Pole-safe summation certificate]
+Assume Equation~\eqref{eq:cleared-telescope}, the lower-boundary identity, and all
+$r$ upper-boundary identities hold. Then for every $n\in\N$,
+\begin{equation}
+ \sum_{j=0}^{r}p_j(n)S_m(n+j)=0.
+ \label{eq:sum-recurrence}
+\end{equation}
+\end{theorem}
+\begin{proof}
+The interior and boundary arguments prove Equation~\eqref{eq:regularized-telescope}
+for every $k$ in the common range $0\le k\le n+r$. Sum over that range. Each
+shifted summand $F_m(n+j,k)$ vanishes beyond $n+j$, so its sum is exactly
+$S_m(n+j)$. The right side telescopes to
+\[
+ H(n,n+r+1)-H(n,0)=0,
+\]
+since the upper binomial coefficient has lower index $n+r$ and upper index
+$n+r-1$, while the lower endpoint has lower index $-1$. The left side is
+$A(n)^m$ times Equation~\eqref{eq:sum-recurrence}. Every factor of $A(n)$ is
+positive, and the empty product when $r=1$ is one. Cancel this nonzero scalar.
+\end{proof}
+
+No asymptotic limit or infinite summation theorem is needed. The difficulty is
+uniform handling of a moving finite support, not convergence.
+
+\subsection{A recurrence is not yet an equality with a proposed sequence}
+
+To characterize a sequence uniquely from an order-$r$ recurrence, require
+$p_r(n)\ne0$ for every $n\ge0$ and supply the first $r$ values. If sequences $S$
+and $T$ share those initial values and satisfy the same recurrence, their
+difference $D$ satisfies the homogeneous recurrence. Strong induction gives
+$D(n),\ldots,D(n+r-1)=0$, after which $p_r(n)D(n+r)=0$ forces $D(n+r)=0$.
+
+The prototype accepts a simple sufficient nonvanishing certificate: either
+$p_r$ or $-p_r$ has a strictly positive constant coefficient and all coefficients
+nonnegative. More sophisticated examples should route this obligation to
+Forge's existing univariate sign machinery rather than weaken the condition.
+The initial values are computed by finite exact binomial sums.
+
+There are consequently two different useful outputs. A \emph{recurrence proof}
+establishes Equation~\eqref{eq:sum-recurrence}. A \emph{sequence-characterization
+proof} adds nonvanishing and initial data. The prototype's acceptance profile
+requires the latter side conditions even when only the recurrence is being
+recorded. A production interface should expose these as different result
+constructors.
+
+The mutation tests multiply every $p_j$ and $U$ by $n-2$. This preserves the
+interior and boundary polynomial identities and produces a true recurrence,
+but its leading coefficient vanishes at $n=2$. The checker reaches and rejects
+the nonvanishing step. Such a recurrence is not false; it simply does not
+justify the same unrestricted uniqueness argument.
+
+\subsection{Three synthesized certificates}
+
+\paragraph{First powers.}
+For $m=1$, choose $r=1,a=0,b=0$. The three-equation system in three unknowns has
+a one-dimensional nullspace. Normalization gives
+\[
+ p_0=-2,\qquad p_1=1,\qquad U=-1.
+\]
+Thus $S_1(n+1)=2S_1(n)$ and $S_1(0)=1$. Ordinary induction gives $S_1(n)=2^n$.
+The recorded artifact certifies the recurrence and its initial data; this last
+closed-form identification is the additional mathematical argument just given.
+
+\paragraph{Squares.}
+For $m=2$, use $r=1,a=1,b=1$. The nine-equation system in seven unknowns yields
+\[
+ p_0=-2(2n+1),\qquad p_1=n+1,\qquad U=2k-3n-3.
+\]
+The regularized certificate is particularly small:
+\[
+ H(n,k)=(2k-3n-3)\binom{n}{k-1}^2.
+\]
+It proves
+\begin{equation}
+ (n+1)S_2(n+1)=2(2n+1)S_2(n),\qquad S_2(0)=1.
+ \label{eq:square-recurrence}
+\end{equation}
+For example, the upper boundary at $k=n+1$ has left side $n+1$ and right side
+$0-(-(n+1))=n+1$. The lower boundary gives $-3n-1$ on both sides.
+
+The sequence $\binom{2n}{n}$ has the same initial value and ratio
+$2(2n+1)/(n+1)$, as follows from factorials. Equation~\eqref{eq:square-recurrence}
+and uniqueness therefore prove the familiar identity
+$S_2(n)=\binom{2n}{n}$. The factorial ratio is a source-level proof obligation,
+not a string returned by the telescoper and automatically trusted.
+
+\paragraph{Cubes.}
+For $m=3$, the executed search uses $r=2,a=2,b=5$: thirty unknowns, forty-five
+coefficient equations, and a one-dimensional nullspace. It finds
+\begin{align*}
+ p_0(n)&=-8(n+1)^2,\\
+ p_1(n)&=-7n^2-21n-16,\\
+ p_2(n)&=(n+2)^2,
+\end{align*}
+and $U(n,k)=(n+1)^2P(n,k)$, where
+\begin{align*}
+ P(n,k)={}&4k^3-18k^2n-30k^2+27kn^2+93kn+78k\\
+          &-14n^3-74n^2-128n-72.
+\end{align*}
+Here $A(n)=n+1$ and
+\[
+ H(n,k)=(n+1)^2P(n,k)\binom{n+1}{k-1}^{3}.
+\]
+The resulting Franel-number recurrence is
+\begin{equation}
+ (n+2)^2S_3(n+2)
+ =(7n^2+21n+16)S_3(n+1)+8(n+1)^2S_3(n),
+ \label{eq:franel}
+\end{equation}
+with $S_3(0)=1$ and $S_3(1)=2$. This is a certified recurrence, not a claim that
+the algorithm found a single hypergeometric closed form for $S_3$.
+
+All three certificates are stored in \code{results/certificates.json} with the
+original summand-family parameters. The checker verifies the bivariate
+identity, $r+1$ boundary rows, leading-coefficient positivity, and the initial
+values. Additional tests compare the recurrences against direct finite sums
+for $n=0,\ldots,30$; those numerical regressions are not substituted for the
+symbolic proof obligations.
+
+\subsection{A route to a broader summation worker}
+
+The next implementation layer should separate summand recognition from
+operator search. Recognize a source summand only after proving its shift
+relations and support description. Then permit a more capable search backend
+to propose an operator and certificate, while retaining the same source-level
+obligations for summation.
+
+For hypergeometric antidifferences, SymPy documents \code{gosper_normal},
+\code{gosper_term}, and \code{gosper_sum}~\cite{sympy-concrete}. For D-finite
+operator manipulation, Sage's \code{ore_algebra} provides creative telescoping,
+closure operations, transformations, guessing, and desingularization~\cite{ore}.
+The reduction-based work of Brochet and Salvy is a source of algorithms for
+compact definite-summation certificates~\cite{brochet}. These are proposed
+backends, not dependencies exercised by the included tests.
+
+Operator serialization must fix a normal form. For example, write
+$L=\sum_jp_j(n)E_n^j$ with coefficients on the left, where
+$E_nf(n)=f(n+1)$. The rule $E_n n=(n+1)E_n$ means that ordinary commutative
+polynomial multiplication is not a correct implementation of operator
+composition. A recurrence checker that merely evaluates the listed coefficient
+polynomials at the current $n$ avoids this ambiguity; a broader operator engine
+must preserve it explicitly.
+
+Finally, support handling should become a first-class component. A general
+summand may have different moving lower and upper bounds, internal poles,
+exceptional small parameters, or a nonzero boundary contribution. In those
+cases the output recurrence can be inhomogeneous. The worker must return the
+boundary term and prove it, not discard it because the generic certificate was
+computed successfully.

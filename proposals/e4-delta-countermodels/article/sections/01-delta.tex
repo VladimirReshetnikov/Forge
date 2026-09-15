@@ -1,0 +1,90 @@
+\section{The actual increment, not another Forge architecture}
+\label{sec:delta}
+
+\subsection{What the reviewed baseline already contains}
+The baseline is Forge commit
+\code{674521027d968d59f7b83220ed52304a85cb55e2}, particularly the merged article's
+structural-search section, provenance appendix, status ledger, and review of
+Leant and Djex. It already covers induction planning, accumulator
+generalization, demand-directed theorem use, polynomial recurrence synthesis,
+algebraic certificates, and a carefully delimited acceptance boundary
+\cite{forge,forge-structural,forge-status,forge-neighbors}. These are dependencies
+of this proposal, not its contributions.
+
+The relevant unfinished step is narrower and more consequential. The implemented
+state-machine invariant certificate described in the merged article requires
+$I(F(x))=I(x)$. Its prospective generalization allows multiple invariants and
+polynomial multipliers, but correctly warns that discovering both at once is a
+bilinear problem. The first contribution below supplies a different search
+organization: demand a \emph{closed space of observations}, discover it by exact
+linear dependence, and then prove that its generators all vanish on the
+reachable states. No simultaneous unknown invariant/multiplier system is solved.
+
+The second relevant gap is already named in the repository: negative results
+from an intuitionistic inhabitation decision procedure lack a separately
+checkable certificate. The proposal here does not claim that identifying this
+gap is new. It provides an implemented \emph{semantic alternative} to logging an
+entire unsuccessful LJT search: a finite Kripke structure and a small forcing
+checker.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}P{0.27\textwidth}P{0.30\textwidth}P{0.35\textwidth}@{}}
+\toprule
+Existing ingredient & Increment in this package & Resulting capability \\
+\midrule
+Conserved polynomial invariant & Control-indexed coefficient-pullback closure & Mutually supporting relational invariants, discovered rather than supplied \\
+Polynomial recurrence goals & Fresh symbolic payloads at every edge & All finite words over an infinite rational input alphabet \\
+Typed candidate plus bounded behavioral tests & Product-machine proof obligation & Universal fold equivalence in an explicit fragment \\
+Suggested failed-search certificate & Finite Kripke model and independent forcing & Replayable IPC nonderivability diagnostics \\
+Uncompiled certificate sources & 222 generated local identity obligations & A concrete next compiler gate, not a claim of Lean acceptance \\
+\bottomrule
+\end{tabular}
+\caption{The delta relative to the reviewed merged design. The last row is an integration artifact, not a new logical method.}
+\end{table}
+
+\subsection{Two recommendations}
+\textbf{Implement the observable-closure worker first.} It addresses a positive
+proof capability directly: statements about arbitrary finite executions,
+streaming algorithms, accumulator programs, and equivalence of two folds. Its
+certificate needs only exact polynomial identities plus induction, and it can
+reuse existing Lean arithmetic reconstruction.
+
+\textbf{Implement the Kripke worker as a diagnostic lane.} It is valuable when a
+user asks whether constructive propositional reasoning is sufficient. It must
+not close the original goal with its negation. Its strongest appropriate output
+is a checked theorem that the corresponding \emph{object-logic sequent} has no
+derivation.
+
+These are not substitutes for each other. A rational execution counterexample
+can refute a particular universally quantified machine property. An IPC
+countermodel instead classifies a restricted proof language. An interface that
+uses one generic ``refuted'' label for both would erase the most important
+semantic distinction in the proposal.
+
+\subsection{Relation to established work}
+The algebraic worker belongs to the tradition of exact invariant analysis,
+including Karr's affine relations, and to the linear-algebraic treatment of
+observables under composition. Finite invariant spaces of Koopman observables
+are an established perspective on nonlinear dynamics; this proposal uses exact
+polynomial pullbacks for discrete, symbolic-input proof obligations, not
+numerically learned approximate observables \cite{karr,koopman}. Register
+automata with linear arithmetic supply closely related algorithmic context
+\cite{register}. Neither invariant subspaces nor rational-machine verification
+is claimed to originate here.
+
+Kripke semantics is likewise established. Lean formalizations of intuitionistic
+propositional logic already provide soundness and completeness infrastructure
+\cite{trufas}. Mathlib's \code{itauto} already implements a complete positive
+intuitionistic propositional procedure for its supported syntax
+\cite{itauto}. The addition is a reusable negative \emph{certificate boundary},
+not a new claim to solve positive propositional tautologies.
+
+\subsection{Evidence labels used throughout}
+\emph{Proved mathematically} means a proof is given in this article.
+\emph{Executed} means the supplied code actually ran and has retained results.
+\emph{Generated, uncompiled} means Lean text was emitted but no Lean compiler
+checked it. \emph{Proposed} means an implementation plan, not completed code.
+These labels must not be collapsed into a single word such as ``verified.''
+The supplied Python checker is an executable implementation of the mathematics;
+it is not itself formally verified.

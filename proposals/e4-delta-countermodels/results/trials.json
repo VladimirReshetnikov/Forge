@@ -1,0 +1,1746 @@
+[
+  {
+    "name": "delayed_relational_equality",
+    "replay_seconds": [
+      0.00021336400004656753,
+      0.00026454099997863523,
+      0.00019928200003960228
+    ],
+    "search_seconds": [
+      0.003064280999979019,
+      0.0020539009999538393,
+      0.0017881689998375805
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0017881689998375805,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "delayed_mutant",
+    "replay_seconds": [
+      0.00014944600002309016,
+      0.00014368699999067758,
+      0.00014193500010151183
+    ],
+    "search_seconds": [
+      0.0020463190001009934,
+      0.0013499249998858431,
+      0.0012932590000218624
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0012932590000218624,
+      "grid_points": 2,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "sum_scaling",
+    "replay_seconds": [
+      8.028199999898789e-05,
+      7.696600005147047e-05,
+      7.632599999851664e-05
+    ],
+    "search_seconds": [
+      0.001120896999964316,
+      0.0006958540000141511,
+      0.0006330389999220642
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0006330389999220642,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "square_of_sum",
+    "replay_seconds": [
+      0.00016476999985570728,
+      9.60449999638513e-05,
+      9.398199995303003e-05
+    ],
+    "search_seconds": [
+      0.0013517280001451581,
+      0.0008681350000188104,
+      0.0007151339998472395
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0007151339998472395,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "cube_of_sum",
+    "replay_seconds": [
+      0.00011341199979142402,
+      0.0001139229998443625,
+      0.00011067800005548634
+    ],
+    "search_seconds": [
+      0.0014848289999918052,
+      0.0007331100000556035,
+      0.0007345630001509562
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0007345630001509562,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "symmetric_polynomial",
+    "replay_seconds": [
+      0.00012445799984561745,
+      0.000117406999834202,
+      0.000114573000018936
+    ],
+    "search_seconds": [
+      0.0014480229999662697,
+      0.0008889359999102453,
+      0.0009248410001418961
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0009248410001418961,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "fibonacci_relational",
+    "replay_seconds": [
+      0.00017831000013757148,
+      0.00017866100006358465,
+      0.00017513499983579095
+    ],
+    "search_seconds": [
+      0.002200853999966057,
+      0.0016054410000378994,
+      0.0014576779999515566
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0014576779999515566,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "alternating_control",
+    "replay_seconds": [
+      0.00012867499981439323,
+      0.00012720299991997308,
+      0.00012745300000460702
+    ],
+    "search_seconds": [
+      0.0014233960000638035,
+      0.0010654739999154117,
+      0.001049420000072132
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1,
+        1
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.001049420000072132,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "circle_rotation",
+    "replay_seconds": [
+      7.654599994566524e-05,
+      7.670700006201514e-05,
+      7.506399992962542e-05
+    ],
+    "search_seconds": [
+      0.000965862999919409,
+      0.0007146430000375403,
+      0.0006512759998713591
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0006512759998713591,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "seven_sample_trap",
+    "replay_seconds": [
+      5.4864000048837624e-05,
+      5.0085000111721456e-05,
+      5.135800006428326e-05
+    ],
+    "search_seconds": [
+      0.006040278999989823,
+      0.0011797460001616855,
+      0.00113521999992372
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 8,
+      "elapsed_seconds": 0.00113521999992372,
+      "grid_points": 8,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "nonlinear_growth_true_but_unknown",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      0.0009704200001579011,
+      0.0005330569999841828,
+      0.0005817109999952663
+    ],
+    "stats": {
+      "basis_dimensions": [
+        4
+      ],
+      "coefficient_obligations": 4,
+      "elapsed_seconds": 0.0005817109999952663,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "empty_basis_zero_goal",
+    "replay_seconds": [
+      0.00011796900002991606,
+      1.171700000668352e-05,
+      3.549300004124234e-05
+    ],
+    "search_seconds": [
+      0.00017146000004686357,
+      0.0001733929998408712,
+      0.00012655199998334865
+    ],
+    "stats": {
+      "basis_dimensions": [
+        0
+      ],
+      "coefficient_obligations": 0,
+      "elapsed_seconds": 0.00012655199998334865,
+      "grid_points": 0,
+      "pullbacks": 0
+    }
+  },
+  {
+    "name": "zero_step_failure",
+    "replay_seconds": [
+      1.1017000133506372e-05,
+      9.304000059273676e-06,
+      9.264000027542352e-06
+    ],
+    "search_seconds": [
+      0.00014766400022381276,
+      0.00012788300000465824,
+      0.0001165159999345633
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 0,
+      "elapsed_seconds": 0.0001165159999345633,
+      "grid_points": 0,
+      "pullbacks": 0
+    }
+  },
+  {
+    "name": "unreachable_bad_node",
+    "replay_seconds": [
+      5.252000005384616e-05,
+      4.8753000100987265e-05,
+      4.927400004817173e-05
+    ],
+    "search_seconds": [
+      0.0007406820000142034,
+      0.000546617000054539,
+      0.0005687010000201553
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1,
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0005687010000201553,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "simultaneous_swap",
+    "replay_seconds": [
+      7.282999990820826e-05,
+      7.217899997158383e-05,
+      6.887399990773702e-05
+    ],
+    "search_seconds": [
+      0.0008397210001476196,
+      0.0006395389998488099,
+      0.0006009500000345724
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0006009500000345724,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "two_payload_square",
+    "replay_seconds": [
+      9.724799997457012e-05,
+      9.520499997961451e-05,
+      0.00010273599991705851
+    ],
+    "search_seconds": [
+      0.0014196810000157711,
+      0.0007394099998236925,
+      0.0008387499999571446
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0008387499999571446,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "symbolic_initial_parameter",
+    "replay_seconds": [
+      0.00010043199995379837,
+      9.933100000125705e-05,
+      9.336099992651725e-05
+    ],
+    "search_seconds": [
+      0.0008874640000158251,
+      0.0009561279998706596,
+      0.0009606749999875319
+    ],
+    "stats": {
+      "basis_dimensions": [
+        0,
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0009606749999875319,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "symbolic_initial_mutant",
+    "replay_seconds": [
+      4.729199986286403e-05,
+      4.5129000000088126e-05,
+      4.488800004764926e-05
+    ],
+    "search_seconds": [
+      0.0009845010001754417,
+      0.0006637950000367709,
+      0.0006302340000274853
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1,
+        1
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0006302340000274853,
+      "grid_points": 2,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_00",
+    "replay_seconds": [
+      0.00032676499995432096,
+      0.0003440610000779998,
+      0.00032345999989047414
+    ],
+    "search_seconds": [
+      0.003950263999968229,
+      0.0021678840000731725,
+      0.002440385999989303
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002440385999989303,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_00",
+    "replay_seconds": [
+      0.0001529109999864886,
+      0.0001540729999760515,
+      0.00015126900007089716
+    ],
+    "search_seconds": [
+      0.0018195860000105313,
+      0.0015794020000612363,
+      0.0012254860000666667
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0012254860000666667,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_01",
+    "replay_seconds": [
+      0.0012686009999924863,
+      0.0011659660001441807,
+      0.0012171840000974044
+    ],
+    "search_seconds": [
+      0.014073546999952669,
+      0.007132003000151599,
+      0.0072753290000946436
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.0072753290000946436,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_01",
+    "replay_seconds": [
+      0.00032981899994410924,
+      0.0003084770000896242,
+      0.00030590400001528906
+    ],
+    "search_seconds": [
+      0.0035490360000949295,
+      0.002428287999919121,
+      0.002504473000044527
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002504473000044527,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_02",
+    "replay_seconds": [
+      0.00028290799991737003,
+      0.00027874200009136985,
+      0.00027437600010671304
+    ],
+    "search_seconds": [
+      0.00300291799999286,
+      0.0018332059999011108,
+      0.0018348290000176348
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0018348290000176348,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_02",
+    "replay_seconds": [
+      0.00016997700004139915,
+      0.0001521399999546702,
+      0.00013712800000575953
+    ],
+    "search_seconds": [
+      0.001516135999963808,
+      0.001035046999959377,
+      0.00097441599996273
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.00097441599996273,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_03",
+    "replay_seconds": [
+      0.0014743329998054833,
+      0.0014063410001199372,
+      0.0013657289998718625
+    ],
+    "search_seconds": [
+      0.01500081099993622,
+      0.007744609999917884,
+      0.007886536000114575
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.007886536000114575,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_03",
+    "replay_seconds": [
+      0.000341407999940202,
+      0.0003483069999674626,
+      0.0003460949999407603
+    ],
+    "search_seconds": [
+      0.004232450000017707,
+      0.00314137799978198,
+      0.002663052999878346
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002663052999878346,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_04",
+    "replay_seconds": [
+      0.00035675100002663385,
+      0.000247454999907859,
+      0.0002476849999766273
+    ],
+    "search_seconds": [
+      0.0040488119998371985,
+      0.0022363180000866123,
+      0.002532265999889205
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002532265999889205,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_04",
+    "replay_seconds": [
+      0.00013927100008004345,
+      0.00010507899992262537,
+      0.00018473900013304956
+    ],
+    "search_seconds": [
+      0.0018998279999777878,
+      0.0010068349999983184,
+      0.001000445000045147
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.001000445000045147,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_05",
+    "replay_seconds": [
+      0.0013396790000115288,
+      0.0012043540000377106,
+      0.0012356820000150037
+    ],
+    "search_seconds": [
+      0.0184472010000718,
+      0.007908038000095985,
+      0.007061094999926354
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.007061094999926354,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_05",
+    "replay_seconds": [
+      0.0003346569999393978,
+      0.0005394169997998688,
+      0.0003425089998927433
+    ],
+    "search_seconds": [
+      0.003683119000015722,
+      0.003522865999912028,
+      0.003754686999855039
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.003754686999855039,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_06",
+    "replay_seconds": [
+      0.000351803000057771,
+      0.0003182319999268657,
+      0.0003257440000652423
+    ],
+    "search_seconds": [
+      0.006229085000086343,
+      0.0023013160000573407,
+      0.002277909999975236
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002277909999975236,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_06",
+    "replay_seconds": [
+      0.00014923599997018755,
+      0.0001482650000070862,
+      0.00014490900002783746
+    ],
+    "search_seconds": [
+      0.0017586530000244238,
+      0.0011342880000029254,
+      0.0011305519999496028
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0011305519999496028,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_07",
+    "replay_seconds": [
+      0.0014410829999178532,
+      0.0017615080000723538,
+      0.0015694179999172775
+    ],
+    "search_seconds": [
+      0.015208795000035025,
+      0.008615519999921162,
+      0.008041879999836965
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.008041879999836965,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_07",
+    "replay_seconds": [
+      0.000336909999987256,
+      0.00033865299997160037,
+      0.0005885820000912645
+    ],
+    "search_seconds": [
+      0.004083926000021165,
+      0.0027118969999264664,
+      0.0031271059999653517
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0031271059999653517,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_08",
+    "replay_seconds": [
+      0.00048769899990475096,
+      0.00020400899984451826,
+      0.00021313300021574832
+    ],
+    "search_seconds": [
+      0.0033109450000665674,
+      0.0017350080001961032,
+      0.0019343089998073992
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0019343089998073992,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_08",
+    "replay_seconds": [
+      0.00010654099992279953,
+      0.00010470899997017113,
+      0.0001890369999273389
+    ],
+    "search_seconds": [
+      0.0014615239999784535,
+      0.0009395939998739777,
+      0.0009565279999605991
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0009565279999605991,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_09",
+    "replay_seconds": [
+      0.0016459329999634065,
+      0.0016206149998652108,
+      0.0024325450001470017
+    ],
+    "search_seconds": [
+      0.02037356899995757,
+      0.009774816000117426,
+      0.011734915000033652
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.011734915000033652,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_09",
+    "replay_seconds": [
+      0.0003662849999273021,
+      0.0003649220000170317,
+      0.0003635409998423711
+    ],
+    "search_seconds": [
+      0.0062386689999129885,
+      0.0034107459998722334,
+      0.003517197000064698
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.003517197000064698,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_10",
+    "replay_seconds": [
+      0.00351143900002171,
+      0.00029555800006164645,
+      0.00030157600008351437
+    ],
+    "search_seconds": [
+      0.003833084999996572,
+      0.0024782640000466927,
+      0.0025353599999107246
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0025353599999107246,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_10",
+    "replay_seconds": [
+      0.0001905280000755738,
+      0.00013452399980451446,
+      0.0001328910000211181
+    ],
+    "search_seconds": [
+      0.0016692379999767581,
+      0.0011156599998685124,
+      0.0010650730000634212
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0010650730000634212,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_11",
+    "replay_seconds": [
+      0.0013104249999287276,
+      0.001275221000014426,
+      0.0013032540000494919
+    ],
+    "search_seconds": [
+      0.015039228999967236,
+      0.00729674200010777,
+      0.008141792000060377
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.008141792000060377,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_11",
+    "replay_seconds": [
+      0.00033892300007209997,
+      0.000369390000059866,
+      0.0005095409999285039
+    ],
+    "search_seconds": [
+      0.0039061160000528616,
+      0.0025216789999831235,
+      0.0025746689998413785
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0025746689998413785,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_12",
+    "replay_seconds": [
+      0.00030432100015787,
+      0.00043687199990927184,
+      0.0002761079999800131
+    ],
+    "search_seconds": [
+      0.003318426000078034,
+      0.0027410220000092522,
+      0.0025994970001192996
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0025994970001192996,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_12",
+    "replay_seconds": [
+      0.00013103900005262403,
+      0.0001294460000735853,
+      0.00013008699988859007
+    ],
+    "search_seconds": [
+      0.001473481999937576,
+      0.001006924999956027,
+      0.0011484690000997944
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0011484690000997944,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_13",
+    "replay_seconds": [
+      0.001296163000006345,
+      0.0017553390000557556,
+      0.0013955140000234678
+    ],
+    "search_seconds": [
+      0.014798513999949137,
+      0.010564632000068741,
+      0.008992179999950167
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.008992179999950167,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_13",
+    "replay_seconds": [
+      0.0005472679999911634,
+      0.0004466060001959704,
+      0.00038119700002425816
+    ],
+    "search_seconds": [
+      0.004326333000108207,
+      0.0029588009999770293,
+      0.0027577070000006643
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0027577070000006643,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_14",
+    "replay_seconds": [
+      0.0005241640001258929,
+      0.0003083869999045419,
+      0.00032427200017082214
+    ],
+    "search_seconds": [
+      0.005033414000081393,
+      0.0025559709999924962,
+      0.0028578379999544268
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0028578379999544268,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_14",
+    "replay_seconds": [
+      0.00020899600008306152,
+      0.0001397420001012506,
+      0.0002580709999620012
+    ],
+    "search_seconds": [
+      0.00212563000013688,
+      0.0015266519999386219,
+      0.0012643549998756498
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0012643549998756498,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_15",
+    "replay_seconds": [
+      0.001657329999943613,
+      0.0018367329998909554,
+      0.0015045079999254085
+    ],
+    "search_seconds": [
+      0.01297781599987502,
+      0.00820124200004102,
+      0.010703482000053555
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.010703482000053555,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_15",
+    "replay_seconds": [
+      0.00034004500002993154,
+      0.0003706210000018473,
+      0.0003378609999344917
+    ],
+    "search_seconds": [
+      0.004112629000019297,
+      0.0028485449997788237,
+      0.004415948000087155
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.004415948000087155,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_16",
+    "replay_seconds": [
+      0.0003095990000474558,
+      0.000359204000005775,
+      0.0002669339999101794
+    ],
+    "search_seconds": [
+      0.003191743999877872,
+      0.001935021000008419,
+      0.001953408999952444
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.001953408999952444,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_16",
+    "replay_seconds": [
+      0.00012253599993528042,
+      0.00011825899991890765,
+      0.0001224860000093031
+    ],
+    "search_seconds": [
+      0.0014967070001148386,
+      0.00097239299998364,
+      0.0009608250002202112
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0009608250002202112,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_17",
+    "replay_seconds": [
+      0.0013760440001533425,
+      0.0012629729999389383,
+      0.0012686120001035306
+    ],
+    "search_seconds": [
+      0.014587984999934633,
+      0.008227171000044109,
+      0.007675797000047169
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.007675797000047169,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_17",
+    "replay_seconds": [
+      0.00031999500015444937,
+      0.00031266399992091465,
+      0.0003172310000536527
+    ],
+    "search_seconds": [
+      0.0038194750000002387,
+      0.0026088009999511996,
+      0.0024830709999150713
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0024830709999150713,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_18",
+    "replay_seconds": [
+      0.00029230199993435235,
+      0.00032332900013898325,
+      0.0003023980000307347
+    ],
+    "search_seconds": [
+      0.003202419999979611,
+      0.001989352999999028,
+      0.0019951219999256864
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0019951219999256864,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_18",
+    "replay_seconds": [
+      0.00014414800011763873,
+      0.00014441899998018926,
+      0.00014367800008585618
+    ],
+    "search_seconds": [
+      0.0016175700000076176,
+      0.0012176350001027458,
+      0.001295172000027378
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.001295172000027378,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_19",
+    "replay_seconds": [
+      0.0012027319999106112,
+      0.0011845040000935114,
+      0.0012225619998389448
+    ],
+    "search_seconds": [
+      0.012127499000143871,
+      0.006793210000068939,
+      0.008734709999998813
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.008734709999998813,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_19",
+    "replay_seconds": [
+      0.0003333849999762606,
+      0.0003338859999075794,
+      0.00034540399997240456
+    ],
+    "search_seconds": [
+      0.0034518790000674926,
+      0.0024660250001034,
+      0.0023479670001052
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0023479670001052,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_20",
+    "replay_seconds": [
+      0.00030519200004164304,
+      0.0003180119999797171,
+      0.00031093100005818997
+    ],
+    "search_seconds": [
+      0.003401341999961005,
+      0.0020286530000248604,
+      0.0020089629999802128
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.0020089629999802128,
+      "grid_points": 0,
+      "pullbacks": 4
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_20",
+    "replay_seconds": [
+      0.00013827899988427816,
+      0.00013760900014858635,
+      0.0001333319999048399
+    ],
+    "search_seconds": [
+      0.0016514110000116489,
+      0.001063360999978613,
+      0.0010212170000158949
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0010212170000158949,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_21",
+    "replay_seconds": [
+      0.001405879999992976,
+      0.0014041459999134531,
+      0.001412800000025527
+    ],
+    "search_seconds": [
+      0.01343400699988706,
+      0.008653096999978516,
+      0.007927777999839236
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.007927777999839236,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_21",
+    "replay_seconds": [
+      0.0003381920000720129,
+      0.00043995700002597005,
+      0.00032843700000739773
+    ],
+    "search_seconds": [
+      0.004013227999848823,
+      0.0029978709999340936,
+      0.002753510000047754
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002753510000047754,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "affine_conjugacy_22",
+    "replay_seconds": [
+      0.000117127999828881,
+      0.00011610499996095314,
+      0.00011653699993985356
+    ],
+    "search_seconds": [
+      0.0015069830001266382,
+      0.0009884969999802706,
+      0.0010215170000265061
+    ],
+    "stats": {
+      "basis_dimensions": [
+        1
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0010215170000265061,
+      "grid_points": 0,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_22",
+    "replay_seconds": [
+      0.0001128609999341279,
+      0.000109875999896758,
+      0.00017640700002630183
+    ],
+    "search_seconds": [
+      0.0011898129998826334,
+      0.0009011649999592919,
+      0.0008110180001494882
+    ],
+    "stats": {
+      "basis_dimensions": [
+        2
+      ],
+      "coefficient_obligations": 1,
+      "elapsed_seconds": 0.0008110180001494882,
+      "grid_points": 1,
+      "pullbacks": 2
+    }
+  },
+  {
+    "name": "affine_conjugacy_23",
+    "replay_seconds": [
+      0.001818684999989273,
+      0.0015007930001047498,
+      0.001395013000092149
+    ],
+    "search_seconds": [
+      0.013485025999898426,
+      0.00781426499997906,
+      0.007908508999889818
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 6,
+      "elapsed_seconds": 0.007908508999889818,
+      "grid_points": 0,
+      "pullbacks": 12
+    }
+  },
+  {
+    "name": "affine_conjugacy_mutant_23",
+    "replay_seconds": [
+      0.00040653599990037037,
+      0.0003112419999524718,
+      0.00031177200003185135
+    ],
+    "search_seconds": [
+      0.004178950000095938,
+      0.0030166389999521925,
+      0.002702493000015238
+    ],
+    "stats": {
+      "basis_dimensions": [
+        3
+      ],
+      "coefficient_obligations": 2,
+      "elapsed_seconds": 0.002702493000015238,
+      "grid_points": 1,
+      "pullbacks": 3
+    }
+  },
+  {
+    "name": "atomic_implication",
+    "replay_seconds": [
+      1.950000000761065e-05,
+      1.0726000027716509e-05,
+      8.974000138550764e-06
+    ],
+    "search_seconds": [
+      6.412700008695538e-05,
+      2.6619999971444486e-05,
+      2.0761000087077264e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 2.0761000087077264e-05,
+      "frames": 1,
+      "models": 3
+    }
+  },
+  {
+    "name": "excluded_middle",
+    "replay_seconds": [
+      1.340100016022916e-05,
+      1.2349000144240563e-05,
+      1.3039999885222642e-05
+    ],
+    "search_seconds": [
+      3.536400004122697e-05,
+      3.1808999892746215e-05,
+      3.48529999882885e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 3.48529999882885e-05,
+      "frames": 2,
+      "models": 4
+    }
+  },
+  {
+    "name": "double_negation_elimination",
+    "replay_seconds": [
+      1.569400001244503e-05,
+      1.5563000033580465e-05,
+      1.3459999991027871e-05
+    ],
+    "search_seconds": [
+      3.7195999993855366e-05,
+      3.705599988279573e-05,
+      3.216899995095446e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 3.216899995095446e-05,
+      "frames": 2,
+      "models": 4
+    }
+  },
+  {
+    "name": "peirce",
+    "replay_seconds": [
+      1.603400005478761e-05,
+      1.601400003892195e-05,
+      1.4282000165621866e-05
+    ],
+    "search_seconds": [
+      4.542900001069938e-05,
+      6.248399995456566e-05,
+      4.451800009519502e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 4.451800009519502e-05,
+      "frames": 2,
+      "models": 8
+    }
+  },
+  {
+    "name": "weak_excluded_middle",
+    "replay_seconds": [
+      2.095199988616514e-05,
+      2.2833999992144527e-05,
+      1.7577000107849017e-05
+    ],
+    "search_seconds": [
+      0.0001371969999581779,
+      5.0806999979613465e-05,
+      4.7853000069153495e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 4.7853000069153495e-05,
+      "frames": 3,
+      "models": 7
+    }
+  },
+  {
+    "name": "linearity",
+    "replay_seconds": [
+      1.848800002335338e-05,
+      1.7156000012619188e-05,
+      1.6624999943815055e-05
+    ],
+    "search_seconds": [
+      8.821400001579605e-05,
+      8.32059999993362e-05,
+      8.232499999394349e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 8.232499999394349e-05,
+      "frames": 3,
+      "models": 21
+    }
+  },
+  {
+    "name": "contextual_failure",
+    "replay_seconds": [
+      7.73199985815154e-06,
+      7.401999937428627e-06,
+      6.990999963818467e-06
+    ],
+    "search_seconds": [
+      1.7014999912134954e-05,
+      1.3269999953990919e-05,
+      1.2668999943343806e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 1.2668999943343806e-05,
+      "frames": 1,
+      "models": 3
+    }
+  },
+  {
+    "name": "disjunction_does_not_select",
+    "replay_seconds": [
+      8.913999863580102e-06,
+      1.651499997024075e-05,
+      8.643000001029577e-06
+    ],
+    "search_seconds": [
+      1.6865999896253925e-05,
+      0.0005541900000025635,
+      1.9089000034000492e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 1.9089000034000492e-05,
+      "frames": 1,
+      "models": 2
+    }
+  },
+  {
+    "name": "identity",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      3.6103999946135445e-05,
+      3.195800013600092e-05,
+      3.182800014656095e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 3.182800014656095e-05,
+      "frames": 4,
+      "models": 14
+    }
+  },
+  {
+    "name": "composition",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      0.0009469350000017585,
+      0.0011684290000175679,
+      0.001004101000035007
+    ],
+    "stats": {
+      "elapsed_seconds": 0.001004101000035007,
+      "frames": 4,
+      "models": 224
+    }
+  },
+  {
+    "name": "conjunction_projection",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      0.00010435800004415796,
+      0.000137639000058698,
+      0.00010184400002799521
+    ],
+    "stats": {
+      "elapsed_seconds": 0.00010184400002799521,
+      "frames": 4,
+      "models": 54
+    }
+  },
+  {
+    "name": "disjunction_injection",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      0.00010365700018155621,
+      0.00010207499985881441,
+      0.00016413799994552392
+    ],
+    "stats": {
+      "elapsed_seconds": 0.00016413799994552392,
+      "frames": 4,
+      "models": 54
+    }
+  },
+  {
+    "name": "ex_falso",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      3.3731000030456926e-05,
+      3.068599994549004e-05,
+      3.0296000204543816e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 3.0296000204543816e-05,
+      "frames": 4,
+      "models": 14
+    }
+  },
+  {
+    "name": "double_negation_introduction",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      4.968499979440821e-05,
+      4.68010000531649e-05,
+      4.7090999942156486e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 4.7090999942156486e-05,
+      "frames": 4,
+      "models": 14
+    }
+  },
+  {
+    "name": "disjunction_elimination",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      0.0010353679999752785,
+      0.00099958400005562,
+      0.0010530649999509478
+    ],
+    "stats": {
+      "elapsed_seconds": 0.0010530649999509478,
+      "frames": 4,
+      "models": 224
+    }
+  },
+  {
+    "name": "noncontradiction",
+    "replay_seconds": [
+      null,
+      null,
+      null
+    ],
+    "search_seconds": [
+      5.033599995840632e-05,
+      4.438699988895678e-05,
+      4.433700019035314e-05
+    ],
+    "stats": {
+      "elapsed_seconds": 4.433700019035314e-05,
+      "frames": 4,
+      "models": 14
+    }
+  }
+]

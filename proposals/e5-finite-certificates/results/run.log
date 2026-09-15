@@ -1,0 +1,67 @@
+linear_invariant_d2_0 certified 1.306 ms
+linear_invariant_d2_1 certified 1.159 ms
+linear_invariant_d2_2 certified 1.086 ms
+linear_invariant_d3_0 certified 1.603 ms
+linear_invariant_d3_1 certified 1.36 ms
+linear_invariant_d3_2 certified 1.331 ms
+linear_invariant_d4_0 certified 3.061 ms
+linear_invariant_d4_1 certified 2.938 ms
+linear_invariant_d4_2 certified 2.766 ms
+linear_invariant_d5_0 certified 2.943 ms
+linear_invariant_d5_1 certified 2.943 ms
+linear_invariant_d5_2 certified 3.135 ms
+linear_invariant_d6_0 certified 5.299 ms
+linear_invariant_d6_1 certified 6.265 ms
+linear_invariant_d6_2 certified 5.324 ms
+linear_invariant_d7_0 certified 5.232 ms
+linear_invariant_d7_1 certified 5.579 ms
+linear_invariant_d7_2 certified 5.73 ms
+linear_equivalence_d2 certified 3.579 ms
+linear_equivalence_d3 certified 5.28 ms
+linear_equivalence_d4 certified 10.128 ms
+linear_equivalence_d5 certified 18.576 ms
+linear_late_error_d2 counterexample 0.329 ms
+linear_late_error_d3 counterexample 0.444 ms
+linear_late_error_d4 counterexample 0.606 ms
+linear_late_error_d5 counterexample 0.999 ms
+linear_late_error_d6 counterexample 1.316 ms
+linear_late_error_d7 counterexample 2.046 ms
+linear_late_error_d8 counterexample 2.763 ms
+linear_random_false_0 counterexample 0.198 ms
+linear_random_false_1 counterexample 0.191 ms
+linear_random_false_2 counterexample 0.178 ms
+linear_random_false_3 counterexample 0.173 ms
+linear_random_false_4 counterexample 0.175 ms
+linear_random_false_5 counterexample 0.301 ms
+linear_word_order counterexample 0.525 ms
+ideal_mutual_squares certified 10.862 ms
+ideal_budget unknown 1.982 ms
+ideal_mutant_update counterexample 6.028 ms
+ideal_mutant_initial counterexample 6.867 ms
+ideal_product_scale1 certified 6.226 ms
+ideal_product_scale2 certified 5.801 ms
+ideal_product_scale3 certified 5.923 ms
+ideal_product_scale5 certified 6.306 ms
+ideal_cassini certified 5.447 ms
+ideal_cassini_mutant counterexample 7.325 ms
+ideal_chain_d3 certified 16.342 ms
+ideal_chain_d4 certified 32.095 ms
+ideal_chain_d5 certified 55.934 ms
+sum_binomial_m1_moment0 certified 2.686 ms
+sum_binomial_m1_moment1 certified 31.016 ms
+sum_binomial_m1_moment2 certified 47.632 ms
+sum_binomial_m1_moment3 certified 220.754 ms
+sum_binomial_m2_moment0 certified 19.534 ms
+sum_binomial_m2_moment1 certified 97.425 ms
+sum_binomial_m2_moment2 certified 233.017 ms
+sum_m1_moment3_small_template unknown 76.412 ms
+sum_m2_moment2_small_template unknown 83.879 ms
+sum_franel_order1_budget unknown 30.657 ms
+{
+  "cases": 59,
+  "certified": 38,
+  "counterexample": 17,
+  "unknown": 4,
+  "mutations": 818,
+  "mutations_accepted": 0
+}

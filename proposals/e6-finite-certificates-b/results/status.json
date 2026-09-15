@@ -1,0 +1,17 @@
+{
+  "project": "Forge finite certificates extension prototypes",
+  "date": "2026-09-15",
+  "repository_snapshots": {
+    "Forge": "674521027d968d59f7b83220ed52304a85cb55e2",
+    "Leant": "6bf05ad78c467989e68290f2d08bbed40802d485",
+    "Djex": "e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5"
+  },
+  "python_search": "EXECUTED",
+  "independent_stdlib_replay": "78 accepted, python -S",
+  "pytest": "318 passed; 148 rejection controls, 84 differential cases",
+  "lean_core_specimens": "NOT_RUN",
+  "lean_mathlib_replay_targets": "NOT_RUN",
+  "lean_tactic_integration": "NOT_IMPLEMENTED",
+  "head_to_head_tactic_benchmark": "NOT_RUN",
+  "claims": "Exact finite algebraic certificates, tested search implementations, written mathematical soundness proofs. Not Lean-kernel receipts."
+}

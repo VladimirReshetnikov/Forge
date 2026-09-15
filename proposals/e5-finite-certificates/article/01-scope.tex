@@ -1,0 +1,126 @@
+\section{The incremental objective}
+\label{sec:objective}
+
+The most useful next contribution to Forge is not more orchestration. It is a
+small number of new reasoning domains with a precise admission test, a concrete
+algorithm, and a short route from search output to a Lean proof. This proposal
+adds three such domains. Their common feature is that they replace unbounded
+execution or unfolding by a finite closure computation.
+
+\subsection{What the audit establishes}
+
+The Forge snapshot reviewed here is
+\code{674521027d968d59f7b83220ed52304a85cb55e2}. Its merged article, status ledger,
+structural algorithms, and provenance appendix already cover a great deal:
+demand-directed theorem use, structural induction and generalization, auxiliary
+lemma synthesis, exact polynomial sums, state-machine conserved quantities,
+polynomial equality multipliers, and nonlinear and Boolean certificate
+workers~\cite{forge,forge-structural,forge-status,forge-provenance}. Those ideas
+are prerequisites, not contributions of this article.
+
+The important boundary is more specific. The implemented state-machine
+certificate in the structural section checks
+\[
+ I(F(s))=I(s),
+\]
+whereas an invariant only needs its zero set to be preserved. The same section
+correctly notes that simultaneously searching for unknown $I_j$ and unknown
+$H_{ij}$ in
+\[
+ I_i(F(s))=\sum_j H_{ij}(s)I_j(s)
+\]
+is a bilinear problem. The present proposal supplies a concrete alternative:
+generate the required invariant ideal from the target, then compute the
+multipliers after the generating set has stabilized. This changes both the
+search problem and the fragment for which a completeness argument is available.
+
+The audit read the merged algorithm and status material, rather than claiming
+a byte-for-byte review of all nine historical submissions. Some long connector
+responses were truncated; the successive structural ranges and the provenance
+inventory were used to resolve the relevant boundary. An unresponsive repository
+search index was not used as evidence that a term was absent. The exact locations
+and limitations are recorded in \code{docs/audit.md}.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}p{0.21\linewidth}XX@{}}
+\toprule
+Area & Existing ingredient & Increment supplied here\\
+\midrule
+Recursive arithmetic & Polynomial differences and conserved quantities &
+Exact closure of all target observations under switched linear updates.\\
+Polynomial invariants & General inductiveness suggested; multiplier identity format known &
+Target-generated ascending ideals; automatic strengthening; concrete counterexample extraction.\\
+Finite sums & Additive polynomial recurrences &
+Binomial powers and moments; a pole-free telescoping template and exact coefficient synthesis.\\
+Leant behavior & Exact candidate checks by \code{decide} and bounded \code{simp} &
+A restricted universal-behavior adapter based on checked fold compilation and closure certificates.\\
+\bottomrule
+\end{tabularx}
+\caption{The proposed delta, not a restatement of the existing architecture.}
+\end{table}
+
+\subsection{A shared question, three different closures}
+
+Consider a state $s$, an update $F$, and an observation $q$. Instead of asking
+``which invariant should I guess?'', ask:
+\begin{quote}
+What additional observations must vanish now to ensure that the desired
+observation vanishes after every possible future update?
+\end{quote}
+
+For linear maps, observations are row vectors and closure is linear span. For
+polynomial maps, observations are polynomials and closure is an ideal. For
+symbolic sums, observations are shifted summands and closure is taken modulo
+known identities and telescoping differences. The mathematical structures differ,
+but each gives a disciplined way to manufacture the auxiliary facts needed by
+an induction proof.
+
+This is more useful than a collection of isolated examples. A single linear
+worker covers equivalence of finite-state numeric folds, linear recurrence
+implementations, and affine accumulator programs. A single ideal worker covers
+coupled nonlinear recurrences and invariants whose values change but whose zero
+sets do not. A single summation worker produces proofs of recurrences for whole
+families of finite sums rather than evaluating isolated inputs.
+
+\subsection{The notation and outcome contract}
+
+All executed searches use exact rational arithmetic. A finite alphabet
+$\Sigma$ indexes finitely many total updates. The execution of a word
+$w=a_1\cdots a_t$ is
+\[
+ F_w(s)=F_{a_t}(\cdots F_{a_2}(F_{a_1}(s))\cdots),
+ \qquad F_\epsilon(s)=s.
+\]
+This convention is important: backward multiplication of observations reverses
+how a new symbol is attached to a recorded forward execution word.
+
+A successful result is a certificate for the exact supplied problem. A negative
+result is a concrete counterexample evaluated in that problem. Resource
+exhaustion or failure of a bounded template gives \Unknown. In the summation
+worker, success certifies a \emph{recurrence}, not automatically a closed form
+or uniqueness of its solution. These distinctions determine what each result
+is allowed to do; they are not merely labels in a report.
+
+The article distinguishes mathematical theorems about idealized algorithms,
+executed Python validation, uncompiled Lean source, and proposed integration.
+In particular, the proof that an unbounded ideal algorithm terminates does not
+turn an interrupted Gr\"obner-basis computation into a negative answer.
+
+\subsection{Relationship to established work}
+
+Observable closure belongs to the linear-algebraic theory of weighted-automaton
+equivalence; Kiefer gives a compact treatment of the classical field-based
+algorithms~\cite{kiefer}. Polynomial backward reasoning by ideals has direct
+antecedents in the program-analysis work of Cachera, Jensen, Jobin, and
+Kirchner~\cite{cachera,celtique}. Creative telescoping is an established symbolic
+summation method, including modern algorithms that keep certificates
+compact~\cite{brochet-salvy}. The specific contribution here is to turn these
+ideas into deliberately small, independently replayable workers at Forge's
+existing boundary, and to expose the semantic obligations their integration
+actually needs.
+
+No claim is made that the demonstrations would defeat every existing tactic or
+library lemma. A one-line application of a previously proved theorem may beat
+any search. The improvement sought is the ability to discover a finite
+explanation when that theorem or invariant has not yet been supplied.

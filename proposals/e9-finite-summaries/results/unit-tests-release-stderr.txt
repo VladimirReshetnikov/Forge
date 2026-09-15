@@ -1,0 +1,46 @@
+test_bad_checker_kind (test_certificates.Decoding.test_bad_checker_kind) ... ok
+test_bool (test_certificates.Decoding.test_bool) ... ok
+test_degree_cap (test_certificates.Decoding.test_degree_cap) ... ok
+test_duplicate_json_keys (test_certificates.Decoding.test_duplicate_json_keys) ... ok
+test_duplicate_terms (test_certificates.Decoding.test_duplicate_terms) ... ok
+test_explicit_zero (test_certificates.Decoding.test_explicit_zero) ... ok
+test_float (test_certificates.Decoding.test_float) ... ok
+test_negative_denominator (test_certificates.Decoding.test_negative_denominator) ... ok
+test_noncanonical (test_certificates.Decoding.test_noncanonical) ... ok
+test_rational_roundtrip (test_certificates.Decoding.test_rational_roundtrip) ... ok
+test_univariate_guard (test_certificates.Decoding.test_univariate_guard) ... ok
+test_zero_denominator (test_certificates.Decoding.test_zero_denominator) ... ok
+test_constant_lead (test_certificates.OreAndSeeds.test_constant_lead) ... ok
+test_initial_values_not_enough_countermodel (test_certificates.OreAndSeeds.test_initial_values_not_enough_countermodel) ... ok
+test_missing_reset (test_certificates.OreAndSeeds.test_missing_reset) ... ok
+test_missing_root (test_certificates.OreAndSeeds.test_missing_root) ... ok
+test_noncommutative (test_certificates.OreAndSeeds.test_noncommutative) ... ok
+test_roots_beyond_resource_limit_unknown (test_certificates.OreAndSeeds.test_roots_beyond_resource_limit_unknown) ... ok
+test_singularity_reset (test_certificates.OreAndSeeds.test_singularity_reset) ... ok
+test_understated_root_bound (test_certificates.OreAndSeeds.test_understated_root_bound) ... ok
+test_zero_coefficient_search_regression (test_certificates.OreAndSeeds.test_zero_coefficient_search_regression) ... ok
+test_changed_flux (test_certificates.TelescopeCertificates.test_changed_flux) ... ok
+test_franel (test_certificates.TelescopeCertificates.test_franel) ... ok
+test_insufficient_ansatz_unknown (test_certificates.TelescopeCertificates.test_insufficient_ansatz_unknown) ... ok
+test_missing_flux (test_certificates.TelescopeCertificates.test_missing_flux) ... ok
+test_parameter_misbinding (test_certificates.TelescopeCertificates.test_parameter_misbinding) ... ok
+test_q_zero (test_certificates.TelescopeCertificates.test_q_zero) ... ok
+test_zero_operator (test_certificates.TelescopeCertificates.test_zero_operator) ... ok
+test_bad_coordinates (test_certificates.WordCertificates.test_bad_coordinates) ... ok
+test_counterexample_fake_zero (test_certificates.WordCertificates.test_counterexample_fake_zero) ... ok
+test_empty_counterexample (test_certificates.WordCertificates.test_empty_counterexample) ... ok
+test_extra_field (test_certificates.WordCertificates.test_extra_field) ... ok
+test_initial_binding (test_certificates.WordCertificates.test_initial_binding) ... ok
+test_missing_letter (test_certificates.WordCertificates.test_missing_letter) ... ok
+test_nonaffine_lift_refused (test_certificates.WordCertificates.test_nonaffine_lift_refused) ... ok
+test_observer_degree_refused (test_certificates.WordCertificates.test_observer_degree_refused) ... ok
+test_output_binding (test_certificates.WordCertificates.test_output_binding) ... ok
+test_polynomial_input_degree_trap (test_certificates.WordCertificates.test_polynomial_input_degree_trap) ... ok
+test_transition_binding (test_certificates.WordCertificates.test_transition_binding) ... ok
+test_valid (test_certificates.WordCertificates.test_valid) ... ok
+test_zero_initial_rank_zero (test_certificates.WordCertificates.test_zero_initial_rank_zero) ... ok
+
+----------------------------------------------------------------------
+Ran 41 tests in 0.231s
+
+OK

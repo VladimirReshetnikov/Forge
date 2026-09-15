@@ -1,0 +1,227 @@
+\section{Cyclic obligations compiled to well-founded proofs}
+\label{sec:cycles}
+
+\subsection{A repeated goal is a candidate recursive call}
+
+Existing tabling must not turn an active goal into its own proof. The proposed
+extension preserves that rule. It changes what happens \emph{after} a recursive
+pattern has been found: a cyclic dependency may be recorded as an unaccepted
+proof-program candidate, whose recursive calls must subsequently be justified by
+well-founded descent.
+
+This direction is motivated by cyclic equational proof systems such as CycleQ,
+and by recent work translating abstract cyclic proofs into induction
+\cite{cycleq,unravelling}. The first Forge implementation should be substantially
+more restricted than those general results. It should require a concrete scalar
+or lexicographic ranking that Lean can use with ordinary well-founded induction.
+There is no need to trust an arbitrary cyclic proof graph or implement a general
+cyclic-proof kernel.
+
+\subsection{The typed object to compile}
+
+Each graph node $v$ has a telescope $\Gamma_v$, a state type $S_v$ packaging its
+varying inputs, and a proposition family $P_v:S_v\to\mathsf{Prop}$. An edge
+$e:v\to w$ carries a typed argument map $\sigma_e:S_v\to S_w$ together with
+any branch condition under which that call is needed. A local constructor must
+prove $P_v(x)$ from the recursive calls actually used in that branch and any
+already checked nonrecursive facts.
+
+These are logical edges, not just syntactic similarities. A matched variable
+permutation needs a well-typed substitution; a cast between different index
+types needs a proof; and a change to a dependent hypothesis needs an explicit
+transport. The tagged state space is
+\[
+ S=\sum_{v:V}S_v,
+ \qquad P(v,x)=P_v(x).
+\]
+The tag allows mutually recursive lemmas with different input types to be
+compiled as one induction over a sum type. In an initial prototype integration,
+a homogeneous telescope can simplify implementation, but it should not be baked
+into the mathematical contract.
+
+\begin{theorem}[Ranked local constructors]\label{thm:cyclic}
+Let $\prec$ be a well-founded relation on $S$. Suppose that for every $s:S$,
+a checked local constructor proves $P(s)$ from proofs of $P(t)$ for the recursive
+calls it uses, and each such call has a checked proof $t\prec s$. Then
+$\forall s,\,P(s)$.
+\end{theorem}
+\begin{proof}
+Apply well-founded induction to $P$. At state $s$, the induction hypothesis
+supplies $P(t)$ for each $t\prec s$. The checked descent proofs permit every
+recursive call in the local constructor to be replaced by an instance of that
+hypothesis. Applying the constructor proves $P(s)$.
+\end{proof}
+
+The theorem requires all branch cases to be covered and all local constructors
+to be checked. A ranking of a graph alone does not meet those requirements.
+The included Python code checks only the descent component for supplied graphs;
+it does not extract those graphs from Lean or construct their logical branches.
+
+\subsection{Why node phases matter}
+
+Consider two obligations with calls
+\[
+ P(n)\longrightarrow Q(n),\qquad
+ Q(n)\longrightarrow P(n-1)\quad(n\ge1).
+\]
+The first edge does not decrease $n$. Rejecting it independently would miss a
+valid mutual-induction structure. A rank on the tagged state resolves this:
+\[
+ \rho(P,n)=2n+1,\qquad \rho(Q,n)=2n.
+\]
+Each edge now decreases by exactly one. The phase is not an arbitrary tie-breaker
+in search order: it is part of the mathematical termination measure.
+
+The prototype synthesizes this rank by enumerating small nonnegative weights
+and node phases. A production solver can instead synthesize phases jointly with
+affine weights. An acyclic run of zero-progress edges suggests phases cheaply:
+assign reverse topological heights within a candidate phase graph, then scale
+the primary measure sufficiently to dominate phase resets. Cycles of purely
+zero-progress edges cannot be repaired by phases alone.
+
+\subsection{Permuted arguments and lexicographic growth}
+
+Two other fixtures distinguish useful ranking families.
+
+For a call $(x,y)\mapsto(y,x-1)$ under $x\ge1$, neither a fixed-position
+``first argument always decreases'' check nor a requirement that both arguments
+shrink is appropriate. The rank $x+y$ decreases by one. This also covers the
+standard subtractive Euclidean branches, when their positive-subtraction guards
+are retained.
+
+For calls
+\[
+ (x,y)\mapsto(x-1,2y)\quad(x\ge1),\qquad
+ (x,y)\mapsto(x,y-1)\quad(y\ge1),
+\]
+lexicographic rank $(x,y)$ works. There is no globally decreasing nonnegative
+affine scalar $a x+b y+c$ for both branches: the second requires $b>0$, while
+the first would require $a-b y\ge1$ for unbounded $y$. This gives a meaningful
+ablation between scalar and lexicographic ranking search.
+
+The compiler must use lexicographic well-foundedness, not encode $(x,y)$ as
+$a x+b y$ with a guessed fixed multiplier. Such an encoding is valid only when a
+bound on the lower-priority component is available and proved.
+
+\subsection{A tempting but invalid local rule}
+
+Suppose the graph contains
+\[
+ (x,y)\mapsto(x-1,y+1)\quad(x\ge1),\qquad
+ (x,y)\mapsto(x+1,y-1)\quad(y\ge1).
+\]
+Every edge decreases \emph{some} argument. Nevertheless,
+\[
+ (1,0)\longrightarrow(0,1)\longrightarrow(1,0)
+\]
+is an infinite repeatable cycle. The decrease on one edge is replenished by the
+other. Neither a local decreasing-variable flag nor the existence of one
+favorable cycle proves global well-foundedness.
+
+The prototype's ranking search returns \code{unknown} here. Its size-change
+closure also fails the acceptance criterion. The concrete two-cycle explains
+this particular failure, but exhaustion of a ranking grammar in an arbitrary
+case is not itself evidence of nontermination.
+
+\subsection{Size-change closure as a proposal filter}
+
+A size-change graph records relations between caller measures and callee measures.
+The implementation uses entries $0,1,2$ for unknown, nonincrease, and strict
+decrease. Along a composable path, an unknown comparison annihilates that path;
+otherwise it is strict if either constituent is strict. Multiple paths between
+an input and output retain the strongest established comparison.
+
+Writing $\otimes$ for path composition and $\oplus$ for maximum strength,
+\[
+ (G\circ H)_{ij}=\bigoplus_k G_{ik}\otimes H_{kj}.
+\]
+Compute the closure of graphs of \emph{nonempty} paths, retaining source and
+target node tags. The standard size-change test requires a strict diagonal
+entry in every idempotent self-graph in that closure. A failure means that this
+abstraction did not certify descent; a success relies on all recorded local
+comparisons being semantically valid \cite{cycleq,unravelling}.
+
+In this implementation the closure is diagnostic and guides ranking search.
+It is not passed off as a Lean termination proof. The first compiler accepts
+only an explicit checked ranking. A later release could formalize an abstract
+size-change soundness theorem or implement a general unravelling construction,
+but that is separate work with a separate proof obligation.
+
+\subsection{Exact affine and lexicographic certificates}
+
+The executable graph language uses natural-number measures and guarded affine
+updates represented over the integers. For an edge $e:v\to w$ with update
+$F_e$, a scalar ranking certificate proves
+\[
+ \rho_v(x)-\rho_w(F_e(x))-1\ge0.
+\]
+Subtracting one encodes strict decrease on integral ranks. Replacing this
+condition by nonincrease is a soundness bug, not a harmless relaxation.
+
+The checker proves the inequality by an explicit nonnegative rational
+combination of the edge's guard polynomials, the natural-domain inequalities
+$x_i\ge0$, and the constant inequality $1\ge0$. It separately proves that every
+updated measure is nonnegative. Without the latter check, a syntactically
+decreasing integer expression could leave the claimed well-founded domain.
+
+For a lexicographic tuple, the certificate gives a pivot for every edge. All
+components before the pivot must be equal, and the pivot decreases by at least
+one. Later components need not decrease. The implemented checker requires
+literal affine equality for the earlier components; a production extension may
+accept guarded equality proved by two checked inequalities instead.
+
+All ranking coefficients and phases in the prototype are nonnegative integers,
+so the ranks map every natural state to a natural. More expressive ranks can
+have signed coefficients, but then their nonnegativity over each node's invariant
+region becomes an additional obligation. They should not be admitted merely
+because they decrease along the sampled calls.
+
+\subsection{A concrete production synthesis algorithm}
+
+For one affine rank, use unknowns $w_{vi}$ and phases $b_v$ in
+$\rho_v(x)=b_v+\sum_i w_{vi}x_i$. For each edge, introduce nonnegative Farkas
+multipliers $\lambda_{ej}$ and equate coefficients in
+\[
+ \rho_v(x)-\rho_w(F_e(x))-1=\sum_j\lambda_{ej}g_{ej}(x).
+\]
+The update and guard coefficients are fixed, so this is a linear feasibility
+problem in the rank parameters and multipliers. Solve over rationals, scale to
+integral rank coefficients if necessary, regenerate all exact identities, and
+check them. The solver's numerical feasibility verdict is not the certificate.
+
+For a lexicographic tuple of fixed length, choose a pivot for each edge, enforce
+prefix equality, and solve the resulting linear problem. Pivot choices can be
+enumerated for small SCCs or represented by finite selectors in an SMT/MILP
+proposer. The backend must export the selected pivots and exact coefficient
+witnesses, not a floating-point tuple that is rounded without rechecking.
+
+The Python implementation uses bounded enumeration instead: common weights
+across nodes, small individual phases, then permutations of the original
+coordinates as a lexicographic fallback. Cone membership is solved by enumerating
+linearly independent supports of size at most the affine coefficient dimension.
+This is appropriate for its one- and two-variable tests; it is not proposed as
+a scalable replacement for an exact LP backend.
+
+\subsection{Compiling an SCC without introducing circular declarations}
+
+A practical Lean compiler can close one strongly connected component as follows.
+First, package its node goals into the tagged family $P$. Second, construct a
+well-founded relation from the accepted rank. Third, build one local proof
+constructor per node using ordinary case splits and the already checked
+nonrecursive facts. Recursive edges become accesses to the well-founded
+induction hypothesis, instantiated at the typed callee state and supplied with
+the corresponding descent proof. Finally, project the theorem for the entry
+node and original arguments.
+
+No node theorem should be inserted into the environment as an assumed theorem
+while its SCC is being checked. The only recursive authority is the induction
+hypothesis provided by the well-founded recursor. Lean supports structural and
+well-founded recursive definitions through ordinary kernel-checked terms;
+\code{termination\_by} and \code{decreasing\_by} are possible elaboration
+interfaces, not a new trusted proof rule \cite{lean-recursion,lean-inductive}.
+
+The first implementation should support explicit tagged states and \emph{given}
+local constructors, then add graph extraction. Trying to discover dependent
+back-edge substitutions, generate branches, infer ranks, and lower proofs all
+at once makes failures difficult to localize. The supplied examples provide
+separate descent gates before that larger integration begins.

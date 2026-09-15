@@ -1,0 +1,243 @@
+\section{Continuation-local synthesis}
+\label{sec:continuations}
+
+\subsection{A concrete composition failure}
+
+Leant's current indexing diagnostics are unusually useful because they separate
+missing expressiveness from poor composition order. The original bounded Haskell
+query produces 256 checked candidates and falsifies all of them. Separate probes
+find both function-valued Church folds and the required integer-case step; the
+step appears at candidate 5 in an isolated context and candidate 219 in a larger
+context. The report explicitly warns that neither number is the step's ordinal
+inside the original whole-term search \cite{leant-diagnostic}.
+
+The appropriate response is therefore not ``add function types to the carrier
+grammar.'' They are already supported. It is to expose a fold's algebra as a
+separate synthesis problem, constrain that algebra using the residual
+specification, and avoid repeatedly discovering its local pieces inside many
+unrelated whole terms.
+
+\subsection{Recover the carrier from the elimination spine}
+
+Suppose a candidate expression is obtained by eliminating a polymorphic value
+and then applying the result to arguments of types $B_1,\ldots,B_k$, with final
+result type $C$. One useful carrier candidate is
+\begin{equation}\label{eq:carrier}
+ R=B_1\to\cdots\to B_k\to C.
+\end{equation}
+This is a constraint implied by that particular application spine, not a general
+solution to higher-rank type inference. Other spines, other carriers, and
+alternative polymorphic instantiations remain separate search alternatives.
+
+For integer indexing with a supplied default $d:A$, the last application is to
+an index $i:\Z$, and the observed result has type $A$. The carrier suggested by
+\eqref{eq:carrier} is $R=\Z\to A$. A right fold therefore needs
+\[
+ b:\Z\to A,
+ \qquad a:A\to(\Z\to A)\to(\Z\to A).
+\]
+The nonstructural input has moved \emph{inside} the fold carrier. This is the
+functional counterpart of generalizing an accumulator before induction, but the
+search object is now a local algebra rather than a strengthened theorem.
+
+\subsection{Derive contracts from a specification, not from a type}
+
+Let $J_d(xs,i)$ denote the total indexing operation that returns $d$ at negative
+or out-of-range indices. Its structural equations are
+\begin{align}
+ J_d([],i)&=d,\label{eq:index-base}\\
+ J_d(h::xs,i)&=
+ \begin{cases}
+ d,&i<0,\\
+ h,&i=0,\\
+ J_d(xs,i-1),&i>0.
+ \end{cases}\label{eq:index-step}
+\end{align}
+The type alone does not select this behavior: always returning $d$ has the same
+result type. The equations must come from the user's specification, a proved
+library characterization, or a separately proved unfolding of the intended
+operation.
+
+For the selected carrier, the equations induce local algebra contracts:
+\begin{align}
+ b(i)&=d,\label{eq:base-contract}\\
+ a(h,k)(i)&=
+ \begin{cases}
+ d,&i<0,\\
+ h,&i=0,\\
+ k(i-1),&i>0,
+ \end{cases}\label{eq:step-contract}
+\end{align}
+where $k$ is an arbitrary continuation. Treating $k$ as arbitrary is decisive.
+A candidate step is not allowed to exploit the behavior of one guessed tail
+function that happens to occur in a few examples.
+
+\begin{theorem}[Fold contract]\label{thm:fold}
+If $b$ and $a$ satisfy \eqref{eq:base-contract} and
+\eqref{eq:step-contract}, then for every finite list $xs$ and integer $i$,
+\[
+ \operatorname{foldr}(a,b,xs)(i)=J_d(xs,i).
+\]
+\end{theorem}
+\begin{proof}
+For the empty list, the left side is $b(i)$, so the base contract proves the
+claim. Suppose the claim holds for $xs$ at every integer index. The fold of
+$h::xs$ is $a(h,\operatorname{foldr}(a,b,xs))$. For a negative index and for zero,
+the step contract gives the first two branches of \eqref{eq:index-step}.
+For a positive index it gives
+$\operatorname{foldr}(a,b,xs)(i-1)$, which is $J_d(xs,i-1)$ by the induction
+hypothesis. These cases exhaust the integers. The quantification over every
+index in the induction hypothesis is exactly why the carrier is $\Z\to A$.
+\end{proof}
+
+The synthesized term has the following shape:
+\begin{lstlisting}
+fun default outerIndex input =>
+  input (Int -> A)
+    (fun head tailFn localIndex =>
+      if localIndex < 0 then default
+      else if localIndex = 0 then head
+      else tailFn (localIndex - 1))
+    (fun _ => default)
+    outerIndex
+\end{lstlisting}
+This is explanatory Lean-like syntax. The archive's executable version uses a
+small explicitly typed intermediate language, and its Lean specimen states the
+corresponding theorem for encoded lists.
+
+\subsection{The Church representation boundary}
+
+For a finite list $xs$, define its Church encoding by
+\[
+ \operatorname{encode}(xs)(R,a,b)=\operatorname{foldr}(a,b,xs).
+\]
+Theorem~\ref{thm:fold} immediately proves the indexing theorem for
+$\operatorname{encode}(xs)$. It does \emph{not} establish that every arbitrary
+Lean value with a Church-style type behaves as the encoding of a finite list.
+That stronger statement requires an appropriate representation or naturality
+hypothesis and a proof in the actual source theory.
+
+This matters especially in a synthesis engine that treats polymorphic values as
+opaque data. A source type is not an automatic relational-parametricity theorem.
+The prototype's acceptance language is deliberately named
+\code{encoded-finite-list-index-v1}. Changing it to an unrestricted
+Church-value claim causes the independent checker to reject the certificate.
+The article's theorem and the executable checker therefore have the same scope.
+
+\subsection{The executable search}
+
+The prototype builds the fold sketch, but does not insert the answer's four
+expressions as already chosen leaves. It enumerates four finite hole grammars:
+the base result, the negative branch, the zero branch, and the positive branch.
+The context contains the default, the input fold, the outer index, and $n$
+unhelpful element-valued binders. The step additionally contains the head,
+continuation, and local index. Candidate continuation arguments include
+$i+2,i+1,i,i-2,i-3,i-1$ in that order.
+
+The flat policy enumerates tuples from the four grammars, type-checks each whole
+term, and evaluates the same six training examples. The local policy first
+filters each hole against its local contract, using distinct symbolic-looking
+values for element binders and a continuation observation $k(j)=({\tt tail},j)$;
+it then enumerates the surviving tuples. Both policies use the same grammar
+and candidate order within each hole.
+
+Those local observations remain a search filter. Final acceptance uses an
+independent symbolic checker: it checks the carrier, the base and step binders,
+the outer application, the three branch results, and the affine predecessor
+argument. In particular, the positive branch must call the locally bound
+continuation at precisely $i-1$, not at the outer index. This checker is narrow
+by design, but its success is stronger than passing a finite example suite.
+The proof that the checked algebra implies list correctness is
+Theorem~\ref{thm:fold}; its Lean formalization is a remaining integration gate.
+
+\begin{lstlisting}
+completeFold(demand, specification):
+  for spine in compatibleEliminationSpines(demand):
+    R := carrierEquation(spine)
+    sketch := instantiateFoldAt(R)
+    contracts := deriveBaseAndStepContracts(specification, sketch)
+    for compatibleTuple in join(localSearch(contracts)):
+      term := assemble(sketch, compatibleTuple)
+      if sourceTypeCheck(term) and proveAlgebraContracts(term):
+        return applyCheckedFoldTheorem(term)
+  return Unknown
+\end{lstlisting}
+
+The implemented fragment has one selected fold schema, one carrier spine, and a
+fixed three-way integer case split. Automatic discovery of arbitrary recursive
+schemas, branch predicates, and source-level contracts is proposed rather than
+implemented. The value of the prototype is to isolate and measure local
+composition once these structures are available.
+
+\subsection{Do not replace relational compatibility by projections}
+
+Independent filtering is exact only when the specification factors into
+independent local conditions. Suppose two holes $u,v$ must satisfy $u+v=1$ and
+their domains are $\{0,1\}$. The allowed relation is
+\[
+ C=\{(0,1),(1,0)\}.
+\]
+Projecting onto the two coordinates and taking their Cartesian product introduces
+$(0,0)$ and $(1,1)$. Both projections are individually correct, but their product
+is not the original relation.
+
+A general implementation should therefore store residual constraints as finite
+relations or symbolic relations indexed by \emph{shared hole identifiers}.
+For finite relations, use natural joins: if $R_1$ mentions holes $(u,v)$ and
+$R_2$ mentions $(v,w)$, index both by the full identity of $v$, join matching
+rows, and retain witnesses for all constraints. For symbolic relations, keep
+shared metavariables owned by the same synthesis region and discharge the
+conjoined residual condition before accepting an assembled term.
+
+The indexing fragment factors after the constructor contract is fixed: the
+base, negative, zero, and positive results have separate conditions. Its
+one-survivor-per-hole result must not be generalized into a claim that all
+higher-order synthesis admits such a product decomposition.
+
+\subsection{Source identity, instantiation, and scheduling}
+
+The proposed Leant/Djex integration needs one new search object: an
+\emph{algebra region}. It retains the exact fold occurrence, selected source
+polytype, instantiated carrier, source universes, available lexical binders,
+local instance evidence, hole dependency relation, and residual contract. These
+are references to the existing typed-source inventory, not fresh spellings that
+will later be guessed back into the original context.
+
+Each hole receives only the source binders its contract permits. Removing a
+binder from a search context is a completeness-affecting choice unless a
+separation argument justifies the smaller interface. Accordingly, the first
+implementation should use a smaller interface as a preferred search branch,
+while preserving a budgeted branch with the original context. The finite
+prototype instead fixes the interface explicitly as part of its problem.
+
+Search continuations should be memoized by the algebra region and hole, not by
+pretty-printed type alone. A useful memo entry contains the next candidate
+cursor, already considered local terms, remaining shared budget, and the residual
+compatibility relation. Sibling holes may reuse a function head even when an
+ancestor-path rule forbids repeating that same head along a single application
+path; that distinction already matters in Djex's construction policies
+\cite{djex-rank}.
+
+This is not an invitation to reset the old global limits. Local checks, joins,
+whole-term construction, and verification must all be charged. The intended
+advantage is fewer useless complete combinations, not more hidden computation.
+A cvc5 SyGuS worker could later solve first-order arithmetic holes inside a
+fixed carrier, but it should not be asked to recover Lean's complete dependent
+or rank-N source semantics \cite{cvc5}. The initial implementation needs no SMT
+solver.
+
+\subsection{What the experiment isolates}
+
+With 12 distractor binders, the flat search reaches its first accepted term after
+50,940 whole-term candidates. The local search checks 61 components and assembles
+one whole term. A 256-candidate cutoff truncates the flat run, whereas the local
+run succeeds. These numbers measure the supplied finite grammar, whose ordering
+puts distractors early for both policies. They are not a measured 50,940-fold
+speedup and not evidence that the original Leant query has been fixed.
+
+The useful experimental conclusion is narrower and stronger: an explicit
+constructor contract can remove the combinatorial cross-product that causes a
+composition search to repeatedly combine locally wrong pieces. The production
+test must preserve Leant's original source signature, primitive inventory,
+binder order, behavioral predicate, and limits; the easier isolated step is a
+regression fixture, not a substitute acceptance target.

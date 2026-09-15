@@ -1,0 +1,163 @@
+\section{Concrete Lean, Forge, Leant, and Djex integration}
+\label{sec:integration}
+
+\subsection{Do not invent a new outer controller}
+The reviewed Forge runtime sketch already has obligations, scope keys,
+conditional candidates, and replies named \code{candidate}, \code{conditional},
+\code{progress}, and \code{noResult}. Those remain the right entry points for
+positive proof construction. They are sketches rather than an implemented
+\code{forge} runtime \cite{forge-runtime}.
+
+The new positive worker should return a \code{ConditionalCandidate} whose
+premises are the local polynomial identities, initial equalities, and a
+source-to-machine semantic bridge. Its constructor is the appropriate
+induction theorem. After those premises have Lean proofs, the ordinary Forge
+acceptance path may install the result. A Python Boolean is never submitted as
+that proof.
+
+The Kripke lane should return a separate \emph{diagnostic artifact}. The
+current reply sketch does not distinguish object-logic nonderivability from a
+source-goal refutation. Add a nominally separate artifact carrying its exact
+object formula, atom-origin map, and a proof about a selected derivation type.
+Do not encode it as a candidate for $\neg G$.
+
+\subsection{The smallest useful source-to-machine reifier}
+The first implementation should accept elaborated, monomorphic folds with
+fixed products of rational registers and explicit list element types. It can
+be built through six checkable transformations:
+\begin{enumerate}
+\item Locate an equality between supported folds or their fixed polynomial
+      output projections. Obtain the actual elaborated step functions and
+      initial states, not a reparsed display string.
+\item Normalize tuple projections and let-bindings using proved equations;
+      distinguish old-state register expressions from newly computed values.
+\item Reify literals, addition, multiplication, subtraction over $\Q$, and
+      natural powers into a typed polynomial AST. Refuse all other arithmetic
+      operations in the first version.
+\item Reify complete finite constructor matches as control edges. Every
+      constructor branch must have a corresponding transition; do not
+      interpret a partial pattern match as a total transition system.
+\item Build the product machine with one shared payload tuple per paired step.
+      Prove the equality between each original step and evaluation of its
+      reified polynomial update.
+\item Instantiate the fold/run correspondence and translate output equality
+      into the demanded polynomial difference. Keep this bridge among the
+      candidate's explicit proof obligations.
+\end{enumerate}
+
+These operations can initially be implemented in ordinary \code{MetaM} using
+Lean expression construction and standard elaboration. No undocumented
+incremental \code{grind} hook is required for this worker. The arithmetic
+identities can be discharged in separate local goals, and the completed
+invariant can then be supplied to \code{grind} as an ordinary lemma.
+
+This makes the contribution orthogonal to local saturation. The documented
+\code{grind} engine remains useful for closing local consequences; it is not
+being misdescribed as lacking congruence closure, arithmetic, or E-matching
+\cite{grind}. The added capability is choosing and proving a finite invariant
+that expresses an unbounded execution property.
+
+\subsection{The initial Lean proof path: source reconstruction}
+For each accepted certificate, emit the following obligations over the original
+register and input binders:
+\[
+ P_{q_0}(x_0)=0,\qquad G_q=C_qP_q,\qquad
+ P_{q'}\circ F_e=M_eP_q.
+\]
+Use \code{norm_num} for closed rational initial calculations and
+\code{ring} or \code{ring_nf} for the universal polynomial identities.
+Then use an ordinary induction theorem over the machine's reachability or
+input-list execution.
+
+The package's \code{emit_lean.py} performs the local source-emission part.
+It emits 222 named identity obligations from the 37 positive certificates into
+\code{lean/GeneratedIdentities.lean}. The file includes \code{\#print axioms}
+commands for later auditing. It does not emit or prove a bridge from arbitrary
+original Lean source, and no compiler was available here to validate those
+identities. The generated count is a count of \emph{local obligations}, not
+222 proved user theorems.
+
+\code{lean/Reachability.lean} supplies complete, but uncompiled, proof text for
+three generic induction bridges: reachable-state invariant preservation,
+fold invariant preservation, and relational fold preservation. A hand-written
+delayed-accumulator reconstruction appears in \code{lean/WorkedFold.lean}.
+These distinguish a concrete proof path from an abstract promise to ``replay in
+Lean.'' Their uncompiled status remains a material limitation.
+
+\subsection{A reflected checker is the next optimization, not a prerequisite}
+For larger instances, prove one theorem of the schematic form
+\begin{lstlisting}
+checkClosure problem certificate = true ->
+  forall state, Reachable problem state -> GoalsHold problem state
+\end{lstlisting}
+inside Lean. The data types need a semantic interpretation into the same
+rational polynomial ring used by the source bridge. Soundness factors into
+canonical decoding, correctness of sparse operations, the evaluated identity
+lemma, and the reachability induction theorem.
+
+Mathlib's multivariate polynomial evaluation infrastructure supplies relevant
+semantics and homomorphism lemmas \cite{mvpoly}. Its representation need not
+be the fastest executable representation. A compact sparse AST can carry its
+own denotation into \code{MvPolynomial}, with a proved correctness theorem for
+normalization. The external worker can retain any faster internal data structure
+because Lean checks only the emitted certificate.
+
+Clearing denominators row by row can reduce the rational checker to integer
+polynomial identities. Record each positive denominator and multiply the
+whole corresponding equation, rather than round coefficients. Prove the
+nonzero scalar cancellation once. This is a deterministic representation
+optimization; it does not alter the certificate's mathematical claim.
+
+\subsection{Universal behavioral assertions in Leant}
+At the reviewed Leant snapshot, the named \code{:synth f : TYPE where PROP}
+route checks the exact proposed candidate and attempts positive and negative
+proofs with \code{decide} and bounded simplification. A quantified assertion can
+remain inconclusive when those methods do not close it
+\cite{leant-behavior}.
+
+Extend that assertion checker with a new dispatch rule, not a new inhabitant
+search engine. When the asserted property is a supported universal fold
+equality, feed the exact candidate/reference pair to the product-machine
+reifier and observable-closure worker. A fully reconstructed Lean proof makes
+the behavioral assertion pass. A fully reconstructed concrete source execution
+can falsify it. A reifier refusal, search cutoff, or unproved semantic bridge
+leaves the assertion inconclusive.
+
+The candidate's original exact type and source identity remain unchanged.
+A successful machine certificate for one candidate cannot be used for another
+candidate with the same displayed type. This reuses the existing source-owned
+candidate discipline rather than claiming it as an invention.
+
+\subsection{Source-level quantifiers and arithmetic domains}
+A closed rational initial vector is the prototype's direct input. Universally
+quantified rational initial parameters can use the special initialization-edge
+construction in Section~\ref{sec:model}. More general parameter telescopes
+require a source bridge that proves this encoding preserves the quantifier
+order and variable dependencies.
+
+Positive rational polynomial identities also evaluate in a commutative
+$\Q$-algebra. This gives a route to real-valued versions of the same equalities,
+but the initial implementation must not silently cast an arbitrary source
+semantics into that setting. A rational trace only becomes a source-level
+counterexample after its values are well typed and its operations are proved
+to match the source operations. In particular, negative rational states do not
+automatically provide counterexamples to natural-number programs.
+
+\subsection{A precise Kripke-to-Lean target}
+Choose an IPC syntax and derivation system already formalized in Lean. Define a
+Boolean evaluator for finite models and prove that it agrees with the library's
+semantic forcing relation. The desired output theorem is schematically
+\begin{lstlisting}
+checkCountermodel Gamma goal certificate = true ->
+  Not (Nonempty (IPC.Derivation Gamma goal))
+\end{lstlisting}
+The inner \code{IPC.Derivation} is an object-language derivation type; the
+statement is not \code{Not (denote goal)}.
+
+An object sequent extracted from Djex's formula structure needs a faithful map
+of constructor-tagged disjunctions and conjunction arities, and an exact atom
+identity table. A successful object-model check does not prove the separate
+translation-completeness theorem for opaque quantified source types or
+class dictionaries. Until that theorem is available, report only the named
+object-logic result. Classical fallback may still prove the user's source
+formula.

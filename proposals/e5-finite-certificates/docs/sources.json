@@ -1,0 +1,111 @@
+{
+  "review_date": "2026-09-15",
+  "repositories": [
+    {
+      "repository": "VladimirReshetnikov/Forge",
+      "revision": "674521027d968d59f7b83220ed52304a85cb55e2",
+      "files": [
+        "README.md",
+        "docs/STATUS.md",
+        "docs/IDEAS-FROM-LEANT-DJEX.md",
+        "article/sections/05-structural.tex",
+        "article/sections/B-provenance.tex",
+        "lean/Forge/Design/Contracts.lean"
+      ],
+      "use": "Define the existing design, provenance, and incremental contribution boundary.",
+      "source_urls": [
+        "https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/README.md",
+        "https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/docs/STATUS.md",
+        "https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/docs/IDEAS-FROM-LEANT-DJEX.md",
+        "https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/article/sections/05-structural.tex",
+        "https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/article/sections/B-provenance.tex",
+        "https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/lean/Forge/Design/Contracts.lean"
+      ]
+    },
+    {
+      "repository": "VladimirReshetnikov/Leant",
+      "revision": "6bf05ad78c467989e68290f2d08bbed40802d485",
+      "files": [
+        "README.md",
+        "docs/behavioral-synthesis.md"
+      ],
+      "use": "Exact-candidate verification and the proposed universal numeric-fold behavior branch.",
+      "source_urls": [
+        "https://github.com/VladimirReshetnikov/Leant/blob/6bf05ad78c467989e68290f2d08bbed40802d485/README.md",
+        "https://github.com/VladimirReshetnikov/Leant/blob/6bf05ad78c467989e68290f2d08bbed40802d485/docs/behavioral-synthesis.md"
+      ]
+    },
+    {
+      "repository": "VladimirReshetnikov/Djex",
+      "revision": "e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5",
+      "files": [
+        "README.md"
+      ],
+      "use": "Synthesis and source-ownership context; no reimplementation claimed.",
+      "source_urls": [
+        "https://github.com/VladimirReshetnikov/Djex/blob/e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5/README.md"
+      ]
+    },
+    {
+      "repository": "leanprover-community/mathlib4",
+      "revision": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+      "files": [
+        "Mathlib/Algebra/MvPolynomial/Eval.lean",
+        "Mathlib/Data/Nat/Choose/Basic.lean",
+        "Mathlib/Data/Matrix/Mul.lean"
+      ],
+      "use": "Inspected source-level integration targets; no compatible build was executed.",
+      "source_urls": [
+        "https://github.com/leanprover-community/mathlib4/blob/1cf325a0cf67aca2b04d76b5380ff6a9e410aefa/Mathlib/Algebra/MvPolynomial/Eval.lean",
+        "https://github.com/leanprover-community/mathlib4/blob/1cf325a0cf67aca2b04d76b5380ff6a9e410aefa/Mathlib/Data/Nat/Choose/Basic.lean",
+        "https://github.com/leanprover-community/mathlib4/blob/1cf325a0cf67aca2b04d76b5380ff6a9e410aefa/Mathlib/Data/Matrix/Mul.lean"
+      ]
+    }
+  ],
+  "reference_lean_toolchain": "leanprover/lean4:v4.34.0",
+  "publications_and_documentation": [
+    {
+      "key": "kiefer",
+      "title": "Stefan Kiefer, Notes on Equivalence and Minimization of Weighted Automata",
+      "url": "https://arxiv.org/abs/2009.01217",
+      "use": "Primary notes; linear-space equivalence and distinguishing-word bounds."
+    },
+    {
+      "key": "cachera",
+      "title": "Cachera, Jensen, Jobin, Kirchner, Inference of Polynomial Invariants for Imperative Programs: A Farewell to Gröbner Bases",
+      "url": "https://doi.org/10.1007/978-3-642-33125-1_7",
+      "use": "Bibliographic and methodological antecedent; related HAL full text was access-blocked, not represented as fully read."
+    },
+    {
+      "key": "celtique",
+      "title": "Inria Celtique 2014 activity report: Fast inference of polynomial invariants",
+      "url": "https://rex-radar.inria.fr/report/2014/celtique/uid36.html",
+      "use": "Primary author-team description of backward polynomial analysis."
+    },
+    {
+      "key": "brochet-salvy",
+      "title": "Brochet and Salvy, Reduction-Based Creative Telescoping for Definite Summation of D-finite Functions",
+      "url": "https://arxiv.org/abs/2307.07216",
+      "use": "Primary antecedent for the general summation extension; not an implemented backend in this package."
+    },
+    {
+      "key": "sympy-polys",
+      "title": "SymPy polynomial manipulation reference",
+      "url": "https://docs.sympy.org/latest/modules/polys/reference.html",
+      "use": "Exact QQ domains, Gröbner bases, quotient/remainder reduction."
+    },
+    {
+      "key": "sympy-concrete",
+      "title": "SymPy concrete summation reference",
+      "url": "https://docs.sympy.org/latest/modules/concrete.html",
+      "use": "Gosper/hypergeometric background; not trusted by the independent checker."
+    },
+    {
+      "key": "ore-algebra",
+      "title": "SageMath ore_algebra package reference",
+      "url": "https://doc.sagemath.org/html/en/reference/spkg/ore_algebra.html",
+      "use": "Concrete optional general-telescoping proposer; not installed or benchmarked here."
+    }
+  ],
+  "scope_note": "Exact inspected ranges and retrieval limits are recorded in audit.md. Long connector responses were sometimes truncated; no exhaustive repository-absence or mathematical-priority claim is made."
+}

@@ -1,0 +1,60 @@
+{
+  "evidence": {
+    "basis": [
+      [],
+      [
+        [
+          [
+            [
+              0
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    ],
+    "schema": "forge-closure-cert-v1",
+    "step": [
+      []
+    ],
+    "target": [
+      [
+        [
+          [
+            [
+              0
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    ]
+  },
+  "mode": "linear",
+  "process_seconds": 1.1826507849999643,
+  "replay": {
+    "accepted": true,
+    "arithmetic_operations": 2,
+    "basis_dimensions": [
+      0,
+      1
+    ],
+    "kind": "closure-certificate"
+  },
+  "stats": {
+    "elapsed_seconds": 0.00121817399997326,
+    "generators": 1,
+    "grid_evaluations": 0,
+    "groebner_calls": 0,
+    "max_generated_degree": 0,
+    "membership_queries": 2,
+    "pullbacks": 0
+  },
+  "status": "proved"
+}

@@ -1,0 +1,158 @@
+\section{Boundary-safe telescoping for binomial-power moments}
+\label{sec:telescoping}
+
+\subsection{The new obligation is a sum, not a polynomial antidifference}
+
+The existing structural article handles additive polynomial recurrences by searching for a polynomial antidifference. Here the summand itself depends on the outer parameter and has moving support. Fix an integer $m\ge1$ and a rational polynomial $w(K)$. Define
+\begin{equation}
+ S(n)=\sum_{k=0}^{n}w(k)\binom nk^m,\qquad n\in\N.
+ \label{eq:moment}
+\end{equation}
+The worker seeks a first-order recurrence
+\begin{equation}
+ a(n)S(n+1)=b(n)S(n)
+ \label{eq:recurrence}
+\end{equation}
+with rational polynomials $a,b$ and $a\ne0$. This is a restricted creative-telescoping problem, not a general Zeilberger implementation. The general methodology is established~\cite{koutschan}; the deliverable here is a small certificate schema whose support boundaries can be proved once and reused.
+
+The moving upper endpoint matters. A formal identity valid only when $0<k<n$ cannot be summed as though it held at $k=0$ and $k=n+1$. Dividing by a binomial coefficient or by $n+1-k$ is particularly dangerous at the endpoint. The certificate below is designed to avoid those divisions.
+
+\subsection{The exact polynomial identity that search must find}
+
+Use indeterminates $N,K$ and set $D=N+1-K$. Search for $a(N),b(N)$ and $U(N,K)$ satisfying
+\begin{equation}
+ \big[a(N)(N+1)^m-b(N)D^m\big]w(K)
+ =D^m U(N,K+1)-K^m U(N,K).
+ \label{eq:flux-cert}
+\end{equation}
+Everything in \eqref{eq:flux-cert} is polynomial. The checker receives $m$ and $w$ from the original problem, parses the proposed $a,b,U$, substitutes $K+1$ exactly, expands independently, and compares coefficients. The producer cannot replace the requested weight or power in the certificate.
+
+\paragraph{Search as exact linear algebra.}
+For bounds $d,e$, use
+\[
+ a(N)=\sum_{i=0}^d a_iN^i,\quad
+ b(N)=\sum_{i=0}^d b_iN^i,\quad
+ U(N,K)=\sum_{i+j\le e}u_{ij}N^iK^j.
+\]
+Substitution into \eqref{eq:flux-cert} gives a homogeneous rational linear system. The prototype computes its nullspace, examines basis vectors with nonzero $a$, clears rational denominators, and performs exact replay. The number of unknown coefficients is
+\[
+ 2(d+1)+\frac{(e+1)(e+2)}2.
+\]
+The search raises $d$ and $e$ within configured bounds. It does not use samples of $S(n)$ to manufacture a recurrence, and it does not trust a symbolic summation function returning an answer without a flux.
+
+The candidate policy is intentionally modest: it inspects nullspace basis vectors and uses a bounded sufficient test for eventual nonvanishing of $a$. A failure is not a proof that no first-order recurrence exists, and it is not even a general infeasibility certificate for all possible bounded recurrence/regularity combinations. A different nullspace combination, regularity proof, denominator schema, or recurrence order might succeed.
+
+\subsection{The semantic bridge, including both endpoints}
+
+Interpret binomial coefficients as zero above their upper index. For $n\ge0$, define
+\begin{equation}
+ G(n,k)=\frac{k^m U(n,k)}{(n+1)^m}\binom{n+1}{k}^m.
+ \label{eq:flux}
+\end{equation}
+The only denominator is $(n+1)^m$, which is nonzero. For $0\le k\le n+1$, the scaled binomial identities give
+\begin{align}
+ (n+1)\binom nk&=(n+1-k)\binom{n+1}k,\label{eq:choose-n}\\
+ (k+1)\binom{n+1}{k+1}&=(n+1-k)\binom{n+1}k.
+ \label{eq:choose-k}
+\end{align}
+Both are valid at $k=n+1$: each side then vanishes where required. They can be established without canceling a possibly zero binomial coefficient. Mathlib's pinned binomial module supplies the inductive definition, support-zero lemmas, and scaled identities from which the bridge can be built~\cite{mathlib-choose}.
+
+\begin{theorem}[Binomial flux certificate]
+If \eqref{eq:flux-cert} holds as a polynomial identity and $m\ge1$, the sum \eqref{eq:moment} satisfies \eqref{eq:recurrence} for every $n\in\N$.
+\end{theorem}
+\begin{proof}
+Fix $n\ge0$ and $0\le k\le n+1$. Multiply \eqref{eq:flux-cert}, evaluated at $(n,k)$, by $\binom{n+1}k^m/(n+1)^m$. Using \eqref{eq:choose-n}, its left side becomes
+\[
+ a(n)w(k)\binom{n+1}k^m-b(n)w(k)\binom nk^m.
+\]
+Using \eqref{eq:choose-k}, its right side becomes $G(n,k+1)-G(n,k)$. Thus the local identity is valid on the entire summation range, including its endpoints.
+
+Sum from $k=0$ to $k=n+1$. The left side is $a(n)S(n+1)-b(n)S(n)$, because the additional $k=n+1$ term in the second sum is zero. The right side telescopes to $G(n,n+2)-G(n,0)$. The upper flux vanishes because $\binom{n+1}{n+2}=0$; the lower flux vanishes because $0^m=0$ for $m\ge1$. Therefore the difference is zero.
+\end{proof}
+
+The Python checker verifies the universal \emph{polynomial} identity and the scalar side conditions. The theorem above is the mathematical bridge from that identity to the sum. This bridge has not been compiled in Lean in the supplied package. It must be proved in Lean before the worker can close an original Lean summation goal.
+
+\subsection{The central-binomial identity, discovered and checked}
+
+For $m=2$ and $w=1$, the producer finds
+\[
+ a(N)=N+1,\qquad b(N)=4N+2,\qquad U(N,K)=2K-3N-3.
+\]
+The checker verifies
+\begin{align*}
+ &(N+1)^3-(4N+2)(N+1-K)^2\\
+ &\quad=(N+1-K)^2(2K-3N-1)-K^2(2K-3N-3).
+\end{align*}
+Consequently
+\[
+ (n+1)\sum_{k=0}^{n+1}\binom{n+1}k^2
+ =(4n+2)\sum_{k=0}^n\binom nk^2.
+\]
+The sequence $T(n)=\binom{2n}n$ satisfies the same recurrence. For example, applying the factorial formula in its valid range gives
+\[
+ \frac{T(n+1)}{T(n)}
+ =\frac{(2n+2)(2n+1)}{(n+1)^2}
+ =\frac{4n+2}{n+1},
+\]
+where the factorials are positive and $n+1$ is nonzero. Both sequences start at one. Induction therefore proves
+\begin{equation}
+ \boxed{\displaystyle\sum_{k=0}^n\binom nk^2=\binom{2n}n.}
+ \label{eq:vandermonde}
+\end{equation}
+
+This identity is classical; it is not a new theorem claimed by the report. The computational result is that the supplied restricted search finds the local certificate without receiving this recurrence or flux as input. The package stores the recurrence certificate, not a machine-checked proof of the factorial argument identifying the closed form.
+
+\subsection{Regularity is a separate certificate}
+
+A polynomial recurrence can hold at an index where $a(n)=0$, yet fail to determine $S(n+1)$. The prototype stores a nonnegative integer $N_0$ and a sign $\sigma\in\{-1,1\}$ such that
+\begin{equation}
+ \sigma a(N_0+T)=c_0+c_1T+\cdots+c_dT^d,
+ \quad c_0>0,\quad c_i\ge0.
+ \label{eq:regularity}
+\end{equation}
+Then $a(n)\ne0$ for every integer $n\ge N_0$. This is a sufficient positivity proof, not a root-isolation decision procedure. The search tries shifts from zero through twenty; the checker validates the supplied shift without trusting the search.
+
+\begin{proposition}[Using a recurrence to identify a sequence]
+Suppose $S$ and $T$ satisfy \eqref{eq:recurrence}, and $a(n)\ne0$ for $n\ge N_0$. If $S(N_0)=T(N_0)$, then $S(n)=T(n)$ for every $n\ge N_0$. To conclude equality for all natural indices, also verify every index below $N_0$.
+\end{proposition}
+\begin{proof}
+If equality holds at $n\ge N_0$, the recurrences give $a(n)(S(n+1)-T(n+1))=0$. Cancellation gives equality at $n+1$. Induct from $N_0$ and combine with the separately checked prefix.
+\end{proof}
+
+The recorded cubic squared-binomial moment has $a(n)=n^4-n^3=n^3(n-1)$ and $N_0=2$. It would be wrong to start recurrence cancellation at zero or one. The mutation suite changes the regularity start to zero and confirms rejection. The identity itself is still meaningful at the singular indices; it is the inference of the next value that fails there.
+
+\subsection{Selected discovered recurrences}
+
+The following table records $a,b$ with the convention $a(n)S(n+1)=b(n)S(n)$. It is an artifact summary, not a claim that these are minimal or uniquely normalized recurrences.
+
+\begin{center}
+\small
+\begin{tabular}{@{}cclll@{}}
+\toprule
+$m$ & $w(k)$ & $a(n)$ & $b(n)$ & $N_0$\\
+\midrule
+1 & $1$ & $1$ & $2$ & 0\\
+1 & $k$ & $n$ & $2n+2$ & 1\\
+1 & $k^2$ & $n$ & $2n+4$ & 1\\
+1 & $k^3$ & $n^3+3n^2$ & $2n^3+12n^2+18n+8$ & 1\\
+2 & $1$ & $n+1$ & $4n+2$ & 0\\
+2 & $k$ & $n^2$ & $4n^2+2n$ & 1\\
+2 & $k^2$ & $n^3$ & $4n^3+6n^2-2$ & 1\\
+2 & $k^3$ & $n^4-n^3$ & $4n^4+6n^3-8n^2-6n+4$ & 2\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A common factor of $a$ and $b$ cannot automatically be canceled from the \emph{flux certificate} unless the resulting flux still satisfies the polynomial identity. The producer only cancels a common polynomial factor of $a,b,U$ and then performs full replay. Other simplifications may be valid as sequence reasoning but need a separate argument at roots of the canceled factor.
+
+\subsection{Failure modes and the next genuinely useful generalization}
+
+The run deliberately includes two unknown cases. The cubic ordinary-binomial moment is unknown with flux degree at most five and becomes provable when the flux degree reaches six. A cubic-power binomial sum is unknown under the configured first-order bounds. Neither result proves that the sum identity is false.
+
+The next extension should be higher-order telescoping, not unbounded guessing of larger first-order polynomials. Search for
+\[
+ \sum_{j=0}^r a_j(n)S(n+j)=0
+\]
+with a flux expressed relative to a common supported hypergeometric term. The replayer must check every local shift identity, the union of shifted support ranges, the boundary contributions, and the nonvanishing of the leading coefficient on the recurrence range. An inhomogeneous boundary term should be retained rather than erased. This higher-order worker is a design direction, not an implemented feature of BFT.
+
+More general factorial ratios, rational summands, and alternating sums require additional source identities and denominator guards. The input schema should grow one semantic family at a time. Importing a general computer-algebra answer and hoping that \texttt{field\_simp} resolves all exceptional indices would undo the principal benefit of the boundary-safe design.

@@ -1,0 +1,278 @@
+\Needspace{8\baselineskip}
+\section{Worker II: finite residual closure for weighted behaviors}
+\label{sec:weighted}
+
+\subsection{Why a recursive equality can be linear algebra}
+
+Consider two programs that fold over a word. Their internal states may be
+different, and syntactic rewriting may not find a useful relation between them.
+Nevertheless, their observable outputs can have finite-dimensional linear
+representations. Once those representations are proved correct, equality for
+\emph{every word} becomes a finite closure problem.
+
+A rational weighted representation over a finite alphabet $\Sigma$ consists of
+\[
+ \alpha\in\Q^{1\times N},\qquad M_a\in\Q^{N\times N}\ (a\in\Sigma),
+ \qquad\beta\in\Q^{N\times1}.
+\]
+Use row vectors throughout. For $w=a_1\cdots a_k$, set
+\[
+ M_w=M_{a_1}\cdots M_{a_k},\qquad
+ f(w)=\alpha M_w\beta,
+\]
+with $M_\epsilon=I$. This is the usual linear-algebraic view of weighted
+automata over a field~\cite{kiefer,tzeng}. The relevant extension to Forge is a
+small certificate-producing worker for this fragment, not a new automata
+theory.
+
+Two representations can be compared by taking their difference:
+\begin{equation}
+ \alpha=(\alpha_L\ \alpha_R),\qquad
+ M_a=\diag(M^L_a,M^R_a),\qquad
+ \beta=\begin{pmatrix}\beta_L\\-\beta_R\end{pmatrix}.
+ \label{eq:weighted-difference}
+\end{equation}
+It suffices to decide whether $\alpha M_w\beta=0$ for all $w$. The dimensions
+need not agree, and no syntactic correspondence between their state components
+is assumed.
+
+\subsection{Reachable-space search}
+
+Let $\mathcal V=\spanQ\{\alpha M_w:w\in\Sigma^*\}$. This is a subspace of
+$\Q^{1\times N}$, so it has dimension at most $N$. A breadth-first worklist
+constructs a basis from reachable rows. Each row carries a word that reaches
+it.
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+queue := [(alpha, emptyWord)]
+basis := []
+while queue is not empty:
+    (v, w) := popFront(queue)
+    if v * beta != 0:
+        return DistinguishingWord(w)
+    if v is in span(basis):
+        continue
+    append v to basis
+    for each letter a:
+        pushBack(queue, (v * M[a], w ++ [a]))
+extract alpha coordinates and transition coordinates in basis
+return ClosureCertificate(basis, coordinates)
+\end{lstlisting}
+\end{minipage}\par
+
+The span test is exact rational elimination. There are at most $N$ independent
+rows, and each independent row enqueues at most $|\Sigma|$ successors. Thus at
+most $1+|\Sigma|N$ queue rows are examined when no counterexample or budget
+cutoff ends the run early. Dependent rows do not need expansion because the
+successors of a linear combination are the same linear combinations of the
+successors.
+
+\begin{theorem}[Complete finite search over a field]
+For a finite-dimensional rational weighted representation and no resource
+cutoff, the algorithm returns either a word $w$ with $f(w)\ne0$ or a finite
+closure certificate proving $f(w)=0$ for every word.
+\end{theorem}
+\begin{proof}
+Each appended row increases the dimension of the current span, so only finitely
+many are appended and the queue terminates. Every appended row is reachable.
+On termination, the span contains $\alpha$ and is closed under every right
+multiplication $M_a$: successors of every basis row were processed and found in
+the final span. Induction on word length puts every $\alpha M_w$ in that span.
+Every basis row has zero product with $\beta$, so every reachable row does as
+well. If the algorithm stops earlier on a nonzero product, its stored word is
+an explicit counterexample.
+\end{proof}
+
+\begin{proposition}[Bounded distinguishing words]
+If the represented series is nonzero, some distinguishing word has length at
+most $N-1$.
+\end{proposition}
+\begin{proof}
+Let $V_j$ be the span of rows reached by words of length at most $j$. If
+$\alpha=0$, the series is zero. Otherwise $\dim V_0=1$. Whenever
+$V_j=V_{j+1}$, that space is closed under every transition and hence contains all
+reachable rows. Before stabilization, its dimension increases strictly. It
+therefore stabilizes by $j=N-1$. If the output is zero on all rows through that
+length, it is zero on their span and thus on all words.
+\end{proof}
+
+The proof does not say that brute-force enumeration through length $N-1$ is a
+good algorithm: that enumeration is exponential in $N$ for a nontrivial
+alphabet. The reachable-space search avoids that expansion by recognizing
+linear dependence.
+
+\subsection{The closure certificate}
+
+Let the rows of $B\in\Q^{r\times N}$ span a suitable closed space. Supply a row
+$c_0\in\Q^{1\times r}$ and matrices $C_a\in\Q^{r\times r}$ such that
+\begin{equation}
+ \alpha=c_0B,\qquad BM_a=C_aB\quad(a\in\Sigma),\qquad B\beta=0.
+ \label{eq:weighted-cert}
+\end{equation}
+The replay checks are only matrix equalities over exact rationals.
+
+\begin{theorem}[Weighted-closure soundness]
+Equation~\eqref{eq:weighted-cert} implies $\alpha M_w\beta=0$ for all words $w$.
+\end{theorem}
+\begin{proof}
+Writing $C_w=C_{a_1}\cdots C_{a_k}$, induction on the word gives
+\[
+ \alpha M_w=c_0C_wB.
+\]
+The empty case is the initial-coordinate identity. The extension step is
+\[
+ c_0C_wBM_a=c_0C_wC_aB.
+\]
+Multiply the resulting equation by $\beta$ and use $B\beta=0$.
+\end{proof}
+
+Replay does \emph{not} need a rank computation. The rows of $B$ can be redundant,
+and even a larger non-reachable closed space can certify the result if the
+three identities hold. Independence is needed only for the efficiency and
+termination analysis of the search. Keeping it out of the certificate checker
+makes the proof principle smaller.
+
+The zero-initial-vector case admits $r=0$: the initial-coordinate equality then
+forces $\alpha=0$, and the closure and output conditions are empty. The empty
+alphabet case has just the empty word and requires no transition identities.
+Both cases are covered by the executed tests. Matrix dimensions and the exact
+alphabet inventory are checked explicitly, so omitting a difficult letter is
+not an allowed certificate simplification.
+
+A counterexample certificate is smaller still: it contains a word, and replay
+computes its nonzero output from the original representation. This is a genuine
+negative answer in the encoded fragment. It transfers to a source program only
+after the source-to-representation bridge is proved, just as a positive answer
+does.
+
+\subsection{Building representations from code}
+
+\paragraph{Linear folds.}
+If a state update is $v\mapsto vM_a$ and the output is $v\beta$, the
+representation is direct. The front end must prove the equations connecting
+these coordinates to the source fold. It should not infer those equations from
+the shape of pretty-printed code.
+
+\paragraph{Affine folds.}
+For $v\mapsto vA_a+b_a$, adjoin a constant coordinate and represent the state as
+$z=(1,v)$. Then
+\[
+ z\longmapsto z\begin{pmatrix}1&b_a\\0&A_a\end{pmatrix}.
+\]
+The invariant that the first coordinate is one follows from the matrix form.
+Affine outputs are handled by the same coordinate. This covers many counters,
+linear accumulators, and statistics of words.
+
+\paragraph{Scalar recurrences.}
+A constant-coefficient linear recurrence has a companion-matrix state and a
+one-letter alphabet. Equivalence of two recurrence implementations is therefore
+an instance of the same worker. Polynomial coefficients depending on the index
+are not constant matrices; either a proved finite lift exists or another
+worker, such as telescoping, is required.
+
+\paragraph{Addition and products of observations.}
+Direct sums represent addition. For pointwise products over $\Q$,
+\begin{align*}
+ \alpha_{fg}&=\alpha_f\otimes\alpha_g,\\
+ M^{fg}_a&=M^f_a\otimes M^g_a,\\
+ \beta_{fg}&=\beta_f\otimes\beta_g.
+\end{align*}
+The Kronecker-product identity gives
+$f(w)g(w)=\alpha_{fg}M^{fg}_w\beta_{fg}$. This permits nonlinear \emph{output}
+identities even though the expanded state dynamics remain linear. Repeated
+tensor lifting can multiply dimensions rapidly, so it requires an explicit
+state-dimension budget and subsequent reachable-space reduction.
+
+\paragraph{Finite observations of an infinite alphabet.}
+A source type need not literally be finite if a proved classifier maps each
+input element to one of finitely many transition classes and the update depends
+only on that classifier. The bridge theorem must establish this factoring.
+Without it, checking a finite sample of letters does not establish a word
+identity over an infinite alphabet.
+
+\subsection{Worked example: a product of counts versus subsequence counts}
+
+For a binary word, let $A,B$ count occurrences of $a,b$, and let $AB,BA$ count
+ordered subsequences of length two. The row state is
+\[
+ z=(1,A,B,AB,BA).
+\]
+Appending $a$ updates $A$ to $A+1$ and $BA$ to $BA+B$; appending $b$ updates $B$
+to $B+1$ and $AB$ to $AB+A$. All other coordinates remain unchanged. Starting
+from $(1,0,0,0,0)$, the output $AB+BA$ is therefore a five-dimensional weighted
+representation.
+
+A two-dimensional affine counter represents $A$, and another represents $B$.
+Their tensor product has four coordinates and represents $AB$ as the
+\emph{product of counts}. To avoid a notational ambiguity in an implementation,
+call that output $A\cdot B$, reserving \code{countABSubseq} for the subsequence
+counter.
+
+The difference construction has ambient dimension nine. The executed search
+finds five reachable basis rows, reached by
+\[
+ \epsilon,\quad a,\quad b,\quad ab,\quad ba,
+\]
+and examines eleven worklist rows. Its certificate verifies
+\[
+ \forall w\in\{a,b\}^*,\qquad
+ \operatorname{countABSubseq}(w)+\operatorname{countBASubseq}(w)
+ =\operatorname{countA}(w)\operatorname{countB}(w)
+\]
+for the encoded folds. A separate simple combinatorial proof pairs every
+$a$-position with every $b$-position and partitions the pairs by their order.
+That proof explains the identity, but it is \emph{not} supplied to the search.
+The prototype derives the finite linear relation instead.
+
+The example exercises several capabilities at once: different source states,
+noncommuting letter matrices, a tensor-composed right side, and an invariant
+space smaller than the combined coordinate space. Replacing both sides by a
+single known algebraic expression would not test those capabilities.
+
+\subsection{Counterexamples, minimization, and use during synthesis}
+
+A minimal state representation is not required to decide zero equivalence.
+It can nonetheless be useful after success. First restrict to the reachable
+space using $B$ and $C_a$. Then compute which residual directions affect future
+outputs, quotienting only after proving the corresponding observation map.
+Classical weighted-automaton minimization provides the algebraic background
+for this second phase~\cite{kiefer}. The prototype implements reachable-space
+closure, not full minimal realization.
+
+During term synthesis, an exact distinguishing word can reject a candidate
+whose proved weighted summary disagrees with the requested weighted
+specification. A proved match can discharge \emph{that observable contract}.
+Neither result justifies replacing equality of arbitrary source functions by
+equality of their lengths or counts. For example, two list-valued functions can
+have equal length on all inputs while returning different elements in a
+different order. The result type of the adapter should name the observable it
+has established.
+
+This provides a useful bridge to Leant and Djex: their current semantic
+foundation already associates behavioral analyses with source-owned typed
+candidate graphs~\cite{djex-semantic}. A weighted domain can analyze a new class
+of behaviors without altering the candidate's type certificate or claiming
+that the existing length abstraction suddenly became complete.
+
+\subsection{Cost model and boundaries}
+
+With incremental rational elimination, each independence test can be reduced to
+$O(N^2)$ field operations, and each dense successor multiplication also costs
+$O(N^2)$. Across $O(|\Sigma|N)$ generated rows, a straightforward optimized
+implementation has an $O(|\Sigma|N^3)$ field-operation bound. Bit complexity
+also depends on coefficient growth. Fraction-free or modular linear algebra
+with exact reconstruction is a production option; reconstruction must still
+pass the finite equalities in Equation~\eqref{eq:weighted-cert}.
+
+The included SymPy implementation recomputes linear solves for span membership
+and coordinate extraction. It is intentionally simpler than an incremental
+cubic implementation, so its measured times must not be presented as evidence
+for that optimized bound. Its role is to validate the algorithm, certificate,
+and source examples.
+
+The field assumption matters for the decision algorithm. Rational weighted
+zero equivalence is not Boolean-language equivalence with the word ``rational''
+erased, and it is not arbitrary-semiring equivalence. A nondeterministic
+weighted representation may count accepting paths rather than indicate their
+existence. A Lean bridge must preserve which semantics is being modeled.

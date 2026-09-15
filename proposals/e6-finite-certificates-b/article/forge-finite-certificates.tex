@@ -1,0 +1,115 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsthm}
+\usepackage{newtxtext,newtxmath}
+\usepackage[margin=1in,headheight=15pt]{geometry}
+\usepackage{microtype,booktabs,longtable,array,enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings,fancyhdr,titlesec,needspace}
+\usepackage[most]{tcolorbox}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\definecolor{ink}{HTML}{354236}
+\definecolor{muted}{HTML}{62685F}
+\definecolor{paper}{HTML}{F3F4EE}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,
+ pdftitle={Forge: Finite Certificates for Infinite Behaviors},
+ pdfauthor={OpenAI},pdfsubject={Concrete extensions to Lean proof automation}}
+\urlstyle{tt}
+\titleformat{\section}{\Large\bfseries\color{ink}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection}{0.7em}{}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{muted}FORGE / FINITE CERTIFICATES}
+\fancyhead[R]{\small\color{muted}Technical extension report}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parskip}{4pt}\setlength{\parindent}{1em}
+\setlist{nosep,leftmargin=1.4em}
+\setcounter{tocdepth}{2}
+\newcommand{\Q}{\mathbb{Q}}\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}\newcommand{\R}{\mathbb{R}}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\grind}{\texttt{grind}}
+\newcommand{\code}[1]{\texttt{\nolinkurl{#1}}}
+\newcommand{\ideal}[1]{\left\langle #1\right\rangle}
+\DeclareMathOperator{\spanQ}{span_{\Q}}
+\DeclareMathOperator{\NF}{NF}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\diag}{diag}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,
+ breaklines=true,showstringspaces=false,frame=single,framerule=0.3pt,
+ rulecolor=\color{muted},backgroundcolor=\color{paper},
+ xleftmargin=0.5em,xrightmargin=0.5em,aboveskip=9pt,belowskip=9pt,
+ commentstyle=\color{muted},tabsize=2}
+\newtcolorbox{finding}{colback=paper,colframe=ink,boxrule=0.5pt,arc=1pt,
+ left=10pt,right=10pt,top=7pt,bottom=7pt,breakable}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.7in}
+{\large\color{muted}LEAN AUTOMATION / CONCRETE ALGORITHMS}\par
+\vspace{0.35in}
+{\Huge\bfseries\color{ink}Forge}\par
+\vspace{0.15in}
+{\huge\bfseries Finite Certificates for\\[5pt]Infinite Behaviors}\par
+\vspace{0.3in}
+{\Large Inductive ideals, weighted residuals,\\[4pt]and pole-safe creative telescoping}\par
+\vspace{0.45in}
+{\large Technical research report for Vladimir Reshetnikov}\par
+{\large 15 September 2026}\par
+\vspace{0.5in}
+\begin{finding}
+Three executable search workers extend the reviewed Forge design with
+non-conserved polynomial invariants, equivalence of rational weighted
+representations, and certified recurrences for binomial sums. The package
+contains exact certificates, an independently implemented standard-library
+replayer, and 318 passing tests. The Lean proof principles and replay targets
+are supplied as \emph{uncompiled specimens}; no implemented Lean tactic or
+head-to-head tactic improvement is claimed.
+\end{finding}
+\vfill
+{\small\color{muted}Repository baseline: Forge \texttt{674521027d96}.\\
+Original code and report source are included. No third-party repository, font,
+or solver distribution is bundled.}
+\end{titlepage}
+\begin{abstract}
+Forge already proposes a proof-planning layer above Lean's \grind{}, including
+induction generalization, arithmetic witnesses, nonlinear certificates, and
+careful evidence management. This report develops three additional algorithmic
+capabilities rather than restating that architecture. First, a descending
+sequence of finite-dimensional polynomial spaces discovers jointly inductive
+ideals with polynomial transition multipliers. Second, reachable-space closure
+proves equivalence of rational weighted representations, or returns a concrete
+distinguishing word. Third, a bounded creative-telescoping search synthesizes
+recurrences together with regularized, pole-safe summation certificates.
+Each worker has an explicit source fragment, a finite acceptance language, a
+soundness argument, a sharply delimited completeness statement, and an
+implementation path into Lean. The executed corpus contains 27 invariant
+certificates, 23 weighted closure certificates, 25 distinguishing words, and
+three telescopers; four bounded searches return unknown. Independent replay
+works with Python's site packages disabled. The report separates these results
+from the still-unimplemented Lean front ends, formalized checker theorems, and
+end-to-end tactic benchmarks.
+\end{abstract}
+{\small\setlength{\parskip}{0pt}\tableofcontents}
+\newpage
+\input{sections/01-delta}
+\input{sections/02-ideals}
+\input{sections/03-weighted}
+\input{sections/04-telescoping}
+\input{sections/05-integration}
+\input{sections/06-evaluation}
+\input{sections/07-roadmap}
+\appendix
+\input{sections/A-artifacts}
+\input{references}
+\end{document}

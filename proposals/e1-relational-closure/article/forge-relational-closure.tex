@@ -1,0 +1,1565 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=0.92in,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{microtype,booktabs,longtable,array,tabularx}
+\usepackage[table]{xcolor}
+\usepackage{enumitem,listings,fancyhdr,titlesec,tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage[most]{tcolorbox}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=teal!65!black,citecolor=teal!65!black,urlcolor=teal!65!black]{hyperref}
+\definecolor{ink}{HTML}{203441}
+\definecolor{accent}{HTML}{226C73}
+\definecolor{pale}{HTML}{EDF4F4}
+\definecolor{muted}{HTML}{53616D}
+\titleformat{\section}{\Large\bfseries\color{ink}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection}{0.7em}{}
+\titlespacing*{\section}{0pt}{2.4ex plus 1ex minus .2ex}{1.2ex}
+\titlespacing*{\subsection}{0pt}{1.8ex plus .5ex}{.7ex}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2.5em}
+\linespread{1.045}
+\setlist{nosep,leftmargin=1.7em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}FORGE \quad / \quad RELATIONAL CLOSURE}
+\fancyhead[R]{\small\color{muted}Research extension}
+\fancyfoot[L]{\small\color{muted}15 September 2026}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,
+  breaklines=true,breakatwhitespace=false,showstringspaces=false,
+  frame=single,rulecolor=\color{accent!25},backgroundcolor=\color{pale!50},
+  xleftmargin=.4em,xrightmargin=.4em,aboveskip=.9em,belowskip=.9em,
+  keywordstyle=\bfseries\color{accent},commentstyle=\color{muted},tabsize=2}
+\newtcolorbox{focusbox}[1][]{colback=pale,colframe=accent!60,boxrule=.5pt,
+  arc=1.5mm,left=10pt,right=10pt,top=7pt,bottom=7pt,#1}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\ideal}[1]{\langle #1\rangle}
+\newcommand{\Span}{\operatorname{span}_{\Q}}
+\newcommand{\coeff}{\operatorname{coeff}}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newcommand{\unknown}{\textsc{unknown}}
+\newcommand{\proved}{\textsc{proved}}
+\newcommand{\refuted}{\textsc{refuted}}
+\newcommand{\inv}{\mathcal I}
+\newcommand{\poly}{\Q[\bm x]}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\hypersetup{pdftitle={Forge: Target-Directed Relational Closure},pdfauthor={Prepared for Vladimir Reshetnikov},pdfsubject={Concrete algorithms, independent certificates, and Lean integration design},pdfkeywords={Lean, Forge, invariants, polynomial ideals, relational verification}}
+\begin{document}
+\begin{titlepage}
+\vspace*{.5in}
+{\small\bfseries\color{accent}A CONCRETE EXTENSION TO THE FORGE DESIGN\par}
+\vspace{.25in}
+{\fontsize{30}{35}\selectfont\bfseries\color{ink}Target-Directed\\Relational Closure\par}
+\vspace{.22in}
+{\Large From recurrence guessing to checkable\\nonlinear and behavioral proofs\par}
+\vspace{.35in}
+{\large Prepared for Vladimir Reshetnikov\par}
+{\color{muted}15 September 2026\par}
+\vspace{.4in}
+\begin{focusbox}
+\textbf{The proposed capability.} Given a polynomial equality about a recursive
+computation, construct the additional equations needed to make an induction
+close. Discover those equations by pulling the target backward through program
+steps, and stop when their \emph{ideal}, rather than just their linear span,
+becomes stable. Return explicit polynomial identities, or an exact violating
+execution.
+\end{focusbox}
+\vspace{.18in}
+\begin{tabularx}{\linewidth}{@{}lY@{}}
+\toprule
+\textbf{Delivered} & Two executable search algorithms, an independent standard-library
+checker, retained problems and evidence, regression tests, Lean replay sources,
+and this article.\\[.6em]
+\textbf{Executed} & 62 synthetic problems under two search policies; 108 evidence
+files independently accepted; 40 regression tests, including an 80-instance
+scalar differential check.\\[.6em]
+\textbf{Not established} & An installed Lean tactic, Lean-kernel acceptance of the
+new files, or a measured improvement over \code{grind} or other Lean tactics.\\
+\bottomrule
+\end{tabularx}
+\vfill
+{\small\color{muted}An incremental research proposal, not a replacement for Forge's
+existing architecture. The mathematical foundations are attributed to prior
+work on weighted automata, polynomial automata, and algebraic invariants.}
+\end{titlepage}
+
+\begin{abstract}
+Forge already proposes induction planning, invariant synthesis, theorem-directed
+search, and exact algebraic certificates. Repeating those proposals would not
+make it more capable. This article instead fills a specific algorithmic gap:
+\emph{constructing a mutually supporting family of polynomial invariants when
+no useful equation is individually conserved}. The extension has a fast
+linear-span lane and a stronger polynomial-ideal lane. Both start from the
+requested observation, propagate it backward through total polynomial
+transitions, and synthesize an inductive relation. The ideal lane avoids the
+bilinear problem of guessing invariant coefficients and their preservation
+multipliers simultaneously. Its unbounded version terminates for a precisely
+specified finite-control fragment by the ascending-chain condition; its bounded
+implementation can return unknown. Failed initial identities produce concrete
+rational executions through a coefficient-provenance argument, not merely
+algebraic countermodels.
+
+A synchronous product turns the same mechanism into an equivalence prover for
+polynomial folds. This supplies a concrete new behavioral-proof lane for Leant
+and a verification service for Djex-generated candidates without changing their
+type-synthesis engines. A SymPy search implementation, a separately written
+standard-library checker, a 62-problem matched synthetic comparison, 40
+regression tests, and 254 generated Lean identity obligations accompany the
+article. The ideal lane resolves all 62 synthetic problems; the linear lane
+returns unknown on 16 nonlinear examples. These results establish a tested
+algorithmic extension, not a Lean tactic comparison. All new Lean files remain
+explicitly uncompiled in this environment.
+\end{abstract}
+
+\setcounter{tocdepth}{1}
+\makeatletter
+\begingroup
+\small
+\setlength{\parskip}{0pt}
+\renewcommand*\l@section{\@dottedtocline{1}{0em}{2.3em}}
+\tableofcontents
+\endgroup
+\makeatother
+\newpage
+
+\section{The contribution relative to the repository}
+\label{sec:delta}
+
+\subsection{A source-pinned starting point}
+The inspected Forge revision is
+\code{674521027d968d59f7b83220ed52304a85cb55e2}. Its merged article already
+contains the broad proof-planning architecture that this proposal assumes:
+scoped obligations, explicit induction plans, certificate-producing workers,
+and a conservative bridge to Lean's local tactics. The repository explicitly
+states that Forge is not yet an implemented Lean tactic. Its existing merge
+records elaboration of three core-only Lean files, not a complete integration
+or a tactic benchmark~\cite{forge-readme,forge-architecture}.
+
+The relevant starting point is more specific than ``Forge needs invariants.''
+The structural chapter implements additive recurrence synthesis and a
+state-machine format with
+\[
+ I(s_0)=0,\qquad I(T(s))=I(s).
+\]
+It also \emph{already proposes} the more general condition
+\[
+ I_i(T(\bm x))=\sum_j h_{ij}(\bm x)I_j(\bm x),
+\]
+and correctly warns that jointly discovering the $I_j$ and $h_{ij}$ is a
+bilinear search problem. The current \code{prototype/forge/recurrence.py}
+implements exact additive and accumulator procedures, rather than the
+closure algorithm developed here~\cite{forge-structural,forge-recurrence}.
+
+This article contributes the missing \emph{construction}, its proof obligations,
+its counterexample extraction, and working experiments. It does not claim that
+multiple invariants, ideal certificates, or certificate-first automation are
+new ideas.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}p{.25\linewidth}YY@{}}
+\toprule
+Area & Already present in Forge & Addition here\\
+\midrule
+Recursion & Generalization, induction planning, additive polynomial formulas
+& Target-generated coupled relations, including nonlinear state updates\\[.5em]
+Algebra & Ideal multipliers in fixed-goal certificates & Automatic construction
+of a transition-stable target ideal\\[.5em]
+Search & Typed, scoped, bounded workers & Two concrete closure policies with a
+shared independently replayable output format\\[.5em]
+Negative evidence & Exact witnesses and careful verdict boundaries & A
+coefficient-provenance algorithm yielding an actual violating execution\\[.5em]
+Behavior & Typed synthesis and proposed higher-order extensions & A relational
+product reduction for universal polynomial-fold assertions\\
+\bottomrule
+\end{tabularx}
+\caption{The incremental contribution. The middle column is prior material,
+not a new proposal.}
+\end{table}
+
+\subsection{What was, and was not, reviewed}
+The review targeted Forge's README, the architecture, structural, nonlinear,
+and integration source sections, its Leant/Djex review, the prototype module
+inventory, and the current recurrence implementation. It also inspected the
+Leant and Djex READMEs and Leant's behavioral-synthesis contract. This is not a
+claim to have read every line of all nine frozen submissions. A search index
+returning no matches is not evidence of universal absence. The novelty claim is
+therefore deliberately scoped: this is a concrete extension beyond the reviewed
+merged design and its present recurrence worker.
+
+The neighboring revisions are Leant
+\code{6bf05ad78c467989e68290f2d08bbed40802d485} and Djex
+\code{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}. Leant's reported dependency pin
+is separately \code{e237e866}; the tip of a repository and a downstream dependency
+pin are not interchangeable~\cite{leant-readme,djex-readme}.
+
+\subsection{Why this is worth adding}
+The capability is useful when the proof obligation contains an unbounded
+iteration but each \emph{step} is algebraically simple. Examples include two
+implementations of a numerical fold, a cached intermediate value maintained by
+a loop, an affine state-space realization, or a polynomial relationship between
+several accumulators. Local algebra can prove the step once the correct
+relation is supplied. The difficulty is discovering that relation.
+
+The proposed worker does not search for an arbitrary closed form of the entire
+computation. It searches only for equations needed to justify the requested
+observation. That distinction allows it to prove equivalence even when neither
+side has a small or convenient closed form.
+
+\section{A running example that separates the two algorithms}
+\label{sec:example}
+
+Consider a list of rational inputs $u_1,\ldots,u_m$. The first implementation
+keeps one value $z$ and updates
+\begin{equation}\label{eq:slow}
+ z' = z^2+u.
+\end{equation}
+The second keeps a pair $(x,y)$ and updates
+\begin{equation}\label{eq:fast}
+ x'=y+u,\qquad y'=(y+u)^2.
+\end{equation}
+Initialize them at $z=x=t$, $y=t^2$. The desired theorem says that after every
+finite input list, the first result equals the first component of the second.
+Calling the implementations ``slow'' and ``fast'' in the accompanying code is
+only a mnemonic; no runtime advantage is asserted.
+
+One-step comparison of the visible outputs gives
+\[
+ z'-x'=z^2-y.
+\]
+The original equation $z-x=0$ is not sufficient by itself. The missing
+relationship is the meaning of the second accumulator:
+\[
+ g_1=x^2-y,\qquad g_2=z-x.
+\]
+Their transition identities are
+\begin{align}
+ g_1(F(z,x,y,u))&=0,\label{eq:ex-step1}\\
+ g_2(F(z,x,y,u))&=g_1+(z+x)g_2.\label{eq:ex-step2}
+\end{align}
+At initialization both vanish. These two identities prove the result by
+induction on the input list. Neither a closed form for $z_m$ nor enumeration of
+lists is needed.
+
+\begin{focusbox}
+\textbf{The conceptual shift.} Do not insist that an equation retain the same
+value after a step. Require only that the \emph{common zero set of a finite
+family of equations} be preserved. The equations may transform into polynomial
+combinations of one another.
+\end{focusbox}
+
+\subsection{Why a linear-only repair is fundamentally weaker}
+Let $T_0$ be the product update with input $u=0$ and let $p=z-x$. For $k\ge1$,
+\[
+ p\circ T_0^k=z^{2^k}-y^{2^{k-1}}.
+\]
+These polynomials have pairwise distinct highest powers of $z$. They are
+linearly independent over $\Q$: in a finite linear combination, the coefficient
+of the largest such power forces its multiplier to be zero, and descending
+induction forces the rest to be zero.
+
+Thus the vector space generated by repeated pullbacks of $p$ is infinite-dimensional. Increasing a fixed linear-span budget cannot make the underlying
+space finite. In contrast, the ideal generated by $g_1$ and $g_2$ is already
+stable by \eqref{eq:ex-step1}--\eqref{eq:ex-step2}. The ideal lane is therefore
+not merely the same search with a larger budget; it uses a strictly stronger
+notion of redundant obligation.
+
+\subsection{A mutation with an exact witness}
+Change only the second update in \eqref{eq:fast} to
+\[
+ y'=(y+u)^2+1.
+\]
+With $t=0$ and the two inputs $[0,0]$, the first implementation ends at $z=0$;
+the second ends with first component $x=1$. The difference is $-1$. The
+prototype discovers this two-step execution and the independent checker
+recomputes it from the original transition system. A failed polynomial identity
+is not automatically reported as a counterexample: the actual execution is
+part of the evidence.
+
+\section{The exact fragment and its semantics}
+\label{sec:fragment}
+
+\begin{definition}[Polynomial transition system]
+A problem consists of a finite set of control locations $L$, a state vector
+$\bm x\in\Q^n$, and a finite set of edges. An edge
+$e:\ell\to m$ has a fresh input vector $\bm u\in\Q^{k_e}$ and a simultaneous
+polynomial update
+\[
+ F_e:\Q^n\times\Q^{k_e}\longrightarrow\Q^n.
+\]
+Each initial branch specifies a location $\ell_b$ and a polynomial map
+$I_b:\Q^r\to\Q^n$. Each target specifies a location $\ell_a$ and a polynomial
+$p_a\in\Q[\bm x]$ whose required value is zero.
+\end{definition}
+
+A legal execution chooses an initial branch and rational parameter values, then
+follows any finite sequence of control-compatible edges, choosing arbitrary
+fresh rational inputs on each edge. The safety property is that every target
+polynomial vanishes whenever its observation location is reached, including an
+initial state at that location.
+
+\subsection{Deliberate restrictions}
+All transitions in this first fragment are total. There are no implicit guards,
+truncated natural subtraction, field divisions by state-dependent expressions,
+integer remainder operations, floating-point rounds, or partial functions.
+Initial conditions are given by polynomial parametrizations, not arbitrary
+logical predicates. There are finitely many locations and state coordinates.
+Fresh inputs are independent between steps, but occurrences of the \emph{same}
+input within one step are correlated.
+
+These restrictions are part of the theorem, not parser inconveniences to be
+silently erased. The fragment includes nonlinear updates of arbitrary degree,
+but it does not include arbitrary recursive Lean programs.
+
+The implementation uses a uniform state dimension at all locations; unused
+coordinates can be padded. A future typed implementation may use a dependent
+state family, but then each edge carries the necessary source-to-destination
+coordinate correspondence. Nothing in the proof permits an accidental variable
+permutation.
+
+\subsection{Control and nondeterminism}
+Finite control is not cosmetic. A temporary discrepancy may be legal at an
+intermediate location and must not become an obligation there merely because it
+is forbidden at the exit. For example,
+\[
+\begin{array}{ll}
+0\to1:& (x,y)\mapsto(x+u,y+u+c),\\
+1\to0:& (x,y)\mapsto(x+v,y+v-c),
+\end{array}
+\]
+with initialization $(t,t)$ at location 0, preserves $y-x=0$ at location 0 and
+$y-x-c=0$ at location 1. The two locations require different equations.
+
+The semantics permits all outgoing edges. That models genuine nondeterministic
+choice. Forgetting the conditions on a guarded source program also gives such
+a system, but only as an \emph{overapproximation}. Positive proofs can sometimes
+transport back through a proved simulation; abstract counterexamples cannot
+be reported as source counterexamples without checking the guards.
+
+\section{The certificate language}
+\label{sec:certificate}
+
+For every location $\ell$, the certificate supplies a finite list
+\[
+ G_\ell=(g_{\ell,1},\ldots,g_{\ell,d_\ell})\subseteq\Q[\bm x].
+\]
+Empty lists are allowed. Define
+\[
+ \inv_\ell(\bm x)\quad\Longleftrightarrow\quad
+ \bigwedge_{j=1}^{d_\ell}g_{\ell,j}(\bm x)=0.
+\]
+The following three families of \emph{polynomial identities} constitute the
+entire positive certificate.
+
+\paragraph{Initialization.}
+For every initial branch $b$ and every generator at its location,
+\begin{equation}\label{eq:base}
+ g_{\ell_b,j}(I_b(\bm t))=0\quad\text{in }\Q[\bm t].
+\end{equation}
+
+\paragraph{Observation.}
+For every target $a$, provide polynomial multipliers $a_{a,j}(\bm x)$ such that
+\begin{equation}\label{eq:target}
+ p_a(\bm x)=\sum_j a_{a,j}(\bm x)g_{\ell_a,j}(\bm x).
+\end{equation}
+
+\paragraph{Transition.}
+For every edge $e:\ell\to m$ and every destination generator, provide
+$h_{e,i,j}\in\Q[\bm x,\bm u]$ satisfying
+\begin{equation}\label{eq:step}
+ g_{m,i}(F_e(\bm x,\bm u))
+   =\sum_j h_{e,i,j}(\bm x,\bm u)g_{\ell,j}(\bm x).
+\end{equation}
+The matrix has $d_m$ rows and $d_\ell$ columns. Swapping those dimensions is a
+semantic error, not merely a storage convention.
+
+\begin{theorem}[Certificate soundness]\label{thm:sound}
+If \eqref{eq:base}, \eqref{eq:target}, and \eqref{eq:step} hold, every legal
+finite execution satisfies all its target observations.
+\end{theorem}
+\begin{proof}
+Initialization follows by evaluating \eqref{eq:base} at the selected parameter
+values. Suppose $\inv_\ell(\bm x)$ holds before an edge $e:\ell\to m$. Every
+summand on the right of \eqref{eq:step} has a zero generator factor. Therefore
+every destination generator vanishes at the updated state, so
+$\inv_m(F_e(\bm x,\bm u))$ holds. Induction on the finite execution length
+establishes the invariant at every reached location. At an observation point,
+\eqref{eq:target} evaluates to a sum of zero terms.
+\end{proof}
+
+\subsection{What the checker does not need}
+The checker does not need to know how the basis was discovered. It need not
+verify that a basis is reduced, minimal, a Gr\"obner basis, or even a basis of
+the ideal generated by the originally requested targets. It checks the three
+identity families directly against the original problem. An arbitrary family
+of equations is acceptable when it passes all three checks.
+
+This removes a substantial proof burden. The search may use Gr\"obner bases,
+but accepting the final inductive relation does not require formalizing the
+Gr\"obner algorithm. In contrast, a tool whose conclusion specifically asserts
+that a set is a Gr\"obner basis must establish that additional fact. Existing
+Lean polynomial tactics offer certificate-based ideal membership and related
+results; they are possible implementation dependencies, not the source of a new
+trust principle here~\cite{groebner-tactics}.
+
+\subsection{Coefficient fields and transport}
+The executed checker interprets the problem over $\Q$. The positive certificate
+argument also works after interpreting its rational coefficients in a
+characteristic-zero field, including $\R$. This is a mathematical transport
+statement, not evidence that a Lean reifier for those fields was implemented.
+For an arbitrary commutative ring, rational literals may not make sense.
+Denominator clearing requires an explicit, source-correct argument. A worker
+must never reuse the same serialized coefficient interpretation indiscriminately
+across rings, naturals, finite fields, and machine arithmetic.
+
+\section{Algorithm I: target-directed linear closure}
+\label{sec:linear}
+
+\subsection{Pull an observation backward}
+Suppose $q$ is a destination equation for an edge $e:\ell\to m$. Substitute
+the update and expand in the fresh input variables:
+\begin{equation}\label{eq:coeff}
+ q(F_e(\bm x,\bm u))=\sum_{\alpha}q_{e,\alpha}(\bm x)\bm u^\alpha.
+\end{equation}
+The coefficients are new possible source equations. The linear lane maintains
+at each location the vector space spanned by its discovered coefficients. It
+adds a coefficient only when exact rational linear algebra shows that it is
+outside the current span.
+
+\begin{lstlisting}
+linear_closure(problem):
+  seed each location with its target polynomials
+  queue := independent seeds, with provenance
+  while queue is nonempty:
+    take destination generator q at location m
+    for every incoming edge e : l -> m:
+      image := simultaneous_substitution(q, e.update)
+      for coefficient r of image in e.fresh_inputs:
+        if r is outside span_Q(generators[l]):
+          add r, record its parent coefficient, and enqueue it
+          if r(initial_parameters) is nonzero:
+            construct and replay an exact execution witness
+  reconstruct all base, target, and transition identities
+\end{lstlisting}
+
+Every new independent polynomial is processed once. Span membership returns its
+exact coordinates when it succeeds; no tolerance appears in that decision.
+Input-dependent transition multipliers are reconstructed by combining those
+coordinates with the corresponding input monomials.
+
+\subsection{The finite-dimensional guarantee}
+\begin{proposition}[Finite observable space]\label{prop:linear}
+Suppose that, at every location, all target coefficients and their iterated
+pullbacks lie in a known finite-dimensional rational vector space $V_\ell$.
+Without resource truncation, linear closure terminates after at most
+$\sum_\ell\dim V_\ell$ independent insertions and either constructs a positive
+certificate or exposes a nonzero initial identity.
+\end{proposition}
+\begin{proof}
+Each insertion strictly increases a subspace dimension at one location, and
+those dimensions are bounded by the stated sum. Each inserted polynomial has
+only finitely many incoming edges and input coefficients, so the worklist is
+finite. At exhaustion every generator pullback has its coefficients in the
+corresponding source span, which supplies \eqref{eq:step}. Targets were seeded;
+initial identities are checked when generators are added.
+\end{proof}
+
+For affine targets and updates affine in the state, the affine observable space
+has dimension at most $n+1$ at each location. Coefficients of the affine updates
+may depend polynomially on fresh inputs without breaking this bound. The
+usual linear-algebraic view of weighted-automaton equivalence is the relevant
+prior foundation~\cite{kiefer}.
+
+For nonlinear observables with degree cap $D$, the ambient dimension is at most
+\[
+ M=\binom{n+D}{D}.
+\]
+A bounded implementation must still check that newly generated polynomials fit
+that cap. Discarding higher-degree terms would be unsound. The bound limits the
+number of admitted independent equations; it does not guarantee that all
+pullbacks stay in the space.
+
+\subsection{Implementation and cost}
+The supplied prototype uses exact coefficient matrices and
+\code{Matrix.gauss_jordan_solve}. A practical native worker should maintain an
+incremental row-echelon basis, reducing a new coefficient against existing pivot
+rows instead of resolving every span query from scratch. The proof payload
+retains the reduction coordinates.
+
+The algebraic-operation count depends on the number of monomials, independent
+rows, edges, and distinct input coefficients. Rational bit lengths can grow
+substantially, so polynomially many field operations are not automatically a
+polynomial bit-complexity claim. Sparse pivot selection and fraction-free or
+modular reconstruction are search optimizations; every reconstructed rational
+identity must still be checked exactly.
+
+\section{Algorithm II: polynomial-ideal closure}
+\label{sec:ideal}
+
+\subsection{Replace vector-space redundancy by ideal redundancy}
+In the running example, the coefficient $z^4-y^2$ is not a constant linear
+combination of $z-x$ and $z^2-y$. It is nevertheless an immediate polynomial
+multiple:
+\[
+ z^4-y^2=(z^2+y)(z^2-y).
+\]
+The ideal lane regards this obligation as redundant. At each location maintain
+an ideal $J_\ell\subseteq\Q[\bm x]$ instead of a vector space. A new pullback
+coefficient is added only when it is not already in that ideal.
+
+\begin{lstlisting}
+ideal_closure(problem):
+  J[l] := ideal generated by targets at l
+  pending := raw target generators with provenance
+  while pending is nonempty:
+    pop a raw generator q at destination m
+    for each incoming e : l -> m:
+      expand q(F_e(x,u)) by monomials in u
+      for each coefficient r(x):
+        if normal_form(r, GroebnerBasis(J[l])) != 0:
+          append the ORIGINAL r to J[l]
+          enqueue r with coefficient/edge/parent provenance
+          invalidate only the basis cache for l
+          check r against each initial parametrization at l
+          if an initial identity fails: reconstruct a real trace
+  choose finite final generators G[l]
+  compute quotient multipliers for targets and every edge
+  emit identities; let the independent checker decide acceptance
+\end{lstlisting}
+
+The search uses a Gr\"obner normal form for membership, but retains the
+\emph{original coefficient} as the newly added raw generator. Storing only the
+normal-form remainder would lose the simple path provenance used for negative
+witnesses. A production implementation may retain both, together with the
+membership decomposition connecting them.
+
+\subsection{Why coefficients are the right interface}
+\begin{lemma}[Extension by fresh variables]\label{lem:coeff}
+For an ideal $J\subseteq\Q[\bm x]$ and
+$q(\bm x,\bm u)=\sum_\alpha q_\alpha(\bm x)\bm u^\alpha$,
+\[
+ q\in J\,\Q[\bm x,\bm u]
+ \quad\Longleftrightarrow\quad q_\alpha\in J\text{ for every }\alpha.
+\]
+\end{lemma}
+\begin{proof}
+If all coefficients belong to $J$, expand each as a finite sum of generator
+multiples and collect the input monomials. Conversely, in a representation
+$q=\sum_i a_i(\bm x,\bm u)g_i(\bm x)$ with $g_i\in J$, comparing each input
+coefficient expresses $q_\alpha$ as a sum of polynomial multiples of the $g_i$.
+\end{proof}
+
+No finite set of tested input values is used to infer this membership. The
+operation is a symbolic coefficient extraction over independent indeterminates.
+
+\subsection{Why an old generator need not be processed again}
+Assume a generator's image was already shown to belong to the source ideal
+extended by the input variables. Enlarging that source ideal cannot invalidate
+membership. Enlarging a destination ideal by adding a new generator requires
+processing the new generator, not revisiting the old ones.
+
+More generally, if each current destination generator has a valid image, then
+for every polynomial combination
+$q=\sum_i a_i(\bm x)g_i(\bm x)$,
+\[
+ q(F_e)=\sum_i a_i(F_e)g_i(F_e)
+\]
+also belongs to the extended source ideal. This is why it suffices to process a
+finite generating set rather than all its infinitely many multiples.
+
+\subsection{A precise termination theorem}
+\begin{theorem}[Unbounded target-ideal closure]\label{thm:ideal}
+For the fragment in Section~\ref{sec:fragment}, exact ideal closure without
+resource bounds terminates. If the property is true, it returns a positive
+certificate. If the property is false, it exposes a nonzero initial identity
+from which a finite rational counterexample can be reconstructed.
+\end{theorem}
+\begin{proof}
+Every insertion strictly increases the ideal at one location. A polynomial ring
+in finitely many variables over a field is Noetherian, so it has no infinite
+strictly ascending chain of ideals. With finitely many locations, infinitely
+many insertions would force an infinite ascending chain at some location.
+Therefore only finitely many insertions occur. Each insertion generates only
+finitely many worklist operations and coefficient polynomials. Exact Gr\"obner
+membership terminates on each finite input, so the unbounded worklist terminates.
+
+If no initial identity fails, every raw generator vanishes under its initial
+parametrizations. At worklist exhaustion, all generator pullbacks are in the
+respective source ideals extended by fresh input variables. A finite final
+basis therefore admits all the identities of Section~\ref{sec:certificate};
+Theorem~\ref{thm:sound} proves the property.
+
+If the property is false, this positive conclusion is impossible, so some
+initial identity must fail before such a certificate is completed. The witness
+construction of Section~\ref{sec:witness} converts its retained coefficient
+provenance into a finite execution violating an original target.
+\end{proof}
+
+The proof deliberately states the exact fragment. It is not a theorem about
+arbitrary guarded imperative programs, arbitrary Lean recursion, or generating
+all polynomial invariants. It verifies \emph{one finite collection of given
+polynomial observations}. Connections between polynomial automata, zeroness,
+and algebraic invariant computation are established research, not a discovery
+claimed by this article~\cite{polynomial-automata,polynomial-invariants}.
+
+\subsection{Why this avoids the bilinear template problem}
+The algorithm never solves simultaneously for unknown coefficients of $g_j$
+and $h_{ij}$. At each step, the requested observation and the program determine
+a concrete next polynomial. Ideal membership is asked relative to a concrete
+finite generator list. Once the list stabilizes, quotient multipliers are
+computed for fixed polynomials.
+
+The tradeoff is important: replacing a bilinear template search does not make
+all resulting computations cheap. Gr\"obner bases, substitution, coefficient
+expansion, and ascending-chain length can be very expensive. The benefit is a
+well-defined complete unbounded procedure for a useful fragment and a small
+certificate boundary, not a general polynomial-time algorithm.
+
+\subsection{Basis choice and certificate size}
+The executable prototype stores raw generators for discovery but emits a
+reduced Gr\"obner basis for replay. This makes quotient extraction convenient,
+because SymPy reduces against that basis directly. It need not produce the
+smallest certificate. The coupled example in Section~\ref{sec:coupled} has two
+natural generators but the chosen reduced basis has three.
+
+A useful optimization is to retain the transformation from the original
+requested generators to the Gr\"obner basis, and lift the quotient vectors back
+to the original small family. Singular's \code{liftstd} and \code{lift} are
+concrete operations to investigate for this purpose~\cite{singular-lift}.
+This optimization is proposed, not implemented in the delivered prototype.
+Its result must satisfy the same identity checker; the backend's preferred
+basis is not authoritative.
+
+\section{Exact counterexamples from coefficient provenance}
+\label{sec:witness}
+
+A nonzero initial polynomial is evidence that the proposed invariant family
+fails somewhere, but an arbitrary family could simply have been too strong.
+The closure construction supplies additional provenance that makes the failure
+meaningful for the \emph{original target}.
+
+Every raw generator is either a target or one coefficient of a pullback of an
+earlier generator along an incoming edge. Each node stores its parent, the
+edge, and the chosen input monomial. Suppose a generated coefficient $r$ at a
+source state $s$ is nonzero, where
+\[
+ q(F_e(s,\bm u))=\sum_\alpha r_\alpha(s)\bm u^\alpha
+\]
+and $r=r_\beta$. The right side is then a nonzero polynomial in $\bm u$.
+Consequently some rational input makes $q$ nonzero in the successor state.
+Following the parent pointer repeats this argument until an original target is
+nonzero.
+
+\begin{lemma}[Deterministic interpolation grid]\label{lem:grid}
+Let $p\in\Q[t_1,\ldots,t_r]$ be nonzero, with individual degree at most $d_i$
+in $t_i$. There is a point in
+$\prod_i\{0,1,\ldots,d_i\}$ where $p$ is nonzero.
+\end{lemma}
+\begin{proof}
+For one variable, a nonzero polynomial of degree at most $d$ cannot have $d+1$
+distinct roots. For several variables, write $p$ as a polynomial in its last
+variable. If it vanished at every grid point, fixing the preceding coordinates
+and using the one-variable result would make every coefficient vanish on the
+smaller grid. Induction would make all coefficient polynomials zero, a
+contradiction.
+\end{proof}
+
+\begin{proposition}[Provenance yields a concrete witness]
+If a raw closure generator has a nonzero polynomial pullback through an initial
+parametrization, its provenance yields a finite control-compatible execution,
+with rational parameters and inputs, on which an original target is nonzero.
+\end{proposition}
+\begin{proof}
+Use Lemma~\ref{lem:grid} on the failed initial identity to obtain parameters and
+an initial state where the generator is nonzero. If the node is not a target,
+its parent pullback has a nonzero coefficient at that state. Apply the same
+lemma to find inputs making the parent nonzero after the recorded edge.
+The edge is directed from the child node's location to the parent's location,
+so the resulting execution follows control flow. Parent pointers lead to
+strictly earlier discovery nodes and hence terminate. At the root, the
+nonzero polynomial is an original target at the reached observation location.
+\end{proof}
+
+\subsection{The order of the reconstructed execution}
+Discovery proceeds backward from an observation, but the witness runs forward
+from initialization. A provenance chain must therefore be interpreted in its
+source-to-parent order, not copied as the order in which edges happened to be
+processed. The regression corpus includes a three-location, two-edge system
+whose transitions do not commute. Reversing the witness edges is rejected by
+the checker.
+
+\subsection{A false statement that finite samples miss}
+Consider the initial state $x=0$ and transition
+\[
+ x'=x+u(u-1)(u-2),\qquad\text{target }x=0.
+\]
+For every finite execution using only $u\in\{0,1,2\}$, the target holds. Thus a
+large sample of long lists over that alphabet can be entirely misleading.
+Coefficient extraction immediately sees a nonzero coefficient, and the grid
+construction finds $u=3$, giving $x'=6$. The retained evidence records that
+one-step trace. A separate test restricts the witness back to each of $0,1,2$
+and confirms that these alleged counterexamples are rejected.
+
+The grid can be exponentially large in the number of fresh inputs. The
+implementation charges each grid point and returns unknown on exhaustion. A
+future solver may propose a smaller witness, but it cannot replace exact replay
+of the source transition system.
+
+\section{A genuinely coupled nonlinear invariant}
+\label{sec:coupled}
+
+Let the initial state be $(x,y,z)=(t,t^2,t^3)$ and let
+\begin{align*}
+ x'&=x+u,\\
+ y'&=(x+u)^2+(z-x^3),\\
+ z'&=(x+u)^3+(x+u+c)(y-x^2),
+\end{align*}
+where $c$ is a fixed rational constant. The only requested observation is
+$y=x^2$. Starting from $g_1=y-x^2$, one pullback produces
+\[
+ g_1(F)=z-x^3=:g_2.
+\]
+The new equation is not an arbitrary template guess; it is demanded by the
+step case. Pulling it back gives
+\[
+ g_2(F)=(x+u+c)g_1.
+\]
+The resulting certificate is the matrix identity
+\[
+\begin{pmatrix}g_1(F)\\g_2(F)\end{pmatrix}
+ =
+\begin{pmatrix}0&1\\x+u+c&0\end{pmatrix}
+\begin{pmatrix}g_1\\g_2\end{pmatrix}.
+\]
+Both generators vanish at initialization. Hence the requested observation holds
+for every finite input list. Except at special states, neither generator is
+individually conserved. The product multiplier $(x+u+c)$ explains why constant
+linear-span closure can keep adding equations such as $xg_1,xg_2$, and higher
+polynomial multiples.
+
+The corpus contains eight instances with $c=1,\ldots,8$. With the same degree
+cap of six, the ideal lane proves all eight; the linear lane returns unknown
+on all eight. The machine certificate's reduced basis is not the explanatory
+two-generator basis above, and the result records distinguish \emph{raw
+independent insertions} from \emph{final replay basis size}.
+
+\section{Relational products and whole-fold proofs}
+\label{sec:products}
+
+\subsection{The product construction}
+Suppose two implementations consume the same input list and have state updates
+$A(s,u)$ and $B(t,u)$. Their synchronous product is
+\[
+ F((s,t),u)=(A(s,u),B(t,u)).
+\]
+If their outputs are polynomial observations $o_A(s)$ and $o_B(t)$, ask the
+closure worker to prove
+\[
+ p(s,t)=o_A(s)-o_B(t)=0.
+\]
+The initial product state preserves any shared parameters and dependencies.
+Theorem~\ref{thm:sound} then proves equality of the observations for every finite
+input list, not merely agreement on a finite behavior table.
+
+This is a reduction, not an assumption that all recursive functions are folds.
+The source extractor must prove that each function is represented by the
+claimed transition. A term can be mathematically equivalent to a fold without
+being recognized by the first implementation.
+
+\subsection{Shared inputs must really be shared}
+A common translation error is to give the two sides distinct fresh inputs.
+For updates $s'=s+u$ and $t'=t+u$, equality is preserved. For the erroneously
+translated product $s'=s+u$, $t'=t+v$, it is not. The shared input is one binder
+in the product's source-owned variable table. Reifying each side independently
+and concatenating variable names is insufficient.
+
+The same discipline applies to initial parameters. Two uses of one source
+parameter must become one neutral parameter; two distinct binders must not be
+merged because they print the same name. This uses Forge's existing identity
+boundary rather than proposing a second identity scheme~\cite{forge-integration}.
+
+\subsection{Source forms for a first extractor}
+The first useful extractor should recognize an explicit \code{List.foldl}
+with a fixed-size product of rational state coordinates and a polynomial step.
+Accept projections, tuples, rational constants, addition, subtraction,
+multiplication, and fixed natural powers. Allow a finite sum of input tags by
+compiling each tag to a control-compatible edge with its payload coordinates.
+Use exact source equations to normalize a limited number of wrappers.
+
+A second extractor may recognize structurally recursive list functions whose
+recursive calls all consume the tail and whose nonstructural arguments update
+polynomially. It must prove the accumulator/fold representation before asking
+the closure worker about it. General dependent recursion, well-founded
+recursion with arithmetic stopping conditions, and higher-order callbacks with
+unmodeled behavior stay outside this first contract.
+
+\subsection{State summaries without promising full equivalence}
+The discovered family can be useful even when it proves only a selected
+observation. For example, equal checksums are not equal lists. A summary
+certificate may justify that checksum assertion and still be insufficient to
+deduplicate the underlying candidate programs.
+
+A proposed later optimization is to use the finite linear observable space as
+a quotient of a state machine for the selected observations. Such a quotient
+can reduce repeated searches. It must retain a simulation proof and an explicit
+observation interface. The delivered code constructs closure certificates, not
+a general semantic equivalence relation on Djex terms.
+
+\section{A concrete new lane for Leant and Djex}
+\label{sec:leant}
+
+Leant's named behavioral entrance first checks the exact candidate's type and
+then tries proofs of the supplied proposition and its negation by
+\code{decide} and bounded \code{simp}. Its contract explicitly distinguishes
+passed, falsified, and inconclusive assertions. Quantified properties can
+remain inconclusive when these proof attempts do not suffice~\cite{leant-behavior}.
+
+The new lane should be inserted \emph{after exact candidate elaboration}, as a
+bounded additional discharge method for supported universal fold assertions.
+It should not modify Djinn's inhabitation verdicts or Exference's typeclass
+resolution. A candidate remains tied to its original source graph and exact
+rendered occurrence.
+
+\subsection{Proposed assertion-discharge protocol}
+\begin{lstlisting}
+discharge_polynomial_behavior(exactCandidate, assertion, budget):
+  recognize assertion as a supported fold observation
+  extract each fold into a typed transition view
+  prove source-to-transition correspondence
+  form a synchronous product when two computations are compared
+  try linear closure under its quota
+  if still unknown, try ideal closure under a separate quota
+  replay returned polynomial identities in Lean
+  apply fold/path induction and source correspondence
+  return a proof of THIS assertion about THIS candidate
+\end{lstlisting}
+
+The phrase ``prove source-to-transition correspondence'' is an implementation
+obligation, not a step delegated to an untrusted parser. If it fails, the lane
+returns unsupported or unknown. For a checked abstract counterexample, the
+implementation reconstructs the original input list, evaluates the candidate's
+actual source semantics, and proves the negation of the precise assertion
+before labeling that source candidate falsified.
+
+\subsection{Why this helps without changing type synthesis}
+A type such as \code{List Rat -> Rat} admits many implementations. Type-directed
+synthesis alone does not distinguish the desired recurrence from an unrelated
+one. A finite assertion table may distinguish some candidates but cannot prove
+a universal law. The proposed lane can certify all-list behavior for its
+fragment using finitely many algebraic identities.
+
+It can also expose a useful synthesis feedback signal. A checked counterexample
+is a concrete list and initial parameter assignment. Leant may add that example
+to its existing candidate-rejection workload, preserving all original budgets.
+The example rejects only candidates independently shown to violate it. A failed
+closure attempt does not authorize pruning a term or a source specialization.
+
+\subsection{A compositional candidate policy}
+For a candidate whose typed graph visibly contains two polynomial folds,
+construct the corresponding paired obligation without asking the synthesis
+engine to discover an explicit relational proof term first. This separates
+\emph{constructing the program} from \emph{discovering the induction relation}.
+It is a concrete way for Forge to add capability to Leant rather than copying
+its term-synthesis machinery.
+
+The currently reported integer-indexing and simultaneous two-universe
+composition gaps in Leant/Djex are not solved by these experiments. Neither is
+arbitrary Church-encoded behavior. The proposed first integration targets exact,
+source-visible polynomial folds. The type-synthesis libraries remain useful for
+candidate generation and source ownership, but no Haskell value is treated as a
+Lean proof merely because Djex accepts its type~\cite{leant-readme,djex-readme}.
+
+\section{Implementation: algorithms, modules, and libraries}
+\label{sec:implementation}
+
+\subsection{What the executable prototype actually contains}
+\code{prototype/search.py} is an untrusted proposer. It uses SymPy 1.14.0 for
+simultaneous substitution, exact polynomial expansion, coefficient extraction,
+rational linear systems, Gr\"obner bases in graded reverse lexicographic order,
+and quotient/remainder computation. The exercised entry points are
+\code{Poly}, \code{Matrix.gauss_jordan_solve}, \code{groebner}, and the basis's
+\code{reduce} method~\cite{sympy}.
+
+\code{prototype/verify_stdlib.py} is a separately written checker. It imports
+no search code and no SymPy. It has its own sparse polynomial operations over
+\code{fractions.Fraction}. The proposer and checker share a documented JSON
+schema, not an algebra implementation. The checker recomputes initial
+substitutions, every target combination, and every transition identity against
+a separately supplied original problem. Counterexample replay recomputes all
+states; states supplied by the search would not be trusted.
+
+\code{prototype/cases.py} builds the deterministic synthetic corpus.
+\code{prototype/run_experiments.py} executes both policies and checks their
+outputs before recording acceptance. \code{prototype/replay_corpus.py} replays
+retained evidence with Python site packages disabled. The test suite exercises
+search cutoffs, arithmetic semantics, schema rejection, witness reconstruction,
+and independently evaluated scalar transitions.
+
+\subsection{Library choices for a production implementation}
+\begin{longtable}{@{}p{.23\linewidth}p{.29\linewidth}p{.41\linewidth}@{}}
+\toprule
+Component & Concrete choice & Role and acceptance condition\\
+\midrule\endhead
+Reference search & SymPy \code{Poly}, rational matrices, \code{groebner},
+\code{reduce} & Already exercised. Retain as a readable reference and a
+cross-check for optimized workers.\\[.7em]
+Larger ideal searches & Singular, optionally through SageMath & Use exact
+standard bases and lifting matrices. Recheck every emitted coefficient identity;
+no backend status is a theorem.\\[.7em]
+Small Lean replay & Mathlib \code{ring}, \code{norm_num}, and ordinary induction
+& Emit concrete identity proofs first. This is a modest bridge before a
+reflective checker. New emitted files are uncompiled here.\\[.7em]
+Polynomial Lean infrastructure & \code{MvPolynomial}; evaluate
+WuProver's \code{GroebnerTactic} and \code{MonomialOrderedPolynomial} & Existing
+formal algebra and certificate-oriented tactics are relevant. Their compatibility
+with Forge's pinned project must be tested, not assumed.\\[.7em]
+Typed extraction & Lean metaprogramming and, where appropriate,
+\code{quote4} & Preserve exact source expressions while constructing a
+polynomial view and its correctness theorem. Extraction is proposed, not
+implemented in this package.\\[.7em]
+Candidate source & Djex's curated \code{Language.Haskell.Djex} or focused
+\code{Language.Haskell.Synthesis.*} interfaces & Keep the candidate's own
+source evidence. Do not build a new adapter on accidental internal-module APIs.\\
+\bottomrule
+\end{longtable}
+
+Singular and SageMath expose the needed ideal/standard-basis operations in their
+documentation~\cite{singular-lift,sage-ideals}. The recently described
+\code{GroebnerTactic} project provides concrete Lean/CAS certificate machinery
+for related polynomial tasks; adopting it would require checking its exact
+imports, toolchain, and trust path against the Forge pin~\cite{groebner-tactics}.
+No build or speed claim for those optional dependencies is made here.
+
+\subsection{Why the first version should not use a floating solver}
+This fragment is exact by construction. A floating linear or nonlinear optimizer
+would introduce rational reconstruction problems without being necessary for
+the reference algorithm. Search can still use numerical or modular heuristics
+later to suggest supports or pivots, but the prototype's actual membership and
+identity computations use rational coefficients throughout.
+
+\subsection{Budget semantics}
+The recorded run uses maximum generated state degree six, 40 raw independent
+generators, 200 pullbacks, 1,500 terms per candidate coefficient, and 100,000
+witness-grid evaluations. A ten-second cooperative search deadline is checked
+between operations. A single CAS call is not cooperatively preempted, so the
+runner also owns a disposable worker process and applies an external timeout.
+
+The checker has independent caps on input bytes, monomials, rational bit lengths,
+expanded degree, and arithmetic operations. These are useful resource guards,
+not a claim that the Python parser is a hardened adversarial service. Expanding
+a large product or parsing deeply nested JSON can consume resources before a
+later check notices a limit; process isolation remains necessary.
+
+The prototype checks a generated degree cap before ideal membership. This is
+conservative but can miss an easy high-degree member of an existing small ideal.
+An improved worker can first attempt bounded reduction without full expansion,
+while preserving the same exact final checker. That optimization must not
+silently replace a discarded term with zero.
+
+\section{Lean lowering and the remaining verification gap}
+\label{sec:lean}
+
+\subsection{An implementation sequence that avoids a large trusted checker}
+The first Lean integration should lower the received basis and multipliers to
+ordinary rational expressions. For each row, construct a goal asserting the
+literal identity and close it with \code{ring}. Evaluate initial identities the
+same way. Combine them with conjunction introduction and elimination to obtain
+an invariant-preservation theorem. Finally apply an ordinary fold or
+reachability induction theorem and the certified source extraction.
+
+The fact that a returned family happens to be a Gr\"obner basis should not
+appear in the resulting theorem unless needed elsewhere. A final proof uses
+only its initial vanishing, preservation identities, and implication of the
+requested target.
+
+\subsection{Delivered Lean artifacts}
+\code{lean/Core.lean} contains a generic reachability-invariant theorem and a
+fold-preservation skeleton. \code{lean/IntegrationSpecimens.lean} gives an
+explicit full proof script for the running fold equivalence, its two-generator
+algebra, the coupled transition identities, and the two-step mutant control.
+These are integration targets, not a \code{forge} syntax implementation.
+
+\code{prototype/emit_lean.py} generates \code{lean/GeneratedIdentities.lean}
+from the 45 accepted positive ideal certificates. It emits 254 concrete
+initial, observation, and transition identity declarations. Emission first
+replays the JSON certificates with the independent checker. This guards the
+generator's input, but does not make the emitted text a checked Lean proof.
+
+\begin{focusbox}
+\textbf{Lean status: NOT\_RUN.} No Lean or Lake executable was available in this
+environment. The attempted compilation runner records this explicitly in
+\code{results/lean-status.json}. None of the new Lean declarations is claimed
+to have elaborated, and no axiom audit was run. The polynomial-identity emitter
+is not a full compiler from the JSON problem to its original Lean goal.
+\end{focusbox}
+
+The supplied Lake configuration pins Lean \code{v4.34.0} and Mathlib
+\code{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}, matching the Forge baseline.
+A maintainer should compile the core theorem, then the explicit specimens, then
+the generated identities, and only afterward integrate the extractor and tactic
+front end. A compilation failure is a reason to repair the script, not to add
+\code{sorry} or relax the assertion.
+
+\subsection{A later reflective implementation}
+When identity replay becomes a measured bottleneck, define a computable sparse
+polynomial representation in Lean, its evaluation function, and correctness
+lemmas for addition, multiplication, substitution, and normalization. The
+certificate-checking theorem then states that a successful Boolean check
+implies the three identity families under the source interpretation.
+
+This does not require formalizing the search algorithm to trust individual
+results. A separate formalization of termination or completeness would be
+valuable research, but it must not delay a small proof-producing integration.
+Existing computable polynomial work is a better starting point than another
+unreviewed private algebra implementation~\cite{groebner-tactics}.
+
+\section{Experiments and what their numbers mean}
+\label{sec:experiments}
+
+\subsection{A matched synthetic comparison}
+The main corpus contains 62 distinct problem files. Both closure policies run
+on exactly those files, giving 124 policy runs. Construction parameters and
+expected outcomes are fixed in \code{cases.py}; the affine coordinate changes
+use seed 20260915. These are designed examples, not a sample of Mathlib goals.
+The two policies share their degree, generator, pullback, and coefficient caps.
+
+Every terminal result is checked before it enters the accepted ledger.
+Successful search means ``a candidate certificate was produced'' until that
+independent replay succeeds. All 16 unknown results are degree-cap outcomes;
+there is no accepted negative verdict derived from a timeout or failed search.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+& & \multicolumn{3}{c}{Linear closure} & \multicolumn{3}{c}{Ideal closure}\\
+\cmidrule(lr){3-5}\cmidrule(l){6-8}
+Family & Cases & P & R & U & P & R & U\\
+\midrule
+Scaled graph & 8 & 8&0&0 & 8&0&0\\
+Coupled nonlinear & 8 & 0&0&8 & 8&0&0\\
+Nonlinear equivalence & 8 & 0&0&8 & 8&0&0\\
+Nonlinear mutant & 8 & 0&8&0 & 0&8&0\\
+Affine equivalence & 12 & 12&0&0 & 12&0&0\\
+Affine mutant & 6 & 0&6&0 & 0&6&0\\
+Control flow & 4 & 4&0&0 & 4&0&0\\
+Boundary controls & 8 & 5&3&0 & 5&3&0\\
+\midrule
+Total & 62 & 29&17&16 & 45&17&0\\
+\bottomrule
+\end{tabular}
+\caption{Recorded outcomes. P: positive certificate independently accepted;
+R: concrete counterexample independently accepted; U: unknown. The total counts
+are legitimate here because the problem set and policies are explicitly paired.
+They are not totals of Forge's nine historical experiments.}
+\end{table}
+
+The 108 emitted evidence files consist of 74 positive certificates and 34
+counterexamples. Many concern the same problem under two different policies;
+108 must not be described as 108 distinct solved theorems. The ideal lane's 45
+positive and 17 negative results account for all 62 distinct problems.
+
+\subsection{Independent replay}
+The retained evidence was replayed with
+\begin{lstlisting}
+python -S prototype/replay_corpus.py --output results/stdlib-replay.json
+\end{lstlisting}
+All 108 files were accepted. The receipt records that site packages were
+disabled and neither \code{search} nor \code{sympy} was imported. The run took
+about 0.044 seconds in this environment, excluding search and the standalone
+Python process startup. This is a local replay observation, not a Lean checking
+measurement or a general performance estimate.
+
+The independent checker is not formally verified. Its agreement with search,
+its different implementation, its exact arithmetic, and its rejection controls
+make the evidence stronger than re-running the proposer's own simplifier, but
+none of them substitutes for Lean-kernel checking.
+
+\subsection{Regression and differential tests}
+Forty named regression tests passed. They exercise changed initial states,
+changed targets and transitions, missing matrix dimensions, wrong multipliers,
+malformed rational encodings, duplicate monomials, floats, Boolean exponents,
+resource exhaustion, shared inputs, simultaneous substitution, unreachable
+observation points, and reversed witness control flow.
+
+One of those 40 tests contains a separate 80-instance scalar differential
+experiment. Its transitions have the form
+\[
+ x'=a x+b x^2+c xu+d u,\quad x_0=0,
+\]
+with fixed-seed small integer coefficients and $d\in\{0,1\}$. It checks each
+accepted result and also evaluates all words of length at most three over
+$\{-1,0,1\}$ using the checker's arithmetic. The 40 cases with $d=0$ preserve
+zero; the 40 with $d=1$ admit a violating input. The finite evaluation is an
+additional bug detector. It is not the acceptance argument for positive cases.
+
+These 80 instances are not added to the main corpus totals, and the number of
+assertions inside a test is not presented as a count of Lean proofs.
+
+\subsection{Why no speedup is claimed}
+The runner records discovery time, total worker-process time, checking time,
+raw generator count, Gr\"obner calls, and maximum generated degree. Those
+measurements are useful for debugging. The recorded experiment was resumed
+after interruption: its early cases ran sequentially and later cases ran with
+six concurrent workers. Process startup, scheduling contention, and warm-up
+therefore differ between portions of the run.
+
+Consequently this article does not use the timing columns for a comparative
+speedup claim. The count comparison remains valid because it uses the same
+problems, algorithms, and algebraic caps, and the recorded unknown reasons are
+not timeouts. A future performance study should use a uniform execution policy,
+repeat runs, report distributions, and include extraction and Lean replay.
+
+An initial runner error duplicated a keyword while building a result row; it
+was corrected before the accepted ledger was produced. Its failed-run log is
+retained separately. That diagnostic is neither a solver refutation nor an
+accepted benchmark result.
+
+\subsection{A fair future Lean evaluation}
+A meaningful end-to-end experiment must use source Lean statements, not just
+JSON systems. Fix exact theorem files and imports; verify that the intended
+methods cannot simply use the theorem under test as a premise. Compare ordinary
+\code{grind}, an explicit induction-plus-algebra baseline, and Forge with the new
+worker. Report extraction success separately from search success and final
+kernel acceptance.
+
+The strongest baseline is not ``\code{grind} with no induction'' when the task
+obviously needs induction. Include a manually supplied correct invariant to
+measure the cost of discovering the relation rather than confusing it with the
+cost of checking the step. Count proof size and heartbeats as well as wall time,
+and preserve all unsupported and unknown cases.
+
+\section{Integration modules and acceptance gates}
+\label{sec:roadmap}
+
+The following are \emph{proposed new paths}, not files asserted to already exist
+in Forge. They fit the existing worker/obligation boundary rather than replacing
+it.
+
+\begin{longtable}{@{}p{.36\linewidth}p{.57\linewidth}@{}}
+\toprule
+Proposed module & Responsibility and acceptance gate\\
+\midrule\endhead
+\code{Forge/Relational/System.lean} & Typed finite-control polynomial view;
+source variables and shared inputs have exact ownership. Gate: explicit round-trip
+examples and rejected arithmetic-domain mismatches.\\[.7em]
+\code{Forge/Relational/ExtractFold.lean} & Recognize supported folds and prove
+source correspondence. Gate: the original theorem is reconstructed without trusting
+serialized source text.\\[.7em]
+\code{Forge/Relational/Product.lean} & Pair computations using shared input
+binders. Gate: correlated-input and initial-parameter tests distinguish intentional
+sharing from accidental name equality.\\[.7em]
+\code{Forge/Relational/Certificate.lean} & Represent basis, target rows, and
+edge matrices. Gate: all 254 emitted identities compile, then the path-induction
+composition closes the corresponding source examples.\\[.7em]
+\code{Forge/Relational/Replay.lean} & Lower identities through \code{ring}
+or a proved sparse checker. Gate: bad initial states, missing rows, and altered
+multipliers are rejected in Lean.\\[.7em]
+\code{Forge/Workers/Relational.lean} & Route unsupported, linear, and ideal
+problems under distinct quotas. Gate: cutoff returns unknown; a successful worker
+adds only a checked proof of its assigned proposition.\\[.7em]
+\code{forge/relational_closure.py} & External reference search in the
+prototype package, with a canonical data-only protocol. Gate: independent replay
+and a supervised process timeout; no arbitrary code execution from a request.\\[.7em]
+Leant assertion adapter & Invoke the worker on supported universal behavior
+after exact candidate elaboration. Gate: proof and counterexample refer to the same
+candidate and original assertion, including the final input list.\\
+\bottomrule
+\end{longtable}
+
+\subsection{Order of implementation}
+The first milestone is a compiled explicit example: the running fold theorem
+using a supplied two-generator relation. The next milestone adds JSON
+certificate replay but keeps the transition system hand-authored. The third
+adds verified extraction for explicit \code{List.foldl}. Only then should the
+external search be invoked automatically from a tactic. Finally, expose the
+behavioral lane in Leant with its existing candidate provenance and budget
+accounting.
+
+This order gives each failure a small surface. A search algorithm should not be
+debugged simultaneously with source extraction, expression lowering,
+metavariable scope, external process recovery, and proof reconstruction.
+
+\subsection{A useful first user-facing syntax}
+A possible interface is
+\begin{lstlisting}
+forge (workers := [relational])
+forge? (workers := [relational])
+\end{lstlisting}
+with optional diagnostics displaying the discovered invariant relation and
+whether linear or ideal closure was used. These are proposed commands only.
+The ordinary success result remains a proof of the original goal. A diagnostic
+counterexample should identify the input list and show a separately checked
+negation, not mark a false goal as solved.
+
+A trace explanation should be small: requested observation, added invariant
+components, maximum algebraic degree reached, the preserved relation, and the
+first unsupported extraction node or exhausted resource. Dumping a Gr\"obner
+basis without its relationship to the user's computation is not sufficient
+explanation.
+
+\section{Extensions that reuse the new mechanism}
+\label{sec:future}
+
+\subsection{Guards through certified local obligations}
+For a guarded edge, suppose its equality guard is represented by equations
+$r_k(\bm x)=0$. A sufficient preservation identity is
+\[
+ g_i(F_e)=\sum_j h_{ij}g_j+\sum_k a_{ik}r_k.
+\]
+The guard terms vanish only while taking that edge. They are not permanent
+invariants at the source location. For inequality guards, a preservation
+implication may be discharged by Forge's existing ordered-algebra certificate
+worker instead~\cite{forge-nonlinear}.
+
+An initial experimental extension could keep the discovered target family
+fixed and ask the existing arithmetic workers to prove guarded preservation.
+This produces a useful positive-only fallback without claiming a new complete
+guarded search. Counterexamples must replay all original guards; a trace in the
+unguarded overapproximation is not enough.
+
+\subsection{Discover equations before asking for inequalities}
+Suppose a proof asks for an inequality about several accumulators, but the
+accumulators have hidden polynomial dependencies. The closure worker can first
+certify an equality relation for demanded subobservations, and the existing
+nonlinear worker can use those equations as ideal terms in its positivity
+certificate. Conversely, a proved algebraic simplification can shrink the state
+coordinates before closure.
+
+This is a specific cooperation protocol: relational closure publishes a proved
+relation; ordered algebra consumes it under the same source context. It does
+not allow the two workers to assume one another's conjectures. The general
+cooperation architecture already exists in Forge; this section identifies the
+new relation-producing worker's useful outputs rather than restating that
+architecture.
+
+\subsection{Compositional summaries of checked components}
+A checked fold relation can serve as a summary for a larger program, provided
+the summary's parameters, preconditions, and observations are explicit. For a
+larger synchronous product, a previously checked component relation can reduce
+the needed state variables or discharge part of the initial relation. The
+summary is an ordinary theorem, not a cached Boolean result.
+
+The first useful cache should store the certificate inputs and source
+correspondence needed to replay that theorem. The repository already defines
+strict identity and scope rules; this extension should reuse them. No new
+receipt or cache authority is justified by an algebraic basis fingerprint.
+
+\subsection{Template synthesis as a later, separate problem}
+If an update contains unknown program coefficients, closure becomes a different
+problem: the transition system itself is not fixed. Treating those unknowns as
+universally quantified parameters would prove a theorem for \emph{every}
+coefficient choice, not synthesize one. Treating them as unconstrained existential
+values while extracting input coefficients can also change the quantifier order.
+
+A principled extension can enumerate or solve for a candidate coefficient
+assignment, freeze it, then run the verified relation checker. It may use
+counterexamples to refine the assignment search. This is a future
+program-synthesis layer; the delivered algorithm verifies fixed candidate
+programs and must not be advertised as automatically solving arbitrary nonlinear
+sketches.
+
+\section{Limits and conclusions}
+\label{sec:conclusion}
+
+The main limitation is not soundness of the mathematical rule but scale and
+integration. Polynomial expansion can explode. Ideal chains have a finite
+termination proof but no small uniform practical bound asserted here. The
+bounded linear and ideal searches may return unknown on true statements.
+The source extractor, tactic controller, and complete Lean replay path still
+need implementation and compilation.
+
+There are semantic limits as well. Equality of selected observations does not
+imply arbitrary program equivalence. Positive polynomial identities do not
+supply loop termination. A total-polynomial abstraction does not establish the
+validity of a guarded counterexample. Rational arithmetic is not interchangeable
+with natural subtraction, integer division, or fixed-width arithmetic. None of
+these boundaries should be hidden behind a generic ``solver failed'' message.
+
+Within those boundaries, the delivered addition is concrete. It constructs the
+missing induction relation from the goal itself, distinguishes linear from
+polynomial dependence, emits a small algebraic interface for proof replay, and
+finds actual violating executions. The paired synthetic experiment shows a
+clear capability difference between the two algorithms, including a family
+whose linear pullback space is provably infinite while its ideal certificate
+has only two explanatory equations.
+
+\begin{focusbox}
+\textbf{Recommendation.} Add a target-directed relational worker to Forge,
+starting with explicit rational folds and ordinary Lean identity replay. Keep
+linear closure as a cheap lane, use ideal closure when polynomial multiples
+cause linear growth, and make source-certified relational products the first
+bridge to Leant's universal behavioral assertions.
+\end{focusbox}
+
+\appendix
+\section{Artifact map and reproduction}
+
+\begin{tabularx}{\linewidth}{@{}p{.32\linewidth}Y@{}}
+\toprule
+Path & Contents\\
+\midrule
+\code{article/} & This standalone LaTeX source and compiled PDF.\\
+\code{prototype/search.py} & Linear and ideal closure, provenance, and witness
+construction.\\
+\code{prototype/verify_stdlib.py} & Independent exact certificate and execution
+checker.\\
+\code{prototype/cases.py} & The 62-problem deterministic corpus generator.\\
+\code{prototype/test_closure.py} & 40 regression tests, one containing 80 scalar
+differential instances.\\
+\code{prototype/run_experiments.py} & Paired runner with supervised worker
+processes and optional exact-record resumption.\\
+\code{prototype/emit_lean.py} & Generates 254 identity obligations from 45 positive
+ideal certificates.\\
+\code{lean/} & Generic semantic skeleton, full worked specimens, generated
+identities, and a pinned Lake configuration; all uncompiled.\\
+\code{results/experiment/} & 62 original problems, 124 run records, 108 evidence
+files, CSV measurements, summary, and environment manifest.\\
+\code{results/} & Independent replay receipts, unit-test log, Lean status,
+identity-emission status, and a separated failed-run diagnostic.\\
+\code{docs/} & Revision ledger, status, schema and integration notes.\\
+\bottomrule
+\end{tabularx}
+
+From the archive root:
+\begin{lstlisting}
+python -m pip install -r requirements.txt
+python -m unittest discover -s prototype -p 'test_*.py' -v
+python -S prototype/replay_corpus.py
+python prototype/run_experiments.py --output reproduced-results --jobs 1
+python -S prototype/emit_lean.py
+\end{lstlisting}
+For a new canonical JSON problem, use the supervised general-purpose entrance:
+\begin{lstlisting}
+python prototype/solve_problem.py problem.json --mode ideal --evidence evidence.json
+\end{lstlisting}
+It checks the original schema, constructs symbolic expressions without evaluating
+source strings, and independently replays any returned evidence.
+
+Use \code{--jobs 1} for an uncomplicated timing rerun. The default output
+directory for experiments is separate from recorded evidence, and nonempty
+outputs are rejected unless \code{--resume} is explicit. Resumption checks that
+existing problem and evidence files match; it is not permission to substitute
+new problems under old result names.
+
+Once Lean and Mathlib are installed:
+\begin{lstlisting}
+cd lean
+lake update
+lake exe cache get
+cd ..
+python prototype/check_lean.py --output reproduced-lean-status.json
+\end{lstlisting}
+These commands are supplied for a future local run. They were not executed here.
+The runner distinguishes missing tools, timeout, elaboration failure, and
+elaboration success. It does not perform a transitive axiom audit.
+
+Build the article with ordinary pdfLaTeX:
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-relational-closure.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-relational-closure.tex
+\end{lstlisting}
+No font files, external solver installations, or copies of the source repositories
+are bundled.
+
+\section{Canonical data and exact-check obligations}
+\label{app:schema}
+
+A polynomial is a sorted list of nonzero monomial terms. A term contains an
+exponent vector and a rational pair of canonical decimal strings:
+\begin{lstlisting}
+[ [ [exponent_0, ..., exponent_n_minus_1], [numerator, denominator] ], ... ]
+\end{lstlisting}
+The denominator is positive, numerator and denominator are coprime, negative
+zero is forbidden, exponent entries are actual nonnegative integers rather
+than Booleans, and duplicate monomials are rejected. Zero is an empty term list.
+Variable order is determined by the separately supplied problem, not a field
+inside a certificate polynomial.
+
+The original problem schema is
+\begin{lstlisting}
+{
+  "schema": "forge-polynomial-system-v1",
+  "name": "informational name",
+  "n": state_dimension,
+  "locations": location_count,
+  "parameters": initial_parameter_count,
+  "initial": [{"location": l, "state": [parameter_polynomials]}],
+  "edges": [{"src": l, "dst": m, "inputs": k,
+             "update": [polynomials_in_state_then_inputs]}],
+  "targets": [{"location": l, "polynomial": state_polynomial}]
+}
+\end{lstlisting}
+The positive certificate contains only
+\begin{lstlisting}
+{
+  "schema": "forge-closure-cert-v1",
+  "basis": [basis_polynomials_at_each_location],
+  "target": [target_multiplier_rows],
+  "step": [edge_matrices_destination_rows_source_columns]
+}
+\end{lstlisting}
+The certificate cannot choose a replacement transition, target, domain,
+initialization, or variable dimension. All these are read from the original
+problem argument.
+
+The negative evidence is an execution request, not a list of trusted states:
+\begin{lstlisting}
+{
+  "schema": "forge-counterexample-v1",
+  "initial": initial_branch_index,
+  "parameters": [exact_rational_values],
+  "steps": [{"edge": edge_index, "inputs": [exact_rational_values]}],
+  "target": target_index
+}
+\end{lstlisting}
+The checker computes the selected initial state, verifies each edge's source
+location, evaluates all coordinates of each update using the \emph{old} state,
+and checks a nonzero original target at the final location. Missing steps,
+incorrect input arities, wrong locations, and a final zero value are rejected.
+
+\section{Proof obligations for a certified source extractor}
+
+An extraction receipt for a supported fold should contain the exact source
+step $f$, the neutral polynomial update $F$, and a representation map $\rho$
+from source states to coordinates. Its essential theorem has the form
+\[
+ \rho(f(s,u))=F(\rho(s),\sigma(u)),
+\]
+where $\sigma$ represents the source input with its exact domain. Initialization
+and observation maps need analogous theorems. A product extractor proves that
+the same $\sigma(u)$ is used by both sides.
+
+For a source invariant goal, positive transport follows by induction on the
+source list using this commuting-step identity. Negative transport needs a
+source inhabitant for every selected parameter and input, and an actual source
+execution. A rational value outside a restricted source input type cannot be
+used merely because it satisfies the neutral variable's type.
+
+For a finite-control source representation, the correspondence theorem must
+also map source control constructors to exact location numbers and preserve
+which transitions are permitted. This is where guard erasure is recorded as
+an overapproximation rather than silently made exact.
+
+These obligations state what the proposed Lean module must prove. They are not
+implemented by the JSON parser or established by Python test counts.
+
+\section{Source and status ledger}
+
+\begin{longtable}{@{}p{.30\linewidth}p{.63\linewidth}@{}}
+\toprule
+Claim class & Status in this package\\
+\midrule\endhead
+Mathematical certificate soundness & Proved in ordinary mathematics in
+Theorem~\ref{thm:sound}; not a Lean formalization of the checker.\\[.5em]
+Linear-fragment termination & Proved under finite observable-space hypotheses
+in Proposition~\ref{prop:linear}; bounded searches still admit unknown.\\[.5em]
+Ideal-fragment termination & Proved for the explicitly total polynomial fragment
+in Theorem~\ref{thm:ideal}; no general program-verification claim.\\[.5em]
+Search implementations & Executed on the stated synthetic suites.\\[.5em]
+Independent Python replay & Executed with site packages disabled; 108 retained
+evidence files accepted.\\[.5em]
+Lean identity emission & Executed; 254 declarations generated from 45 positive
+ideal certificates.\\[.5em]
+Lean elaboration and kernel checking & Not run; no compiler available.\\[.5em]
+Forge/Leant/Djex integration & Proposed module and protocol design only; no
+repository changes or live integration executed.\\[.5em]
+Comparison with \code{grind}, Aesop, or other tactics & Not run; no solved-goal
+or performance claim about those tactics.\\
+\bottomrule
+\end{longtable}
+
+\begin{thebibliography}{99}
+\small
+\bibitem{forge-readme} Vladimir Reshetnikov, \emph{Forge: README and status},
+revision \code{674521027d968d59f7b83220ed52304a85cb55e2}.
+\url{https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/README.md}.
+
+\bibitem{forge-architecture} \emph{Forge}, same revision,
+\code{article/sections/03-architecture.tex} and
+\code{docs/IDEAS-FROM-LEANT-DJEX.md}.
+\url{https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/article/sections/03-architecture.tex}.
+
+\bibitem{forge-structural} \emph{Forge}, same revision,
+\code{article/sections/05-structural.tex}, especially the state-machine
+invariant discussion and the warning about jointly unknown multipliers.
+\url{https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/article/sections/05-structural.tex}.
+
+\bibitem{forge-recurrence} \emph{Forge}, same revision,
+\code{prototype/forge/recurrence.py}.
+\url{https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/prototype/forge/recurrence.py}.
+
+\bibitem{forge-nonlinear} \emph{Forge}, same revision,
+\code{article/sections/06-nonlinear.tex}.
+\url{https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/article/sections/06-nonlinear.tex}.
+
+\bibitem{forge-integration} \emph{Forge}, same revision,
+\code{article/sections/08-integration.tex}.
+\url{https://github.com/VladimirReshetnikov/Forge/blob/674521027d968d59f7b83220ed52304a85cb55e2/article/sections/08-integration.tex}.
+
+\bibitem{leant-readme} Vladimir Reshetnikov, \emph{Leant: README}, revision
+\code{6bf05ad78c467989e68290f2d08bbed40802d485}.
+\url{https://github.com/VladimirReshetnikov/Leant/blob/6bf05ad78c467989e68290f2d08bbed40802d485/README.md}.
+
+\bibitem{leant-behavior} \emph{Leant}, same revision,
+\code{docs/behavioral-synthesis.md}.
+\url{https://github.com/VladimirReshetnikov/Leant/blob/6bf05ad78c467989e68290f2d08bbed40802d485/docs/behavioral-synthesis.md}.
+
+\bibitem{djex-readme} Vladimir Reshetnikov, \emph{Djex: README}, revision
+\code{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}.
+\url{https://github.com/VladimirReshetnikov/Djex/blob/e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5/README.md}.
+
+\bibitem{kiefer} Stefan Kiefer, \emph{Notes on Equivalence and Minimization of
+Weighted Automata}, 2020, arXiv:2009.01217.
+\url{https://arxiv.org/abs/2009.01217}.
+
+\bibitem{polynomial-automata} Michael Benedikt, Timothy Duff, Aditya Sharad, and
+James Worrell, \emph{Polynomial Automata: Zeroness and Applications}, LICS 2017,
+pp.~1--12. DOI: 10.1109/LICS.2017.8005101.
+\url{https://doi.org/10.1109/LICS.2017.8005101}.
+
+\bibitem{polynomial-invariants} Erdenebayar Bayarmagnai, Fatemeh Mohammadi,
+and R\'emi Pr\'ebet, \emph{Algebraic and Algorithmic Methods for Computing
+Polynomial Loop Invariants}, Journal of Symbolic Computation 135 (2026),
+102551; arXiv:2412.14043v2.
+\url{https://arxiv.org/html/2412.14043}.
+
+\bibitem{groebner-tactics} Hao Shen, Junyu Guo, Junqi Liu, and Lihong Zhi,
+\emph{Automated Tactics for Polynomial Reasoning in Lean 4}, 2026,
+arXiv:2604.13514v1. Includes descriptions of \code{GroebnerTactic},
+\code{MonomialOrderedPolynomial}, \code{gb_solve}, and ideal-membership
+certificate replay.
+\url{https://arxiv.org/html/2604.13514v1}.
+
+\bibitem{sympy} SymPy development team, \emph{Polynomial Manipulation Reference}.
+Prototype runtime: SymPy 1.14.0; documentation consulted 15 September 2026.
+\url{https://docs.sympy.org/latest/modules/polys/reference.html}.
+
+\bibitem{singular-lift} Singular development team, \emph{Singular Manual},
+\code{lift} and \code{liftstd}; documented standard-basis transformation and
+ideal-membership lifting operations.
+\url{https://www.singular.uni-kl.de/Manual/4-0-3/sing_334.htm};
+\url{https://www.singular.uni-kl.de/Manual/4-0-3/sing_335.htm}.
+
+\bibitem{sage-ideals} SageMath development team, \emph{Ideals in Multivariate
+Polynomial Rings}, reference documentation, consulted 15 September 2026.
+\url{https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/rings/polynomial/multi_polynomial_ideal.html}.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,198 @@
+\section{Integrating the workers into Forge and Leant}
+\label{sec:integration}
+
+\subsection{The missing component is a semantic compiler}
+
+The mathematical certificate checkers are intentionally small. The more subtle
+Lean work is showing that the reified problem denotes the original goal. A
+correct polynomial identity about an incorrectly translated expression proves
+nothing useful. Forge's own contract already separates certificate soundness
+from this correspondence~\cite{forge-contracts}; the new contribution is to
+make the required correspondence concrete for these workers.
+
+For a source state type $S$, input type $A$, and original update
+$\operatorname{step}:S\to A\to S$, a positive bridge should contain:
+\begin{align*}
+ e &: S\to\Q^D,\\
+ \iota &: A\to\Sigma,\\
+ e(\operatorname{step}(s,a))&=F_{\iota(a)}(e(s)),\\
+ e(\operatorname{initial}(\theta))&=S_0(\theta),\\
+ q(e(s))=0&\Longrightarrow \operatorname{Goal}(s).
+\end{align*}
+Each displayed equality or implication is a Lean theorem, not a callback
+assertion. These facts, the certificate theorem, and induction on the original
+input list produce the source goal. Injectivity of $e$ is not required when the
+observation implication already gives exactly the desired proposition.
+
+A negative bridge needs more. A rational state or action produced by a solver
+might have no source inhabitant. Thus a counterexample becomes a user-visible
+refutation only after constructing the original typed parameter values and
+inputs and checking the original proposition at that concrete execution. A
+positive simulation into an overapproximation is insufficient to justify
+lifting a negative result back.
+
+\subsection{An admission algorithm for numeric folds}
+
+The first reifier should target explicit folds over lists and a small first-order
+state grammar. It should not begin by trying to translate arbitrary Lean
+metaprograms or dependent recursive definitions. A practical admission pass is:
+
+\begin{enumerate}
+\item Normalize only the approved definitional equations of the fold and its
+step function. Preserve lets until their dependencies and sharing are recorded.
+\item Collect scalar state fields and parameters. Admit rational ring operations
+and natural exponents. Translate each expression by an interpretation theorem,
+so addition, multiplication, constants, and projection all come with source
+correspondence.
+\item Classify state dependence. Degree at most one yields Worker A after
+homogenization; general admitted polynomial dependence yields Worker B.
+\item Enumerate an actual finite input type, or use a supplied exhaustive
+classification theorem. Merely seeing a few constructors in samples does not
+establish exhaustive action coverage.
+\item Build the target observation and initial parameterization. Preserve casts,
+state-field order, and every parameter dependency explicitly.
+\item Submit the exact reified problem. Replay the returned algebraic identities
+and compose the semantic bridge with the source fold-induction theorem.
+\end{enumerate}
+
+Every rejected construct should be named: for example, ``state-dependent
+integer division'', ``unknown numeric dictionary'', or ``input alphabet not
+proved exhaustive''. Falling back to Forge's existing engines is legitimate;
+pretending the unsupported expression is polynomial is not.
+
+A source fold may have a nonnumeric payload alongside a numeric accumulator.
+It can be erased only when a theorem establishes that the payload does not
+affect the observation or the numeric update. If it controls a branch or carries
+a typeclass method, it cannot be ignored. This is where a seemingly convenient
+``just extract the arithmetic'' implementation often becomes unsound.
+
+\subsection{Universal behavior as a new Leant verification branch}
+
+Leant already checks an exact candidate against its type and then tries to
+prove or refute a supplied behavioral proposition using \code{decide} and
+bounded \code{simp}. Its documentation carefully distinguishes a conjunction
+of examples from a universal assertion, and reports inconclusive checks rather
+than inventing a counterexample~\cite{leant-behavior}. The proposed addition is
+a restricted universal-behavior branch, not a replacement for that discipline.
+
+For a candidate implementing a numeric fold and a reference specification, the
+adapter should compile both to the admitted state model, form the product
+observation, and ask Worker A or B to prove it zero for all input words. On
+success, it reconstructs a theorem about the \emph{same exact candidate}. On
+failure, a concrete word can become a new rejecting behavioral example after
+source-level replay. On \Unknown, the candidate remains inconclusive for the
+universal assertion.
+
+This can improve synthesis in two different ways. A universal certificate can
+accept a candidate that finite executable tests cannot establish correct.
+Conversely, a distinguishing word can reject many other candidates cheaply,
+provided each candidate is separately evaluated at that word. The latter is
+ordinary counterexample-guided filtering; it does not transfer one candidate's
+proof or rejection receipt to another.
+
+The adapter should retain the already verified source identity, lexical
+universe choices, and dictionaries. Djex and Leant invest substantial effort in
+preserving precisely those associations~\cite{djex,leant}. This article does not
+propose to rebuild their existing ownership or rank-N search mechanisms. It
+adds a mathematical behavior verifier behind that boundary.
+
+\subsection{A warning about Church encodings and parametricity}
+
+A proof about folds of genuine finite lists does not automatically prove a
+statement about every inhabitant of a Church-encoded type. In Lean, one cannot
+silently import a Haskell-style free theorem, erase a universe distinction, or
+assume that every polymorphic value is the image of an ordinary list encoding.
+Those claims need their own source-level theorems and hypotheses.
+
+The first integration should therefore accept either an explicit \code{List}
+fold or a Church value accompanied by a proved representation theorem. A
+certificate for all encoded finite lists should be displayed at that scope,
+not as an answer to a more general original quantified signature. In particular,
+this proposal does not close the neighboring projects' outstanding integer
+indexing or simultaneous-universe composition queries merely by solving easier
+numeric fold examples~\cite{leant,djex}.
+
+\subsection{Certificate-guided, but not heuristic, semantic pruning}
+
+Once universal equivalence is available for a restricted grammar, it can safely
+remove redundant candidate implementations \emph{under an explicitly proved
+observational congruence}. Suppose two complete candidates have the same numeric
+output on every admissible input. They are interchangeable for a final
+specification that observes only that output. They are not automatically
+interchangeable as arbitrary higher-order subterms, because an enclosing context
+might inspect their representation, intermediate state, dictionaries, or a
+second output.
+
+A safe first optimization deduplicates only \emph{complete candidates at the
+root behavioral specification}, keeping one representative and its own source
+receipt. A more ambitious grammar-level quotient needs a congruence theorem
+for every grammar constructor. It must also preserve a representative for each
+required source type and dictionary instantiation. The proposed workers supply
+equivalence evidence; they do not make an arbitrary lossy hashing scheme safe.
+This optimization is not part of the executed prototype.
+
+\subsection{The first Lean implementation should emit small proofs}
+
+There are two sensible replay paths. The initial path emits ordinary Lean
+proofs of the finitely many certificate identities, using existing arithmetic
+normalization and explicit substitution lemmas. The later path uses a reflected
+sparse-polynomial checker with a proved evaluation theorem. Reflection is a
+performance and proof-size improvement, not a prerequisite to validate the
+first feature.
+
+For Worker A, emit proofs of $q=tG$, $GA_a=C_aG$, and $Gs_0=0$. Apply a single
+generic invariant theorem. For Worker B, prove the polynomial identities in
+\eqref{eq:ideal-target}--\eqref{eq:ideal-initial}, evaluate them at a state,
+and apply simultaneous invariant induction. The mathematical derivation of a
+Gr\"obner basis need not appear in the Lean proof. For Worker C, prove the
+local polynomial identity, apply the two binomial bridge lemmas, telescope a
+finite sum, and only then address recurrence comparison and exceptional seeds.
+
+The supplied \code{lean/ForgeExtension/Core.lean} is the semantic
+list-execution induction glue. \code{Worked.lean} contains a hand-written replay
+target for the mutually supporting nonlinear invariants and the local
+squared-binomial identity. They contain no \code{sorry}, declared axiom, or
+native-evaluation shortcut, but they were \emph{not compiled}. Their purpose is
+to pin down the intended theorem shapes, not to pretend that the full reifier,
+reflection theorem, or tactic exists.
+
+\subsection{Concrete libraries and module responsibilities}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}@{}}
+\toprule
+Component & Concrete choice & Required boundary\\
+\midrule\endhead
+Linear search & SymPy \code{Matrix.rank}, \code{gauss\_jordan\_solve}; later an
+incremental echelon implementation & Exact rational coefficients only; no numeric-rank acceptance.\\
+Ideal search & SymPy \code{groebner} over \code{QQ}, graded reverse lexicographic
+order, \code{GroebnerBasis.reduce} & Export multiplier identities; the checker does
+not trust basis claims or normal-form status.\\
+Binomial synthesis & SymPy polynomial reduction and \code{Matrix.nullspace} &
+Polynomial coefficient domain $\Q[A,B,n,k]$; retain endpoint-safe form.\\
+Independent replay & Python standard library \code{fractions}, \code{json},
+explicit sparse operations & No import of search code or symbolic library.\\
+Lean polynomial semantics &
+\path{Mathlib.Algebra.MvPolynomial.Eval} & Evaluation, substitution, and ring
+homomorphism lemmas connect identities to source expressions.\\
+Lean matrix semantics & \path{Mathlib.Data.Matrix.Mul} &
+Matrix, vector, and dot-product conventions must agree with the serialized row/column layout.\\
+Lean binomial semantics & \path{Mathlib.Data.Nat.Choose.Basic} &
+Prove the zero-extended predecessor convention and rational casts explicitly.\\
+General telescoping, optional & Sage \code{ore\_algebra} as an external proposer &
+Only source-grounded pointwise identities and checked boundaries have proof authority.\\
+\bottomrule
+\end{longtable}
+
+The SymPy API choices used by the prototypes are documented, and its polynomial
+reduction returns quotient witnesses as well as a remainder~\cite{sympy-polys}.
+The named Mathlib source files were inspected at Forge's pinned revision;
+\code{MvPolynomial} provides evaluation maps, and the matrix file explicitly
+specifies its row/vector conventions~\cite{mathlib-eval,mathlib-matrix}.
+These are concrete integration targets, not claims that a compatible binary
+build was available in the preparation environment.
+
+The source package pins the same reference Lean and Mathlib revisions as Forge
+for the uncompiled specimen project. A first real integration run must compile
+against that pin, inspect all resulting axioms under Forge's existing policy,
+and record the exact environment. Reusing Forge's policy is preferable to
+inventing another almost-identical trust profile in this extension.

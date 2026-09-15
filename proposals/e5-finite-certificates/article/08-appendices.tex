@@ -1,0 +1,146 @@
+\section{Certificate schemas and executable entry points}
+
+\subsection{Canonical scalar and polynomial encodings}
+
+A rational is encoded as the integer pair \code{[numerator, denominator]}, with
+positive denominator and greatest common divisor one. Python booleans are
+rejected even though they are subclasses of integers. Floats are rejected.
+A sparse polynomial in $D$ variables is a strictly lexicographically ordered
+list
+\begin{lstlisting}
+[[[e1, ..., eD], [numerator, denominator]], ...]
+\end{lstlisting}
+with nonnegative exponents, no repeated exponent vector, and no explicit zero
+coefficient. The empty list denotes the zero polynomial. Constant polynomials
+have the all-zero exponent vector. The source problem establishes the variable
+order; the certificate cannot reorder it.
+
+The checker uses exponent-vector addition for monomial multiplication and
+collects equal exponents by exact addition. Substitution is evaluated by repeated
+squaring and cached powers. This implementation is independent of SymPy's
+internal polynomial classes. Both search and checker still share the published
+mathematical schema, so common specification mistakes remain possible; the
+paper's derivations and the concrete differential controls help expose them but
+do not formally exclude them.
+
+\subsection{Linear and ideal payloads}
+
+The linear problem supplies \code{dimension}, \code{actions}, \code{initial},
+and \code{target}. Its certificate supplies \code{basis},
+\code{target\_weights}, and \code{action\_weights}. Matrices are row-major.
+Every action must have one correctly dimensioned coefficient matrix.
+
+The ideal problem additionally supplies \code{parameters}, with its initial
+coordinate polynomials in those parameter variables. Its certificate supplies
+\code{generators}, \code{target\_weights}, and nested
+\code{action\_weights}. The latter is indexed by action, destination generator,
+and source generator. Each entry is a polynomial in the state variables. There
+is no optional ``trust this Gr\"obner basis'' field.
+
+A concrete counterexample payload contains a forward input \code{word} and its
+nonzero rational \code{value}; polynomial cases also contain concrete integer
+\code{parameters}. Replaying the original problem must reproduce that value.
+A nonzero value alone, without a valid word and initialization, is not accepted.
+
+\subsection{Summation payloads}
+
+The summation problem supplies \code{power} and a polynomial \code{weight} in
+$k$. The certificate supplies \code{p0}, \code{p1}, \code{r}, and
+\code{relation\_multiplier}. Their variable orders are respectively $(n)$,
+$(n)$, $(n,k)$, and $(A,B,n,k)$. The local checker validates
+\eqref{eq:sum-cert}. Endpoints are justified by the fixed shape theorem, not by
+certificate-supplied numerical endpoint claims. An extension that changes this
+shape must provide a new boundary theorem.
+
+\Needspace{23\baselineskip}
+\subsection{Actual use from Python}
+
+The following is executable against the delivered package:
+\begin{lstlisting}[language=Python]
+import sympy as s
+from prototype.search import ideal_problem, ideal_search
+from prototype.checkers import verify
+
+x, y, z, w = s.symbols("x y z w")
+a, b = s.symbols("a b")
+problem = ideal_problem(
+    (x, y, z, w),
+    [(y*y, x, w*w, z)],
+    (a, b),
+    [a, b, a, -b],
+    x - z,
+)
+result = ideal_search(problem, max_extensions=12)
+assert result["status"] == "certified"
+assert verify(problem, result["certificate"])
+\end{lstlisting}
+
+A user may replace the target or updates, but the certificate must then be
+rechecked against that changed problem. Reusing a previous result object or
+matching a case name does not establish validity.
+
+\section{Reproduction and archive map}
+
+From the archive root:
+\begin{lstlisting}
+python -m pip install -r requirements.txt
+python -m prototype.run_experiments --output reproduced-results
+python -S prototype/checkers.py reproduced-results/certificates \
+    reproduced-results/counterexamples
+python -m pytest -q
+\end{lstlisting}
+The regression tests replay the retained \code{results/} corpus; the generation
+command writes a distinct directory by default. Timings will vary across
+machines. The deterministic outcome categories and exact identities, not the
+millisecond values, are the reproducibility targets.
+
+To build the article, run \code{python build.py}. It invokes \code{pdflatex}
+three times in a temporary output directory and copies the final PDF into
+\code{article/}. The complete source uses ordinary LaTeX packages; no font files
+are included. The generated \code{metrics.tex} and \code{recurrences.tex} reflect
+the retained run, not an automatically substituted local timing run.
+
+The \code{lean/} directory is a separate, uncompiled specimen project. On a
+machine with the pinned Lean toolchain and fetched Mathlib dependencies,
+\code{lake build} is the intended first validation command. Its successful
+execution is \emph{not} part of the recorded evidence supplied with this article.
+
+\begin{longtable}{@{}p{0.34\linewidth}p{0.58\linewidth}@{}}
+\toprule
+Path & Contents\\
+\midrule\endhead
+\code{article/} & Main TeX, section sources, generated tables, references, and rendered PDF.\\
+\code{prototype/search.py} & The three untrusted exact search algorithms.\\
+\code{prototype/checkers.py} & Standard-library proof and counterexample replay.\\
+\code{prototype/run\_experiments.py} & Deterministic corpus, timing protocol, mutation generation, and exports.\\
+\code{tests/} & Regression, schema, boundary, and differential tests.\\
+\code{results/certificates/} & 38 compact problem-and-certificate bundles.\\
+\code{results/counterexamples/} & 17 original-problem concrete counterexamples.\\
+\code{results/summary.json} & Per-case outcomes, settings, timing statistics, and environment.\\
+\code{results/mutations.json} & All 818 single-entry perturbation outcomes.\\
+\code{results/*.log} & Accepted runs and explicitly separated development diagnostics.\\
+\code{docs/} & Repository audit, validation scope, and source manifest.\\
+\code{lean/} & Uncompiled semantic induction and worked replay specimens.\\
+\bottomrule
+\end{longtable}
+
+\section{Research questions left by the implementation}
+
+The most valuable unresolved questions are practical rather than foundational.
+How often is the target-generated ideal small in real Lean developments? When
+does fixed-degree affine lifting beat direct ideal closure? Which generator
+orders minimize kernel replay rather than search alone? Can the binomial
+certificate basis be enlarged while keeping endpoints polynomial? Which exact
+Leant candidate grammars admit useful observational congruences?
+
+Each has a concrete experiment. Compare discovered generator counts under
+alternative term orders while replaying the same source goals. Measure
+monomial-lift dimensions and polynomial certificate sizes on matched affine
+problems. Compare proof construction and kernel time for expanded versus shared
+multiplier expressions. Add higher-shift binomial factors and require support
+and pole tests before admitting the new template. Restrict semantic deduplication
+to a source grammar with proved congruence lemmas and retain a no-pruning control.
+
+None requires treating an unproved CAS assertion as evidence. The architecture
+can remain the one Forge already has; the advance comes from choosing
+mathematical fragments with finite, inspectable certificates.

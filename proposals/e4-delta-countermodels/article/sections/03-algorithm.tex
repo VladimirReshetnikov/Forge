@@ -1,0 +1,120 @@
+\section{Goal-directed observable closure}
+\label{sec:algorithm}
+
+\subsection{Linear operators hidden inside polynomial updates}
+For an edge $e:q\to q'$ and polynomial observation $p\in\Q[x]$, expand
+\begin{equation}\label{eq:coefficient}
+ p(F_e(x,u))=\sum_{\alpha\in\N^m}u^\alpha\,T_{e,\alpha}(p)(x).
+\end{equation}
+Only finitely many coefficients are nonzero. For fixed $e$ and $\alpha$,
+$T_{e,\alpha}$ is a \emph{linear map of rational vector spaces}, even when
+$F_e$ is nonlinear in $x$. Composition with a fixed map and extraction of a
+coefficient both commute with rational linear combinations.
+
+This observation separates two issues often conflated in invariant synthesis.
+The degree of $p(F_e)$ may grow, creating more monomials. But testing whether
+its coefficients belong to a space already discovered is still exact linear
+algebra. The procedure does not make an unknown polynomial multiplier multiply
+an unknown candidate invariant.
+
+\subsection{The least closed family}
+We seek vector spaces $W_q\subseteq\Q[x]$ satisfying
+\begin{align}
+ g_{q,j}&\in W_q &&\text{for every demanded goal},\label{eq:contain}\\
+ T_{e,\alpha}(W_{q'})&\subseteq W_q
+ &&\text{for every }e:q\to q'\text{ and every }\alpha.\label{eq:closed}
+\end{align}
+There is a least such family: intersect all families satisfying these
+conditions, or equivalently take the span of all iterated coefficient
+pullbacks of the goals. The search constructs bases $P_q$ for that family
+whenever the process stabilizes.
+
+Backward propagation is essential. A newly discovered observation at the
+\emph{destination} of an edge is pulled back to the \emph{source}. Moving it
+in the other direction is not a sound invariant-discovery algorithm.
+
+\begin{lstlisting}
+for each control node q:
+    basis[q] := empty exact rational span
+agenda := empty queue
+insert every requested goal into its node's span
+
+while agenda is nonempty:
+    (destination, p) := pop_front(agenda)
+    if destination is initial and p(initial_state) != 0:
+        return a reconstructed, independently checked execution trace
+    for each incoming edge e : source -> destination:
+        expanded := simultaneous_substitution(p, update[e])
+        for each nonzero payload coefficient c(x) of expanded:
+            if c is not in span(basis[source]):
+                retain c itself, with its parent/edge provenance
+                insert c into the exact span and enqueue it
+
+emit goal-coordinate and edge-coordinate identities
+accept only after independent replay of every identity
+\end{lstlisting}
+
+There are separate limits for state degree, basis size, coefficient obligations,
+polynomial terms, and counterexample-grid enumeration. A cutoff returns
+\unknown{}. The bound on worklist actions is not a wall-clock preemption
+mechanism; a large symbolic expansion can itself be expensive.
+
+\subsection{Exact dependence without losing useful provenance}
+The implementation retains each \emph{original} independent polynomial rather
+than replacing it by its reduced echelon residual. This choice is intentional.
+An original polynomial has a simple origin: either a demanded goal, or one
+coefficient of the pullback of a previously retained polynomial. That origin
+will later construct a counterexample trace.
+
+A separate echelon structure stores normalized pivot rows and their coordinates
+in the retained original generators. To reduce a new polynomial $p$, eliminate
+its pivot monomials, accumulating coefficients $c_i$, until
+\[
+ p=\sum_i c_iP_i+r.
+\]
+If $r=0$, $p$ is already in the space. Otherwise retain $p$ and insert
+$r/\operatorname{lc}(r)$ as a pivot row. Its coordinates in the enlarged
+original basis are
+\[
+ \left(-\frac{c_1}{\operatorname{lc}(r)},\ldots,
+       -\frac{c_k}{\operatorname{lc}(r)},
+        \frac{1}{\operatorname{lc}(r)}\right).
+\]
+Exact rational arithmetic makes this a decision, not a tolerance-based rank
+heuristic. Every previous coordinate row is padded with a zero when a generator
+is added. Monomial order is fixed, so certificate output is deterministic for
+a fixed input and traversal order.
+
+\subsection{The positive certificate}
+Write $P_q$ as a column vector of its retained generators. Search returns
+rational matrices $C_q$ and polynomial matrices $M_e(u)$ such that
+\begin{align}
+ G_q(x)&=C_qP_q(x),\label{eq:goalcert}\\
+ P_{q'}(F_e(x,u))&=M_e(u)P_q(x)
+ &&(e:q\to q'),\label{eq:edgecert}\\
+ P_{q_0}(x_0)&=0.\label{eq:initcert}
+\end{align}
+The matrix $M_e$ has $\dim W_{q'}$ rows and $\dim W_q$ columns; reversing
+these dimensions is an easy implementation error. A zero-dimensional source
+space is valid only when each relevant pulled-back observation is identically
+zero. A zero-dimensional destination has no preservation rows.
+
+The checker does not need to verify that the generators are independent, that
+the family is least, or that the search followed this algorithm. Those
+properties concern discovery, completeness, and cost. Soundness requires only
+\eqref{eq:goalcert}--\eqref{eq:initcert}, with complete coverage of the
+\emph{externally supplied} problem's edges and goals.
+
+\subsection{Search and replay really use different arithmetic paths}
+The search uses SymPy expressions, \code{Poly} over \code{QQ}, simultaneous
+\code{xreplace}, coefficient extraction, and a custom exact span manager. The
+checker uses canonical sparse dictionaries with \code{fractions.Fraction},
+explicit addition and convolution, and independently implemented simultaneous
+substitution. It does not import SymPy or ask the search to normalize an
+identity for it.
+
+The two sides still share the problem schema and Python runtime. The search
+also calls the schema validator before starting. Thus ``independent'' here
+means independent algebraic replay, not two verified implementations with
+independent foundations. The distinction is tested by replaying the stored
+corpus under \code{python -S}, which disables site-package imports.

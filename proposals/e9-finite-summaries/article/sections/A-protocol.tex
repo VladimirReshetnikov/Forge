@@ -1,0 +1,129 @@
+\section{Artifact protocol and reproduction}
+
+\subsection{Files and commands}
+
+The ZIP archive contains this article and its complete multi-file LaTeX source,
+the Python producer and checker modules, the unit tests, raw run records, and
+the uncompiled Lean semantic lemma. Run from the extracted bundle root:
+
+\begin{lstlisting}
+# Install only the producer dependency in an appropriate Python environment.
+python -m pip install -r prototype/requirements.txt
+
+# Recheck the supplied corpus; no third-party Python packages are loaded.
+python -S prototype/replay.py results/run-4/certificates.json
+
+# Exercise the standalone regression suite.
+cd prototype
+python -m unittest discover -s tests -v
+cd ..
+
+# Recreate the full corpus in a new or empty directory.
+python prototype/run_experiments.py --out results/reproduction
+
+# Supplemental universal-q polynomial check (uses SymPy).
+python prototype/check_parametric_square.py
+
+# Rebuild the article with a normal TeX installation.
+cd article
+latexmk -pdf -interaction=nonstopmode -halt-on-error \
+  forge_finite_summaries.tex
+\end{lstlisting}
+
+The producer deliberately refuses a nonempty output directory. This avoids
+mixing a changed run's measurements with old files. The historical run records
+are described in \path{results/RUN_HISTORY.md}. The supplemental parameterised
+square-sum check establishes zero symbolic residuals in $n,k,q$; it is not
+counted among the $245$ rational-problem entries and is not a Lean proof.
+
+\subsection{Canonical rational and polynomial encoding}
+
+A rational is encoded as \code{[numerator, denominator]}, with integer
+components, a strictly positive denominator, and greatest common divisor one.
+The zero rational is therefore exactly \code{[0, 1]}. Floats, Booleans,
+noncanonical fractions, and negative or zero denominators are rejected.
+
+A polynomial is a sorted list of terms
+\code{[nExponent, kExponent, numerator, denominator]}. Zero terms and duplicate
+monomials are forbidden. An empty list denotes the zero polynomial. A
+univariate operator coefficient must have zero $k$ exponent. An operator is an
+array of these polynomials, indexed by shift power; its last coefficient must
+be nonzero.
+
+The checker fixes a maximum rational bit length of $4096$, total polynomial
+degree $128$, and $4096$ terms per polynomial. Word models have dimension at
+most $64$ and at most $32$ explicitly supplied transition matrices.
+The telescoper decoder further restricts power to $1$ through $8$ and order to
+$1$ through $6$. General operator decoding permits order at most $16$.
+The singularity cover has a bound cap of $100\,000$. These input limits are
+research safeguards, not a comprehensive bound on all intermediate resource
+use.
+
+The file replay loader rejects duplicate JSON keys and nonfinite numeric
+constants and imposes a $32$ MiB file-size cap. It does not execute strings as
+Python or Lean source. Structural shape checks precede the mathematical
+identities. This is preferable to a producer-controlled ``residual is zero''
+field: no such field is accepted.
+
+\subsection{Authoritative problem versus certificate}
+
+Every replay bundle has exactly the top-level fields
+\code{checker}, \code{problem}, and \code{certificate}. A word problem supplies
+\code{kind}, \code{dimension}, \code{initial}, \code{output}, and
+\code{transitions}. Its closure certificate supplies
+\code{kind}, \code{basis}, \code{initial_coordinates}, and \code{actions}.
+A word counterexample instead supplies its literal word and a nonzero claimed
+value, which the checker recomputes against the authoritative matrices.
+
+For example, with $u=(1,1)$, $v=(1,-1)^T$, and letter matrices $2I,3I$, a
+one-row certificate has $B=(1,1)$, $\alpha=(1)$, and actions $(2),(3)$.
+The universal equality follows even though the two state coordinates may grow
+without bound. Changing only the initial row to $(2,1)$ invalidates the
+certificate and is caught by $u=\alpha B$ before any word search is performed.
+
+A telescoping problem supplies only its fixed family tag, power, and rational
+weight. The certificate supplies operator and flux arrays. A common-multiple
+problem supplies both original operators; its certificate supplies the proposed
+common operator and left multipliers. A recurrence-plan problem supplies its
+operator; the certificate supplies a bound, complete natural root list, and
+seed list. Extra object fields are rejected rather than ignored.
+
+This format makes one kind of subject-substitution error observable: changing
+the problem while retaining the old certificate generally fails a recomputed
+identity. In production, the problem also needs the source denotation proof
+and exact context binding. JSON shape alone does not provide those properties.
+
+\subsection{Checker map}
+
+\begin{longtable}{@{}p{0.31\linewidth}p{0.64\linewidth}@{}}
+\toprule
+Entry point & Mathematical work performed\\
+\midrule\endhead
+\code{check.linear} & Decode dimensions and rationals; verify $u=\alpha B$, $Bv=0$, and $BM_a=C_aB$ for all supplied letters.\\
+\code{check.counterexample} & Re-evaluate the concrete word in the original model and compare its nonzero rational output.\\
+\code{check.telescoper} & Reconstruct \eqref{eq:Ri}--\eqref{eq:Tj}; verify the interior identity and every exceptional boundary polynomial.\\
+\code{check.ore_identity} & Apply the shifted polynomial product rule twice and compare with the proposed common left multiple.\\
+\code{check.singularity_plan} & Verify a Cauchy cover, enumerate all natural roots in it, and recompute the required pivot seeds.\\
+\bottomrule
+\end{longtable}
+
+The producer modules are separate: \path{linear_search.py},
+\path{telescoping_search.py}, \path{ore_search.py}, and \path{lift.py}.
+Neither \code{check.py} nor \code{exact.py} imports SymPy or any search routine.
+The latter is a deliberately small shared arithmetic and encoding module;
+sharing it is disclosed because it is not the same as a fully independent
+second implementation.
+
+\section{Scope ledger for future claims}
+
+Before describing a future result as ``Forge proved it'', require the exact
+source goal, the accepted source fragment, the produced certificate, the
+reconstructed Lean proof, the kernel outcome, and the actual axiom inventory.
+Before describing a future result as ``faster'', require a controlled baseline
+with the same goal, imports, available lemmas, and budgets.
+
+The current archive establishes exact model-level search and replay, mathematical
+soundness arguments, a documented implementation route, and bounded experimental
+evidence. It does not establish the source-to-kernel path. The capability ledger
+in \code{docs/STATUS.md} is intended to survive integration: each row has a
+separate acceptance condition and cannot be closed by a nearby easier result.

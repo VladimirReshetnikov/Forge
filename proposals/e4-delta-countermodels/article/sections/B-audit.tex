@@ -1,0 +1,78 @@
+\section{Source audit, scope of originality, and artifact ledger}
+
+\subsection{Pinned repository context}
+\begin{longtable}{@{}P{0.18\textwidth}P{0.74\textwidth}@{}}
+\toprule
+Repository & Reviewed revision and principal material \\
+\midrule
+\endhead
+Forge & \code{674521027d968d59f7b83220ed52304a85cb55e2}\newline
+README; recursive tree; \path{article/sections/05-structural.tex};
+\path{article/sections/B-provenance.tex}; \path{docs/STATUS.md};
+\path{docs/IDEAS-FROM-LEANT-DJEX.md}; \path{lean/Forge/Design/Runtime.lean}. \\
+Leant & \code{6bf05ad78c467989e68290f2d08bbed40802d485}\newline
+Tree and README context; pinned \path{docs/behavioral-synthesis.md}. \\
+Djex & \code{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}\newline
+Root and Djinn trees; pinned
+\path{djinn/src-core/Djinn/Internal/LJTFormula.hs}. \\
+\bottomrule
+\end{longtable}
+
+The audit focused on the merged design and the code directly relevant to the
+proposed integration. It was not a line-by-line review of all nine frozen
+upstream submissions or every Leant/Djex source file. An incomplete code-search
+response was not treated as proof that a term or idea is absent from the
+repository. The claim of increment is therefore grounded in the specific
+baseline passages identified in Section~\ref{sec:delta}, not in a universal
+claim of priority over all existing literature or files.
+
+The neighboring repositories are evidence of actual interfaces and existing
+behavioral-verification mechanisms. Their test counts are not added to this
+package's counts, and their source text is not redistributed in the archive.
+
+\subsection{Contribution and reuse ledger}
+\begin{longtable}{@{}P{0.31\textwidth}P{0.61\textwidth}@{}}
+\toprule
+Item & Attribution and status \\
+\midrule
+\endhead
+Certificate-producing outer planner & Already in Forge. Reused as context only. \\
+Invariant and observable spaces & Established mathematics. The exact control-indexed coefficient closure is developed here as an incremental worker, with its fragment theorem and concrete formats. \\
+Rational sparse replay & New code in this package, standard algebra. Executed; not formally verified. \\
+Path-origin trace extraction & Implemented here for the stated unrestricted-input machine IR. The counterexample is checked independently of its provenance. \\
+Kripke semantics and IPC soundness & Established logic. A finite model proposer/checker and integration discipline are implemented/proposed here; existing Lean metatheory should be reused. \\
+Generic validation, source identity, trust policy & Already treated extensively by Forge and its neighboring projects. Not claimed as new. \\
+Universal behavioral fold dispatcher & Concrete proposed extension to the reviewed Leant assertion checker; not integrated into Leant. \\
+Lean reconstruction & 222 generated local obligations, three generic induction bridges, and a worked example. All uncompiled here. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Archive contents}
+\begin{longtable}{@{}P{0.34\textwidth}P{0.58\textwidth}@{}}
+\toprule
+Path & Purpose \\
+\midrule
+\endhead
+\path{article/forge_delta.tex}, \path{article/sections/} & Main article and complete modular source. \\
+\path{article/forge_delta.pdf} & Rendered article. \\
+\path{forge_delta/search.py} & Exact SymPy closure, retained-origin witnesses, narrow ablation. \\
+\path{forge_delta/checker.py} & Standard-library rational-machine replay and strict mathematical decoder. \\
+\path{forge_delta/kripke.py} & Bounded model proposer and separate forcing replay. \\
+\path{forge_delta/cases.py} & Transparent worked and seeded case generators. \\
+\path{forge_delta/experiment.py} & Non-overwriting reproducible experiment runner. \\
+\path{tests/test_delta.py} & 151-test suite, including mutation and differential tests. \\
+\path{results/} & Exact corpus, observations, summaries, logs, generated-Lean count, and an initial packaging failure record. \\
+\path{replay.py}, \path{emit_lean.py} & Site-package-free replay and local Lean identity emission. \\
+\path{lean/} & Uncompiled integration targets and explicit status notes. \\
+\path{docs/} & Source audit, implementation limits, and merge-oriented notes. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Remaining acceptance obligations}
+The prototype is sufficient to reproduce the mechanism, inspect its exact
+proof certificates, and develop the next implementation. It is not sufficient
+to claim that Forge now proves additional Lean theorems. That claim still
+requires the pinned Lean compilation, denotation bridge, completed induction
+composition, and representative source-goal evaluation specified in
+Section~\ref{sec:engineering}. These are explicit next engineering gates,
+not missing explanations concealed behind a test-pass count.

@@ -1,0 +1,62 @@
+linear_invariant_d2_0 certified 1.698 ms
+linear_invariant_d2_1 certified 1.384 ms
+linear_invariant_d2_2 certified 1.134 ms
+linear_invariant_d3_0 certified 1.79 ms
+linear_invariant_d3_1 certified 1.495 ms
+linear_invariant_d3_2 certified 1.327 ms
+linear_invariant_d4_0 certified 2.902 ms
+linear_invariant_d4_1 certified 2.982 ms
+linear_invariant_d4_2 certified 2.948 ms
+linear_invariant_d5_0 certified 3.554 ms
+linear_invariant_d5_1 certified 3.214 ms
+linear_invariant_d5_2 certified 3.635 ms
+linear_invariant_d6_0 certified 6.273 ms
+linear_invariant_d6_1 certified 6.472 ms
+linear_invariant_d6_2 certified 5.919 ms
+linear_invariant_d7_0 certified 6.684 ms
+linear_invariant_d7_1 certified 7.596 ms
+linear_invariant_d7_2 certified 6.709 ms
+linear_equivalence_d2 certified 3.044 ms
+linear_equivalence_d3 certified 5.541 ms
+linear_equivalence_d4 certified 9.944 ms
+linear_equivalence_d5 certified 17.42 ms
+linear_late_error_d2 counterexample 0.333 ms
+linear_late_error_d3 counterexample 0.67 ms
+linear_late_error_d4 counterexample 0.536 ms
+linear_late_error_d5 counterexample 0.818 ms
+linear_late_error_d6 counterexample 1.25 ms
+linear_late_error_d7 counterexample 1.907 ms
+linear_late_error_d8 counterexample 2.919 ms
+linear_random_false_0 counterexample 0.351 ms
+linear_random_false_1 counterexample 0.167 ms
+linear_random_false_2 counterexample 0.152 ms
+linear_random_false_3 counterexample 0.147 ms
+linear_random_false_4 counterexample 0.192 ms
+linear_random_false_5 counterexample 0.146 ms
+linear_word_order counterexample 0.429 ms
+ideal_mutual_squares certified 10.667 ms
+ideal_budget unknown 1.725 ms
+ideal_mutant_update counterexample 5.98 ms
+ideal_mutant_initial counterexample 6.987 ms
+ideal_product_scale1 certified 6.764 ms
+ideal_product_scale2 certified 6.761 ms
+ideal_product_scale3 certified 6.536 ms
+ideal_product_scale5 certified 6.596 ms
+ideal_cassini certified 5.789 ms
+ideal_cassini_mutant counterexample 10.471 ms
+ideal_chain_d3 certified 17.396 ms
+ideal_chain_d4 certified 31.803 ms
+ideal_chain_d5 certified 52.036 ms
+sum_binomial_m1_moment0 certified 2.813 ms
+sum_binomial_m1_moment1 certified 35.657 ms
+sum_binomial_m1_moment2 certified 48.0 ms
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data/forge_extensions/prototype/run_experiments.py", line 214, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/data/forge_extensions/prototype/run_experiments.py", line 179, in main
+    assert r['status']==expected,(name,r)
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('sum_binomial_m1_moment3', {'status': 'unknown', 'reason': 'template_exhausted', 'stats': {'trials': 20}})

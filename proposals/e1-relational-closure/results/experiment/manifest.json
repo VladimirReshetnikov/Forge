@@ -1,0 +1,21 @@
+{
+  "command": "prototype/run_experiments.py --output results/experiment --resume --jobs 6",
+  "comparison": "matched synthetic linear vs ideal, NOT Lean tactics",
+  "hard_timeout": 30,
+  "jobs": 6,
+  "lean": "NOT_RUN; no Lean compiler available",
+  "limits": {
+    "coefficient_terms": 1500,
+    "degree": 6,
+    "generators": 40,
+    "grid_points": 100000,
+    "pullbacks": 200,
+    "seconds": 10
+  },
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "resumed": true,
+  "seed": 20260915,
+  "sympy": "1.14.0",
+  "timestamp": "2026-09-15T19:34:41.243891+00:00"
+}

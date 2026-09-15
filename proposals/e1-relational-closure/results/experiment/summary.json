@@ -1,0 +1,186 @@
+{
+  "accepted": 108,
+  "groups": [
+    {
+      "cases": 8,
+      "check_seconds": 0.0025797509999847534,
+      "counts": {
+        "proved": 8
+      },
+      "discovery_seconds": 0.054759941000043,
+      "family": "scaled graph",
+      "mode": "linear",
+      "process_seconds": 6.119863381999949
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.002208239000310641,
+      "counts": {
+        "proved": 8
+      },
+      "discovery_seconds": 0.05404698300014843,
+      "family": "scaled graph",
+      "mode": "ideal",
+      "process_seconds": 5.9329398890000675
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0,
+      "counts": {
+        "unknown": 8
+      },
+      "discovery_seconds": 1.0855119869999044,
+      "family": "coupled nonlinear",
+      "mode": "linear",
+      "process_seconds": 6.933939023000107
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.011544220999894605,
+      "counts": {
+        "proved": 8
+      },
+      "discovery_seconds": 0.2653789970000844,
+      "family": "coupled nonlinear",
+      "mode": "ideal",
+      "process_seconds": 6.065885449999882
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0,
+      "counts": {
+        "unknown": 8
+      },
+      "discovery_seconds": 0.26875541300012173,
+      "family": "nonlinear equivalence",
+      "mode": "linear",
+      "process_seconds": 11.677736237999852
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.0037139949998845623,
+      "counts": {
+        "proved": 8
+      },
+      "discovery_seconds": 0.1262524799997209,
+      "family": "nonlinear equivalence",
+      "mode": "ideal",
+      "process_seconds": 9.724908715999845
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.0027365110000800996,
+      "counts": {
+        "refuted": 8
+      },
+      "discovery_seconds": 0.23350244499988548,
+      "family": "nonlinear mutant",
+      "mode": "linear",
+      "process_seconds": 10.379946562999862
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.002512372000069263,
+      "counts": {
+        "refuted": 8
+      },
+      "discovery_seconds": 0.25532132900025317,
+      "family": "nonlinear mutant",
+      "mode": "ideal",
+      "process_seconds": 12.557980688000157
+    },
+    {
+      "cases": 12,
+      "check_seconds": 0.009404287999814187,
+      "counts": {
+        "proved": 12
+      },
+      "discovery_seconds": 0.8381670799999483,
+      "family": "affine equivalence",
+      "mode": "linear",
+      "process_seconds": 19.11276732099998
+    },
+    {
+      "cases": 12,
+      "check_seconds": 0.009961834000023373,
+      "counts": {
+        "proved": 12
+      },
+      "discovery_seconds": 0.5470554360000506,
+      "family": "affine equivalence",
+      "mode": "ideal",
+      "process_seconds": 21.43652848199997
+    },
+    {
+      "cases": 6,
+      "check_seconds": 0.003585221000093952,
+      "counts": {
+        "refuted": 6
+      },
+      "discovery_seconds": 0.338981510999929,
+      "family": "affine mutant",
+      "mode": "linear",
+      "process_seconds": 8.633219719999943
+    },
+    {
+      "cases": 6,
+      "check_seconds": 0.003788295000163089,
+      "counts": {
+        "refuted": 6
+      },
+      "discovery_seconds": 0.406807257999958,
+      "family": "affine mutant",
+      "mode": "ideal",
+      "process_seconds": 9.581928654999729
+    },
+    {
+      "cases": 4,
+      "check_seconds": 0.0018019189999449736,
+      "counts": {
+        "proved": 4
+      },
+      "discovery_seconds": 0.05856769800016082,
+      "family": "control flow",
+      "mode": "linear",
+      "process_seconds": 5.610351741000045
+    },
+    {
+      "cases": 4,
+      "check_seconds": 0.001605725999979768,
+      "counts": {
+        "proved": 4
+      },
+      "discovery_seconds": 0.06383067100000517,
+      "family": "control flow",
+      "mode": "ideal",
+      "process_seconds": 6.849519727999905
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.0014688500001511784,
+      "counts": {
+        "proved": 5,
+        "refuted": 3
+      },
+      "discovery_seconds": 0.07979048699996838,
+      "family": "boundary controls",
+      "mode": "linear",
+      "process_seconds": 11.39959465999982
+    },
+    {
+      "cases": 8,
+      "check_seconds": 0.0014126070000202162,
+      "counts": {
+        "proved": 5,
+        "refuted": 3
+      },
+      "discovery_seconds": 0.06525814400004037,
+      "family": "boundary controls",
+      "mode": "ideal",
+      "process_seconds": 11.214999864999982
+    }
+  ],
+  "problems": 62,
+  "runs": 124,
+  "unknown": 16
+}

@@ -1,0 +1,143 @@
+\Needspace{8\baselineskip}
+\section{Artifact map and reproduction}
+\label{app:artifacts}
+
+\subsection{Files and their roles}
+
+\begin{longtable}{@{}p{0.45\textwidth}p{0.49\textwidth}@{}}\toprule
+Path & Role \\\midrule\endhead
+\code{prototype/ideal.py} & Descending spaces, tracked Buchberger algorithm,
+original-generator multiplier extraction, conservation comparator. \\
+\code{prototype/weighted.py} & Reachable-space search, difference construction,
+affine/tensor subsequence example. \\
+\code{prototype/telescoping.py} & Bounded linear coefficient synthesis for
+binomial-power telescopers. \\
+\code{prototype/check.py} & Independent standard-library exact replayer and
+bounded canonical-data decoder. \\
+\code{prototype/encode.py} & SymPy-side serialization, not imported by the
+checker. \\
+\code{run_experiments.py} & Seeded corpus construction and separate search/replay
+measurements. \\
+\code{replay.py} & Standalone replay of stored original problems and
+certificates. \\
+\code{tests/test_certificates.py} & 318 recorded pytest cases, including semantic
+mutations and differential controls. \\
+\code{results/certificates.json} & 78 original-problem/certificate pairs. \\
+\code{results/experiments.json} & Full per-attempt outcomes, dimensions,
+coefficients, and local timings. \\
+\code{results/stdlib-replay.json} & Receipt from replay with site packages
+disabled. \\
+\code{results/pytest.xml}, \code{results/pytest.log} & Test report and captured
+console output. \\
+\code{results/status.json} & Repository pins and explicit implemented/not-run
+status. \\
+\code{lean/ProofPrinciples.lean} & Uncompiled core proof-principle specimens. \\
+\code{lean/ReplayTargets.lean} & Uncompiled concrete Mathlib polynomial replay
+targets. \\
+\code{article/forge-finite-certificates.tex} & Main report source; section and
+reference files are in the same directory tree. \\
+\bottomrule\end{longtable}
+
+\subsection{Commands}
+
+Use Python 3.10 or newer. The recorded environment was Python 3.13.5. From the
+package root:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+python -m pip install -r requirements.txt
+python -m pytest -q
+python -S replay.py
+python run_experiments.py --out reproduced-results
+python -S replay.py reproduced-results/certificates.json
+\end{lstlisting}
+\end{minipage}\par
+The fourth command regenerates the cases; it does not overwrite the supplied
+measurements. Timings will vary. The deterministic inputs and outcomes should
+match under the recorded dependency version; serialized basis choices should
+not be used as a cross-version semantic identity.
+
+Build the report from \code{article/} with three passes:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+pdflatex -interaction=nonstopmode -halt-on-error forge-finite-certificates.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-finite-certificates.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-finite-certificates.tex
+\end{lstlisting}
+\end{minipage}\par
+The main source uses ordinary TeX Live packages, including New TX text/math,
+Microtype, Listings, and Tcolorbox. Font files are not included in the archive.
+
+To try the Lean specimens, place them inside an independently configured,
+pinned Lean/Mathlib project and invoke \code{lake env lean} on each file. This
+is a reproduction instruction, not a record that the commands were executed
+here. Their \code{NOT_RUN} headers are intentional.
+
+\Needspace{8\baselineskip}
+\section{Certificate data contracts}
+
+\subsection{Rationals and sparse polynomials}
+
+A rational is the pair $[a,b]$ of exact JSON integers with $b>0$ and
+$\gcd(|a|,b)=1$. A zero coefficient is represented by $[0,1]$ when it occurs in
+a vector or matrix; zero terms are omitted from polynomials. A polynomial in
+$n$ variables is a strictly lexicographically ordered list of
+$[\text{exponent vector},\text{rational coefficient}]$ pairs. For example,
+$x^2-y$ in variable order $(x,y)$ is
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+[[[0,1],[-1,1]], [[2,0],[1,1]]]
+\end{lstlisting}
+\end{minipage}\par
+The zero polynomial is the empty list. Exponent dimension and variable order
+come from the original problem, not from a claimed theorem name in the
+certificate.
+
+\subsection{Inductive-ideal data}
+
+The problem contains \code{dimension}, initial maps with explicit parameter
+counts, transitions with update and guard polynomials, and the goal polynomial.
+The certificate contains \code{invariants}, \code{steps}, and
+\code{goal_multipliers}. For transition $e$ and invariant $i$,
+\code{steps[e][i]} is a list of multipliers in the order
+\[
+ (p_1,\ldots,p_r,g_{e1},\ldots,g_{eq_e}).
+\]
+Thus the checker can validate multiplier count and meaning without any
+Gr\"obner-basis data. Initial maps are interpreted separately even if they use
+the same number of parameter variables.
+
+\subsection{Weighted data}
+
+The source problem supplies \code{dimension}, \code{alphabet}, \code{alpha},
+\code{beta}, and one matrix for every alphabet label. A closure certificate
+supplies \code{rank} (the number of rows supplied, not a replayed rank claim),
+\code{basis}, \code{initial_coordinates}, and \code{closure}. A negative
+certificate supplies \code{word}. The two kinds have different acceptance
+conditions: finite matrix identities versus a directly reevaluated nonzero
+output.
+
+\subsection{Telescoping data}
+
+The source problem fixes \code{family = binomial_power_sum} and \code{power}.
+The certificate contains \code{order}, univariate \code{coefficients}, the
+bivariate \code{numerator}, and exact \code{initial_values}. Its intended domain
+is all natural $n$, with zero-extended binomial support. The polynomial identity
+and regularization formulas are fixed by the versioned certificate kind, not
+provided as executable text by the search backend.
+
+\Needspace{8\baselineskip}
+\section{Audit scope and source provenance}
+
+The repository audit focused on Forge's README, structural and nonlinear
+sections, conclusion, provenance appendix, neighboring-project integration
+notes, and runtime design specimen. Leant and Djex were inspected through their
+current READMEs, source-owned semantic description, and the latest indexing
+composition diagnosis. These sources identify what the consolidated design
+already covers and where the present increment begins.
+
+The report does not reproduce the nine historical proposals, claim an
+exhaustive absence search across every preserved file, or incorporate their
+old experimental counts into its new results. Every count in
+Section~\ref{sec:experiments} comes from this package's own executed corpus.
+Mathematical background is attributed in the references; the detailed
+certificate theorems and derivations are stated and proved in the report.

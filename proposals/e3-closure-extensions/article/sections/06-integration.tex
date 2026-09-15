@@ -1,0 +1,113 @@
+\section{A concrete Lean and Leant integration plan}
+\label{sec:integration}
+
+\subsection{Implement the acceptance lemmas before the search adapter}
+
+The production development should begin with a small Lean library containing three semantic results: preservation of a simultaneous zero invariant along a fold, preservation of a binary relation along two folds, and the binomial flux theorem. The Noetherian termination proof and the Gr\"obner algorithm do \emph{not} have to be formalized before ideal certificates can be accepted. They explain discovery; the certificate soundness theorem alone authorizes the proof.
+
+The supplied \code{lean/BridgeSpec.lean} contains core Lean source specimens for generic fold invariance, relational invariance, and transport. It has no \texttt{sorry} or added axioms, but it is \emph{uncompiled}. Its status is \code{NOT_RUN}, not ``verified Lean''. It is a starting specimen for a pinned build, not a hidden claim that the package already integrates with Lean.
+
+For polynomial certificates, two replay strategies are sensible. The first emits ordinary Lean identities with concrete coefficients and proves each using the existing ring-normalization infrastructure, then applies an ordinary induction theorem. The second ports the sparse checker to Lean, proves a soundness theorem for its interpretation, and checks data by reduction. Start with the first route: it makes translation errors visible as ordinary Lean goals and avoids prematurely committing to a reflected polynomial implementation.
+
+A positive replay must prove the original source-level target, not just a fresh theorem about the serialized polynomial system. The supplied data's mathematical meaning and the source-to-data bridge are separate acceptance obligations.
+
+\subsection{Proposed modules and their exact responsibilities}
+
+These paths are proposed new modules. They are not claimed to exist in the reviewed repository.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.39\textwidth}X@{}}
+\toprule
+Proposed module & Responsibility and required output\\
+\midrule
+\code{Forge/Closure/FoldSoundness.lean} & Prove generic unary-invariant, binary-relation, and commuting-map fold lemmas. No solver dependency.\\
+\code{Forge/Closure/PolynomialReplay.lean} & Interpret the state-coordinate map, construct rational coefficient expressions, prove initial and multiplier identities, apply simultaneous-zero induction.\\
+\code{Forge/Closure/ReifyTransitions.lean} & Recognize supported iterations/folds; produce a transition IR \emph{and} explicit source equation obligations. Never identify terms by printed names.\\
+\code{Forge/Closure/FiniteContract.lean} & Check finite relation tables with the entire alphabet, connect tables to exact source-step equations, derive universal endpoint observations.\\
+\code{Forge/Closure/BinomialFlux.lean} & Prove the supported sum bridge, including support-zero facts and regularity-based recurrence comparison.\\
+\code{Forge/Closure/WorkerAdapter.lean} & Serialize only supported problems, consume certificate data, and request native replay through Forge's existing verification boundary.\\
+\code{Forge/Closure/Diagnostics.lean} & Report generator count, degree ceilings, missing bridge obligations, singular recurrence indices, and concrete counterexample words.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+No module in this plan should expose an operation that marks a goal solved merely because the Python checker returned true. Python is an experimental replay oracle; production authority is the completed Lean proof.
+
+\subsection{Reifying an iteration without changing its meaning}
+
+The initial supported source grammar should be small: a tuple of scalar state components, total polynomial coordinate updates, and a visible finite iteration or left fold. Fixed finite choices become transition labels. The frontend must extract the equations of the exact recursive definition or use a supplied theorem connecting it to a fold. It should not invent a new recurrence based only on the function's name or a few evaluations.
+
+A concrete extraction procedure is:
+\begin{enumerate}[leftmargin=1.6em]
+\item Introduce the universal input word or iteration count while preserving the local telescope. Locate a supported fold/iterate expression on each side of the target.
+\item Form a product state when comparing two computations. Enumerate state coordinates by exact expressions with their types, not by pretty-printed variable names.
+\item Reify the target equality as a polynomial difference. For every coordinate update, construct a source equality identifying it with the interpretation of the proposed polynomial.
+\item Prove the initial-state equality and every update equality. Arithmetic casts and any finite-case expansion are included here.
+\item Send the resulting polynomial problem to PRC, then GI when appropriate. On a positive certificate, prove all concrete multiplier identities in Lean.
+\item Apply the simultaneous-zero fold lemma and rewrite through the source equations to close the original target.
+\end{enumerate}
+
+A target such as equality of two fold observations should generate \emph{one} product-state relation, rather than independently proving a closed form for each implementation. This often avoids unnecessary expression growth. The certificate may describe a stronger invariant than the target, but that invariant remains local to the proof unless deliberately exported as a separately proved theorem.
+
+\paragraph{Natural and integer source values.}
+A rational polynomial model for natural-number arithmetic needs a proved embedding. Natural subtraction is not ring subtraction; division is not field division; finite-width overflow is not integer addition. The first reifier should therefore admit only operations for which a direct homomorphic interpretation is proved. Unsupported operations remain outside this worker. For finite-width values, finite-state tables may be an appropriate alternative when the state space is genuinely small.
+
+\paragraph{Opaque subexpressions.}
+An opaque expression may be a polynomial atom in a \emph{single} algebraic identity. It cannot automatically become a state coordinate with an invented polynomial update. If a recursive step changes the opaque expression, its new value needs a source equation or a separate invariant. This is the difference between reifying a static polynomial goal and reifying an entire transition semantics.
+
+\subsection{Replay through ordinary Lean terms}
+
+For a fixed certificate with $r$ generators, build the proposition
+\[
+ I(s):=\bigwedge_{i=1}^r b_i(s)=0.
+\]
+An implementation may use a finite universal quantifier instead of a nested conjunction. Prove $I(s_0)$ by exact normalization. In the step proof, instantiate the supplied multiplier identity for row $i$ and rewrite every $b_j(s)$ to zero using the induction assumptions. The resulting equality is immediate.
+
+The generators need not be linear, and the multipliers need not be nonnegative. A generic theorem should quantify over arbitrary functions $b_i$ and $h_{aij}$ satisfying the displayed equalities. Polynomial normalization is only the way the adapter proves those premises. This keeps the induction library reusable for non-polynomial identities later.
+
+For a small initial implementation, generating a conjunction of perhaps a dozen identities is preferable to building a high-performance matrix reflection layer. Once proof sizes are measured, share common subexpressions, factor coefficient arithmetic, and introduce named intermediate identities inside the proof term. Do not assume that the fewest generators automatically gives the smallest Lean proof; a smaller generator set can require much larger polynomial multipliers.
+
+\subsection{Finite-state replay and existing Mathlib infrastructure}
+
+Mathlib's \code{Mathlib.Computability.DFA} exposes a transition function, start state, and fold-based evaluation, including \code{DFA.evalFrom}, \code{DFA.evalFrom_cons}, and related lemmas~\cite{mathlib-dfa}. Boolean recognition can use that representation directly. General Moore outputs require a thin observation layer rather than pretending that DFA acceptance is already an arbitrary-output equivalence API.
+
+For explicit finite state types, enumerate all constructors with a genuine finite-type instance and prove the transition table entries by reduction. Encode relation membership as a finite decidable predicate and prove the three certificate premises. A strict replay can use ordinary kernel reduction or a proved reflected checker; the package does not require \texttt{native\_decide} or an unexamined compiled-evaluation shortcut.
+
+The Leant hook belongs \emph{after} exact candidate typing and assertion preflight, and before reporting the behavioral assertion inconclusive. It should activate only when the assertion is recognized as a supported all-words contract and both source bridges are available. The result then proves that exact assertion for that exact candidate. It must not change the ownership or identity of the candidate supplied by Djex.
+
+\subsection{Telescoping replay and finite sums}
+
+The first Lean BFT module should fix the summand family \eqref{eq:moment} and accept only the polynomial certificate \eqref{eq:flux-cert}. Reification must verify that the input sum has the exact range, weight, binomial power, and casts required by the family. A syntactically similar rational summand outside the family is not accepted by the same theorem.
+
+The bridge proof should operate with scaled binomial identities over an ordered characteristic-zero field, using the natural indices only for bounds and finite sets. In particular, $n+1-k$ in the symbolic identity is a field subtraction after casting; conversion from a natural subtraction is justified by $k\le n+1$. Prove the two support-zero endpoint facts before any division simplification. Then use the finite-sum telescoping lemma and the single guard $n+1\ne0$.
+
+To close an equality with a proposed closed form, create separate obligations for that form's recurrence, the finite prefix, and the leading-coefficient regularity range. These are explicit AND children of the original goal. The flux search may succeed while the closed-form comparison remains open; that is useful partial progress, not a completed sum proof.
+
+\subsection{Concrete dependencies, without a speculative dependency stack}
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.21\textwidth}p{0.27\textwidth}X@{}}
+\toprule
+Library & Concrete use & Status and constraint\\
+\midrule
+Python standard library & \code{Fraction}, sparse dictionaries, JSON, BFS & Used in the independent checker; no SymPy import on replay.\\
+SymPy 1.14.0 & \code{Poly}, \code{gauss_jordan_solve}, \code{nullspace}, \code{groebner}, membership and reduction & Used by all algebraic producers. Computations are untrusted and checked afterward.\\
+python-flint & \code{fmpq_mat.rref}, rank, rational matrix operations & Optional producer optimization, not installed or tested here. Rectangular membership needs RREF; its \code{solve} interface assumes square invertible input~\cite{flint}.\\
+Mathlib & Polynomial interpretation, ring normalization, finite sums, \code{Nat.choose}, DFA fold lemmas & Proposed Lean replay foundation. Only selected source/API reads were inspected; no package compatibility build was run.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+SymPy's official polynomial interface documents exact polynomial objects and Gr\"obner membership/reduction operations~\cite{sympy-polys}; the executed producer code is the most precise record of which APIs were actually used. FLINT should remain interchangeable with SymPy behind the producer interface. Neither belongs in the trusted acceptance boundary.
+
+A large collection of optional SMT, SAT, e-graph, or external-prover dependencies would not improve these particular workers. Forge already discusses such integrations. The initial implementation can be a small exact algebra producer plus ordinary Lean replay, and a standard-library finite-state producer. This keeps the first end-to-end proof achievable and the failure surface understandable.
+
+\subsection{Selecting a worker from a proof obstruction}
+
+A deterministic selector can be based on recognizable structure rather than a learned ranking model. A supported finite-state fold contract goes to FRC. A polynomial iteration equality goes first to PRC when degree preservation or small observed growth makes finite-dimensional closure plausible. If pullbacks show increasing degree or repeated polynomial divisibility structure, route to GI. A supported binomial-power sum goes to BFT. Unrecognized structure falls back to the existing Forge plan.
+
+Do not treat the worker's failure as a rejection of the theorem. A vector-space ceiling can trigger the ideal worker; an ideal multiplier ceiling can trigger a larger reconstruction budget without rerunning discovery; a telescoper can export its recurrence while leaving comparison obligations open. The new diagnostic value lies in naming the concrete obstruction: ``new independent pullback of degree 16'', ``ideal membership found but multiplier degree cap reached'', ``finite product relation not exhausted'', or ``leading recurrence coefficient unresolved at index 1''.
+
+The selector itself can initially be small enough to audit exhaustively. Optimizing it statistically should wait until there are measurements of complete source extraction and Lean replay, rather than treating the current Python component times as a model of end-to-end tactic cost.

@@ -1,0 +1,29 @@
+{
+  "ideal": {
+    "attempts": 29,
+    "outcomes": {
+      "inductive_ideal_v1": 27,
+      "unknown": 2
+    },
+    "search_seconds_total": 0.5706642600002851,
+    "replay_seconds_total": 0.02580840500013437
+  },
+  "weighted": {
+    "attempts": 48,
+    "outcomes": {
+      "distinguishing_word_v1": 25,
+      "weighted_closure_v1": 23
+    },
+    "search_seconds_total": 0.4212331119999817,
+    "replay_seconds_total": 0.040371731999812255
+  },
+  "telescoping": {
+    "attempts": 5,
+    "outcomes": {
+      "binomial_telescoper_v1": 3,
+      "unknown": 2
+    },
+    "search_seconds_total": 0.3192550900000697,
+    "replay_seconds_total": 0.012206139999989318
+  }
+}

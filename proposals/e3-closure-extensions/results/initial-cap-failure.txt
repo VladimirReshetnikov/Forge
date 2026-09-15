@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/mnt/data/Forge_Closure_Extensions/prototype/run_experiments.py", line 198, in <module>
+    args=parser.parse_args(); run(args.out)
+                              ~~~^^^^^^^^^^
+  File "/mnt/data/Forge_Closure_Extensions/prototype/run_experiments.py", line 132, in run
+    r=save(f'moment_{i:02}','telescoping',p,telescoper_search(p,max_degree=4,max_u_degree=5),'proved')
+  File "/mnt/data/Forge_Closure_Extensions/prototype/run_experiments.py", line 56, in save
+    raise AssertionError((name,r,expected))
+AssertionError: ('moment_03', {'status': 'unknown', 'reason': 'first_order_ansatz_exhausted', 'certificate': None, 'statistics': {'systems': 30, 'seconds': 0.10698814900001707}}, 'proved')

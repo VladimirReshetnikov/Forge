@@ -1,0 +1,22 @@
+........................................................................ [ 61%]
+..........................................F..                            [100%]
+=================================== FAILURES ===================================
+____________ test_singular_leading_coefficient_requires_extra_seed _____________
+
+    def test_singular_leading_coefficient_requires_extra_seed():
+        # Two distinct sequences meet this recurrence and the n=0 seed.
+        # The certificate proves a recurrence; it deliberately makes no uniqueness claim.
+        r=sum_search(sum_problem(1,1));n=s.Symbol('n');cert=r['certificate']
+        p0,p1=dec(cert['p0'],(n,)),dec(cert['p1'],(n,))
+        assert p1.subs(n,0)==0
+>       assert p0.subs(n,0)==0
+E       assert -2 == 0
+E        +  where -2 = subs(n, 0)
+E        +    where subs = -2*n - 2.subs
+
+tests/test_extensions.py:105: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_extensions.py::test_singular_leading_coefficient_requires_extra_seed - assert -2 == 0
+ +  where -2 = subs(n, 0)
+ +    where subs = -2*n - 2.subs
+1 failed, 116 passed in 0.93s

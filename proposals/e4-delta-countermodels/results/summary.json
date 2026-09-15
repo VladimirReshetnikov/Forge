@@ -1,0 +1,32 @@
+{
+  "case_counts": {
+    "IPC": {
+      "ipc_countermodel": 8,
+      "unknown": 8
+    },
+    "machine": {
+      "proved": 37,
+      "refuted": 28,
+      "unknown": 1
+    }
+  },
+  "certificates": 73,
+  "claims": {
+    "Lean_compiled": false,
+    "checker_formally_verified": false,
+    "comparison_with_grind": false,
+    "installed_forge_tactic": false,
+    "synthetic_cases_only": true
+  },
+  "conserved_target_only_proved": 8,
+  "machine_positive_count": 37,
+  "maximum_certificate_bytes": 915,
+  "median_of_case_medians_seconds": {
+    "IPC": 4.490799994982808e-05,
+    "machine": 0.001974265499939065
+  },
+  "repeats": 3,
+  "schema_version": 1,
+  "seed": 20260915,
+  "total_experiment_seconds": 0.8422766910000519
+}

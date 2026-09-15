@@ -1,0 +1,46 @@
+\section{Implementation priorities and acceptance gates}
+\label{sec:roadmap}
+
+\subsection{First milestone: one complete polynomial proof path}
+
+Implement the fold-soundness lemmas and ordinary-term replay for one small PRC certificate, then connect a single explicit Lean recurrence to the transition IR. The acceptance case should be the sign-changing invariant, with both the positive theorem and a changed-update negative control. Do not begin by porting the entire producer to Lean or by changing Forge's scheduler.
+
+The gate is concrete: from the exact original Lean source, generate the problem, run the producer, reconstruct the proof, and kernel-check the final declaration under the project's approved trust profile. The same test must fail safely when the transition, initial state, or target is changed without updating the certificate. Archive the exact source and final proof status. This turns a mathematical certificate into an actual automation feature.
+
+\subsection{Second milestone: the nonlinear ideal path}
+
+Reuse the same zero-invariant induction theorem and extend only the identity replay to polynomial multipliers. Port the repeated-squaring and joint-generator examples. A successful test must show that the Gr\"obner engine is absent from the acceptance path: replay a stored certificate in a process or build environment without the search library.
+
+Keep discovery and multiplier reconstruction separate. When reconstruction times out, retain the frozen generator list as untrusted reusable input, not as a proved invariant. Instrument generator count, degree growth, multiplier degree, coefficient bit size, and final Lean expression size. Only then compare direct normalizer proofs against a reflected sparse checker.
+
+\subsection{Third milestone: a universal behavioral assertion}
+
+Add FRC to Leant for an explicit finite-state fold, first with source states already represented by a finite inductive type. Prove the source-to-table bridge, not just the table equivalence. The acceptance case should quantify over \emph{all} finite input words. Include the delayed mismatch, changed output table, and truncated product exploration as controls.
+
+This milestone must not be declared complete by replaying a fixed finite collection of words. Nor should it be substituted with a proof about the candidate's type alone. The useful deliverable is an exact universal behavioral assertion about the candidate that Leant actually displays.
+
+\subsection{Fourth milestone: summation with checked boundaries}
+
+Formalize the binomial flux theorem for the restricted family and prove the central-binomial identity by recurrence comparison. Add the singular-index moment to force explicit treatment of $N_0>0$. The gate should reject a recurrence-comparison proof that cancels $a(0)=0$, even if the recurrence certificate itself is correct.
+
+After that, extend the supported summand family or recurrence order. A generic hypergeometric importer is premature before the support, casting, boundary, and regularity obligations are independently tested. The payoff of BFT is not merely another closed form; it is a reusable proof route for an entire class of parameterized finite sums.
+
+\subsection{The first fair Lean evaluation}
+
+A future Lean corpus should include held-out recurrences, product-state equivalences with different state representations, nonlinear invariants with nontrivial initial assumptions, universal finite-fold contracts, and binomial sums not present in the development examples. Preserve false variants and resource-limited variants. Split structurally similar families across train/development and evaluation sets rather than shuffling only coefficient values.
+
+Compare the same source files under the same Lean and Mathlib revisions, heartbeat and wall-clock budgets, import costs, and trust profile. Count only completed original goals. Report discovery time, reification time, replay time, proof size, and failures separately. A cached certificate replay is a useful workflow but not the same experiment as fresh proof discovery.
+
+The strongest near-term hypothesis is not that Forge universally dominates \texttt{grind}. It is that these workers eliminate specific human-supplied objects: an auxiliary invariant, a bisimulation relation, or a telescoping flux. A fair evaluation should test that hypothesis directly.
+
+\subsection{Research directions that remain genuinely open in this design}
+
+Three directions are particularly valuable. First, coefficientwise closure for arbitrary polynomial input values would move beyond finite input alphabets and address infinite-domain list folds. Second, control-state-indexed ideals would combine finite control and algebraic data without forcing either representation to model the other poorly. Third, higher-order telescopers would cover sums outside the first-order schema while preserving explicit boundary obligations.
+
+Each should keep the current asymmetry: an ambitious producer may use sophisticated mathematics, but its acceptance object should remain small and explicit. Noetherianity can guide a search without becoming a trusted runtime claim; a shortest counterexample can guide synthesis without becoming a non-inhabitation theorem; a recurrence can guide a sum proof without silently erasing exceptional indices.
+
+\section{Conclusion}
+
+The practical step beyond Forge's reviewed design is to let a goal generate the finite structure needed for its own induction. PRC closes a vector of observations under pullback. GI closes the ideal generated by those observations and thereby handles nonlinear relations that have no finite orbit span. FRC turns a finite relation into an all-words behavioral proof. BFT turns a local polynomial flux identity into a recurrence for a sum whose support moves with its parameter.
+
+The package implements all four discovery routes and checks their outputs independently in Python. The remaining work is not mysterious, but it is substantial: source reification, semantic bridges, Lean replay, and an honest end-to-end evaluation. The report supplies the proof obligations and acceptance gates for that work rather than describing an unimplemented tactic as already complete.

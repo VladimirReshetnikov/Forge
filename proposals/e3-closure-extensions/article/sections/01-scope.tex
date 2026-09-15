@@ -1,0 +1,65 @@
+\section{The development target and the non-duplication boundary}
+\label{sec:scope}
+
+\subsection{What should become more capable?}
+
+A useful automation extension changes the class of obligations that can be discharged without a user inventing an intermediate mathematical object. For this report the objects are a \emph{closed family of polynomial relations}, a \emph{finite relational invariant}, and a \emph{telescoping flux}. Each can be difficult to discover and short to check. They also cross a boundary that ordinary local normalization does not cross: they explain all iterations or all summation indices at once.
+
+The proposed development target is not to replace \texttt{grind}. It is to give Forge additional ways to manufacture a finite, independently checkable reason for an infinite statement. The local Lean engine remains responsible for the ordinary equalities and logical consequences after the new certificate has been replayed. Nothing here depends on an undocumented modification of its internal congruence state.
+
+There are four named producers:
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Producer & Search object & Acceptance object\\
+\midrule
+PRC & Pullback-invariant vector space & Constant-matrix polynomial identities\\
+GI & Pullback-invariant polynomial ideal & Polynomial-multiplier identities\\
+FRC & Reachable product of finite machines & Successor-closed relation or distinguishing word\\
+BFT & First-order binomial telescoper & One exact flux identity and a regularity certificate\\
+\bottomrule
+\end{tabularx}
+\end{center}
+PRC means polynomial relation closure; GI means goal-generated ideal closure; FRC means finite relational contract; BFT means binomial flux telescoping. These labels are local package names, not proposed replacements for established terminology.
+
+\subsection{What the repository already contains}
+
+The reviewed Forge README describes a design rather than an installed tactic and distinguishes original proposal evidence from the merge's later elaboration of three Lean-core files~\cite{forge-readme}. The structural section already contains induction generalization, auxiliary-lemma exploration, and exact polynomial recurrence synthesis. Its state-machine certificate initially requires a conserved quantity, $I(F(s))=I(s)$. It then identifies the stronger condition $I(s)=0\Rightarrow I(F(s))=0$ and discusses joint polynomial multipliers, warning correctly that simultaneously unknown generators and multipliers create a bilinear problem~\cite{forge-structural}.
+
+Those observations are the starting point, not new contributions claimed here. The new algebraic work gives a concrete algorithm that \emph{constructs the generators from the goal}, closes them, and only then reconstructs multipliers. This supplies an executable answer to that warning without pretending that a bilinear system is a linear one.
+
+The merged nonlinear and external-engine sections already cover several rich certificate languages and integration techniques~\cite{forge-nonlinear,forge-external}. This report does not redescribe their sum-of-squares, Bernstein, Sturm, SAT/theory, equality-saturation, or external-prover designs. Likewise, the project's Leant/Djex review already discusses the verification boundary, exact identity, evidence permissions, and negative-result gates~\cite{forge-neighbors}. Those disciplines remain requirements for the eventual integration; naming them again would not make Forge more powerful.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.21\textwidth}XX@{}}
+\toprule
+Area & Already present in the reviewed design & Increment delivered here\\
+\midrule
+Polynomial invariants & Conserved identities; additive recurrence synthesis; joint-multiplier condition discussed & Goal-orbit basis discovery, finite-dimensional closure theorem, original-word counterexamples\\
+Nonlinear induction & General implication invariant worker proposed & Ascending-ideal discovery with explicit polynomial multipliers and bounded executable reconstruction\\
+Higher-order behavior & Type-directed recursor/fold synthesis and behavioral checks & A finite-machine universal-contract certificate, including an explicit source-to-machine bridge obligation\\
+Summation & Polynomial antidifferences for additive recurrences & Moving-support binomial-power summation with a searched flux and endpoint-safe recurrence proof\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Review scope and version discipline}
+
+The baseline is Forge commit \code{674521027d968d59f7b83220ed52304a85cb55e2}. The review used GitHub connector reads of the README, substantial ranges of the merged structural, nonlinear, and external-engine sections, and the Leant/Djex integration review. The repository tree was inspected through the connector, but its large response was truncated; no complete local checkout was obtained. In particular, this is \emph{not} a line-by-line audit of all nine frozen submissions. Empty code-search results were not treated as proof of absence.
+
+The non-duplication claim is correspondingly specific: the algorithmic details and artifacts in this report extend the reviewed merged design, rather than republishing its existing material. Broad statements such as ``invariant synthesis'' or ``finite-state reasoning'' are not claimed as globally new ideas. The audit ledger names the exact files and ranges read, so a maintainer can compare against a later repository revision without relying on a vague assertion that everything was reviewed.
+
+Leant was observed at commit \code{6bf05ad78c46}; Djex at commit \code{e8778f4ebd63}. Full identifiers are recorded in the bibliography and audit ledger. Their READMEs and Leant's behavioral-synthesis documentation were used for the integration boundary~\cite{leant-readme,djex-readme,leant-behavior}. No claim is made to have compiled or exhaustively audited either project.
+
+\subsection{Four meanings of success that must remain separate}
+
+The report distinguishes a mathematical theorem about a certificate rule, successful execution of a Python search, successful independent Python replay, and successful Lean-kernel replay. The first three are provided. The fourth is not: there was no Lean executable in this environment. The Lean source specimen is therefore marked \code{NOT_RUN}, and no installed \forge{} syntax is advertised.
+
+A returned positive certificate means the mathematical input encoded in the bundle satisfies the certificate rule. It does not establish that an arbitrary Lean expression was translated correctly into that input. A returned counterexample is a checked execution word for the encoded transition system, or a distinguishing word for the encoded machines. A telescoper certificate proves a recurrence through the mathematical bridge developed below; it does not by itself prove an unrelated guessed closed form. These are substantive scope restrictions, not cosmetic labels.
+
+\subsection{Prior work and what is being contributed}
+
+Polynomial weakest-precondition analysis and ideal stabilization have established antecedents; M\"uller-Olm and Seidl give an algebraic analysis of polynomial program invariants~\cite{mueller-seidl}. Automata equivalence has a substantial classical and coalgebraic literature~\cite{automata-equivalence}. Creative telescoping is a mature subject, for which Koutschan gives a useful account~\cite{koutschan}. The proofs below specialize these ideas to small acceptance languages suitable for Forge and make all relevant assumptions explicit.
+
+The contribution is therefore engineering and mathematical adaptation: a demand-generated certificate interface, provenance-preserving search, a stronger nonlinear route that avoids jointly unknown multipliers, a universal behavioral worker that fits Leant's exact-candidate boundary, a moving-boundary summation schema, and an executable evidence package. The most important claim is that these additions can be implemented and audited without trusting their search algorithms. The accompanying code demonstrates that claim at the Python level.

@@ -1,0 +1,128 @@
+\section{Worked proof plans and genuinely distinguishing cases}
+\label{sec:examples}
+
+\subsection{Delayed equality: both the readable basis and the emitted basis}
+For update~\eqref{eq:delayed}, a convenient human basis is
+\[
+ H=\begin{pmatrix}a-c\\b-d\end{pmatrix},\qquad
+ H(F(x,u))=\begin{pmatrix}1&1\\0&1\end{pmatrix}H(x).
+\]
+Both components vanish initially. This one matrix identity proves $a=c$ after
+arbitrarily many steps. It explains why merely checking that the target itself
+is conserved is insufficient.
+
+The program retains original pullbacks, so its actual stored basis is
+\[
+ P=\begin{pmatrix}a-c\\a+b-c-d\end{pmatrix},\qquad
+ P(F(x,u))=\begin{pmatrix}0&1\\-1&2\end{pmatrix}P(x).
+\]
+These bases span the same space, but the second is the one in
+\code{results/corpus.json}. Showing the first without this qualification would
+misdescribe the experiment.
+
+Now change the last update to $d'=d+u+1$. Start at zero and feed two zero
+payloads. The first state is $(0,0,0,1)$, so the original demand still holds.
+The second is $(0,0,1,2)$, so $a-c=-1$. The prototype emits exactly this
+length-two trace. A one-step test at the initial state would miss the error.
+
+\subsection{Different Fibonacci accumulator presentations}
+Compare
+\[
+ (a,b)'=(b,a+b),\qquad (p,q)'=(p+q,p)
+\]
+starting at $(a,b,p,q)=(0,1,1,0)$, with output demand $b-p=0$.
+The additional relation $a-q=0$ is needed. In the emitted basis
+\[
+ P_1=b-p,\qquad P_2=a+b-p-q,
+\]
+the transition matrix is
+\[
+ \begin{pmatrix}0&1\\1&1\end{pmatrix}.
+\]
+This is not the additive-polynomial recurrence fragment used to synthesize
+power sums: the outputs have Fibonacci growth. The proof comes from a finite
+relation between the two state representations, not from guessing a polynomial
+closed form for either output.
+
+\subsection{A quadratic identity with arbitrary input magnitudes}
+Let
+\[
+ s'=s+u,\qquad t'=t+2su+u^2,
+ \qquad (s_0,t_0)=(0,0).
+\]
+The goal is $t-s^2=0$. The entire closure has one generator because
+\[
+ (t+2su+u^2)-(s+u)^2=t-s^2.
+\]
+There is no bound on input length or magnitude. The update is affine in state
+$(s,t)$ with coefficients depending polynomially on the payload; the theorem
+of Section~\ref{sec:theory} applies with $D=2$.
+
+The case \code{two_payload_square} replaces $u$ by $uv$. The same one-generator
+certificate proves the identity for all lists of rational pairs. This checks
+that the implementation really extracts coefficients in multiple fresh inputs
+rather than substituting a single test value or confusing state degree with
+total degree.
+
+\subsection{A finite-control invariant}
+Use two control nodes, even and odd, and transitions
+\begin{align*}
+ \text{even}\to\text{odd}:&(s,t)\mapsto(s+u,u-t),\\
+ \text{odd}\to\text{even}:&(s,t)\mapsto(s-u,u-t).
+\end{align*}
+Start at the even node with $(s,t)=(0,0)$. Demand $s+t=0$ at the even node and
+$s-t=0$ at the odd node. Each destination goal pulls back to its source goal:
+\[
+ (s+u)-(u-t)=s+t,\qquad
+ (s-u)+(u-t)=s-t.
+\]
+The certificate has a one-dimensional basis at each node. A single unqualified
+statement $s=t$ would be wrong on half the control states. This is why control
+identity is part of the invariant semantics, not just an optimization key.
+
+\subsection{A simultaneous-update regression}
+The update $(a,b)\mapsto(b,a)$ with initial $(1,2)$ preserves $a+b=3$.
+Sequentially overwriting the first register before computing the second would
+instead produce $(2,2)$ and break the invariant. The search uses simultaneous
+substitution; the replay checker evaluates every right-hand side against the
+same old state. A dedicated regression case and random substitution comparisons
+exercise this distinction.
+
+\subsection{The finite-sample trap}
+Consider
+\[
+ x'=x+\prod_{i=0}^{6}(u-i),\qquad x_0=0,
+ \qquad\text{demand }x=0.
+\]
+Every one-step sample at $u=0,1,\ldots,6$ passes. Repeating only those payloads
+for any length would also pass. The identity is nevertheless false.
+Coefficient extraction discovers a nonzero constant observation at the initial
+state, and provenance reconstruction chooses $u=7$. The actual endpoint is
+$x=7!=5040$, so the execution checker rejects the universal equality.
+
+The use of a small grid in the \emph{counterexample constructor} is not the
+same mistake as finite-sample verification. The nonzero polynomial has already
+been established by exact coefficients; the grid is a proved way of finding a
+witness to its nonzeroness.
+
+\subsection{A family with known positive and negative answers}
+The synthetic conjugacy family begins with an affine machine
+\[
+ x'=Ax+Bu+c.
+\]
+Choose an invertible rational matrix $U$ and offset $v$, and express the same
+machine in coordinates $y=Ux+v$:
+\[
+ y'=U\bigl(AU^{-1}(y-v)+Bu+c\bigr)+v.
+\]
+The product starts with this relation satisfied. Only its \emph{first}
+coordinate is supplied as the output goal, so closure must discover any other
+relations needed by the selected matrices. The 24 positive cases use two or
+three registers per side and one or two input tags. Their 24 negative partners
+add $1$ to the first transformed register update, creating a checked violation.
+
+This generator gives known answers and variation in coefficients, basis
+coordinates, and tagged transitions. It is not independent evidence that the
+method handles arbitrary real-world Lean functions. Because the family was
+constructed from the intended algebraic structure, it is a mechanism test,
+not a held-out theorem benchmark.

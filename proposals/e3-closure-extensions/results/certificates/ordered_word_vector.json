@@ -1,0 +1,93 @@
+{
+  "case": "ordered_word_vector",
+  "certificate": {
+    "kind": "transition_word_counterexample_v1",
+    "target": 0,
+    "word": [
+      0,
+      1
+    ]
+  },
+  "problem": {
+    "dimension": 2,
+    "initial": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "kind": "polynomial_transition_system_v1",
+    "targets": [
+      [
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "transitions": [
+      [
+        [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ]
+    ]
+  }
+}

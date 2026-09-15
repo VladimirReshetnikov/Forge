@@ -1,0 +1,392 @@
+\section{From conserved quantities to invariant packets}
+\label{sec:packets}
+\status{Implemented in \code{invariant_space.py}; exact identity checker and
+recorded experiments included.}
+
+\subsection{Preservation of a zero set is weaker than conservation}
+Let a state be $x\in\Q^n$ and let $T_1,\ldots,T_r:\Q^n\to\Q^n$ be polynomial
+transitions. Every transition is allowed at every state in the initial fragment.
+Let the initial states be the union of the images of polynomial maps
+$\sigma_1,\ldots,\sigma_s$. Parameters of these maps range over all rational
+values. The implementation pads parameter maps with unused variables so all
+polynomials use one common arity.
+
+A conserved polynomial satisfies $p(T_a(x))=p(x)$ everywhere. An invariant
+equality only requires that $p=0$ remain true on reachable states. Requiring
+conservation is therefore unnecessarily strong. With several polynomials, a
+sufficient preservation condition is
+\begin{equation}
+\label{eq:constant-packet}
+ P(\sigma_b(u))=0,
+ \qquad P(T_a(x))=M_a P(x),
+\end{equation}
+where $P=(p_1,\ldots,p_k)^{\mathsf T}$ and $M_a$ is a rational matrix. No
+individual $p_i$ need be conserved, and $M_a$ need not be invertible, positive,
+or stable in any analytic sense.
+
+\begin{theorem}[Packet soundness]
+\label{thm:packet}
+If the polynomial identities in \eqref{eq:constant-packet} hold, then
+$p_i(x)=0$ for every reachable state $x$ and every $i$.
+\end{theorem}
+\begin{proof}
+The initial identities establish the claim at a state $\sigma_b(u)$. If
+$P(x)=0$ and the next transition is $T_a$, then
+$P(T_a(x))=M_a P(x)=M_a0=0$. Induction on the length of a finite execution gives
+the result. No termination statement about an infinite execution is required.
+\end{proof}
+
+\begin{example}[A packet that conservation misses]
+\label{ex:cycle}
+Take
+\[
+ T(x,y,z)=(y,z,x),\qquad (x_0,y_0,z_0)=(t,t,t).
+\]
+With $p=x-y$ and $q=y-z$,
+\[
+ \begin{pmatrix}p\circ T\\q\circ T\end{pmatrix}
+ =\begin{pmatrix}0&1\\-1&-1\end{pmatrix}
+  \begin{pmatrix}p\\q\end{pmatrix}.
+\]
+Thus $x=y=z$ is preserved. In contrast, a conserved linear polynomial has equal
+coefficients on $x,y,z$; requiring that it vanish at every $(t,t,t)$ forces
+those coefficients and the constant term to be zero. The conserved-linear
+subspace is zero, while the invariant-linear subspace has dimension two.
+The recorded prototype returns the equivalent basis $(z-x,y-x)$, not the
+hand-chosen basis displayed above.
+\end{example}
+
+This is a strict increase in what the \emph{selected template method} can
+certify. It is not a demonstration that Lean's existing tactics cannot prove
+this elementary example with suitable induction and hypotheses.
+
+\subsection{Compute the entire admissible space}
+Fix a finite-dimensional template space
+\[
+ V_d=\{p\in\Q[X_1,\ldots,X_n]:\degp p\le d\},
+ \qquad N=\dim V_d=\binom{n+d}{d}.
+\]
+A sparse template can replace all monomials, but the full degree template has
+a particularly clean completeness statement. Polynomial pullback
+$T_a^*:p\mapsto p\circ T_a$ is a \emph{linear operator in $p$}, even when
+$T_a$ is nonlinear. Its output may have a higher degree; that is not a problem
+for exact coefficient comparison.
+
+First compute
+\[
+ W_0=\{p\in V_d:p\circ\sigma_b=0\text{ as a polynomial for every }b\}.
+\]
+Substitution of each template monomial into each initial map gives a matrix of
+rational coefficients. Its kernel is $W_0$. This is not interpolation over a
+sample of initial states.
+
+For a current space $W$, apply the restriction
+\begin{equation}
+\label{eq:constant-restriction}
+ W\longleftarrow W\cap (T_a^*)^{-1}(W).
+\end{equation}
+Cycle through all transitions until a full pass makes no dimension decrease.
+Because every update only removes vectors, equality of dimensions implies
+equality of spaces; comparing pretty-printed bases is unnecessary.
+
+\subsection{The actual linear system}
+Let $b_1,\ldots,b_k$ be a basis of the current $W$. Form coefficient columns for
+\[
+ b_1\circ T_a,\ldots,b_k\circ T_a,-b_1,\ldots,-b_k.
+\]
+A null vector $(c,h)$ says
+\[
+ \sum_i c_i(b_i\circ T_a)=\sum_j h_j b_j.
+\]
+Project a basis of this kernel to its first $k$ coordinates and take the span
+of the resulting polynomials $\sum_i c_i b_i$. This is exactly the new space in
+\eqref{eq:constant-restriction}. Kernel vectors with $c=0$ contribute no
+polynomial and disappear during row reduction.
+
+\begin{lstlisting}
+W := kernel(initial_substitution_constraints(V_d))
+repeat:
+    old_dimension := dimension(W)
+    for T in transitions:
+        A := coefficient_columns(pullback(T, basis(W)))
+        B := coefficient_columns(basis(W))
+        K := nullspace([A | -B])
+        W := span(project_left(K) * basis(W))
+until dimension(W) = old_dimension
+solve coordinates of each pullback in the final basis
+return basis(W), transition_matrices
+\end{lstlisting}
+
+The source uses rational row reduction, deterministic monomial order, and
+canonical rational coefficients. It is deliberately small rather than an
+optimized symbolic linear-algebra library.
+
+\begin{theorem}[Greatest pullback-stable subspace]
+\label{thm:greatest-constant}
+The restriction algorithm terminates. Its result is the greatest subspace
+$W\subseteq W_0$ for which $T_a^*W\subseteq W$ for every transition $a$.
+There are at most $N$ strict dimension decreases.
+\end{theorem}
+\begin{proof}
+Every update is an intersection with a linear preimage, hence is a subspace of
+the previous space. Strict inclusion decreases dimension. A full pass with no
+decrease leaves every restriction unchanged, establishing closure.
+If $U\subseteq W_0$ is any common pullback-stable subspace, then $U\subseteq W$
+before an update implies $T_a^*U\subseteq U\subseteq W$, and hence
+$U\subseteq W\cap(T_a^*)^{-1}(W)$ afterwards. Induction over updates shows
+$U$ is contained in the final space.
+\end{proof}
+
+\begin{theorem}[Exact degree-bounded equality invariants for affine transitions]
+\label{thm:affine-complete}
+If every transition is affine, the final space equals the set of all
+polynomials of degree at most $d$ that vanish on the reachable states defined
+above.
+\end{theorem}
+\begin{proof}
+Let $E$ be that set. It is a subspace of $W_0$. For $p\in E$, an affine
+substitution preserves the degree bound, and $p\circ T_a$ vanishes on every
+reachable state because each successor is reachable. Thus $T_a^*E\subseteq E$,
+so Theorem~\ref{thm:greatest-constant} gives $E\subseteq W$. Conversely the final
+basis has a packet certificate, and Theorem~\ref{thm:packet} gives $W\subseteq E$.
+\end{proof}
+
+This is a lifted, degree-bounded linear-invariant computation, in the lineage of
+Karr-style affine relation analysis. It is not the much more general algebraic
+algorithm for all polynomial invariants of affine programs studied by
+Hrushovski, Ouaknine, Pouly, and Worrell~\cite{karr,affine-invariants}.
+
+\subsection{A nonlinear case the constant packet still finds}
+Consider $T(n,s)=(n+1,s+n^2)$ with initial state $(0,0)$. In degree three the
+successive recorded dimensions are
+\[
+ 9\;\longrightarrow\;5\;\longrightarrow\;3\;\longrightarrow\;2
+ \;\longrightarrow\;1\;\longrightarrow\;1.
+\]
+The surviving basis polynomial is
+\[
+ p(n,s)=s-\frac{n}{6}+\frac{n^2}{2}-\frac{n^3}{3}.
+\]
+Its checked pullback is $p\circ T=p$. Clearing denominators yields
+$6s=n(n-1)(2n-1)$. Forge's existing recurrence worker also targets this kind of
+example; it is included here to test compatibility with a known successful
+fragment, not as a new capability claim.
+
+\subsection{An explicit limitation, not a reason to abandon the method}
+For $T(x,y)=(x^2,y^2)$ and initial states $(t,t)$, the true linear invariant is
+$x-y=0$. But
+\[
+ (x-y)\circ T=(x+y)(x-y),
+\]
+which is not in the one-dimensional span of $x-y$. At $d=1$ the constant-packet
+algorithm returns the zero space. The failure comes from its certificate
+language, not from the absence of a linear invariant. The next section removes
+this particular obstruction without a bilinear solver.
+
+\section{Invariant ideals with bounded multipliers}
+\label{sec:ideals}
+\status{Implemented in \code{ideal_space.py}. Polynomial multiplier certificates
+and negative controls are included.}
+
+\subsection{A monotone relaxation of the packet condition}
+For a nonnegative multiplier-degree bound $e$, define
+\begin{equation}
+\label{eq:bounded-ideal}
+ J_e(W)=\Span_{\Q}\{m p : p\in W,\ m\text{ a monomial},\ \degp m\le e\}.
+\end{equation}
+This is a finite-dimensional \emph{truncated multiple space}, not necessarily
+an ideal: it need not be closed under further multiplication. In terms of a
+basis $p_1,\ldots,p_k$ of $W$, it consists precisely of sums
+$\sum_j h_jp_j$ with $\degp h_j\le e$. The notation $J_e$ is convenient, but
+using the full ideal's closure properties here would be a mistake.
+
+Replace the restriction in the previous section by
+\begin{equation}
+\label{eq:ideal-restriction}
+ F_{a,e}(W)=W\cap(T_a^*)^{-1}\bigl(J_e(W)\bigr).
+\end{equation}
+This operation is monotone: $U\subseteq W$ implies
+$J_e(U)\subseteq J_e(W)$, and therefore $F_{a,e}(U)\subseteq F_{a,e}(W)$.
+It is also deflationary, since $F_{a,e}(W)\subseteq W$.
+
+The final certificate becomes
+\begin{equation}
+\label{eq:poly-packet}
+ p_i\circ\sigma_b=0,
+ \qquad p_i\circ T_a=\sum_{j=1}^k h_{aij}p_j,
+ \qquad \degp h_{aij}\le e.
+\end{equation}
+The same induction proof as before establishes soundness, because every term
+on the right vanishes when all $p_j$ vanish. Coefficients may be polynomials in
+the current state. They do not have to be invariant or bounded in magnitude.
+
+\subsection{Why this does not solve a bilinear system}
+Forge correctly notes that writing unknown generators $p_i$ and unknown
+multipliers $h_{ij}$ simultaneously produces bilinear coefficient equations.
+The algorithm here does not solve that system directly. It starts with
+\emph{all} initially valid polynomials in a fixed finite template. At every
+restriction step the current generator basis is already known. Consequently,
+all products of that basis with bounded monomials are known polynomials, and
+finding which pullbacks belong to their span is ordinary linear algebra.
+
+For current basis $b_1,\ldots,b_k$ and multiplier monomials
+$m_1,\ldots,m_K$, form columns
+\[
+ b_i\circ T_a\quad(1\le i\le k),
+ \qquad -m_\ell b_j\quad(1\le j\le k,\ 1\le\ell\le K).
+\]
+Take the kernel and project to the first $k$ coordinates as before. This
+computes \eqref{eq:ideal-restriction} exactly. After convergence, solve for the
+coordinates of each $b_i\circ T_a$ in the final product list and regroup the
+coefficients into polynomials $h_{aij}$.
+
+\begin{lstlisting}
+W := all initially-zero polynomials in V_d
+repeat:
+    old_dimension := dimension(W)
+    for T in transitions:
+        products := [m * p for p in basis(W), deg(m) <= e]
+        columns := pullback(T, basis(W)) ++ (-products)
+        K := nullspace(coefficient_matrix(columns))
+        W := span(left_projection(K) * basis(W))
+until dimension(W) = old_dimension
+H := coordinates(pullbacks(final_basis), final_products)
+return final_basis, regroup_as_polynomial_matrices(H)
+\end{lstlisting}
+
+This is a change in the search problem, not a linearization that drops products
+of unknown quantities and hopes they can be repaired later. Every certificate
+identity is checked with all products present.
+
+\begin{theorem}[Greatest bounded-multiplier generator space]
+\label{thm:ideal-greatest}
+The algorithm terminates and returns the greatest subspace $W\subseteq W_0$
+such that $T_a^*W\subseteq J_e(W)$ for every $a$.
+\end{theorem}
+\begin{proof}
+The sequence descends inside finite-dimensional $V_d$, so it stabilizes.
+Stability of a complete transition pass is exactly the required inclusion for
+each transition. Let $U\subseteq W_0$ satisfy the same inclusions. If
+$U\subseteq W$, then
+$T_a^*U\subseteq J_e(U)\subseteq J_e(W)$, so
+$U\subseteq F_{a,e}(W)$. The induction over updates proves greatestness.
+\end{proof}
+
+\begin{corollary}[Relative completeness of discovery]
+Any finite collection of degree-at-most-$d$ polynomials that vanishes initially
+and admits preservation identities with multiplier degrees at most $e$ spans a
+subspace of the computed result. In particular, the search does not miss a
+certificate packet in this fixed fragment merely because its generators and
+multipliers would have appeared bilinearly in a direct ansatz.
+\end{corollary}
+\begin{proof}
+The span of the supplied collection is initially zero. Every linear combination
+of its pullbacks is a bounded-degree polynomial combination of the same
+collection, so its span satisfies the hypothesis of
+Theorem~\ref{thm:ideal-greatest}.
+\end{proof}
+
+The corollary is about \emph{packets closed within the selected template and
+multiplier bound}. It is not a decision procedure for all invariants, all
+polynomial implications, or all true goals. A valid invariant may require
+auxiliary generators above degree $d$, or preservation multipliers above degree
+$e$, or a different certificate such as a radical-ideal argument.
+
+\subsection{Worked nonlinear certificates}
+For squaring on the diagonal, degree $d=1$, $e=0$ fails and $e=1$ succeeds:
+\[
+ p=y-x,\qquad p(x^2,y^2)=(x+y)p(x,y).
+\]
+More generally, for $T_k(x,y)=(x^k,y^k)$,
+\[
+ (y-x)\circ T_k=
+ \left(\sum_{j=0}^{k-1}x^jy^{k-1-j}\right)(y-x).
+\]
+The archive synthesizes these packets for $k=2,\ldots,9$, using $e=k-1$.
+
+An initial union is handled without choosing one component. Let initial states
+be $(t,0)$ or $(0,t)$ and use the same squaring transition. In degree two,
+$W_0=\Span\{xy\}$. Then
+\[
+ (xy)\circ T=x^2y^2=(xy)(xy).
+\]
+The degree-one multiplier limit fails, while $e=2$ recovers the packet. The
+checker verifies both initial substitutions; checking only the first would
+silently change the subject.
+
+For the parabola $\sigma(t)=(t,t^2)$, take $p=y-x^2$. Then
+\[
+ p\circ T=y^2-x^4=(y+x^2)(y-x^2).
+\]
+Again $d=2,e=2$ succeeds. These examples exercise changing zero sets, unions of
+initial images, and nonlinear multipliers without numerical sampling.
+
+\subsection{What the checker actually certifies}
+The certificate contains the exact problem, generator polynomials, and one
+polynomial matrix per transition. Its checker verifies arities, canonical
+rational coefficients, degree limits, all initial substitutions, and every
+identity in \eqref{eq:poly-packet}. It calls neither nullspace computation nor
+invariant synthesis. The replay driver replaces those functions with routines
+that raise an exception if called.
+
+An accepted certificate proves only the preservation claim represented by the
+packet. It does \emph{not} certify that the packet is greatest. In particular,
+an empty packet is a vacuously valid preservation certificate, not independently
+checked evidence that no useful invariant exists. Certifying greatestness would
+require additional row-space or elimination evidence for every restriction
+step. Forge should not upgrade an empty returned packet to a mathematical
+refutation of its goal.
+
+\subsection{Cost, refinement, and a concrete production route}
+There are $N=\binom{n+d}{d}$ template monomials and
+$K=\binom{n+e}{e}$ multiplier monomials. At a stage with $k$ generators, the
+restriction matrix has $k(1+K)$ columns. If the largest transition degree is
+$t$, its rows range over monomials of degree at most $\max(dt,d+e)$, though
+sparsity can make the actual support much smaller. At most $N$ strict
+restrictions occur, and a simple pass scheduler uses at most $r(N+1)$ edge
+checks. None of these bounds controls coefficient bit growth; rational
+elimination and substitution expansion can dominate memory.
+
+A useful initial scheduling order is $(d,e)=(1,0),(1,1),(2,0),(2,1),(2,2)$,
+followed by problem-specific templates. This order is a proposed heuristic,
+not a measured optimum. Increasing $e$ can recover certificates that a smaller
+bound cannot express. However, a larger-bound run must begin with the full new
+$W_0$, not the old final subspace: using the old answer as the only starting
+space would prevent lost generators from reappearing.
+
+Use sparse coefficient collection in the Lean-facing front end and an exact
+rational matrix backend for the proposer. \code{python-flint}'s
+\code{fmpq_mat} offers rational row reduction and solving as a concrete external
+option; the included implementation uses \code{fractions.Fraction} to remain
+self-contained~\cite{flint-matrix}. In Lean, reify into a small polynomial syntax,
+prove its denotation correct, check coefficient identities, and instantiate a
+generic reachability-invariant theorem. Mathlib's multivariate-polynomial
+evaluation homomorphisms provide an appropriate semantic target~\cite{mvpoly}.
+Neither external library is needed to trust a returned packet once the Lean
+identity checker exists.
+
+\subsection{Extension to control-flow locations}
+\label{sec:locations}
+A useful unimplemented next step is a family of generator spaces $W_\ell$, one
+per control-flow location. Initial conditions restrict entry locations; a
+location without an initial state starts with its full template. For an edge
+$\ell\xrightarrow{T}k$, require
+\[
+ T^*W_k\subseteq J_e(W_\ell).
+\]
+The corresponding restriction is on the \emph{target} generator space:
+\[
+ W_k\leftarrow W_k\cap(T^*)^{-1}\bigl(J_e(W_\ell)\bigr).
+\]
+This remains monotone on the product of the subspace lattices and terminates
+after at most the sum of their template dimensions in strict decreases. A
+worklist rechecks an edge when either its source or target space changes.
+The greatestness proof is the same containment induction as above.
+
+An equality guard $g=0$ can contribute bounded multiples of $g$ to the
+right-hand side, giving identities of the form
+$p_k\circ T=\sum h_jp_{\ell j}+qg$. Inequality guards do not vanish and cannot
+be inserted into this equation as if they did. Ignoring such guards gives a
+sound over-approximation but may lose invariants; exploiting them requires a
+separate proved implication. This control-flow extension is specified here,
+not implemented in the single-location prototype.

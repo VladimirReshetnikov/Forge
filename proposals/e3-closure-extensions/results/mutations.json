@@ -1,0 +1,127 @@
+[
+  {
+    "name": "closure_bad_coefficient",
+    "rejected": true,
+    "message": "pullback identity violated"
+  },
+  {
+    "name": "closure_missing_transition",
+    "rejected": true,
+    "message": "missing transition certificate"
+  },
+  {
+    "name": "closure_wrong_initial",
+    "rejected": true,
+    "message": "initial invariant violation"
+  },
+  {
+    "name": "closure_target_not_bound",
+    "rejected": true,
+    "message": "target not reconstructed"
+  },
+  {
+    "name": "closure_float_coefficient",
+    "rejected": true,
+    "message": "expected a literal integer, not bool/float"
+  },
+  {
+    "name": "closure_boolean_coefficient",
+    "rejected": true,
+    "message": "expected a literal integer, not bool/float"
+  },
+  {
+    "name": "closure_zero_denominator",
+    "rejected": true,
+    "message": "denominator must be positive"
+  },
+  {
+    "name": "closure_unreduced_rational",
+    "rejected": true,
+    "message": "noncanonical rational"
+  },
+  {
+    "name": "ideal_bad_multiplier",
+    "rejected": true,
+    "message": "ideal pullback identity violated"
+  },
+  {
+    "name": "ideal_missing_generator",
+    "rejected": true,
+    "message": "wrong polynomial matrix column count"
+  },
+  {
+    "name": "negative_word_reversed",
+    "rejected": true,
+    "message": "not a counterexample"
+  },
+  {
+    "name": "negative_word_empty",
+    "rejected": true,
+    "message": "not a counterexample"
+  },
+  {
+    "name": "negative_word_invalid_symbol",
+    "rejected": true,
+    "message": "unknown transition label"
+  },
+  {
+    "name": "machine_relation_missing_root",
+    "rejected": true,
+    "message": "initial pair absent"
+  },
+  {
+    "name": "machine_relation_duplicate",
+    "rejected": true,
+    "message": "duplicate or invalid pair"
+  },
+  {
+    "name": "machine_observation_changed",
+    "rejected": true,
+    "message": "unequal observations"
+  },
+  {
+    "name": "machine_word_too_short",
+    "rejected": true,
+    "message": "word does not distinguish outputs"
+  },
+  {
+    "name": "machine_word_invalid_symbol",
+    "rejected": true,
+    "message": "alphabet symbol out of range"
+  },
+  {
+    "name": "telescoper_wrong_flux",
+    "rejected": true,
+    "message": "telescoping polynomial identity violated"
+  },
+  {
+    "name": "telescoper_zero_leading",
+    "rejected": true,
+    "message": "zero leading recurrence coefficient"
+  },
+  {
+    "name": "telescoper_wrong_weight",
+    "rejected": true,
+    "message": "telescoping polynomial identity violated"
+  },
+  {
+    "name": "telescoper_wrong_power",
+    "rejected": true,
+    "message": "telescoping polynomial identity violated"
+  },
+  {
+    "name": "telescoper_forbidden_power_zero",
+    "rejected": true,
+    "message": "binomial power ceiling"
+  },
+  {
+    "name": "telescoper_bad_regularity_sign",
+    "rejected": true,
+    "message": "leading coefficient positivity proof failed"
+  },
+  {
+    "name": "telescoper_false_regularity_start",
+    "rejected": true,
+    "message": "leading coefficient positivity proof failed"
+  }
+]

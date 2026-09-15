@@ -1,0 +1,40 @@
+linear_invariant_d2_0 certified 1.439 ms
+linear_invariant_d2_1 certified 1.061 ms
+linear_invariant_d2_2 certified 1.043 ms
+linear_invariant_d3_0 certified 1.775 ms
+linear_invariant_d3_1 certified 1.331 ms
+linear_invariant_d3_2 certified 1.261 ms
+linear_invariant_d4_0 certified 3.108 ms
+linear_invariant_d4_1 certified 2.838 ms
+linear_invariant_d4_2 certified 2.833 ms
+linear_invariant_d5_0 certified 2.92 ms
+linear_invariant_d5_1 certified 2.952 ms
+linear_invariant_d5_2 certified 3.011 ms
+linear_invariant_d6_0 certified 5.609 ms
+linear_invariant_d6_1 certified 5.387 ms
+linear_invariant_d6_2 certified 5.663 ms
+linear_invariant_d7_0 certified 5.476 ms
+linear_invariant_d7_1 certified 5.417 ms
+linear_invariant_d7_2 certified 6.016 ms
+linear_equivalence_d2 certified 3.894 ms
+linear_equivalence_d3 certified 5.465 ms
+linear_equivalence_d4 certified 10.595 ms
+linear_equivalence_d5 certified 16.524 ms
+linear_late_error_d2 counterexample 0.338 ms
+linear_late_error_d3 counterexample 0.362 ms
+linear_late_error_d4 counterexample 0.534 ms
+linear_late_error_d5 counterexample 0.841 ms
+linear_late_error_d6 counterexample 1.218 ms
+linear_late_error_d7 counterexample 1.761 ms
+linear_late_error_d8 counterexample 2.436 ms
+linear_random_false_0 counterexample 0.424 ms
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data/forge_extensions/prototype/run_experiments.py", line 211, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/data/forge_extensions/prototype/run_experiments.py", line 176, in main
+    assert r['status']==expected,(name,r)
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('linear_random_false_1', {'status': 'certified', 'certificate': {'kind': 'linear', 'basis': [[[1, 1], [0, 1], [0, 1]], [[1, 1], [-1, 1], [0, 1]]], 'target_weights': [[1, 1], [0, 1]], 'action_weights': [[[[0, 1], [0, 1]], [[2, 1], [-1, 1]]], [[[0, 1], [1, 1]], [[0, 1], [2, 1]]]]}, 'stats': {'basis_size': 2, 'candidates': 5, 'basis_words': [[], [1]]}})

@@ -1,0 +1,88 @@
+\section{The missing capabilities, not another redesign}
+\label{sec:scope}
+
+\subsection{The reviewed boundary}
+
+This study uses Forge revision \code{674521027d96}, Leant revision
+\code{6bf05ad78c46}, and standalone Djex revision \code{e8778f4ebd63}.
+Leant's own Djex dependency is a different revision, \code{e237e866}; it must not
+be silently replaced by the standalone head when reproducing Leant's reports.
+The audit concentrates on Forge's merged structural-search and integration
+sections, its provenance appendix, its explicit Leant/Djex review, and the
+neighboring projects' current synthesis diagnostics and rank-N description
+\cite{forge,forge-structural,forge-integration,forge-provenance,forge-neighbors,leant,djex-rank}.
+
+The repository's design is already considerably broader than ``run a stronger
+arithmetic tactic.'' In particular, induction generalization, demand-driven
+lemma discovery, arithmetic witness synthesis, negative-evidence discipline,
+and the separation of proposals from accepted proofs are already there.
+Recommending them again would not answer the present request. The three
+extensions below start precisely where those descriptions stop.
+
+\begin{table}[ht]
+\small
+\begin{tabularx}{\textwidth}{@{}p{.23\textwidth}YY@{}}
+\toprule
+Area & Existing boundary & Addition developed here \\
+\midrule
+Higher-order synthesis & Type-directed candidates and higher-order carriers are available; whole compositions can still miss the budget. & Residual-specification-derived algebra contracts, local hole search, and a compatibility join before assembly. \\
+Inductive equations & Polynomial recurrence synthesis and conserved quantities; general coupled ideal preservation is recognized as bilinear. & A descending linear-space algorithm that avoids joint bilinear synthesis, followed by target-directed ideal completion with polynomial multipliers. \\
+Recursive proof search & Induction planning and acyclic tabling; a circular dependency is not a proof. & Typed cyclic obligation candidates compiled through explicit, checked well-founded descent on tagged states. \\
+\bottomrule
+\end{tabularx}
+\caption{The contribution boundary. Existing material is used as infrastructure, not claimed as a new capability.}
+\end{table}
+
+The first column of additions is a search decomposition, the second is an
+algebraic closure computation, and the third is a proof-construction strategy.
+They are not proposed as new mathematical discoveries. Type-and-example-directed
+synthesis, refinement-based synthesis, polynomial invariant analysis, and cyclic
+proof systems are established research directions \cite{osera,polikarpova,karr,rodriguez,cycleq}.
+The contribution is a concrete selection and adaptation for Forge, including
+executable algorithms, certificate formats, failure cases, and integration gates.
+
+\subsection{What the implementation actually establishes}
+
+\status{Executed: finite-fragment Python synthesis; exact rational invariant-space
+and ideal algorithms; ranking synthesis for supplied call graphs; an independent
+certificate replayer; differential, mutation, and regression tests.
+Not executed: a Lean tactic, source-to-polynomial reification, Lean kernel replay,
+or a production change to Djex or Leant.}
+
+The distinction is important because the strongest result here is not a claim
+that a new \forge{} already beats \grind{}. There is no such end-to-end measurement.
+The strongest demonstrated result is that small, precisely delimited workers can
+produce structures unavailable to simpler ablations: a composition assembled from
+locally constrained holes; a nonconserved but inductively closed family of
+polynomials; and a decreasing interpretation of a cyclic call graph.
+
+The source tree includes a proposed Lean file, \code{lean/Specimens.lean}, with
+ordinary induction and well-founded-induction lemmas. It contains no \code{sorry},
+but it was not compiled: no Lean executable was available in this execution
+environment. Its presence is a starting point for porting, not a checking receipt.
+This does not change the separate elaboration evidence already recorded by Forge
+for its own core design files.
+
+\subsection{A single operational principle}
+
+All three extensions address the same practical failure: local search has found
+useful pieces but has not discovered how they fit together. The remedy is to
+make the required interface between pieces explicit.
+
+For a fold, the interface is a base/constructor contract. For a family of
+invariants, it is an action matrix or a matrix of polynomial multipliers. For
+recursive obligations, it is a local proof constructor plus a ranking relation.
+A successful search exports that interface, not just a Boolean success flag.
+
+This yields a useful division of labor. Forge's existing obligation controller
+owns the original theorem and invokes these workers. A worker may introduce
+auxiliary obligations, but those obligations must have a mathematical reason:
+a fold equation, an inductive closure condition, or a strict-descent requirement.
+The controller does not need to guess arbitrary extra lemmas to make the worker
+look productive.
+
+The resulting development order should be: first exact proof lowering for the
+algebraic certificates; then continuation-local synthesis with a checked fold
+lemma; then the restricted cyclic compiler. The cyclic compiler depends on more
+source-level structure than either algebraic lane, and should not be the first
+component whose correctness is tested through a production tactic.

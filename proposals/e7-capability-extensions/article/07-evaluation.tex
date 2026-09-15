@@ -1,0 +1,167 @@
+\section{Executed experiments and their evidential limits}
+\label{sec:experiments}
+
+\subsection{Reproducibility envelope}
+
+The recorded run used Python 3.13.5 on Linux. The main experiments and standalone
+replay have no third-party runtime dependency. Their seeds are fixed and their
+inputs are serialized beside the certificates. The optional algebra comparison
+used SymPy 1.14.0 with a separate seed. The complete scripts and outputs are in
+\code{prototype/} and \code{results/}.
+
+The main run finished in about 1.8 seconds in this environment. That elapsed
+time is only a reproducibility observation for these small fixtures. It excludes
+Lean elaboration, source extraction, solver startup in a production worker, and
+kernel checking. The algorithmic counts below are more meaningful than ratios
+of sub-millisecond timings.
+
+\subsection{Continuation composition}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Distractors & Flat complete terms & Local checks & Local complete terms & Hole sizes \\
+\midrule
+0 & 24 & 13 & 1 & $1,2,2,8$ \\
+4 & 2,148 & 29 & 1 & $5,6,6,12$ \\
+8 & 14,384 & 45 & 1 & $9,10,10,16$ \\
+12 & 50,940 & 61 & 1 & $13,14,14,20$ \\
+\bottomrule
+\end{tabular}
+\caption{Same finite grammar and within-hole ordering; different composition strategy. Local checks and complete terms are different work units.}
+\end{table}
+
+All four comparisons return the same term. For the largest context, the term was
+also checked on all lists of length at most six over each of two two-element
+alphabets, at ordinary nearby indices and at $\pm2^{80}$. The independent
+non-fold reference agrees on all 3,570 checks. Final symbolic algebra replay
+checks the predecessor expression and lexical structure, rather than relying on
+those observations as a proof of general behavior.
+
+The distractor ordering is deliberately unfavorable and held fixed across both
+policies. The experiment demonstrates removal of a cross-product under factored
+contracts, not robustness under all candidate orders. No native Djex or Leant
+execution was performed in this study.
+
+\subsection{Inductive algebra}
+
+\begin{table}[ht]
+\small
+\begin{tabularx}{\textwidth}{@{}p{.35\textwidth}Y@{}}
+\toprule
+Experiment & Recorded result \\
+\midrule
+Coupled nonlinear switching example & Stable degree-two dimensions $5\to2$; target derived; conservation-only dimension $0$. \\
+Degree-one ablation & Dimensions $1\to0$; no target derivation. \\
+Affine differential corpus & 72 systems; backward-space and forward-feature algorithms agree in every case; 24 have nonzero relation spaces. \\
+Constructed nonlinear family & 40 systems; expected targets derived and exact action identities replayed. \\
+Target ideal completion & 14 positive fixtures: degree-growth control, coupled target, and 12 power-curve cases. \\
+Exact orbit counterexamples & 3 fixtures; every returned parameter/word pair independently executed. \\
+Gr\"obner differential oracle & 32 small systems; 368 polynomial remainders agree with SymPy; 185 traced basis identities independently replayed. \\
+\bottomrule
+\end{tabularx}
+\caption{Algebra results. Generated families and zero-space controls are identified explicitly rather than reported as a production theorem-proving score.}
+\end{table}
+
+The Gr\"obner comparison is important because many positive ideal fixtures need
+only one generator. Such examples alone exercise polynomial division but barely
+exercise completion. The separate random two-variable corpus contains two or
+three quadratic generators and tests both original-generator representations and
+normal remainders against another implementation.
+
+The high-degree negative control is also meaningful: degree-one linear-space
+closure does \emph{not} incorrectly prove stability of $x$ under $x'=x^2$.
+The ideal lane then succeeds legitimately with a polynomial multiplier. This
+checks the intended handoff between algorithms rather than just two unrelated
+success lists.
+
+\subsection{Descent on supplied cyclic graphs}
+
+\begin{table}[ht]
+\small
+\begin{tabularx}{\textwidth}{@{}p{.28\textwidth}Yrr@{}}
+\toprule
+Fixture & Ranking or outcome & Attempts & SCT closure \\
+\midrule
+Two phases & $2n+1$ at $P$, $2n$ at $Q$ & 8 & 5 \\
+Swapped arguments & $x+y$ & 4 & 3 \\
+Subtractive Euclid & $x+y$ & 4 & 3 \\
+Lexicographic growth & $(x,y)$ lexicographically & 16 & 2 \\
+Identity cycle & Unknown; SCT criterion fails & 4 & 1 \\
+Alternating decrease & Unknown; SCT criterion fails & 17 & 3 \\
+\bottomrule
+\end{tabularx}
+\caption{The four found rankings pass exact independent descent replay. These are call-graph results, not completed Lean proofs of recursive theorems.}
+\end{table}
+
+The SCT closure is a diagnostic over abstract comparison graphs. The recorded
+rank certificates additionally establish natural-valuedness of callee measures
+and strict descent, using exact nonnegative combinations. A general failed SCT
+test or exhausted ranking grammar remains inconclusive; the last two fixtures
+have explicit bad cycles for independent reasons.
+
+\subsection{Independent replay and deliberate corruptions}
+
+The standalone replayer accepted 135 encoded certificate records: 113
+constant-action invariant records, 14 ideal-preservation records, four ranking
+records, one indexing-algebra record, and three orbit-counterexample records.
+An affine record with an empty invariant space and zero target is a valid
+consistency check, not a nontrivial solved theorem. The count therefore must not
+be described as ``135 Lean theorems proved.''
+
+The replayer contains its own polynomial arithmetic and substitution routines;
+it imports none of the search modules. It checks identities and inequality
+combinations rather than rediscovering the candidate. It was also run using
+\code{python -S}, which disables normal site initialization and demonstrates that
+no installed symbolic-algebra package is needed for replay. This remains a
+Python research checker, not a formally verified implementation or a hardened
+hostile-input verifier.
+
+Thirty-one named corruptions were rejected. They include wrong action matrices,
+missing transitions, changed initializations, a fabricated target combination,
+floating-point and noncanonical rational encodings, omitted call edges, erased
+phases, wrong lexicographic pivots, missing natural-domain proofs, captured
+binders, an outer-index escape, a wrong predecessor, changed Church semantics,
+wrong ideal multipliers, and reversed noncommuting execution order.
+
+The portable regression suite has 29 test methods and passes. Some methods
+replay the already counted certificates, so these numbers overlap; there is no
+combined ``total benchmark cases'' statistic. The optional SymPy comparison is
+separate from both the portable tests and the acceptance boundary.
+
+\subsection{What remains unmeasured}
+
+No claim is made here about Mathlib-wide coverage, a new default tactic's latency,
+Lean proof-term sizes, kernel replay times, or a solved original Leant behavior
+cell. The source-level folds, cyclic proof constructors, and polynomial maps in
+these experiments were supplied or generated in the prototype's own language.
+Extracting them from arbitrary Lean goals remains implementation work.
+
+These limitations do not make the experiments merely illustrative. They test
+specific algorithmic claims: a greatest stable subspace, exact target-driven
+ideal completion, compositional algebra synthesis, and sound descent certificates.
+They establish enough of each mechanism to make its next integration gate
+precise and falsifiable.
+
+\section{Conclusion}
+
+The most valuable extension to Forge is not a longer list of fallback tactics.
+It is the ability to discover and certify \emph{interfaces between partial
+solutions}. A continuation carrier lets a fold's step be synthesized as its own
+problem. An inductive equation family lets an arithmetic proof use mutually
+supporting facts rather than demand individual conservation. A rank on a tagged
+obligation graph lets recursive proof structure be turned into ordinary
+well-founded induction.
+
+The proposed design deliberately uses two algebraic lanes. The linear lane is
+predictable, degree-bounded, and complete in its affine fragment. The ideal lane
+is target-directed and handles polynomial multipliers and degree growth, at the
+cost of potentially expensive algebra. Cyclic compilation then consumes their
+proved local facts without accepting a circular argument.
+
+The immediate implementation priority is to lower the already executable exact
+certificates to Lean, not to enlarge the untrusted search first. Once that gate
+works, the continuation and cyclic extensions have sharply defined entry points,
+concrete regression targets, and evidence that their central algorithms behave
+as specified.

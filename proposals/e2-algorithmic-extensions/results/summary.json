@@ -1,0 +1,43 @@
+{
+  "accepted_certificates": 65,
+  "assertions": 1100,
+  "binomial_n_range": [
+    0,
+    30
+  ],
+  "binomial_pointwise_regressions": 527,
+  "differential_substitution_cases": 100,
+  "expected_unknowns": 7,
+  "families": {
+    "gosper": 15,
+    "invariant": 24,
+    "telescoper": 1,
+    "two_sided": 25
+  },
+  "invariant_ablation": {
+    "conservation_only_solved": 3,
+    "same_feature_cases": 24,
+    "subspace_solved": 24
+  },
+  "lean_status": "NOT_RUN_NO_EXECUTABLE",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "rejected_mutations": 188,
+  "replay_seconds_by_family": {
+    "gosper": 0.0021865209998850332,
+    "invariant": 0.00758740400010538,
+    "telescoper": 0.0015879640000093787,
+    "two_sided": 0.0042355580001185444
+  },
+  "search_seconds_by_family": {
+    "gosper": 0.24700772299991058,
+    "invariant": 0.21606269199969574,
+    "telescoper": 0.10788483400006044,
+    "two_sided": 0.11046120999981213
+  },
+  "seed": 20260915,
+  "status": "PYTHON_SEARCH_AND_REPLAY_ONLY",
+  "stdlib_replay_returncode": 0,
+  "stock_tactic_comparison": "NOT_RUN",
+  "sympy": "1.14.0"
+}

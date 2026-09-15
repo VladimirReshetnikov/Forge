@@ -1,0 +1,4139 @@
+{
+  "run": "forge-extensions-2026-09-15",
+  "status": "PYTHON_CHECKED_NOT_LEAN_CHECKED",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "standard_library_only": true,
+  "lean_executable": null,
+  "lake_executable": null,
+  "seeds": {
+    "affine": 41027,
+    "magma": 85031,
+    "finite": 73041,
+    "integer": 95041
+  },
+  "certificate_counts_by_lane": {
+    "invariant": 51,
+    "ideal": 14,
+    "finite": 136,
+    "integer": 221
+  },
+  "finite_random_outcomes": {
+    "cover": 33,
+    "counterexample": 67
+  },
+  "integer_differential": {
+    "systems": 220,
+    "valuations": 3400,
+    "feasible": 1368,
+    "infeasible": 2032
+  },
+  "seconds_one_run_including_check_and_oracle": {
+    "invariant": 0.6125181340000836,
+    "ideal": 0.03734705399995164,
+    "finite": 0.022866166999961024,
+    "integer": 0.25954305599998406
+  },
+  "rows": [
+    {
+      "name": "cyclic-differences",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2,
+      "conserved_subspace_dimension": 0,
+      "basis": [
+        "1*z + -1*x",
+        "1*y + -1*x"
+      ]
+    },
+    {
+      "name": "sum-of-squares",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        9,
+        5,
+        3,
+        2,
+        1,
+        1
+      ],
+      "restrictions": 5,
+      "invariant_dimension": 1,
+      "basis": [
+        "1*s + -1/6*n + 1/2*n^2 + -1/3*n^3"
+      ]
+    },
+    {
+      "name": "affine-diagonal-00",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-01",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-02",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-03",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-04",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-05",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-06",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-07",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-08",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-09",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-10",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-11",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-12",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-13",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-14",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-15",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-16",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-17",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-18",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-19",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-20",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-21",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-22",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-23",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-24",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-25",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-26",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-27",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-28",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-29",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-30",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-31",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-32",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-33",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-34",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-35",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-36",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-37",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-38",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-39",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-40",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-41",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-42",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-43",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-44",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-45",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "affine-diagonal-46",
+      "lane": "invariant",
+      "template_dimension": 4,
+      "dimensions": [
+        2,
+        2
+      ],
+      "restrictions": 2,
+      "invariant_dimension": 2
+    },
+    {
+      "name": "affine-diagonal-47",
+      "lane": "invariant",
+      "template_dimension": 10,
+      "dimensions": [
+        7,
+        7
+      ],
+      "restrictions": 3,
+      "invariant_dimension": 7
+    },
+    {
+      "name": "nonlinear-template-miss",
+      "lane": "invariant",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        0
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 0,
+      "known_true_relation": "x = y",
+      "expected_incompleteness": true
+    },
+    {
+      "name": "squaring-diagonal-e0",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        0
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 0,
+      "multiplier_degree": 0,
+      "basis": []
+    },
+    {
+      "name": "squaring-diagonal-e1",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 1,
+      "basis": [
+        "1*y + -1*x"
+      ]
+    },
+    {
+      "name": "union-axes-e1",
+      "lane": "ideal",
+      "template_dimension": 6,
+      "dimensions": [
+        1,
+        0
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 0,
+      "multiplier_degree": 1,
+      "basis": []
+    },
+    {
+      "name": "union-axes-e2",
+      "lane": "ideal",
+      "template_dimension": 6,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 2,
+      "basis": [
+        "1*x*y"
+      ]
+    },
+    {
+      "name": "parabola-e2",
+      "lane": "ideal",
+      "template_dimension": 6,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 2,
+      "basis": [
+        "1*y + -1*x^2"
+      ]
+    },
+    {
+      "name": "false-line-control",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        0
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 0,
+      "multiplier_degree": 1,
+      "basis": []
+    },
+    {
+      "name": "diagonal-power-2",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 1
+    },
+    {
+      "name": "diagonal-power-3",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 2
+    },
+    {
+      "name": "diagonal-power-4",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 3
+    },
+    {
+      "name": "diagonal-power-5",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 4
+    },
+    {
+      "name": "diagonal-power-6",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 5
+    },
+    {
+      "name": "diagonal-power-7",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 6
+    },
+    {
+      "name": "diagonal-power-8",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 7
+    },
+    {
+      "name": "diagonal-power-9",
+      "lane": "ideal",
+      "template_dimension": 3,
+      "dimensions": [
+        1,
+        1
+      ],
+      "restrictions": 1,
+      "invariant_dimension": 1,
+      "multiplier_degree": 8
+    },
+    {
+      "name": "tree-counts-mod-01",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3
+    },
+    {
+      "name": "tree-counts-mod-02",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 3,
+      "evaluations": 5,
+      "tuple_visits": 8
+    },
+    {
+      "name": "tree-counts-mod-03",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 4,
+      "evaluations": 10,
+      "tuple_visits": 18
+    },
+    {
+      "name": "tree-counts-mod-04",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 4,
+      "evaluations": 17,
+      "tuple_visits": 25
+    },
+    {
+      "name": "tree-counts-mod-05",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 5,
+      "evaluations": 26,
+      "tuple_visits": 51
+    },
+    {
+      "name": "tree-counts-mod-06",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 5,
+      "evaluations": 37,
+      "tuple_visits": 62
+    },
+    {
+      "name": "tree-counts-mod-07",
+      "lane": "finite",
+      "states_reached": 7,
+      "rounds": 5,
+      "evaluations": 50,
+      "tuple_visits": 75
+    },
+    {
+      "name": "tree-counts-mod-08",
+      "lane": "finite",
+      "states_reached": 8,
+      "rounds": 5,
+      "evaluations": 65,
+      "tuple_visits": 90
+    },
+    {
+      "name": "tree-counts-mod-09",
+      "lane": "finite",
+      "states_reached": 9,
+      "rounds": 6,
+      "evaluations": 82,
+      "tuple_visits": 172
+    },
+    {
+      "name": "tree-counts-mod-10",
+      "lane": "finite",
+      "states_reached": 10,
+      "rounds": 6,
+      "evaluations": 101,
+      "tuple_visits": 191
+    },
+    {
+      "name": "tree-counts-mod-11",
+      "lane": "finite",
+      "states_reached": 11,
+      "rounds": 6,
+      "evaluations": 122,
+      "tuple_visits": 212
+    },
+    {
+      "name": "tree-counts-mod-12",
+      "lane": "finite",
+      "states_reached": 12,
+      "rounds": 6,
+      "evaluations": 145,
+      "tuple_visits": 235
+    },
+    {
+      "name": "mirror-magma-00",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 6,
+      "tuple_visits": 8,
+      "kind": "cover",
+      "magma_size": 2
+    },
+    {
+      "name": "mirror-magma-01",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "magma_size": 3
+    },
+    {
+      "name": "mirror-magma-02",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 20,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "magma_size": 4
+    },
+    {
+      "name": "mirror-magma-03",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 2,
+      "evaluations": 7,
+      "tuple_visits": 12,
+      "kind": "counterexample",
+      "magma_size": 5
+    },
+    {
+      "name": "mirror-magma-04",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 6,
+      "tuple_visits": 8,
+      "kind": "cover",
+      "magma_size": 2
+    },
+    {
+      "name": "mirror-magma-05",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "magma_size": 3
+    },
+    {
+      "name": "mirror-magma-06",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 20,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "magma_size": 4
+    },
+    {
+      "name": "mirror-magma-07",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 2,
+      "evaluations": 7,
+      "tuple_visits": 12,
+      "kind": "counterexample",
+      "magma_size": 5
+    },
+    {
+      "name": "mirror-magma-08",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 6,
+      "tuple_visits": 8,
+      "kind": "cover",
+      "magma_size": 2
+    },
+    {
+      "name": "mirror-magma-09",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "magma_size": 3
+    },
+    {
+      "name": "mirror-magma-10",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 20,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "magma_size": 4
+    },
+    {
+      "name": "mirror-magma-11",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 2,
+      "evaluations": 7,
+      "tuple_visits": 12,
+      "kind": "counterexample",
+      "magma_size": 5
+    },
+    {
+      "name": "mirror-magma-12",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 6,
+      "tuple_visits": 8,
+      "kind": "cover",
+      "magma_size": 2
+    },
+    {
+      "name": "mirror-magma-13",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "magma_size": 3
+    },
+    {
+      "name": "mirror-magma-14",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 20,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "magma_size": 4
+    },
+    {
+      "name": "mirror-magma-15",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 2,
+      "evaluations": 7,
+      "tuple_visits": 12,
+      "kind": "counterexample",
+      "magma_size": 5
+    },
+    {
+      "name": "mirror-magma-16",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 6,
+      "tuple_visits": 8,
+      "kind": "cover",
+      "magma_size": 2
+    },
+    {
+      "name": "mirror-magma-17",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "magma_size": 3
+    },
+    {
+      "name": "mirror-magma-18",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 20,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "magma_size": 4
+    },
+    {
+      "name": "mirror-magma-19",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 2,
+      "evaluations": 7,
+      "tuple_visits": 12,
+      "kind": "counterexample",
+      "magma_size": 5
+    },
+    {
+      "name": "mirror-magma-20",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 6,
+      "tuple_visits": 8,
+      "kind": "cover",
+      "magma_size": 2
+    },
+    {
+      "name": "mirror-magma-21",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "magma_size": 3
+    },
+    {
+      "name": "mirror-magma-22",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 2,
+      "evaluations": 20,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "magma_size": 4
+    },
+    {
+      "name": "mirror-magma-23",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 2,
+      "evaluations": 7,
+      "tuple_visits": 12,
+      "kind": "counterexample",
+      "magma_size": 5
+    },
+    {
+      "name": "random-algebra-000",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-001",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 4,
+      "evaluations": 13,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "oracle_reached": 3
+    },
+    {
+      "name": "random-algebra-002",
+      "lane": "finite",
+      "states_reached": 10,
+      "rounds": 5,
+      "evaluations": 40,
+      "tuple_visits": 60,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-003",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 10,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-004",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-005",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 10,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-006",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-007",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-008",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 3,
+      "evaluations": 4,
+      "tuple_visits": 7,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-009",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 4,
+      "evaluations": 11,
+      "tuple_visits": 20,
+      "kind": "counterexample",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-010",
+      "lane": "finite",
+      "states_reached": 8,
+      "rounds": 5,
+      "evaluations": 73,
+      "tuple_visits": 147,
+      "kind": "cover",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-011",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 3,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-012",
+      "lane": "finite",
+      "states_reached": 7,
+      "rounds": 4,
+      "evaluations": 57,
+      "tuple_visits": 74,
+      "kind": "cover",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-013",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-014",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 4,
+      "evaluations": 13,
+      "tuple_visits": 24,
+      "kind": "cover",
+      "oracle_reached": 3
+    },
+    {
+      "name": "random-algebra-015",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 3,
+      "evaluations": 5,
+      "tuple_visits": 9,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-016",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-017",
+      "lane": "finite",
+      "states_reached": 7,
+      "rounds": 5,
+      "evaluations": 57,
+      "tuple_visits": 99,
+      "kind": "cover",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-018",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-019",
+      "lane": "finite",
+      "states_reached": 10,
+      "rounds": 5,
+      "evaluations": 58,
+      "tuple_visits": 76,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-020",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-021",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-022",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-023",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-024",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 4,
+      "evaluations": 21,
+      "tuple_visits": 32,
+      "kind": "cover",
+      "oracle_reached": 4
+    },
+    {
+      "name": "random-algebra-025",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-026",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-027",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-028",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 3,
+      "evaluations": 4,
+      "tuple_visits": 6,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-029",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-030",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 3,
+      "evaluations": 4,
+      "tuple_visits": 7,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-031",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-032",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 3
+    },
+    {
+      "name": "random-algebra-033",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-034",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-035",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 4,
+      "evaluations": 13,
+      "tuple_visits": 23,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-036",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 4,
+      "evaluations": 31,
+      "tuple_visits": 48,
+      "kind": "cover",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-037",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-038",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-039",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 4,
+      "evaluations": 16,
+      "tuple_visits": 25,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-040",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-041",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-042",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-043",
+      "lane": "finite",
+      "states_reached": 7,
+      "rounds": 3,
+      "evaluations": 13,
+      "tuple_visits": 16,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-044",
+      "lane": "finite",
+      "states_reached": 7,
+      "rounds": 5,
+      "evaluations": 57,
+      "tuple_visits": 89,
+      "kind": "cover",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-045",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-046",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-047",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-048",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-049",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-050",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-051",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 11,
+      "kind": "cover",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-052",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-053",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 5,
+      "evaluations": 31,
+      "tuple_visits": 55,
+      "kind": "cover",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-054",
+      "lane": "finite",
+      "states_reached": 7,
+      "rounds": 3,
+      "evaluations": 11,
+      "tuple_visits": 15,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-055",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 4
+    },
+    {
+      "name": "random-algebra-056",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 10,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-057",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-058",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-059",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 3,
+      "evaluations": 6,
+      "tuple_visits": 9,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-060",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-061",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-062",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 3,
+      "evaluations": 5,
+      "tuple_visits": 8,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-063",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-064",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-065",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-066",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-067",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 11,
+      "kind": "cover",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-068",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 3,
+      "evaluations": 8,
+      "tuple_visits": 11,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-069",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-070",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-071",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 5,
+      "evaluations": 43,
+      "tuple_visits": 85,
+      "kind": "cover",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-072",
+      "lane": "finite",
+      "states_reached": 3,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-073",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-074",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-075",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 5,
+      "evaluations": 21,
+      "tuple_visits": 45,
+      "kind": "cover",
+      "oracle_reached": 4
+    },
+    {
+      "name": "random-algebra-076",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-077",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 3,
+      "evaluations": 5,
+      "tuple_visits": 7,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-078",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 4,
+      "evaluations": 31,
+      "tuple_visits": 48,
+      "kind": "cover",
+      "oracle_reached": 5
+    },
+    {
+      "name": "random-algebra-079",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 3,
+      "evaluations": 4,
+      "tuple_visits": 6,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-080",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-081",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 11,
+      "kind": "cover",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-082",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-083",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 7
+    },
+    {
+      "name": "random-algebra-084",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-085",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 11,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-086",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-087",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 8
+    },
+    {
+      "name": "random-algebra-088",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 11,
+      "kind": "cover",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-089",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 9
+    },
+    {
+      "name": "random-algebra-090",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-091",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-092",
+      "lane": "finite",
+      "states_reached": 6,
+      "rounds": 4,
+      "evaluations": 43,
+      "tuple_visits": 60,
+      "kind": "cover",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-093",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 3,
+      "evaluations": 11,
+      "tuple_visits": 15,
+      "kind": "counterexample",
+      "oracle_reached": 6
+    },
+    {
+      "name": "random-algebra-094",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 3,
+      "evaluations": 7,
+      "tuple_visits": 11,
+      "kind": "cover",
+      "oracle_reached": 2
+    },
+    {
+      "name": "random-algebra-095",
+      "lane": "finite",
+      "states_reached": 2,
+      "rounds": 2,
+      "evaluations": 2,
+      "tuple_visits": 3,
+      "kind": "counterexample",
+      "oracle_reached": 4
+    },
+    {
+      "name": "random-algebra-096",
+      "lane": "finite",
+      "states_reached": 4,
+      "rounds": 4,
+      "evaluations": 21,
+      "tuple_visits": 38,
+      "kind": "cover",
+      "oracle_reached": 4
+    },
+    {
+      "name": "random-algebra-097",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 2,
+      "evaluations": 3,
+      "tuple_visits": 4,
+      "kind": "cover",
+      "oracle_reached": 1
+    },
+    {
+      "name": "random-algebra-098",
+      "lane": "finite",
+      "states_reached": 5,
+      "rounds": 3,
+      "evaluations": 8,
+      "tuple_visits": 11,
+      "kind": "counterexample",
+      "oracle_reached": 10
+    },
+    {
+      "name": "random-algebra-099",
+      "lane": "finite",
+      "states_reached": 1,
+      "rounds": 1,
+      "evaluations": 1,
+      "tuple_visits": 1,
+      "kind": "counterexample",
+      "oracle_reached": 1
+    },
+    {
+      "name": "integer-projection-000",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 10,
+      "infeasible": 15,
+      "nodes": 8,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-001",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 19,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-002",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 67,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-003",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 23,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-004",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 48,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-005",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 14,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-006",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 12,
+      "infeasible": 13,
+      "nodes": 66,
+      "period": 12
+    },
+    {
+      "name": "integer-projection-007",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 11,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-008",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 55,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-009",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 51,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-010",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 24,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-011",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 2,
+      "infeasible": 3,
+      "nodes": 19,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-012",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 17,
+      "infeasible": 8,
+      "nodes": 28,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-013",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 7,
+      "infeasible": 18,
+      "nodes": 49,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-014",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 17,
+      "infeasible": 8,
+      "nodes": 71,
+      "period": 21
+    },
+    {
+      "name": "integer-projection-015",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 56,
+      "period": 21
+    },
+    {
+      "name": "integer-projection-016",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 65,
+      "period": 20
+    },
+    {
+      "name": "integer-projection-017",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 34,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-018",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 27,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-019",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 75,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-020",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 45,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-021",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 34,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-022",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 35,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-023",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 15,
+      "infeasible": 10,
+      "nodes": 35,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-024",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 49,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-025",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 17,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-026",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 19,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-027",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-028",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 59,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-029",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 57,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-030",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 42,
+      "period": 35
+    },
+    {
+      "name": "integer-projection-031",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 2,
+      "infeasible": 23,
+      "nodes": 66,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-032",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-033",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 39,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-034",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 2,
+      "infeasible": 23,
+      "nodes": 57,
+      "period": 12
+    },
+    {
+      "name": "integer-projection-035",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 9,
+      "infeasible": 16,
+      "nodes": 27,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-036",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 54,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-037",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 56,
+      "period": 56
+    },
+    {
+      "name": "integer-projection-038",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 57,
+      "period": 24
+    },
+    {
+      "name": "integer-projection-039",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 24,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-040",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 43,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-041",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 57,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-042",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 51,
+      "period": 40
+    },
+    {
+      "name": "integer-projection-043",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 52,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-044",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 44,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-045",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 47,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-046",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 15,
+      "infeasible": 10,
+      "nodes": 19,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-047",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 30,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-048",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 74,
+      "period": 10
+    },
+    {
+      "name": "integer-projection-049",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 11,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-050",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 41,
+      "period": 14
+    },
+    {
+      "name": "integer-projection-051",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 44,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-052",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 30,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-053",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-054",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 32,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-055",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 2,
+      "infeasible": 23,
+      "nodes": 49,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-056",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 23,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-057",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 43,
+      "period": 20
+    },
+    {
+      "name": "integer-projection-058",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 65,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-059",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 78,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-060",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-061",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 27,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-062",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 14,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-063",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 38,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-064",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 51,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-065",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 48,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-066",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 13,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-067",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 59,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-068",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 51,
+      "period": 30
+    },
+    {
+      "name": "integer-projection-069",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 8,
+      "infeasible": 17,
+      "nodes": 36,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-070",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 43,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-071",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 12,
+      "infeasible": 13,
+      "nodes": 48,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-072",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 37,
+      "period": 10
+    },
+    {
+      "name": "integer-projection-073",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 41,
+      "period": 12
+    },
+    {
+      "name": "integer-projection-074",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 16,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-075",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 7,
+      "infeasible": 18,
+      "nodes": 76,
+      "period": 12
+    },
+    {
+      "name": "integer-projection-076",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 22,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-077",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 56,
+      "period": 10
+    },
+    {
+      "name": "integer-projection-078",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 25,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-079",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 60,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-080",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 29,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-081",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 46,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-082",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 40,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-083",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 41,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-084",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 9,
+      "infeasible": 16,
+      "nodes": 55,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-085",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 30,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-086",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 62,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-087",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 43,
+      "period": 14
+    },
+    {
+      "name": "integer-projection-088",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 34,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-089",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 36,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-090",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 10,
+      "infeasible": 15,
+      "nodes": 36,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-091",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 7,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-092",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 51,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-093",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 44,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-094",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 56,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-095",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 36,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-096",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 4,
+      "infeasible": 1,
+      "nodes": 15,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-097",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 16,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-098",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 3,
+      "infeasible": 22,
+      "nodes": 40,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-099",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 8,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-100",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 38,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-101",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 45,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-102",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 44,
+      "period": 70
+    },
+    {
+      "name": "integer-projection-103",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 44,
+      "period": 14
+    },
+    {
+      "name": "integer-projection-104",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 30,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-105",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-106",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 2,
+      "infeasible": 3,
+      "nodes": 20,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-107",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 48,
+      "period": 56
+    },
+    {
+      "name": "integer-projection-108",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 4,
+      "infeasible": 1,
+      "nodes": 13,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-109",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 28,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-110",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 34,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-111",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 27,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-112",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 16,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-113",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 26,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-114",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 58,
+      "period": 28
+    },
+    {
+      "name": "integer-projection-115",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 21,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-116",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 24,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-117",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 47,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-118",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 28,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-119",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 56,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-120",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 50,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-121",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 29,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-122",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 9,
+      "infeasible": 16,
+      "nodes": 35,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-123",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 24,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-124",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 51,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-125",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 32,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-126",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 12,
+      "infeasible": 13,
+      "nodes": 32,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-127",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 6,
+      "infeasible": 19,
+      "nodes": 31,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-128",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 44,
+      "period": 28
+    },
+    {
+      "name": "integer-projection-129",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 18,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-130",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 46,
+      "period": 40
+    },
+    {
+      "name": "integer-projection-131",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 37,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-132",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 16,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-133",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-134",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 2,
+      "infeasible": 23,
+      "nodes": 44,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-135",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 52,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-136",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 19,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-137",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 63,
+      "period": 56
+    },
+    {
+      "name": "integer-projection-138",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 50,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-139",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 44,
+      "period": 20
+    },
+    {
+      "name": "integer-projection-140",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 41,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-141",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 50,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-142",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 37,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-143",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 58,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-144",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 11,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-145",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 2,
+      "infeasible": 3,
+      "nodes": 18,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-146",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 29,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-147",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 19,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-148",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 35,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-149",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 25,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-150",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 9,
+      "infeasible": 16,
+      "nodes": 8,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-151",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 16,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-152",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 33,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-153",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 77,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-154",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 3,
+      "infeasible": 22,
+      "nodes": 54,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-155",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 2,
+      "infeasible": 23,
+      "nodes": 45,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-156",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-157",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 18,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-158",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 10,
+      "infeasible": 15,
+      "nodes": 40,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-159",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 11,
+      "infeasible": 14,
+      "nodes": 41,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-160",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 61,
+      "period": 35
+    },
+    {
+      "name": "integer-projection-161",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 51,
+      "period": 15
+    },
+    {
+      "name": "integer-projection-162",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 18,
+      "infeasible": 7,
+      "nodes": 17,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-163",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 8,
+      "infeasible": 17,
+      "nodes": 46,
+      "period": 21
+    },
+    {
+      "name": "integer-projection-164",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 61,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-165",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 25,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-166",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 2,
+      "infeasible": 3,
+      "nodes": 25,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-167",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 69,
+      "period": 20
+    },
+    {
+      "name": "integer-projection-168",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 21,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-169",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 9,
+      "infeasible": 16,
+      "nodes": 24,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-170",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 3,
+      "infeasible": 22,
+      "nodes": 49,
+      "period": 8
+    },
+    {
+      "name": "integer-projection-171",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 30,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-172",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 7,
+      "infeasible": 18,
+      "nodes": 53,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-173",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 57,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-174",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 11,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-175",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 10,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-176",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 5,
+      "infeasible": 20,
+      "nodes": 43,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-177",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 9,
+      "infeasible": 16,
+      "nodes": 31,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-178",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 65,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-179",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 56,
+      "period": 40
+    },
+    {
+      "name": "integer-projection-180",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 13,
+      "infeasible": 12,
+      "nodes": 8,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-181",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 25,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-182",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 45,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-183",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 16,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-184",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 4,
+      "infeasible": 21,
+      "nodes": 61,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-185",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 16,
+      "infeasible": 9,
+      "nodes": 34,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-186",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 2,
+      "infeasible": 3,
+      "nodes": 35,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-187",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 70,
+      "period": 4
+    },
+    {
+      "name": "integer-projection-188",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 75,
+      "period": 14
+    },
+    {
+      "name": "integer-projection-189",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 2,
+      "infeasible": 3,
+      "nodes": 19,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-190",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 56,
+      "period": 14
+    },
+    {
+      "name": "integer-projection-191",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 59,
+      "period": 24
+    },
+    {
+      "name": "integer-projection-192",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 57,
+      "period": 5
+    },
+    {
+      "name": "integer-projection-193",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 62,
+      "period": 12
+    },
+    {
+      "name": "integer-projection-194",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 50,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-195",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 30,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-196",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 13,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-197",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 13,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-198",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 19,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-199",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 15,
+      "infeasible": 10,
+      "nodes": 33,
+      "period": 24
+    },
+    {
+      "name": "integer-projection-200",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 36,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-201",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 14,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-202",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 20,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-203",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 38,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-204",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 1,
+      "infeasible": 4,
+      "nodes": 58,
+      "period": 14
+    },
+    {
+      "name": "integer-projection-205",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 14,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-206",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 30,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-207",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 51,
+      "period": 12
+    },
+    {
+      "name": "integer-projection-208",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 30,
+      "period": 6
+    },
+    {
+      "name": "integer-projection-209",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 3,
+      "infeasible": 2,
+      "nodes": 19,
+      "period": 3
+    },
+    {
+      "name": "integer-projection-210",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 0,
+      "infeasible": 25,
+      "nodes": 57,
+      "period": 24
+    },
+    {
+      "name": "integer-projection-211",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 5,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-212",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 3,
+      "infeasible": 22,
+      "nodes": 47,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-213",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 14,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-214",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 39,
+      "period": 2
+    },
+    {
+      "name": "integer-projection-215",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 2,
+      "infeasible": 23,
+      "nodes": 60,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-216",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 3,
+      "infeasible": 22,
+      "nodes": 44,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-217",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 1,
+      "infeasible": 24,
+      "nodes": 67,
+      "period": 7
+    },
+    {
+      "name": "integer-projection-218",
+      "lane": "integer",
+      "valuations": 25,
+      "feasible": 25,
+      "infeasible": 0,
+      "nodes": 1,
+      "period": 1
+    },
+    {
+      "name": "integer-projection-219",
+      "lane": "integer",
+      "valuations": 5,
+      "feasible": 0,
+      "infeasible": 5,
+      "nodes": 13,
+      "period": 3
+    },
+    {
+      "name": "large-symbolic-CRT",
+      "lane": "integer",
+      "nodes": 42,
+      "period": 1000000016000000063,
+      "period_bits": 60,
+      "demonstrations": [
+        {
+          "input": 0,
+          "witness": 2000000015
+        },
+        {
+          "input": 1,
+          "witness": 500000008500000038
+        },
+        {
+          "input": -1,
+          "witness": 500000011500000055
+        },
+        {
+          "input": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+          "witness": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000734552899368602969
+        },
+        {
+          "input": -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+          "witness": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999734552879368602876
+        }
+      ]
+    }
+  ]
+}

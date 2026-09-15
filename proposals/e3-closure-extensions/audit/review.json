@@ -1,0 +1,98 @@
+{
+  "review_date": "2026-09-15",
+  "review_method": "GitHub connector reads and public primary-source web research",
+  "forge_commit": "674521027d968d59f7b83220ed52304a85cb55e2",
+  "leant_observed_commit": "6bf05ad78c467989e68290f2d08bbed40802d485",
+  "djex_observed_commit": "e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5",
+  "scope_limitation": "Selected merged-design sections, not every frozen submission. No complete local checkout. Recursive tree and some file responses were truncated. Search-index misses were not treated as proof of absence.",
+  "files": [
+    {
+      "repo": "Forge",
+      "path": "README.md",
+      "blob": "4942c9d11f1a7a2aa9fbf6e016cf668fcb937be6",
+      "scope": "README connector content"
+    },
+    {
+      "repo": "Forge",
+      "path": "article/sections/05-structural.tex",
+      "blob": "e473ffb3f9b6cd3ffb0c5d34b4752e9368351d33",
+      "scope": "Initial read partly truncated; separate requested range 270-590 inspected"
+    },
+    {
+      "repo": "Forge",
+      "path": "article/sections/06-nonlinear.tex",
+      "blob": "6f1aac80dcfd24e822e1202268db458d3825b6a2",
+      "scope": "Requested ranges 1-210 and 400-700"
+    },
+    {
+      "repo": "Forge",
+      "path": "article/sections/07-boolean-and-external.tex",
+      "blob": "25cdce485dd4b7f2f3822abfe10b3df64ac18a6f",
+      "scope": "Requested range 1-400; response truncated near end"
+    },
+    {
+      "repo": "Forge",
+      "path": "docs/IDEAS-FROM-LEANT-DJEX.md",
+      "blob": "533df7eeb926da7d311911e187d0b8d935bfe6ad",
+      "scope": "Connector document read"
+    },
+    {
+      "repo": "Leant",
+      "path": "README.md",
+      "blob": "19311d5823ad34e23802791ae226bc812c01c921",
+      "scope": "Requested range 1-180"
+    },
+    {
+      "repo": "Leant",
+      "path": "docs/behavioral-synthesis.md",
+      "blob": "6b1f20e624d8e87bc6edbbba3651fab5a2a3e21d",
+      "scope": "Requested range 1-180"
+    },
+    {
+      "repo": "Djex",
+      "path": "README.md",
+      "blob": "12fec0edf075937f2eb42125e800845a480d4b76",
+      "scope": "Requested range 1-150"
+    },
+    {
+      "repo": "leanprover-community/mathlib4",
+      "path": "Mathlib/Data/Nat/Choose/Basic.lean",
+      "commit": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+      "blob": "1cd090d71c8175e5f2071d939d30394b4c56d9de",
+      "scope": "Requested range 20-165"
+    }
+  ],
+  "novelty_boundary": {
+    "not_new": [
+      "General proof planning",
+      "Induction generalization",
+      "Conserved polynomial invariants",
+      "Joint polynomial multiplier condition",
+      "Exact search/replay separation",
+      "Type-correct candidate checking"
+    ],
+    "delivered_extensions": [
+      "Goal-orbit vector closure with execution-word provenance",
+      "Goal-orbit ideal closure and fixed-generator multiplier reconstruction",
+      "Finite Moore-machine universal contract certificates",
+      "Boundary-safe binomial-power flux discovery"
+    ],
+    "not_claimed": "Global mathematical originality; exhaustive absence from every historic repository file; installed Lean tactic; measured improvement over grind"
+  },
+  "verification": {
+    "python_search": "EXECUTED",
+    "stdlib_replay": "EXECUTED",
+    "unit_tests": "EXECUTED",
+    "lean": "NOT_RUN",
+    "source_reification": "NOT_IMPLEMENTED",
+    "lean_tactic_comparison": "NOT_RUN"
+  },
+  "primary_external_sources": [
+    "https://www.uni-muenster.de/imperia/md/content/informatik/agmueller-olm/publications/ipl-poly-preprint.pdf",
+    "https://arxiv.org/abs/0907.5058",
+    "https://arxiv.org/abs/1307.4554",
+    "https://docs.sympy.org/latest/modules/polys/reference.html",
+    "https://python-flint.readthedocs.io/en/latest/fmpq_mat.html",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Computability/DFA.html"
+  ]
+}

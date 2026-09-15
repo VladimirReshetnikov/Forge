@@ -1,0 +1,86 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=0.9in,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{xcolor,enumitem,listings,fancyhdr}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black,pdftitle={Forge Closure Extensions},pdfauthor={OpenAI}}
+\urlstyle{tt}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\unknown}{\textsc{unknown}}
+\newcommand{\proved}{\textsc{proved}}
+\newcommand{\refuted}{\textsc{refuted}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\run}{\operatorname{run}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Orbit}{\mathcal O}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,breaklines=true,frame=single,framerule=0.25pt,rulecolor=\color{black!25},showstringspaces=false,xleftmargin=0.6em,xrightmargin=0.6em,aboveskip=0.9em,belowskip=0.9em}
+\setlist{itemsep=2pt,topsep=4pt}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+\setcounter{tocdepth}{2}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Forge: closure extensions}
+\fancyhead[R]{\small Design and executed prototypes}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\emergencystretch=2em
+\begin{document}
+\begin{titlepage}
+\vspace*{1.0in}
+{\Large\scshape A development proposal for Forge\par}
+\vspace{0.35in}
+{\Huge\bfseries Beyond Local Certificates\par}
+\vspace{0.3in}
+{\LARGE Goal-generated invariants, finite-state contracts,\par boundary-safe telescoping\par}
+\vspace{0.6in}
+{\large Concrete algorithms, mathematical guarantees,\par independently replayed Python artifacts, and a Lean integration plan\par}
+\vfill
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Prepared for & Vladimir Reshetnikov\\[5pt]
+Date & 15 September 2026\\[5pt]
+Forge baseline & \texttt{674521027d968d59f7b83220ed52304a85cb55e2}\\[5pt]
+Implementation & Four Python producers; a separate exact checker\\[5pt]
+Evidence & 317 cases; 313 certificates; 25 rejected invalid mutations\\[5pt]
+Lean status & No Lean execution in this package; integration remains proposed
+\end{tabularx}\par
+\vspace{0.30in}
+{\small This is an additive research proposal, not a replacement for Forge's existing article. Its new implementation is not an installed Lean tactic. A Python acceptance is not a Lean-kernel proof.\par}
+\end{titlepage}
+\begin{abstract}
+Forge's present design already has an extensive proof-planning architecture. The most useful next contribution is therefore not another scheduler, another generalization heuristic, or another statement of the search/checking boundary. This report develops three additional capability areas through four executable producers. First, a goal-generated pullback algorithm constructs a finite vector of polynomial invariants whose entries may change together. Second, ideal closure replaces constant linear dependence with polynomial dependence, resolving nonlinear cases in which the vector-space algorithm necessarily keeps growing. The ideal worker retains original-goal provenance, obtains explicit multiplier certificates, and has an unbounded termination argument for a precisely stated unguarded polynomial fragment. Third, finite-state relational certificates establish equality of fold observations for every finite input word, or produce a shortest distinguishing word. Fourth, a restricted creative-telescoping worker discovers recurrences for binomial-power moments with moving support and explicit endpoint reasoning.
+
+All four producers were executed. A separate standard-library-only checker replays their sparse polynomial identities, finite relations, and concrete counterexamples without importing SymPy. The recorded run contains 178 positive certificates, 135 counterexample certificates, and four resource-bounded unknown outcomes; 240 finite-state results agree with an independent greatest-fixed-point oracle. The report supplies complete mathematical arguments for the certificate rules, concrete integration interfaces, a dependency plan, and adversarial tests. It makes no measured claim against \texttt{grind} or any other Lean tactic. The algorithms build on established algebraic invariant analysis, automata equivalence, and creative telescoping; the contribution is their focused adaptation and executable extension of the reviewed Forge design, not a claim to have invented those fields.
+\end{abstract}
+\tableofcontents
+\clearpage
+\input{sections/01-scope}
+\input{sections/02-vector}
+\input{sections/03-ideal}
+\input{sections/04-machines}
+\input{sections/05-telescoping}
+\input{sections/06-integration}
+\input{sections/07-evidence}
+\input{sections/08-roadmap}
+\appendix
+\input{sections/09-artifacts}
+\input{references}
+\end{document}

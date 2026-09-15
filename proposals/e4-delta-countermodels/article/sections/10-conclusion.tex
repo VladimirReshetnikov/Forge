@@ -1,0 +1,59 @@
+\section{Research extensions and final recommendation}
+
+\subsection{Where the next mathematical work should go}
+\textbf{Guarded closure modulo proved constraints.} If an edge has a polynomial
+equality guard $h(x,u)=0$, preservation only needs to hold on that variety. A
+certificate could replace \eqref{eq:edgecert} by a sum of invariant generators
+and explicit guard-ideal multiples. Search then needs a carefully chosen
+quotient representation or a separate ideal-membership proposer. Inequality
+guards require a different justification. This extension is not implemented,
+and dropping a guard invalidates source-level counterexamples.
+
+\textbf{Combine finite vector spaces with invariant ideals.} The true
+$x\mapsto x^2$ example suggests a measured hybrid: attempt observable closure,
+then use the discovered growing monomials as candidates for the repository's
+existing polynomial-multiplier worker. The multiplier worker must independently
+prove ideal preservation. The closure failure is a proposal signal, not a proof
+that the resulting ideal is invariant.
+
+\textbf{Input alignment and simulations.} The current product construction is
+synchronous. Stuttering or multi-element-consuming programs require an explicit
+simulation relation and a measure ensuring the intended input alignment. A
+finite-control alignment automaton may cover useful fragments, but a certificate
+must state which input prefixes each component has consumed.
+
+\textbf{Certificate-producing constructive synthesis.} A negative Kripke model
+can be paired with a positive LJT proof search in a two-sided service. Positive
+proof terms go through the existing source re-elaboration boundary. Negative
+models go through object-logic soundness and an independently justified source
+translation gate. This gives useful answers on both sides without granting
+heuristic failure the status of semantic evidence.
+
+\subsection{What should be merged first}
+The highest-value first merge is the observable machine IR, exact closure
+producer, sparse replay checker, and the explicit corpus. They provide a
+small, coherent subsystem with a stated completeness theorem and real
+negative witnesses. The next merge should compile the generated identities and
+complete the source-to-fold semantic bridge. An outer \code{forge} wrapper can
+then exploit the new lemma as an ordinary checked fact.
+
+The Kripke checker is a useful parallel contribution, provided its result type
+is explicitly about IPC derivability. It should not be used to strengthen a
+source-level noninhabitation claim before a faithful translation theorem has
+been supplied.
+
+\subsection{The substantive change in capability}
+The algebraic worker changes the question from
+\emph{``which invariant template should I guess?''} to
+\emph{``which finite space of observations must be zero for this requested
+output to remain zero?''} In a broad state-affine fragment that question is
+answered by exact finite-dimensional algebra, and a negative answer has a
+concrete input word. The logical worker changes a bare failed proof search into
+a separately inspectable model, while carefully stating which proof language
+the model excludes.
+
+Neither contribution is a new foundation for mathematics or a replacement for
+Lean's kernel. Together they are a concrete next step for Forge: additional
+proof and diagnostic capabilities, small certificate languages, executed
+prototypes, and explicit integration gates rather than another general-purpose
+controller proposal.

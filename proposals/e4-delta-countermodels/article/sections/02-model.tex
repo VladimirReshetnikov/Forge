@@ -1,0 +1,97 @@
+\section{The machine fragment and the proof obligation}
+\label{sec:model}
+
+\subsection{State, control, and fresh inputs}
+Let $Q$ be a finite set of control nodes. At each node the program has $r$
+rational registers $x=(x_1,\ldots,x_r)$. An edge $e:q\to q'$ carries a
+\emph{simultaneous} polynomial update
+\[
+ F_e:\Q^r\times\Q^m\longrightarrow\Q^r,
+ \qquad F_e(x,u)\in\Q[x_1,\ldots,x_r,u_1,\ldots,u_m]^r.
+\]
+An execution begins at a specified $(q_0,x_0)$. At every step it chooses an edge
+leaving the current node and a fresh arbitrary rational payload $u\in\Q^m$.
+It then moves to $(q',F_e(x,u))$. The zero-step execution is included.
+
+The edge choice is unrestricted among outgoing edges. It can represent an
+input constructor or tag. The implemented fragment has \emph{no numerical
+edge guards}. In particular, an edge labelled ``positive'' is not assumed to
+have a positive payload: labels are descriptive strings, not formulas.
+
+For each control node $q$ the demanded outputs are a finite list
+\[
+ G_q=(g_{q,1},\ldots,g_{q,t_q}),\qquad g_{q,j}\in\Q[x].
+\]
+The task is to establish
+\begin{equation}\label{eq:task}
+ \forall(q,x)\text{ reachable from }(q_0,x_0),\quad
+ \bigwedge_{j=1}^{t_q}g_{q,j}(x)=0.
+\end{equation}
+An empty list at a node imposes no output condition there. It does not exempt
+that node from the backward propagation needed to prove later outputs.
+
+\subsection{Why this is a useful target for Lean automation}
+A fold with a fixed-dimensional accumulator has exactly this shape. Suppose
+\[
+ f(xs)=o_f(\operatorname{foldl}(F,s_f,xs)),\qquad
+ h(xs)=o_h(\operatorname{foldl}(H,s_h,xs)).
+\]
+To prove $\forall xs,\ f(xs)=h(xs)$, take the product accumulator $(s,t)$,
+update both sides on the \emph{same} input, and demand
+$o_f(s)-o_h(t)=0$. Different implementation states are allowed: a two-register
+candidate can be compared with a three-register reference by using five
+registers in the product. The relation between those registers need not be
+supplied by the user.
+
+An invariant of the product is not merely an identity of program syntax. It is
+a relational assertion about all states reached by the two executions. This is
+what permits different recurrences, coordinate systems, and accumulator
+representations to be related.
+
+The product construction is valid only when both sides consume the same input
+word with the same step alignment. Comparing a one-pass fold to a program that
+conditionally consumes two elements needs a richer simulation relation; silently
+pairing their updates would prove the wrong theorem.
+
+\subsection{Arbitrary starting parameters without a new search mechanism}
+A universally quantified starting parameter $\theta$ can be modeled by a
+special initial control node with no demanded output and a single initialization
+edge. Its payload is $\theta$, and its update installs the desired polynomial
+initial state $H(\theta)$. The edge goes to the ordinary execution node, and no
+edge returns to the initialization node.
+
+For example, the universal claim that $b=7a$ remains true after increments
+$(a,b)\mapsto(a+u,b+7u)$ can start at $(a,b)=(\theta,7\theta)$.
+The implemented case \code{symbolic_initial_parameter} encodes precisely this
+construction. It is not finite sampling of $\theta$. The source bridge must
+identify the distinguished first edge, and input tuples can be padded with
+unused coordinates so that the common payload dimension remains fixed.
+
+\subsection{What is deliberately outside the first fragment}
+There is no integer division, truncated natural subtraction, floating-point
+rounding, finite-field interpretation, variable-length register vector, or
+uninterpreted state operation. Numerical guards, probabilistic choices, and
+unbounded heap structures are not represented. Polynomial updates may be
+nonlinear in state, but then the closure algorithm can fail to terminate without
+a resource cap.
+
+Over-approximating a guarded machine by dropping its guards has a useful
+\emph{one-sided} meaning: a positive invariant of all the additional
+executions remains valid for the guarded program. A counterexample to that
+over-approximation need not be executable in the original program. The initial
+integration should therefore refuse guarded translations rather than allow the
+negative lane to acquire unintended authority.
+
+\subsection{The small example that motivates the construction}
+Consider four registers initially zero and the update
+\begin{equation}\label{eq:delayed}
+ (a,b,c,d)\longmapsto(a+b,\ b+u,\ c+d,\ d+u).
+\end{equation}
+The demand is $a-c=0$. It is true on every reachable state. Nevertheless,
+\[
+ (a-c)\circ F=(a-c)+(b-d)\ne a-c
+\]
+as a polynomial on arbitrary states. The target is not conserved. The missing
+fact is $b-d=0$, and it is conserved. Discovering the two-dimensional space
+spanned by $a-c$ and $b-d$ solves the problem without a general invariant
+ansatz or a guessed coefficient bound.

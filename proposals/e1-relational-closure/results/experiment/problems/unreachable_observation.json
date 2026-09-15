@@ -1,0 +1,60 @@
+{
+  "edges": [
+    {
+      "dst": 0,
+      "inputs": 0,
+      "src": 0,
+      "update": [
+        [
+          [
+            [
+              0
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ],
+          [
+            [
+              1
+            ],
+            [
+              "1",
+              "1"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "initial": [
+    {
+      "location": 0,
+      "state": [
+        []
+      ]
+    }
+  ],
+  "locations": 2,
+  "n": 1,
+  "name": "unreachable_observation",
+  "parameters": 0,
+  "schema": "forge-polynomial-system-v1",
+  "targets": [
+    {
+      "location": 1,
+      "polynomial": [
+        [
+          [
+            0
+          ],
+          [
+            "1",
+            "1"
+          ]
+        ]
+      ]
+    }
+  ]
+}

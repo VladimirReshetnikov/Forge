@@ -1,0 +1,77 @@
+{
+  "case": "false_recurrence_06",
+  "certificate": {
+    "kind": "transition_word_counterexample_v1",
+    "target": 0,
+    "word": [
+      0,
+      0
+    ]
+  },
+  "problem": {
+    "dimension": 2,
+    "initial": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "kind": "polynomial_transition_system_v1",
+    "targets": [
+      [
+        [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "transitions": [
+      [
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        ]
+      ]
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+case,family,mode,expected,status,accepted,reason,check_seconds,kind,arithmetic_operations,basis_dimensions,elapsed_seconds,generators,grid_evaluations,groebner_calls,max_generated_degree,membership_queries,pullbacks,process_seconds,value,length
+scaled_graph_00,scaled graph,linear,proved,proved,True,,0.0007204790000514549,closure-certificate,40,[1],0.0066706260000728435,1,0,0,2,4,1,0.8252578579999863,,
+scaled_graph_00,scaled graph,ideal,proved,proved,True,,0.00027010500002688786,closure-certificate,40,[1],0.006659220000074129,1,0,1,2,4,1,0.7843651409999666,,
+scaled_graph_01,scaled graph,linear,proved,proved,True,,0.00028434599994398013,closure-certificate,40,[1],0.00625035799998841,1,0,0,2,4,1,0.760018774999935,,
+scaled_graph_01,scaled graph,ideal,proved,proved,True,,0.00028218300008120423,closure-certificate,40,[1],0.007027120999964609,1,0,1,2,4,1,0.7515514030000077,,
+scaled_graph_02,scaled graph,linear,proved,proved,True,,0.000266699000007975,closure-certificate,40,[1],0.008076925000068513,1,0,0,2,4,1,0.8347661159999689,,
+scaled_graph_02,scaled graph,ideal,proved,proved,True,,0.0002766450000990517,closure-certificate,40,[1],0.006585319000009804,1,0,1,2,4,1,0.8509536369999751,,
+scaled_graph_03,scaled graph,linear,proved,proved,True,,0.00025067500007480703,closure-certificate,40,[1],0.007076520999930835,1,0,0,2,4,1,0.7816827380000859,,
+scaled_graph_03,scaled graph,ideal,proved,proved,True,,0.00024109100002078776,closure-certificate,40,[1],0.006549692000021423,1,0,1,2,4,1,0.7433404979999523,,
+scaled_graph_04,scaled graph,linear,proved,proved,True,,0.0002716760000112117,closure-certificate,40,[1],0.006815718999973797,1,0,0,2,4,1,0.6994868289999658,,
+scaled_graph_04,scaled graph,ideal,proved,proved,True,,0.0002867100000685241,closure-certificate,40,[1],0.0061448239999890575,1,0,1,2,4,1,0.6939741300000151,,
+scaled_graph_05,scaled graph,linear,proved,proved,True,,0.00026314399997318105,closure-certificate,40,[1],0.006537041999990834,1,0,0,2,4,1,0.7312283830000297,,
+scaled_graph_05,scaled graph,ideal,proved,proved,True,,0.0002801099999487633,closure-certificate,40,[1],0.0068055039999990186,1,0,1,2,4,1,0.7036602350000294,,
+scaled_graph_06,scaled graph,linear,proved,proved,True,,0.00025933799997801543,closure-certificate,40,[1],0.006393710999986979,1,0,0,2,4,1,0.7145853189999798,,
+scaled_graph_06,scaled graph,ideal,proved,proved,True,,0.0002868889999945168,closure-certificate,40,[1],0.0060755650000601236,1,0,1,2,4,1,0.6954747880000696,,
+scaled_graph_07,scaled graph,linear,proved,proved,True,,0.00026339399994412815,closure-certificate,40,[1],0.006939039000030789,1,0,0,2,4,1,0.7728373639999973,,
+scaled_graph_07,scaled graph,ideal,proved,proved,True,,0.00028450600007090543,closure-certificate,40,[1],0.008199738000030266,1,0,1,2,4,1,0.7096200570000519,,
+coupled_graph_00,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.12588679399993907,9,0,0,7,25,9,0.9052419359999249,,
+coupled_graph_00,coupled nonlinear,ideal,proved,proved,True,,0.0014084989999219033,closure-certificate,317,[3],0.036008822999974655,2,0,2,3,11,2,0.8223743849999892,,
+coupled_graph_01,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.13268387999994502,9,0,0,7,25,9,0.8544122110000671,,
+coupled_graph_01,coupled nonlinear,ideal,proved,proved,True,,0.0014749089999668286,closure-certificate,317,[3],0.031200610000041706,2,0,2,3,11,2,0.7305342049999126,,
+coupled_graph_02,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.1277229070000203,9,0,0,7,25,9,0.8300772000000052,,
+coupled_graph_02,coupled nonlinear,ideal,proved,proved,True,,0.0014624400000684545,closure-certificate,317,[3],0.033512798000060684,2,0,2,3,11,2,0.7535234900000205,,
+coupled_graph_03,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.14571836499999336,9,0,0,7,25,9,0.8450331100000312,,
+coupled_graph_03,coupled nonlinear,ideal,proved,proved,True,,0.0014829209999334125,closure-certificate,317,[3],0.03260095200005253,2,0,2,3,11,2,0.7289291509999885,,
+coupled_graph_04,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.13807627400001365,9,0,0,7,25,9,0.8380390800000441,,
+coupled_graph_04,coupled nonlinear,ideal,proved,proved,True,,0.0014375240000390477,closure-certificate,317,[3],0.0324517779999951,2,0,2,3,11,2,0.7640431429999808,,
+coupled_graph_05,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.13574157499999728,9,0,0,7,25,9,0.8422453330000508,,
+coupled_graph_05,coupled nonlinear,ideal,proved,proved,True,,0.0014270780000060768,closure-certificate,317,[3],0.03205201599996599,2,0,2,3,11,2,0.7953406310000446,,
+coupled_graph_06,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.1437019009999858,9,0,0,7,25,9,0.9156367759999284,,
+coupled_graph_06,coupled nonlinear,ideal,proved,proved,True,,0.0015151489999425394,closure-certificate,317,[3],0.03479792099994938,2,0,2,3,11,2,0.7460148069999377,,
+coupled_graph_07,coupled nonlinear,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.13598029100000986,9,0,0,7,25,9,0.9032533770000555,,
+coupled_graph_07,coupled nonlinear,ideal,proved,proved,True,,0.0013357010000163427,closure-certificate,317,[3],0.032754099000044334,2,0,2,3,11,2,0.7251256380000086,,
+nonlinear_equivalence_00,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.014045555999928183,3,0,0,8,4,3,0.7382598320000398,,
+nonlinear_equivalence_00,nonlinear equivalence,ideal,proved,proved,True,,0.00037092599995958153,closure-certificate,61,[2],0.011314432999938617,2,0,2,4,6,2,0.6758132179999166,,
+nonlinear_mutant_00,nonlinear mutant,linear,refuted,refuted,True,,0.00028515700000752986,counterexample,94,,0.01684080300003643,3,3,0,4,3,2,0.7125718020000704,"['-1', '1']",2
+nonlinear_mutant_00,nonlinear mutant,ideal,refuted,refuted,True,,0.00021549200005210878,counterexample,94,,0.018161984000016673,3,3,2,4,3,2,0.7631433480000851,"['-1', '1']",2
+nonlinear_equivalence_01,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.021571020999999746,3,0,0,8,4,3,0.7630477279999468,,
+nonlinear_equivalence_01,nonlinear equivalence,ideal,proved,proved,True,,0.0004896240000107355,closure-certificate,90,[2],0.011684278999950948,2,0,2,4,6,2,0.7369223470000179,,
+nonlinear_mutant_01,nonlinear mutant,linear,refuted,refuted,True,,0.00028976399994462554,counterexample,134,,0.01866913599997133,3,3,0,4,3,2,0.7411543149999034,"['-2', '1']",2
+nonlinear_mutant_01,nonlinear mutant,ideal,refuted,refuted,True,,0.0002682220000451707,counterexample,134,,0.01833323300002121,3,3,2,4,3,2,0.7124780839999403,"['-2', '1']",2
+nonlinear_equivalence_02,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.024525353000058203,3,0,0,8,4,3,0.7172057389999509,,
+nonlinear_equivalence_02,nonlinear equivalence,ideal,proved,proved,True,,0.0005000290000225505,closure-certificate,90,[2],0.014506769000036002,2,0,2,4,6,2,0.7713277529999232,,
+nonlinear_mutant_02,nonlinear mutant,linear,refuted,refuted,True,,0.00038064099999246537,counterexample,134,,0.02097585399997115,3,3,0,4,3,2,0.7462408179999329,"['-3', '1']",2
+nonlinear_mutant_02,nonlinear mutant,ideal,refuted,refuted,True,,0.000467651000008118,counterexample,134,,0.03239113699999052,3,3,2,4,3,2,2.40959797000005,"['-3', '1']",2
+nonlinear_equivalence_03,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.022646860999998353,3,0,0,8,4,3,1.904873579000082,,
+nonlinear_equivalence_03,nonlinear equivalence,ideal,proved,proved,True,,0.0003835349999690152,closure-certificate,61,[2],0.01783846899991204,2,0,2,4,6,2,1.7419708639999953,,
+nonlinear_mutant_03,nonlinear mutant,linear,refuted,refuted,True,,0.00029738600005657645,counterexample,94,,0.0445149219999621,3,3,0,4,3,2,1.7844200569999202,"['-4', '1']",2
+nonlinear_mutant_03,nonlinear mutant,ideal,refuted,refuted,True,,0.0002611910000496209,counterexample,94,,0.03599782000003415,3,3,2,4,3,2,2.3904255229999762,"['-4', '1']",2
+nonlinear_equivalence_04,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.02132792600002631,3,0,0,8,4,3,2.3966196809999474,,
+nonlinear_equivalence_04,nonlinear equivalence,ideal,proved,proved,True,,0.0006227229999922201,closure-certificate,90,[2],0.01725492499997472,2,0,2,4,6,2,1.2094433969999727,,
+nonlinear_mutant_04,nonlinear mutant,linear,refuted,refuted,True,,0.00039054500007296156,counterexample,134,,0.022476476999941042,3,3,0,4,3,2,1.1635174659999166,"['-5', '1']",2
+nonlinear_mutant_04,nonlinear mutant,ideal,refuted,refuted,True,,0.0003121779999446517,counterexample,134,,0.03655705700009548,3,3,2,4,3,2,1.3849191230000315,"['-5', '1']",2
+nonlinear_equivalence_05,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.06514739100009592,3,0,0,8,4,3,2.2804297330000054,,
+nonlinear_equivalence_05,nonlinear equivalence,ideal,proved,proved,True,,0.00038541699996130774,closure-certificate,90,[2],0.025562708999927963,2,0,2,4,6,2,1.4642654919999814,,
+nonlinear_mutant_05,nonlinear mutant,linear,refuted,refuted,True,,0.00027699500003564026,counterexample,134,,0.03185814899995876,3,3,0,4,3,2,2.209797227000081,"['-6', '1']",2
+nonlinear_mutant_05,nonlinear mutant,ideal,refuted,refuted,True,,0.0002997289999484565,counterexample,134,,0.03253390199995465,3,3,2,4,3,2,1.5124392190000435,"['-6', '1']",2
+nonlinear_equivalence_06,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.04043309300004694,3,0,0,8,4,3,1.345430227999941,,
+nonlinear_equivalence_06,nonlinear equivalence,ideal,proved,proved,True,,0.0005204799999773968,closure-certificate,61,[2],0.016682877999983248,2,0,2,4,6,2,1.6027801840000393,,
+nonlinear_mutant_06,nonlinear mutant,linear,refuted,refuted,True,,0.0003545309999708479,counterexample,94,,0.057861338999941836,3,3,0,4,3,2,1.4033573140000044,"['-7', '1']",2
+nonlinear_mutant_06,nonlinear mutant,ideal,refuted,refuted,True,,0.0002441950000502402,counterexample,94,,0.028623835000075815,3,3,2,4,3,2,1.4037586230000443,"['-7', '1']",2
+nonlinear_equivalence_07,nonlinear equivalence,linear,proved,unknown,False,generated-polynomial degree cap,,,,,0.05905821199996808,3,0,0,8,4,3,1.531869717999939,,
+nonlinear_equivalence_07,nonlinear equivalence,ideal,proved,proved,True,,0.00044126099999175494,closure-certificate,90,[2],0.011408017999997355,2,0,2,4,6,2,1.522385460999999,,
+nonlinear_mutant_07,nonlinear mutant,linear,refuted,refuted,True,,0.0004614919999994527,counterexample,134,,0.020305765000102838,3,3,0,4,3,2,1.6188875640000333,"['-8', '1']",2
+nonlinear_mutant_07,nonlinear mutant,ideal,refuted,refuted,True,,0.0004437139999708961,counterexample,134,,0.052722361000064666,3,3,2,4,3,2,1.9812187979999862,"['-8', '1']",2
+affine_equivalence_00,affine equivalence,linear,proved,proved,True,,0.0007026430000678374,closure-certificate,111,[2],0.025475658999994266,2,0,0,1,10,4,1.3312153900000112,,
+affine_equivalence_00,affine equivalence,ideal,proved,proved,True,,0.0007600589999583462,closure-certificate,111,[2],0.03314249300001393,2,0,2,1,10,4,2.1598746209999717,,
+affine_mutant_00,affine mutant,linear,refuted,refuted,True,,0.0004722180000271692,counterexample,157,,0.03827952699998605,3,3,0,1,4,3,1.4672647520000055,"['-1', '1']",2
+affine_mutant_00,affine mutant,ideal,refuted,refuted,True,,0.00047163600004296313,counterexample,157,,0.021010871000044062,3,3,2,1,4,3,1.3760404359999256,"['-1', '1']",2
+affine_equivalence_01,affine equivalence,linear,proved,proved,True,,0.0008435229999577132,closure-certificate,180,[3],0.10108307999996669,3,0,0,1,14,6,2.094355405999977,,
+affine_equivalence_01,affine equivalence,ideal,proved,proved,True,,0.0006606000000601853,closure-certificate,180,[3],0.06284796800002823,3,0,3,1,14,6,1.3096849439999687,,
+affine_mutant_01,affine mutant,linear,refuted,refuted,True,,0.0006184459999758474,counterexample,430,,0.03797294799994688,4,4,0,1,6,5,1.2672942180000746,"['-1', '1']",3
+affine_mutant_01,affine mutant,ideal,refuted,refuted,True,,0.0008896329999288355,counterexample,430,,0.09355180800002927,4,4,3,1,6,5,1.5509767370000418,"['-1', '1']",3
+affine_equivalence_02,affine equivalence,linear,proved,proved,True,,0.0005366839999396689,closure-certificate,105,[2],0.06805728099993757,2,0,0,1,10,4,1.455660019999982,,
+affine_equivalence_02,affine equivalence,ideal,proved,proved,True,,0.0005439540000224952,closure-certificate,105,[2],0.015593056000057004,2,0,2,1,10,4,1.6453092200000583,,
+affine_mutant_02,affine mutant,linear,refuted,refuted,True,,0.00028839200001584686,counterexample,157,,0.04379895499994291,3,3,0,1,4,3,1.3556975309999189,"['-1', '1']",2
+affine_mutant_02,affine mutant,ideal,refuted,refuted,True,,0.0005586270000321747,counterexample,157,,0.035511030999941795,3,3,2,1,4,3,2.162846662999982,"['-1', '1']",2
+affine_equivalence_03,affine equivalence,linear,proved,proved,True,,0.0009318259999417933,closure-certificate,171,[3],0.03481016099999579,3,0,0,1,14,6,1.2826727289999553,,
+affine_equivalence_03,affine equivalence,ideal,proved,proved,True,,0.000895291000006182,closure-certificate,171,[3],0.06349775099999988,3,0,3,1,14,6,1.212357484999984,,
+affine_mutant_03,affine mutant,linear,refuted,refuted,True,,0.0008467180000479857,counterexample,430,,0.08189546899996003,4,4,0,1,6,5,1.778425795999965,"['-1', '1']",3
+affine_mutant_03,affine mutant,ideal,refuted,refuted,True,,0.0005701640000097541,counterexample,430,,0.09694187599995985,4,4,3,1,6,5,1.2190429289998974,"['-1', '1']",3
+affine_equivalence_04,affine equivalence,linear,proved,proved,True,,0.0004911050000373507,closure-certificate,68,[2],0.018697004999921774,2,0,0,1,10,4,1.351822150000089,,
+affine_equivalence_04,affine equivalence,ideal,proved,proved,True,,0.000396473000023434,closure-certificate,68,[2],0.01861803700001019,2,0,2,1,10,4,1.6404029609999498,,
+affine_mutant_04,affine mutant,linear,refuted,refuted,True,,0.00039400000002842717,counterexample,106,,0.014671205000013288,3,3,0,1,4,3,1.1300380129999894,"['-1', '1']",2
+affine_mutant_04,affine mutant,ideal,refuted,refuted,True,,0.00034883300008914375,counterexample,106,,0.021809627000038745,3,3,2,1,4,3,1.536991493999949,"['-1', '1']",2
+affine_equivalence_05,affine equivalence,linear,proved,proved,True,,0.0009367029999793886,closure-certificate,208,[3],0.13641006399996058,3,0,0,1,14,6,1.6230382019999752,,
+affine_equivalence_05,affine equivalence,ideal,proved,proved,True,,0.0012903430000505978,closure-certificate,208,[3],0.053303530999983195,3,0,3,1,14,6,1.7914668490000167,,
+affine_mutant_05,affine mutant,linear,refuted,refuted,True,,0.0009654469999986759,counterexample,430,,0.12236340700007986,4,4,0,1,6,5,1.6344994099999894,"['-1', '1']",3
+affine_mutant_05,affine mutant,ideal,refuted,refuted,True,,0.0009494020000602177,counterexample,430,,0.13798204499994426,4,4,3,1,6,5,1.7360303959999328,"['-1', '1']",3
+affine_equivalence_06,affine equivalence,linear,proved,proved,True,,0.0006632939999917653,closure-certificate,111,[2],0.043249470000091605,2,0,0,1,10,4,1.5521600439999474,,
+affine_equivalence_06,affine equivalence,ideal,proved,proved,True,,0.0007678800000121555,closure-certificate,111,[2],0.021364415999983066,2,0,2,1,10,4,1.771102646999907,,
+affine_equivalence_07,affine equivalence,linear,proved,proved,True,,0.001197964999960277,closure-certificate,220,[3],0.11729304200002844,3,0,0,1,14,6,2.287874310999996,,
+affine_equivalence_07,affine equivalence,ideal,proved,proved,True,,0.001069051999934345,closure-certificate,220,[3],0.05432010399999854,3,0,3,1,14,6,1.476686136000012,,
+affine_equivalence_08,affine equivalence,linear,proved,proved,True,,0.0006189069999891217,closure-certificate,93,[2],0.07424315000002935,2,0,0,1,10,4,1.6305647160000944,,
+affine_equivalence_08,affine equivalence,ideal,proved,proved,True,,0.0006785770000306002,closure-certificate,93,[2],0.0151903549999588,2,0,2,1,10,4,1.8396583789999568,,
+affine_equivalence_09,affine equivalence,linear,proved,proved,True,,0.0011672289999751229,closure-certificate,149,[3],0.13626847900002304,3,0,0,1,14,6,1.5219690779999837,,
+affine_equivalence_09,affine equivalence,ideal,proved,proved,True,,0.0006790579999460533,closure-certificate,149,[3],0.07614649199990708,3,0,3,1,14,6,1.8548091210000166,,
+affine_equivalence_10,affine equivalence,linear,proved,proved,True,,0.0005046759999913775,closure-certificate,111,[2],0.02685351799993896,2,0,0,1,10,4,1.5137521549999065,,
+affine_equivalence_10,affine equivalence,ideal,proved,proved,True,,0.0008373649999384725,closure-certificate,111,[2],0.01788262900004156,2,0,2,1,10,4,2.100760171000047,,
+affine_equivalence_11,affine equivalence,linear,proved,proved,True,,0.0008097329999827707,closure-certificate,223,[3],0.055726171000060276,3,0,0,1,14,6,1.4676831200000606,,
+affine_equivalence_11,affine equivalence,ideal,proved,proved,True,,0.001383182000040506,closure-certificate,223,[3],0.1151486040000691,3,0,3,1,14,6,2.6344159480000826,,
+control_locations_00,control flow,linear,proved,proved,True,,0.0004136590000598517,closure-certificate,53,"[1, 1]",0.010867851000057271,2,0,0,1,6,2,1.464256100000057,,
+control_locations_00,control flow,ideal,proved,proved,True,,0.0003625229999215662,closure-certificate,53,"[1, 1]",0.006910641999979816,2,0,2,1,6,2,1.3883206650000375,,
+control_locations_01,control flow,linear,proved,proved,True,,0.00038313400000333786,closure-certificate,53,"[1, 1]",0.011210053000013431,2,0,0,1,6,2,1.4181862849999334,,
+control_locations_01,control flow,ideal,proved,proved,True,,0.0003976360000024215,closure-certificate,53,"[1, 1]",0.00640795899994373,2,0,2,1,6,2,1.65850860799992,,
+control_locations_02,control flow,linear,proved,proved,True,,0.0005580559999316392,closure-certificate,53,"[1, 1]",0.025172170000018923,2,0,0,1,6,2,1.3847770710000304,,
+control_locations_02,control flow,ideal,proved,proved,True,,0.0005329790000132562,closure-certificate,53,"[1, 1]",0.034877689000040846,2,0,2,1,6,2,1.8491691770000216,,
+control_locations_03,control flow,linear,proved,proved,True,,0.00044706999995014485,closure-certificate,53,"[1, 1]",0.011317624000071191,2,0,0,1,6,2,1.3431322850000242,,
+control_locations_03,control flow,ideal,proved,proved,True,,0.00031258800004252407,closure-certificate,53,"[1, 1]",0.015634381000040776,2,0,2,1,6,2,1.9535212779999256,,
+sampling_trap,boundary controls,linear,refuted,refuted,True,,8.208300005208002e-05,counterexample,14,,0.033918491000008544,2,4,0,1,3,1,1.2712807569999995,"['6', '1']",1
+sampling_trap,boundary controls,ideal,refuted,refuted,True,,0.00013046599997323938,counterexample,14,,0.007852734000039163,2,4,1,1,3,1,1.3560244830000556,"['6', '1']",1
+initial_parameter_trap,boundary controls,linear,refuted,refuted,True,,0.0001308560000552461,counterexample,8,,0.0054216920000271784,1,4,0,3,1,0,1.6623941679999916,"['6', '1']",0
+initial_parameter_trap,boundary controls,ideal,refuted,refuted,True,,0.0001409919999559861,counterexample,8,,0.005093581000096492,1,4,0,3,1,0,1.2111229009999533,"['6', '1']",0
+simultaneous_swap,boundary controls,linear,proved,proved,True,,0.0002668000000767279,closure-certificate,39,[1],0.0069866659999888725,1,0,0,1,4,1,1.3657272779998948,,
+simultaneous_swap,boundary controls,ideal,proved,proved,True,,0.00029706500004067493,closure-certificate,39,[1],0.009431309999968107,1,0,1,1,4,1,2.171942213999955,,
+two_fresh_inputs,boundary controls,linear,proved,proved,True,,0.00024561800000810763,closure-certificate,40,[1],0.01029064199997265,1,0,0,2,4,1,1.5467303169999695,,
+two_fresh_inputs,boundary controls,ideal,proved,proved,True,,0.00016540799992981192,closure-certificate,40,[1],0.005869018999987929,1,0,1,2,4,1,1.3868662539999832,,
+unreachable_observation,boundary controls,linear,proved,proved,True,,5.543299994315021e-05,closure-certificate,2,"[0, 1]",0.00121817399997326,1,0,0,0,2,0,1.1826507849999643,,
+unreachable_observation,boundary controls,ideal,proved,proved,True,,6.990400004269759e-05,closure-certificate,2,"[0, 1]",0.001623591999987184,1,0,1,0,2,0,1.2817508849999513,,
+rational_scaling,boundary controls,linear,proved,proved,True,,0.0002960730000722833,closure-certificate,40,[1],0.00713004900001124,1,0,0,2,4,1,2.1127284660000214,,
+rational_scaling,boundary controls,ideal,proved,proved,True,,0.00024843200003488164,closure-certificate,40,[1],0.024008506999962265,1,0,1,2,4,1,1.286942262000025,,
+multiple_targets,boundary controls,linear,proved,proved,True,,0.00025495199997749296,closure-certificate,52,[2],0.012433981999947719,2,0,0,1,8,2,1.189982382999915,,
+multiple_targets,boundary controls,ideal,proved,proved,True,,0.0002329889999828083,closure-certificate,56,[2],0.0088644249999561,2,0,2,1,8,2,1.1788428350000686,,
+ordered_trace,boundary controls,linear,refuted,refuted,True,,0.00013703499996609025,counterexample,10,,0.0023907910000389165,3,0,0,1,3,2,1.0681005060000643,"['1', '1']",2
+ordered_trace,boundary controls,ideal,refuted,refuted,True,,0.00012735100006011635,counterexample,10,,0.0025149760000431343,3,0,0,1,3,2,1.3415080309999894,"['1', '1']",2

@@ -1,0 +1,198 @@
+\section{Executed evidence and what it measures}
+\label{sec:evidence}
+
+\subsection{The authoritative run}
+
+The delivered code was run under Python 3.13.5 and SymPy 1.14.0 on the recorded
+Linux container. Its deterministic random seed is $681437$. The authoritative
+outputs are in \code{results/run-4/}. The numbers below belong to that one
+corpus and are not pooled with Forge's nine earlier prototypes.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Accepted object & Count & Invalidating mutations rejected\\
+\midrule
+Rational matrix closure & 54 & 54\\
+Concrete separating word & 115 & 115\\
+Shifted-support telescoper & 23 & 23\\
+Common-left-multiple identity & 6 & 6\\
+Complete singularity/seed plan & 47 & 47\\
+\midrule
+Total & 245 & 245\\
+\bottomrule
+\end{tabular}
+\caption{Objects checked, not 245 Lean theorems. The 47 plans still require their residual sequence and seed proofs.}
+\end{table}
+
+The whole recorded corpus, including searches, symbolic lifting, numerical
+cross-checks, and mutations, completed in approximately $5.558$ seconds in this
+run. Separate replay of all stored certificates took approximately $0.339$
+seconds with Python site packages disabled and SymPy absent from the replay
+process. These are different workloads, not a controlled search-versus-check
+speedup claim. They are also not a prediction of Lean kernel checking time.
+The unrounded observations and exact environment string are retained in JSON.
+
+The replay command is
+\begin{lstlisting}
+python -S prototype/replay.py results/run-4/certificates.json
+\end{lstlisting}
+Its output explicitly records \code{site_packages_enabled: false} and
+\code{sympy_loaded: false}. The checker does use the same small exact-arithmetic
+representation module as the producer's serializer. It is search-independent,
+not an independently authored or formally verified implementation of arithmetic.
+
+\subsection{Composition of the word corpus}
+
+One hundred random rational models have dimension $1$ through $5$, twenty of
+each dimension, with two letter matrices. Their search outcomes were compared
+to exhaustive evaluation of every word of length at most $d-1$. There were
+$1\,140$ such word evaluations, and all one hundred model-level comparisons
+agreed. This uses the proven finite distinguishing bound; it is not arbitrary
+finite sampling presented as universal truth.
+
+Forty positive comparison models were constructed by invertible rational
+coordinate changes of random systems of dimension $2$ through $6$, eight per
+dimension. Their block comparison dimensions are twice the original dimensions.
+These exercise nontrivial rational coefficients and certificates of equality
+between different representations. They are generated positives with a known
+mathematical construction, not a representative sample of user theorems.
+
+Twenty-three delayed-separation models of dimension $2$ through $24$ return
+first nonzero output at word length exactly $d-1$. They show why checking a
+fixed small prefix is insufficient even in this elementary linear fragment.
+The remaining six models are the Cassini lift, four polynomial-input Horner
+instances, and the degree-two input-grid counterexample. The combined word
+corpus therefore has $169$ entries: $54$ closures and $115$ actual separating
+words.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Representative model & Lift dimension & Emitted basis rank & Expansions\\
+\midrule
+Cassini, either one or two advances & 10 & 8 & 16\\
+Horner relation, each of four bases & 4 & 3 & 6\\
+Input-grid trap $x(x-1)$ & 2 & 1 before separation & 3\\
+Delayed separation, dimension 24 & 24 & 23 before separation & 23\\
+\bottomrule
+\end{tabular}
+\caption{Expansions count one stored-row/letter multiplication, not Lean tactic steps.}
+\end{table}
+
+The polynomial lift checks its own symbolic substitution identities before
+search. This is useful producer-side validation, but its results do not test an
+independent Lean reifier. That distinction remains visible in the capability
+ledger.
+
+\subsection{Summation and recurrence evidence}
+
+Twenty-five prescribed telescoping requests were attempted. Twenty-three
+returned certificates and two had zero nullspace at their declared
+first-order bounds. The successful family consists of eleven $p=1$ weights
+$q=-5,\ldots,5$; ten $p=2$ instances, including negative, zero and fractional
+weights; one Franel instance; and one fourth-power instance. Both bounded misses
+are stored with their order, degree bounds, matrix dimensions, and nullity.
+
+For every accepted recurrence, direct exact summation checked $n=0,\ldots,20$,
+for $483$ additional recurrence checks. The runner also checks every summand
+cell from $k=0$ through $n+r$ on those inputs. These finite cross-checks are
+supplementary error detection. The universal acceptance is the polynomial
+identity and boundary certificate, not agreement on the first twenty-one
+values.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Request & $r$ & $d_a,d_P$ & Matrix & Boundary rows & Nullity\\
+\midrule
+Binomial, $q=1$ & 1 & $0,0$ & $4\times3$ & 1 & 1\\
+Squared binomial, $q=1$ & 1 & $1,1$ & $11\times7$ & 2 & 1\\
+Alternating squared binomial & 2 & $1,1$ & $27\times12$ & 6 & 1\\
+Franel & 2 & $2,2$ & $54\times21$ & 9 & 1\\
+Fourth power & 3 & $3,3$ & $159\times46$ & 24 & 2\\
+Franel, undersized request & 1 & $1,1$ & $17\times7$ & 2 & 0\\
+Fourth power, undersized request & 1 & $1,1$ & $22\times7$ & 2 & 0\\
+\bottomrule
+\end{tabular}
+\caption{Actual search systems. A zero nullspace is local to these prescribed bounds.}
+\end{table}
+
+The six common-multiple tests include constant operators, equal operators, a
+zero constant coefficient, and nonconstant polynomial coefficients. Each checks
+both exact left products. The singularity corpus consists of one plan for every
+accepted telescoper and twenty-four additional operators: eight prescribed
+natural root sets at each of orders one, two, and three. The root sets include
+zero, positive separated roots, and multiple exceptional pivots.
+
+\subsection{Invalidating changes and independent unit tests}
+
+Each stored entry receives one deliberately invalidating mutation. For a matrix
+closure, the authoritative initial row changes while its certified coordinates
+do not. For a separating word, the claimed nonzero output is replaced by zero.
+For a telescoper, one is added to its last operator coefficient, so the required
+interior residual changes by the nonzero polynomial $R_r$. For an Ore identity,
+one is added to its last common-operator coefficient while the multipliers are
+unchanged. For a seed plan, the first required seed is removed. All $245$ of
+these specified mutations are rejected.
+
+These are not random byte flips, nor a claim that every syntactic modification
+should be rejected. Scaling a valid entire telescope by a nonzero rational,
+for instance, can produce another valid certificate and should be accepted.
+The mutation suite tests known-invalid changes to the mathematical subject or
+identity.
+
+An additional $41$ unit tests cover noncanonical rationals, floats and Boolean
+values masquerading as integers, repeated monomials and JSON keys, degree bounds,
+wrong output or transition matrices, missing letter actions, wrong initial
+coordinates, a zero initial row, empty separating words, non-affine updates,
+insufficient observation degree, $q=0$, changed weights and fluxes, zero
+operators, the Ore commutation trap, omitted singular roots or reset seeds,
+understated root bounds, and the explicit recurrence countermodel from
+Section~\ref{sec:recurrences}. Their full verbose output is retained.
+
+\subsection{Failed runs and repairs are retained}
+
+The first complete run reached Ore search and failed because the zero
+polynomial had become a Python integer lacking a SymPy substitution method.
+The original traceback is preserved. Coercing zero into a SymPy expression
+repairs that path, and a dedicated zero-coefficient regression test passes.
+
+An intermediate run passed with interior-only search followed by boundary
+checking. The search was then strengthened to include boundary rows before
+nullspace calculation, avoiding the basis-combination completeness issue.
+The first run of that revision exceeded the $45$-second execution limit before
+writing results. Inspection found a Python division of an empty product that
+could introduce a floating coefficient. The delivered code uses an explicit
+SymPy rational multiplier and checks that every matrix entry is rational before
+solving. The exact timeout location was not profiled, so the artifact does not
+claim that this diagnosis alone proves its runtime cause. The corrected final
+revision completes and supplies the article's measurements.
+
+Historical results are labelled separately from the authoritative run. A past
+passing certificate file is not evidence that a changed search implementation
+was exercised. Conversely, fixing a producer does not justify deleting its
+failed-run record.
+
+\subsection{What these experiments cannot establish}
+
+No Python experiment here measures Lean elaboration time, kernel checking cost,
+realistic theorem retrieval, or interaction with \grind{}. There is no
+head-to-head comparison with \grind{}, Aesop, \code{nlinarith}, LeanHammer, a
+CAS-backed tactic, or Forge's other workers. The generated corpus is designed
+to exercise algorithms and failure modes, not to estimate a user-development
+success rate. No extrapolated percentage improvement is reported.
+
+The decoders impose bounds on dimensions, degrees, rational bit lengths and
+collection sizes, but all intermediate arithmetic has not been hardened against
+resource exhaustion. A full hostile-input security audit and broader fuzzing
+remain future work. The processes do not evaluate certificate text as code,
+but that alone does not make an implementation resistant to denial of service.
+
+Most importantly, the complete source-to-Lean-proof path is untested. A correct
+matrix model of the wrong fold would prove the wrong statement. A correct
+recurrence plan with unproved seeds remains only a plan. These limitations
+should be acceptance gates, not footnotes erased by a successful demonstration.

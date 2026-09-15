@@ -1,0 +1,13 @@
+Initial replay attempt, before corpus/measurement separation:
+  python -S replay.py
+  ... checker.py load_json -> json.loads -> no_float
+  forge_delta.checker.Invalid: floating-point JSON values prohibited
+
+Cause: timing observations were serialized into the same corpus envelope as
+exact mathematical problem and certificate data. The strict decoder rejected
+these measurement floats before checking any certificate.
+
+Repair: timings and search statistics are stored separately in trials.json and
+measurements.csv; corpus.json contains exact mathematical data and integer
+limits only. The float-rejection policy was not relaxed. This file records a
+packaging failure, not accepted evidence. The successful replay is replay.txt.

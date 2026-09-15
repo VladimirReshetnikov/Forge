@@ -1,0 +1,2533 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "sympy": "1.14.0",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "lean_status": "NOT_RUN: Lean and Lake executables unavailable in this runtime",
+  "timing_scope": "single ordered local run; search and independent replay timed separately; not a Lean comparison",
+  "cases": [
+    {
+      "id": "ideal_curve_scaling",
+      "family": "ideal",
+      "search_seconds": 0.01263166100000035,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - y"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "degree": 2,
+        "conserved_subspace_dimension": 0,
+        "goal": "x**2 - y",
+        "variables": [
+          "x",
+          "y"
+        ],
+        "initial": [
+          [
+            [
+              "t"
+            ],
+            [
+              "t",
+              "t**2"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "2*x",
+              "4*y"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0003019120000544717,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 142
+    },
+    {
+      "id": "ideal_curve_nonlinear",
+      "family": "ideal",
+      "search_seconds": 0.012018339999940508,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - y"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "degree": 2,
+        "conserved_subspace_dimension": 0,
+        "goal": "x**2 - y",
+        "variables": [
+          "x",
+          "y"
+        ],
+        "initial": [
+          [
+            [
+              "t"
+            ],
+            [
+              "t",
+              "t**2"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "x**2",
+              "y**2"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0002576320000571286,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 156
+    },
+    {
+      "id": "ideal_curve_two_branches",
+      "family": "ideal",
+      "search_seconds": 0.01309963100004552,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - y"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "degree": 2,
+        "conserved_subspace_dimension": 0,
+        "goal": "x**2 - y",
+        "variables": [
+          "x",
+          "y"
+        ],
+        "initial": [
+          [
+            [
+              "t"
+            ],
+            [
+              "t",
+              "t**2"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "x + 1",
+              "2*x + y + 1"
+            ],
+            []
+          ],
+          [
+            [
+              "x**2",
+              "y**2"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.00048631899994688865,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 2
+      },
+      "certificate_bytes": 176
+    },
+    {
+      "id": "ideal_mutual_swap",
+      "family": "ideal",
+      "search_seconds": 0.009225437999930364,
+      "search_info": {
+        "dimensions": [
+          2,
+          2
+        ],
+        "invariants": [
+          "x",
+          "y"
+        ],
+        "groebner_pairs": 3
+      },
+      "details": {
+        "degree": 1,
+        "conserved_subspace_dimension": 1,
+        "goal": "x",
+        "variables": [
+          "x",
+          "y",
+          "z"
+        ],
+        "initial": [
+          [
+            [
+              "t"
+            ],
+            [
+              "0",
+              "0",
+              "t"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "y",
+              "x",
+              "z + 1"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.00020011599997360463,
+      "replay_details": {
+        "invariants": 2,
+        "transitions": 1
+      },
+      "certificate_bytes": 180
+    },
+    {
+      "id": "ideal_guarded_update",
+      "family": "ideal",
+      "search_seconds": 0.011170021999987512,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x"
+        ],
+        "groebner_pairs": 2
+      },
+      "details": {
+        "degree": 1,
+        "conserved_subspace_dimension": 0,
+        "goal": "x",
+        "variables": [
+          "x",
+          "y"
+        ],
+        "initial": [
+          [
+            [
+              "t"
+            ],
+            [
+              "0",
+              "t"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "x + y",
+              "y + 1"
+            ],
+            [
+              "y"
+            ]
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.00018970799999351584,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 143
+    },
+    {
+      "id": "ideal_finite_orbit_degree2",
+      "family": "ideal",
+      "search_seconds": 0.010237736000021869,
+      "search_info": {
+        "dimensions": [
+          2,
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - x"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "degree": 2,
+        "conserved_subspace_dimension": 1,
+        "goal": "x**2 - x",
+        "variables": [
+          "x"
+        ],
+        "initial": [
+          [
+            [],
+            [
+              "0"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "1 - x"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.00022063799997340539,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 134
+    },
+    {
+      "id": "ideal_two_initial_maps",
+      "family": "ideal",
+      "search_seconds": 0.005499374999999418,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - x"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "degree": 2,
+        "conserved_subspace_dimension": 1,
+        "goal": "x**2 - x",
+        "variables": [
+          "x"
+        ],
+        "initial": [
+          [
+            [],
+            [
+              "0"
+            ]
+          ],
+          [
+            [],
+            [
+              "1"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "1 - x"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0003147759999819755,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 134
+    },
+    {
+      "id": "ideal_degree1_miss",
+      "family": "ideal",
+      "search_seconds": 0.001799450000021352,
+      "search_info": {
+        "dimensions": [
+          1,
+          0
+        ],
+        "invariants": [],
+        "reason": "target_not_in_fixed_point_ideal"
+      },
+      "details": {
+        "degree": 1,
+        "conserved_subspace_dimension": 0,
+        "goal": "x**2 - x",
+        "variables": [
+          "x"
+        ],
+        "initial": [
+          [
+            [],
+            [
+              "0"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "1 - x"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "unknown"
+    },
+    {
+      "id": "ideal_false_invariant",
+      "family": "ideal",
+      "search_seconds": 0.005900423000070987,
+      "search_info": {
+        "dimensions": [
+          2,
+          1,
+          0
+        ],
+        "invariants": [],
+        "reason": "target_not_in_fixed_point_ideal"
+      },
+      "details": {
+        "degree": 2,
+        "conserved_subspace_dimension": 0,
+        "goal": "x",
+        "variables": [
+          "x"
+        ],
+        "initial": [
+          [
+            [],
+            [
+              "0"
+            ]
+          ]
+        ],
+        "transitions": [
+          [
+            [
+              "x + 1"
+            ],
+            []
+          ]
+        ]
+      },
+      "outcome": "unknown"
+    },
+    {
+      "id": "ideal_random_curve_00",
+      "family": "ideal",
+      "search_seconds": 0.0313456110000061,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - x/2 + 9*y/2 + 13"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          3,
+          1,
+          -2,
+          -1,
+          -3
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011986160000105883,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 200
+    },
+    {
+      "id": "ideal_random_curve_01",
+      "family": "ideal",
+      "search_seconds": 0.026355652999995982,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 7*x - y + 13"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          1,
+          3,
+          1,
+          -1,
+          1
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0012049529999558217,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 202
+    },
+    {
+      "id": "ideal_random_curve_02",
+      "family": "ideal",
+      "search_seconds": 0.02746028900003239,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 9*x/2 + 9*y/2 + 27/2"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -3,
+          -3,
+          -2,
+          -1,
+          -2
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0012159770000153003,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 199
+    },
+    {
+      "id": "ideal_random_curve_03",
+      "family": "ideal",
+      "search_seconds": 0.026875364000034097,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 9*x/2 - y/2 + 6"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -1,
+          2,
+          2,
+          1,
+          2
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011879310000040277,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 200
+    },
+    {
+      "id": "ideal_random_curve_04",
+      "family": "ideal",
+      "search_seconds": 0.02280689600002006,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 3*x - 9*y - 9"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -3,
+          0,
+          1,
+          -1,
+          -1
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0010218390000318323,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 186
+    },
+    {
+      "id": "ideal_random_curve_05",
+      "family": "ideal",
+      "search_seconds": 0.0220922949999931,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 2*x + 2*y + 1"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          -1,
+          -2,
+          0,
+          0
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0010153110000601373,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 183
+    },
+    {
+      "id": "ideal_random_curve_06",
+      "family": "ideal",
+      "search_seconds": 0.023900421000007555,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 4*x + 2*y + 10"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          -2,
+          -2,
+          0,
+          -3
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0017324479999842879,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 184
+    },
+    {
+      "id": "ideal_random_curve_07",
+      "family": "ideal",
+      "search_seconds": 0.0246177810000745,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 2*x + 2*y - 2"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          2,
+          -2,
+          2,
+          1
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011375779999980296,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 200
+    },
+    {
+      "id": "ideal_random_curve_08",
+      "family": "ideal",
+      "search_seconds": 0.02199498599998151,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 4*x + 4*y + 4"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          -2,
+          -1,
+          0,
+          0
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0010113320000755266,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 197
+    },
+    {
+      "id": "ideal_random_curve_09",
+      "family": "ideal",
+      "search_seconds": 0.02512573199999224,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 6*x + y/2 + 9"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -1,
+          3,
+          -2,
+          0,
+          0
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0010922870000058538,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 199
+    },
+    {
+      "id": "ideal_random_curve_10",
+      "family": "ideal",
+      "search_seconds": 0.02800573499996517,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 10*x + 4*y + 29"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          2,
+          -3,
+          -1,
+          -2,
+          -2
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011702549999199618,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 200
+    },
+    {
+      "id": "ideal_random_curve_11",
+      "family": "ideal",
+      "search_seconds": 0.022008710000022802,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 4*x + 4*y - 12"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          0,
+          -1,
+          2,
+          3
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0010751019999588607,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 185
+    },
+    {
+      "id": "ideal_random_curve_12",
+      "family": "ideal",
+      "search_seconds": 0.02508516700004293,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 3*x - 2*y + 2"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          2,
+          2,
+          2,
+          1,
+          0
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011691469999277615,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 200
+    },
+    {
+      "id": "ideal_random_curve_13",
+      "family": "ideal",
+      "search_seconds": 0.022362439000062295,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 4*x + 2*y + 1"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          -1,
+          -2,
+          2,
+          1
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0018345990000625534,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 198
+    },
+    {
+      "id": "ideal_random_curve_14",
+      "family": "ideal",
+      "search_seconds": 0.02484645599997748,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 4*x + 4*y - 5"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          3,
+          -1,
+          1,
+          2
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011920880000388934,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 200
+    },
+    {
+      "id": "ideal_random_curve_15",
+      "family": "ideal",
+      "search_seconds": 0.022066796999979488,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 6*x + 4*y - 4"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -2,
+          -2,
+          -1,
+          1,
+          3
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0015922640000098909,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 184
+    },
+    {
+      "id": "ideal_random_curve_16",
+      "family": "ideal",
+      "search_seconds": 0.02043600100000731,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 4*y + 12"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          2,
+          0,
+          -1,
+          0,
+          -3
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0008108490000040547,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 184
+    },
+    {
+      "id": "ideal_random_curve_17",
+      "family": "ideal",
+      "search_seconds": 0.026327581000032296,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 6*x + 2*y + 5"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          2,
+          3,
+          -2,
+          0,
+          2
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0011231050000333198,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 199
+    },
+    {
+      "id": "ideal_random_curve_18",
+      "family": "ideal",
+      "search_seconds": 0.0238401320000321,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 + 3*x + y/2 + 2"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          1,
+          -2,
+          -2,
+          2,
+          0
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0009574790000215216,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 183
+    },
+    {
+      "id": "ideal_random_curve_19",
+      "family": "ideal",
+      "search_seconds": 0.021528138000007857,
+      "search_info": {
+        "dimensions": [
+          1,
+          1
+        ],
+        "invariants": [
+          "x**2 - 2*x - y + 4"
+        ],
+        "groebner_pairs": 0
+      },
+      "details": {
+        "parameters": [
+          -1,
+          1,
+          1,
+          0,
+          3
+        ],
+        "degree": 2
+      },
+      "outcome": "inductive_ideal_v1",
+      "replay_seconds": 0.0010941440000351577,
+      "replay_details": {
+        "invariants": 1,
+        "transitions": 1
+      },
+      "certificate_bytes": 186
+    },
+    {
+      "id": "weighted_subsequence_product",
+      "family": "weighted",
+      "search_seconds": 0.025753754999982448,
+      "search_info": {
+        "examined": 11,
+        "basis_rows": 5,
+        "ambient_dimension": 9,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ]
+      },
+      "details": {},
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.002932526999984475,
+      "replay_details": {
+        "basis_rows": 5,
+        "dimension": 9,
+        "letters": 2
+      },
+      "certificate_bytes": 733
+    },
+    {
+      "id": "weighted_similarity_00",
+      "family": "weighted",
+      "search_seconds": 0.006639040999971257,
+      "search_info": {
+        "examined": 5,
+        "basis_rows": 2,
+        "ambient_dimension": 4,
+        "basis_words": [
+          [],
+          [
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 2
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0003194219999613779,
+      "replay_details": {
+        "basis_rows": 2,
+        "dimension": 4,
+        "letters": 2
+      },
+      "certificate_bytes": 222
+    },
+    {
+      "id": "weighted_inequivalent_00",
+      "family": "weighted",
+      "search_seconds": 0.0011321929999894564,
+      "search_info": {
+        "examined": 3,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 2,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00012028200001168443,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          4,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_01",
+      "family": "weighted",
+      "search_seconds": 0.013428237000084664,
+      "search_info": {
+        "examined": 7,
+        "basis_rows": 3,
+        "ambient_dimension": 6,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 3
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0008752269999376949,
+      "replay_details": {
+        "basis_rows": 3,
+        "dimension": 6,
+        "letters": 2
+      },
+      "certificate_bytes": 362
+    },
+    {
+      "id": "weighted_inequivalent_01",
+      "family": "weighted",
+      "search_seconds": 0.0008958830001120077,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 3,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00024601400002666196,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -2,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_02",
+      "family": "weighted",
+      "search_seconds": 0.02015645099993435,
+      "search_info": {
+        "examined": 9,
+        "basis_rows": 4,
+        "ambient_dimension": 8,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 4
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0016501820000485168,
+      "replay_details": {
+        "basis_rows": 4,
+        "dimension": 8,
+        "letters": 2
+      },
+      "certificate_bytes": 557
+    },
+    {
+      "id": "weighted_inequivalent_02",
+      "family": "weighted",
+      "search_seconds": 0.0011843149999322122,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 4,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00035509400004229974,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -3,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_03",
+      "family": "weighted",
+      "search_seconds": 0.031346219999932146,
+      "search_info": {
+        "examined": 11,
+        "basis_rows": 5,
+        "ambient_dimension": 10,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 5
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0030106640000440166,
+      "replay_details": {
+        "basis_rows": 5,
+        "dimension": 10,
+        "letters": 2
+      },
+      "certificate_bytes": 852
+    },
+    {
+      "id": "weighted_inequivalent_03",
+      "family": "weighted",
+      "search_seconds": 0.0016307490000144753,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 5,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0005267289999437708,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -6,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_04",
+      "family": "weighted",
+      "search_seconds": 0.007122320000007676,
+      "search_info": {
+        "examined": 5,
+        "basis_rows": 2,
+        "ambient_dimension": 4,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 2
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0003260019999515862,
+      "replay_details": {
+        "basis_rows": 2,
+        "dimension": 4,
+        "letters": 2
+      },
+      "certificate_bytes": 222
+    },
+    {
+      "id": "weighted_inequivalent_04",
+      "family": "weighted",
+      "search_seconds": 0.0005033369999409842,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 2,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00011885799995070556,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -12,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_05",
+      "family": "weighted",
+      "search_seconds": 0.012298697999995056,
+      "search_info": {
+        "examined": 7,
+        "basis_rows": 3,
+        "ambient_dimension": 6,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 3
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0008294610000803004,
+      "replay_details": {
+        "basis_rows": 3,
+        "dimension": 6,
+        "letters": 2
+      },
+      "certificate_bytes": 363
+    },
+    {
+      "id": "weighted_inequivalent_05",
+      "family": "weighted",
+      "search_seconds": 0.0008809780000547107,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 3,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00023217799991925858,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          18,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_06",
+      "family": "weighted",
+      "search_seconds": 0.019988999000020158,
+      "search_info": {
+        "examined": 9,
+        "basis_rows": 4,
+        "ambient_dimension": 8,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 4
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.001668791000042802,
+      "replay_details": {
+        "basis_rows": 4,
+        "dimension": 8,
+        "letters": 2
+      },
+      "certificate_bytes": 561
+    },
+    {
+      "id": "weighted_inequivalent_06",
+      "family": "weighted",
+      "search_seconds": 0.0016900889999078572,
+      "search_info": {
+        "examined": 3,
+        "word_length": 1,
+        "basis_rows": 2
+      },
+      "details": {
+        "component_dimension": 4,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0003581479999184012,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          18,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_07",
+      "family": "weighted",
+      "search_seconds": 0.030339964000063446,
+      "search_info": {
+        "examined": 11,
+        "basis_rows": 5,
+        "ambient_dimension": 10,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 5
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.003050512999948296,
+      "replay_details": {
+        "basis_rows": 5,
+        "dimension": 10,
+        "letters": 2
+      },
+      "certificate_bytes": 834
+    },
+    {
+      "id": "weighted_inequivalent_07",
+      "family": "weighted",
+      "search_seconds": 0.001613377000012406,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 5,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0004874840000184122,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -6,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_08",
+      "family": "weighted",
+      "search_seconds": 0.0071317829999770765,
+      "search_info": {
+        "examined": 5,
+        "basis_rows": 2,
+        "ambient_dimension": 4,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 2
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.00033958500000608183,
+      "replay_details": {
+        "basis_rows": 2,
+        "dimension": 4,
+        "letters": 2
+      },
+      "certificate_bytes": 221
+    },
+    {
+      "id": "weighted_inequivalent_08",
+      "family": "weighted",
+      "search_seconds": 0.0005025149999937639,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 2,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0001124940000636343,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          12,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_09",
+      "family": "weighted",
+      "search_seconds": 0.011951244999977462,
+      "search_info": {
+        "examined": 7,
+        "basis_rows": 3,
+        "ambient_dimension": 6,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 3
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0007971399999178175,
+      "replay_details": {
+        "basis_rows": 3,
+        "dimension": 6,
+        "letters": 2
+      },
+      "certificate_bytes": 363
+    },
+    {
+      "id": "weighted_inequivalent_09",
+      "family": "weighted",
+      "search_seconds": 0.0007703429999992295,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 3,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00020559799997954542,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -6,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_10",
+      "family": "weighted",
+      "search_seconds": 0.02004427300005318,
+      "search_info": {
+        "examined": 9,
+        "basis_rows": 4,
+        "ambient_dimension": 8,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 4
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0018273040000167384,
+      "replay_details": {
+        "basis_rows": 4,
+        "dimension": 8,
+        "letters": 2
+      },
+      "certificate_bytes": 577
+    },
+    {
+      "id": "weighted_inequivalent_10",
+      "family": "weighted",
+      "search_seconds": 0.0017166939999242459,
+      "search_info": {
+        "examined": 3,
+        "word_length": 1,
+        "basis_rows": 2
+      },
+      "details": {
+        "component_dimension": 4,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00033663300007447106,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          9,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_11",
+      "family": "weighted",
+      "search_seconds": 0.03445431000000099,
+      "search_info": {
+        "examined": 11,
+        "basis_rows": 5,
+        "ambient_dimension": 10,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 5
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0030981659999724798,
+      "replay_details": {
+        "basis_rows": 5,
+        "dimension": 10,
+        "letters": 2
+      },
+      "certificate_bytes": 887
+    },
+    {
+      "id": "weighted_inequivalent_11",
+      "family": "weighted",
+      "search_seconds": 0.0015310709999312166,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 5,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0005445649999273883,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -8,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_12",
+      "family": "weighted",
+      "search_seconds": 0.006703179999931308,
+      "search_info": {
+        "examined": 5,
+        "basis_rows": 2,
+        "ambient_dimension": 4,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 2
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0003216779999775099,
+      "replay_details": {
+        "basis_rows": 2,
+        "dimension": 4,
+        "letters": 2
+      },
+      "certificate_bytes": 220
+    },
+    {
+      "id": "weighted_inequivalent_12",
+      "family": "weighted",
+      "search_seconds": 0.0005157540000482186,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 2,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0001143190000902905,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          2,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_13",
+      "family": "weighted",
+      "search_seconds": 0.012979274000031182,
+      "search_info": {
+        "examined": 7,
+        "basis_rows": 3,
+        "ambient_dimension": 6,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 3
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0008099990000118851,
+      "replay_details": {
+        "basis_rows": 3,
+        "dimension": 6,
+        "letters": 2
+      },
+      "certificate_bytes": 359
+    },
+    {
+      "id": "weighted_inequivalent_13",
+      "family": "weighted",
+      "search_seconds": 0.0009844420000035825,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 3,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00023377200000140874,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          12,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_14",
+      "family": "weighted",
+      "search_seconds": 0.020322776000057274,
+      "search_info": {
+        "examined": 9,
+        "basis_rows": 4,
+        "ambient_dimension": 8,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 4
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.002085072999989279,
+      "replay_details": {
+        "basis_rows": 4,
+        "dimension": 8,
+        "letters": 2
+      },
+      "certificate_bytes": 566
+    },
+    {
+      "id": "weighted_inequivalent_14",
+      "family": "weighted",
+      "search_seconds": 0.002187767000009444,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 4,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0003684179999936532,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          2,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_15",
+      "family": "weighted",
+      "search_seconds": 0.03708792800000538,
+      "search_info": {
+        "examined": 11,
+        "basis_rows": 5,
+        "ambient_dimension": 10,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 5
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.002950813999973434,
+      "replay_details": {
+        "basis_rows": 5,
+        "dimension": 10,
+        "letters": 2
+      },
+      "certificate_bytes": 817
+    },
+    {
+      "id": "weighted_inequivalent_15",
+      "family": "weighted",
+      "search_seconds": 0.0015888020000147662,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 5,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0005485059999728037,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          1,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_16",
+      "family": "weighted",
+      "search_seconds": 0.0079763380000486,
+      "search_info": {
+        "examined": 5,
+        "basis_rows": 2,
+        "ambient_dimension": 4,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 2
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.00033279700005550694,
+      "replay_details": {
+        "basis_rows": 2,
+        "dimension": 4,
+        "letters": 2
+      },
+      "certificate_bytes": 221
+    },
+    {
+      "id": "weighted_inequivalent_16",
+      "family": "weighted",
+      "search_seconds": 0.0006568080000306509,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 2,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0001256189999594426,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -6,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_17",
+      "family": "weighted",
+      "search_seconds": 0.01308365500005948,
+      "search_info": {
+        "examined": 7,
+        "basis_rows": 3,
+        "ambient_dimension": 6,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 3
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0008060170000590006,
+      "replay_details": {
+        "basis_rows": 3,
+        "dimension": 6,
+        "letters": 2
+      },
+      "certificate_bytes": 361
+    },
+    {
+      "id": "weighted_inequivalent_17",
+      "family": "weighted",
+      "search_seconds": 0.0008257300000877876,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 3,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00020931099993504176,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          9,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_18",
+      "family": "weighted",
+      "search_seconds": 0.019986129000017172,
+      "search_info": {
+        "examined": 9,
+        "basis_rows": 4,
+        "ambient_dimension": 8,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 4
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0018201780000026702,
+      "replay_details": {
+        "basis_rows": 4,
+        "dimension": 8,
+        "letters": 2
+      },
+      "certificate_bytes": 565
+    },
+    {
+      "id": "weighted_inequivalent_18",
+      "family": "weighted",
+      "search_seconds": 0.0011529649999602043,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 4,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0003300209999679282,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -4,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_similarity_19",
+      "family": "weighted",
+      "search_seconds": 0.031116393999923275,
+      "search_info": {
+        "examined": 11,
+        "basis_rows": 5,
+        "ambient_dimension": 10,
+        "basis_words": [
+          [],
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "details": {
+        "component_dimension": 5
+      },
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 0.0029970670000238897,
+      "replay_details": {
+        "basis_rows": 5,
+        "dimension": 10,
+        "letters": 2
+      },
+      "certificate_bytes": 835
+    },
+    {
+      "id": "weighted_inequivalent_19",
+      "family": "weighted",
+      "search_seconds": 0.0016574320000017906,
+      "search_info": {
+        "examined": 2,
+        "word_length": 1,
+        "basis_rows": 1
+      },
+      "details": {
+        "component_dimension": 5,
+        "initial_outputs_agree": true
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0005324789999576751,
+      "replay_details": {
+        "word_length": 1,
+        "value": [
+          -9,
+          1
+        ]
+      },
+      "certificate_bytes": 46
+    },
+    {
+      "id": "weighted_delayed_3",
+      "family": "weighted",
+      "search_seconds": 0.0005207499999642096,
+      "search_info": {
+        "examined": 3,
+        "word_length": 2,
+        "basis_rows": 2
+      },
+      "details": {
+        "first_distinguishing_length": 2
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 7.807999998021842e-05,
+      "replay_details": {
+        "word_length": 2,
+        "value": [
+          1,
+          1
+        ]
+      },
+      "certificate_bytes": 50
+    },
+    {
+      "id": "weighted_delayed_4",
+      "family": "weighted",
+      "search_seconds": 0.0009022899999990841,
+      "search_info": {
+        "examined": 4,
+        "word_length": 3,
+        "basis_rows": 3
+      },
+      "details": {
+        "first_distinguishing_length": 3
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00013077699998120806,
+      "replay_details": {
+        "word_length": 3,
+        "value": [
+          1,
+          1
+        ]
+      },
+      "certificate_bytes": 54
+    },
+    {
+      "id": "weighted_delayed_5",
+      "family": "weighted",
+      "search_seconds": 0.0012723590000405238,
+      "search_info": {
+        "examined": 5,
+        "word_length": 4,
+        "basis_rows": 4
+      },
+      "details": {
+        "first_distinguishing_length": 4
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.00021911300007104728,
+      "replay_details": {
+        "word_length": 4,
+        "value": [
+          1,
+          1
+        ]
+      },
+      "certificate_bytes": 58
+    },
+    {
+      "id": "weighted_delayed_6",
+      "family": "weighted",
+      "search_seconds": 0.001753829999984191,
+      "search_info": {
+        "examined": 6,
+        "word_length": 5,
+        "basis_rows": 5
+      },
+      "details": {
+        "first_distinguishing_length": 5
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0003573290000531415,
+      "replay_details": {
+        "word_length": 5,
+        "value": [
+          1,
+          1
+        ]
+      },
+      "certificate_bytes": 62
+    },
+    {
+      "id": "weighted_delayed_7",
+      "family": "weighted",
+      "search_seconds": 0.002144408000049225,
+      "search_info": {
+        "examined": 7,
+        "word_length": 6,
+        "basis_rows": 6
+      },
+      "details": {
+        "first_distinguishing_length": 6
+      },
+      "outcome": "distinguishing_word_v1",
+      "replay_seconds": 0.0005356079999501162,
+      "replay_details": {
+        "word_length": 6,
+        "value": [
+          1,
+          1
+        ]
+      },
+      "certificate_bytes": 66
+    },
+    {
+      "id": "weighted_zero_initial",
+      "family": "weighted",
+      "search_seconds": 0.0002912579999474474,
+      "search_info": {
+        "examined": 1,
+        "basis_rows": 0,
+        "ambient_dimension": 3,
+        "basis_words": []
+      },
+      "details": {},
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 4.8769999921205454e-05,
+      "replay_details": {
+        "basis_rows": 0,
+        "dimension": 3,
+        "letters": 1
+      },
+      "certificate_bytes": 94
+    },
+    {
+      "id": "weighted_empty_alphabet",
+      "family": "weighted",
+      "search_seconds": 0.0008160029999544349,
+      "search_info": {
+        "examined": 1,
+        "basis_rows": 1,
+        "ambient_dimension": 2,
+        "basis_words": [
+          []
+        ]
+      },
+      "details": {},
+      "outcome": "weighted_closure_v1",
+      "replay_seconds": 4.692600009548187e-05,
+      "replay_details": {
+        "basis_rows": 1,
+        "dimension": 2,
+        "letters": 0
+      },
+      "certificate_bytes": 106
+    },
+    {
+      "id": "telescope_binomial_power_1",
+      "family": "telescoping",
+      "search_seconds": 0.0033728959999734798,
+      "search_info": {
+        "power": 1,
+        "order": 1,
+        "unknowns": 3,
+        "equations": 3,
+        "nullity": 1,
+        "coefficients": [
+          "-2",
+          "1"
+        ],
+        "numerator": "-1",
+        "coefficient_degree_cap": 0,
+        "numerator_total_degree_cap": 0
+      },
+      "details": {},
+      "outcome": "binomial_telescoper_v1",
+      "replay_seconds": 0.00044559599996318866,
+      "replay_details": {
+        "power": 1,
+        "order": 1,
+        "initial_values": [
+          1
+        ],
+        "boundary_rows": 2
+      },
+      "certificate_bytes": 139
+    },
+    {
+      "id": "telescope_binomial_power_2",
+      "family": "telescoping",
+      "search_seconds": 0.02758311100001265,
+      "search_info": {
+        "power": 2,
+        "order": 1,
+        "unknowns": 7,
+        "equations": 9,
+        "nullity": 1,
+        "coefficients": [
+          "-2*(2*n + 1)",
+          "n + 1"
+        ],
+        "numerator": "2*k - 3*n - 3",
+        "coefficient_degree_cap": 1,
+        "numerator_total_degree_cap": 1
+      },
+      "details": {},
+      "outcome": "binomial_telescoper_v1",
+      "replay_seconds": 0.0012179520000472621,
+      "replay_details": {
+        "power": 2,
+        "order": 1,
+        "initial_values": [
+          1
+        ],
+        "boundary_rows": 2
+      },
+      "certificate_bytes": 193
+    },
+    {
+      "id": "telescope_binomial_power_3",
+      "family": "telescoping",
+      "search_seconds": 0.2534853800000292,
+      "search_info": {
+        "power": 3,
+        "order": 2,
+        "unknowns": 30,
+        "equations": 45,
+        "nullity": 1,
+        "coefficients": [
+          "-8*(n + 1)**2",
+          "-7*n**2 - 21*n - 16",
+          "(n + 2)**2"
+        ],
+        "numerator": "(n + 1)**2*(4*k**3 - 18*k**2*n - 30*k**2 + 27*k*n**2 + 93*k*n + 78*k - 14*n**3 - 74*n**2 - 128*n - 72)",
+        "coefficient_degree_cap": 2,
+        "numerator_total_degree_cap": 5
+      },
+      "details": {},
+      "outcome": "binomial_telescoper_v1",
+      "replay_seconds": 0.010542591999978868,
+      "replay_details": {
+        "power": 3,
+        "order": 2,
+        "initial_values": [
+          1,
+          2
+        ],
+        "boundary_rows": 3
+      },
+      "certificate_bytes": 504
+    },
+    {
+      "id": "telescope_bounded_miss_2",
+      "family": "telescoping",
+      "search_seconds": 0.0013280939999731345,
+      "search_info": {
+        "reason": "no_telescoper_in_ansatz",
+        "unknowns": 3,
+        "equations": 6,
+        "nullity": 0
+      },
+      "details": {},
+      "outcome": "unknown"
+    },
+    {
+      "id": "telescope_bounded_miss_3",
+      "family": "telescoping",
+      "search_seconds": 0.03348560900008124,
+      "search_info": {
+        "reason": "no_telescoper_in_ansatz",
+        "unknowns": 12,
+        "equations": 21,
+        "nullity": 0
+      },
+      "details": {},
+      "outcome": "unknown"
+    }
+  ]
+}

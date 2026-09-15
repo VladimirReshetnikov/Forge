@@ -1,0 +1,1004 @@
+[
+  {
+    "certificate_bytes": 121,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x*y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 10,
+      "target_in_span": true
+    },
+    "id": "scaled_graph",
+    "kind": "invariant",
+    "replay_seconds": 0.00025556900004630734,
+    "search_seconds": 0.020964939999998933
+  },
+  {
+    "certificate_bytes": 135,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "y",
+        "x"
+      ],
+      "dimensions": [
+        2,
+        2
+      ],
+      "features": 3,
+      "target_in_span": true
+    },
+    "id": "mutual_cycle",
+    "kind": "invariant",
+    "replay_seconds": 0.00013715300008243503,
+    "search_seconds": 0.003927922000002582
+  },
+  {
+    "certificate_bytes": 117,
+    "conservation_only": true,
+    "details": {
+      "basis": [
+        "x**2 - y"
+      ],
+      "dimensions": [
+        5,
+        4,
+        3,
+        2,
+        1,
+        1
+      ],
+      "features": 6,
+      "target_in_span": true
+    },
+    "id": "square_counter",
+    "kind": "invariant",
+    "replay_seconds": 0.000196091000020715,
+    "search_seconds": 0.012151489000075344
+  },
+  {
+    "certificate_bytes": 177,
+    "conservation_only": true,
+    "details": {
+      "basis": [
+        "x*y",
+        "x**2 + y**2 - 1"
+      ],
+      "dimensions": [
+        5,
+        4,
+        3,
+        2,
+        2
+      ],
+      "features": 6,
+      "target_in_span": true
+    },
+    "id": "rotation_circle",
+    "kind": "invariant",
+    "replay_seconds": 0.00021517899995160406,
+    "search_seconds": 0.009369395000021541
+  },
+  {
+    "certificate_bytes": 120,
+    "conservation_only": true,
+    "details": {
+      "basis": [
+        "y - z"
+      ],
+      "dimensions": [
+        2,
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "relational_accumulators",
+    "kind": "invariant",
+    "replay_seconds": 0.00021398699993824266,
+    "search_seconds": 0.00541593599996304
+  },
+  {
+    "certificate_bytes": 130,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x*y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 10,
+      "target_in_span": true
+    },
+    "id": "two_branch_graph",
+    "kind": "invariant",
+    "replay_seconds": 0.00032266800008073915,
+    "search_seconds": 0.01623543999994581
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_00",
+    "kind": "invariant",
+    "replay_seconds": 0.00035495600002377614,
+    "search_seconds": 0.010519068999997216
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_01",
+    "kind": "invariant",
+    "replay_seconds": 0.00034876600000188773,
+    "search_seconds": 0.008279761000039798
+  },
+  {
+    "certificate_bytes": 153,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_02",
+    "kind": "invariant",
+    "replay_seconds": 0.00034457099991414,
+    "search_seconds": 0.008120043999952031
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_03",
+    "kind": "invariant",
+    "replay_seconds": 0.00035007899998618086,
+    "search_seconds": 0.008403243000088878
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_04",
+    "kind": "invariant",
+    "replay_seconds": 0.00034286799996152695,
+    "search_seconds": 0.009388032999936513
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_05",
+    "kind": "invariant",
+    "replay_seconds": 0.00037605700003950915,
+    "search_seconds": 0.007746038999925986
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_06",
+    "kind": "invariant",
+    "replay_seconds": 0.00036772500004644826,
+    "search_seconds": 0.008111580999980106
+  },
+  {
+    "certificate_bytes": 151,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_07",
+    "kind": "invariant",
+    "replay_seconds": 0.00031391499999244843,
+    "search_seconds": 0.007942890999970587
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_08",
+    "kind": "invariant",
+    "replay_seconds": 0.00033606900001359463,
+    "search_seconds": 0.008145322000018496
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_09",
+    "kind": "invariant",
+    "replay_seconds": 0.0003695379999726356,
+    "search_seconds": 0.008052974999941398
+  },
+  {
+    "certificate_bytes": 151,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_10",
+    "kind": "invariant",
+    "replay_seconds": 0.00035974299998997594,
+    "search_seconds": 0.008789625999952477
+  },
+  {
+    "certificate_bytes": 153,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_11",
+    "kind": "invariant",
+    "replay_seconds": 0.0003415259999428599,
+    "search_seconds": 0.008254331999978604
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_12",
+    "kind": "invariant",
+    "replay_seconds": 0.0003411450001067351,
+    "search_seconds": 0.008119482999973116
+  },
+  {
+    "certificate_bytes": 151,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_13",
+    "kind": "invariant",
+    "replay_seconds": 0.00035601700005827297,
+    "search_seconds": 0.007868841999993492
+  },
+  {
+    "certificate_bytes": 152,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_14",
+    "kind": "invariant",
+    "replay_seconds": 0.00035042899992276944,
+    "search_seconds": 0.00794908000000305
+  },
+  {
+    "certificate_bytes": 153,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_15",
+    "kind": "invariant",
+    "replay_seconds": 0.0003526329999203881,
+    "search_seconds": 0.0073934069999950225
+  },
+  {
+    "certificate_bytes": 151,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_16",
+    "kind": "invariant",
+    "replay_seconds": 0.00032234800005426223,
+    "search_seconds": 0.007774531999984902
+  },
+  {
+    "certificate_bytes": 153,
+    "conservation_only": false,
+    "details": {
+      "basis": [
+        "x + y - z"
+      ],
+      "dimensions": [
+        1,
+        1
+      ],
+      "features": 4,
+      "target_in_span": true
+    },
+    "id": "affine_planted_17",
+    "kind": "invariant",
+    "replay_seconds": 0.0003183720000379253,
+    "search_seconds": 0.007139309999956822
+  },
+  {
+    "certificate_bytes": 65,
+    "details": {
+      "R": "1/k",
+      "U": "1",
+      "V": "k",
+      "trials": 7
+    },
+    "id": "factorial_weight",
+    "kind": "gosper",
+    "replay_seconds": 0.00013430900003186252,
+    "search_seconds": 0.03402332199993907
+  },
+  {
+    "certificate_bytes": 85,
+    "details": {
+      "R": "-k - 1",
+      "U": "-k - 1",
+      "V": "1",
+      "trials": 2
+    },
+    "id": "reciprocal_pair",
+    "kind": "gosper",
+    "replay_seconds": 0.000130122999962623,
+    "search_seconds": 0.004123010999933285
+  },
+  {
+    "certificate_bytes": 85,
+    "details": {
+      "R": "-k - 4",
+      "U": "-k - 4",
+      "V": "1",
+      "trials": 2
+    },
+    "id": "shifted_reciprocal",
+    "kind": "gosper",
+    "replay_seconds": 0.00013303800005814992,
+    "search_seconds": 0.004054158000030839
+  },
+  {
+    "certificate_bytes": 68,
+    "details": {
+      "R": "-1/4",
+      "U": "-1/4",
+      "V": "1",
+      "trials": 1
+    },
+    "id": "geometric_m3",
+    "kind": "gosper",
+    "replay_seconds": 7.560200003808859e-05,
+    "search_seconds": 0.0011742000000367625
+  },
+  {
+    "certificate_bytes": 89,
+    "details": {
+      "R": "(3 - 4*k)/(16*k)",
+      "U": "3/16 - k/4",
+      "V": "k",
+      "trials": 8
+    },
+    "id": "weighted_geometric_m3",
+    "kind": "gosper",
+    "replay_seconds": 0.00015727299989976018,
+    "search_seconds": 0.0299012230000244
+  },
+  {
+    "certificate_bytes": 68,
+    "details": {
+      "R": "-1/3",
+      "U": "-1/3",
+      "V": "1",
+      "trials": 1
+    },
+    "id": "geometric_m2",
+    "kind": "gosper",
+    "replay_seconds": 8.667800000239367e-05,
+    "search_seconds": 0.001181390999931864
+  },
+  {
+    "certificate_bytes": 88,
+    "details": {
+      "R": "(2 - 3*k)/(9*k)",
+      "U": "2/9 - k/3",
+      "V": "k",
+      "trials": 8
+    },
+    "id": "weighted_geometric_m2",
+    "kind": "gosper",
+    "replay_seconds": 0.00040327800002160075,
+    "search_seconds": 0.03355293500010248
+  },
+  {
+    "certificate_bytes": 65,
+    "details": {
+      "R": "1",
+      "U": "1",
+      "V": "1",
+      "trials": 1
+    },
+    "id": "geometric_2",
+    "kind": "gosper",
+    "replay_seconds": 8.363400002053822e-05,
+    "search_seconds": 0.001203703999976824
+  },
+  {
+    "certificate_bytes": 84,
+    "details": {
+      "R": "(k - 2)/k",
+      "U": "k - 2",
+      "V": "k",
+      "trials": 8
+    },
+    "id": "weighted_geometric_2",
+    "kind": "gosper",
+    "replay_seconds": 0.00014637699996455922,
+    "search_seconds": 0.029065674999969815
+  },
+  {
+    "certificate_bytes": 67,
+    "details": {
+      "R": "1/2",
+      "U": "1/2",
+      "V": "1",
+      "trials": 1
+    },
+    "id": "geometric_3",
+    "kind": "gosper",
+    "replay_seconds": 7.224700004826445e-05,
+    "search_seconds": 0.0011802389999502338
+  },
+  {
+    "certificate_bytes": 88,
+    "details": {
+      "R": "(2*k - 3)/(4*k)",
+      "U": "k/2 - 3/4",
+      "V": "k",
+      "trials": 8
+    },
+    "id": "weighted_geometric_3",
+    "kind": "gosper",
+    "replay_seconds": 0.00023832299996229267,
+    "search_seconds": 0.046397441000067374
+  },
+  {
+    "certificate_bytes": 67,
+    "details": {
+      "R": "1/4",
+      "U": "1/4",
+      "V": "1",
+      "trials": 1
+    },
+    "id": "geometric_5",
+    "kind": "gosper",
+    "replay_seconds": 0.00012147999996159342,
+    "search_seconds": 0.0011901540000280875
+  },
+  {
+    "certificate_bytes": 89,
+    "details": {
+      "R": "(4*k - 5)/(16*k)",
+      "U": "k/4 - 5/16",
+      "V": "k",
+      "trials": 8
+    },
+    "id": "weighted_geometric_5",
+    "kind": "gosper",
+    "replay_seconds": 0.00014998199992533046,
+    "search_seconds": 0.029005634999975882
+  },
+  {
+    "certificate_bytes": 66,
+    "details": {
+      "R": "-2",
+      "U": "-2",
+      "V": "1",
+      "trials": 1
+    },
+    "id": "geometric_1_2",
+    "kind": "gosper",
+    "replay_seconds": 8.303300000989111e-05,
+    "search_seconds": 0.0018384049999440322
+  },
+  {
+    "certificate_bytes": 85,
+    "details": {
+      "R": "(-2*k - 2)/k",
+      "U": "-2*k - 2",
+      "V": "k",
+      "trials": 8
+    },
+    "id": "weighted_geometric_1_2",
+    "kind": "gosper",
+    "replay_seconds": 0.00017114399997808505,
+    "search_seconds": 0.029116229999999632
+  },
+  {
+    "certificate_bytes": 313,
+    "details": {
+      "U": "2*k**3 - 3*k**2*n - 3*k**2",
+      "V": "(-k + n + 1)**2",
+      "c0": "-4*n - 2",
+      "c1": "n + 1",
+      "coefficient_equations": 48,
+      "rank": 6,
+      "unknowns": 6
+    },
+    "id": "binomial_square_telescoper",
+    "kind": "telescoper",
+    "replay_seconds": 0.0015879640000093787,
+    "search_seconds": 0.10788483400006044
+  },
+  {
+    "certificate_bytes": 140,
+    "details": {
+      "columns": 5,
+      "degree_cap": 3,
+      "rank": 5,
+      "terms": 2
+    },
+    "id": "weyl_commutator_2",
+    "kind": "two_sided",
+    "replay_seconds": 9.32990000137579e-05,
+    "search_seconds": 8.712900000773516e-05
+  },
+  {
+    "certificate_bytes": 200,
+    "details": {
+      "columns": 17,
+      "degree_cap": 4,
+      "rank": 16,
+      "terms": 3
+    },
+    "id": "weyl_commutator_3",
+    "kind": "two_sided",
+    "replay_seconds": 9.02340000266122e-05,
+    "search_seconds": 0.00013785400005872361
+  },
+  {
+    "certificate_bytes": 264,
+    "details": {
+      "columns": 49,
+      "degree_cap": 5,
+      "rank": 42,
+      "terms": 4
+    },
+    "id": "weyl_commutator_4",
+    "kind": "two_sided",
+    "replay_seconds": 0.0001105640000105268,
+    "search_seconds": 0.00048303599999144353
+  },
+  {
+    "certificate_bytes": 332,
+    "details": {
+      "columns": 129,
+      "degree_cap": 6,
+      "rank": 99,
+      "terms": 5
+    },
+    "id": "weyl_commutator_5",
+    "kind": "two_sided",
+    "replay_seconds": 0.0001363119999950868,
+    "search_seconds": 0.0016239569999925152
+  },
+  {
+    "certificate_bytes": 404,
+    "details": {
+      "columns": 321,
+      "degree_cap": 7,
+      "rank": 219,
+      "terms": 6
+    },
+    "id": "weyl_commutator_6",
+    "kind": "two_sided",
+    "replay_seconds": 0.00017114399997808505,
+    "search_seconds": 0.006753157999924042
+  },
+  {
+    "certificate_bytes": 480,
+    "details": {
+      "columns": 769,
+      "degree_cap": 8,
+      "rank": 466,
+      "terms": 7
+    },
+    "id": "weyl_commutator_7",
+    "kind": "two_sided",
+    "replay_seconds": 0.00023648100000173145,
+    "search_seconds": 0.023765919999959806
+  },
+  {
+    "certificate_bytes": 560,
+    "details": {
+      "columns": 1793,
+      "degree_cap": 9,
+      "rank": 968,
+      "terms": 8
+    },
+    "id": "weyl_commutator_8",
+    "kind": "two_sided",
+    "replay_seconds": 0.0002621690000523813,
+    "search_seconds": 0.07249739999997473
+  },
+  {
+    "certificate_bytes": 258,
+    "details": {
+      "columns": 15,
+      "degree_cap": 4,
+      "rank": 15,
+      "terms": 4
+    },
+    "id": "q_commute_-2",
+    "kind": "two_sided",
+    "replay_seconds": 9.116500007166906e-05,
+    "search_seconds": 0.00014269100006458757
+  },
+  {
+    "certificate_bytes": 258,
+    "details": {
+      "columns": 15,
+      "degree_cap": 4,
+      "rank": 15,
+      "terms": 4
+    },
+    "id": "q_commute_-1",
+    "kind": "two_sided",
+    "replay_seconds": 7.727500008058996e-05,
+    "search_seconds": 0.00011504999997669074
+  },
+  {
+    "certificate_bytes": 256,
+    "details": {
+      "columns": 15,
+      "degree_cap": 4,
+      "rank": 15,
+      "terms": 4
+    },
+    "id": "q_commute_2",
+    "kind": "two_sided",
+    "replay_seconds": 9.47400000086418e-05,
+    "search_seconds": 0.00011346799999500945
+  },
+  {
+    "certificate_bytes": 257,
+    "details": {
+      "columns": 15,
+      "degree_cap": 4,
+      "rank": 15,
+      "terms": 4
+    },
+    "id": "q_commute_3",
+    "kind": "two_sided",
+    "replay_seconds": 9.04539999737608e-05,
+    "search_seconds": 0.00023813299992525572
+  },
+  {
+    "certificate_bytes": 262,
+    "details": {
+      "columns": 15,
+      "degree_cap": 4,
+      "rank": 15,
+      "terms": 4
+    },
+    "id": "q_commute_1_2",
+    "kind": "two_sided",
+    "replay_seconds": 8.458499996777391e-05,
+    "search_seconds": 0.00012172000003829453
+  },
+  {
+    "certificate_bytes": 475,
+    "details": {
+      "columns": 41,
+      "degree_cap": 4,
+      "rank": 26,
+      "terms": 8
+    },
+    "id": "commuting_idempotent_join",
+    "kind": "two_sided",
+    "replay_seconds": 0.00033910199999809265,
+    "search_seconds": 0.00040462000004026777
+  },
+  {
+    "certificate_bytes": 370,
+    "details": {
+      "columns": 41,
+      "degree_cap": 4,
+      "rank": 26,
+      "terms": 6
+    },
+    "id": "nc_planted_00",
+    "kind": "two_sided",
+    "replay_seconds": 0.00015763399994739302,
+    "search_seconds": 0.0004464119999738614
+  },
+  {
+    "certificate_bytes": 648,
+    "details": {
+      "columns": 42,
+      "degree_cap": 4,
+      "rank": 27,
+      "terms": 11
+    },
+    "id": "nc_planted_01",
+    "kind": "two_sided",
+    "replay_seconds": 0.00021957599994948396,
+    "search_seconds": 0.0003678550000358882
+  },
+  {
+    "certificate_bytes": 421,
+    "details": {
+      "columns": 25,
+      "degree_cap": 4,
+      "rank": 18,
+      "terms": 7
+    },
+    "id": "nc_planted_02",
+    "kind": "two_sided",
+    "replay_seconds": 0.0001584249999950771,
+    "search_seconds": 0.0001965110000128334
+  },
+  {
+    "certificate_bytes": 538,
+    "details": {
+      "columns": 42,
+      "degree_cap": 4,
+      "rank": 27,
+      "terms": 9
+    },
+    "id": "nc_planted_03",
+    "kind": "two_sided",
+    "replay_seconds": 0.00032648399997015076,
+    "search_seconds": 0.0003526729999521194
+  },
+  {
+    "certificate_bytes": 480,
+    "details": {
+      "columns": 41,
+      "degree_cap": 4,
+      "rank": 26,
+      "terms": 8
+    },
+    "id": "nc_planted_04",
+    "kind": "two_sided",
+    "replay_seconds": 0.00019653100002869905,
+    "search_seconds": 0.00032215699991411384
+  },
+  {
+    "certificate_bytes": 426,
+    "details": {
+      "columns": 41,
+      "degree_cap": 4,
+      "rank": 26,
+      "terms": 7
+    },
+    "id": "nc_planted_05",
+    "kind": "two_sided",
+    "replay_seconds": 0.0001542390000395244,
+    "search_seconds": 0.0003292479999572606
+  },
+  {
+    "certificate_bytes": 254,
+    "details": {
+      "columns": 33,
+      "degree_cap": 4,
+      "rank": 24,
+      "terms": 4
+    },
+    "id": "nc_planted_06",
+    "kind": "two_sided",
+    "replay_seconds": 0.00019179399998847657,
+    "search_seconds": 0.000246305000018765
+  },
+  {
+    "certificate_bytes": 417,
+    "details": {
+      "columns": 31,
+      "degree_cap": 4,
+      "rank": 22,
+      "terms": 7
+    },
+    "id": "nc_planted_07",
+    "kind": "two_sided",
+    "replay_seconds": 0.00014873999998599174,
+    "search_seconds": 0.00023022100003800006
+  },
+  {
+    "certificate_bytes": 590,
+    "details": {
+      "columns": 42,
+      "degree_cap": 4,
+      "rank": 27,
+      "terms": 10
+    },
+    "id": "nc_planted_08",
+    "kind": "two_sided",
+    "replay_seconds": 0.00020435199996882147,
+    "search_seconds": 0.00038238700005877035
+  },
+  {
+    "certificate_bytes": 589,
+    "details": {
+      "columns": 42,
+      "degree_cap": 4,
+      "rank": 27,
+      "terms": 10
+    },
+    "id": "nc_planted_09",
+    "kind": "two_sided",
+    "replay_seconds": 0.0001885389999642939,
+    "search_seconds": 0.0003462930000068809
+  },
+  {
+    "certificate_bytes": 316,
+    "details": {
+      "columns": 33,
+      "degree_cap": 4,
+      "rank": 24,
+      "terms": 5
+    },
+    "id": "nc_planted_10",
+    "kind": "two_sided",
+    "replay_seconds": 0.00012567600003876578,
+    "search_seconds": 0.00028311999994912185
+  },
+  {
+    "certificate_bytes": 763,
+    "details": {
+      "columns": 42,
+      "degree_cap": 4,
+      "rank": 27,
+      "terms": 13
+    },
+    "id": "nc_planted_11",
+    "kind": "two_sided",
+    "replay_seconds": 0.000286044000063157,
+    "search_seconds": 0.0004738919999454083
+  }
+]
