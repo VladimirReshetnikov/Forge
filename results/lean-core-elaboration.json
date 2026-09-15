@@ -1,0 +1,33 @@
+{
+  "status": "RUN",
+  "mode": "elaborate",
+  "lean_version": "Lean (version 4.34.0, x86_64-w64-windows-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+  "lake_version": null,
+  "platform": "Windows-11-10.0.26340-SP0",
+  "project": null,
+  "counts": {
+    "elaborated": 3
+  },
+  "files": [
+    {
+      "file": "proposals/p3-planner-certificate-layer/lean/DesignAPI.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 211.374
+    },
+    {
+      "file": "proposals/p6-proof-logging-cdcl/lean/Contracts.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 5.266
+    },
+    {
+      "file": "proposals/p9-proof-planner/lean/Structural.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 5.129,
+      "stdout": "'ForgeExamples.revAcc_correct' depends on axioms: [propext]\n'ForgeExamples.rev_involutive' depends on axioms: [propext]"
+    }
+  ],
+  "note": "Successful elaboration is not a full transitive-axiom audit and is not a comparison against any Lean tactic."
+}

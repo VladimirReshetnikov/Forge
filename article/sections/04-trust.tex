@@ -1,0 +1,239 @@
+\section{Trust: what exactly is being checked?}
+\label{sec:trust}
+
+\subsection{Three layers that are not interchangeable}
+
+It is essential to keep apart the mathematical soundness of a certificate
+format, the software correctness of a checker, and a proof accepted by Lean.
+The propositions in this document explain why each certificate implies the
+statement it claims. Tests provide evidence about the Python implementations.
+Neither supplies a Lean theorem. A completed tactic must either reconstruct a
+Lean proof or use a formally verified checker whose result is established
+inside Lean.
+
+\begin{proposition}[Certificate-format soundness is not implementation
+correctness]
+Let $\mathcal{C}$ be a certificate format with a proved soundness statement
+``$\mathrm{check}(P,C)=\texttt{true}\Rightarrow P$ holds'', and let $K$ be a
+program intended to compute $\mathrm{check}$. Evidence that $K$ accepts only
+certificates satisfying $\mathrm{check}$ is evidence about $K$, obtained by
+testing. It does not follow from the soundness statement, and the soundness
+statement does not follow from it.
+\end{proposition}
+
+This is laboured deliberately, because the gap is where an automation project
+most easily deceives itself. The prototypes here replay every stored
+certificate with the standard library alone, and several run their checkers in
+a direction algorithmically opposite to their producers --- a Bernstein checker
+that \emph{expands} a claimed basis representation and compares it against an
+independently computed affine transform shares no conversion formula with the
+search that proposed it. That is real, and it is still not kernel verification.
+
+\subsection{The acceptance judgement}
+
+An accepted source theorem must have:
+
+\begin{enumerate}[leftmargin=1.4em]
+\item no unresolved expression or universe metavariables;
+\item no \code{sorry} dependency anywhere in its transitive closure;
+\item no unexpected new axioms relative to the approved environment;
+\item every guard and side condition discharged, not merely recorded;
+\item a proof of \emph{the exact original goal}, not of a restated one.
+\end{enumerate}
+
+The last point deserves emphasis because it is the one a certificate pipeline
+gets wrong most easily.
+
+\begin{invariant}[Certificate binding]
+\label{inv:binding}
+A certificate is checked against the problem derived from the \emph{source}
+--- the same variable mapping, types, assumptions, and target. The checker
+receives the original target and hypotheses externally. It must never accept a
+problem statement supplied by the certificate itself. A certificate for
+another polynomial, another box, or a different quantifier scope is not
+interchangeable with the one required.
+\end{invariant}
+
+A correct polynomial identity about the wrong reification is not a proof of
+the user's goal. A certificate must identify the actual hypotheses it used,
+not merely provide polynomial data that resembles them. The prototypes test
+this directly: removing a necessary constraint from the problem makes replay
+fail, and a certificate re-attached to a changed target is rejected.
+
+\subsection{Kernel-only and native-checked are different profiles}
+
+The Lean kernel verifies derivations relative to the axioms they use, so a
+strict automation policy must inspect the transitive axiom dependencies of the
+final proof and of its auxiliary declarations. A practical whitelist may allow
+the project's usual logical axioms --- propositional extensionality, quotient
+soundness, and classical choice where permitted --- while rejecting admitted
+proofs and compiler-result axioms.
+
+The current tactic reference documents that \code{native\_decide} and
+\code{bv\_decide} rely on native code generation and associated trusted
+results~\cite{tactic-reference,validating-proofs}. Consequently ``the SAT
+solver returns a checked certificate'' does not by itself mean ``no compiler
+trust is added''. \forge{} should place that route behind an opt-in trust mode
+rather than enabling it under a kernel-only label, and the active profile must
+be visible in the trace and in the output metadata.
+
+Two further details matter for anyone implementing the audit. Native
+evaluation in recent Lean versions can introduce a \emph{separate generated
+axiom per computation}, so a single-name blacklist such as ``reject
+\code{Lean.trustCompiler}'' is not a sufficient
+policy~\cite{native-infra,native-rfc}. And the audit must follow the actual
+pinned Lean version rather than a remembered one; the set of axioms a given
+tactic can introduce is a property of the release.
+
+A kernel-only bit-vector route would require replaying a supported certificate
+checker through a reduction mechanism that introduces no native-result axioms,
+and measuring the resulting cost. That route is proposed here, not implemented.
+Lean4Lean is the relevant reference point for what independent kernel-level
+assurance would mean~\cite{lean4lean}.
+
+\subsection{Diagnostic holes are not accepted proofs}
+
+The inspected \grind{} configuration includes an option concerning admitted
+branches in trace-oriented diagnostics~\cite{grind-config}. That is not a claim
+that ordinary successful \grind{} proofs are unsound. It is a reminder that a
+coordinator must never mistake a diagnostic artefact for a finished proof: the
+root declaration's dependencies must be checked for admitted terms even when an
+inner tool reports a successful diagnostic operation.
+
+Absence of the token \code{sorry} in a source file is likewise not evidence
+that the file compiles, and it is not evidence that the declarations it
+contains are proved. A benchmark harness should detect an admitted declaration
+in a tactic's output and record it as a rejection rather than a success.
+
+\subsection{Soundness invariants to assert in code}
+
+\begin{invariant}[Context validity]
+Every proved fact is accompanied by a proof whose free variables and local
+instances belong to its recorded context, or by an explicit abstraction and
+instantiation that transports it into the consuming context.
+\end{invariant}
+
+\begin{invariant}[Candidate quarantine]
+No candidate theorem, model equation, numerical conjecture, or unsolved proof
+hole is admitted to the proved-fact state. Exploratory assumptions never serve
+as proof evidence.
+\end{invariant}
+
+\begin{invariant}[Induction discipline]
+An induction hypothesis is used only with the scope and smaller-argument
+relationship supplied by its recursor. Generalised parameters may vary; the
+structural induction index may not be replaced arbitrarily.
+\end{invariant}
+
+\begin{invariant}[Fail-closed arithmetic]
+Numerical tolerances may guide search. Accepted equalities, coefficient signs,
+partition boundaries, and proof-rule premises are checked exactly.
+\end{invariant}
+
+\begin{invariant}[Acyclic justification]
+A lemma is not available while its own certificate is being checked, and a
+bundle of lemmas is accepted only in a dependency order in which no entry
+refers to a later one. Name shadowing of a defining equation or of the
+induction hypothesis is rejected outright.
+\end{invariant}
+
+Invariant~\ref{inv:binding} completes the list. Each of these has an
+executable analogue in at least one prototype, and the corresponding negative
+tests are part of the recorded evidence.
+
+\subsection{Adversarial failure modes and their defences}
+
+The most dangerous implementation errors are not weak heuristics. They are
+mistakes that quietly turn search evidence into a stronger assumption.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
+\toprule
+Failure mode & Required defence \\
+\midrule
+\endhead
+Self-justifying lemma &
+Prove candidates in a separate obligation; forbid dependency cycles unless a
+joint induction principle explicitly justifies them. \\
+Induction hypothesis applied to the wrong argument &
+Keep the recursion index rigid; let only genuinely generalised binders be
+instantiated, and record the permitted instantiation set as checked data. \\
+Branch fact leakage &
+Record split assumptions and scope; combine branches with a proof, never with
+a global cache insertion. \\
+Floating-point near-equality &
+Recompute exact rational identities. A small residual is a rejection, not a
+proof. \\
+Numerical tolerance exploited in a weight &
+Require the weight to be an exact rational \emph{of the right type} before
+comparison; a weight of $(10^{20}+1)/10^{20}$ must not pass as $1$. \\
+Wrong root problem &
+Bind the certificate to the original reified expression and assumptions, never
+to an oracle-provided replacement (Invariant~\ref{inv:binding}). \\
+Missing subdivision region &
+Derive child boxes from a full split tree and check both children; reject a
+split point at an interval endpoint. \\
+Duplicate keys in a decoded certificate &
+Reject duplicate JSON object keys at parse time; two parsers disagreeing about
+which value wins is a real differential hazard. \\
+Vacuous replay success &
+Fail when a required certificate family is absent from the results directory,
+and mutate each decoded certificate to confirm the checker actually rejects
+it. \\
+Erased dependent type or cast &
+Preserve typed denotation proofs and explicit transport obligations. \\
+Numerical field proof used for integer division &
+Use a source-semantics bridge, or reject the fragment. \\
+Opaque model element used as a witness &
+Reify an actual source term with the correct scope; otherwise reject the
+proposal. \\
+Incomplete external reconstruction &
+Keep every hole as an unsolved obligation. No success until all are checked. \\
+Stale state after metavariable assignment &
+Invalidate affected caches, or restore a consistent snapshot containing the
+old identities. \\
+\bottomrule
+\end{longtable}
+
+\subsection{The proof-cost budget}
+
+Search can produce a valid but impractically large certificate, and proof size
+is a resource distinct from search time. Track certificate term count,
+polynomial support size, rewrite-trace length, proof-DAG size, final proof-term
+size, replay time, and axiom-audit time.
+
+Share repeated polynomial normalisations and repeated nonnegativity proofs.
+Emit a proof DAG topologically as local lemmas rather than re-expanding shared
+subterms. Prefer sparse certificates and small rational coefficients when
+several valid certificates are available --- but never alter a certificate
+approximately in order to reduce its size, and never delete a dependency
+because it looks unused in a heuristic trace while remaining inside the actual
+proof term. Minimise a replay script only by rerunning and rechecking the
+minimised version.
+
+When a proof is rejected for size or replay budget, return a useful \unknown{}
+diagnostic and preserve the candidate certificate as a debugging artefact. Do
+not accept a partial proof, and do not silently raise the trust level in order
+to finish the goal.
+
+\subsection{The external certificate protocol}
+
+Exchange structured data, never executable code. A problem request carries a
+schema version, registered variable identifiers, exact rational coefficients,
+normalised relation kinds, input bounds, and a resource envelope. A returned
+certificate may reference only registered expressions and hypotheses; the Lean
+side reconstructs the original semantics from its own registry.
+
+The parser must reject malformed dimensions, duplicate or non-canonical
+monomials where canonical form is required, negative exponents, oversized
+integers, unknown references, invalid tree splits, and unsupported certificate
+variants. It must not use \code{eval}, run a returned script, load arbitrary
+shared libraries, or trust a theorem name supplied by the external solver.
+Limits should be enforced \emph{before} expensive polynomial expansion as well
+as after it, and search processes should be isolated from the proof-checking
+process.
+
+The packaged decoders demonstrate bounded rational parsing with numerator and
+denominator bit-length caps, arity, term-count, total-degree, tree-depth and
+file-size limits, and duplicate-key rejection. They are research tooling, not
+hardened services for hostile uploads. A denial of service is not a soundness
+failure, but it still makes a tactic unusable.

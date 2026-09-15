@@ -1,0 +1,719 @@
+\section{Structural search: changing the statement that is being proved}
+\label{sec:structural}
+
+This is the capability that most clearly exceeds local saturation. A saturation
+engine is very effective when useful ground terms and useful lemmas are already
+present. A much wider class of goals requires \emph{making one of those things
+exist}.
+
+\subsection{Demand-directed theorem use}
+
+Trigger-based instantiation works forward, from terms present in the equality
+state. The documented E-matching machinery is a baseline, not something to
+discard~\cite{grind-ematch}. \forge{} adds a complementary backward direction.
+
+Maintain an index over the \emph{conclusions} of approved theorems --- initially
+a discrimination tree keyed by the target's head symbol and normalised type
+structure. An entry records the theorem constant, its universe and type
+parameters, its conclusion head, a discrimination key, the shapes of its
+premises, and a cheap estimate of elaboration cost. Retrieve a bounded candidate
+list, instantiate universes, and unify the theorem conclusion with the target.
+Successful unification creates premises as AND obligations and instantiation
+choices as OR alternatives, with explicit dependencies so that the conclusion
+cannot become available before its premises are proved.
+
+For a theorem of shape $\forall x,\;P(x)\to Q(f(x))$ and a goal $Q(f(u))$,
+backward application immediately proposes the obligation $P(u)$ and introduces
+useful terms even when no suitable trigger was present in the initial forward
+state. For a goal $Q(t)$ with arbitrary $t$ it does \emph{not} justify inventing
+an inverse of $f$: the system must unify $t$ with an application already known
+to be equal, synthesise a candidate $u$ and prove $f(u)=t$, or decline.
+
+\begin{remark}
+This is not a claim that E-matching could never reproduce the same argument with
+different patterns and annotations. What a conclusion index removes is the need
+for a human to have chosen those patterns in advance. Conclusion-selected
+backward patterns already exist in \grind{} in some form~\cite{grind-paper}; the
+proposed addition is that a retrieved theorem's unproved premises become
+persistent obligations that other workers can be scheduled against.
+\end{remark}
+
+Premise retrieval should combine the target with currently \emph{blocked}
+obligations, not just a bag of symbols from the original goal. A theorem
+resolving a denominator guard can be more useful than one mentioning the final
+function symbol. Start with local hypotheses, the equations of mentioned
+definitions, relevant extensionality lemmas, and a small retrieved set; expand
+only if those fail.
+
+\subsubsection*{Solving for the missing term}
+
+Backward matching does not determine every parameter, and the honest responses
+to that are limited. In $\forall x\,y,\;R(x,y)\to P(x)$, a demand for $P(a)$
+leaves $y$ unknown. \forge{} must not silently choose an arbitrary inhabitant.
+It can enumerate appropriately typed terms from the local context, ask a witness
+engine, exploit equalities, or leave the application suspended. Every selected
+instantiation is checked by Lean, and typeclass synthesis and inhabitation
+obligations are scheduled explicitly rather than assuming an arbitrary type has
+an element.
+
+A sharper technique applies when matching stalls at an \emph{interpreted}
+subterm. Rather than failing, emit an equality constraint between that subterm
+and the corresponding source expression, and solve for the missing binder.
+
+\begin{lstlisting}
+matchDemand(theorem, goal):
+  freshen theorem parameters in a child metavariable context
+  unify rigid heads and directly matching arguments
+  collect the remaining argument equations
+  dispatch recognized affine equations to witness synthesis
+  enumerate small typed terms only for the still-free parameters
+  apply the theorem with a complete candidate assignment
+  retain every generated side condition as an obligation
+  accept only after all obligations and the final proof replay
+\end{lstlisting}
+
+For hypotheses $\forall k\in\Z,\;P(2k+1)$ and $n\bmod 2=1$ with goal $P(n)$, the
+controller synthesises $k=n/2$ from the arithmetic shape and proves
+$2(n/2)+1=n$ using the oddness assumption, then transports along that checked
+equality. For a conclusion containing $f(t+1)$ against a goal involving $f(s)$,
+the candidate $t=s-1$ comes from solving $t+1=s$ over $\Z$ --- and over $\N$ the
+same surface subtraction has different semantics and requires a guard.
+
+Two disciplines make this safe. An arithmetic identity used to match arguments
+must appear in the proof as rewriting or transport; it cannot be smuggled into
+the unifier as an unverified definitional equality. And several triggers or
+repeated binders produce a \emph{joint} constraint system: solving each
+occurrence independently loses the equality relating two occurrences of the
+same variable. Cache instances by theorem identity, universe and type
+instantiation, the complete substitution, and the valid branch context. A proof
+of $P(x)$ under $h:x=0$ is not a proof of the same displayed goal under
+$h:x=1$.
+
+\subsection{Demand slicing in a finite Horn fragment}
+\status{Implemented and tested in Python by four independent efforts, in both
+propositional and first-order ground variants.}
+
+The prototypes isolate the mechanism in a fragment small enough to prove things
+about: finite ground definite Horn programs. Backward relevance closure selects
+the rules that could contribute to the target; forward chaining then runs only
+on that slice.
+
+\begin{proposition}[Slicing preserves derivability]
+\label{prop:slicing}
+For a finite ground definite Horn program, restricting forward chaining to the
+backward conclusion-dependency closure of a target preserves whether that target
+belongs to the least model.
+\end{proposition}
+\begin{proof}
+A derivation of the target is a finite tree of rule applications. Starting from
+its root, every rule used and every premise of every such rule is included by
+the backward closure, so every derivation of the target is retained. Conversely
+every rule of the restricted program belongs to the original program, so any
+restricted derivation is valid in the original. Forward fixed-point evaluation
+computes derivability in both finite programs. Cycles without a supporting fact
+create no derivation in either.
+\end{proof}
+
+Termination and non-circularity are handled by \emph{tabling}, not by a
+depth-first convention that treats ``currently being visited'' as success. Each
+rule instance carries a counter of unresolved premises; input facts initialise
+the agenda; proving a premise decrements the counters of its dependents; a rule
+fires only when every premise is proved, and the proof node is stored at that
+moment. Rules $P\to Q$ and $Q\to P$ with no base fact prove neither.
+
+\begin{proposition}[Relative completeness of the finite core]
+For a fixed finite set of ground candidate rule instances, if the dependency
+agenda is exhausted without a resource cutoff, every fact in their least forward
+closure is eventually proved. In particular, a backward-relevant closure
+containing a ground derivation of the target will discover a proof.
+\end{proposition}
+\begin{proof}
+Induct on the height of a finite derivation. Height-zero input facts enter the
+agenda initially. Once all smaller-height premises of an instance have entered,
+its unresolved counter reaches zero and its conclusion is enqueued. Tabling
+ensures that repeated discoveries do not obstruct propagation.
+\end{proof}
+
+The certificate is a topologically ordered DAG: every premise index is strictly
+smaller than its conclusion's index; the substitution domain must be exactly the
+head's variables; and the head instantiation and premise alignment are checked.
+A dependency cycle in the \emph{search} graph may be legitimate, but the final
+proof certificate cannot justify itself through that cycle.
+
+Two honesty constraints govern how this is measured, and
+Section~\ref{sec:experiments} keeps four separate Horn experiments apart for
+exactly this reason. First, the cost of \emph{building} the conclusion index
+over all input rules is part of the demand-directed method's cost; none of the
+prototypes obtains a sublinear end-to-end runtime merely by activating fewer
+rules. Second, proof minimisation reduces even a full-closure derivation to the
+same small proof, so \emph{proof size alone conceals the search-work
+difference} --- the interesting quantity is rule firings, not the length of the
+answer.
+
+\begin{remark}
+None of these Horn engines is an implementation or emulation of \grind{}'s
+E-matching. They compare two deliberately small search policies against each
+other, and one of them is a fair semi-naive forward-chaining baseline rather
+than a straw man.
+\end{remark}
+
+\subsection{Induction: selecting a scheme and generalising the statement}
+\status{The list and natural-number fragments, changing-argument detection,
+bounded right-hand-side synthesis, structural induction, and trace replay are
+implemented. General dependent induction and e-graph-guided frontier discovery
+are specified only.}
+
+The induction planner starts from the recursive applications visible in the
+target and in relevant hypotheses. For each function it records which argument
+positions are destructed by pattern matching, which are passed to recursive
+calls as proper subterms, and which non-structural arguments change. Candidates
+are ranked by how many blocked recursive calls they expose after one constructor
+split. A variable is not selected merely because its type has an induction
+principle, and blind induction on every natural variable is not acceptable.
+
+A case split on an inductive value does not automatically supply an induction
+hypothesis; confusing the two is a design error. Each candidate plan carries an
+explicit Lean motive, an induction principle, the generalised variables, and the
+recursive hypotheses available in each case. User-specified schemes take
+priority.
+
+Generalisation follows a \emph{dependency closure}, and this is where a naive
+implementation goes wrong. In a context containing $x:A$, $y:B(x)$, and
+$h:C(x,y)$, induction on $x$ requires a motive of the form
+\[
+  M(x)\;:=\;\forall y:B(x),\; C(x,y)\to P(x,y),
+\]
+not a proposition containing the old fixed $y$ at every new value of $x$. If a
+generalised variable occurs in the type of another binder, that binder must be
+generalised or explicitly transported as well. A textual substitution that
+ignores dependent hypotheses is not a correct generalisation algorithm, and a
+well-typed-looking first-order erasure is not a substitute for building the
+motive through Lean's elaborator.
+
+Generalisation is an \emph{OR alternative}, not an irreversible preprocessing
+step: too much generality can make a useful theorem false or unnecessarily
+difficult. Candidate generalisation sets are ordered by size and capped.
+
+\subsubsection*{The accumulator example, including the obstruction}
+
+Write $A$ for append, $R$ for reverse, and $\mathrm{RA}$ for accumulator
+reverse:
+\begin{align*}
+A([],y)&=y,& A(h::t,y)&=h::A(t,y),\\
+R([])&=[],& R(h::t)&=A(R(t),[h]),\\
+\mathrm{RA}([],a)&=a,& \mathrm{RA}(h::t,a)&=\mathrm{RA}(t,h::a).
+\end{align*}
+The requested theorem is $\mathrm{RA}(x,[])=R(x)$. Inducting on $x$ without
+generalisation gives an induction hypothesis about $\mathrm{RA}(t,[])$, whereas
+the recursive call in the step case is $\mathrm{RA}(t,[h])$. \emph{Increasing a
+rewriting budget cannot make this particular hypothesis say something
+stronger.} This is the shape of obstruction the planner exists to detect.
+
+The changing-argument detector observes that argument~0 is destructed
+structurally while argument~1 changes from $a$ to $h::a$. It replaces the fixed
+empty accumulator with a fresh parameter and asks for a right-hand side in a
+typed grammar
+\[
+  L ::= []\;\mid\; x\;\mid\; a\;\mid\; R(L)\;\mid\; A(L,L),
+\]
+enumerated in increasing syntax-tree size. The successful candidate is
+\begin{equation}\label{eq:accspec}
+\forall x\,a,\qquad \mathrm{RA}(x,a)=A(R(x),a).
+\end{equation}
+The base case is immediate. The step case uses the generalised hypothesis
+$\mathrm{RA}(t,h::a)=A(R(t),h::a)$ against
+\[
+A(R(h::t),a)=A(A(R(t),[h]),a)=A(R(t),A([h],a))=A(R(t),h::a),
+\]
+the middle step being append associativity. Instantiating \eqref{eq:accspec} at
+$a=[]$ and using append's right identity proves the original theorem.
+
+A second family makes the same point over $\N$. For
+\[
+ A(0,a)=a,\qquad A(n+1,a)=A(n,a+2n+1),
+\]
+the theorem $A(n,a)=a+n^2$ needs $a$ generalised before induction; the step then
+reduces to $a+2n+1+n^2=a+(n+1)^2$. The automation problem is choosing the
+generalisation, not performing the final ring calculation.
+
+\begin{remark}[Sampling rejects; it never proves]
+Two prototypes filter grammar candidates against finite sample environments ---
+one uses all 49 pairs of lists of length at most two over a two-element
+alphabet. Samples \emph{only reject}. The surviving candidate is accepted solely
+because it then passes symbolic induction and independent trace replay.
+\end{remark}
+
+\subsubsection*{What a replay checker must restrict}
+
+The miniature checkers make the induction discipline a first-class, checked
+datum, and this is the part a production implementation most needs to inherit.
+
+There are separate syntactic constructors for universal pattern variables and
+for \emph{rigid} free variables. In an induction step the recursion index --- a
+list tail, a natural predecessor --- is rigid; only genuinely generalised
+parameters remain instantiable in the induction hypothesis. Treating the tail as
+an ordinary rewrite metavariable would let an induction hypothesis rewrite the
+goal at an unjustified larger argument. In the base case the induction
+hypothesis is not available at all.
+
+The strongest formulation attaches to each rule an explicit \emph{flexible}
+variable set --- the variables at which that rule, notably the induction
+hypothesis, may be instantiated --- and requires each replayed step to supply
+exactly that substitution set with correct sorts, rejecting missing or illegal
+instantiations.
+
+Every rewrite certificate contains a rule identifier and a subterm path. The
+checker retrieves the rule from the defining equations, from an earlier checked
+lemma, or from the current induction hypothesis; matches the left-hand side;
+checks repeated-variable identity and sorts; replaces the selected subterm; and
+continues. The two replayed sides must end syntactically identical. No search
+and no normalisation happen during replay.
+
+\begin{proposition}[Soundness of the list certificate format]
+Assume that previously installed equations are valid for all finite lists. If
+the checker accepts an induction certificate, its universally quantified
+equation holds for all finite lists under the supplied definitions.
+\end{proposition}
+\begin{proof}
+Each defining rewrite preserves the interpreted value. Each installed lemma
+instance preserves it by assumption, and congruence permits replacement inside
+a typed term context. An accepted base trace therefore proves the empty-list
+case. In the step trace the only additional rule is the desired statement for
+the rigid tail, universally quantified over its generalised parameters, and that
+rule is valid under the structural induction hypothesis. The accepted step trace
+therefore proves the constructor case, and structural induction establishes the
+universal equation.
+\end{proof}
+
+This justifies a small format. It is not a machine-checked Lean proof of the
+Python implementation, and the negative tests reduce rather than remove the risk
+of a checker bug.
+
+\subsubsection*{Lemma discovery and non-circularity}
+
+A public theorem-installation operation first checks both induction cases, and
+\emph{a lemma is not available while its own certificate is being checked} ---
+which rejects a forged proof that cites its own conclusion. A bundle of lemmas
+is accepted only in a dependency order in which no entry refers to a later one,
+and shadowing a defining equation or the induction-hypothesis name is rejected
+outright.
+
+Beyond generalisation, a demand-driven lemma explorer works from the residual
+of a failed step. Retain the normalised left and right frontiers and the
+rewrites that produced them. Bounded equality saturation can expose alternative
+forms a one-way normaliser would have discarded --- for the accumulator example,
+unfolding append in reverse exposes $h::a$ as $A([h],a)$, and the remaining
+frontier then suggests $A(A(u,v),w)=A(u,A(v,w))$.
+
+\begin{lstlisting}
+find_lemma(left_frontier, right_frontier):
+  expand each frontier using a bounded set of proved equalities
+  identify pairs separated by a small structural difference
+  anti-unify shared subterms, preserving repeated-variable identity
+  abstract a well-typed parameter telescope
+  reject trivial, cyclic, or irrelevant candidates
+  filter candidates with executable counterexamples where available
+  prove surviving candidates in a separate obligation
+  return only checked lemmas to the main equality state
+\end{lstlisting}
+
+Typed anti-unification starts in a restricted fragment: fully applied,
+homogeneous first-order terms with compatible types. Memoise pairs of subterms
+so that anti-unifying $f(a,a)$ and $f(b,b)$ gives $f(z,z)$ and not $f(z_1,z_2)$.
+In a dependent fragment, an abstraction that changes a term's type needs a typed
+telescope and possibly transport proofs; failing to find one is an ordinary
+search failure.
+
+Three further candidate sources are worth implementing: generalise a changing
+non-structural argument; propose a distribution or homomorphism lemma such as
+$R(A(xs,ys))=A(R(ys),R(xs))$ when nested calls obstruct normalisation; and
+synthesise a stronger invariant containing the measure, bound, or relation the
+step requires. Useful templates for the last are
+\[
+ f(s,a)=H(s,a),\qquad
+ \mu(f(s,a))=\mu(a)+J(s),\qquad
+ R(f(s,a),s,a).
+\]
+Each candidate becomes its own obligation, never a rewrite rule merely because
+it helped simplify another candidate. Quotient syntactically different
+candidates only by \emph{already proved} equalities; otherwise the quotient can
+discard the correct expression or conceal an unproved assumption.
+
+This goal-directed exploration is closely related to CCLemma's use of e-graphs
+to focus inductive lemma discovery on useful proof frontiers, and to the
+rippling tradition; the proposal adapts that work to a proof-producing
+controller rather than originating
+it~\cite{cclemma,rippling,directed-lemma-synthesis}.
+
+Impose separate limits on term size, saturation nodes, candidate count,
+induction depth, and lemma-dependency depth, and use term fingerprints and
+alpha-normalised telescopes to avoid reproving the same lemma under new binder
+names. Bounded enumeration is exponential in its grammar size; the production
+advantage must come from recursive-call analysis, relevance filtering, typed
+indexing, and frontier selection, not from assuming that unrestricted
+enumeration will be cheap.
+
+\subsection{Invariant synthesis by exact CEGIS}
+\status{Implemented and tested in Python by six independent efforts, in
+univariate, bivariate, multivariate, accumulator and state-machine forms.}
+
+\subsubsection*{The additive fragment and its certificate}
+
+Consider
+\begin{equation}\label{eq:recurrence}
+T(0)=t_0,\qquad T(n+1)=T(n)+f(n),\qquad n\in\N,
+\end{equation}
+with $t_0\in\Q$ and $f\in\Q[X]$. Search for $q\in\Q[X]$ with
+\begin{equation}\label{eq:rec-cert}
+q(0)=t_0,\qquad q(X+1)-q(X)=f(X).
+\end{equation}
+The certificate is the exact coefficient list of $q$. Its checker computes the
+shift $q(X+1)$ by polynomial arithmetic and compares exact coefficients; it does
+not sample the step relation and does not trust an interpolator.
+
+\begin{proposition}[Recurrence certificate]
+\label{prop:rec}
+If \eqref{eq:rec-cert} holds then $T(n)=q(n)$ for every $n\in\N$.
+\end{proposition}
+\begin{proof}
+The base equality is the first condition. If $T(n)=q(n)$ then
+\eqref{eq:recurrence} and the second condition give
+$T(n+1)=q(n)+f(n)=q(n+1)$. Apply induction on $n$.
+\end{proof}
+
+The multivariate form carries parameters. For
+$S(0,\bm a)=I(\bm a)$ and $S(n+1,\bm a)=S(n,\bm a)+P(n,\bm a)$, search for
+$F(n,\bm a)=\sum_{|\alpha|\le D}c_\alpha(n,\bm a)^\alpha$, substitute into
+$F(0,\bm a)=I(\bm a)$ and $F(n+1,\bm a)-F(n,\bm a)=P(n,\bm a)$, and equate
+coefficients to obtain a rational linear system in the $c_\alpha$.
+
+For the accumulator shape
+$\mathrm{go}(0,a)=a$, $\mathrm{go}(n+1,a)=\mathrm{go}(n,a+r(n))$, the ansatz is
+$F(n,a)=P(n)+aQ(n)$ with obligations $F(0,a)=a$ and $F(n+1,a)=F(n,a+r(n))$.
+One implementation joins the two systems by introducing a formal tag variable
+$t$, encoding the base equation in the coefficients of $t^0$ and the step
+equation in those of $t^1$, so that a single exact row reduction solves both
+simultaneously; $t$ does not appear in the final invariant.
+
+\subsubsection*{Counterexamples direct the coefficient search}
+
+For degree bound $d$, write $q(X)=\sum_{i=0}^d c_iX^i$, maintain exact sample
+constraints $q(n)=T(n)$, and solve the rational linear system with free
+coefficients set to zero. Check the candidate's base and step identities. If the
+step residual
+\[
+r(X)=q(X+1)-q(X)-f(X)
+\]
+is nonzero, choose a natural $n$ with $r(n)\ne0$ and add \emph{both} $q(n)=T(n)$
+and $q(n+1)=T(n+1)$ to the sample set. At least one is a new constraint: if both
+were already satisfied by the candidate, their difference would force $r(n)=0$.
+A nonzero degree-$k$ polynomial cannot vanish at all of $0,1,\ldots,k$, so an
+exact separating counterexample is found without an SMT solver. If the
+coefficient constraints become inconsistent, raise the degree bound.
+
+\begin{proposition}[Fragment completeness]
+\label{prop:rec-complete}
+For a nonzero $f$ of degree $k$, the finite-difference map
+$q\mapsto q(X+1)-q(X)$ sends a leading term $aX^{k+1}$ to $(k+1)aX^k$ plus lower
+terms. Over $\Q$ one may therefore solve for the leading coefficient, subtract
+its difference, and continue downward: a degree-$(k+1)$ solution exists and is
+unique once $q(0)$ is fixed. The zero increment gives a constant solution.
+Hence exact linear solving with a degree budget of at least $k+1$ terminates on
+this fragment.
+\end{proposition}
+
+Equivalently, the forward-difference operator maps polynomials of degree at most
+$d+1$ with zero constant term bijectively onto polynomials of degree at most
+$d$, since its matrix in the monomial basis is triangular with nonzero diagonal.
+In the binomial basis $\Delta\binom{n}{k+1}=\binom{n}{k}$, which a future
+implementation could exploit; the prototypes use ordinary monomials and exact
+row reduction because that keeps the certificate checker small.
+
+This is a \emph{fragment-level} coverage result. It says nothing about
+recurrences involving products with $S$, branching updates, nonlinear state
+transformations, piecewise definitions, or integer formulas with truncated
+division, and it does not make the broader induction planner complete.
+
+\subsubsection*{The overfitting trap}
+
+For $f(X)=X+1$ the discovered result is $q(X)=X(X+1)/2$. The interpolated
+expression
+\[
+\widetilde q(X)=\frac{X(X+1)}2+X(X-1)(X-2)(X-3)
+\]
+agrees with the triangular-number formula on the first four inputs and is
+rejected by the step checker. This is a small, concrete reason why conjecture
+generation and proof acceptance must be separate operations, and the same trap
+is built into the test suites as a hostile control: a high-degree term that
+vanishes at every sampled point but violates the recurrence identity elsewhere.
+
+For $P(n)=n^2$ with $I=0$ the synthesised result is
+\[
+ F(n)=\frac{n^3}{3}-\frac{n^2}{2}+\frac n6=\frac{n(n-1)(2n-1)}6,
+\]
+and one run recovered the degree-9 invariant for $r(n)=n^8$,
+\[
+F(n,a)=a+\frac{n^9}{9}-\frac{n^8}{2}+\frac{2n^7}{3}
+ -\frac{7n^5}{15}+\frac{2n^3}{9}-\frac{n}{30}.
+\]
+
+\subsubsection*{The state-machine generalisation}
+
+A more reusable certificate format treats the invariant as a conserved quantity
+of a transition system: for initial state $s_0$ and transition $T$, require
+\[
+ I(s_0)=0,\qquad I(T(s))=I(s).
+\]
+The second identity is a convenient \emph{sufficient} condition --- proving
+$I(s)=0\Rightarrow I(T(s))=0$ would also suffice but is not the implemented
+certificate language. For sums of squares, clearing denominators gives
+$J(n,s)=6s-n(n+1)(2n+1)$, and
+\[
+ J(n+1,s+(n+1)^2)-J(n,s)
+ =6(n+1)^2-(n+1)(n+2)(2n+3)+n(n+1)(2n+1)=0 .
+\]
+
+The next step is a genuine invariant worker for a state transition
+$s'=F(n,s)$, proving the initial condition and
+\[
+ I(n,s)\land\mathrm{Guard}(n,s)\;\Longrightarrow\;I(n+1,F(n,s)).
+\]
+Coefficient comparison handles identities and exact nonlinear certificates can
+handle some inequalities. A warning applies to the multi-invariant version: if
+the step condition takes the form $I_i(T(\vec x))=\sum_j h_{ij}(\vec x)I_j(\vec
+x)$, then jointly discovering the $I_j$ and the multipliers is a
+\emph{bilinear} search, not linear algebra, and it should not be described as
+the latter. Separate candidate generation from multiplier certification, or fix
+one side at a time.
+
+\begin{remark}
+An invariant does not prove that a loop or a recursive definition terminates.
+Termination is a separate obligation.
+\end{remark}
+
+\subsection{Witness synthesis: construct terms, not satisfying assignments}
+
+\subsubsection*{The logical distinction}
+
+To prove $\forall x\,\exists y\,P(x,y)$, a satisfying assignment for one value
+of $x$ is not enough. A useful synthesiser produces a term $y=w(x)$ and proves
+$\forall x\,P(x,w(x))$. For
+\[
+\forall x\in\R,\quad \exists y\in\R,\quad x+1\le y\le x+2,
+\]
+the witness is $w(x)=x+1$; no constant works for every real $x$, and a
+constant-only template returns no certificate where the affine template
+succeeds.
+
+Sampling individual values of $x$ and finding unrelated values of $y$
+constructs no function and proves nothing. The grammar must represent a
+well-typed expression $w(x)$. A synthesis oracle may help choose $w$; it cannot
+justify $P(x,w(x))$ by testing.
+
+Witness binders retain their dependencies. A witness for the second existential
+may refer to an earlier witness but not to a future binder or to a branch-local
+variable outside its scope. The instructive negative example is
+$\exists x:\alpha,\forall y:\alpha,\;x=y$: the witness for $x$ cannot be the
+later-bound $y$, and a naive synthesiser that sees all displayed variables will
+propose exactly that. The existential task's context must exclude $y$, and
+replay must reject any escaped local variable.
+
+Constructing a value of \code{Fin n} requires a value \emph{and} a bound proof;
+over $\N$, a construction using a signed intermediate representation carries a
+nonnegativity obligation. A witness is a program with a proof obligation.
+
+The search grammar should be type-directed and size-bounded: local variables,
+constructors, projections, selected recursive calls, affine combinations, and
+guarded division or remainder operations. Piecewise terms are permitted only
+with exhaustive, proved branch conditions --- never on the assumption that
+finitely many sampled regions cover the domain.
+
+\subsubsection*{Affine witnesses with Farkas multipliers}
+\status{Implemented and tested in Python.}
+
+Let the input domain be the rational polyhedron $g(x)=Ax+b\ge0$ and the target
+constraints $h(x,y)=Cx+Dy+e\ge0$, all componentwise and non-strict, and seek
+$y=Mx+c$. A sufficient certificate is a nonnegative matrix $\Lambda$ and a
+nonnegative vector $s$ with
+\begin{align}
+C+DM&=\Lambda A,\label{eq:farkas-linear}\\
+e+Dc&=\Lambda b+s.\label{eq:farkas-constant}
+\end{align}
+
+\begin{proposition}[Affine witness certificate]
+If \eqref{eq:farkas-linear}--\eqref{eq:farkas-constant} hold with
+$\Lambda,s\ge0$, then for every $x$ with $Ax+b\ge0$ the term $y=Mx+c$ satisfies
+$Cx+Dy+e\ge0$.
+\end{proposition}
+\begin{proof}
+Substitution gives $Cx+D(Mx+c)+e=\Lambda(Ax+b)+s$. Every entry on the right is a
+sum of nonnegative multiples of nonnegative quantities plus a nonnegative slack.
+\end{proof}
+
+The decisive observation is that \eqref{eq:farkas-linear} and
+\eqref{eq:farkas-constant} are \emph{linear in the unknowns} $M,c,\Lambda,s$,
+because $A,b,C,D,e$ are fixed problem data. Witness synthesis and proof search
+are therefore \emph{one} linear feasibility problem rather than an enumeration
+of candidate affine functions followed by a separate verification pass. With $n$
+inputs, $m$ outputs, $r$ domain constraints and $q$ target constraints the
+encoding has $m(n+1)+q(r+1)$ unknowns and $q(n+1)$ coefficient equations before
+template restrictions; entries of $M,c$ are unrestricted and entries of
+$\Lambda,s$ are constrained nonnegative. A constant-only grammar adds $M=0$.
+
+For a nonempty rational polyhedron, the affine implication form of Farkas'
+lemma gives a completeness route for a \emph{fixed} affine witness: validity of
+each non-strict affine target inequality has such
+multipliers~\cite{mosek-cookbook}. The floating-point proposer is not a complete
+exact LP algorithm and an empty domain needs separate handling, but neither
+qualification affects certificate soundness.
+
+A variant fragment solves $A w=Bx+c$ for $w=Wx+d$ by coefficient matching,
+giving the exact systems $AW=B$ and $Ad=c$, each solved by rational reduced
+row-echelon elimination with free variables set to zero, and re-multiplied
+exactly by the checker with no sampled values of $x$ involved.
+
+\subsubsection*{Integer witnesses are a different problem}
+
+A rational affine solution is not an integer proof. The implemented integer mode
+merely requires every coefficient of $W$ and $d$ to be integral, and is
+deliberately incomplete: a different choice of free variables might yield an
+integral solution when the default rational one does not. The instructive case
+is $2w=x$, which has the rational witness $x/2$ and no integer witness valid for
+every integer $x$; an integer solver must obtain a parity assumption or fail,
+and must never silently reinterpret rational division as integer arithmetic.
+
+A practical first integer grammar is
+\[
+ w(x) ::= c+\sum_i a_ix_i\;\Big|\;
+ \left\lfloor\frac{c+\sum_i a_ix_i}{d}\right\rfloor\;\Big|\;
+ \operatorname{ite}(g,w_1,w_2),\qquad d>0,
+\]
+with every candidate checked in the source integer semantics.
+
+\subsubsection*{Integer lattices and certificates of impossibility}
+\status{Implemented and tested in Python. The only worker here that emits a
+certificate of infeasibility.}
+
+A stronger integer fragment solves $Ax=b$ over $\Z$ by row-by-row unimodular
+elimination, returning either a particular solution with a basis for all
+homogeneous freedom, or a replayable divisibility obstruction. It does not
+search a bounded numerical box. For $6x+10y=2$ it returns
+\[
+(x,y)=(2,-1)+t(-5,3),\qquad t\in\Z,
+\]
+and the trace explains why this family contains \emph{all} solutions --- which
+is what a later impossibility argument needs.
+
+After processing rows $0,\ldots,i-1$, maintain
+\begin{equation}\label{eq:lattice}
+\{x\in\Z^n:A_{<i}x=b_{<i}\}=\{x_0+Bz:z\in\Z^d\},
+\end{equation}
+initially $x_0=0$, $B=I_n$, $d=n$. For the next row $a$ compute $v=aB$ and
+$r=b_i-ax_0$, and find an integer unimodular $U$ with
+$vU=(g,0,\ldots,0)$, $g\ge0$. If $g=0$, consistency requires $r=0$ and the
+family is unchanged. If $g>0$, consistency requires $g\mid r$; with $q=r/g$,
+update
+\[
+x_0\leftarrow x_0+(BU)_{:,0}\,q,\qquad
+B\leftarrow(BU)_{:,1:},\qquad d\leftarrow d-1 .
+\]
+The elementary block, for a current pair $(a,b)$ with $sa+tb=g$, is
+\[
+\begin{pmatrix}s&-b/g\\t&a/g\end{pmatrix},
+\]
+whose determinant is $(sa+tb)/g=1$ and which sends the pair to $(g,0)$; a sign
+flip makes the final first entry nonnegative.
+
+\begin{proposition}[Lattice elimination]
+Each successful row update preserves \eqref{eq:lattice}, and a reported
+divisibility obstruction proves that no integer solution exists.
+\end{proposition}
+\begin{proof}
+Because $U$ is unimodular, $z=Uw$ is a bijection of $\Z^d$. The new row equation
+becomes $gw_0=r$. For $g>0$ this has an integer solution precisely when
+$g\mid r$, in which case $w_0=r/g$ and all other coordinates remain free;
+substitution gives the stated update. For $g=0$ the row is either redundant or
+contradictory. Induction over processed rows proves both claims.
+\end{proof}
+
+The replay format stores, per row, the row number, $U$, $g$, $r$, and either the
+quotient or an obstruction marker. The independent checker recomputes the
+current row image and residual, checks that all entries are integers, verifies
+$\det U=\pm1$, and performs the exact state update --- without calling the
+extended-gcd construction or the solver. For $[6\ 10]$ one trace step is
+\[
+U=\begin{pmatrix}2&-5\\-1&3\end{pmatrix},\qquad
+[6\ 10]\,U=[2\ 0],\qquad \det U=1,
+\]
+and with right-hand side $1$ the same reduction establishes the obstruction
+$2\nmid1$.
+
+A production Lean checker might instead accept elementary column operations or
+an explicitly checked integer inverse; the elementary-operation format is
+attractive because it has short local correctness lemmas and avoids determinant
+expansion. For a positive existential goal, checking a returned witness directly
+is cheaper than verifying completeness of the whole lattice --- the latter is
+needed only when the family or a negative result is used.
+
+Parameterised right-hand sides extend the same machinery: if $Au_0=b_0$ and
+$AU=C$, then $x=u_0+Up$ is a witness family for $Ax=b_0+Cp$. This sufficient
+method misses witnesses that need piecewise divisibility conditions or integer
+division, so it must not report impossibility when the coefficientwise
+construction fails. Carrying affine residuals through the same row algorithm
+produces obligations $g\mid r(p)$ and a checked integer quotient once they are
+proved --- for example, $2x=p$ requires evenness of $p$. If the goal also
+includes $Cx\le d$, substitute the lattice parameterisation to obtain
+inequalities in the remaining integer parameters; \emph{dropping the
+inequalities after solving the equalities would be unsound}, and
+natural-number witnesses additionally require nonnegativity, since solutions
+over $\Z$ do not automatically inhabit $\N$.
+
+There are at most $n$ dimension-reducing steps, but intermediate coefficient
+bit lengths rather than matrix dimensions can dominate cost. The prototype is a
+straightforward exact implementation, not an optimised Smith or Hermite
+normal-form library.
+
+\subsubsection*{Finite-residue witnesses}
+\status{Implemented and tested in Python.}
+
+A different existential shape is discharged by finite case analysis on a residue
+class. Given a modulus $m$, synthesise offsets $d_r$, one per residue class
+$r$ modulo $m$, such that for every integer $n$,
+\[
+ n\le n+d_{n\bmod m}<n+m
+ \quad\text{and}\quad
+ a\,(r+d_r)\equiv b \pmod m .
+\]
+Verification is a finite check over the $m$ residue classes; the universal
+interpretation is justified by the quotient/remainder theorem, not by the
+sampled integers. When the congruence $a\,z\equiv b\pmod m$ has no solution ---
+detected by a gcd divisibility condition --- the worker reports impossibility for
+that parameter tuple rather than failing silently. The implementation is
+exercised at inputs such as $10^{20}+7$ to confirm that the finite table really
+does instantiate at arbitrary integers.
+
+\subsubsection*{Polynomial witnesses certified by nonnegativity}
+\status{Implemented and tested in Python.}
+
+The composition pattern the whole architecture argues for appears in miniature
+here. For
+\[
+ \forall x\in\R,\quad \exists y\in\R,\quad x\le y\ \wedge\ -x\le y,
+\]
+one prototype enumerates $w(x)=a+bx+cx^2$ with $a,b,c\in\{-2,\ldots,2\}$,
+ordered by coefficient $\ell_1$ size and then lexicographically, using five
+sample values only as a rejection filter. The 23rd candidate is $w(x)=x^2+1$,
+and acceptance requires \emph{two} nonnegativity certificates, for $w-x\ge0$ and
+$w+x\ge0$. Convenient explanatory decompositions are
+\[
+ x^2+1-x=\left(x-\tfrac12\right)^2+\tfrac34,\qquad
+ x^2+1+x=\left(x+\tfrac12\right)^2+\tfrac34,
+\]
+but the recorded certificates contain the different rational weighted-square
+decompositions the LP actually returned; both replay exactly. The artefact does
+not pretend that a hand-simplified certificate was the optimiser's output.
+
+A production implementation should also try simpler witnesses --- an available
+absolute-value or maximum expression --- when the local library makes those
+cheap. Restricting a prototype to polynomials is an experiment design, not a
+recommended restriction on all \forge{} witnesses.

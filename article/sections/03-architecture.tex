@@ -1,0 +1,255 @@
+\section{Architecture: a scoped obligation graph around a shared fact store}
+\label{sec:architecture}
+\status{Specified architecture. The Python prototypes implement several workers
+and certificate formats; none of them implements this Lean controller.}
+
+\subsection{Three data structures that must never be confused}
+
+A single global collection of ``facts'' is too ambiguous to be safe. The
+controller maintains three stores with different admission rules.
+
+The \emph{proved-fact store} contains propositions together with Lean proof
+expressions valid in a particular local context. Each entry records its
+source, its assumptions, and the proof dependencies needed to reconstruct it.
+A worker may consume it as evidence.
+
+The \emph{obligation graph} contains goals waiting for proofs: ordinary goals,
+side conditions, candidate lemmas, induction cases, witness specifications,
+and proof-reconstruction holes. An AND node is solved only when all of its
+required children are solved; an OR node records alternative approaches to the
+same goal. Failed attempts and exhausted budgets do not become logical facts.
+
+The \emph{search store} contains models, candidate terms, speculative
+rewrites, usefulness scores, and unsuccessful attempts. These may direct
+search. They are never accepted as hypotheses by a proof worker. In
+particular, a conjectural equality may merge nodes in an isolated exploration
+graph, but it must not merge nodes in the proved equality state.
+
+\begin{invariant}[The ledger invariant]
+Every entry in the proved-fact store carries a proof term and a scope. Nothing
+enters it that is not accompanied by both. Membership of the proved-fact store
+is the \emph{only} licence a worker has to use a proposition as a premise.
+\end{invariant}
+
+At the outer layer these stores are organised as an AND/OR search graph over
+structural choices; at each open leaf a coordination layer exposes certified
+facts and typed views to specialised workers. \grind{} maintains its own
+efficient internal equality and theory state behind that boundary. The
+acceptance layer reconstructs a Lean proof of each returned proposition,
+checks scope and dependencies, and ultimately constructs a proof of the
+original goal. Numerical success, satisfiability status, an unverified
+certificate, and a plausible conjecture are never accepted as facts.
+
+\subsection{The demand protocol and the worker contract}
+
+Workers are addressed through an explicit vocabulary of demands rather than
+being invoked as opaque tactics. The following is a proposed interface, not a
+transcription of a released Lean API.
+
+\begin{lstlisting}
+Demand :=
+  | Prove          (goal)
+  | ProveGuard     (context, proposition)
+  | FindWitness    (context, binders, specification, grammar)
+  | Instantiate    (context, theorem, desired_consequence)
+  | Generalize     (context, recursive_call, blocked_goal)
+  | FindLemma      (context, left_frontier, right_frontier)
+  | ProveInduction (context, motive, recursor_candidates)
+  | Reconstruct    (context, source_goal, external_certificate)
+
+Worker.supports : GoalView -> SupportReport
+Worker.step     : Snapshot -> DeltaFacts -> Budget -> WorkerResult
+
+WorkerResult :=
+  | Proved     (lean_proof : CheckedProofRef)
+               (dependencies) (replay_record)
+  | Progress   (facts       : Array ScopedFact)
+               (obligations : Array ConditionalObligation)
+               (continuation : OpaqueToken)
+  | Candidate  (kind : CertificateKind) (payload : BoundedData)
+               (proposed_next_demands)
+  | Unknown    (reason : FailureReason) (diagnostics) (continuation)
+
+ScopedFact := {
+  proposition  : Expr,
+  proof        : Expr,
+  scope        : ScopeId,
+  dependencies : Array FactId
+}
+\end{lstlisting}
+
+\code{CheckedProofRef} is a capability issued by the acceptance layer, never by
+an external process. An external solver can return only data or a candidate. A
+native Lean tactic worker may return a proof expression, but the coordinator
+still verifies its type, its local-variable support, its auxiliary
+declarations, and its allowed axioms before committing it.
+
+A worker returning \code{Progress} must not pretend that its residual goals are
+solved. The controller may tentatively construct a parent proof containing
+metavariables, but overall success is reported only after those metavariables
+are assigned and the completed expression is checked.
+
+A \emph{conditional obligation} is a directed dependency, not an assertion.
+Cancelling $a$ in a field creates the obligation $a\ne0$; until that proof
+exists, the cancelled equality cannot enter the fact store. The result protocol
+must keep a conjectured fact visibly different from a proved fact even when the
+two share the same proposition.
+
+A counterexample belongs in \code{Candidate} unless its terms, its hypotheses,
+and the negation of the source conclusion have all been validated in Lean. For
+an abstraction-based translation, a satisfying assignment may be no more than a
+model of an overapproximation.
+
+\subsection{Three outcomes, not an overloaded Boolean}
+
+The tactic's result type should distinguish \emph{proved}, \emph{refuted with
+a checked countermodel}, and \emph{unknown}, and the diagnostic attached to
+\unknown{} should name the first substantive blocked obligation or the
+exhausted budget. Collapsing these into success/failure destroys exactly the
+information the next attempt needs, and it invites the most common category
+error in this area: reading a failed bounded search as a disproof.
+
+\begin{remark}
+Throughout this document, a search failure is \unknown{}. It is never evidence
+that the requested theorem is false.
+\end{remark}
+
+\subsection{Snapshots, scope keys, and proof transport}
+
+A proposed \code{GoalSnapshot} contains the environment revision, the local
+context, local instances, the metavariable context, the target expression, the
+transparency configuration, branch assumptions, the normalisation version, and
+worker state. The controller must restore \emph{all} of it on backtracking.
+Restoring only the visible list of hypotheses is insufficient: a worker may
+have instantiated metavariables or created local declarations whose identities
+are used by other expressions.
+
+A persistent fact key contains the expression, its type, universe levels where
+relevant, the identity of the ordered ring or field instance, a local-context
+fingerprint, and a scope identifier. Printed text is not a safe key --- names
+printed as \code{x} can denote different free variables in sibling goals ---
+and expression pointers are not suitable for caches that outlive an
+environment. Implicit typeclass arguments matter: two syntactically similar
+applications of an overloaded operation can mean different things because their
+instances differ.
+
+Typed views must therefore preserve source semantics, and the traps are
+concrete:
+
+\begin{itemize}[leftmargin=1.4em]
+\item $x-y$ over $\N$ is truncated subtraction; over $\Z$ or $\R$ it is ring
+  subtraction. A translator that treats these identically is unsound.
+\item A \code{Fin n} expression is not automatically an integer with
+  unrestricted arithmetic.
+\item A proposition about real division cannot be transported through a
+  denominator without a nonzero or sign guard. Clearing denominators in an
+  inequality requires a sign proof. These become \code{ProveGuard}
+  obligations; if the guard fails, the rewrite is unavailable, not
+  approximately valid.
+\item An integer embedding into a field can be injective; a fixed-width
+  bit-vector projection is not. Mixing those relationships inside a generic
+  ``numeric cast'' cache would be a serious error.
+\end{itemize}
+
+Facts proved using a branch hypothesis can be shared only within that branch or
+a descendant. To move one upward, discharge the hypothesis and transport an
+implication, or combine proofs from a complete case split. This applies as
+strongly to numerical bounds, inferred equalities, and cached certificates as
+it does to ordinary theorem applications. There is no ``most likely branch''
+rule in the logical layer.
+
+A subtler issue is proof transport. A successful worker may introduce auxiliary
+theorem declarations and return a proof referring to them; restoring the
+environment while retaining only the final expression would leave dangling
+references. A commit must preserve the required declaration closure, after
+checking it, or reconstruct a self-contained proof term in the parent
+environment. One safe reuse method abstracts a proof over its exact
+free-variable dependencies and then instantiates that closed theorem in the
+destination context. External results must be re-elaborated against the exact
+destination context rather than transporting free-variable identifiers between
+unrelated goals.
+
+\subsection{Facts carry explanations, not only truth flags}
+
+A nonlinear worker may prove $0<c$ from polynomial constraints. That proof
+justifies $c\ne0$, which unlocks a division rewrite; the rewrite's proof yields
+an equality; the equality may enable congruence closure; and that may make an
+E-matching instance useful. The chain should be represented as a proof DAG with
+explicit edges, not rediscovered by reparsing tactic text.
+
+This is why an arithmetic worker returns individual proved consequences and
+their assumptions rather than a Boolean ``solved'' flag. A checked sign or
+equality is useful well beyond the goal that prompted it.
+
+\subsection{Event-driven cooperation}
+
+Workers subscribe to deltas rather than repeatedly scanning the entire context.
+Typical events are a new bound on an arithmetic expression, a new equality
+joining two term classes, a proved side condition, an instantiated theorem, and
+a changed target after structural decomposition.
+
+The coordinator normalises a returned fact, checks whether it adds information,
+stores its proof, and notifies only relevant subscribers. Changing an interval
+bound invalidates or strengthens a Bernstein search problem; learning a
+polynomial equality may reduce the dimension of a subsequent positivity
+certificate; proving an existential witness's denominator nonzero activates its
+algebraic replay.
+
+Logical circularity and scheduling cycles must be distinguished. A worker
+waiting for a fact that another worker might establish is an ordinary
+dependency cycle; it may call for a different search action. It does not permit
+both workers to assume their own outputs. Track these dependencies as strongly
+connected components and either pursue an independent obligation, perform a
+justified case split, or return a diagnostic explaining the blockage.
+
+\subsection{An explicit scheduler}
+
+The initial implementation should use deterministic, cost-aware scheduling and
+must not require a trained model. Each task has a relevance estimate, an
+expected information gain, a recent cost, an age, and a resource ceiling. A
+simple score is
+\[
+  s(a)=w_r R(a)+w_g G(a)+w_a A(a)-w_c\widehat C(a),
+\]
+with the weights fixed in the experiment manifest. This is a heuristic, and
+the important part is not its shape but two disciplines around it.
+
+First, \emph{reserve a minimum quota for every eligible worker class}, so that
+a high-scoring stream of cheap actions cannot starve structural search. A cheap
+task that regenerates itself is the normal failure mode here.
+
+Second, \emph{the estimated benefit of an action must include the cost of the
+certificate it will produce}, not only the probability that it closes the goal.
+A worker that reliably succeeds while emitting a proof too large to elaborate
+is not a good scheduling choice, and a scheduler that scores only success
+probability will keep choosing it.
+
+\begin{lstlisting}
+solve(goal, mode, budgets):
+  if mode == compatibility:
+    run exact_stock_grind(goal, budgets.stock)
+    if accepted: return proof
+    restore_original_goal()
+  agenda := initial_structural_and_local_tasks(goal)
+  while resources_remain:
+    action   := choose_with_reserved_worker_quotas(agenda)
+    snapshot := save_full_branch_state()
+    result   := run_bounded(action)
+    restore_or_commit_only_checked_changes(snapshot, result)
+    if original_goal_has_checked_proof(): return proof
+    enqueue_new_obligations_and_relevant_delta_subscribers()
+  return Unknown(with_structured_diagnostics)
+\end{lstlisting}
+
+Heartbeats alone are insufficient for external numerical code. Maintain
+separate limits on wall time, memory, instantiated theorems, polynomial
+monomials, rational bit lengths, certificate size, induction depth, and replay
+work. External workers should run in bounded child processes without network
+access. A process timeout returns \unknown{} and cannot create a theorem.
+
+Finite budgets imply incompleteness. Fair worker quotas do not make
+unrestricted Lean proof search complete; they make the search policy
+interpretable and reduce avoidable starvation. A deterministic mode, in which
+the schedule is a function of the goal and the manifest alone, should be
+available for reproducible experiments even if an interactive mode is allowed
+to be adaptive.
