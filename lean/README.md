@@ -16,7 +16,7 @@ others; [`INTEGRATION.md`](INTEGRATION.md) has the module plan and the inspected
 None of the nine proposals compiled any Lean at all — each recorded `NOT_RUN`
 with the same reason, no toolchain in the authoring environment. The
 `ForgeCore` result above is the only compilation evidence this project has, and
-it covers three of the seventeen files.
+it covers three of the sixteen files.
 
 Successful elaboration is not a transitive axiom audit, and it is not a
 comparison against any tactic. A hand-written example that type-checks proves

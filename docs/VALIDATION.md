@@ -90,7 +90,7 @@ cannot pass vacuously. These are the right defaults and are worth generalising.
 | Check | Result |
 | --- | --- |
 | Merged article builds | pdfLaTeX, 68 pages, no errors, no undefined references |
-| Core Lean elaboration | 3 of 17 files, Lean v4.34.0, no errors — see [`LEAN-STATUS.md`](LEAN-STATUS.md) |
+| Core Lean elaboration | 3 of 16 files, Lean v4.34.0, no errors — see [`LEAN-STATUS.md`](LEAN-STATUS.md) |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine runs; it is a timing field |
 | Schema compatibility | semantically compatible, syntactically incompatible; one numeric conversion and a key-rename table reconcile all nine |
@@ -122,7 +122,7 @@ In rough order of value per unit of work:
    cone checker, which is the smallest and most reused.
 2. Property-based generation of malformed inputs, rather than the hand-written
    corruption lists above.
-3. Compiling the fourteen Mathlib-dependent Lean files against a built project.
+3. Compiling the thirteen Mathlib-dependent Lean files against a built project.
 4. A checker implemented independently from a specification, by someone who has
    not read the producer.
 5. The controlled Lean evaluation described in Section 10 of the article.

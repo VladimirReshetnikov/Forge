@@ -79,8 +79,8 @@ files that import nothing beyond Lean core could be elaborated:
 
 Recorded in [`results/lean-core-elaboration.json`](results/lean-core-elaboration.json).
 
-That is three files of seventeen. It is not an axiom audit, it does not cover
-the fourteen Mathlib-dependent files, it does not establish that any checker is
+That is three files of sixteen. It is not an axiom audit, it does not cover
+the thirteen Mathlib-dependent files, it does not establish that any checker is
 correct, and it is not a comparison against any tactic.
 
 ## Building the article

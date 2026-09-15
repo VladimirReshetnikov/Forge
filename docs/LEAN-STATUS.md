@@ -12,8 +12,8 @@ Consequently none performed a kernel check, an axiom audit, or any comparison
 against a Lean tactic.
 
 **This merge compiled three files.** The merge environment has `elan`, which
-installed the pinned `leanprover/lean4:v4.34.0`. Three of the seventeen merged
-files import nothing beyond Lean core and elaborate with no errors.
+installed the pinned `leanprover/lean4:v4.34.0`. Three of the sixteen files in
+the merged tree import nothing beyond Lean core and elaborate with no errors.
 
 ## What each run recorded
 
@@ -55,7 +55,7 @@ artefacts that had never met a compiler now have.
 
 - It is not a transitive axiom audit. Elaboration succeeding says nothing about
   what the declarations depend on.
-- It says nothing about the other fourteen files, which import Mathlib.
+- It says nothing about the other thirteen files, which import Mathlib.
 - It does not establish that any certificate checker is correct. The contracts
   are *types*; a type is not a proof that an implementation satisfies it.
 - It is not a comparison against any Lean tactic. A hand-written example that
@@ -63,7 +63,7 @@ artefacts that had never met a compiler now have.
   have found it.
 - It is not evidence that a `forge` tactic works, because none exists.
 
-## The remaining fourteen
+## The remaining thirteen
 
 They need a project with Mathlib built at the pinned revision
 `1cf325a0cf67aca2b04d76b5380ff6a9e410aefa`.

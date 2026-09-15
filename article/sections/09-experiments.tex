@@ -531,7 +531,7 @@ None of the nine compiled any Lean source. Each recorded the same reason --- no
 \code{lean} or \code{lake} executable in the authoring environment --- under five
 different filenames and in two different formats. Consequently none of them
 performed a kernel check, an axiom audit, or any comparison against \grind{},
-Aesop, \code{nlinarith}, LeanHammer, or any other tactic. Twenty-seven
+Aesop, \code{nlinarith}, LeanHammer, or any other tactic. Twenty-one
 \code{.lean} files across the nine, totalling about 3{,}000 lines, were
 \emph{candidate source}.
 
@@ -539,8 +539,8 @@ Aesop, \code{nlinarith}, LeanHammer, or any other tactic. Twenty-seven
 
 The merge environment has \code{elan}, and installing the pinned
 \code{leanprover/lean4:v4.34.0} made a first, narrow compilation check possible.
-Three of the twenty-seven files import nothing beyond Lean core and can
-therefore be elaborated without a built Mathlib:
+Three of the sixteen files in the merged tree import nothing beyond Lean core
+and can therefore be elaborated without a built Mathlib:
 
 \begin{table}[htbp]
 \centering\small
@@ -563,7 +563,7 @@ This confirms that the proposed runtime and scheduler contract, the
 proofs are well-typed Lean 4.34.0 rather than merely plausible-looking source.
 
 It confirms nothing else. It is not a transitive axiom audit. It says nothing
-about the other twenty-four files, which import Mathlib and need a built project.
+about the other thirteen files, which import Mathlib and need a built project.
 It does not establish that any certificate checker is correct. And it is not a
 comparison against any Lean tactic --- successful elaboration of a hand-written
 example proves that the example type-checks, not that automation found it.

@@ -73,7 +73,7 @@ different filenames and in two formats. This merge installed the pinned
 beyond Lean core.
 
 All three elaborate. That is the whole claim. It is not an axiom audit, it says
-nothing about the fourteen Mathlib-dependent files, it does not establish that
+nothing about the thirteen Mathlib-dependent files, it does not establish that
 any checker is correct, and it is not a comparison against any tactic.
 
 See [`../docs/LEAN-STATUS.md`](../docs/LEAN-STATUS.md).
