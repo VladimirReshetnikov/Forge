@@ -1,15 +1,16 @@
 % ---------------------------------------------------------------------------
 % Forge: a certificate-producing proof-planning layer above Lean's `grind`
 %
-% Merged working draft. Assembled from nine independently prepared proposals,
-% which are retained verbatim under proposals/ for provenance.
+% Merged working draft. Assembled from eighteen independently prepared
+% proposals -- nine design-round, nine extension-round -- retained verbatim
+% under proposals/ for provenance.
 %
 % Build (pdfLaTeX, standard TeX Live / MiKTeX packages only -- deliberately no
 % fontspec, so no system font has to be installed):
 %
 %     latexmk -pdf -interaction=nonstopmode forge.tex
 %
-% The nine source articles used four different engines (pdfLaTeX, XeLaTeX,
+% The design-round articles used four different engines (pdfLaTeX, XeLaTeX,
 % LuaLaTeX, and LuaLaTeX-with-fontspec) and between them required Linux
 % Libertine O, Lato, Libertinus Math, Noto Serif, Noto Sans, STIX, Arimo,
 % newtx and DejaVu Sans Mono. None of those fonts is needed here.
@@ -119,7 +120,7 @@ above Lean's \texttt{grind}\par}
 \vspace{1.4cm}
 {\large Merged working draft\par}
 \vspace{0.4cm}
-{\large Consolidated from nine independent proposals\par}
+{\large Consolidated from eighteen independent proposals\par}
 
 \vspace{2.2cm}
 \begin{minipage}{0.82\textwidth}
@@ -134,7 +135,7 @@ witnesses, and obtains exact algebraic certificates. Every component that can
 succeed must return something Lean can check.
 
 \textbf{What this document is not.} \forge{} is \emph{not an implemented Lean
-tactic}. None of the nine contributing efforts had a Lean executable
+tactic}. None of the eighteen contributing efforts had a Lean executable
 available; no Lean source was compiled by any of them; no comparison against
 \grind{}, Aesop, \code{nlinarith}, LeanHammer, or any other Lean tactic was
 measured. The Python prototypes are research code and are not formally
@@ -146,8 +147,9 @@ revision \texttt{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
 \end{minipage}
 
 \vfill
-{\small Nine source proposals retained verbatim under \texttt{proposals/};
-see Appendix~\ref{app:provenance} for the merge ledger.\par}
+{\small Eighteen source proposals retained verbatim under
+\texttt{proposals/}; see Appendix~\ref{app:provenance} for the merge
+ledger.\par}
 \end{titlepage}
 
 \tableofcontents
@@ -158,12 +160,13 @@ see Appendix~\ref{app:provenance} for the merge ledger.\par}
 \input{sections/03-architecture}
 \input{sections/04-trust}
 \input{sections/05-structural}
-\input{sections/06-nonlinear}
-\input{sections/07-boolean-and-external}
-\input{sections/08-integration}
-\input{sections/09-experiments}
-\input{sections/10-evaluation}
-\input{sections/11-conclusion}
+\input{sections/06-closure}
+\input{sections/07-nonlinear}
+\input{sections/08-boolean-and-external}
+\input{sections/09-integration}
+\input{sections/10-experiments}
+\input{sections/11-evaluation}
+\input{sections/12-conclusion}
 
 \appendix
 \input{sections/A-schemas}

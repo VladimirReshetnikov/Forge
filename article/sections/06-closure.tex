@@ -1,0 +1,250 @@
+\section{Finite certificates for unbounded behaviour}
+\label{sec:closure}
+
+\subsection{The shape of the problem}
+
+A large class of obligations has the form: \emph{for every input word, every
+number of iterations, every reachable state, some observation is zero}. Program
+equivalence, fold correctness, loop invariants and accumulator specifications
+all land here. The universal quantifier ranges over an infinite set, so no
+amount of testing settles it --- but the state space that matters is often
+finite-dimensional, and that is what makes a finite certificate possible.
+
+\S\ref{sec:structural} approached this by \emph{guessing}: propose an invariant
+template, solve for its coefficients, check the base and step identities. That
+works, and Proposition~\ref{prop:rec-complete} shows it is complete on its
+fragment. But it has two defects that the same section had to admit.
+
+The first is that the implemented certificate language requires a
+\emph{conserved} quantity, $I(T(s))=I(s)$. That is strictly too narrow. Take
+\[
+ x'=2x+a,\qquad y'=2y+2a,\qquad (x_0,y_0)=(0,0),\qquad a\in\{0,1\},
+\]
+and the observation $q=2x-y$. After every input word $q$ is zero --- yet it is
+not conserved: the rule is $q'=2q$, not $q'=q$. A worker that can only express
+conservation cannot state this invariant at all, let alone prove it.
+
+The second is the bilinearity trap. For a \emph{family} of invariants the step
+condition is
+\[
+ I_i(T(\vec x))=\sum_j h_{ij}(\vec x)\,I_j(\vec x),
+\]
+and \S\ref{sec:structural} warns that discovering the $I_j$ and the multipliers
+$h_{ij}$ together is a bilinear search which must not be described as linear
+algebra, recommending only that one ``fix one side at a time''.
+
+This section is what fixing one side at a time looks like when it is done
+constructively. The idea is to stop guessing and start from the \emph{target}:
+take the observation one actually cares about, close it under pullback along
+the transition until the closure stabilises, and then solve for multipliers
+over the resulting \emph{fixed} family --- which is an ordinary linear problem.
+The closure either terminates with a certificate valid for every input, or it
+produces a concrete input on which the observation is nonzero. There is no
+template to choose and no ansatz degree to tune.
+
+\subsection{Observable-space closure}
+\label{sec:obs-closure}
+\status{Implemented and tested in Python by several independent efforts.}
+
+\subsubsection*{The fragment}
+
+Let $A_a\in\Q^{D\times D}$ for each letter $a\in\Sigma$, let $s_0\in\Q^{D}$, and
+let $q\in\Q^{1\times D}$. The goal is
+\begin{equation}\label{eq:linear-goal}
+ \forall w\in\Sigma^{*},\qquad q\,A_w\,s_0=0,
+ \qquad A_{a_1\cdots a_t}=A_{a_t}\cdots A_{a_1}.
+\end{equation}
+\emph{All} words are permitted. A restricted input language needs either an
+explicit product with a supplied finite automaton or a separate proof that the
+restriction is respected; it must never be silently assumed.
+
+Affine updates are included by homogenisation,
+\[
+ s'=M_as+b_a
+ \quad\leadsto\quad
+ \begin{bmatrix}s'\\1\end{bmatrix}
+ =\begin{bmatrix}M_a&b_a\\0&1\end{bmatrix}\begin{bmatrix}s\\1\end{bmatrix},
+\]
+and an affine target likewise. Rational constants stay rational: no
+floating-point rank test is needed, and none would be appropriate.
+
+Equivalence of two implementations is the same problem. Form the block system
+\[
+ A_a=\begin{bmatrix}A^{(1)}_a&0\\0&A^{(2)}_a\end{bmatrix},\qquad
+ q=\begin{bmatrix}o_1&-o_2\end{bmatrix},
+\]
+and a single zero-observation goal compares every output. Equal output requires
+neither equal internal states, nor equal state dimensions, nor a shared
+coordinate system --- which is exactly what makes this useful for proving two
+differently written folds equal.
+
+\subsubsection*{The algorithm}
+
+Start from the target row and close it under right multiplication.
+
+\begin{lstlisting}
+queue := [(q, empty_word)]
+basis := []
+while queue is not empty:
+    (r, w) := pop_front(queue)
+    if r * initial != 0:
+        replay w in the original matrices
+        return Counterexample(w)
+    if r lies in span(basis):
+        continue
+    append r to basis
+    for each action a:
+        push_back(queue, (r * A[a], prepend(a, w)))
+return the closure coefficients for the completed basis
+\end{lstlisting}
+
+Dependent rows need not be expanded: multiplying their known linear combination
+by $A_a$ produces the corresponding combination of rows already scheduled. Each
+queued row carries a concrete word, and because a row representing $qA_w$
+becomes $qA_wA_a$ under right multiplication, that word grows on the \emph{left}
+--- the successor of $w$ is $aw$, not $wa$. Getting this backwards yields a
+``counterexample'' that does not reproduce.
+
+\subsubsection*{A certificate that needs no rank computation}
+
+The search returns a matrix $G\in\Q^{r\times D}$, a row $t\in\Q^{1\times r}$,
+and matrices $C_a\in\Q^{r\times r}$ with
+\begin{align}
+ q&=tG, \label{eq:lin-target}\\
+ GA_a&=C_aG \qquad (a\in\Sigma), \label{eq:lin-closure}\\
+ Gs_0&=0. \label{eq:lin-init}
+\end{align}
+
+\begin{theorem}[Observable certificate soundness]
+\label{thm:linear-sound}
+If \eqref{eq:lin-target}--\eqref{eq:lin-init} hold then \eqref{eq:linear-goal}
+holds.
+\end{theorem}
+\begin{proof}
+The invariant is $Gs=0$. If it holds before action $a$ then
+$G(A_as)=(GA_a)s=(C_aG)s=C_a(Gs)=0$. It holds initially by
+\eqref{eq:lin-init}, hence after every finite word by induction. Finally
+$qs=tGs=0$ by \eqref{eq:lin-target}.
+\end{proof}
+
+The checker verifies three finite matrix identities and nothing else. It does
+\emph{not} check that the rows of $G$ are independent, that they came from any
+particular search, or that $r$ is minimal. Those properties explain the
+algorithm's efficiency; they are irrelevant to soundness, and a certificate
+carrying redundant rows is still valid. This is the cleanest search/check
+separation anywhere in this document: the producer may be clever, the checker
+does linear algebra.
+
+Conversely \eqref{eq:lin-target} is indispensable. An invariant basis without
+the target-membership equation may prove something perfectly true and entirely
+irrelevant.
+
+\subsubsection*{Termination, completeness, and a sharp witness bound}
+
+\begin{theorem}[Finite-dimensional coverage]
+\label{thm:linear-complete}
+Without operational cutoffs, observable closure terminates and \emph{decides}
+\eqref{eq:linear-goal}. If the goal is false and $q\ne0$, a distinguishing word
+of length at most $D-1$ exists.
+\end{theorem}
+\begin{proof}
+At most $D$ independent rows can be admitted, and each admitted row creates
+$|\Sigma|$ successors, so the queue holds at most $1+|\Sigma|D$ entries over the
+whole run. On normal termination every basis row is closed under right
+multiplication by every action, so induction places every $qA_w$ in the final
+row space; if all basis rows annihilate $s_0$ then so does every observation,
+and otherwise a tested row supplies a concrete word.
+
+For the bound, let $V_i$ be the span of the target rows arising from words of
+length at most $i$. If $V_i=V_{i+1}$ the space is closed under each action and
+the chain has stabilised. Starting from the one-dimensional span of a nonzero
+$q$, at most $D-1$ strict increases are possible, so $V_{D-1}$ contains every
+target row; if its evaluation at $s_0$ is not identically zero, one of its
+generating words of length at most $D-1$ has nonzero evaluation.
+\end{proof}
+
+The bound is attained, and the family that attains it is the best possible
+argument against testing. Take a shift matrix with ones just above the
+diagonal, initial state $e_D$, and target $e_1^{\mathsf T}$: every output before
+step $D-1$ is zero, and the next one is one. \emph{Testing only the first
+several inputs would classify these systems as correct.} What tells us when a
+conclusion is justified is the finite-dimensional argument, not the number of
+samples --- which is the same lesson as \S\ref{sec:structural}'s interpolation
+trap, in a setting where the trap is invisible to any finite test.
+
+With a maintained echelon basis, row multiplication and membership reduction
+cost $O(D^2)$ field operations per candidate, so an $O(|\Sigma|D^3)$
+implementation exists. Bit complexity additionally depends on exact coefficient
+growth, and the prototypes recompute ranks symbolically rather than maintaining
+the incremental representation, so the cubic figure is a production target and
+not a measured property of the delivered code.
+
+\subsubsection*{Beyond a finite alphabet, carefully}
+
+Suppose an update depends polynomially on a fresh scalar input,
+$A(u)=\sum_{j=0}^{d}u^jM_j$. A sufficient universal certificate is
+\[
+ GM_j=C_jG \qquad (0\le j\le d),
+\]
+since then $GA(u)=\bigl(\sum_j u^jC_j\bigr)G$ for every $u$. Over an infinite
+field, an output polynomial vanishing for all inputs forces all its
+coefficients to vanish, so coefficient closure is complete for this precise
+polynomial-input, linear-state fragment.
+
+\begin{remark}[A coefficient matrix is not an input symbol]
+If a coefficient row fails to annihilate the initial state, its index sequence
+is evidence of a nonzero output \emph{polynomial} --- not a counterexample.
+To produce an actual counterexample, instantiate that polynomial on an exact
+grid whose coordinate sizes exceed the respective degrees, then replay the
+chosen rational inputs. Presenting the coefficient indices to a user as though
+they were inputs would be a semantic bug of exactly the kind
+Invariant~\ref{inv:tuple} exists to prevent.
+\end{remark}
+
+\subsection{Target-generated ideal closure}
+\label{sec:ideal-closure}
+\status{Implemented and tested in Python by several independent efforts.}
+
+Linear closure decides linear observations of linear systems. The polynomial
+case replaces the row space by an \emph{ideal}: pull the target and its
+auxiliary generators back through the updates and close the ideal they generate,
+rather than closing a span.
+
+The certificate is correspondingly richer. Where the linear case emits closure
+matrices $C_a$, the polynomial case emits \emph{polynomial multipliers}: each
+pulled-back generator is expressed as a combination of the current generators
+with polynomial coefficients. The checker verifies those identities directly by
+exact polynomial arithmetic. In particular it does not have to trust a
+Gr\"obner-basis computation, or even to know that one occurred --- the
+multiplier identities are the certificate, and a basis computation is merely
+how the producer found them.
+
+This is the constructive answer to the bilinearity trap. The invariants are not
+guessed jointly with their multipliers: the family is \emph{constructed} by
+closure, and only then are multipliers solved for over that fixed family, which
+is linear.
+
+\subsection{What a counterexample here actually refutes}
+
+The closure workers return concrete negative results, and those are worth more
+than the usual \unknown{}: a distinguishing word for the linear case, a
+concrete orbit point or execution for the polynomial case. Each is validated
+independently --- the word is replayed in the \emph{original} matrices, not in
+the closure representation.
+
+But the scope statement matters as much as the object.
+
+\begin{remark}[Scope of a distinguishing word]
+A replayed word refutes \eqref{eq:linear-goal} \emph{as modelled}. It refutes
+the source obligation only to the extent that the modelling is faithful: that
+the matrices really are the source updates, that the alphabet really is the
+input type, and --- the one most easily forgotten --- that the source admits
+\emph{all} words. If the source restricts its inputs and the model did not,
+a distinguishing word may be unreachable in the source, and the correct report
+is that the model was wrong, not that the program is.
+\end{remark}
+
+This places closure counterexamples in the \emph{countermodel replayed} row of
+the status lattice (\S\ref{sec:lattice}): they refute the modelled statement for
+this system, subject to the recorded assumptions --- which is a strong and
+useful result, and is not the same as refuting the Lean goal.
