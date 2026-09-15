@@ -1,0 +1,105 @@
+\section{Assessment and recommended starting point}
+
+The most promising route beyond \grind{} is not to replace its equality and
+arithmetic infrastructure. It is to surround that infrastructure with
+proof-structure search and to feed it new, independently validated mathematical
+consequences.
+
+Three complementary kinds of progress are available: discovering a certificate,
+discovering an invariant, and constructing a witness. Each of them changes what
+is being proved rather than deriving more consequences of a fixed local state,
+and that is the distinction the whole architecture rests on. A constructor case
+split and an induction principle are not interchangeable --- the former says a
+list is empty or a cons, the latter licenses a recursive hypothesis about its
+tail. Recognising an existential proposition is not the same as finding a useful
+witness for it. Increasing a rewriting budget cannot turn a theorem about one
+fixed accumulator into a theorem about all accumulators.
+
+The arithmetic design is deliberately broader than a single SOS tactic, and the
+breadth is justified by an actual obstruction rather than by taste. Exact
+quadratic decomposition handles hidden global quadratic positivity and is
+complete on its fragment. Finite cones exploit useful factors and hypotheses,
+which global SOS search structurally cannot do for a domain-dependent statement.
+Bernstein trees exploit compact domains. Square-factor and Sturm certificates
+handle the univariate zeros that Theorem~\ref{thm:zero} proves subdivision can
+never reach. Each of these fails on problems another one decides immediately ---
+that is why they belong in one system with a router, and why a failure of one
+search is a reason to route rather than a reason to stop.
+
+\subsection{What to build first}
+
+\emph{Not} a new SMT solver, and not a rewrite of \grind{}. A narrow Lean
+controller that combines automatic generalisation and induction with an exact
+witness and certificate pipeline already changes the \emph{shapes} of proofs
+that can be found automatically, and it provides clean interfaces for adding
+stronger nonlinear and quantified reasoning afterwards. The first useful release
+adds induction with generalisation, typed witness construction, and intermediate
+certified arithmetic facts. Tightly integrated Boolean search comes after the
+scope and explanation contracts are reliable --- which is worth stating plainly,
+because the Boolean lane has the most complete prototype here and is still the
+right thing to do last.
+
+Two findings should narrow the claims a first release makes. A Lean \code{sos}
+project already implements an end-to-end nonlinear-real-arithmetic tactic with
+reification, search, rational reconstruction and certificate-based proof
+construction; a Lean \code{lp} project already supplies verified linear
+programming and a quantified rational-affine fragment. Building either again
+would be the second unaudited wrapper, not a contribution
+(Remark~\ref{rem:sos-reuse}). The contribution is \emph{when} to request a
+certificate, \emph{how} to bind it to the source problem, and \emph{what} to do
+with the proved consequence afterwards.
+
+\subsection{Where the risk is}
+
+The largest soundness risk is mistranslation at the Lean/certificate boundary
+--- local assumptions, casts, dependent binders, and strict inequalities. The
+largest performance risk is generating candidates whose proofs are expensive to
+reconstruct. The largest evaluation risk is comparing against an artificially
+weak premise set or leaking target theorems into retrieval.
+
+None of these is mathematical. The numerical search is comparatively easy to
+sandbox, precisely because an exact certificate can reject a bad proposal. A
+restricted, correct implementation that exports a small set of ordinary Lean
+proofs is preferable to a wide solver bridge that silently leaves obligations or
+enlarges the trusted base.
+
+\subsection{What this document has established, and what it has not}
+
+Established: nine prototype runs synthesise certificates in fragments spanning
+exact polynomial cones, quadratic decomposition, Bernstein subdivision,
+univariate Sturm certificates, polynomial and accumulator invariants, affine,
+lattice, residue and polynomial witnesses, ground Horn slicing, structural
+induction with generalisation, and proof-logging CDCL(T); every stored
+certificate replays without the search libraries; the specified mutation and
+corruption tests are rejected; several mechanisms solve problems their own
+restricted precursors cannot; and three Lean design artefacts elaborate under
+the pinned v4.34.0 toolchain.
+
+Not established: that \forge{} is implemented as a Lean tactic; that the
+twenty-four Mathlib-dependent candidate scripts compile; that any certificate is
+checked by Lean's kernel; that any checker is correct rather than merely tested;
+that the methods outperform any existing Lean tactic; or that any success rate
+transfers to user developments. No head-to-head comparison against \grind{},
+Aesop, \code{nlinarith}, LeanHammer, or any other tactic exists anywhere in this
+work.
+
+The gap between those two lists is the project. It is not a gap that more
+prototype experiments can close: it closes only by writing the Lean
+implementation described in Section~\ref{sec:integration} and running the
+evaluation described in Section~\ref{sec:evaluation}.
+
+\subsection{The intended end state}
+
+Worth restating, because it constrains the design: the goal is not a permanently
+expensive tactic invocation. It is expensive search \emph{once}, then a stable,
+readable proof for ordinary recompilation --- a separately proved general lemma
+and a short specialisation, with the final theorem not invoking the synthesiser
+at all. A proof that succeeds only while a particular search process, solver
+build, or model service remains available is an unsatisfactory end product when
+an explicit certificate could have been retained instead.
+
+The result is a concrete, falsifiable design for substantially stronger
+automation, with working algorithmic building blocks and a precise account of
+what still has to be proved and measured. It is more than a list of tactics to
+try, and considerably less than a finished Lean prover. Saying which is which,
+at every point, is the part of this document that matters most.

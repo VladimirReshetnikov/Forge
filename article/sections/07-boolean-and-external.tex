@@ -1,0 +1,261 @@
+\section{Boolean search, equality exploration, and external engines}
+\label{sec:boolean}
+
+\subsection{A separate lane before a core-engine rewrite}
+
+Large combinatorial Boolean search is not what a congruence-closure and
+theory-propagation engine is designed for, and the Lean reference says as much:
+it distinguishes \grind{}'s branching strategy from bulk Boolean solving and
+recommends \code{bv\_decide} for the latter~\cite{grind-ref}. These are
+complementary roles. Nothing here is evidence that \grind{} is a weak
+simplifier, and the existing shared-state \code{grind => bv\_decide} route
+already encodes equivalence classes and theory-learned facts into the SAT
+problem~\cite{lean-release-434}.
+
+The proposal is therefore a \emph{separate lane} with an explicit proof
+contract, scheduled after structural steps have made the relevant facts
+available, and implemented late. Every roadmap in this collection places the
+Boolean adapter last, and that ordering should be kept even though it is the
+component with the most complete prototype.
+
+\subsection{A proof-producing SAT/theory loop}
+
+The coarse-grained version needs no changes to any existing engine:
+
+\begin{lstlisting}
+while budget remains:
+  answer := SAT.solve(currentClauses)
+  if answer is UNSAT:
+    replay the propositional certificate and all clause origins
+    lift the contradiction to the original Lean goal
+    return PROVED only if replay and the axiom audit succeed
+  if answer is not a complete Boolean assignment:
+    return UNKNOWN
+  open a temporary scope with the assignment's signed atoms
+  ask the relevant Lean theory engines for a contradiction
+  if a contradiction is proved:
+    discharge its used decisions into a learned clause
+    add the proved clause; close the temporary scope
+  else:
+    refine the supported abstraction or return UNKNOWN
+\end{lstlisting}
+
+Incremental CDCL(T) is the later optimisation. When a theory implies a literal
+$L$ from current literals $A_1,\ldots,A_k$, it must return a proof of the clause
+$\neg A_1\lor\cdots\lor\neg A_k\lor L$. A stale explanation referring to a
+withdrawn equality is a correctness bug even when the Boolean clause still looks
+plausible.
+
+\subsection{An implemented CDCL(T) with checkable learning}
+\status{Implemented and tested in Python by two independent efforts, with two
+different proof formats.}
+
+The implemented theory is integer difference logic: atoms $x-y\le c$ over
+integer variables, with Boolean structure in CNF. The solver performs unit
+propagation to a Boolean fixed point, then tests the implied difference
+constraints for a negative cycle; a negative cycle yields a theory lemma. First-UIP
+conflict analysis and non-chronological backjumping are implemented, and
+tautological resolvents are detected during analysis.
+
+\paragraph{The integer-negation trap.}
+The negation of $x-y\le c$ over $\Z$ is $x-y\ge c+1$, that is $y-x\le -c-1$ ---
+\emph{not} $y-x\le -c$. Getting this wrong produces a solver that is subtly
+unsound on exactly the instances it is meant to decide. Two defences are worth
+copying. The consistency oracle carries a dedicated regression assertion at the
+complement boundary, tested at magnitudes such as $10^{60}$ to confirm that
+arbitrary-precision bounds survive; and the certificate checker \emph{duplicates}
+the negation rule rather than calling the solver's shared edge constructor, so
+that a bug in one copy cannot cancel itself out in the other. For the same
+reason the all-pairs consistency check uses explicit \code{None} sentinels for
+absent edges instead of a finite infinity.
+
+\paragraph{Two certificate formats.}
+One implementation emits a \emph{resolution DAG}: nodes tagged
+\code{input}, \code{theory}, or \code{resolution}, each resolution node carrying
+parent indices and a pivot. Replay is purely structural and cheap --- it re-does
+the solver's own steps, which makes it fast but means the checker trusts the
+solver's choice of derivation.
+
+The other emits \emph{RUP additions plus signed negative-cycle lemmas}, and its
+checker re-derives each added clause by \emph{independent} unit propagation. It
+never trusts the solver's resolution chain. That independence is the stronger
+property, and it is why a merged implementation should offer the resolution DAG
+as an optional second mode --- strictly cheaper to check when available --- while
+keeping RUP as the default.
+
+A theory lemma is validated by exact coefficient summation: the cycle's
+coefficients telescope, and the resulting constant bound must be strictly
+negative. A satisfying assignment is validated separately: the Boolean
+assignment must satisfy every original clause, \emph{and} each atom's truth
+value must match the integer model.
+
+\begin{proposition}[Decision procedure for the implemented fragment]
+For a fixed finite set of integer difference atoms and a CNF over them,
+exhaustive Boolean search together with a complete difference-logic consistency
+check is a decision procedure.
+\end{proposition}
+
+This does not extend automatically to the other theories or the quantified goals
+\forge{} targets, and it is stated only to fix what the implemented fragment
+does.
+
+\paragraph{Production requirements.}
+A Lean port needs the clause origins bound to actual Lean propositions, a
+supported certificate format, and a declared trust profile. Existing work is
+directly relevant: \code{bv\_check} already demonstrates the useful separation
+of a stored SAT certificate from an installed solver, and PBLean shows that
+existing Lean SAT integrations make an explicit compiled-reflection
+choice~\cite{bv-decide-api,pblean}. The classical DPLL(T) framework supplies the
+architecture; the contribution proposed here is an integration contract with
+native Lean terms, not the algorithm~\cite{dpll-t}.
+
+\begin{remark}[A benchmark fairness rule]
+A comparison must not measure strict kernel replay in one tactic against native
+replay in another and report them as identical trust configurations. Caching an
+LRAT file for \code{bv\_check} does not by itself establish a kernel-only replay
+profile.
+\end{remark}
+
+\subsection{Bounded equational exploration}
+
+Equality saturation should be used \emph{selectively}, because \grind{} already
+supplies congruence machinery. The proposed extension maintains small
+collections of alternative forms for terms relevant to a blocked obligation,
+prioritising forms that expose recursive calls, match a theorem conclusion, or
+reduce an arithmetic certificate's dimension. Rewrites are justified by equality
+proofs; conditional rewrites create explicit guards, and if a conditional rule
+depends on an unproved proposition, its output belongs in the obligation graph
+rather than in an unconditional equality class.
+
+Do not saturate associativity, commutativity, and distributivity
+indiscriminately: existing normalisers already handle much of that structure
+more efficiently. Use algebraic normal forms for certificate checking while
+retaining a few factored or recursive views for search, and limit term count,
+expansion degree, and rewrite generations.
+
+Extraction deserves more care than it usually receives. At each fuel boundary,
+extract \emph{several} candidate representatives rather than a single
+syntactically cheapest term: one may have the fewest nodes, another the simplest
+arithmetic degree, another the best overlap with a desired lemma. A practical
+cost vector is lexicographic --- unsupported constructs; unsolved side
+conditions; maximum polynomial degree or recursive mismatch count; expression
+size; estimated replay size --- and different obligation kinds lead with
+different coordinates. Cyclic equivalence classes require a well-founded
+extraction procedure, because a cycle is not a finite Lean term.
+
+An e-class identifier is meaningful only within a state lineage and revision. A
+proof node must not depend on a mutable representative number that does not
+survive rollback. The binder-sensitivity and dependent-transport obligations
+involved in doing this over real Lean expressions are documented
+elsewhere~\cite{egg-lean-paper,eqsat-paper}, and the historical \code{lean-egg}
+package is deprecated in favour of \grind{}~\cite{lean-egg}; an archived
+experimental project should not become a critical dependency because its name
+sounds aligned with the design.
+
+\subsection{Higher-order structure and external provers}
+
+Before translating a goal to a first-order backend, expose its constructive
+structure. For a function equality, attempt the relevant extensionality
+principle and introduce a fresh argument. For a universally quantified goal,
+introduce its binder. For a conjunction or constructor target, create the
+corresponding subgoals. For an existential, construct a scoped witness and then
+prove its specification.
+
+A bounded type-directed term synthesiser handles witness goals beyond the affine
+fragment. Its grammar includes local terms, lambda abstraction, application of
+retrieved lemmas and functions, constructors, and selected recursor or fold
+schemas, with every candidate elaborated before semantic checking. Higher-order
+pattern unification handles tractable application patterns; unrestricted
+higher-order unification is not assumed to be a cheap or complete subroutine.
+
+To synthesise $h:\operatorname{List}(A)\to\operatorname{List}(B)$ with
+$h([])=[]$ and $h(x::xs)=f(x)::h(xs)$, a list-fold schema already fixes the
+recursion structure, so search needs only the empty case and the constructor
+step; a library index may retrieve \code{map}, and otherwise a recursor term
+provides an equivalent witness whose equations hold by reduction. Canonical is
+the relevant prior work on inhabitation and unification in dependent type
+theory, and it should be integrated through its proof-term interface rather than
+by flattening away the dependencies that make its task
+meaningful~\cite{canonical,canonical-min}.
+
+After structural exposure, a saturation-based prover may find theorem
+combinations a local tactic misses. Duper is an in-Lean proof-producing
+option~\cite{duper}; \code{lean-auto} supplies translation and monomorphization
+infrastructure~\cite{lean-auto}; \code{lean-smt} and QuerySMT supply SMT search
+with Lean reconstruction~\cite{lean-smt,query-smt}. Two operational points:
+\code{duper [*]} requests local facts, so a bare \code{duper} should not be
+assumed to consume them automatically --- pass an explicit recorded premise
+slice. And \code{lean-auto} distinguishes reconstruction-capable paths from
+standalone invocation modes \emph{without} reconstruction, so an external
+\code{unsat} is not a uniform proof interface.
+
+The controller must not send every declaration in the local environment. Select
+the dependency-relevant facts, instantiate polymorphic schemas only at the types
+the current demand requires, and record which source theorem and which
+universe/type instantiation each exported formula came from, so that
+reconstruction applies the actual theorem.
+
+A useful ordering for reconstruction, from most to least preferred: an existing
+Lean tactic on the original expressions; a restricted, proved translation with a
+known replay path; externally proposed hints replayed on the original
+expressions; and finally a full external proof import with explicit supported
+rules. \code{lean-smt}'s documented behaviour includes returning
+proof-reconstruction holes as Lean goals; those holes enter the obligation graph
+as children of the current AND node, and an external \code{unsat} response does
+not bypass them. Partial progress is useful; it is not completed verification.
+
+\subsection{Solver islands and the limits of theory combination}
+
+A \emph{solver island} is a selected subproblem whose translation and proof
+reconstruction are supported end to end. The island may prove a lemma over
+shared interface terms rather than the complete original goal. For an island
+under assumptions $A_1,\ldots,A_k$, reconstruct a proof of
+$A_1\to\cdots\to A_k\to L$ and apply it to the appropriate scoped proofs to
+insert $L$ into the main graph.
+
+Every export carries a \emph{translation ledger}: the Lean expressions, their
+solver symbols, their types and operations, and the proof obligations connecting
+the encoding to the original proposition. Universe instantiation,
+monomorphization, typeclass resolution, and auxiliary assertions must all have
+justified transformations.
+
+Abstraction has a direction, and both directions must be stated. Replacing a
+difficult subterm by a fresh atom is sound for proving a \emph{universal
+consequence} of the abstraction: a proof valid for every assignment of those
+atoms is valid for the actual expressions. But an abstract satisfying assignment
+can be spurious and is not a counterexample to the Lean goal. Conversely,
+erasing dependencies in an indexed datatype is \emph{not} automatically a sound
+abstraction; use an explicit bridge or leave that expression in the native
+layer.
+
+\begin{remark}[No blanket combination theorem]
+Do not assume a generic Nelson--Oppen completeness result merely because solvers
+exchange equalities. Finite datatypes and fixed-width bit-vectors do not satisfy
+the usual stably-infinite assumptions. \forge{} avoids relying on a blanket
+combination theorem: plugins exchange \emph{proved interface facts}. An
+arithmetic atom abbreviating $xy$ must carry a definition or equality proof;
+treating it as an unrelated real variable yields a relaxation, not a
+bidirectional equivalence of problems.
+\end{remark}
+
+\subsection{Candidate generation can be untrusted without being unconstrained}
+
+An optional model, learned ranker, or language model may propose a lemma, an
+induction variable, a proof sketch, or a term. It cannot change the accepted
+logical rules, and it cannot submit arbitrary Lean commands that introduce
+axioms or alter the environment under the guise of a proof term. Restrict the
+import channel to a typed certificate schema or to a term elaborated inside a
+fixed environment, with resource and size limits protecting the checker from
+pathological proposals. Never trust a textual theorem statement supplied by a
+model.
+
+Neural ranking is optional and is never proof evidence. The design does not
+require an online model service: the executed prototypes use deterministic
+enumeration, exact algebra, and local LP proposals, and their algorithms remain
+useful in a fully offline implementation.
+
+Finally, isolation is a separate concern from soundness. External search should
+run in bounded child processes without network access --- not because a wrong
+answer would be accepted, but because a foreign-function boundary is a
+memory-safety surface and an unbounded search is a denial-of-service surface.
+Neither is a soundness failure; both make a tactic unusable.

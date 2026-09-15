@@ -1,0 +1,250 @@
+\section{Provenance: what came from where}
+\label{app:provenance}
+
+This document is a merge of nine independently prepared proposals for the same
+system. All nine are retained verbatim under \code{proposals/} so that every
+claim here can be audited against its source. Nothing in this article is new
+mathematics: each statement is carried over from at least one of the nine, and
+this appendix records which.
+
+\subsection{The nine sources}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}p{0.46\textwidth}@{}}
+\toprule
+Label & Directory, and the archive name it arrived under & Distinguishing emphasis \\
+\midrule
+\endhead
+\src{p1} & \code{p1-structural-search}\newline
+\emph{from} \code{FORGE\_Beyond\_Grind(1) (1)/} &
+Six certificate families under one measurement protocol; the only
+zero-preserving univariate worker; the hardened certificate decoder. \\
+\src{p2} & \code{p2-obligation-controller}\newline
+\emph{from} \code{Forge-design-and-prototypes/} &
+The three-store architecture and the demand protocol; Farkas affine witnesses as
+a single feasibility problem; theory-constrained instantiation. \\
+\src{p3} & \code{p3-planner-certificate-layer}\newline
+\emph{from} \code{Forge\_Beyond\_Grind/} &
+Two graphs rather than one fact bag; compositional acceptance; the quantitative
+Bernstein obstruction; the Lean runtime design contract. \\
+\src{p4} & \code{p4-theory-cooperation}\newline
+\emph{from} \code{Forge\_Beyond\_Grind(1)/} &
+The largest artefact corpus; residue witnesses; the named \grind{}
+solver-extension API; the $2\times2$ structural ablation. \\
+\src{p5} & \code{p5-certificate-first}\newline
+\emph{from} \code{Forge\_Tactic\_Design/} &
+Target-driven square proposal; tabling against cyclic pseudo-proofs; solver
+islands and translation ledgers; expected-outcome benchmarking. \\
+\src{p6} & \code{p6-proof-logging-cdcl}\newline
+\emph{from} \code{forge-beyond-grind/} &
+Proof-logging CDCL(T) with independent RUP replay; the integer-negation trap;
+the \code{nativeEqTrue} trust finding. \\
+\src{p7} & \code{p7-successor-architecture}\newline
+\emph{from} \code{forge-grind/} &
+Integer-lattice witnesses and certificates of impossibility; the evidence
+broker; conclusion indexing; metavariable ownership. \\
+\src{p8} & \code{p8-obligation-broker}\newline
+\emph{from} \code{forge-tactic-design-and-prototypes/} &
+The cleanest dictionary ablation; certificate cost as a scheduling term; the
+largest Horn workload; checkers that take the target externally. \\
+\src{p9} & \code{p9-proof-planner}\newline
+\emph{from} \code{forge\_beyond\_grind (1)/} &
+The executive assessment; variables absent from the conclusion; witness as a
+program with an obligation; the rank-one dictionary-gap argument. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Where each section's material came from}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
+\toprule
+Section & Principal sources \\
+\midrule
+\endhead
+\S1 Objective &
+The two modes and the preservation proposition appear in all nine; the
+four evidence levels are \src{p1}'s framing with \src{p4}'s vocabulary and
+\src{p8}'s ``implemented / mathematically justified / proposed / kernel
+checked'' distinction. \\
+\S2 Baseline &
+Five proposals built partial capability tables; the bit-vector and
+conditional-rewriting rows are \src{p2}'s, the configuration defaults
+\src{p9}'s, the dependency map \src{p2}'s extended with \src{p6}'s and
+\src{p9}'s library findings. \\
+\S3 Architecture &
+Three stores and the demand vocabulary from \src{p2}; two graphs, hyperedges and
+scope-as-identity from \src{p3}; the evidence broker, event subscriptions and
+metavariable ownership from \src{p7}; the ledger invariant and
+certificate-cost-in-benefit from \src{p8}; the nine-tuple planner state and the
+six-constructor message vocabulary from \src{p9}; the scheduler score and
+reserved quotas from \src{p1}. \\
+\S4 Trust &
+Three layers and the proof-cost budget from \src{p1}; the five invariants and
+the review checklist from \src{p2}; ``a type is not a check'' from \src{p3};
+axiom auditing against the pinned version from \src{p4}; the two trust profiles
+from \src{p5}; \code{nativeEqTrue} and the insufficiency of a single-name
+blacklist from \src{p6}; the four-step acceptance procedure from \src{p9}. \\
+\S5 Structural search &
+Conclusion indexing and \code{matchDemand} from \src{p7}; constrained matching
+from \src{p2}; tabling and the relative-completeness proposition from \src{p5};
+the slicing propositions from \src{p3} and \src{p7}; the accumulator obstruction
+from \src{p2} and \src{p3}; the flexible-variable IH discipline from \src{p4};
+the CEGIS loop and the overfitting trap from \src{p2}; fragment completeness
+from \src{p2} and \src{p7}; the tag-variable trick from \src{p7}; the
+state-machine invariant format from \src{p5}; Farkas witnesses from \src{p2};
+lattice elimination from \src{p7}; residue witnesses from \src{p4}; polynomial
+witnesses from \src{p9}; \code{energyAcc} from \src{p3}. \\
+\S6 Nonlinear &
+The cone language and its soundness from all nine; the quadratic theorem from
+\src{p1} and \src{p3}; repair-not-rounding from \src{p1}; target-driven squares
+from \src{p5}; the four dictionary-gap arguments from \src{p2}, \src{p5},
+\src{p6}, \src{p7} and \src{p9}; the Bernstein lemma and the interior-zero
+theorem from \src{p1}, with \src{p3}'s quantitative form; the completeness
+sketch from \src{p2} and \src{p3}; square-factor and Sturm certificates from
+\src{p1} alone; product envelopes from \src{p1}; the reuse-the-existing-backend
+argument from \src{p9} and \src{p5}. \\
+\S7 Boolean and external &
+The SAT/theory loop from \src{p7}; CDCL(T), RUP replay and the negation trap
+from \src{p6}; the resolution-DAG format, \code{verify\_sat} and the exhaustive
+oracle from \src{p4}; extraction cost vectors from \src{p7}; solver islands and
+translation ledgers from \src{p5}; the reconstruction preference order from
+\src{p7}; the no-blanket-combination warning from \src{p5} and \src{p9}. \\
+\S8 Integration &
+\code{Params}/\code{assertExtra}/\code{mkGoalCore} from \src{p2} and \src{p9};
+the solver-extension callbacks from \src{p4}; the rollback-is-not-enough point
+from \src{p6}; three reconstruction levels from \src{p2}; the module layout
+merged from \src{p1}, \src{p2}, \src{p3}, \src{p5} and \src{p9}; the acceptance
+contract table from \src{p5}; the deployment pattern from \src{p9}; the gates
+merged from all nine. \\
+\S9 Experiments & Each run reports itself. \\
+\S10 Evaluation &
+Leakage control from \src{p1}, \src{p5} and \src{p9}; the three input conditions
+from \src{p2}; the two tracks from \src{p4}; the non-communicating portfolio
+from \src{p1} and \src{p6}; metric discipline from \src{p4} and \src{p9}; the
+illustrative acceptance target from \src{p9}. \\
+\S A Schemas &
+\src{p5}'s field names as the base, \src{p3}'s \code{kind} discriminator,
+\src{p8}'s \code{\{index, multiplier\}} ideals, \src{p1}'s bounded decoder,
+\src{p3}'s duplicate-key rejection, \src{p6}'s anti-vacuity guards and
+ignore-the-residual rule, \src{p9}'s typed decoding gate. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Ideas that survive in exactly one source}
+
+These were the merge's first concern, since a careless consolidation loses
+precisely the material that distinguishes one submission from the rest.
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Square-factor and Sturm certificates} (\src{p1}) --- the only
+  mechanism anywhere in the collection that can certify a polynomial with an
+  interior zero, and the constructive answer to Theorem~\ref{thm:zero}.
+\item \textbf{Integer-lattice elimination with a divisibility obstruction}
+  (\src{p7}) --- the only worker that emits a certificate of \emph{infeasibility}.
+\item \textbf{Finite-residue witnesses} (\src{p4}) --- the only
+  existential-over-$\Z$-by-case-analysis certificate.
+\item \textbf{Polynomial witnesses discharged by two cone certificates}
+  (\src{p9}) --- the smallest complete instance of the composition pattern the
+  whole architecture argues for.
+\item \textbf{Farkas affine witnesses as one feasibility problem} (\src{p2}) ---
+  the observation that synthesis and proof search are jointly linear.
+\item \textbf{Proof-logging CDCL(T) with independent RUP re-derivation}
+  (\src{p6}), and the resolution-DAG alternative (\src{p4}).
+\item \textbf{Theory-constrained quantifier instantiation} (\src{p2}) ---
+  emitting an equality constraint at an interpreted subterm instead of failing.
+\item \textbf{Certificate cost inside the scheduling benefit} (\src{p8}).
+\item \textbf{The quantitative interior-zero coefficient}
+  $(\ell-1/3)(u-1/3)<0$ (\src{p3}).
+\item \textbf{The rank-one Gram argument} for $(x+y+1)^2$ (\src{p9}) and the
+  \textbf{weight-6-versus-coefficient-4 argument} for $(2x-3y)^2$ (\src{p7}).
+\item \textbf{The Lean design contracts} --- the runtime and scheduler contract
+  (\src{p3}) and the \code{CertificateSpec} soundness contract (\src{p6}); these
+  complement rather than duplicate each other, and both now elaborate.
+\end{itemize}
+
+\subsection{Disagreements, and how they were resolved}
+
+The nine did not agree on everything. Where they conflicted, this document took
+the more conservative position and says so.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.67\textwidth}@{}}
+\toprule
+Disagreement & Resolution \\
+\midrule
+\endhead
+Build or reuse the nonlinear backend &
+\src{p9} and \src{p5} identified an existing Lean \code{sos} project and a Lean
+\code{lp} project; the other seven proposed building cone and witness machinery
+from scratch without mentioning either. Resolved in favour of the conservative
+reading: the in-house searches are a cheap first stage, the existing libraries
+are the production backend, and ``add an SOS tactic to Lean'' is not claimed as
+a contribution (Remark~\ref{rem:sos-reuse}). \\
+What \grind{} already does &
+\src{p6} conceded conclusion-selected backward patterns to the baseline;
+\src{p1} listed them as new work. The concession was adopted. \\
+Native-evaluation trust &
+Three confidence levels were recorded: an RFC-only reading, a
+tactic-reference reading, and \src{p6}'s inspection of \code{Lean.Meta.Native}
+and \code{nativeEqTrue}. The most specific source was used, with its own
+instruction that the behaviour must be re-audited against the pinned
+implementation rather than inherited from a design thread. \\
+Is a stable snapshot API available? &
+\src{p4} called the solver-extension callbacks ``real integration points, not
+hypothetical hooks''; \src{p3} declined to assume any stable public API. Both
+are reported: the inventory is \src{p4}'s, the framing is \src{p3}'s. \\
+Bernstein split policy &
+Round-robin axis bisection (\src{p4}) against largest-relative-width (\src{p3})
+against \code{depth mod n} (\src{p2}). All three make every coordinate shrink
+along a branch, which is what Proposition~\ref{prop:bernstein-complete} needs;
+largest-\emph{absolute}-width does not, and is rejected. \\
+Horn forward-search growth &
+\src{p5} reports $2^{d+1}-1$ facts and \src{p9} reports $2^d$ on the same rule
+family. The difference is entirely the forward baseline's stopping rule. Both
+tables are printed, side by side, as a methodological example
+(Table~\ref{tab:horn-four}). \\
+Quadratic matrix convention &
+\src{p3} places a linear coefficient at $H_{0i}=b_i/2$; \src{p4} states it as
+$2Q_{0i}$. These are inverse readings of the same matrix. \S\ref{sec:quadratic}
+uses one convention throughout. \\
+Accumulator naming &
+\code{ra}/\code{la} (\src{p3}), \code{qrev} (\src{p4}), \code{revAux}
+(\src{p2}), \code{revAcc} (\src{p9}). One naming is used per derivation; they
+are never mixed inside one chain of equalities. \\
+Pigeonhole encodings &
+\src{p4} and \src{p6} use different clause sets and report different columns.
+Both tables are kept, explicitly labelled as non-comparable. \\
+\bottomrule
+\end{longtable}
+
+\subsection{What the merge changed}
+
+Four things in this document are not simply inherited.
+
+First, the nine experiment sections are reported as nine, with the non-pooling
+rule stated explicitly and the four Horn setups tabulated against each other.
+Several of the source articles warned against pooling their \emph{own} numbers;
+none could warn against pooling across articles, because none knew about the
+others.
+
+Second, the bibliography is deduplicated: roughly 215 \code{bibitem} entries
+under about 100 keys became 56 entries under descriptive keys, keeping the
+richest description of each work and preserving details only one source had
+recorded --- inspected blob SHA-1s, the release timestamp, the
+blob-id-is-not-a-commit-id caveat, and the \code{sos} toolchain version
+mismatch.
+
+Third, the build is plain pdf\LaTeX{} with stock packages. The nine used four
+engines and nine font families between them, and every one of their READMEs had
+to explain what to do when a font was missing.
+
+Fourth, and the only new evidence: three Lean files were compiled
+(Table~\ref{tab:lean}). Every source recorded \code{NOT\_RUN}. That is now
+narrower --- three of twenty-seven files elaborate under Lean v4.34.0 --- and the
+limits of what it shows are stated where the result appears.
+
+\subsection{Conventions used in this document}
+
+\code{\textbackslash status\{...\}} banners, inherited from several of the
+sources, mark whether a mechanism was implemented and executed, specified only,
+or proposed for production. \src{pN} labels attribute a result to the run that
+produced it. \unknown{} always means a bounded search found nothing; it never
+means a statement is false.

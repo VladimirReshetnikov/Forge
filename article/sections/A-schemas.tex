@@ -1,0 +1,259 @@
+\section{Certificate schemas}
+\label{app:schemas}
+
+The nine prototypes serialised the same mathematics in nine mutually
+incompatible ways. This appendix fixes one canonical shape and records the
+invariants a checker must enforce. The differences between the original formats
+were confined to key names and one numeric encoding: no information is lost in
+either direction, and no float rounding is involved anywhere
+(\S\ref{app:schema-divergence}).
+
+\subsection{The universal rule}
+
+\begin{invariant}[Exact rationals only]
+Every mathematical coefficient is an exact rational, serialised either as a
+string such as \code{"125/18"} or as an integer numerator/denominator pair.
+No mathematical value is ever a JSON floating-point number. A decimal is not
+parsed into a claim of approximate equality, and there is no epsilon, numerical
+norm, or solver-status field anywhere in an acceptance condition.
+\end{invariant}
+
+The only floats in the entire corpus are timing diagnostics.
+
+\subsection{Sparse polynomials}
+
+A polynomial carries a variable count and a list of
+\code{[exponentVector, rationalString]} pairs:
+
+\begin{lstlisting}
+{
+  "nvars": 2,
+  "terms": [
+    [[0, 2], "1"],
+    [[1, 1], "-2"],
+    [[2, 0], "1"]
+  ]
+}
+\end{lstlisting}
+
+Canonical construction rejects malformed exponent vectors, negative exponents,
+zero coefficients, arity mismatches, and \emph{duplicate or unsorted monomials}.
+Decoding must also reject duplicate JSON object keys: two parsers disagreeing
+about which value wins is a genuine differential hazard, and at least one
+prototype installs an explicit duplicate-key hook for this reason.
+
+The variable table binding these indices to Lean expressions is a separate
+production concern and is deliberately absent from the Python formats, which use
+fixed mathematical variables.
+
+\subsection{Cone and ideal certificates}
+
+\begin{lstlisting}
+{
+  "kind": "nonnegative_cone",
+  "terms": [
+    { "weight": "1/2",           -- exact, nonnegative
+      "square": {...polynomial}, -- this stores q, NOT q^2
+      "factors": [0, 2] }        -- indices into the supplied hypotheses
+  ],
+  "equalities": [
+    { "index": 1,                -- index into the supplied equations
+      "multiplier": {...} }      -- UNRESTRICTED sign
+  ]
+}
+\end{lstlisting}
+
+Checking, expressed as the loop every implementation runs:
+
+\begin{lstlisting}
+acc := zero_polynomial
+for term in certificate.terms:
+    reject unless term.weight is an exact rational and >= 0
+    reject unless term.square has the target's arity
+    p := term.weight * term.square^2
+    for i in term.factors:
+        reject unless i is a valid hypothesis index
+        p := p * nonnegative_hypotheses[i]
+    acc := acc + p
+for (index, multiplier) in certificate.equalities:
+    reject unless index is a valid equality index
+    acc := acc + multiplier * equalities[index]
+accept exactly when acc == target
+\end{lstlisting}
+
+Four points that the prototypes learned the hard way:
+
+\begin{itemize}[leftmargin=1.4em]
+\item The field named \code{square} stores $q$, not $q^2$. Mixing the two
+  conventions silently changes the degree of everything.
+\item The weight must be confirmed to be an exact rational \emph{of the right
+  type} before it is compared to zero. A weight of $(10^{20}+1)/10^{20}$ offered
+  as $1$ is the tested attack.
+\item Equality multipliers are unrestricted in sign, so an LP over nonnegative
+  variables needs $\pm$ columns for each ideal generator.
+\item The target, hypotheses and equations are supplied \emph{from outside} the
+  certificate (Invariant~\ref{inv:binding}). The certificate is valid
+  \emph{under} those hypotheses; replay does not establish that they hold at any
+  particular point, and the Lean adapter must map each hypothesis index to an
+  actual proof of the corresponding reified inequality rather than copying a
+  polynomial list into the checker.
+\end{itemize}
+
+\subsection{Bernstein trees}
+
+\begin{lstlisting}
+Tree := { "leaf":  { "degrees": [...], "coefficients": [...] } }
+      | { "axis": i, "cut": "1/2", "left": Tree, "right": Tree }
+\end{lstlisting}
+
+The root box and the polynomial are separate problem inputs. \emph{Child domains
+are computed by the checker during replay}, never read from the certificate, so
+a producer cannot omit a strip of the domain by supplying inconsistent
+endpoints. Every basis index must appear exactly once in canonical order. A cut
+at an interval endpoint, a missing child, or an invalid axis is rejected. Tensor
+size is capped \emph{before} expansion, since an adversarial certificate could
+otherwise request an enormous one.
+
+A negative Bernstein coefficient is not a negative value of the polynomial; it
+is failure of a sufficient condition. Conversely a positive sampled value is not
+enough to accept a leaf. Node and depth limits are operational rejection limits,
+not mathematical assumptions.
+
+\subsection{Induction traces}
+
+An induction certificate contains the equation, the induction variable, the
+\emph{generalised} variables, and four rewrite traces: left and right for the
+base case and for the step case. A rewrite step is a
+\code{(rule\_identifier, subterm\_path)} pair, optionally with the resulting
+term.
+
+The checker derives the base and step contexts and the single permitted
+induction hypothesis itself; these are never claims supplied by the certificate.
+It reconstructs each substitution and replacement rather than trusting a recorded
+output term, and the two replayed sides must end syntactically identical. The
+recursion index is a rigid eigenvariable; only the named generalised parameters
+may be instantiated. In the base case the induction hypothesis is not available
+at all.
+
+The strongest variant attaches to each rule an explicit \emph{flexible} variable
+set and requires the trace to supply exactly that substitution domain with
+correct sorts.
+
+Certificates are stored and replayed in dependency order, and a lemma is
+installed only after its own certificate has been checked. A bundle checker must
+additionally reject forward dependencies, shadowing of a defining equation or of
+the induction-hypothesis name, and a tampered status field --- which is why an
+accepting run takes an explicit list of the entries it is \emph{required} to
+have verified, so that an empty or mistyped bundle cannot pass vacuously.
+
+\subsection{Horn derivations}
+
+A node records its ground conclusion, the rule index or an input-fact marker, a
+complete ground substitution, and the indices of its premise nodes. Replay
+checks groundness; that every referenced rule exists; that the substitution
+domain is exactly the head's variables; that the recorded conclusion is that
+rule's actual instantiated conclusion; that every premise is already derived;
+that every premise index is strictly smaller than the node's own; and that the
+last node is the goal.
+
+Trimming retains only ancestors of the root, preserving topological order. A
+dependency cycle in the \emph{search} graph may be legitimate; the final
+certificate may never justify itself through one.
+
+\subsection{Lattice traces}
+
+Per row: the row number, the unimodular matrix $U$, the gcd $g$, the residual
+$r$, and either the quotient $r/g$ or an obstruction marker. Replay recomputes
+the current row image and residual, checks that all entries are integers,
+verifies $\det U=\pm1$ by independent rational elimination, and performs the
+exact state update --- \emph{without} calling the extended-gcd construction or
+the solver that produced the trace.
+
+\subsection{SAT and theory proof logs}
+
+Two supported formats.
+
+\emph{RUP form}: a list of added clauses, each re-derived by independent unit
+propagation, plus signed negative-cycle theory lemmas validated by exact
+coefficient summation with a strictly negative resulting bound. The checker
+duplicates the atom-negation rule rather than calling the solver's shared edge
+constructor.
+
+\emph{Resolution-DAG form}: nodes tagged \code{input}, \code{theory} or
+\code{resolution}, each resolution node carrying parent indices and a pivot.
+Cheaper to check, but it replays the solver's own derivation rather than
+re-deriving it.
+
+A satisfying assignment is a separate record: it must satisfy every original
+clause \emph{and} each atom's truth value must match the integer model.
+
+\subsection{Invariant records}
+
+The record carries the invariant's exact coefficients, the initial state, the
+transition, and --- in some prototypes --- the search history and diagnostic
+residual strings.
+
+\begin{remark}
+Replay must \emph{ignore} the diagnostic residual claims. It independently
+reconstructs the invariant, substitutes into the base and step identities, and
+compares coefficient maps against zero. This is what prevents a fabricated
+\code{"residual": 0} field from serving as evidence.
+\end{remark}
+
+\subsection{What the recorded formats actually diverged on}
+\label{app:schema-divergence}
+
+For the record, and as the specification for the translation layer:
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.26\textwidth}>{\raggedright\arraybackslash}p{0.68\textwidth}@{}}
+\toprule
+Field & Spellings observed across the nine runs \\
+\midrule
+\endhead
+Polynomial arity &
+\code{n} (\src{p1}, \src{p3}, \src{p4}, \src{p6}, \src{p8});
+\code{variables} (\src{p2}, \src{p7}); \code{nvars} (\src{p5});
+a term-tree AST with no arity field (\src{p9}). \\
+Coefficient encoding &
+\code{"n/d"} strings in eight runs; \code{\{numerator, denominator\}} integer
+objects in \src{p7}. This is the only numeric conversion any adapter needs. \\
+Cone container &
+\code{terms} (\src{p1}, \src{p3}, \src{p5}); \code{squares} (\src{p2});
+\code{nonnegative} (\src{p4}); \code{cone} (\src{p6}); \code{positive}
+(\src{p7}, \src{p8}). \\
+Weight &
+\code{weight} (six runs); \code{coefficient} (\src{p4}, \src{p8}). \\
+Hypothesis reference &
+\code{powers} (\src{p1}); \code{constraint}, singular and nullable (\src{p2});
+\code{hypotheses} (\src{p3}); \code{factors} (\src{p4}, \src{p5}, \src{p6},
+\code{p8}); \code{assumptions} (\src{p7}). \\
+Ideal multipliers &
+\code{equality\_multipliers} (\src{p1}); \code{ideal} (\src{p4}--\src{p7});
+\code{equalities} as \code{\{index, multiplier\}} (\src{p8}); absent in
+\src{p2}, \src{p3}, \src{p9}. \\
+Bernstein node &
+\code{\{kind, axis, point, left, right\}} (\src{p2});
+\code{\{leaf:\{coefficients, degrees\}\}} (\src{p3});
+\code{\{axis, cut, left, right, leaf\}} (\src{p8}). \\
+\bottomrule
+\end{longtable}
+
+The formats are \emph{semantically compatible and syntactically incompatible}.
+Every one encodes weighted squares times nonnegative-generator products plus
+ideal multipliers, over exact rationals. A single canonical schema is reachable
+by key renaming plus the one \src{p7} numeric conversion. Three families have no
+common schema and stay separate: the CNF/RUP proof logs, the lattice elimination
+traces, and the symbolic term-tree theorem bank with its rewrite paths.
+
+\subsection{What a production format must add}
+
+A schema version; a source-goal identifier; an environment and encoding
+revision; a variable-map identifier resolved against the Lean side's own
+registry; the required assumptions; and the claimed result kind. Resource limits
+must bound integer bit sizes, monomial counts, degrees, tree nodes, and proof
+depth \emph{before} expensive checking as well as after it.
+
+The Lean process resolves every identifier against its own state. It never
+accepts an oracle-provided expression as authoritative, and the decoder itself
+must be checked --- a Lean-side decoder with a proved correspondence to the
+reified problem is part of the trusted path, not a convenience.

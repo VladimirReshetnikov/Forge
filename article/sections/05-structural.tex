@@ -236,6 +236,41 @@ the theorem $A(n,a)=a+n^2$ needs $a$ generalised before induction; the step then
 reduces to $a+2n+1+n^2=a+(n+1)^2$. The automation problem is choosing the
 generalisation, not performing the final ring calculation.
 
+\subsubsection*{A worked cross-engine plan: an accumulator \emph{inequality}}
+
+The examples above are equations. The mechanism matters at least as much for
+inequalities, where the induction planner and the arithmetic worker each supply
+something the other cannot. Let
+\[
+\mathrm{energyAcc}([],a)=a,\qquad
+\mathrm{energyAcc}(x::xs,a)=\mathrm{energyAcc}\bigl(xs,\;a+(x-1)^2\bigr),
+\]
+and take the goal
+\begin{equation}\label{eq:energy}
+\forall xs\,a,\qquad a\le\mathrm{energyAcc}(xs,a).
+\end{equation}
+The planner identifies $xs$ as structural, detects that the accumulator changes
+in the recursive call, and generalises $a$. The base case is reflexivity. In the
+step, the generalised induction hypothesis gives
+\[
+ a+(x-1)^2\le\mathrm{energyAcc}\bigl(xs,\,a+(x-1)^2\bigr),
+\]
+leaving the demand $a\le a+(x-1)^2$. The ordered-algebra worker proves
+$(x-1)^2\ge0$, the linear worker adds $a$, and transitivity closes the step.
+\emph{Four} components contribute and none of them solves the problem alone.
+
+If the update were an expanded polynomial such as $q(x,y)=x^2+6xy+9y^2$, the
+same plan would call the exact quadratic decomposition of
+\S\ref{sec:quadratic} to discover $q=(x+3y)^2$. If the update were nonnegative
+only under a loop invariant, that invariant would have to be proved and threaded
+through the induction motive --- an arithmetic certificate cannot supply an
+invariant about recursive calls.
+
+One of the source packages contains an ordinary Lean proof of \eqref{eq:energy}
+as an uncompiled integration target. It is \emph{not} claimed that a planner
+generated it; its purpose is to make the intended constructor sequence concrete
+enough to validate once a pinned project exists.
+
 \begin{remark}[Sampling rejects; it never proves]
 Two prototypes filter grammar candidates against finite sample environments ---
 one uses all 49 pairs of lists of length at most two over a two-element

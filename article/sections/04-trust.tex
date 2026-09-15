@@ -60,6 +60,18 @@ not merely provide polynomial data that resembles them. The prototypes test
 this directly: removing a necessary constraint from the problem makes replay
 fail, and a certificate re-attached to a changed target is rejected.
 
+\begin{remark}[A type is not a check]
+An \code{Expr} field is not a proof-validation boundary. Calling a structure
+\code{CheckedProof} does not make its contents checked, and a reported
+dependency list is a diagnostic: the acceptance layer must recompute
+dependencies from the accepted term. The Lean design contract in this collection
+deliberately names a submitted term \code{Candidate} for exactly this reason.
+Likewise, a successful \code{inferType} or unification inside tactic
+metaprogramming is part of elaboration, not a replacement for the final kernel
+boundary --- an expression can type-check because an imported axiom states the
+desired result.
+\end{remark}
+
 \subsection{Kernel-only and native-checked are different profiles}
 
 The Lean kernel verifies derivations relative to the axioms they use, so a

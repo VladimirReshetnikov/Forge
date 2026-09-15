@@ -1,0 +1,677 @@
+\section{Nonlinear arithmetic: exact certificates, not floating-point proofs}
+\label{sec:nonlinear}
+
+\subsection{The acceptance language}
+
+The nonlinear worker targets polynomial statements over $\R$ with exact rational
+coefficients. Variables may stand for opaque real subexpressions; any further
+relationship between them must be supplied as a proved constraint. The same
+representation must not be reused over an arbitrary ring with an assumed real
+ordering.
+
+Normalise the target to $p(\bm x)\ge0$, the hypotheses to $g_i(\bm x)\ge0$, and
+the equalities to $h_j(\bm x)=0$. The certificate language is
+\begin{equation}
+ p=\sum_{k=1}^{s}c_k\,q_k^2\prod_{i=1}^{m}g_i^{a_{ki}}
+        +\sum_{j=1}^{r}u_j\,h_j,
+ \qquad c_k\in\Q_{\ge0},\quad a_{ki}\in\N,
+ \label{eq:cone}
+\end{equation}
+with $q_k,u_j$ rational polynomials. The checker is given the original
+$p,g_i,h_j$ independently of the certificate, reconstructs the right-hand side
+exactly, and requires polynomial identity.
+
+\begin{proposition}[Cone-certificate soundness]
+\label{prop:cone}
+If \eqref{eq:cone} holds, every point satisfying $g_i\ge0$ and $h_j=0$ satisfies
+$p\ge0$.
+\end{proposition}
+\begin{proof}
+Each square is nonnegative, each hypothesis product is nonnegative, and each
+coefficient $c_k$ is nonnegative. Every equality-multiplier term vanishes.
+Summing proves the claim.
+\end{proof}
+
+This elementary proof is exactly why search can be far more complicated than
+checking --- the observation Harrison made foundational for SOS
+reconstruction~\cite{harrison-sos}. The language is a bounded preordering-style
+cone with equality-ideal terms. Restricting products to individual $g_i$ gives a
+smaller family; fixing the possible $q_k$ gives a finite cone. None of these
+should be called an unrestricted positivity decision procedure.
+
+Two details of \eqref{eq:cone} matter in implementation. The equality
+multipliers $u_j$ carry \emph{no sign condition}: an LP formulation with
+nonnegative variables therefore needs $\pm$ columns for each ideal generator.
+The reason is not pedantry --- under $y=x$,
+\[
+ y^2-2x+1=(x-1)^2+(x+y)(y-x),
+\]
+and the second term need not be nonnegative. It vanishes because of the
+equality. Treating every multiplier as nonnegative would discard that
+flexibility. The second detail is naming: in the serialised formats the field
+called \code{square} stores $q_k$, not $q_k^2$.
+
+\paragraph{Strict inequalities.}
+Strictness needs explicit information. One sufficient certificate is an identity
+of the same form for $p-\varepsilon$ with rational $\varepsilon>0$. It is not
+necessary in general: a polynomial can be strictly positive on an unbounded
+domain while having infimum zero, so $x>0$ implies $x>0$ without a uniform
+rational lower bound. Another route is a term whose coefficient and factors are
+provably strictly positive at every admissible point. The proof layer must
+preserve the strict inequality rather than silently weakening it to
+nonnegativity.
+
+\paragraph{Refutation.}
+A certificate for $-1$ in the nonnegative cone plus the equality ideal gives a
+contradiction. If $q>0$ is a strict hypothesis, a checked identity expressing
+$-q^m$ as a cone element plus vanishing ideal terms, with $m\ge1$, also gives
+one.
+
+\subsection{Search is untrusted; repair, do not round}
+
+Every implemented search here follows the same shape, and the shape is the
+point.
+
+\begin{lstlisting}
+searchCone(problem, degree, budgets):
+  columns := boundedSquaresTimesConstraintProducts(problem)
+            ++ signedIdealColumns(problem.equalities)
+  support := floatingPointLP(columns, target)     -- untrusted
+  if no support: return UNKNOWN
+  coefficients := exactRationalSolve(support, target)
+  if unavailable: return UNKNOWN
+  certificate := assemble(coefficients)
+  if exactCheck(problem, certificate): return certificate
+  return UNKNOWN
+\end{lstlisting}
+
+A floating result is not a certificate. The prototypes take the support of the
+proposed coefficient vector, re-solve the corresponding coefficient equations
+over exact rationals, require the repaired coefficients to be nonnegative, and
+expand the certificate to check the original identity. Rationalisation uses a
+denominator cap; tiny weights may be dropped during \emph{search
+reconstruction}, which never weakens the final check.
+
+This separation handles the most important failure mode: a numerical solver can
+treat a small nonzero residual as acceptable, whereas an identity proof cannot.
+A rational coefficient merely close to a valid one is still wrong, and a residual
+of $10^{-12}$ is not a proof. The test suites include a targeted attack on this
+--- a weight of $(10^{20}+1)/10^{20}$ offered where $1$ is required --- which is
+why the checkers assert the weight's exact rational type before comparing it.
+
+Numerical infeasibility is likewise not a proof that the goal is false, nor even
+a formally established proof that the finite cone contains no solution. Indeed
+the implementations are \emph{not complete even for every feasible instance of
+their own finite LP cone}, because the support and free-parameter heuristics can
+miss an exact feasible solution. And even a mathematically exact LP
+infeasibility certificate would refute \emph{that coefficient representation
+problem}, not the original theorem. The
+repair procedures are deliberately modest: they take coefficients above a fixed
+support threshold and set free parameters of the rational system to zero, which
+can miss valid certificates with small coefficients or a different feasible
+choice of free parameters. The correct result is \unknown{}, not a weakened
+acceptance test. A better oracle can explore nearby supports and solve exact
+feasibility in the nullspace without changing the checker.
+
+\subsection{Building the dictionary}
+
+For each square-free subset or multiset $I$ of the nonnegative premises with
+$|I|\le s$, form the product $g_I$ and enumerate monomials of degree at most
+$\lfloor(D-\deg g_I)/2\rfloor$. Take squares of those monomials and of their
+pairwise sums and differences. Add signed monomial multiples of each equality
+as ideal columns.
+
+Two refinements repay their cost. The first is \emph{target-driven} square
+proposal: if the target contains $a u^2+cuv+bv^2$ with $a>0$, propose
+$q=u+(c/2a)v$, and when $b>0$ also the opposite orientation; likewise propose
+binomial roots from exact rational square-root ratios of positive even-degree
+terms. One implementation's initial heuristic recognised $(x-2/3)^2$ but was
+defeated by $(x-2/3)^2+1/97$, where a positive constant obscured the coefficient
+ratio; adding the cross-coefficient construction recovered the intended square,
+and the case is now a regression test.
+
+The second is \emph{variable-support partitioning}: partition the constraints by
+variable support and request cross-component products only when the target
+connects those components, instead of expanding a global Cartesian product.
+Recorded generator budgets run to a few thousand columns; with $M$ monomials an
+unguarded binomial dictionary already has up to $M+6\binom{M}{2}$ entries before
+deduplication.
+
+\subsubsection*{Four honest failures of a finite dictionary}
+
+The prototypes each kept a control showing a true statement their own search
+misses. They are different arguments and all four are worth keeping.
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Motzkin.} $M(x,y)=x^4y^2+x^2y^4+1-3x^2y^2$ is nonnegative by
+  arithmetic--geometric mean on its three nonnegative terms, and is famously not
+  a sum of squares of polynomials. Bounded square dictionaries return \unknown{}.
+\item \textbf{$(2x-3y)^2$, with a counting argument.} A dictionary restricted to
+  $m$, $m+n$ and $m-n$ cannot represent a square with unequal coefficients:
+  covering the $-12xy$ cross term using $(x-y)^2$ requires weight $6$, already
+  exceeding the target's $x^2$ coefficient $4$, and adding other positive
+  dictionary atoms cannot repair the deficit.
+\item \textbf{$(x+y+1)^2$, with a rank argument.} A rank-one quadratic Gram
+  matrix for the coefficient vector $(1,1,1)$ cannot be decomposed as a positive
+  sum of rank-one vectors with only two nonzero coordinates unless the summands
+  lie in its one-dimensional range, and none of the allowed binomial vectors
+  does.
+\item \textbf{$(2x+y)^2$ at degree cap 2.} A restricted coefficient-ratio
+  dictionary misses it outright --- a goal that the exact quadratic decomposition
+  of \S\ref{sec:quadratic} decides immediately.
+\end{itemize}
+
+The last of these is the most useful, because it is a \emph{cross-engine}
+argument rather than a limitation. One prototype's dictionary obstruction and
+another's quadratic completeness theorem together justify the multi-engine
+design better than either does alone. A failure of one search is a reason to
+route, not a reason to stop.
+
+\begin{remark}
+A nonnegative polynomial need not be a sum of polynomial squares at all. Failure
+of a bounded search proves only that this search found nothing.
+\end{remark}
+
+\subsection{Exact rational quadratic decomposition}
+\label{sec:quadratic}
+\status{Implemented, tested, and used to generate Lean replay candidates.}
+
+For a rational quadratic polynomial in $n$ variables let
+$z=(1,x_1,\ldots,x_n)^{T}$ and $p(\bm x)=z^{T}Qz$, where $Q$ is the unique
+symmetric matrix obtained by placing constant and square coefficients on the
+diagonal and half of each mixed or linear coefficient in the corresponding
+symmetric off-diagonal entries.
+
+\begin{theorem}[Quadratic fragment]
+\label{thm:quadratic}
+A rational quadratic polynomial is nonnegative on all of $\R^n$ if and only if
+its homogenised symmetric matrix $Q$ is positive semidefinite. In that case it
+admits a certificate $p=\sum_k d_k\ell_k^2$ with nonnegative rational $d_k$ and
+rational affine linear forms $\ell_k$.
+\end{theorem}
+\begin{proof}
+If $Q$ is positive semidefinite the first assertion is immediate. Conversely,
+for a vector $(t,\bm y)$ with $t\ne0$,
+\[
+ (t,\bm y)^{T}Q(t,\bm y)=t^2p(\bm y/t)\ge0,
+\]
+and the assertion for $t=0$ follows by continuity; thus $Q$ is positive
+semidefinite.
+
+For the rational decomposition, choose a positive diagonal pivot $d=Q_{kk}$.
+Completing the square gives
+\[
+ z^{T}Qz=d\left(z_k+\sum_{j\ne k}\frac{Q_{kj}}{d}z_j\right)^2
+    +z_R^{T}\!\left(Q_{RR}-\frac{Q_{Rk}Q_{kR}}{d}\right)z_R .
+\]
+The residual Schur complement is positive semidefinite and every entry remains
+rational. Repeat. If all remaining diagonal entries vanish in a positive
+semidefinite matrix, all remaining off-diagonal entries also vanish: otherwise a
+suitable vector supported on two coordinates gives a negative value. The process
+therefore terminates with the claimed rational weighted squares.
+\end{proof}
+
+\begin{lstlisting}
+quadratic_certificate(p):
+  if total_degree(p) > 2: return Unknown
+  Q := exact_homogenized_matrix(p)
+  active := all coordinates
+  terms := []
+  while active is not empty:
+    if any active diagonal is negative: return Unknown
+    choose a positive diagonal pivot d
+    if no pivot exists:
+      if the active submatrix is zero: break
+      else: return Unknown
+    emit d * (pivot_variable + rational_linear_tail)^2
+    Q := exact Schur complement on the remaining coordinates
+  certificate := sum of emitted terms
+  return certificate only if expand(certificate) == p
+\end{lstlisting}
+
+The algorithm rejects a negative diagonal pivot or a nonzero zero-diagonal
+residual, and the returned certificate is checked again by polynomial expansion
+through the \emph{general} cone checker. No numerical eigenvalue threshold is
+used: a matrix with a tiny nonzero rational off-diagonal entry is treated
+exactly, not rounded into positive semidefiniteness.
+
+The matrix arithmetic uses $O(n^3)$ rational operations, which is not an
+$O(n^3)$ bit-complexity claim --- numerators and denominators can grow
+substantially, and sparse pivots, fraction-free variants and explicit bit-length
+budgets are natural production improvements. A fraction-preserving
+$LDL^{\mathsf T}$ decomposition is the same algorithm in matrix form.
+
+A failed global quadratic test does not imply the constrained goal is false: $x$
+is not globally nonnegative but is nonnegative under the hypothesis $x\ge0$.
+Such a result routes to a constraint-aware worker; it does not terminate the
+tactic.
+
+Expanding a nonnegative quadratic hides the linear forms whose squares establish
+its sign. Existing arithmetic preprocessing may discover the right consequences,
+but it need not start from those forms. This worker reconstructs the certificate
+systematically rather than hoping a useful square already appears syntactically.
+
+\subsection{Discovered certificates worth recording}
+
+The implemented searches returned, among others:
+\begin{align*}
+ (a^2+b^2)(c^2+d^2)-(ac+bd)^2&=(ad-bc)^2,\\
+ x^2+y^2+z^2-xy-yz-zx
+   &=\tfrac12(x-y)^2+\tfrac12(y-z)^2+\tfrac12(z-x)^2,\\
+ x^4+y^4-2x^2y^2&=(x^2-y^2)^2,\\
+ x^4+y^4+1-x^2y^2-x^2-y^2
+   &=\tfrac12(x^2-y^2)^2+\tfrac12(x^2-1)^2+\tfrac12(y^2-1)^2,\\
+ x^4+y^4+z^4-x^2y^2-y^2z^2-z^2x^2
+   &=\tfrac12(x^2-y^2)^2+\tfrac12(y^2-z^2)^2+\tfrac12(z^2-x^2)^2,\\
+ (x^2+y^2+z^2)^2-3(x^2y^2+y^2z^2+z^2x^2)
+   &=\tfrac12\bigl((x^2-y^2)^2+(x^2-z^2)^2+(y^2-z^2)^2\bigr),\\
+ x-x^3&=x^2(1-x)+x(1-x),\\
+ x^2+y^2-2&=(x-y)^2+2(xy-1),\\
+ x^3+y^3-xy(x+y)&=(x+y)(x-y)^2\quad(x,y\ge0),
+\end{align*}
+together with the manually supplied discriminant identity
+\begin{equation}\label{eq:disc}
+ b^2-4ac=(2ad+b)^2-4a(ad^2+bd+c),
+\end{equation}
+which is accepted by the checker although it lies outside every implemented
+search dictionary --- a deliberate demonstration that the checker's language is
+larger than the searcher's.
+
+A domain-dependent example shows why hypothesis products matter. Under
+$0\le x\le1$ and $0\le y\le1$,
+\[
+ 2x(1-x)+3y(1-y)+xy+\tfrac15\ge0 .
+\]
+Supplied in expanded form, with negative $x^2$ and $y^2$ coefficients, the
+useful certificate consists of products of the four bound polynomials
+$x,1-x,y,1-y$. Global SOS search alone cannot establish this, because the
+assertion is domain-dependent. Removing or changing a hypothesis makes the exact
+checker reject the certificate, so hypothesis provenance is part of the tested
+interface.
+
+\subsection{A concrete path to general SOS search}
+
+A later worker can replace the fixed square list with Gram matrices: choose a
+monomial vector $v_D$ and seek $Q_\alpha\succeq0$ satisfying coefficient
+identities for
+\[
+ p= v_D^{T}Q_0v_D+\sum_\alpha v_{D_\alpha}^{T}Q_\alpha v_{D_\alpha}g^\alpha
+     +\sum_j u_jh_j .
+\]
+CVXPY or CSDP can serve as modelling front ends~\cite{cvxpy,csdp}. Their output
+remains untrusted: recover rational matrices inside the exact affine
+coefficient-constraint space, perform an exact positive-semidefiniteness check,
+and convert each matrix to rational weighted squares. Entrywise rounding
+followed by approximate eigenvalue testing is not acceptable. Singular Gram
+matrices are especially delicate, since perturbation can destroy either
+positivity or the coefficient identity; exact nullspace handling, support
+changes, and facial reduction are worthwhile \emph{search} techniques, but
+acceptance must still reduce to \eqref{eq:cone}~\cite{rational-sos}. No
+implementation here contains an SDP solver and no SDP performance claim is made.
+
+\begin{remark}[Reuse the existing Lean backend]
+\label{rem:sos-reuse}
+This point deserves emphasis because it materially narrows what \forge{} should
+claim. A Lean \code{sos} project already implements an end-to-end
+nonlinear-real-arithmetic tactic after Harrison's decision procedure: reification,
+search, rational reconstruction, and certificate-based proof construction, with
+a witness-oriented replay interface and a configuration that already includes
+degree deepening, constraint-product bounds, and optional refutation
+powers~\cite{lean-sos,sos-engine,sos-core}. Consequently ``add an SOS tactic to
+Lean'' is \emph{not} a novel component of this design. Similarly, a Lean
+\code{lp} project supplies verified linear programming and a supported
+quantified rational-affine fragment~\cite{lean-lp,lp-blog}, covering much of the
+affine-witness machinery.
+
+The production arrangement should therefore be staged: run the cheap in-house
+certificate searches first, and escalate to the existing libraries rather than
+building a second unaudited wrapper. \forge{}'s contribution in this area is
+\emph{when} to request a certificate, \emph{how} to bind it to the source
+problem, and \emph{what} to do with the proved consequence afterwards --- not
+the certificate search itself. The version caveat of \S\ref{sec:baseline}
+applies: compatibility between those projects and the pinned baseline must be
+established, not assumed.
+\end{remark}
+
+\subsection{Bernstein certificates on rational boxes}
+\status{Implemented and tested in Python by seven independent efforts.}
+
+\subsubsection*{Coefficients and the bound}
+
+Let $p$ be a polynomial on the rational box
+$X=\prod_{i=1}^{n}[l_i,u_i]$ with $l_i<u_i$. Substituting
+$x_i=l_i+(u_i-l_i)t_i$ gives $q(\bm t)=\sum_\alpha a_\alpha\bm t^\alpha$ on the
+unit box. With $d_i$ a coordinatewise degree bound, the tensor-product Bernstein
+expansion is
+\[
+ q(\bm t)=\sum_{0\le\beta\le\bm d} b_\beta
+   \prod_i\binom{d_i}{\beta_i}t_i^{\beta_i}(1-t_i)^{d_i-\beta_i},
+\]
+with exact rational coefficients
+\begin{equation}
+ b_\beta=\sum_{\alpha\le\beta}a_\alpha
+     \prod_i\frac{\binom{\beta_i}{\alpha_i}}{\binom{d_i}{\alpha_i}} .
+ \label{eq:bernstein}
+\end{equation}
+
+\begin{lemma}
+For $0\le a\le d$,
+$\displaystyle t^a=\sum_{b=a}^{d}\frac{\binom ba}{\binom da}\binom db\,
+t^b(1-t)^{d-b}$.
+\end{lemma}
+\begin{proof}
+Use $\binom db\binom ba=\binom da\binom{d-a}{b-a}$, factor out $t^a$, and apply
+the binomial theorem to the remaining sum, which collapses to
+$(t+(1-t))^{d-a}=1$.
+\end{proof}
+
+Applying this in each coordinate proves \eqref{eq:bernstein}. Each basis term is
+nonnegative on the unit box and the basis terms sum to one, so
+\[
+ \min_\beta b_\beta\le p(\bm x)\le\max_\beta b_\beta\qquad(\bm x\in X).
+\]
+In particular nonnegative coefficients certify nonnegativity throughout the box,
+and strictly positive coefficients certify strict positivity.
+
+\begin{remark}
+Negative Bernstein coefficients are \emph{not} counterexamples. They mean only
+that this sufficient condition has not proved the desired sign. A returned
+negative point is a different kind of result and must be evaluated exactly.
+\end{remark}
+
+\subsubsection*{The subdivision tree is part of the proof}
+
+If a box does not certify immediately, split a side at an interior rational
+point. A certificate is a binary tree: an internal node contains an axis, an
+interior rational split point, and \emph{both} children; a leaf contains its
+coefficients or a claimed nonnegative rational lower bound.
+
+The checker independently reconstructs every child box from the root, recomputes
+each leaf's coefficients, and confirms the claimed bound. Requiring both
+children proves coverage --- there is no way to omit a difficult corner by
+supplying an incomplete list of favourable boxes. A missing child, an invalid
+split axis, or a split point at an interval endpoint is rejected, and every
+basis index must appear exactly once in canonical order. Overlap on a shared
+face is harmless; missing an entire child is not. Node and depth limits are
+operational rejection limits, not mathematical assumptions about positivity.
+
+The strongest implementations make the checker algorithmically \emph{opposite}
+to the producer: rather than recomputing \eqref{eq:bernstein}, they expand the
+claimed Bernstein representation --- in the original $x$ coordinates, using
+\[
+ \binom{d}{k}\frac{(x-a)^k(b-x)^{d-k}}{(b-a)^d},
+\]
+--- and compare the result against an independently computed affine transform of
+the target. Producer and checker then share no conversion formula, though they
+do still share the sparse rational arithmetic layer, so their independence is
+not complete.
+
+Search may evaluate the polynomial at a midpoint to abandon a hopeless box
+early, but it must never return that evaluation as a refutation. Some
+implementations do return a checked refutation: an exact point inside the box at
+which the polynomial is negative, validated independently for membership and
+sign. That is a genuine three-valued outcome ---
+\textsc{proved}/\textsc{refuted}/\unknown{} --- and it is the only sound negative
+route any of the prototypes implements.
+
+Split-axis policy matters for the completeness argument below. Cycling axes as
+$\mathrm{depth}\bmod n$, or choosing the largest \emph{relative} width, both
+ensure every coordinate shrinks along a branch; choosing the largest absolute
+width introduces a coordinate-unit bias.
+
+\subsubsection*{A qualified completeness result, and a sharp obstruction}
+
+\begin{proposition}[Strictly positive polynomials]
+\label{prop:bernstein-complete}
+For a polynomial strictly positive on a compact box, a fair subdivision search
+that shrinks every coordinate along each branch eventually makes all Bernstein
+coefficients positive.
+\end{proposition}
+\begin{proof}[Justification]
+The transformed higher-degree coefficients tend uniformly to zero as box widths
+shrink, while the constant terms stay above a positive minimum: each local
+Bernstein coefficient is $p(a)+O(\max_i(b_i-a_i))$ with a bound uniform over the
+original box. Compactness supplies the positive minimum.
+\end{proof}
+
+This does not give a useful bound for every input and does not justify ignoring
+the configured caps.
+
+Zeros behave completely differently, and the difference is a theorem rather than
+a matter of search depth.
+
+\begin{theorem}[Interior-zero obstruction]
+\label{thm:zero}
+Let $p$ be a nonzero polynomial with a zero in the interior of a box $B$. Then
+$p$ has no all-nonnegative Bernstein expansion on $B$.
+\end{theorem}
+\begin{proof}
+Every Bernstein basis function is strictly positive at an interior point. If all
+coefficients were nonnegative, a zero value at an interior point would force
+every coefficient to vanish, hence $p\equiv0$ on $B$ and so $p\equiv0$.
+\end{proof}
+
+Consequently a finite dyadic subdivision cannot certify $(x-1/3)^2$ on $[-1,1]$
+by nonnegative leaf coefficients alone: some leaf must contain $1/3$ in its
+interior. The obstruction is quantitative. On $[0,1]$, the dyadic cell
+containing $1/3$ always has the root in its interior, and if its endpoints are
+$\ell<u$ then the middle quadratic Bernstein coefficient is exactly
+\[
+ (\ell-	frac13)(u-	frac13)<0 .
+\]
+No finite midpoint-only subdivision can certify that cell by nonnegative
+degree-two coefficients, whereas the exact quadratic engine of
+\Sef{sec:quadratic} proves the same inequality immediately. This is a
+concrete reason to cooperate across representations rather than escalate one
+representation's resource cap indefinitely. The same obstruction applies with an \emph{irrational} zero, and there
+it rules out any rational-box tree whatever: $(x^2-2)^2$ on $[1,2]$ has its zero
+at $\sqrt2$, which no rational split point can ever fall on. The prototypes
+record both as expected \unknown{} outcomes, at depth 12 and at their depth
+limits respectively.
+
+A second, milder limitation is worth recording: $(x-y)^2$ on $[0,1]^2$ returns
+\unknown{} at depth four even though a single square certificate proves it
+immediately. Again this routes rather than stops.
+
+\subsubsection*{Worked instances}
+
+For $p(x)=(x-1/2)^2+1/100$ on $[0,1]$, the degree-two coefficients at the root
+are $13/50,\,-6/25,\,13/50$, so the root check cannot certify positivity.
+Splitting at $1/2$ gives
+\[
+ (13/50,\,1/100,\,1/100)\quad\text{and}\quad(1/100,\,1/100,\,13/50),
+\]
+so two leaves suffice for strict positivity. For $p(x)=x^2-x+1/3$ on $[0,1]$ the
+root coefficients are $(1/3,-1/6,1/3)$, and splitting at $1/2$ gives
+$(1/3,1/12,1/12)$ and $(1/12,1/12,1/3)$. For $p(x)=x^2-x+3/10$ the split yields
+two leaves each with exact lower bound $1/20>0$ and a three-node certificate.
+These are exact calculations, not numerical plots.
+
+A multivariate instance uses the bounded Motzkin polynomial
+$M(x,y)=x^4y^2+x^2y^4-3x^2y^2+1$. The search certifies $M+1/16$ on three
+domains: on $[-1,1]^2$ a single leaf suffices, with minimum coefficient exactly
+$1/16$; on $[-2,2]^2$ it constructs 32 leaves at maximum depth six; on
+$[-3,3]^2$, 56 leaves at maximum depth nine.
+
+\begin{remark}[An instructive correction]
+In one development run the first test wrongly expected the smallest domain to
+require subdivision. The exact coefficient calculation showed the test
+assumption was wrong. The corruption test was moved to the larger domain and
+independent symbolic reconstruction tests were added. No positivity condition
+was weakened to make the test pass. That is the correct response to a failing
+test in this setting, and it is recorded here because the opposite response is
+the standard way such a project becomes unsound.
+\end{remark}
+
+\subsubsection*{Cost}
+
+The tensor has $\prod_i(d_i+1)$ coefficients and a binary tree can have
+exponentially many leaves in its depth bound; exact coefficient bit sizes also
+grow under repeated substitution. The method suits moderate dimension, low
+coordinatewise degree, and meaningful compact bounds. Implementations cap tensor
+size before expansion precisely because an adversarial certificate could
+otherwise request an enormous one. This is attractive research code, not a
+complete defence against hostile memory-exhaustion input, and not a universal
+substitute for nonlinear arithmetic.
+
+\subsection{Univariate certificates that preserve zeros}
+\label{sec:sturm}
+\status{Implemented and tested in Python by one effort. No generic Lean Sturm
+replayer exists.}
+
+Theorem~\ref{thm:zero} is not merely a caveat; it is a capability gap with a
+constructive answer. This worker is the answer, and it is the only mechanism in
+the whole collection that can certify a polynomial with an interior zero.
+
+\subsubsection*{Square-factor reduction}
+
+For a nonzero rational univariate polynomial, extract even multiplicities:
+\[
+  p(x)=q(x)^2\,r(x),
+\]
+where $r$ is square-free and its rational scalar coefficient retains the
+original sign. Full factorisation is not necessary in principle --- square-free
+decomposition suffices. The prototype uses a rational factorisation interface as
+an \emph{oracle} and then verifies the resulting identity with its own exact
+representation~\cite{sympy-polys}.
+
+A certificate on a rational interval $[a,b]$, $a<b$, consists of $q$, $r$, and a
+Sturm chain for $r$. The checker requires:
+\begin{enumerate}[leftmargin=1.4em]
+\item the exact identity $p=q^2r$, and a valid terminating signed-remainder
+  chain for $r$;
+\item no roots of $r$ in the \emph{open} interval $(a,b)$;
+\item $r((a+b)/2)>0$ and $p(a),p(b)\ge0$.
+\end{enumerate}
+The zero polynomial is handled by $q=0$, $r=1$.
+
+\subsubsection*{The checked Sturm chain}
+
+The chain starts with $r_0=r$, $r_1=r'$, and continues with
+$r_{i+1}=-\operatorname{rem}(r_{i-1},r_i)$ until the next remainder is zero; a
+constant $r$ has a one-element chain. The checker recomputes the derivatives and
+rational remainders, requires exact equality with the supplied chain, and
+requires the last element to be a nonzero constant --- which establishes that $r$
+is square-free. Crucially it \emph{recomputes the entire chain} rather than
+trusting a stored root count.
+
+Let $V(t)$ denote the number of sign changes in the chain. Endpoint roots are
+the easy thing to get wrong here, so the implementation computes \emph{one-sided}
+signs: at $a+$, the sign of a chain polynomial is the sign of its first nonzero
+derivative at $a$; at $b-$, that sign is multiplied by $(-1)^k$ when the first
+nonzero derivative has order $k$. The open-interval root count is then
+\[
+ N_{(a,b)}(r)=V(a+)-V(b-).
+\]
+Independent tests compare root counts against a symbolic oracle and explicitly
+exercise rational roots at both endpoints.
+
+\begin{theorem}[Univariate interval certificate]
+A certificate satisfying the three conditions above proves $p(x)\ge0$ for every
+$x\in[a,b]$.
+\end{theorem}
+\begin{proof}
+The Sturm count establishes that $r$ has no root in $(a,b)$. By continuity its
+sign is constant there, and the positive midpoint value fixes that sign as
+positive. Hence $q^2r\ge0$ on the interior. The exact identity and the two
+endpoint checks complete the proof on the closed interval.
+\end{proof}
+
+\begin{proposition}[Fragment completeness]
+Ignoring degree and resource caps, exact square-free decomposition together with
+this check is complete for nonnegativity of rational univariate polynomials on a
+rational closed interval.
+\end{proposition}
+\begin{proof}
+If a nonzero $p=q^2r$ is nonnegative, a simple interior root of the square-free
+$r$ would change the sign of $p$, which is impossible. Thus $r$ has no interior
+root and is positive there, and the certificate theorem applies.
+\end{proof}
+
+This argument uses the mathematical Sturm theorem. Its use is justified in the
+algorithm specification and exercised by tests, but it is \emph{not} formalised
+in Lean anywhere in this collection. A production Lean implementation must prove
+or integrate that theorem and check the instantiated certificate before this
+worker can be trusted; that is a substantial verification task and must not be
+hidden behind an unchecked foreign call.
+
+\subsubsection*{Why it belongs alongside Bernstein search}
+
+$(x-1/3)^2$ is handled without aligning a dyadic split with its zero, and so is
+$(x^2-2)^2$, whose real zeros are irrational. A constructed test family
+multiplies rational and irrational even-root factors by a positive quadratic and
+the endpoint factors $(x+2)(2-x)$ on $[-2,2]$. All 30 instances are certified by
+the square-factor/Sturm worker; \emph{none} is certified by the depth-12
+Bernstein-only ablation.
+
+That is a genuine component-level distinction. It does not imply these examples
+are difficult for an existing Lean tactic once a factorisation is supplied. The
+contribution is an explicit search-and-check route for \emph{finding} and
+\emph{validating} the relevant algebraic structure.
+
+In several variables, candidate factorisation, algebraic equality reasoning, and
+constraint-relative certificates can play an analogous role. A generic
+multivariate zero-set treatment is not part of any prototype.
+
+\subsection{Cheap facts for other engines: certified product envelopes}
+\status{Specified; not separately implemented.}
+
+Bound propagation can generate inexpensive facts before any larger nonlinear
+search runs. If $l_x\le x\le u_x$, $l_y\le y\le u_y$, and $z=xy$, then the four
+products of nonnegative bound differences give
+\begin{align*}
+ z&\ge l_xy+l_yx-l_xl_y, & z&\ge u_xy+u_yx-u_xu_y,\\
+ z&\le u_xy+l_yx-u_xl_y, & z&\le l_xy+u_yx-l_xu_y.
+\end{align*}
+The first, for instance, is the expansion of $(x-l_x)(y-l_y)\ge0$. These facts
+are \emph{linear} in $x,y,z$ and can be consumed immediately by the existing
+arithmetic engine; their derivations, bounds, and the equation $z=xy$ must
+accompany them.
+
+This worker should be prioritised because its certificates are small and its
+output is useful across theories, and it has a natural trigger: run only when
+the bounds of a product operand improve. Conversely, an extracted alternative
+form such as $(x-y)^2+2(xy-1)$ can become a positivity candidate for
+$x^2+y^2-2$, and a cone certificate can request a particular difference term
+$x-y$ as a guide for other matching tasks. What is shared between views is a
+\emph{proved relation}, never a mutable polynomial whose meaning changes during
+search.
+
+\subsection{A complete cross-theory proof shape}
+
+Suppose $p=x^2-2xy+y^2$ with hypothesis $p\le0$, and the target is $f(p)=f(0)$
+for an otherwise uninterpreted $f:\R\to\R$. The nonlinear worker discovers
+$p=(x-y)^2$, proves $0\le p$, and exports that inequality; antisymmetry gives
+$p=0$; congruence closure gives the target. No worker needs a theory of $f$, and
+no single worker solves the whole problem.
+
+This is the central integration pattern of the whole design. It is not an
+assertion that stock \grind{} fails on this small example.
+
+\subsection{Domains, casts, and division}
+
+The controller must establish that the source assumptions imply the box bounds
+before applying a Bernstein theorem, and polynomial reification must preserve
+variable identity, source operations, and casts. A real-field certificate cannot
+be applied to an arbitrary ring or a field of finite characteristic.
+
+For natural or integer inequalities, prove the embedding into an ordered field
+explicitly and translate the relevant operations. Integer division, truncated
+subtraction, and modular arithmetic are not field operations. Translating
+\code{(a - b : Nat)} to a field difference requires a guard such as $b\le a$ and
+an appropriate transport theorem; otherwise the operation stays opaque or the
+relevant cases are split.
+
+Unknown real-valued applications can be polynomial atoms without being
+uninterpreted everywhere. One engine may know a theorem about $f(x)$ while the
+polynomial engine treats its value as a single coordinate; once that theorem
+yields a bound or equality, the bound is proved in the original context and can
+then be translated into the polynomial representation. No global erasure of
+dependent types is necessary.
+
+Finally, if congruence closure identifies two source terms, a worker may share
+one polynomial variable only after preserving the equality proof that justifies
+the identification. It must not merge different variables because their printed
+names agree. Treating equal terms as distinct opaque variables is a loss of
+proving power rather than an unsound strengthening --- which is precisely why the
+shared-state integration is worth the engineering.

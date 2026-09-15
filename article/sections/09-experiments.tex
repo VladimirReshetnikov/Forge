@@ -1,0 +1,599 @@
+\section{Executed experiments}
+\label{sec:experiments}
+
+\subsection{Nine runs, reported separately}
+
+This section reports nine independent prototype runs, labelled \src{p1}
+to \src{p9} after the source proposals listed in
+Appendix~\ref{app:provenance}. They are reported separately and they are
+\emph{not} pooled, for a reason stronger than caution.
+
+All nine ran on the same day in the same kind of environment --- Python 3.13.5
+on Linux x86-64, NumPy 2.3.5, SciPy 1.17.0, SymPy 1.14.0, and where pytest was
+used, pytest 9.0.2 --- and five of them recorded the same seed value,
+\code{20260914}. That coincidence makes the runs look comparable. They are not.
+The same seed drives entirely different generators over entirely different case
+sets: one run generates 30 cone and 60 quadratic cases, another 1{,}080 witness
+tables and 300 CDCL(T) instances, another 100 cone and 49 invariant cases,
+another 1{,}500 differential SAT cases, another 26 curated certificates. Three
+runs (\src{p1}, \src{p8}, \src{p9}) record no seed at all.
+
+\begin{remark}[The non-pooling rule]
+The counts below are not commensurable. ``Cases'', ``checks'', ``assertions'',
+``tests'', ``certificates'' and ``bundles'' are five different units, and several
+runs use more than one. Summing them would produce a meaningless total, and any
+such total would describe the prototypes' own constructed distributions rather
+than any theorem corpus. Every number in this section carries its run label for
+that reason.
+\end{remark}
+
+Two properties do hold uniformly, and they are the ones worth carrying forward.
+First, no coefficient anywhere in the certificate corpus is stored as a
+floating-point number: rationals are exact throughout, serialised as strings
+such as \code{"125/18"} or as integer numerator/denominator pairs. A scan of
+every certificate payload in all nine runs found exactly one float, and it is a
+timing field. Second, every run's stored certificates replay under a
+standard-library-only checker, verified with site packages disabled.
+
+\subsection{The runs}
+
+\subsubsection*{\src{p1} --- six certificate families, one uniform protocol}
+
+275 pytest instances passed. A deterministic benchmark of 198 constructed
+instances produced certificates in every case, and a separate
+standard-library-only decoder accepted 198/198. Each case was searched three
+times after numerical warm-up; the table reports medians of per-case medians.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Component & Certified & Ablation & Search (ms) & Recheck (ms) \\
+\midrule
+Quadratic SOS            & 60/60 & 1 & 0.864 & 0.701 \\
+Finite cone LP           & 17/17 & 0 & 1.699 & 0.295 \\
+Bernstein box            & 18/18 & 1 & 0.685 & 0.389 \\
+Polynomial recurrence    & 33/33 & --- & 2.513 & 0.403 \\
+Integral affine witness  & 40/40 & --- & 0.074 & 0.027 \\
+Univariate with zeros    & 30/30 & 0 & 1.930 & 0.505 \\
+\bottomrule
+\end{tabular}
+\caption{\src{p1}. Ablations are restricted versions of these same prototype
+mechanisms, \textbf{not} \grind{} and not any Lean tactic. A dash means no
+ablation was run. Search time includes checking performed internally by the
+search routine, so the recheck column is not the amount of checking hidden
+inside the search column.}
+\label{tab:p1}
+\end{table}
+
+The ablations: the quadratic one recognises only expanded nonnegative
+combinations of even monomials; the cone one removes richer square candidates
+or, for the domain example, the hypothesis products; the Bernstein one disallows
+subdivision; the univariate one runs dyadic Bernstein search to depth 12 without
+factorisation. The last row is the sharpest result in this run --- 30/30 against
+0/30 --- and it is the experimental face of Theorem~\ref{thm:zero}.
+
+Mutation tests alter targets, weights, hypotheses, recurrence base terms, affine
+offsets, Bernstein split points, child nodes, claimed bounds, and Sturm chains,
+and require rejection. Independent symbolic tests reconstruct Bernstein
+expansions, expand quadratic certificates, and compare univariate root counts.
+Limitations are preserved as regression cases: a degree-limited recurrence
+search failing on a valid higher-degree answer, integer affine synthesis
+rejecting a merely rational witness, Bernstein-only search failing at a
+non-dyadic interior zero.
+
+\subsubsection*{\src{p2} --- five families, per-family seeds}
+
+31 unittest methods passed; several contain multiple seeded trials. 215
+certificates were produced and all 215 replayed from storage.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Family & Cases & Exact replays & Time (s) \\
+\midrule
+List induction and generalisation & 6 & 6 & 0.005 \\
+Polynomial additive recurrences & 65 & 65 & 0.241 \\
+Affine witnesses with Farkas certificates & 63 & 63 & 0.352 \\
+Finite-dictionary square certificates & 40 & 40 & 0.648 \\
+Bernstein box certificates & 41 & 41 & 0.067 \\
+\midrule
+Total & 215 & 215 & \\
+\bottomrule
+\end{tabular}
+\caption{\src{p2}. Seeds are per family: 420 recurrences, 421 witnesses,
+422 squares, 423 Bernstein. Times are one local run and are not
+hardware-normalised.}
+\label{tab:p2}
+\end{table}
+
+The recurrence family comprises five named power sums and 60 seeded random
+polynomial increments; it required 312 candidates in total, and the exact step
+checks generated 247 counterexamples before the 65 certificates were accepted.
+The 41 Bernstein problems used 82 leaves in total at maximum split depth four;
+root-only checking certifies 25 of them and subdivision certifies all 41. The
+six list proof traces contain 6, 3, 8, 10, 9 and 5 rewrites.
+
+The run's own caveat is the important one: \emph{the 40 square-certificate
+problems are constructed from the same finite dictionary the search uses}, so
+their 100\% success rate tests implementation and rational reconstruction on a
+designed distribution and must not be read as nonlinear proving coverage.
+Recorded negative outcomes include the Motzkin polynomial finding no certificate
+in the plain-square dictionary, the constant witness template failing on the
+unbounded strip, and $(x-y)^2$ remaining \unknown{} at depth four.
+
+\subsubsection*{\src{p3} --- assertion-counted mechanism ablations}
+
+1{,}680 assertions passed; 24 certificate bundles were saved and all 24 replayed
+under a standard-library-only checker. Seed \code{20260914}; total 2.27 s.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Mechanism & Restricted & Enabled \\
+\midrule
+Cone certificates, curated goals & 0/10 diagonal-only & 9/10 full dictionary \\
+Cone certificates, constructed & --- & 30/30 \\
+Exact quadratic, constructed & --- & 60/60 \\
+Exact quadratic, curated & --- & 4/4 \\
+Bernstein box, 10 true inequalities & 3/10 unsplit & 8/10 adaptive \\
+Ground Horn, 12 goals & 3/12 unsliced & 12/12 demand-sliced \\
+List induction, 8 goals & 6/8 fixed accumulator & 8/8 generalised \\
+\bottomrule
+\end{tabular}
+\caption{\src{p3}. Every ``restricted'' column is a restricted version of this
+run's own implementation. None is \grind{}.}
+\label{tab:p3}
+\end{table}
+
+Four negative controls were rejected by the quadratic path, seven corruptions by
+the Bernstein checker, and eighteen by the induction checker. 250 random Horn
+graphs and 500 comparisons confirmed that the sliced and unsliced modes agree
+with a naive least-fixed-point computation. Both Horn modes still pay the full
+index-construction cost, and the examples deliberately place decoys first.
+
+The 60 generated quadratic examples are constructed from positive square
+combinations and therefore carry an explicit selection bias; the ten cone goals
+are deliberately selected mechanism tests, not an unbiased corpus.
+
+\subsubsection*{\src{p4} --- the largest artefact corpus}
+
+64 pytest tests passed. The deterministic experiment produced 1{,}494 rows and
+1{,}238 saved successful artefacts, all replayed by checking modules that import
+no numerical or symbolic search library. Seed \code{20260914}. This run is also
+the only one that re-verified its corpus from an extracted archive copy and
+confirmed that every family and status count matched the recorded run.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Family & Observed result \\
+\midrule
+Residue witness parameters & 1{,}080 checked: 831 proved, 249 impossible by gcd divisibility \\
+Random CNF + integer difference logic & 300 oracle agreements: 189 UNSAT, 111 SAT \\
+Sparse cone / equality-ideal certificates & 47 of 49; two deliberate \unknown{} \\
+Exact rational nonnegative quadratics & 40/40 manufactured examples \\
+Bernstein covering certificates & 12 of 13; the non-dyadic zero case \unknown{} \\
+Pigeonhole CNF & 5 replayed UNSAT proofs \\
+Structural equations & 3 synthesised or proved lemmas, 2 rejected false candidates \\
+Induction ablation & 4 rows: 1 proved, 3 \unknown{} \\
+\bottomrule
+\end{tabular}
+\caption{\src{p4}. These families are heterogeneous and must not be combined
+into a general accuracy score.}
+\label{tab:p4}
+\end{table}
+
+The structural ablation is this run's sharpest finding, and it is a genuine
+$2\times2$ design rather than a single comparison:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Proved append lemmas & Generalise accumulator & Outcome \\
+\midrule
+No  & No  & \unknown{} \\
+No  & Yes & \unknown{} \\
+Yes & No  & \unknown{} \\
+Yes & Yes & \textsc{proved} \\
+\bottomrule
+\end{tabular}
+\caption{\src{p4}. Only generalisation \emph{and} proved auxiliary lemmas
+together close the accumulator reversal. The same goal and the same rewriting
+engine are used in all four configurations, which is stronger evidence of
+mechanism than a single all-features-enabled demonstration, and it shows why a
+blanket ``try induction'' addition would miss part of the design.}
+\label{tab:p4-ablation}
+\end{table}
+
+Two further details behind the aggregate counts. The 1{,}080 residue cases sweep
+all $1\le m\le20$, $-3\le a\le5$ and $0\le b\le5$; the 249 impossible ones fail
+the exact gcd divisibility condition. And for
+$p(x)=(x-1/3)^2+10^{-4}$ on $[0,1]$ --- the interior-zero example given a
+positive margin --- the prototype returns a tree with seven leaves, thirteen
+nodes and maximum depth six, whereas $(x-1/3)^2$ itself reaches the depth limit,
+exactly as Theorem~\ref{thm:zero} requires.
+
+The run's own caveats are worth preserving: 64 is a test-runner count, not a
+count of mathematical instances, since parametrised tests contain inner-loop
+cases; forty of the 49 cone cases are manufactured from the search's own
+certificate basis; the recorded timing is one in-process pass rather than a
+repeated performance study; and the field named \code{certificate\_bytes}
+includes the accompanying statement, not a proof payload alone. The run states
+the non-pooling rule for itself in the sharpest available form: \emph{do not
+divide 1{,}238 by 1{,}494 and advertise an overall accuracy}, because the
+denominator mixes proof searches, model searches, a lemma batch, deliberately
+false formulas, and overlapping ablation runs.
+
+The pigeonhole family is recorded per instance, including the datum that is
+least flattering to the method:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Pigeons / holes & Decisions & Conflicts & Resolution nodes & Nonchronological jumps \\
+\midrule
+2 / 1 &  0 &  1 &   2 & 0 \\
+3 / 2 &  1 &  2 &  10 & 0 \\
+4 / 3 &  8 &  9 &  45 & 0 \\
+5 / 4 & 30 & 31 & 160 & 0 \\
+6 / 5 & 89 & 89 & 513 & 1 \\
+\bottomrule
+\end{tabular}
+\caption{\src{p4}. The small number of non-chronological jumps is reported
+rather than hidden. It is not evidence that this branch heuristic is competitive
+on industrial SAT instances. Note also that this encoding --- at least one hole
+per pigeon and at most one pigeon per hole --- differs from \src{p6}'s, so
+Tables~\ref{tab:p6-dpll} and this one are not comparable.}
+\label{tab:p4-pigeonhole}
+\end{table}
+
+\subsubsection*{\src{p5} --- expected-outcome benchmarking with negative controls}
+
+73 pytest tests passed in 1.11 s. Seed \code{20260914}.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Experiment & Outcome & Interpretation \\
+\midrule
+Named nonlinear cases & 9 accepted / 12 &
+Two true cases unresolved; one deliberately false case unresolved \\
+Generated product-cone cases & 100 / 100 &
+Constructed inside the covered cone; not representative sampling \\
+False-polynomial controls & 0 accepted / 24 &
+All \unknown{}; exact negative witnesses checked separately \\
+Bernstein cases & 43 / 45 &
+One true non-dyadic-zero case and one false case unresolved \\
+Additive recurrence invariants & 49 / 49 &
+Base and universal step identities checked \\
+Horn growth family & 5 depths &
+Both strategies prove all goals; search work differs sharply \\
+Actual Lean comparison & Not run & No measured superiority over \grind{} \\
+\bottomrule
+\end{tabular}
+\caption{\src{p5}.}
+\label{tab:p5}
+\end{table}
+
+The run states its own most important qualification: the \textbf{109} accepted
+nonlinear certificates are the nine named successes plus the 100 generated
+cases, and they are \emph{not} 109 previously unsolved Lean theorems. The 24
+negative controls are of the form $(x-a)^2-\varepsilon$ with rational
+$\varepsilon>0$; the benchmark separately checks the exact negative value at $a$,
+while the cone routine itself returns \unknown{} rather than a certified
+refutation. Median recorded cone discovery time was about 21.5\,ms with a
+maximum of about 103.6\,ms; median invariant synthesis about 4.1\,ms, including
+interpolation and validation but excluding any Lean work. 58 exported
+certificates --- nine named cone plus all 49 invariants --- were reloaded and
+re-accepted by a separate validator.
+
+\subsubsection*{\src{p6} --- proof-logging CDCL(T)}
+
+This run's core is a differential test against an exhaustive reference.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Check & Result \\
+\midrule
+Random pure CNF cases & 1{,}000 \\
+Random CNF + integer-difference cases & 500 \\
+Satisfiable results & 1{,}278 \\
+Unsatisfiable results & 222 \\
+Differential mismatches & 0 \\
+UNSAT certificates independently replayed & 222 \\
+Truncated certificates rejected & 222 \\
+Additional structural edge cases & 5 \\
+Deliberately mutated theory certificates rejected & 2 \\
+\bottomrule
+\end{tabular}
+\caption{\src{p6}. Formulas have three to eight Boolean variables, clauses of
+three distinct variables with independent signs, and one to six times the
+variable count in clauses; difference constraints use four integer variables and
+constants in $[-3,3]$. The reference enumerates all Boolean assignments and uses
+an all-pairs shortest-path consistency check; the solver under test uses CDCL
+with negative-cycle theory conflicts. These are small exhaustive tests, not an
+industrial benchmark.}
+\label{tab:p6-sat}
+\end{table}
+
+The five edge cases are an empty conjunction, an empty clause, a tautology,
+contradictory units, and repeated literals; the integer-complement boundary has
+its own regression assertion.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Instance & Variables & Clauses & DPLL decisions & CDCL decisions \\
+\midrule
+Padded core, 0 unused  &  2 &  4 &     1 &   1 \\
+Padded core, 4 unused  &  6 &  4 &    31 &   5 \\
+Padded core, 8 unused  & 10 &  4 &   511 &   9 \\
+Padded core, 12 unused & 14 &  4 & 8{,}191 &  13 \\
+Pigeonhole $4\to3$     & 12 & 22 &     8 &   8 \\
+Pigeonhole $5\to4$     & 20 & 45 &    51 &  39 \\
+Pigeonhole $6\to5$     & 30 & 81 &   374 & 148 \\
+\bottomrule
+\end{tabular}
+\caption{\src{p6}. The baseline is \emph{this run's own} chronological
+unit-propagating DPLL with the same static variable order and phase. It is not
+\grind{} and not a production SAT solver.}
+\label{tab:p6-dpll}
+\end{table}
+
+The run attaches the caveats itself, and they should be kept. The padded-core
+family is an artificial diagnostic: it places unused Boolean variables before a
+two-variable inconsistent core, which a production preprocessor would delete.
+Its decision-count gap illustrates non-chronological backjumping; it is not
+credible evidence of practical speedup. More pointedly, \emph{runtime gives a
+soberer picture than decision counts}: on the largest pigeonhole case both
+solvers took about 26\,ms despite their different decision counts, with replay
+adding about 21\,ms. Operation counts are treated as diagnostic and no general
+speed claim is made.
+
+Ten polynomial search cases yielded seven certificates and three deliberate
+\unknown{}s --- a false target, Motzkin at degree cap 6, and $(2x+y)^2$ at degree
+cap 2. A further 100 randomly planted rational-square certificates exercised the
+checker and were cross-checked symbolically; those are \emph{checker tests, not
+100 additional search successes}, and the manually supplied discriminant
+identity \eqref{eq:disc} is likewise separate from the seven discoveries. Six
+invariant powers $p=0,\ldots,5$ yielded degrees 1 to 6 with final sample counts
+3, 4, 5, 6, 7, 8, and each rejected the alterations $Q+1$ and $Q+n$, giving 12
+mutation rejections on the synthesis side and 12 more under independent replay.
+
+The saved corpus is 8 SAT/theory proof logs, 8 polynomial certificates (seven
+discovered, one manually supplied), and 6 invariant certificates, all replayed
+with site packages disabled. Three polynomial search files carry no certificate
+and are explicitly skipped as \unknown{}. The replay program fails on a missing
+corpus rather than reporting vacuous success.
+
+\subsubsection*{\src{p7} --- component cases with corruption controls}
+
+833 principal component test cases produced 891 accepted certificate checks;
+330 deliberately corrupted certificates were rejected; 150 exact polynomial
+cross-checks were run against a symbolic oracle; and 897 synthesised accumulator
+formulas were compared against recursive execution. Seed \code{20260914}.
+
+The run is explicit that \emph{cases and checks are different units}: some Horn
+cases compare two successful derivations while others have no derivation, and
+timing repetitions and archived demonstrations are excluded from the aggregate
+check count. Five cone-search misses and two invariant-template misses are
+expected outcomes, not wrong proofs.
+
+26 representative certificates --- 9 cone identities, 5 lattice traces, 11
+accumulator invariants, 1 Horn derivation --- all passed separate
+standard-library-only replay. The lattice worker was additionally validated by
+an exhaustive 539-case single-row grid checked against integer gcd, and by 120
+random feasible systems whose free-basis samples were re-checked against every
+row.
+
+\subsubsection*{\src{p8} --- the cleanest dictionary ablation}
+
+260 pytest tests passed, the highest count of the nine. No seed recorded.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Experiment & Restricted baseline & Extended mechanism \\
+\midrule
+Polynomial cones, 60 constructed instances & 17 certificates & 60 certificates \\
+Positive rational-box instances, 21 & 0 unsplit & 21 subdivided \\
+Affine accumulator templates, 121 & not measured & 121 synthesised and replayed \\
+Out-of-template recurrences, 5 & not applicable & 5 \unknown{} outcomes \\
+\bottomrule
+\end{tabular}
+\caption{\src{p8}. The cone row varies only the dictionary and holds the LP
+backend fixed, which makes it the most cleanly isolated ablation in the
+collection. It is still an ablation of this run's own implementation.}
+\label{tab:p8}
+\end{table}
+
+The Horn workload is the largest: a useful chain of length 12 buried in 1{,}000
+unrelated chains of length 24, each with an initial fact. Full closure fires all
+24{,}012 rules; an indexed baseline that stops as soon as the goal is known still
+fires 11{,}012 under the specified interleaved queue order; backward slicing
+selects just the 12 useful rules.
+
+The accompanying observation matters more than the ratio: \emph{proof
+minimisation reduces even the full-closure derivation to the same 12 proof
+steps}, so proof size alone would conceal the entire search-work difference.
+Conversely the cold reverse index still scans all input rules and the demand
+implementation still loads the initial fact set, so no sublinear end-to-end cold
+performance is claimed. The run explicitly declines to infer a speedup factor,
+noting a \emph{slower} early-goal run despite fewer firings.
+
+Supporting evidence: 121 invariant cases each cross-checked against runtime
+execution with four deterministic random-list checks per pair (484 concrete
+recurrence checks); 30 seeded sparse-polynomial tests against a symbolic oracle;
+40 randomised Horn programs comparing full and sliced success and replaying
+their derivations; and monomial-enumeration counts checked against
+$\binom{n+d}{d}$. Only two certificates were exported to files, the fewest of
+the nine.
+
+\subsubsection*{\src{p9} --- small, heavily mutation-tested}
+
+69 pytest tests passed. 13 persisted bundles replayed with site initialisation
+disabled: one ordered bank of five inductively proved lemmas with a
+specialisation proof, four Horn proofs, six cone certificates, one box
+certificate, and one witness with its two side-condition proofs. These are
+bundles, not 13 independent Lean theorems. No seed recorded.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Depth & Forward facts & Backward proof nodes & Forward cap & Forward status \\
+\midrule
+ 4 &    16 &  5 & 5{,}000 & Certified \\
+ 8 &   256 &  9 & 5{,}000 & Certified \\
+12 & 4{,}096 & 13 & 5{,}000 & Certified \\
+16 & 5{,}000 & 17 & 5{,}000 & Cap reached \\
+\bottomrule
+\end{tabular}
+\caption{\src{p9}. Neither column is an implementation of \grind{}. The forward
+baseline stops as soon as the target is produced, which is why its counts are
+$2^d$ rather than $2^{d+1}-1$.}
+\label{tab:p9-horn}
+\end{table}
+
+Mechanism outcomes: accumulator-lemma discovery enumerates 41 candidates,
+filters against 49 sample environments, and the 41st enumerated term
+$\mathrm{app}(\mathrm{rev}(xs),a)$ is the one that receives an induction
+certificate; the quartic nonnegativity case builds 280 candidate columns and 35
+coefficient equations and returns a three-term certificate; the witness search
+reaches candidate 23, $w(x)=x^2+1$, with three candidates reaching universal
+certificate search; the Bernstein case $x^2-x+3/10$ on $[0,1]$ needs one split
+and yields two leaves each with exact lower bound $1/20$.
+
+The deliberate control is $(x+y+1)^2$: the restricted dictionary finds no
+certificate, while a manually supplied one-square certificate is accepted. This
+run therefore has a \emph{checker more general than its searcher}, which it uses
+explicitly as a guard against an inflated ``SOS-complete'' claim.
+
+This run has the most systematic mutation testing of the nine, with parametrised
+bad-input matrices for cone, box, Horn and induction certificates, including
+rejection of a base-case use of the induction hypothesis, invalid generalisation
+metadata, rigid-variable intrusion, and reference to an unavailable future
+lemma.
+
+\subsection{Four Horn experiments that must not be merged}
+
+Four runs measured demand-directed versus forward Horn search. They used four
+incompatible setups, and the temptation to combine their tables should be
+resisted.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+Run & Setup and headline observation \\
+\midrule
+\src{p5} & Depth sweep 4/8/10/12/14 on $P(a)$, $P(x)\to P(g(x))$,
+$P(x)\to P(f(x))$; no distractors; no forward cap. Forward generates
+$2^{d+1}-1$ facts (31, 511, 2{,}047, 8{,}191, 32{,}767) against $d+1$ demand
+atoms; both proofs have $d+1$ nodes. Timings reported (846.283\,ms against
+0.478\,ms at depth 14). \\
+\src{p9} & Same rule family, depths 4/8/12/16, but the forward baseline
+\emph{stops when the target appears}, giving $2^d$ facts; a 5{,}000-fact cap is
+reached at depth 16. No timings reported. \\
+\src{p3} & 12 curated goals with decoys placed first; 3/12 unsliced against
+12/12 sliced; 250 random graphs and 500 agreement comparisons. \\
+\src{p8} & Fixed useful chain of length 12 with a distractor sweep to 1{,}000
+chains; 24{,}012 / 11{,}012 / 12 firings for full closure, early-goal stop, and
+demand slicing. Timings explicitly disowned. \\
+\bottomrule
+\end{tabularx}
+\caption{The same mechanism, four incomparable measurements. \src{p5} and
+\src{p9} differ only in the forward baseline's stopping rule, and that alone
+changes the reported growth from $2^{d+1}-1$ to $2^d$.}
+\label{tab:horn-four}
+\end{table}
+
+That last point is the useful methodological lesson: a factor-of-two difference
+in a headline growth curve came entirely from a baseline policy decision, not
+from the mechanism under test.
+
+\subsection{Lean status}
+
+\subsubsection*{What the nine runs recorded}
+
+None of the nine compiled any Lean source. Each recorded the same reason --- no
+\code{lean} or \code{lake} executable in the authoring environment --- under five
+different filenames and in two different formats. Consequently none of them
+performed a kernel check, an axiom audit, or any comparison against \grind{},
+Aesop, \code{nlinarith}, LeanHammer, or any other tactic. Twenty-seven
+\code{.lean} files across the nine, totalling about 3{,}000 lines, were
+\emph{candidate source}.
+
+\subsubsection*{What this merge was able to add}
+
+The merge environment has \code{elan}, and installing the pinned
+\code{leanprover/lean4:v4.34.0} made a first, narrow compilation check possible.
+Three of the twenty-seven files import nothing beyond Lean core and can
+therefore be elaborated without a built Mathlib:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+File & Result & Elapsed (s) \\
+\midrule
+\src{p3} \code{lean/DesignAPI.lean}   & elaborated, no errors & 211.4 \\
+\src{p6} \code{lean/Contracts.lean}   & elaborated, no errors & 5.3 \\
+\src{p9} \code{lean/Structural.lean}  & elaborated, no errors & 5.1 \\
+\bottomrule
+\end{tabular}
+\caption{Lean v4.34.0 (commit \texttt{293d5d0c}), recorded in
+\texttt{results/lean-core-elaboration.json}.}
+\label{tab:lean}
+\end{table}
+
+This confirms that the proposed runtime and scheduler contract, the
+\code{CertificateSpec} soundness contract, and the Mathlib-free structural list
+proofs are well-typed Lean 4.34.0 rather than merely plausible-looking source.
+
+It confirms nothing else. It is not a transitive axiom audit. It says nothing
+about the other twenty-four files, which import Mathlib and need a built project.
+It does not establish that any certificate checker is correct. And it is not a
+comparison against any Lean tactic --- successful elaboration of a hand-written
+example proves that the example type-checks, not that automation found it.
+
+\subsection{What the evidence establishes}
+
+It establishes that the implementations actually synthesise certificates in the
+stated fragments; that certificate replay is separable from the numerical and
+symbolic search libraries; that the specified mutation and corruption tests are
+rejected; that several mechanisms solve problems their own restricted precursors
+cannot; and that three Lean design artefacts type-check under the pinned
+toolchain.
+
+It does not establish that \forge{} is implemented as a Lean tactic, that the
+Mathlib-dependent candidate scripts compile, that any certificate is checked by
+Lean's kernel, that the methods outperform existing Lean tactics, or that any
+success rate transfers to user developments. Those claims require different
+experiments, described next.
+
+Two structural limitations of the evidence deserve to be named rather than
+buried. Manufactured examples favour the grammar that generated them --- most
+visibly for \src{p2}'s 40 square certificates and \src{p5}'s 100 generated cone
+cases, both of which are drawn from the very dictionary their search covers. And
+search and replay share substrate: the same sparse polynomial and term
+representations appear on both sides in every prototype. Search-free replay is a
+meaningful independence property, but it is not an independently implemented
+formal verification of that representation. The strongest partial answers to
+this are the checkers that run algorithmically \emph{opposite} to their
+producers --- expanding a claimed Bernstein basis rather than recomputing
+coefficients, re-deriving a clause by independent unit propagation rather than
+replaying a resolution chain, recomputing a Sturm chain rather than trusting a
+stored root count, verifying $\det U=\pm1$ rather than calling the elimination
+that produced $U$.

@@ -1,0 +1,188 @@
+\section{The evaluation that would actually decide the question}
+\label{sec:evaluation}
+
+Nothing in Section~\ref{sec:experiments} measures whether \forge{} would be a
+better Lean tactic. This section specifies the experiment that would, in enough
+detail that it could be pre-registered.
+
+\subsection{Freeze the comparison, including its theorem knowledge}
+
+Use a pinned Lean release, a compatible pinned Mathlib revision, fixed imported
+modules, and recorded backend versions. Preserve each source goal with its
+original hypotheses. Run methods in isolated processes so that one theorem's
+auxiliary declarations and caches cannot leak into another method's state, and
+reset proof state between runs so that a successful trial cannot add a lemma
+that helps a later baseline run.
+
+\emph{A fair test must specify both the theorem statement and the environment in
+which it is presented.} This is the single most common way an automation
+benchmark misleads, and it has a specific form here: a benchmark extracted from
+an already compiled library can make the tested theorem itself, a renamed
+duplicate, or a later theorem depending on it available through retrieval.
+Renaming a theorem is not enough if its exact type remains indexed as a premise,
+and attributes that indirectly reintroduce a held-out theorem are also leakage.
+Build the retrieval index only from the \emph{pre-theorem} environment, or
+generate each benchmark at the correct declaration point.
+
+Never inspect the target theorem's existing proof to choose premises unless the
+experiment is explicitly labelled an \emph{oracle-premise upper bound}.
+
+\subsection{Baselines}
+
+At minimum: stock \grind{}; tuned \grind{} with explicit budgets and relevant
+suggestion settings; a simple public-tactic portfolio; and the full \forge{}
+system. On applicable subsets add Aesop, \code{nlinarith}, \code{omega}, Duper,
+the existing SOS and LP backends, \code{lean-smt}, and the shared-state
+bit-vector route.
+
+Two baselines matter more than the rest.
+
+The first is the \emph{equal-knowledge} baseline. Use the same imports, local
+context, theorem statement, typeclass environment, and premise universe. If
+\forge{} performs premise retrieval, give the baseline a matched retrieval
+condition or report the retrieval effect separately. Giving \forge{} an
+associativity lemma while withholding the same available theorem from a
+premise-aware baseline measures a data-access difference, not a search
+improvement. A system that wins only against an artificially weak baseline has
+demonstrated nothing.
+
+The second is the \emph{non-communicating portfolio}: the same workers, the same
+total budget, no fact sharing. This is the experiment that distinguishes
+``integration earns its complexity'' from ``we added more solvers'', and it is
+the one most easily omitted.
+
+\subsection{Two tracks, three input conditions}
+
+Run two tracks. The \emph{cold-knowledge} track allows only the actual
+pre-theorem environment and tests missing-lemma synthesis. The
+\emph{equal-premise} track gives all methods the same supplied premises and
+tests proof search and cooperation.
+
+For structural problems, distinguish three input conditions: definitions only;
+a common relevant helper-lemma set; and an oracle-assisted set containing the
+handwritten proof's helper lemmas. The gap between the first two measures lemma
+acquisition; the third separates discovery failures from local proof failures.
+A fourth ablation --- supply a hand-written correct induction motive to every
+eligible method --- isolates motive selection from leaf solving.
+
+\subsection{Corpus design}
+
+Mix existing development goals with newly written examples, and stratify:
+
+\begin{itemize}[leftmargin=1.4em]
+\item recursive data-structure theorems needing induction or changing
+  accumulators --- and not only append and reverse: include trees, mutually
+  recursive syntax, nested recursion, and dependent vectors;
+\item polynomial cost and invariant proofs;
+\item semialgebraic inequalities with side conditions --- sparse and dense,
+  near-zero and exactly-zero boundary behaviour, rationals with denominator side
+  conditions, integer versus real distinctions;
+\item quantified statements needing new arithmetic terms;
+\item constructive existential specifications with scope-sensitive witnesses;
+\item mixed guarded arithmetic and rewriting;
+\item Boolean-heavy verification conditions --- theory-heavy and theory-light,
+  not only pigeonholes;
+\item higher-order and indexed-datatype obligations;
+\item a large control set of goals \grind{} already handles well, including its
+  arithmetic and bit-vector strengths.
+\end{itemize}
+
+Include valid but unsupported problems, false conjectures, misleading induction
+variables, irrelevant assumptions, and goals requiring lemmas outside the first
+retrieval batch. The control set is not optional: it detects whether the new
+controller wastes resources on familiar cases.
+
+Split by theorem dependency family or development module, not by random
+near-duplicate statements. Hold out whole families when tuning heuristic
+weights --- renaming variables or changing constants in a training problem does
+not create an independent test set for a lemma-discovery heuristic. And do not
+choose only problems generated from a favoured certificate language; that is
+precisely the bias Section~\ref{sec:experiments} had to flag repeatedly in the
+prototype evidence.
+
+\subsection{Metrics}
+
+Report solved goals at several fixed wall-clock and heartbeat budgets, together
+with median and tail latency, peak memory, external-process time, proof and
+certificate size, reconstruction time, and kernel-checking time. Distinguish
+cold import costs from warm elaboration costs, and count any proof cache or
+premise index that amortises work explicitly rather than charging it only to the
+competitor.
+
+Record separately: failed translations, unsupported fragments, timeouts,
+rejected certificates, and residual reconstruction goals. \emph{Count a proof
+with one residual goal as unsolved.} A solver verdict with an unclosed proof
+hole is not a solved benchmark, and a worker's Boolean result is never the
+benchmark's success oracle. Timeouts and reconstruction failures belong in the
+denominator.
+
+Keep deterministic replay success as its own metric. Report paired wins and
+losses by problem family, not just total solved counts, using paired confidence
+intervals or a paired test over an appropriate sampling unit --- projects or
+theorem clusters, since examples within a module are correlated. For times, use
+budget curves or censored-runtime summaries rather than averaging only the
+successful cases and discarding timeouts.
+
+Compatibility mode asks a different question and needs a different plot: how
+much \emph{additional} resource rescues failures without replacing the
+successful baseline run? Plot rescue coverage against that additional budget,
+and never present the preservation property of
+Proposition~\ref{prop:preservation} as an equal-cost performance theorem.
+
+One class of outcome is not a metric at all. \emph{Any accepted false theorem or
+unapproved axiom is a release-blocking failure, not an accuracy regression.}
+
+\subsection{Required ablations}
+
+Remove one capability at a time: backward obligation production; induction;
+induction without generalisation; helper-lemma discovery; constrained
+instantiation; constant-only witnesses; hidden-quadratic certificates;
+hypothesis-product cones; Bernstein subdivision; zero-aware univariate search;
+lattice witnesses; the Boolean lane; cross-worker fact exchange; and
+relevance-based scheduling. Evaluate generalisation separately from
+helper-lemma discovery so that the contribution of each is visible --- \src{p4}'s
+$2\times2$ result (Table~\ref{tab:p4-ablation}) is the reason this matters.
+
+And run the stateless-restart versus incremental-adapter comparison explicitly,
+since it is the only thing that can justify the invasive integration work of
+Gate~5.
+
+\subsection{Acceptance gates}
+
+A defensible acceptance criterion has three parts, and the threshold must be
+chosen \emph{before} the run:
+
+\begin{enumerate}[leftmargin=1.4em]
+\item Retain a high fraction of the goals the pinned baseline solves.
+\item Solve a substantial share of held-out families requiring combinations of
+  induction, construction, nonlinear inequalities, and Boolean search.
+\item Keep every result independently checkable, with proof reconstruction and
+  kernel checking included in the cost.
+\end{enumerate}
+
+One contributing proposal offered, purely as an illustration of the \emph{form}
+such a target takes, ``20\% more fully checked solves on the selected difficult
+families and at most 5\% regression on the baseline suite''. That is a shape,
+not a prediction: no such evaluation has been run, no percentage is forecast
+here, and a 10-point gain in one category would not excuse an undisclosed
+regression in the control category.
+
+\subsection{A soundness regression suite, run continuously}
+
+Separately from the performance benchmark, maintain a suite that tries to break
+the system rather than to score it: adversarial certificates (oversized
+exponents, duplicate keys, forward proof references, transplanted certificates,
+omitted subdivision children, negative or float weights, truncated proof logs);
+branch-leakage tests; circular-lemma tests; wrong-context replay; axiom-policy
+violations; and compatibility checks against each supported Lean revision.
+
+Mutate a denominator condition; swap two polynomial variables; replace a strict
+inequality with a weak one; change an exponent; reverse an equality transport;
+remove a branch from a box cover; alter a typeclass instance; point a proof node
+to a future node; and replay under a different local context. Each of these has
+an executable analogue in at least one prototype today, and each should have one
+in the Lean implementation.
+
+Resource exhaustion is a first-class outcome in this suite. A timeout or
+out-of-memory event must return a recoverable status --- never trigger a
+fallback that trusts the search output.

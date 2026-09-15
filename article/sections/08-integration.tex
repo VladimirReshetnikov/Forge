@@ -1,0 +1,372 @@
+\section{Lean integration: a conservative bridge before an invasive one}
+\label{sec:integration}
+\status{Integration specification. The cited core names were inspected at tag
+\texttt{v4.34.0}; every adapter interface below is proposed and none has been
+compiled.}
+
+\subsection{Begin at a stable boundary}
+
+The first implementation should invoke \grind{} on ordinary Lean goals and
+supply newly proved local facts explicitly. This is less efficient than an ideal
+native integration, but it lets the structural planner and the certificate
+pipeline be tested without depending immediately on every internal
+representation.
+
+There are concrete lower-level entry points to investigate next. In the
+inspected v4.34.0 source, \code{Lean.Meta.Grind.Params} carries extensions,
+extra theorems, extra facts, simplification data, and configuration;
+\code{assertExtra} introduces supplied proof facts through
+\code{addNewRawFact}; \code{mkGoalCore} initialises a goal and its solver
+states; and the result structure carries failure information and
+counters~\cite{grind-main}. \code{Lean/Meta/Tactic/Grind/Types.lean} exposes
+\code{GrindM}, \code{GoalM}, opaque solver-extension state, and a
+\code{SavedState} containing both Meta and grind state, whose restore operation
+restores both components~\cite{grind-types}. There is also a registration path
+for solver extensions, whose methods cover internalisation, new-equality and
+new-disequality notification, an action, consistency checks, and a
+model-combination hook~\cite{grind-api}.
+
+A second inspection of the same release found a more specific surface: a
+registration function \code{registerSolverExtension} in the
+\code{Lean.Meta.Grind} namespace, together with
+\code{SolverExtension.setMethods}, whose callbacks are \code{internalize},
+\code{newEq}, \code{newDiseq}, \code{mbtc}, \code{action}, \code{check} and
+\code{checkInv}; registration happens at initialisation time and extension state
+is per goal. The API also distinguishes \code{Solvers.mkActionCore} from the
+wrapper that drains pending facts~\cite{grind-api}. A polynomial adapter would
+mark relevant expressions during internalisation, mark a component dirty after
+an equality, perform bounded certificate search on the expensive-check path, and
+publish its accepted output as a proved fact through the ordinary fact
+machinery. Note that the internal-invariant check in that interface is a check
+of data-structure bookkeeping; it is not the mathematical soundness argument for
+a certificate.
+
+These are implementation hooks, not a promise of a stable public integration
+contract, and two qualifications matter.
+
+First, feeding \code{Params.extraFacts} into a \emph{fresh} run is not the same
+as resuming an earlier saturation state. A true incremental adapter must
+preserve the goal state and all relevant solver and context state, and must add
+facts through the normal internalisation and propagation path. Otherwise an
+equality can exist in one table while being invisible to another solver.
+
+Second, restoring a Lean metavariable snapshot alone is not enough.
+\forge{} needs its own rollback layer for the additional clause-database views,
+demand queues, proof dependencies, and branch-local plugin state that it
+introduces. \code{SavedState} is necessary, not sufficient.
+
+A proposed versioned adapter surface:
+
+\begin{lstlisting}
+GrindAdapter.open           (snapshot, options)     -> session
+GrindAdapter.seed           (session, checkedProofs)-> session
+GrindAdapter.advance        (session, workQuota)    -> localResult
+GrindAdapter.exportRelevant (session, demand)       -> checkedSummary
+GrindAdapter.snapshot       (session)               -> resumableState
+GrindAdapter.restore        (resumableState)        -> session
+\end{lstlisting}
+
+All version-specific internals live in one compatibility module per pinned Lean
+version --- for example \code{Forge.Bridge.GrindV434}. Theory adapters and the
+outer scheduler target \forge{}'s own records rather than importing dozens of
+evolving internal modules. Unit-test seeded facts, case-split rollback, proof
+extraction, metavariable changes, and equality propagation through every enabled
+local theory. Until that adapter is reliable, restarting a local tactic with
+explicit checked facts is preferable to a fast but incoherent shared state.
+
+\subsection{A typed semantic boundary for each worker}
+
+A reifier does more than turn Lean expressions into strings. For a polynomial
+fragment it produces a variable table, an exact polynomial, and a proof that the
+polynomial's denotation under that table is the source expression:
+\[
+\operatorname{reify}(e)
+  =\bigl(\text{environment }\rho,\ \text{IR }t,\
+    \pi: e=\operatorname{eval}_{\rho}(t)\bigr).
+\]
+For an inequality or a formula the contract is an equivalence or a suitable
+one-way implication, and the direction must match how the result will be used.
+Unsupported subexpressions may become opaque atoms when that abstraction is
+sound for the requested procedure.
+
+An algebraically correct certificate for the wrong denotation is not a proof of
+the original statement. Equality classes must be homogeneous up to justified
+type compatibility; heterogeneous equality is not an excuse to ignore type
+indices, so keep \code{HEq} reasoning and transport explicit and use elaboration
+to validate casts. A proof of $i=j$ does not make \code{Vector A i} and
+\code{Vector A j} definitionally interchangeable, and they must not be identified
+because their indices were merged in an untyped side representation. Typeclass
+dictionaries and universe instantiations are part of the elaborated expression,
+not metadata that can always be erased.
+
+An initial external term language should remain first-order and homogeneous
+rather than implementing an ad hoc untyped approximation of all of Lean.
+
+\subsection{Three levels of proof reconstruction}
+
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{Ordinary theorem applications and tactic steps.} Appropriate for
+  synthesised witnesses, explicit induction motives, small nonnegative linear
+  combinations, and recurrence identities. The search can be complicated while
+  the replay stays short.
+\item \textbf{A typed certificate to a reflected checker}, with a theorem
+  \[
+  \operatorname{check}(P,C)=\texttt{true}\ \Longrightarrow\ \operatorname{Denotes}(P).
+  \]
+  The problem $P$ comes from the source reifier. The external solver may choose
+  only $C$; it may never replace $P$. In a conservative configuration, reduce
+  the checker inside the trusted proof-checking path rather than accepting an
+  unchecked foreign result.
+\item \textbf{External proof import} with explicit supported rules, every
+  unsupported step becoming an obligation.
+\end{enumerate}
+
+For larger algebraic results the second level becomes worthwhile once its
+soundness theorem exists; below that threshold, reconstructing small certificates
+with \code{ring}, \code{linarith}, \code{positivity}, \code{norm\_num} and cast
+normalisation avoids introducing a second independent arithmetic proof language
+prematurely~\cite{mathlib-ring,mathlib-linarith,mathlib-positivity,mathlib-linear-combination}.
+
+The mixed bit-vector case should use the existing shared-state
+\code{grind => bv\_decide} route where applicable rather than duplicating its
+encoding to fit a uniform architecture~\cite{lean-release-434}.
+
+\subsection{A proposed module layout}
+
+The following paths are an implementation plan. No file claimed here exists in
+this repository.
+
+\begin{lstlisting}
+Forge/Frontend.lean              -- syntax, configuration, diagnostics
+Forge/Core/GoalSnapshot.lean     -- restorable state identity
+Forge/Core/Obligation.lean       -- AND/OR graph and proof assembly
+Forge/Core/CheckedFact.lean      -- scoped propositions, dependencies
+Forge/Core/Scheduler.lean        -- deterministic quotas and budgets
+Forge/Core/Replay.lean           -- minimization and axiom audit
+
+Forge/Bridge/GrindV434.lean      -- ALL version-pinned internals
+Forge/Reify/Polynomial.lean      -- typed views and denotation proofs
+
+Forge/Structural/CallAnalysis.lean
+Forge/Structural/Generalize.lean
+Forge/Structural/LemmaFrontier.lean
+Forge/Structural/Witness.lean
+
+Forge/Arithmetic/Cone.lean       -- cone semantics and exact replay
+Forge/Arithmetic/Quadratic.lean
+Forge/Arithmetic/Bernstein.lean
+Forge/Arithmetic/Sturm.lean      -- needs a proved root-count theorem
+Forge/Arithmetic/Lattice.lean
+
+Forge/Instantiation/ConstrainedMatch.lean
+Forge/Instantiation/ModelGuided.lean
+
+Forge/Backend/SOS.lean           -- adapter to the existing sos project
+Forge/Backend/LP.lean            -- adapter to the existing lp project
+Forge/Backend/SMT.lean
+Forge/Oracle/Protocol.lean       -- bounded certificate data, never code
+Forge/Tactic.lean
+\end{lstlisting}
+
+The core modules depend only on Lean and a small shared representation.
+Mathlib-specific reifiers and tactics sit behind separate imports. External
+processes consume a versioned certificate format and return only untrusted
+proposals, and the package remains useful when those processes are absent.
+
+That last property is worth stating as a design goal rather than an accident:
+the separation between core, checking, and external search permits
+\emph{replay-only builds}. A numerical solver can be absent on the machine that
+checks a finished proof.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.34\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}@{}}
+\toprule
+Module & Responsibility & Acceptance contract \\
+\midrule
+\endhead
+\code{Forge.Core} &
+Scoped expression, fact, and obligation graph &
+No unproved facts; valid dependency scopes \\
+\code{Forge.Bridge} &
+Version-specific extension hooks &
+Restorable state; exact expression and proof transport \\
+\code{Forge.Demand} &
+Retrieval, instantiation, tabling &
+Every application elaborates; acyclic proof parents \\
+\code{Forge.Reify} &
+Typed polynomial representation &
+Denotation equality for each reified term \\
+\code{Forge.Arithmetic} &
+Cone, box, lattice certificate checking &
+Proved checker soundness, or explicit proof reconstruction \\
+\code{Forge.Structural} &
+Recursor selection and generalisation &
+Goal refinement through an actual induction theorem \\
+\code{Forge.Synth} &
+Invariants and existential candidates &
+Base/step identities or witness specification discharged \\
+\code{Forge.Backend} &
+SAT, SMT, SOS, LP, superposition adapters &
+Supported translation and proof rules; no raw oracle acceptance \\
+\code{Forge.Replay} &
+Proof minimisation and audit &
+Exact original goal, no remaining metavariables, approved axioms \\
+\bottomrule
+\end{longtable}
+
+\begin{proposition}[Compositional soundness is not inherited]
+Soundness of the assembled system requires soundness at every layer
+simultaneously. An unsound term translator is not repaired by an exact
+polynomial checker. A sound checker is not repaired by a replay path that
+assumes its result through an oracle axiom. An acyclic certificate DAG is not
+sufficient if a proof parent was imported from the wrong branch.
+\end{proposition}
+
+\subsection{A proposed user interface}
+
+Proposed syntax only; no such tactic exists.
+
+\begin{lstlisting}
+forge
+forge? [selectedLemma, recursiveDefinition]
+forge (config := {
+  mode             := .compatibility
+  induction        := true
+  inductionDepth   := 2
+  synthesizeLemmas := true
+  witnesses        := .affine
+  witnessSize      := 6
+  polynomialDegree := 4
+  externalSearch   := false
+  trust            := .kernelOnly
+})
+\end{lstlisting}
+
+A successful explanatory invocation emits a \emph{smaller replay plan}: the
+chosen induction scheme, the generalised variables, the witness expressions, the
+library lemmas actually needed, and the concrete certificate data. It must not
+require the original broad search again, and it must not depend on an external
+service still being available. A proof that succeeds only while a particular
+model service is reachable is an unsatisfactory end product when an explicit
+certificate can be retained instead.
+
+Parameters must describe real implementation limits. A polynomial-degree bound
+and a certificate monomial bound control different sources of explosion and
+should not be conflated. A trust option must not change silently because a
+faster worker happens to be available.
+
+A failure report should identify the first substantive blocked obligation rather
+than advising a larger timeout, and should distinguish at least:
+
+\begin{itemize}[leftmargin=1.4em]
+\item no induction motive found;
+\item candidate lemma refuted by an executable example;
+\item nonlinear certificate search exhausted;
+\item unsupported source operation;
+\item external proof reconstruction incomplete;
+\item resource limit reached.
+\end{itemize}
+
+A mathematical failure and a resource failure must not produce the same
+diagnostic. Useful concrete examples of the intended register: ``induction step
+requires a lemma about the changing accumulator; 128 candidate expressions
+rejected by tests; 3 universal proofs remain open,'' and ``SOS candidate
+rejected by exact coefficient check; no theorem added.''
+
+\subsection{The deployment pattern}
+
+The intended end state for a user's file is not a permanently expensive tactic
+call. It is: expensive search once, then a stable, readable proof for ordinary
+recompilation. Concretely, the accumulator example should end as a separately
+proved general lemma plus a short specialisation, with the final theorem not
+invoking the synthesiser at all:
+
+\begin{lstlisting}
+theorem revAcc_spec (xs acc : List a) :
+    revAcc xs acc = app (rev xs) acc := by
+  induction xs generalizing acc with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [revAcc, rev, ih, app_assoc, app]
+
+theorem revAcc_correct (xs : List a) :
+    revAcc xs [] = rev xs := by
+  rw [revAcc_spec, app_right_nil]
+\end{lstlisting}
+
+The important algorithmic decision there is the motive --- \code{generalizing
+acc} --- not the final normalisation tactic. A syntactically valid \code{induction}
+call with a fixed accumulator gives an induction hypothesis too weak for the
+recursive call, which is exactly the obstruction of \S\ref{sec:structural}.
+
+\subsection{Implementation sequence and acceptance gates}
+
+The nine contributing efforts proposed between four and six milestones each,
+with substantial agreement on the ordering. The merged sequence is:
+
+\paragraph{Gate 1 --- trustworthy orchestration.}
+Frontend, deterministic compatibility mode, full state rollback, worker
+contracts, replay records, and the axiom-policy audit. Exit criteria: the
+restricted mode reproduces a pinned baseline suite without introducing new
+axioms or losing source assumptions; a deliberately malformed proof or admitted
+theorem is rejected; a failed branch provably cannot leak a local equality into
+its sibling. Only existing proof-producing leaf tactics need run at this stage.
+
+\paragraph{Gate 2 --- exact algebraic replay.}
+Typed reification and cone replay in Lean; the quadratic and finite-cone oracles
+called through a bounded data protocol; the affine/Farkas and recurrence
+certificate reconstructions. Exit criteria: successful Lean checking of every
+claimed end-to-end example, mutation rejection \emph{at the data boundary}, and
+recorded axiom dependencies. This stage already adds useful nonlinear facts to a
+stock \grind{} leaf; it need not wait for an induction planner or SDP search.
+
+\paragraph{Gate 3 --- structural planning and witnesses.}
+Explicit theorem-application obligations, bounded induction with
+dependency-directed generalisation, and typed witness grammars. Exit criteria:
+unseen variations of accumulator correctness are solved \emph{with the
+correctness theorem absent from the environment}; false-statement and
+circular-lemma rejection tests pass; an induction success includes the selected
+principle and reconstructed motive in its replay trace; a witness success
+includes the witness term and every bound, integrality, and typeclass obligation
+it needs.
+
+\paragraph{Gate 4 --- domain-aware positivity.}
+Bernstein coefficient and coverage rules formalised; compact-box certificates;
+and, before any univariate certificate is accepted in Lean, a proved or
+integrated Sturm/root-count result. That verification task is substantial and
+must not be hidden behind an unchecked foreign call. An explicit multi-leaf
+replay can validate the search-to-source path first, but production acceptance
+should prefer a reusable checked certificate theorem to a large amount of
+duplicated tactic text.
+
+\paragraph{Gate 5 --- efficient cooperation.}
+Incremental fact subscriptions, proof-DAG sharing, bound-derived product
+envelopes, target-driven certificate candidates, and the version-pinned adapter
+--- introduced only where measurement shows that repeated leaf setup dominates.
+Keep a terminal-tactic fallback so that a Lean upgrade cannot disable the entire
+system.
+
+\paragraph{Gate 6 --- optional broader search.}
+Premise search, SDP proposals with exact reconstruction, the CDCL(T) lane, and
+optionally a learned ranking policy. Exit criterion for external backends: zero
+unproved hints in any counted success. Learned components may choose which
+candidate to try; they never decide which statements are accepted.
+Native-trust workers remain opt-in, and every optional dependency carries its own
+toolchain and feature-compatibility check.
+
+\paragraph{What not to implement first.}
+A complete new SMT solver, a rewrite of \grind{}, a general SDP backend, a
+dependent-type-erasing universal intermediate language, or a learned scheduler.
+The most valuable first release is not ``every solver behind one keyword''.
+
+\subsection{Where the risk actually is}
+
+The highest-risk engineering tasks are not mathematical. They are preserving
+dependent contexts through generalisation; maintaining valid state across local
+solver restarts and snapshots; producing compact proof reconstruction; and
+keeping candidate lemmas out of the proved state. The numerical search is
+comparatively easy to sandbox, precisely because an exact certificate can reject
+a bad proposal.
+
+A restricted, correct implementation that exports a small set of ordinary Lean
+proofs is preferable to a wide solver bridge that silently leaves obligations or
+enlarges the trusted base.
