@@ -29,6 +29,7 @@ synthesis — and the shape transfers.
 Verified first-hand against the installed `leanprover/lean4:v4.34.0`, not taken
 on the reviewed project's word — its analysis cites 4.33.0, so the claims
 needed rechecking at our pinned version. **Neither appears in any of the nine
+design-round
 proposals.**
 
 `Kernel.Environment.addDecl` branches on `debug.skipKernelTC` and calls
@@ -249,7 +250,10 @@ does not.
 
 ## Documentation practices worth copying
 
-Both projects do something the nine proposals did not, and it is cheap.
+Both projects do something the nine design-round proposals did not, and it is
+cheap. Four of the extension proposals now do one half of it -- `e9` ships a
+run history with three failures and their tracebacks, and `e1`, `e3` and `e5`
+keep failed-run directories beside their accepted results.
 
 **A three-valued capability ledger.** Accepted / attempted-without-acceptance /
 no-indexed-evidence — with an explicit note that the third is *not* a claim of

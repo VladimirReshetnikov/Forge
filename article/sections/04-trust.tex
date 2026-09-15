@@ -211,8 +211,11 @@ assurance would mean~\cite{lean4lean}.
 The acceptance judgement above is not self-executing. In the pinned Lean
 v4.34.0 source there are two concrete paths by which an implementation that
 believes it is kernel-checking is not. Both were verified directly against the
-installed toolchain rather than inferred, and neither appears in any of the
-nine source proposals.
+installed toolchain rather than inferred, and neither appears in any of the nine
+design-round proposals. The extension round, written after this section existed,
+picked up half of it: two of \src{e8}'s Lean specimens open with
+\code{set\_option debug.skipKernelTC false}, which is the right reflex. The
+asynchronous \code{addDecl} path is still unaddressed by anyone.
 
 \paragraph{An inherited option can switch the kernel off.}
 \code{Lean.Kernel.Environment.addDecl} branches on a builtin option:
@@ -294,8 +297,8 @@ what was checked.
 \subsection{What a working verification boundary looks like}
 \label{sec:boundary-impl}
 
-The preceding subsections say what acceptance must establish. None of the nine
-proposals built it. A neighbouring project has, for term synthesis rather than
+The preceding subsections say what acceptance must establish. None of the
+eighteen proposals built it. A neighbouring project has, for term synthesis rather than
 for certificates, and its shape is worth recording because several of its
 decisions are not the obvious ones.
 

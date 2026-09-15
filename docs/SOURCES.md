@@ -132,8 +132,8 @@ Three source observations materially shaped the merged article.
 nonlinear-real-arithmetic tactic after Harrison's procedure — reification,
 search, rational reconstruction, certificate-based proof construction, and a
 witness replay interface, with degree deepening and constraint-product bounds
-already in its configuration. Two of the nine proposals found this; the other
-seven proposed building the same thing. "Add an SOS tactic to Lean" is
+already in its configuration. Two of the nine design-round proposals found
+this; the other seven proposed building the same thing. "Add an SOS tactic to Lean" is
 therefore not a contribution.
 
 **Verified linear programming already exists.** `leanprover/lp` splits into
