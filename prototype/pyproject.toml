@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forge-prototype"
+version = "0.1.0"
+description = "Merged certificate-producing search prototype from nine proposals (p1-p9)"
+requires-python = ">=3.12"
+license = { text = "See ../LICENSE" }
+
+# Search (bin/generate.py and the forge.*.discover/search entry points) uses
+# these. Every CHECKER, forge/io/decode.py and bin/verify.py are standard
+# library only, which is why `python -S bin/verify.py` works.
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.14",
+    "sympy>=1.13",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+forge-verify = "bin.verify:main"
+
+[tool.setuptools]
+packages = ["forge", "forge.witness", "forge.io"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

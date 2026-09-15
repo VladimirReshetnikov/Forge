@@ -1,0 +1,3968 @@
+[
+ {
+  "certificate": {
+   "equality_multipliers": [],
+   "terms": [
+    {
+     "powers": [],
+     "square": {
+      "n": 2,
+      "terms": [
+       [
+        [
+         0,
+         0
+        ],
+        "1"
+       ],
+       [
+        [
+         0,
+         1
+        ],
+        "-4/7"
+       ],
+       [
+        [
+         1,
+         0
+        ],
+        "-3/7"
+       ]
+      ]
+     },
+     "weight": "21"
+    },
+    {
+     "powers": [],
+     "square": {
+      "n": 2,
+      "terms": [
+       [
+        [
+         0,
+         1
+        ],
+        "-49/51"
+       ],
+       [
+        [
+         1,
+         0
+        ],
+        "1"
+       ]
+      ]
+     },
+     "weight": "51/7"
+    },
+    {
+     "powers": [],
+     "square": {
+      "n": 2,
+      "terms": [
+       [
+        [
+         0,
+         1
+        ],
+        "1"
+       ]
+      ]
+     },
+     "weight": "200/357"
+    }
+   ]
+  },
+  "family": "Quadratic SOS",
+  "id": "hidden_quadratic",
+  "input": {
+   "p": {
+    "n": 2,
+    "terms": [
+     [
+      [
+       0,
+       0
+      ],
+      "21"
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      "-24"
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      "99/7"
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      "-18"
+     ],
+     [
+      [
+       1,
+       1
+      ],
+      "-26/7"
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      "78/7"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "equality_multipliers": [
+    {
+     "n": 2,
+     "terms": [
+      [
+       [
+        0,
+        0
+       ],
+       "1/2"
+      ],
+      [
+       [
+        0,
+        1
+       ],
+       "1/2"
+      ],
+      [
+       [
+        1,
+        0
+       ],
+       "1/2"
+      ]
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "powers": [],
+     "square": {
+      "n": 2,
+      "terms": [
+       [
+        [
+         0,
+         1
+        ],
+        "1"
+       ],
+       [
+        [
+         1,
+         0
+        ],
+        "-1"
+       ]
+      ]
+     },
+     "weight": "1/2"
+    }
+   ]
+  },
+  "family": "Finite cone LP",
+  "id": "equality_constrained",
+  "input": {
+   "equalities": [
+    {
+     "n": 2,
+     "terms": [
+      [
+       [
+        0,
+        0
+       ],
+       "-1"
+      ],
+      [
+       [
+        0,
+        1
+       ],
+       "1"
+      ],
+      [
+       [
+        1,
+        0
+       ],
+       "1"
+      ]
+     ]
+    }
+   ],
+   "p": {
+    "n": 2,
+    "terms": [
+     [
+      [
+       0,
+       0
+      ],
+      "-1/2"
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      "1"
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "equality_multipliers": [],
+   "terms": [
+    {
+     "powers": [
+      1,
+      1
+     ],
+     "square": {
+      "n": 2,
+      "terms": [
+       [
+        [
+         0,
+         0
+        ],
+        "1"
+       ]
+      ]
+     },
+     "weight": "1"
+    }
+   ]
+  },
+  "family": "Finite cone LP",
+  "id": "guard_product",
+  "input": {
+   "inequalities": [
+    {
+     "n": 2,
+     "terms": [
+      [
+       [
+        1,
+        0
+       ],
+       "1"
+      ]
+     ]
+    },
+    {
+     "n": 2,
+     "terms": [
+      [
+       [
+        0,
+        1
+       ],
+       "1"
+      ]
+     ]
+    }
+   ],
+   "p": {
+    "n": 2,
+    "terms": [
+     [
+      [
+       1,
+       1
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "axis": 0,
+   "left": {
+    "axis": 1,
+    "left": {
+     "axis": 0,
+     "left": {
+      "axis": 1,
+      "left": {
+       "leaf": "1/16"
+      },
+      "point": "-1",
+      "right": {
+       "axis": 0,
+       "left": {
+        "leaf": "7/32"
+       },
+       "point": "-3/2",
+       "right": {
+        "axis": 1,
+        "left": {
+         "leaf": "0"
+        },
+        "point": "-1/2",
+        "right": {
+         "leaf": "217/384"
+        }
+       }
+      }
+     },
+     "point": "-1",
+     "right": {
+      "axis": 1,
+      "left": {
+       "axis": 0,
+       "left": {
+        "axis": 1,
+        "left": {
+         "leaf": "91/128"
+        },
+        "point": "-3/2",
+        "right": {
+         "leaf": "0"
+        }
+       },
+       "point": "-1/2",
+       "right": {
+        "leaf": "17/32"
+       }
+      },
+      "point": "-1",
+      "right": {
+       "leaf": "1/16"
+      }
+     }
+    },
+    "point": "0",
+    "right": {
+     "axis": 0,
+     "left": {
+      "axis": 1,
+      "left": {
+       "axis": 0,
+       "left": {
+        "leaf": "7/32"
+       },
+       "point": "-3/2",
+       "right": {
+        "axis": 1,
+        "left": {
+         "leaf": "217/384"
+        },
+        "point": "1/2",
+        "right": {
+         "leaf": "0"
+        }
+       }
+      },
+      "point": "1",
+      "right": {
+       "leaf": "1/16"
+      }
+     },
+     "point": "-1",
+     "right": {
+      "axis": 1,
+      "left": {
+       "leaf": "1/16"
+      },
+      "point": "1",
+      "right": {
+       "axis": 0,
+       "left": {
+        "axis": 1,
+        "left": {
+         "leaf": "0"
+        },
+        "point": "3/2",
+        "right": {
+         "leaf": "91/128"
+        }
+       },
+       "point": "-1/2",
+       "right": {
+        "leaf": "17/32"
+       }
+      }
+     }
+    }
+   },
+   "point": "0",
+   "right": {
+    "axis": 1,
+    "left": {
+     "axis": 0,
+     "left": {
+      "axis": 1,
+      "left": {
+       "axis": 0,
+       "left": {
+        "leaf": "17/32"
+       },
+       "point": "1/2",
+       "right": {
+        "axis": 1,
+        "left": {
+         "leaf": "91/128"
+        },
+        "point": "-3/2",
+        "right": {
+         "leaf": "0"
+        }
+       }
+      },
+      "point": "-1",
+      "right": {
+       "leaf": "1/16"
+      }
+     },
+     "point": "1",
+     "right": {
+      "axis": 1,
+      "left": {
+       "leaf": "1/16"
+      },
+      "point": "-1",
+      "right": {
+       "axis": 0,
+       "left": {
+        "axis": 1,
+        "left": {
+         "leaf": "0"
+        },
+        "point": "-1/2",
+        "right": {
+         "leaf": "217/384"
+        }
+       },
+       "point": "3/2",
+       "right": {
+        "leaf": "7/32"
+       }
+      }
+     }
+    },
+    "point": "0",
+    "right": {
+     "axis": 0,
+     "left": {
+      "axis": 1,
+      "left": {
+       "leaf": "1/16"
+      },
+      "point": "1",
+      "right": {
+       "axis": 0,
+       "left": {
+        "leaf": "17/32"
+       },
+       "point": "1/2",
+       "right": {
+        "axis": 1,
+        "left": {
+         "leaf": "0"
+        },
+        "point": "3/2",
+        "right": {
+         "leaf": "91/128"
+        }
+       }
+      }
+     },
+     "point": "1",
+     "right": {
+      "axis": 1,
+      "left": {
+       "axis": 0,
+       "left": {
+        "axis": 1,
+        "left": {
+         "leaf": "217/384"
+        },
+        "point": "1/2",
+        "right": {
+         "leaf": "0"
+        }
+       },
+       "point": "3/2",
+       "right": {
+        "leaf": "7/32"
+       }
+      },
+      "point": "1",
+      "right": {
+       "leaf": "1/16"
+      }
+     }
+    }
+   }
+  },
+  "family": "Bernstein box",
+  "id": "motzkin_box",
+  "input": {
+   "box": [
+    [
+     "-2",
+     "2"
+    ],
+    [
+     "-2",
+     "2"
+    ]
+   ],
+   "p": {
+    "n": 2,
+    "terms": [
+     [
+      [
+       0,
+       0
+      ],
+      "17/16"
+     ],
+     [
+      [
+       2,
+       2
+      ],
+      "-3"
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      "1"
+     ],
+     [
+      [
+       4,
+       2
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "split": {
+    "axis": 0,
+    "box": [
+     [
+      "0",
+      "1"
+     ]
+    ],
+    "cut": "1/2",
+    "left": {
+     "split": {
+      "axis": 0,
+      "box": [
+       [
+        "0",
+        "1/2"
+       ]
+      ],
+      "cut": "1/4",
+      "left": {
+       "leaf": {
+        "box": [
+         [
+          "0",
+          "1/4"
+         ]
+        ],
+        "coefficients": [
+         [
+          [
+           0
+          ],
+          "109/900"
+         ],
+         [
+          [
+           1
+          ],
+          "17/450"
+         ],
+         [
+          [
+           2
+          ],
+          "61/3600"
+         ]
+        ],
+        "degrees": [
+         2
+        ]
+       }
+      },
+      "right": {
+       "split": {
+        "axis": 0,
+        "box": [
+         [
+          "1/4",
+          "1/2"
+         ]
+        ],
+        "cut": "3/8",
+        "left": {
+         "leaf": {
+          "box": [
+           [
+            "1/4",
+            "3/8"
+           ]
+          ],
+          "coefficients": [
+           [
+            [
+             0
+            ],
+            "61/3600"
+           ],
+           [
+            [
+             1
+            ],
+            "47/7200"
+           ],
+           [
+            [
+             2
+            ],
+            "169/14400"
+           ]
+          ],
+          "degrees": [
+           2
+          ]
+         }
+        },
+        "right": {
+         "leaf": {
+          "box": [
+           [
+            "3/8",
+            "1/2"
+           ]
+          ],
+          "coefficients": [
+           [
+            [
+             0
+            ],
+            "169/14400"
+           ],
+           [
+            [
+             1
+            ],
+            "61/3600"
+           ],
+           [
+            [
+             2
+            ],
+            "17/450"
+           ]
+          ],
+          "degrees": [
+           2
+          ]
+         }
+        }
+       }
+      }
+     }
+    },
+    "right": {
+     "leaf": {
+      "box": [
+       [
+        "1/2",
+        "1"
+       ]
+      ],
+      "coefficients": [
+       [
+        [
+         0
+        ],
+        "17/450"
+       ],
+       [
+        [
+         1
+        ],
+        "109/900"
+       ],
+       [
+        [
+         2
+        ],
+        "409/900"
+       ]
+      ],
+      "degrees": [
+       2
+      ]
+     }
+    }
+   }
+  },
+  "family": "Bernstein expansion",
+  "id": "shifted_square_box",
+  "input": {
+   "box": [
+    [
+     "0",
+     "1"
+    ]
+   ],
+   "p": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       0
+      ],
+      "109/900"
+     ],
+     [
+      [
+       1
+      ],
+      "-2/3"
+     ],
+     [
+      [
+       2
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "n": 1,
+   "terms": [
+    [
+     [
+      1
+     ],
+     "1"
+    ]
+   ]
+  },
+  "family": "Polynomial recurrence",
+  "id": "power_sum_0",
+  "input": {
+   "initial": {
+    "n": 1,
+    "terms": []
+   },
+   "step": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       0
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "n": 1,
+   "terms": [
+    [
+     [
+      1
+     ],
+     "-1/2"
+    ],
+    [
+     [
+      2
+     ],
+     "1/2"
+    ]
+   ]
+  },
+  "family": "Polynomial recurrence",
+  "id": "power_sum_1",
+  "input": {
+   "initial": {
+    "n": 1,
+    "terms": []
+   },
+   "step": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       1
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "n": 1,
+   "terms": [
+    [
+     [
+      1
+     ],
+     "1/6"
+    ],
+    [
+     [
+      2
+     ],
+     "-1/2"
+    ],
+    [
+     [
+      3
+     ],
+     "1/3"
+    ]
+   ]
+  },
+  "family": "Polynomial recurrence",
+  "id": "power_sum_2",
+  "input": {
+   "initial": {
+    "n": 1,
+    "terms": []
+   },
+   "step": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       2
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "n": 1,
+   "terms": [
+    [
+     [
+      2
+     ],
+     "1/4"
+    ],
+    [
+     [
+      3
+     ],
+     "-1/2"
+    ],
+    [
+     [
+      4
+     ],
+     "1/4"
+    ]
+   ]
+  },
+  "family": "Polynomial recurrence",
+  "id": "power_sum_3",
+  "input": {
+   "initial": {
+    "n": 1,
+    "terms": []
+   },
+   "step": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       3
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "n": 1,
+   "terms": [
+    [
+     [
+      1
+     ],
+     "-1/30"
+    ],
+    [
+     [
+      3
+     ],
+     "1/3"
+    ],
+    [
+     [
+      4
+     ],
+     "-1/2"
+    ],
+    [
+     [
+      5
+     ],
+     "1/5"
+    ]
+   ]
+  },
+  "family": "Polynomial recurrence",
+  "id": "power_sum_4",
+  "input": {
+   "initial": {
+    "n": 1,
+    "terms": []
+   },
+   "step": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       4
+      ],
+      "1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "initial": [
+    "0",
+    "0"
+   ],
+   "invariant": {
+    "n": 2,
+    "terms": [
+     [
+      [
+       0,
+       1
+      ],
+      "1"
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      "-1/4"
+     ],
+     [
+      [
+       3,
+       0
+      ],
+      "-1/2"
+     ],
+     [
+      [
+       4,
+       0
+      ],
+      "-1/4"
+     ]
+    ]
+   },
+   "transition": [
+    {
+     "n": 2,
+     "terms": [
+      [
+       [
+        0,
+        0
+       ],
+       "1"
+      ],
+      [
+       [
+        1,
+        0
+       ],
+       "1"
+      ]
+     ]
+    },
+    {
+     "n": 2,
+     "terms": [
+      [
+       [
+        0,
+        0
+       ],
+       "1"
+      ],
+      [
+       [
+        0,
+        1
+       ],
+       "1"
+      ],
+      [
+       [
+        1,
+        0
+       ],
+       "3"
+      ],
+      [
+       [
+        2,
+        0
+       ],
+       "3"
+      ],
+      [
+       [
+        3,
+        0
+       ],
+       "1"
+      ]
+     ]
+    }
+   ]
+  },
+  "family": "Conserved invariant",
+  "id": "cubic_accumulator",
+  "input": {}
+ },
+ {
+  "certificate": {
+   "linear": [
+    [
+     "-1",
+     "-9"
+    ],
+    [
+     "2",
+     "4"
+    ]
+   ],
+   "offset": [
+    "11",
+    "-3"
+   ]
+  },
+  "family": "Integral affine witness",
+  "id": "integral_affine",
+  "input": {
+   "A": [
+    [
+     1,
+     2
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "B": [
+    [
+     3,
+     -1
+    ],
+    [
+     2,
+     4
+    ]
+   ],
+   "c": [
+    5,
+    -3
+   ]
+  }
+ },
+ {
+  "certificate": {
+   "basis": [
+    [
+     -5
+    ],
+    [
+     3
+    ]
+   ],
+   "feasible": true,
+   "steps": [
+    {
+     "gcd": 2,
+     "obstruction": false,
+     "quotient": 1,
+     "residual": 2,
+     "row": 0,
+     "transform": [
+      [
+       2,
+       -5
+      ],
+      [
+       -1,
+       3
+      ]
+     ]
+    }
+   ],
+   "witness": [
+    2,
+    -1
+   ]
+  },
+  "family": "Integer lattice",
+  "id": "bezout_6_10",
+  "input": {
+   "A": [
+    [
+     6,
+     10
+    ]
+   ],
+   "b": [
+    2
+   ]
+  }
+ },
+ {
+  "certificate": {
+   "basis": [
+    [
+     45
+    ],
+    [
+     6
+    ],
+    [
+     -22
+    ]
+   ],
+   "feasible": true,
+   "steps": [
+    {
+     "gcd": 1,
+     "obstruction": false,
+     "quotient": 7,
+     "residual": 7,
+     "row": 0,
+     "transform": [
+      [
+       -14,
+       -5,
+       -30
+      ],
+      [
+       7,
+       3,
+       15
+      ],
+      [
+       1,
+       0,
+       2
+      ]
+     ]
+    },
+    {
+     "gcd": 2,
+     "obstruction": false,
+     "quotient": 185,
+     "residual": 370,
+     "row": 1,
+     "transform": [
+      [
+       -26,
+       57
+      ],
+      [
+       5,
+       -11
+      ]
+     ]
+    }
+   ],
+   "witness": [
+    -3798,
+    -506,
+    1857
+   ]
+  },
+  "family": "Integer lattice",
+  "id": "coupled_system",
+  "input": {
+   "A": [
+    [
+     6,
+     10,
+     15
+    ],
+    [
+     2,
+     -4,
+     3
+    ]
+   ],
+   "b": [
+    7,
+    -1
+   ]
+  }
+ },
+ {
+  "certificate": {
+   "offsets": [
+    2,
+    1,
+    0,
+    4,
+    3
+   ]
+  },
+  "family": "Modular witness",
+  "id": "residue_3_1_mod_5",
+  "input": {
+   "a": 3,
+   "b": 1,
+   "m": 5
+  }
+ },
+ {
+  "certificate": {
+   "chain": [
+    {
+     "n": 1,
+     "terms": [
+      [
+       [
+        0
+       ],
+       "4/63"
+      ],
+      [
+       [
+        2
+       ],
+       "3/7"
+      ],
+      [
+       [
+        4
+       ],
+       "-1/9"
+      ]
+     ]
+    },
+    {
+     "n": 1,
+     "terms": [
+      [
+       [
+        1
+       ],
+       "6/7"
+      ],
+      [
+       [
+        3
+       ],
+       "-4/9"
+      ]
+     ]
+    },
+    {
+     "n": 1,
+     "terms": [
+      [
+       [
+        0
+       ],
+       "-4/63"
+      ],
+      [
+       [
+        2
+       ],
+       "-3/14"
+      ]
+     ]
+    },
+    {
+     "n": 1,
+     "terms": [
+      [
+       [
+        1
+       ],
+       "-1682/1701"
+      ]
+     ]
+    },
+    {
+     "n": 1,
+     "terms": [
+      [
+       [
+        0
+       ],
+       "4/63"
+      ]
+     ]
+    }
+   ],
+   "residual": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       0
+      ],
+      "4/63"
+     ],
+     [
+      [
+       2
+      ],
+      "3/7"
+     ],
+     [
+      [
+       4
+      ],
+      "-1/9"
+     ]
+    ]
+   },
+   "square": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       0
+      ],
+      "-1"
+     ],
+     [
+      [
+       1
+      ],
+      "3"
+     ]
+    ]
+   }
+  },
+  "family": "Univariate with zeros",
+  "id": "double_root",
+  "input": {
+   "interval": [
+    "-2",
+    "2"
+   ],
+   "p": {
+    "n": 1,
+    "terms": [
+     [
+      [
+       0
+      ],
+      "4/63"
+     ],
+     [
+      [
+       1
+      ],
+      "-8/21"
+     ],
+     [
+      [
+       2
+      ],
+      "1"
+     ],
+     [
+      [
+       3
+      ],
+      "-18/7"
+     ],
+     [
+      [
+       4
+      ],
+      "236/63"
+     ],
+     [
+      [
+       5
+      ],
+      "2/3"
+     ],
+     [
+      [
+       6
+      ],
+      "-1"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "certificate": {
+   "nodes": [
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p0"
+     },
+     "premises": [],
+     "rule": null,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p1"
+     },
+     "premises": [
+      0
+     ],
+     "rule": 5,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p2"
+     },
+     "premises": [
+      1
+     ],
+     "rule": 6,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p3"
+     },
+     "premises": [
+      2
+     ],
+     "rule": 7,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p4"
+     },
+     "premises": [
+      3
+     ],
+     "rule": 8,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p5"
+     },
+     "premises": [
+      4
+     ],
+     "rule": 9,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p6"
+     },
+     "premises": [
+      5
+     ],
+     "rule": 10,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p7"
+     },
+     "premises": [
+      6
+     ],
+     "rule": 11,
+     "substitution": []
+    },
+    {
+     "conclusion": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p8"
+     },
+     "premises": [
+      7
+     ],
+     "rule": 12,
+     "substitution": []
+    }
+   ],
+   "root": 8
+  },
+  "family": "Horn proof",
+  "id": "chain_8_decoys_5",
+  "input": {
+   "facts": [
+    {
+     "args": [
+      {
+       "args": [],
+       "symbol": "a"
+      }
+     ],
+     "predicate": "p0"
+    }
+   ],
+   "goal": {
+    "args": [
+     {
+      "args": [],
+      "symbol": "a"
+     }
+    ],
+    "predicate": "p8"
+   },
+   "rules": [
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p0"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "junk0"
+     },
+     "name": "junk0"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p0"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "junk1"
+     },
+     "name": "junk1"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p0"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "junk2"
+     },
+     "name": "junk2"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p0"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "junk3"
+     },
+     "name": "junk3"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p0"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "junk4"
+     },
+     "name": "junk4"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p0"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p1"
+     },
+     "name": "chain0"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p1"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p2"
+     },
+     "name": "chain1"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p2"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p3"
+     },
+     "name": "chain2"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p3"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p4"
+     },
+     "name": "chain3"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p4"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p5"
+     },
+     "name": "chain4"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p5"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p6"
+     },
+     "name": "chain5"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p6"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p7"
+     },
+     "name": "chain6"
+    },
+    {
+     "body": [
+      {
+       "args": [
+        {
+         "args": [],
+         "symbol": "a"
+        }
+       ],
+       "predicate": "p7"
+      }
+     ],
+     "head": {
+      "args": [
+       {
+        "args": [],
+        "symbol": "a"
+       }
+      ],
+      "predicate": "p8"
+     },
+     "name": "chain7"
+    }
+   ]
+  }
+ },
+ {
+  "certificate": {
+   "branches": [
+    {
+     "left": [
+      {
+       "path": [],
+       "rule": "app.nil",
+       "subst": {
+        "?ys": {
+         "args": [],
+         "sort": "List",
+         "symbol": "nil"
+        }
+       }
+      }
+     ],
+     "right": []
+    },
+    {
+     "left": [
+      {
+       "path": [],
+       "rule": "app.cons",
+       "subst": {
+        "?x": {
+         "args": [],
+         "sort": "Elem",
+         "symbol": "?_head"
+        },
+        "?xs": {
+         "args": [],
+         "sort": "List",
+         "symbol": "?_tail"
+        },
+        "?ys": {
+         "args": [],
+         "sort": "List",
+         "symbol": "nil"
+        }
+       }
+      },
+      {
+       "path": [
+        1
+       ],
+       "rule": "IH",
+       "subst": {}
+      }
+     ],
+     "right": []
+    }
+   ],
+   "generalized": [],
+   "induct": "?xs"
+  },
+  "family": "List induction",
+  "id": "app_right_nil",
+  "input": {
+   "lhs": {
+    "args": [
+     {
+      "args": [],
+      "sort": "List",
+      "symbol": "?xs"
+     },
+     {
+      "args": [],
+      "sort": "List",
+      "symbol": "nil"
+     }
+    ],
+    "sort": "List",
+    "symbol": "app"
+   },
+   "rhs": {
+    "args": [],
+    "sort": "List",
+    "symbol": "?xs"
+   }
+  }
+ },
+ {
+  "certificate": {
+   "lemmas": [
+    {
+     "certificate": {
+      "branches": [
+       {
+        "left": [
+         {
+          "path": [],
+          "rule": "app.nil",
+          "subst": {
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "nil"
+           }
+          }
+         }
+        ],
+        "right": []
+       },
+       {
+        "left": [
+         {
+          "path": [],
+          "rule": "app.cons",
+          "subst": {
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?_tail"
+           },
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "nil"
+           }
+          }
+         },
+         {
+          "path": [
+           1
+          ],
+          "rule": "IH",
+          "subst": {}
+         }
+        ],
+        "right": []
+       }
+      ],
+      "generalized": [],
+      "induct": "?xs"
+     },
+     "lhs": {
+      "args": [
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?xs"
+       },
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "nil"
+       }
+      ],
+      "sort": "List",
+      "symbol": "app"
+     },
+     "name": "app_right_nil",
+     "rhs": {
+      "args": [],
+      "sort": "List",
+      "symbol": "?xs"
+     }
+    },
+    {
+     "certificate": {
+      "branches": [
+       {
+        "left": [
+         {
+          "path": [
+           0
+          ],
+          "rule": "app.nil",
+          "subst": {
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?ys"
+           }
+          }
+         }
+        ],
+        "right": [
+         {
+          "path": [],
+          "rule": "app.nil",
+          "subst": {
+           "?ys": {
+            "args": [
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?ys"
+             },
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?zs"
+             }
+            ],
+            "sort": "List",
+            "symbol": "app"
+           }
+          }
+         }
+        ]
+       },
+       {
+        "left": [
+         {
+          "path": [
+           0
+          ],
+          "rule": "app.cons",
+          "subst": {
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?_tail"
+           },
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?ys"
+           }
+          }
+         },
+         {
+          "path": [],
+          "rule": "app.cons",
+          "subst": {
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?_tail"
+             },
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?ys"
+             }
+            ],
+            "sort": "List",
+            "symbol": "app"
+           },
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?zs"
+           }
+          }
+         },
+         {
+          "path": [
+           1
+          ],
+          "rule": "IH",
+          "subst": {}
+         }
+        ],
+        "right": [
+         {
+          "path": [],
+          "rule": "app.cons",
+          "subst": {
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?_tail"
+           },
+           "?ys": {
+            "args": [
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?ys"
+             },
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?zs"
+             }
+            ],
+            "sort": "List",
+            "symbol": "app"
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "generalized": [],
+      "induct": "?xs"
+     },
+     "lhs": {
+      "args": [
+       {
+        "args": [
+         {
+          "args": [],
+          "sort": "List",
+          "symbol": "?xs"
+         },
+         {
+          "args": [],
+          "sort": "List",
+          "symbol": "?ys"
+         }
+        ],
+        "sort": "List",
+        "symbol": "app"
+       },
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?zs"
+       }
+      ],
+      "sort": "List",
+      "symbol": "app"
+     },
+     "name": "app_assoc",
+     "rhs": {
+      "args": [
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?xs"
+       },
+       {
+        "args": [
+         {
+          "args": [],
+          "sort": "List",
+          "symbol": "?ys"
+         },
+         {
+          "args": [],
+          "sort": "List",
+          "symbol": "?zs"
+         }
+        ],
+        "sort": "List",
+        "symbol": "app"
+       }
+      ],
+      "sort": "List",
+      "symbol": "app"
+     }
+    },
+    {
+     "certificate": {
+      "branches": [
+       {
+        "left": [
+         {
+          "path": [],
+          "rule": "revAcc.nil",
+          "subst": {
+           "?acc": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?acc1"
+           }
+          }
+         }
+        ],
+        "right": [
+         {
+          "path": [
+           0
+          ],
+          "rule": "rev.nil",
+          "subst": {}
+         },
+         {
+          "path": [],
+          "rule": "app.nil",
+          "subst": {
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?acc1"
+           }
+          }
+         }
+        ]
+       },
+       {
+        "left": [
+         {
+          "path": [],
+          "rule": "revAcc.cons",
+          "subst": {
+           "?acc": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?acc1"
+           },
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?_tail"
+           }
+          }
+         },
+         {
+          "path": [],
+          "rule": "IH",
+          "subst": {
+           "?acc1": {
+            "args": [
+             {
+              "args": [],
+              "sort": "Elem",
+              "symbol": "?_head"
+             },
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?acc1"
+             }
+            ],
+            "sort": "List",
+            "symbol": "cons"
+           }
+          }
+         }
+        ],
+        "right": [
+         {
+          "path": [
+           0
+          ],
+          "rule": "rev.cons",
+          "subst": {
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?_tail"
+           }
+          }
+         },
+         {
+          "path": [],
+          "rule": "app_assoc",
+          "subst": {
+           "?xs": {
+            "args": [
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "?_tail"
+             }
+            ],
+            "sort": "List",
+            "symbol": "rev"
+           },
+           "?ys": {
+            "args": [
+             {
+              "args": [],
+              "sort": "Elem",
+              "symbol": "?_head"
+             },
+             {
+              "args": [],
+              "sort": "List",
+              "symbol": "nil"
+             }
+            ],
+            "sort": "List",
+            "symbol": "cons"
+           },
+           "?zs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?acc1"
+           }
+          }
+         },
+         {
+          "path": [
+           1
+          ],
+          "rule": "app.cons",
+          "subst": {
+           "?x": {
+            "args": [],
+            "sort": "Elem",
+            "symbol": "?_head"
+           },
+           "?xs": {
+            "args": [],
+            "sort": "List",
+            "symbol": "nil"
+           },
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?acc1"
+           }
+          }
+         },
+         {
+          "path": [
+           1,
+           1
+          ],
+          "rule": "app.nil",
+          "subst": {
+           "?ys": {
+            "args": [],
+            "sort": "List",
+            "symbol": "?acc1"
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "generalized": [
+       "?acc1"
+      ],
+      "induct": "?xs"
+     },
+     "lhs": {
+      "args": [
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?xs"
+       },
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?acc1"
+       }
+      ],
+      "sort": "List",
+      "symbol": "revAcc"
+     },
+     "name": "revAcc_spec",
+     "rhs": {
+      "args": [
+       {
+        "args": [
+         {
+          "args": [],
+          "sort": "List",
+          "symbol": "?xs"
+         }
+        ],
+        "sort": "List",
+        "symbol": "rev"
+       },
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?acc1"
+       }
+      ],
+      "sort": "List",
+      "symbol": "app"
+     }
+    }
+   ],
+   "specialization": {
+    "goal": {
+     "lhs": {
+      "args": [
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?xs"
+       },
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "nil"
+       }
+      ],
+      "sort": "List",
+      "symbol": "revAcc"
+     },
+     "rhs": {
+      "args": [
+       {
+        "args": [],
+        "sort": "List",
+        "symbol": "?xs"
+       }
+      ],
+      "sort": "List",
+      "symbol": "rev"
+     }
+    },
+    "left": [
+     {
+      "path": [],
+      "rule": "revAcc_spec"
+     },
+     {
+      "path": [],
+      "rule": "app_right_nil"
+     }
+    ],
+    "right": []
+   }
+  },
+  "family": "Induction bank",
+  "id": "revAcc_bank",
+  "input": {}
+ },
+ {
+  "certificate": [
+   {
+    "certificate": {
+     "branches": [
+      {
+       "left": [
+        {
+         "path": [],
+         "rule": "app.nil",
+         "subst": {
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "nil"
+          }
+         }
+        }
+       ],
+       "right": []
+      },
+      {
+       "left": [
+        {
+         "path": [],
+         "rule": "app.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?_tail"
+          },
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "nil"
+          }
+         }
+        },
+        {
+         "path": [
+          1
+         ],
+         "rule": "IH",
+         "subst": {}
+        }
+       ],
+       "right": []
+      }
+     ],
+     "generalized": [],
+     "induct": "?x"
+    },
+    "lhs": {
+     "args": [
+      {
+       "args": [],
+       "sort": "List",
+       "symbol": "?x"
+      },
+      {
+       "args": [],
+       "sort": "List",
+       "symbol": "nil"
+      }
+     ],
+     "sort": "List",
+     "symbol": "app"
+    },
+    "name": "app_right_id",
+    "rhs": {
+     "args": [],
+     "sort": "List",
+     "symbol": "?x"
+    },
+    "status": "proved"
+   },
+   {
+    "certificate": {
+     "branches": [
+      {
+       "left": [
+        {
+         "path": [
+          0
+         ],
+         "rule": "app.nil",
+         "subst": {
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?y"
+          }
+         }
+        }
+       ],
+       "right": [
+        {
+         "path": [],
+         "rule": "app.nil",
+         "subst": {
+          "?ys": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?y"
+            },
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?z"
+            }
+           ],
+           "sort": "List",
+           "symbol": "app"
+          }
+         }
+        }
+       ]
+      },
+      {
+       "left": [
+        {
+         "path": [
+          0
+         ],
+         "rule": "app.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?_tail"
+          },
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?y"
+          }
+         }
+        },
+        {
+         "path": [],
+         "rule": "app.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?_tail"
+            },
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?y"
+            }
+           ],
+           "sort": "List",
+           "symbol": "app"
+          },
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?z"
+          }
+         }
+        },
+        {
+         "path": [
+          1
+         ],
+         "rule": "IH",
+         "subst": {}
+        }
+       ],
+       "right": [
+        {
+         "path": [],
+         "rule": "app.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?_tail"
+          },
+          "?ys": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?y"
+            },
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?z"
+            }
+           ],
+           "sort": "List",
+           "symbol": "app"
+          }
+         }
+        }
+       ]
+      }
+     ],
+     "generalized": [],
+     "induct": "?x"
+    },
+    "lhs": {
+     "args": [
+      {
+       "args": [
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?x"
+        },
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?y"
+        }
+       ],
+       "sort": "List",
+       "symbol": "app"
+      },
+      {
+       "args": [],
+       "sort": "List",
+       "symbol": "?z"
+      }
+     ],
+     "sort": "List",
+     "symbol": "app"
+    },
+    "name": "app_assoc",
+    "rhs": {
+     "args": [
+      {
+       "args": [],
+       "sort": "List",
+       "symbol": "?x"
+      },
+      {
+       "args": [
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?y"
+        },
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?z"
+        }
+       ],
+       "sort": "List",
+       "symbol": "app"
+      }
+     ],
+     "sort": "List",
+     "symbol": "app"
+    },
+    "status": "proved"
+   },
+   {
+    "name": "revAcc_right_id",
+    "status": "rejected_by_counterexample"
+   },
+   {
+    "name": "revAcc_assoc",
+    "status": "rejected_by_counterexample"
+   },
+   {
+    "certificate": {
+     "branches": [
+      {
+       "left": [
+        {
+         "path": [
+          0
+         ],
+         "rule": "app.nil",
+         "subst": {
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?y"
+          }
+         }
+        }
+       ],
+       "right": [
+        {
+         "path": [
+          1
+         ],
+         "rule": "rev.nil",
+         "subst": {}
+        },
+        {
+         "path": [],
+         "rule": "app_right_id",
+         "subst": {
+          "?x": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?y"
+            }
+           ],
+           "sort": "List",
+           "symbol": "rev"
+          }
+         }
+        }
+       ]
+      },
+      {
+       "left": [
+        {
+         "path": [
+          0
+         ],
+         "rule": "app.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?_tail"
+          },
+          "?ys": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?y"
+          }
+         }
+        },
+        {
+         "path": [],
+         "rule": "rev.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?_tail"
+            },
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?y"
+            }
+           ],
+           "sort": "List",
+           "symbol": "app"
+          }
+         }
+        },
+        {
+         "path": [
+          0
+         ],
+         "rule": "IH",
+         "subst": {}
+        },
+        {
+         "path": [],
+         "rule": "app_assoc",
+         "subst": {
+          "?x": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?y"
+            }
+           ],
+           "sort": "List",
+           "symbol": "rev"
+          },
+          "?y": {
+           "args": [
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "?_tail"
+            }
+           ],
+           "sort": "List",
+           "symbol": "rev"
+          },
+          "?z": {
+           "args": [
+            {
+             "args": [],
+             "sort": "Elem",
+             "symbol": "?_head"
+            },
+            {
+             "args": [],
+             "sort": "List",
+             "symbol": "nil"
+            }
+           ],
+           "sort": "List",
+           "symbol": "cons"
+          }
+         }
+        }
+       ],
+       "right": [
+        {
+         "path": [
+          1
+         ],
+         "rule": "rev.cons",
+         "subst": {
+          "?x": {
+           "args": [],
+           "sort": "Elem",
+           "symbol": "?_head"
+          },
+          "?xs": {
+           "args": [],
+           "sort": "List",
+           "symbol": "?_tail"
+          }
+         }
+        }
+       ]
+      }
+     ],
+     "generalized": [],
+     "induct": "?x"
+    },
+    "lhs": {
+     "args": [
+      {
+       "args": [
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?x"
+        },
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?y"
+        }
+       ],
+       "sort": "List",
+       "symbol": "app"
+      }
+     ],
+     "sort": "List",
+     "symbol": "rev"
+    },
+    "name": "rev_app",
+    "rhs": {
+     "args": [
+      {
+       "args": [
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?y"
+        }
+       ],
+       "sort": "List",
+       "symbol": "rev"
+      },
+      {
+       "args": [
+        {
+         "args": [],
+         "sort": "List",
+         "symbol": "?x"
+        }
+       ],
+       "sort": "List",
+       "symbol": "rev"
+      }
+     ],
+     "sort": "List",
+     "symbol": "app"
+    },
+    "status": "proved"
+   }
+  ],
+  "family": "Lemma bundle",
+  "id": "signature_lemmas",
+  "input": {
+   "required": [
+    "app_right_id",
+    "app_assoc",
+    "rev_app"
+   ]
+  }
+ },
+ {
+  "certificate": [
+   {
+    "clause": [
+     -1,
+     -2,
+     -3
+    ],
+    "cycle": [
+     3,
+     1,
+     2
+    ],
+    "kind": "theory"
+   },
+   {
+    "clause": [],
+    "kind": "rup"
+   }
+  ],
+  "family": "CDCL(T) refutation",
+  "id": "idl_negative_cycle",
+  "input": {
+   "atoms": {
+    "1": {
+     "c": 0,
+     "x": 0,
+     "y": 1
+    },
+    "2": {
+     "c": 0,
+     "x": 1,
+     "y": 2
+    },
+    "3": {
+     "c": -1,
+     "x": 2,
+     "y": 0
+    }
+   },
+   "clauses": [
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "n": 3
+  }
+ },
+ {
+  "certificate": {
+   "proof": [
+    {
+     "clause": [
+      1,
+      2,
+      3
+     ],
+     "index": 0,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      4,
+      5,
+      6
+     ],
+     "index": 1,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      7,
+      8,
+      9
+     ],
+     "index": 2,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      10,
+      11,
+      12
+     ],
+     "index": 3,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -4,
+      -1
+     ],
+     "index": 4,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -7,
+      -1
+     ],
+     "index": 5,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -10,
+      -1
+     ],
+     "index": 6,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -7,
+      -4
+     ],
+     "index": 7,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -10,
+      -4
+     ],
+     "index": 8,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -10,
+      -7
+     ],
+     "index": 9,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -5,
+      -2
+     ],
+     "index": 10,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -8,
+      -2
+     ],
+     "index": 11,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -11,
+      -2
+     ],
+     "index": 12,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -8,
+      -5
+     ],
+     "index": 13,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -11,
+      -5
+     ],
+     "index": 14,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -11,
+      -8
+     ],
+     "index": 15,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -6,
+      -3
+     ],
+     "index": 16,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -9,
+      -3
+     ],
+     "index": 17,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -12,
+      -3
+     ],
+     "index": 18,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -9,
+      -6
+     ],
+     "index": 19,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -12,
+      -6
+     ],
+     "index": 20,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -12,
+      -9
+     ],
+     "index": 21,
+     "kind": "input"
+    },
+    {
+     "clause": [
+      -6,
+      7,
+      8
+     ],
+     "kind": "resolution",
+     "left": 19,
+     "pivot": -9,
+     "right": 2
+    },
+    {
+     "clause": [
+      4,
+      5,
+      7,
+      8
+     ],
+     "kind": "resolution",
+     "left": 22,
+     "pivot": -6,
+     "right": 1
+    },
+    {
+     "clause": [
+      -2,
+      4,
+      5,
+      7
+     ],
+     "kind": "resolution",
+     "left": 23,
+     "pivot": 8,
+     "right": 11
+    },
+    {
+     "clause": [
+      -2,
+      4,
+      7
+     ],
+     "kind": "resolution",
+     "left": 24,
+     "pivot": 5,
+     "right": 10
+    },
+    {
+     "clause": [
+      -5,
+      7,
+      9
+     ],
+     "kind": "resolution",
+     "left": 13,
+     "pivot": -8,
+     "right": 2
+    },
+    {
+     "clause": [
+      4,
+      6,
+      7,
+      9
+     ],
+     "kind": "resolution",
+     "left": 26,
+     "pivot": -5,
+     "right": 1
+    },
+    {
+     "clause": [
+      -3,
+      4,
+      6,
+      7
+     ],
+     "kind": "resolution",
+     "left": 27,
+     "pivot": 9,
+     "right": 17
+    },
+    {
+     "clause": [
+      -3,
+      4,
+      7
+     ],
+     "kind": "resolution",
+     "left": 28,
+     "pivot": 6,
+     "right": 16
+    },
+    {
+     "clause": [
+      -9,
+      10,
+      11
+     ],
+     "kind": "resolution",
+     "left": 21,
+     "pivot": -12,
+     "right": 3
+    },
+    {
+     "clause": [
+      -5,
+      7,
+      10,
+      11
+     ],
+     "kind": "resolution",
+     "left": 30,
+     "pivot": -9,
+     "right": 26
+    },
+    {
+     "clause": [
+      -5,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 31,
+     "pivot": 11,
+     "right": 14
+    },
+    {
+     "clause": [
+      -8,
+      10,
+      12
+     ],
+     "kind": "resolution",
+     "left": 15,
+     "pivot": -11,
+     "right": 3
+    },
+    {
+     "clause": [
+      -6,
+      7,
+      10,
+      12
+     ],
+     "kind": "resolution",
+     "left": 33,
+     "pivot": -8,
+     "right": 22
+    },
+    {
+     "clause": [
+      -6,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 34,
+     "pivot": 12,
+     "right": 20
+    },
+    {
+     "clause": [
+      4,
+      5,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 35,
+     "pivot": -6,
+     "right": 1
+    },
+    {
+     "clause": [
+      4,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 36,
+     "pivot": 5,
+     "right": 32
+    },
+    {
+     "clause": [
+      -1,
+      4,
+      7
+     ],
+     "kind": "resolution",
+     "left": 37,
+     "pivot": 10,
+     "right": 6
+    },
+    {
+     "clause": [
+      -1,
+      4
+     ],
+     "kind": "resolution",
+     "left": 38,
+     "pivot": 7,
+     "right": 5
+    },
+    {
+     "clause": [
+      -1
+     ],
+     "kind": "resolution",
+     "left": 39,
+     "pivot": 4,
+     "right": 4
+    },
+    {
+     "clause": [
+      -6,
+      10,
+      11
+     ],
+     "kind": "resolution",
+     "left": 20,
+     "pivot": -12,
+     "right": 3
+    },
+    {
+     "clause": [
+      4,
+      5,
+      10,
+      11
+     ],
+     "kind": "resolution",
+     "left": 41,
+     "pivot": -6,
+     "right": 1
+    },
+    {
+     "clause": [
+      -2,
+      4,
+      5,
+      10
+     ],
+     "kind": "resolution",
+     "left": 42,
+     "pivot": 11,
+     "right": 12
+    },
+    {
+     "clause": [
+      -2,
+      4,
+      10
+     ],
+     "kind": "resolution",
+     "left": 43,
+     "pivot": 5,
+     "right": 10
+    },
+    {
+     "clause": [
+      -5,
+      10,
+      12
+     ],
+     "kind": "resolution",
+     "left": 14,
+     "pivot": -11,
+     "right": 3
+    },
+    {
+     "clause": [
+      4,
+      6,
+      10,
+      12
+     ],
+     "kind": "resolution",
+     "left": 45,
+     "pivot": -5,
+     "right": 1
+    },
+    {
+     "clause": [
+      -3,
+      4,
+      6,
+      10
+     ],
+     "kind": "resolution",
+     "left": 46,
+     "pivot": 12,
+     "right": 18
+    },
+    {
+     "clause": [
+      -3,
+      4,
+      10
+     ],
+     "kind": "resolution",
+     "left": 47,
+     "pivot": 6,
+     "right": 16
+    },
+    {
+     "clause": [
+      1,
+      2,
+      4,
+      10
+     ],
+     "kind": "resolution",
+     "left": 48,
+     "pivot": -3,
+     "right": 0
+    },
+    {
+     "clause": [
+      1,
+      4,
+      10
+     ],
+     "kind": "resolution",
+     "left": 49,
+     "pivot": 2,
+     "right": 44
+    },
+    {
+     "clause": [
+      -7,
+      1,
+      4
+     ],
+     "kind": "resolution",
+     "left": 50,
+     "pivot": 10,
+     "right": 9
+    },
+    {
+     "clause": [
+      -7,
+      1
+     ],
+     "kind": "resolution",
+     "left": 51,
+     "pivot": 4,
+     "right": 7
+    },
+    {
+     "clause": [
+      7,
+      8,
+      10,
+      11
+     ],
+     "kind": "resolution",
+     "left": 2,
+     "pivot": 9,
+     "right": 30
+    },
+    {
+     "clause": [
+      -2,
+      7,
+      8,
+      10
+     ],
+     "kind": "resolution",
+     "left": 53,
+     "pivot": 11,
+     "right": 12
+    },
+    {
+     "clause": [
+      -2,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 54,
+     "pivot": 8,
+     "right": 11
+    },
+    {
+     "clause": [
+      7,
+      9,
+      10,
+      12
+     ],
+     "kind": "resolution",
+     "left": 2,
+     "pivot": 8,
+     "right": 33
+    },
+    {
+     "clause": [
+      -3,
+      7,
+      9,
+      10
+     ],
+     "kind": "resolution",
+     "left": 56,
+     "pivot": 12,
+     "right": 18
+    },
+    {
+     "clause": [
+      -3,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 57,
+     "pivot": 9,
+     "right": 17
+    },
+    {
+     "clause": [
+      1,
+      2,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 58,
+     "pivot": -3,
+     "right": 0
+    },
+    {
+     "clause": [
+      1,
+      7,
+      10
+     ],
+     "kind": "resolution",
+     "left": 59,
+     "pivot": 2,
+     "right": 55
+    },
+    {
+     "clause": [
+      1,
+      2,
+      4,
+      7
+     ],
+     "kind": "resolution",
+     "left": 0,
+     "pivot": 3,
+     "right": 29
+    },
+    {
+     "clause": [
+      1,
+      4,
+      7
+     ],
+     "kind": "resolution",
+     "left": 61,
+     "pivot": 2,
+     "right": 25
+    },
+    {
+     "clause": [
+      -10,
+      1,
+      7
+     ],
+     "kind": "resolution",
+     "left": 62,
+     "pivot": 4,
+     "right": 8
+    },
+    {
+     "clause": [
+      1,
+      7
+     ],
+     "kind": "resolution",
+     "left": 63,
+     "pivot": -10,
+     "right": 60
+    },
+    {
+     "clause": [
+      1
+     ],
+     "kind": "resolution",
+     "left": 64,
+     "pivot": 7,
+     "right": 52
+    },
+    {
+     "clause": [],
+     "kind": "resolution",
+     "left": 65,
+     "pivot": 1,
+     "right": 40
+    }
+   ],
+   "root": 66,
+   "status": "unsat"
+  },
+  "family": "CDCL(T) resolution refutation",
+  "id": "pigeonhole_4_3",
+  "input": {
+   "atoms": {},
+   "clauses": [
+    [
+     1,
+     2,
+     3
+    ],
+    [
+     4,
+     5,
+     6
+    ],
+    [
+     7,
+     8,
+     9
+    ],
+    [
+     10,
+     11,
+     12
+    ],
+    [
+     -1,
+     -4
+    ],
+    [
+     -1,
+     -7
+    ],
+    [
+     -1,
+     -10
+    ],
+    [
+     -4,
+     -7
+    ],
+    [
+     -4,
+     -10
+    ],
+    [
+     -7,
+     -10
+    ],
+    [
+     -2,
+     -5
+    ],
+    [
+     -2,
+     -8
+    ],
+    [
+     -2,
+     -11
+    ],
+    [
+     -5,
+     -8
+    ],
+    [
+     -5,
+     -11
+    ],
+    [
+     -8,
+     -11
+    ],
+    [
+     -3,
+     -6
+    ],
+    [
+     -3,
+     -9
+    ],
+    [
+     -3,
+     -12
+    ],
+    [
+     -6,
+     -9
+    ],
+    [
+     -6,
+     -12
+    ],
+    [
+     -9,
+     -12
+    ]
+   ],
+   "nodes": null
+  }
+ }
+]

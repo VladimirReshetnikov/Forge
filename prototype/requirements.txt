@@ -1,0 +1,11 @@
+# Search-side dependencies only. Nothing on the certificate CHECKING path, in
+# forge/io/decode.py, or in bin/verify.py imports any of these -- that is what
+# `python -S bin/verify.py` demonstrates.
+#
+# Versions below are the ones this package was merged and tested against.
+numpy==2.4.4
+scipy==1.17.1
+sympy==1.14.0
+
+# Test-only.
+pytest==9.0.3
