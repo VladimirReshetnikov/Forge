@@ -3,8 +3,9 @@
 
 This document is a merge of nine independently prepared proposals for the same
 system. All nine are retained verbatim under \code{proposals/} so that every
-claim here can be audited against its source. Nothing in this article is new
-mathematics: each statement is carried over from at least one of the nine, and
+claim here can be audited against its source. Almost nothing in this article is
+new mathematics: each statement is carried over from at least one of the nine,
+or from the two external sources named in \S\ref{sec:external-sources}, and
 this appendix records which.
 
 \subsection{The nine sources}
@@ -214,6 +215,88 @@ Pigeonhole encodings &
 Both tables are kept, explicitly labelled as non-comparable. \\
 \bottomrule
 \end{longtable}
+
+\subsection{Material from outside the nine}
+\label{sec:external-sources}
+
+Two neighbouring projects were reviewed after the merge, and a substantial
+amount of this document comes from them rather than from any proposal. They
+matter because between them they had \emph{implemented} the thing all nine
+proposals specified and none built: a boundary at which nothing becomes a fact
+without a checked Lean proof.
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Djex} --- a type-directed Haskell expression synthesizer merging
+  Djinn (Dyckhoff's contraction-free \textsf{LJT}, terminating, able to decide
+  uninhabitation) with Exference (ranked best-first search with typeclass
+  evidence resolution).
+\item \textbf{Leant} --- a Djex-powered synthesis REPL for Lean~4, in which
+  every candidate term is re-elaborated by Lean before the user sees it.
+\end{itemize}
+
+What came from them:
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.34\textwidth}>{\raggedright\arraybackslash}p{0.60\textwidth}@{}}
+\toprule
+Section & Material \\
+\midrule
+\endhead
+\S\ref{sec:tactic-gap} &
+The neighbouring-tactics table. The nine named Aesop, Duper, \code{linarith}
+and the SOS and LP projects, but omitted \code{exact?}/\code{apply?},
+\code{tauto}/\code{itauto}, \code{decide} and \code{omega}. \\
+\S\ref{sec:architecture} &
+Deduplication never refunds budget; a branch dropped for a resource reason
+stays structurally visible to the top. \\
+\S\ref{sec:kernel-traps} &
+\code{debug.skipKernelTC} and the asynchronous \code{addDecl} path
+(Invariant~\ref{inv:sync}); the unforgeable stamp; the verification pipeline. \\
+\S\ref{sec:lattice} &
+The status lattice and its three governing invariants, including the
+approximation-polarity rule for pruning. \\
+\S\ref{sec:boundary-impl} &
+The whole subsection: ephemeral \code{example}, \code{noncomputable},
+\code{autoImplicit} off, re-elaborating the original goal text, the committed
+environment as positive evidence (Invariant~\ref{inv:positive}), the closed
+rejection vocabulary, transport-versus-semantic failure, the two-tier gate,
+the abstract receipt, and ranking as a sealed capability. \\
+\S\ref{sec:negative} &
+The whole subsection: exhausted versus truncated; the completeness ledger as a
+per-node safety bit computed by the encoder; the three-conjunct gate and its
+self-reference sharpening with the monotonicity rule; portfolio asymmetry;
+\textsf{LJT}; Glivenko's classical fallback and the rule that quantified goals
+skip it. \\
+\S\ref{sec:boolean} &
+Instance obligations during synthesis: one function for pruning and checking,
+termination work at admission time, budget-exhausted as a distinct
+constructor, receipts bound to their environment, and class obligations as
+structurally disjoint propositions. \\
+\S\ref{sec:worker-split} &
+The tactic-as-interface, worker-as-executor split and its four costs. \\
+\S\ref{sec:identity} &
+Three levels of identity; the origin table never leaving the worker
+(Invariant~\ref{inv:origin}); environment generation tokens. \\
+\S\ref{sec:search-ir} &
+Why the search IR should not be raw \code{Expr}; deduplication discarding the
+authority-bearing representative. \\
+\bottomrule
+\end{longtable}
+
+Two qualifications on that material.
+
+The \code{debug.skipKernelTC} and asynchronous-\code{addDecl} findings were
+\emph{verified first-hand} against the installed \code{v4.34.0} source rather
+than taken on the reviewing project's word, because its own analysis is written
+against \code{v4.33.0}. Both hold at the pinned version.
+
+And one claim was corrected in the other direction. An \textsf{LJT} decision
+procedure decides non-inhabitation, but the reference implementation emits for
+a negative answer a single enumeration tag and no artefact --- no closed-branch
+tree, nothing a second program can re-check. It is therefore \emph{weaker} than
+lattice elimination, not equivalent to it, and \S\ref{sec:negative} says so.
+The opportunity that follows --- reifying a finite failed search tree into a
+checkable refutation object --- appears to be unbuilt anywhere, and would be a
+genuine contribution rather than a port.
 
 \subsection{What the merge changed}
 
