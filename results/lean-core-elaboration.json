@@ -10,22 +10,22 @@
   },
   "files": [
     {
-      "file": "proposals/p3-planner-certificate-layer/lean/DesignAPI.lean",
+      "file": "lean/Forge/Design/Contracts.lean",
       "status": "elaborated",
       "exit_code": 0,
-      "elapsed_seconds": 211.374
+      "elapsed_seconds": 138.841
     },
     {
-      "file": "proposals/p6-proof-logging-cdcl/lean/Contracts.lean",
+      "file": "lean/Forge/Design/Runtime.lean",
       "status": "elaborated",
       "exit_code": 0,
-      "elapsed_seconds": 5.266
+      "elapsed_seconds": 11.106
     },
     {
-      "file": "proposals/p9-proof-planner/lean/Structural.lean",
+      "file": "lean/Forge/Examples/Structural.lean",
       "status": "elaborated",
       "exit_code": 0,
-      "elapsed_seconds": 5.129,
+      "elapsed_seconds": 51.178,
       "stdout": "'ForgeExamples.revAcc_correct' depends on axioms: [propext]\n'ForgeExamples.rev_involutive' depends on axioms: [propext]"
     }
   ],

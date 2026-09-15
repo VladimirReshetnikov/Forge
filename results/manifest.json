@@ -1,0 +1,198 @@
+{
+  "note": "Derived index over the nine recorded runs. The runs themselves are under proposals/<slug>/results/ and are never modified. Counts are per run and are not commensurable across runs.",
+  "common_environment": {
+    "date": "2026-09-14",
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sympy": "1.14.0",
+    "platform": "Linux x86-64",
+    "note": "Identical environments and a shared seed value across five runs do NOT make the runs comparable: the same seed drives different generators over different case sets."
+  },
+  "lean": {
+    "all_nine_runs": "NOT_RUN -- no lean/lake executable available",
+    "this_merge": "results/lean-core-elaboration.json"
+  },
+  "runs": [
+    {
+      "run": "p1",
+      "slug": "p1-structural-search",
+      "emphasis": "six certificate families under one measurement protocol",
+      "seed": null,
+      "test_framework": "pytest",
+      "test_count": 275,
+      "test_unit": "test instances",
+      "certificates": 198,
+      "certificate_layout": "single list file",
+      "replay": "198/198, standard-library-only decoder",
+      "pdf_pages": 31,
+      "results_path": "proposals/p1-structural-search/results",
+      "lean_status_recorded": {
+        "file": "status.json",
+        "field": "lean_compiled",
+        "value": false
+      },
+      "family_count": 6
+    },
+    {
+      "run": "p2",
+      "slug": "p2-obligation-controller",
+      "emphasis": "obligation controller; per-family seeds",
+      "seed": "420/421/422/423 (per family)",
+      "test_framework": "unittest",
+      "test_count": 31,
+      "test_unit": "test methods",
+      "certificates": 215,
+      "certificate_layout": "five family-bundled lists",
+      "replay": "215/215",
+      "pdf_pages": null,
+      "results_path": "proposals/p2-obligation-controller/results",
+      "lean_status_recorded": {
+        "file": null,
+        "field": null,
+        "value": "recorded in prose only"
+      },
+      "family_count": 5
+    },
+    {
+      "run": "p3",
+      "slug": "p3-planner-certificate-layer",
+      "emphasis": "assertion-counted mechanism ablations",
+      "seed": "20260914",
+      "test_framework": "assertions in driver",
+      "test_count": 1680,
+      "test_unit": "assertions",
+      "certificates": 24,
+      "certificate_layout": "24 individual files",
+      "replay": "24/24, CHECKED_PYTHON",
+      "pdf_pages": 33,
+      "results_path": "proposals/p3-planner-certificate-layer/results",
+      "lean_status_recorded": {
+        "file": "lean_status.json",
+        "field": "status",
+        "value": "NOT_RUN"
+      },
+      "family_count": 7
+    },
+    {
+      "run": "p4",
+      "slug": "p4-theory-cooperation",
+      "emphasis": "largest artefact corpus; theory cooperation",
+      "seed": "20260914",
+      "test_framework": "pytest",
+      "test_count": 64,
+      "test_unit": "tests",
+      "certificates": 1238,
+      "certificate_layout": "single list file",
+      "replay": "1238/1238, re-verified from an extracted archive copy",
+      "pdf_pages": 32,
+      "results_path": "proposals/p4-theory-cooperation/results",
+      "lean_status_recorded": {
+        "file": null,
+        "field": null,
+        "value": "recorded in prose only"
+      },
+      "family_count": 8
+    },
+    {
+      "run": "p5",
+      "slug": "p5-certificate-first",
+      "emphasis": "expected-outcome benchmarking with negative controls",
+      "seed": "20260914",
+      "test_framework": "pytest",
+      "test_count": 73,
+      "test_unit": "tests",
+      "certificates": 58,
+      "certificate_layout": "two list files (exported subset)",
+      "replay": "58/58 re-accepted on reload",
+      "pdf_pages": 30,
+      "results_path": "proposals/p5-certificate-first/results",
+      "lean_status_recorded": {
+        "file": "lean_comparisons.json",
+        "field": "status",
+        "value": "not_run"
+      },
+      "family_count": 5
+    },
+    {
+      "run": "p6",
+      "slug": "p6-proof-logging-cdcl",
+      "emphasis": "proof-logging CDCL(T) with independent RUP replay",
+      "seed": "20260914",
+      "test_framework": "assertions in driver",
+      "test_count": 1500,
+      "test_unit": "differential cases",
+      "certificates": 22,
+      "certificate_layout": "22 individual files",
+      "replay": "all valid under python -S; 3 unknowns skipped explicitly",
+      "pdf_pages": 33,
+      "results_path": "proposals/p6-proof-logging-cdcl/results",
+      "lean_status_recorded": {
+        "file": null,
+        "field": null,
+        "value": "recorded in prose only"
+      },
+      "family_count": 4
+    },
+    {
+      "run": "p7",
+      "slug": "p7-successor-architecture",
+      "emphasis": "integer lattices; component cases with corruption controls",
+      "seed": "20260914",
+      "test_framework": "assertions in driver",
+      "test_count": 833,
+      "test_unit": "component cases",
+      "certificates": 26,
+      "certificate_layout": "26 individual files",
+      "replay": "26/26 under python -S",
+      "pdf_pages": 38,
+      "results_path": "proposals/p7-successor-architecture/results",
+      "lean_status_recorded": {
+        "file": "lean-status.json",
+        "field": "status",
+        "value": "not_run"
+      },
+      "family_count": 4
+    },
+    {
+      "run": "p8",
+      "slug": "p8-obligation-broker",
+      "emphasis": "cleanest dictionary ablation; largest Horn workload",
+      "seed": null,
+      "test_framework": "pytest",
+      "test_count": 260,
+      "test_unit": "tests",
+      "certificates": 2,
+      "certificate_layout": "2 individual files",
+      "replay": "in-process only; no standalone verifier shipped",
+      "pdf_pages": 24,
+      "results_path": "proposals/p8-obligation-broker/results",
+      "lean_status_recorded": {
+        "file": "artifact_validation.json",
+        "field": "lean_compilation",
+        "value": "not executed; no Lean compiler available"
+      },
+      "family_count": 4
+    },
+    {
+      "run": "p9",
+      "slug": "p9-proof-planner",
+      "emphasis": "small, heavily mutation-tested; checker wider than searcher",
+      "seed": null,
+      "test_framework": "pytest",
+      "test_count": 69,
+      "test_unit": "tests",
+      "certificates": 13,
+      "certificate_layout": "13 bundles in one list file",
+      "replay": "13/13 under python -S",
+      "pdf_pages": 31,
+      "results_path": "proposals/p9-proof-planner/results",
+      "lean_status_recorded": {
+        "file": "lean_status.json",
+        "field": "status",
+        "value": "NOT_RUN"
+      },
+      "family_count": 5
+    }
+  ]
+}
