@@ -5,8 +5,9 @@ arithmetic infrastructure. It is to surround that infrastructure with
 proof-structure search and to feed it new, independently validated mathematical
 consequences.
 
-Three complementary kinds of progress are available: discovering a certificate,
-discovering an invariant, and constructing a witness. Each of them changes what
+Four complementary kinds of progress are available: discovering a certificate,
+discovering an invariant, constructing a witness, and --- the extension round's
+addition --- computing a \emph{closure} that makes an unbounded family finite. Each of them changes what
 is being proved rather than deriving more consequences of a fixed local state,
 and that is the distinction the whole architecture rests on. A constructor case
 split and an induction principle are not interchangeable --- the former says a
@@ -25,6 +26,15 @@ handle the univariate zeros that Theorem~\ref{thm:zero} proves subdivision can
 never reach. Each of these fails on problems another one decides immediately ---
 that is why they belong in one system with a router, and why a failure of one
 search is a reason to route rather than a reason to stop.
+
+The closure workers change the shape of that argument rather than adding another
+member to the portfolio. A certificate search asks whether a given statement has
+a proof in a given language; a closure computes the statement's own consequences
+until they stop growing, and then either the target is inside the result or a
+counterexample falls out. That is why Section~\ref{sec:closure} can state
+decision results and length bounds where Section~\ref{sec:nonlinear} can only
+state completeness relative to a dictionary, and it is why a failed closure is
+usually a routing signal rather than a request for more budget.
 
 \subsection{What to build first}
 
@@ -49,6 +59,18 @@ would be the second unaudited wrapper, not a contribution
 certificate, \emph{how} to bind it to the source problem, and \emph{what} to do
 with the proved consequence afterwards.
 
+The extension round supplies a smaller and more specific first target than the
+design round did, and the recommendation here follows it. The finite-algebra
+cover of Section~\ref{sec:covers} has the cheapest checker in this document ---
+a bare list of state identifiers, verified by membership, distinctness,
+constructor closure and inclusion --- and a counterexample form that is an
+ordinary finite tree. It is the right first end-to-end Lean milestone precisely
+because it is not the most mathematically interesting lane: the
+polynomial-multiplier and telescoping lanes are more substantial and their
+source bridges are more delicate. Prove one source theorem through the cheap
+lane first, with a recorded axiom inventory, and only then attempt a lane whose
+reifier has to get a binomial support or a signed lower index right.
+
 \subsection{Where the risk is}
 
 The largest soundness risk is mistranslation at the Lean/certificate boundary
@@ -66,26 +88,40 @@ on whether it ships a narrow correct thing rather than a wide leaky one.
 
 \subsection{What this document has established, and what it has not}
 
-Established: nine prototype runs synthesise certificates in fragments spanning
-exact polynomial cones, quadratic decomposition, Bernstein subdivision,
+Established: eighteen prototype runs synthesise certificates in fragments
+spanning exact polynomial cones, quadratic decomposition, Bernstein subdivision,
 univariate Sturm certificates, polynomial and accumulator invariants, affine,
-lattice, residue and polynomial witnesses, ground Horn slicing, structural
-induction with generalisation, and proof-logging CDCL(T); every stored
-certificate replays without the search libraries; the specified mutation and
-corruption tests are rejected; several mechanisms solve problems their own
-restricted precursors cannot; and three Lean design artefacts elaborate under
-the pinned v4.34.0 toolchain.
+lattice, residue and polynomial witnesses, straight-line integer witness
+programs, ground Horn slicing, structural induction with generalisation,
+proof-logging CDCL(T), observable-space and target-generated ideal closure,
+finite-algebra covers, boundary-safe summation, operator transport, and finite
+Kripke countermodels; every stored certificate replays without the search
+libraries; the specified mutation and corruption tests are rejected; several
+mechanisms solve problems their own restricted precursors cannot; all nine
+extension suites re-run in a different environment and reproduce their recorded
+counts; and thirteen Lean artefacts elaborate under the pinned v4.34.0
+toolchain, seven of them with no axiom dependencies.
 
 Not established: that \forge{} is implemented as a Lean tactic; that the
-thirteen Mathlib-dependent candidate scripts compile; that any certificate is
-checked by Lean's kernel; that any checker is correct rather than merely tested;
-that the methods outperform any existing Lean tactic; or that any success rate
-transfers to user developments. No head-to-head comparison against \grind{},
-Aesop, \code{nlinarith}, LeanHammer, or any other tactic exists anywhere in this
-work.
+twenty-one Mathlib-dependent candidate scripts compile; that any certificate
+is checked by Lean's kernel; that any checker is correct rather than merely
+tested; that the methods outperform any existing Lean tactic; or that any
+success rate transfers to user developments. No head-to-head comparison against
+\grind{}, Aesop, \code{nlinarith}, LeanHammer, or any other tactic exists
+anywhere in this work.
+
+One addition to that second list is specific to the second round and deserves
+its own sentence, because it is the claim most likely to be made on this work's
+behalf. Elaborating a Lean specimen does not change what the specimen says.
+\src{e8}'s indexing sketch now type-checks, and it still proves an equation
+between two ordinary-list definitions; it does not close the Church-encoded
+query its author declined to claim it closed.
 
 The gap between those two lists is the project. It is not a gap that more
-prototype experiments can close: it closes only by writing the Lean
+prototype experiments can close, and the second round is the evidence for that:
+nine more independent efforts, more certificates, more mutations, more proved
+theorems on paper --- and the Lean column still reads \code{NOT\_RUN} in every
+one of the eighteen source packages. The gap closes only by writing the Lean
 implementation described in Section~\ref{sec:integration} and running the
 evaluation described in Section~\ref{sec:evaluation}.
 

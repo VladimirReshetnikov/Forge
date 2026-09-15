@@ -747,8 +747,8 @@ This confirms that the proposed runtime and scheduler contract, the
 proofs are well-typed Lean 4.34.0 rather than merely plausible-looking source.
 
 It confirms nothing else. It is not a transitive axiom audit. It says nothing
-about the other fifteen files in the merged tree, which import Mathlib and need
-a built project. It does not establish that any certificate checker is correct.
+about the other thirteen files in the merged tree, which import Mathlib and
+need a built project, or about the two that merely import their siblings. It does not establish that any certificate checker is correct.
 And it is not a comparison against any Lean tactic --- successful elaboration of
 a hand-written example proves that the example type-checks, not that automation
 found it.

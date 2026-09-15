@@ -207,7 +207,7 @@ For the record, and as the specification for the translation layer:
 
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.26\textwidth}>{\raggedright\arraybackslash}p{0.68\textwidth}@{}}
 \toprule
-Field & Spellings observed across the nine runs \\
+Field & Spellings observed across the nine design-round runs \\
 \midrule
 \endhead
 Polynomial arity &
@@ -238,7 +238,58 @@ Bernstein node &
 \bottomrule
 \end{longtable}
 
-The formats are \emph{semantically compatible and syntactically incompatible}.
+The extension round adds a second, different kind of divergence, and it must not
+be resolved the same way.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.26\textwidth}>{\raggedright\arraybackslash}p{0.68\textwidth}@{}}
+\toprule
+Field & Spellings observed across the extension runs \\
+\midrule
+\endhead
+Closure certificate tag &
+\code{pullback-space-v1} and \code{pullback-ideal-v1} (\src{e7});
+\code{forge.pullback-space/1} and \code{forge.ideal-space/1} (\src{e8});
+\code{check.linear} (\src{e9}); \code{weighted\_closure\_v1} and
+\code{inductive\_ideal\_v1} (\src{e6}). \\
+Rational encoding &
+\code{[numerator, denominator]} pairs nested inside
+\code{[exponentVector, rational]} (\src{e7});
+flat \code{[exponentVector, numerator, positiveDenominator]} (\src{e8});
+bivariate \code{[nExponent, kExponent, numerator, denominator]} (\src{e9}). \\
+Negative result &
+Separating word (\src{e5}, \src{e6}, \src{e9}); orbit record with an
+execution-ordered word (\src{e7}); constructor-tree DAG with an
+earlier-child-index discipline (\src{e8}); rooted Kripke model (\src{e4}). \\
+Decoder bounds &
+Declared per field --- rational bit length $4096$, total degree $128$, $4096$
+terms, dimension $64$, at most $32$ transition matrices, order $16$, a
+singularity bound cap of $100\,000$, and a $32$\,MiB file cap (\src{e9});
+a transition-evaluation cutoff (\src{e8}); a pullback and generator budget
+(\src{e1}, \src{e3}). \\
+\bottomrule
+\end{longtable}
+
+These were \emph{not} unified. A shared tag across \src{e7}, \src{e8} and
+\src{e9} would assert that three checkers accept the same object, and they do
+not: the three ``space'' certificates differ in whether multipliers are constant
+or bounded-degree polynomials, whether the iteration is simultaneous or
+round-robin, and whether the initial set is one map's image or a union of
+padded images. Renaming keys would hide a mathematical difference rather than a
+spelling one. Where the design-round divergence is a translation-layer problem,
+this one is a naming problem whose correct resolution is \emph{distinct names}.
+
+One convention from the extension round is worth adopting universally, because
+it removes an entire class of forged certificate. \src{e9}'s decoder rejects a
+producer-supplied ``the residual is zero'' field outright: no such field is
+accepted, and the checker reconstructs the residual from the authoritative
+problem and the supplied coefficients, then requires its canonical dictionary to
+be empty. The same decoder rejects floats, Booleans masquerading as integers,
+non-canonical fractions, non-positive denominators, duplicate monomials and
+duplicate JSON keys, with structural shape checks preceding every mathematical
+identity. That ordering is the right default for all of the schemas above.
+
+The design-round formats are \emph{semantically compatible and syntactically
+incompatible}.
 Every one encodes weighted squares times nonnegative-generator products plus
 ideal multipliers, over exact rationals. A single canonical schema is reachable
 by key renaming plus the one \src{p7} numeric conversion. Three families have no
