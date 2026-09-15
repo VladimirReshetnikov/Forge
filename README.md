@@ -64,6 +64,9 @@ or reformatted.
    one thing this merge was able to add.
 4. Appendix B of the article — the merge ledger: which proposal each idea came
    from, what was deduplicated, and how the nine's disagreements were resolved.
+5. [`docs/IDEAS-FROM-LEANT-DJEX.md`](docs/IDEAS-FROM-LEANT-DJEX.md) — a review
+   of two neighbouring projects that had already built the verification boundary
+   this design only specified, and what was taken from them.
 
 ## The one new result
 
