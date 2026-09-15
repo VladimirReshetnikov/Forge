@@ -1,14 +1,18 @@
 \section{Executed experiments}
 \label{sec:experiments}
 
-\subsection{Nine runs, reported separately}
+\subsection{Eighteen runs, reported separately}
 
-This section reports nine independent prototype runs, labelled \src{p1}
-to \src{p9} after the source proposals listed in
+This section reports eighteen independent prototype runs in two rounds: the
+design round \src{p1}--\src{p9}, covered first, and the extension round
+\src{e1}--\src{e9}, covered in Section~\ref{sec:extension-runs}. All
+eighteen are named after the source proposals listed in
 Appendix~\ref{app:provenance}. They are reported separately and they are
-\emph{not} pooled, for a reason stronger than caution.
+\emph{not} pooled --- neither within a round nor across the two --- for a
+reason stronger than caution.
 
-All nine ran on the same day in the same kind of environment --- Python 3.13.5
+All nine of the design-round runs ran on the same day in the same kind of
+environment --- Python 3.13.5
 on Linux x86-64, NumPy 2.3.5, SciPy 1.17.0, SymPy 1.14.0, and where pytest was
 used, pytest 9.0.2 --- and five of them recorded the same seed value,
 \code{20260914}. That coincidence makes the runs look comparable. They are not.
@@ -523,23 +527,203 @@ That last point is the useful methodological lesson: a factor-of-two difference
 in a headline growth curve came entirely from a baseline policy decision, not
 from the mechanism under test.
 
+\subsection{The extension round: nine more runs, still not pooled}
+\label{sec:extension-runs}
+
+A second round of nine independent proposals, labelled \src{e1} to \src{e9},
+was prepared against the merged draft. Their runs are reported here separately
+from the first nine and separately from each other. The non-pooling rule applies
+with the same force --- and with an additional reason: the two rounds attack
+overlapping problems, so a combined total would double-count the same
+mathematics under different unit names.
+
+The environmental coincidence repeats almost exactly. All nine ran on Python
+3.13.5 on Linux 6.18.44 x86-64 with SymPy 1.14.0, and five of them
+(\src{e1}, \src{e2}, \src{e3}, \src{e4}, \src{e6}) recorded the seed
+\code{20260915} --- one day after the \code{20260914} shared by five of the
+design-round runs. \src{e5} used \code{2026091507}, \src{e9} used
+\code{681437}, and \src{e7} and \src{e8} record fixed seeds without a shared
+value. As before, the shared seed drives entirely different generators over
+entirely different case sets, and the coincidence carries no comparability.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+Run & Headline unit & Recorded outcome \\
+\midrule
+\src{e1} & 124 runs / 62 problems &
+74 proved, 34 refuted, 16 \unknown{}; 108 accepted certificates, all 108
+replayed with site packages disabled and neither the search module nor SymPy
+imported (0.052\,s); 40 unit tests. \\
+\src{e2} & 65 accepted certificates &
+Four families (25 two-sided, 24 invariant, 15 Gosper, 1 telescoper);
+1{,}100 assertions; 188 mutations rejected; 527 pointwise binomial regressions
+over $n=0,\ldots,30$; 100 differential substitution cases; 7 expected
+\unknown{}s. \\
+\src{e3} & 317 cases / 313 bundles &
+178 proved, 135 refuted, 4 \unknown{}; 240 independent finite-state oracle
+comparisons; 210 diagnostic moment evaluations; 25 targeted invalid mutations,
+all rejected. \\
+\src{e4} & 82 corpus entries / 73 certificates &
+Machine lane 37 proved, 28 refuted, 1 \unknown{}; IPC lane 8 countermodels and
+8 \unknown{}; 222 generated local Lean obligations, none compiled; largest
+certificate 915 bytes; whole corpus 0.842\,s over three repeats; 151 pytest
+items. \\
+\src{e5} & 59 cases &
+38 certified, 17 counterexamples, 4 \unknown{}, across 36 linear, 13 ideal and
+10 binomial-sum cases; 818 mutations generated, 0 accepted; 117 pytest items. \\
+\src{e6} & 82 attempts &
+Ideal lane 27 certificates / 2 \unknown{}; weighted lane 23 closures and 25
+distinguishing words; telescoping lane 3 certificates / 2 \unknown{}; 78
+certificates replayed under a standard-library-only checker; 318 pytest
+items. \\
+\src{e7} & 135 replayed records &
+113 constant-action invariant, 14 ideal-preservation, 4 ranking, 1
+indexing-algebra, 3 orbit-counterexample records; 31 corruptions rejected; 29
+test methods; whole run about 1.8\,s. \\
+\src{e8} & 422 stored certificates &
+51 constant-multiplier, 14 polynomial-multiplier, 136 finite-algebra, 221
+integer-projection; all replay with the search entry points replaced by
+exceptions; 3{,}400 parameter valuations checked against a complete concrete
+oracle (1{,}368 feasible, 2{,}032 infeasible, no disagreement); 21 test methods
+containing 19 explicit mutation cases. \\
+\src{e9} & 245 accepted objects &
+54 matrix closures, 115 separating words, 23 telescopers, 6
+common-left-multiple identities, 47 singularity/seed plans; 245 specified
+invalidating mutations, all rejected; 1{,}140 exhaustive word evaluations; 483
+additional recurrence checks; 41 unit tests; 5.558\,s for the corpus and
+0.339\,s for replay with SymPy absent from the replay process. \\
+\bottomrule
+\end{tabularx}
+\caption{The extension round. Nine incommensurable ledgers: ``runs'',
+``cases'', ``bundles'', ``certificates'', ``records'', ``attempts'' and
+``objects'' are seven different units, and no row may be added to any other.}
+\label{tab:extension-runs}
+\end{table}
+
+\subsubsection*{The ablations that carry the argument}
+
+Three of these runs contain a controlled comparison that is more informative
+than any of the totals, because in each case the \emph{same} problem set is run
+through two lanes that differ in exactly one certificate language.
+
+\src{e1} ran sixteen groups: eight problem families, each in a linear-span mode
+and an ideal mode. The two modes agree everywhere except in two families. On
+\emph{coupled nonlinear} and \emph{nonlinear equivalence}, eight cases each, the
+linear lane returns \unknown{} on all sixteen and the ideal lane proves all
+sixteen. That is the entire content of Section~\ref{sec:span-insufficient}
+reduced to a measurement: no span budget closes those systems, and the failure
+is not a fuel problem.
+
+\src{e2} ran 24 invariant cases through the same feature set twice. The subspace
+method certifies 24; restricting the certificate language to conserved
+quantities certifies 3. The other 21 are true, and the restricted lane simply
+cannot say so.
+
+\src{e6} separates its weighted lane's outcomes rather than reporting a success
+rate: of 48 attempts, 23 produce closure certificates and 25 produce
+distinguishing words. Both are results. Counting only the first would report a
+48\,\% success rate for a worker that actually answered every question it was
+asked.
+
+\subsubsection*{\src{e7}'s composition table, and how to read it}
+
+One table deserves separate handling because it is the most quotable number in
+the extension round and the most easily misquoted. Over four finite hole
+grammars held fixed in size and order, a flat whole-term policy and a
+contract-directed local policy both return the same term:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}rrrrl@{}}
+\toprule
+Distractors & Flat complete terms & Local checks & Local complete terms & Hole sizes \\
+\midrule
+0  & 24     & 13 & 1 & 1, 2, 2, 8 \\
+4  & 2{,}148  & 29 & 1 & 5, 6, 6, 12 \\
+8  & 14{,}384 & 45 & 1 & 9, 10, 10, 16 \\
+12 & 50{,}940 & 61 & 1 & 13, 14, 14, 20 \\
+\bottomrule
+\end{tabular}
+\caption{Same grammar, same within-hole ordering, different composition
+strategy. Local checks and complete terms are different work units and are not
+comparable to each other.}
+\label{tab:composition}
+\end{table}
+
+The distractor ordering is deliberately unfavourable and is held fixed across
+both policies. The largest case was additionally checked on all lists of length
+at most six over each of two two-element alphabets, at ordinary nearby indices
+and at $\pm2^{80}$, agreeing with an independent non-fold reference on all
+3{,}570 checks --- with the symbolic replay, not those observations, carrying
+the general claim. This is a demonstration that a cross-product disappears under
+factored contracts. It is not a measured $50\,940$-fold speedup, not robustness
+under all candidate orders, and not evidence that the original Leant query has
+been fixed.
+
+\subsubsection*{What the re-run added}
+
+Unlike the design round, whose authoring environments were unavailable here,
+every extension suite could be executed in the merge environment. All nine were
+re-run, and every recorded count was reproduced:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Run & Command & Recorded & Observed \\
+\midrule
+\src{e1} & \code{pytest -q test\_closure.py}    & 40 tests & 40 passed \\
+\src{e2} & \code{pytest -q test\_regressions.py}& 13 methods & 13 passed, 69 subtests \\
+\src{e3} & \code{pytest -q tests}               & 12 methods & 12 passed, 313 subtests \\
+\src{e4} & \code{pytest -q tests}               & 151 tests & 151 passed \\
+\src{e5} & \code{pytest -q tests}               & 117 items & 117 passed \\
+\src{e6} & \code{pytest -q tests}               & 318 passed & 318 passed \\
+\src{e7} & \code{pytest -q test\_extensions.py} & 29 methods & 29 passed, 140 subtests \\
+\src{e8} & \code{python -S -m unittest test\_prototypes} & 21 methods & 21 passed \\
+\src{e9} & \code{pytest -q tests}               & 41 tests & 41 passed \\
+\bottomrule
+\end{tabular}
+\caption{Re-run in the merge environment --- Python 3.14.4, NumPy 2.4.4, SciPy
+1.17.1, SymPy 1.14.0, pytest 9.0.3, Windows. Recorded in
+\texttt{results/extension-suites-rerun.json}.}
+\label{tab:extension-rerun}
+\end{table}
+
+Two observations, neither of them a defect. \src{e8} runs under \code{python -S},
+which confirms its standard-library-only claim by making site packages
+unreachable. \src{e9}'s suite must be run from \code{prototype/}; from the
+package root it fails collection with
+\code{ModuleNotFoundError: forge\_summaries}. That is a path convention.
+
+The re-run is a reproduction on \emph{different} interpreter and library
+versions than the authoring environment, not a bit-identical replay, and no
+timing was compared. It establishes that the suites pass and that the recorded
+counts are accurate. It does not establish that any checker is correct, and it
+is not a Lean result.
+
 \subsection{Lean status}
 
-\subsubsection*{What the nine runs recorded}
+\subsubsection*{What the eighteen runs recorded}
 
-None of the nine compiled any Lean source. Each recorded the same reason --- no
-\code{lean} or \code{lake} executable in the authoring environment --- under five
-different filenames and in two different formats. Consequently none of them
-performed a kernel check, an axiom audit, or any comparison against \grind{},
-Aesop, \code{nlinarith}, LeanHammer, or any other tactic. Twenty-one
-\code{.lean} files across the nine, totalling about 3{,}000 lines, were
-\emph{candidate source}.
+None of the eighteen compiled any Lean source. Every one of them recorded the
+same reason --- no \code{lean} or \code{lake} executable in the authoring
+environment --- under several different filenames and in more than one format.
+Consequently none performed a kernel check, an axiom audit, or any comparison
+against \grind{}, Aesop, \code{nlinarith}, LeanHammer, or any other tactic.
+Twenty-one \code{.lean} files across the design round, totalling about
+3{,}000 lines, and twenty across the extension round, totalling about
+3{,}100, were \emph{candidate source}. That the two rounds independently
+produced almost exactly the same quantity of uncompiled Lean is itself worth
+noticing: the bottleneck was never the amount of Lean anyone was willing to
+write.
 
 \subsubsection*{What this merge was able to add}
 
 The merge environment has \code{elan}, and installing the pinned
 \code{leanprover/lean4:v4.34.0} made a first, narrow compilation check possible.
-Three of the sixteen files in the merged tree import nothing beyond Lean core
+Three of the eighteen files in the merged tree import nothing beyond Lean core
 and can therefore be elaborated without a built Mathlib:
 
 \begin{table}[htbp]
@@ -563,10 +747,56 @@ This confirms that the proposed runtime and scheduler contract, the
 proofs are well-typed Lean 4.34.0 rather than merely plausible-looking source.
 
 It confirms nothing else. It is not a transitive axiom audit. It says nothing
-about the other thirteen files, which import Mathlib and need a built project.
-It does not establish that any certificate checker is correct. And it is not a
-comparison against any Lean tactic --- successful elaboration of a hand-written
-example proves that the example type-checks, not that automation found it.
+about the other fifteen files in the merged tree, which import Mathlib and need
+a built project. It does not establish that any certificate checker is correct.
+And it is not a comparison against any Lean tactic --- successful elaboration of
+a hand-written example proves that the example type-checks, not that automation
+found it.
+
+\subsubsection*{Ten more files, from the extension round}
+
+The same check was then applied to the extension proposals. Of their twenty
+source files, two are aggregators that import their siblings, eight import
+Mathlib, and ten import nothing beyond Lean core. All ten elaborate:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+File & Result & Elapsed (s) \\
+\midrule
+\src{e1} \code{lean/Core.lean}                          & elaborated & 82.1 \\
+\src{e2} \code{lean/ForgeExtensions/Reachability.lean}  & elaborated & 175.8 \\
+\src{e3} \code{lean/BridgeSpec.lean}                    & elaborated & 220.7 \\
+\src{e4} \code{lean/Reachability.lean}                  & elaborated & 14.7 \\
+\src{e5} \code{lean/ForgeExtension/Core.lean}           & elaborated & 9.4 \\
+\src{e6} \code{lean/ProofPrinciples.lean}               & elaborated & 10.2 \\
+\src{e7} \code{lean/Specimens.lean}                     & elaborated & 9.5 \\
+\src{e8} \code{lean/CoreSoundness.lean}                 & elaborated & 8.8 \\
+\src{e8} \code{lean/IndexingSketch.lean}                & elaborated & 30.8 \\
+\src{e9} \code{lean/WordSimulation.lean}                & elaborated & 2.2 \\
+\bottomrule
+\end{tabular}
+\caption{Lean v4.34.0 (commit \texttt{293d5d0c}), recorded in
+\texttt{results/lean-extensions-elaboration.json}.}
+\label{tab:lean-extensions}
+\end{table}
+
+Seven of the ten additionally print \code{\#print axioms} results, and every
+printed line reads \emph{does not depend on any axioms} --- covering the
+reachability and run invariants of \src{e2}, \src{e4}, \src{e6} and
+\src{e8}, the tree-cover lemmas of \src{e8}, the fold-indexing and ranked-call
+lemmas of \src{e7}, and the word-simulation lemmas of \src{e9}. This is a
+stronger statement than the design-round result, where two of the three
+elaborated theorems depend on \code{propext}.
+
+The same three disclaimers apply, and one more besides. \src{e8}'s
+\code{IndexingSketch.lean} elaborates, and its author had marked it
+\emph{uncompiled} and \emph{not a substitute for the original query}. Both
+statements are now true at once: the file type-checks, and it still proves an
+equation between two ordinary-list definitions rather than anything about
+Church-encoded inputs. Elaborating a specimen does not upgrade what the specimen
+says.
 
 \subsection{What the evidence establishes}
 
@@ -574,8 +804,11 @@ It establishes that the implementations actually synthesise certificates in the
 stated fragments; that certificate replay is separable from the numerical and
 symbolic search libraries; that the specified mutation and corruption tests are
 rejected; that several mechanisms solve problems their own restricted precursors
-cannot; and that three Lean design artefacts type-check under the pinned
-toolchain.
+cannot; that all nine extension suites re-run and reproduce their recorded
+counts on a different interpreter and different library versions; and that
+thirteen Lean artefacts --- three from the design round, ten from the extension
+round --- type-check under the pinned toolchain, seven of them printing
+\emph{does not depend on any axioms} for every theorem they expose.
 
 It does not establish that \forge{} is implemented as a Lean tactic, that the
 Mathlib-dependent candidate scripts compile, that any certificate is checked by
@@ -597,3 +830,31 @@ coefficients, re-deriving a clause by independent unit propagation rather than
 replaying a resolution chain, recomputing a Sturm chain rather than trusting a
 stored root count, verifying $\det U=\pm1$ rather than calling the elimination
 that produced $U$.
+
+The extension round sharpens that last point into a three-level scale rather
+than a yes/no property, and it is worth stating explicitly because the levels
+are easy to conflate. At the strongest level the checker performs a genuinely
+different computation from the search: \src{e7}'s ideal lane does not verify a
+Gr\"obner basis, re-run Buchberger, or trust a zero-remainder flag, and
+\src{e9}'s checkers multiply rational matrices and compare, where the searches
+solved nullspaces. At an intermediate level the search entry points are
+\emph{replaced by exceptions} during replay --- \src{e8}'s invariant and finite
+lanes --- which proves separation but leaves input-table semantics shared. At
+the weakest level, \src{e8}'s integer projection reconstructs the witness
+program with the same assembler the search used, so replay catches a modified
+receipt but not an arithmetic mistake common to both. The proposal says so
+itself and mitigates it by a different route, an exhaustive concrete oracle over
+a provably sufficient range. A reader comparing ``all certificates replay''
+claims across the eighteen prototypes should ask which of these three things
+the sentence means.
+
+One more limitation is specific to the second round and does not appear in the
+first. Several extension corpora are \emph{constructed positives}: \src{e7}'s
+twelve power-curve fixtures have known invariants, \src{e9}'s forty comparison
+models are invertible coordinate changes of random systems, and \src{e8}'s
+forty-eight affine-diagonal instances are built to preserve the diagonal. These
+exercise polynomial multiplication, substitution and coefficient handling. They
+are not held-out benchmarks of discovery performance, and the proposals label
+them as such rather than counting them as solved theorems. Likewise \src{e7}'s
+seventy-two affine differential systems include forty-eight with a zero relation
+space; those are useful controls, not additional nontrivial results.
