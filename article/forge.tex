@@ -1,0 +1,175 @@
+% ---------------------------------------------------------------------------
+% Forge: a certificate-producing proof-planning layer above Lean's `grind`
+%
+% Merged working draft. Assembled from nine independently prepared proposals,
+% which are retained verbatim under proposals/ for provenance.
+%
+% Build (pdfLaTeX, standard TeX Live / MiKTeX packages only -- deliberately no
+% fontspec, so no system font has to be installed):
+%
+%     latexmk -pdf -interaction=nonstopmode forge.tex
+%
+% The nine source articles used four different engines (pdfLaTeX, XeLaTeX,
+% LuaLaTeX, and LuaLaTeX-with-fontspec) and between them required Linux
+% Libertine O, Lato, Libertinus Math, Noto Serif, Noto Sans, STIX, Arimo,
+% newtx and DejaVu Sans Mono. None of those fonts is needed here.
+% ---------------------------------------------------------------------------
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{xurl}
+\usepackage[hidelinks,bookmarks=true,bookmarksnumbered=true]{hyperref}
+
+% --- colours ---------------------------------------------------------------
+\definecolor{Ink}{HTML}{1A1A1A}
+\definecolor{Accent}{HTML}{1F4E79}
+\definecolor{Rule}{HTML}{BFBFBF}
+\definecolor{CodeBg}{HTML}{F6F6F4}
+
+\hypersetup{
+  colorlinks=false,
+  pdftitle={Forge: a certificate-producing proof-planning layer above Lean's grind},
+  pdfsubject={Design report and executed algorithm prototypes},
+}
+
+% --- headings --------------------------------------------------------------
+\titleformat{\section}{\sffamily\Large\bfseries\color{Accent}}{\thesection}{0.65em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries\color{Ink}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{2.0ex plus 1ex minus .2ex}{1ex}
+\titlespacing*{\subsection}{0pt}{1.5ex plus .7ex minus .2ex}{.8ex}
+
+% --- theorem environments --------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{invariant}{Invariant}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% --- listings --------------------------------------------------------------
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{CodeBg},
+  frame=leftline,
+  rulecolor=\color{Rule},
+  framesep=6pt,
+  xleftmargin=8pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  aboveskip=1.0em,
+  belowskip=1.0em,
+}
+
+% --- shorthands ------------------------------------------------------------
+\newcommand{\forge}{\textsf{Forge}}
+\newcommand{\Forge}{\textsf{Forge}}
+\newcommand{\grind}{\texttt{grind}}
+\newcommand{\Grind}{\texttt{grind}}
+\newcommand{\Lean}{Lean}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\codepath}[1]{\texttt{#1}}
+\newcommand{\unknown}{\textsc{unknown}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+
+% Provenance marker: which of the nine source proposals a result comes from.
+\newcommand{\src}[1]{{\small\textsf{[#1]}}}
+
+% Implementation-status banner used throughout, so that a specified algorithm
+% is never mistaken for an executed one.
+\newcommand{\status}[1]{%
+  \par\noindent{\small\textsf{\textbf{Status:} #1}}\par\smallskip}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{2.5cm}
+
+{\sffamily\Huge\bfseries\color{Accent} Forge\par}
+\vspace{0.8cm}
+{\sffamily\LARGE A certificate-producing proof-planning layer\\[0.25em]
+above Lean's \texttt{grind}\par}
+
+\vspace{1.4cm}
+{\large Merged working draft\par}
+\vspace{0.4cm}
+{\large Consolidated from nine independent proposals\par}
+
+\vspace{2.2cm}
+\begin{minipage}{0.82\textwidth}
+\small
+\setlength{\parskip}{0.7em}
+
+\textbf{What this document is.} A design for a substantially broader Lean~4
+automation system that keeps \grind{} as its local saturation engine and adds
+an outer layer that \emph{changes the proof obligation}: it selects induction
+principles, generalises accumulators, synthesises auxiliary lemmas, constructs
+witnesses, and obtains exact algebraic certificates. Every component that can
+succeed must return something Lean can check.
+
+\textbf{What this document is not.} \forge{} is \emph{not an implemented Lean
+tactic}. None of the nine contributing efforts had a Lean executable
+available; no Lean source was compiled by any of them; no comparison against
+\grind{}, Aesop, \code{nlinarith}, LeanHammer, or any other Lean tactic was
+measured. The Python prototypes are research code and are not formally
+verified. A passing Python check is not a Lean-kernel proof.
+
+\textbf{Baseline.} Lean v4.34.0, released 14 September 2026, with Mathlib
+revision \texttt{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
+
+\end{minipage}
+
+\vfill
+{\small Nine source proposals retained verbatim under \texttt{proposals/};
+see Appendix~\ref{app:provenance} for the merge ledger.\par}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\input{sections/01-objective}
+\input{sections/02-baseline}
+\input{sections/03-architecture}
+\input{sections/04-trust}
+\input{sections/05-structural}
+\input{sections/06-nonlinear}
+\input{sections/07-boolean-and-external}
+\input{sections/08-integration}
+\input{sections/09-experiments}
+\input{sections/10-evaluation}
+\input{sections/11-conclusion}
+
+\appendix
+\input{sections/A-schemas}
+\input{sections/B-provenance}
+
+\clearpage
+\input{references}
+
+\end{document}

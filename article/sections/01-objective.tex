@@ -1,0 +1,159 @@
+\section{The objective: more proof construction, not a bigger timeout}
+
+\forge{} is a \emph{proof-producing automation system with a structural search
+layer}. It is not a new foundational logic, not a replacement for Lean's
+kernel, and not a rewrite of \grind{}. It preserves the existing kernel and
+treats search engines, learned rankings, computer-algebra systems, and
+numerical solvers as fallible advisers whose output must be checked before it
+becomes a fact.
+
+The design separates two tasks that are commonly conflated. A
+\emph{structural planner} chooses a proof shape: introduce a binder,
+construct a witness, apply a theorem, prove an auxiliary lemma, generalise an
+accumulator, or use an induction principle. A \emph{local saturation engine}
+derives consequences within the resulting context. \grind{} is an excellent
+candidate for the second role. The proposed improvement is to supply proof
+structure and certified facts that local saturation cannot obtain on its own,
+and to feed useful consequences back rather than restarting every tool from an
+unchanged goal.
+
+\[
+\boxed{\text{local consequence search}}
+\quad\longleftrightarrow\quad
+\boxed{\text{structural proof search}}
+\]
+
+Three short examples fix the pattern. A nonlinear worker may prove
+$0\le p(x,y)$, combine it with an existing $p(x,y)\le0$, and obtain
+$p(x,y)=0$; that equality is then useful to congruence closure even when the
+final target is an equality between uninterpreted function applications. An
+induction planner may generalise an accumulator, synthesise its polynomial
+invariant, and invoke \grind{} only on the base and step obligations. A
+witness worker may construct a parametric solution of a linear system and
+leave integrality or bound obligations to other workers. In all three cases
+the benefit comes from \emph{coordination around checked intermediate claims},
+not from any single engine becoming stronger.
+
+\subsection{Two meanings of ``more powerful''}
+
+The desired outcome is substantially higher automatic coverage on useful Lean
+developments: \emph{more goals solved automatically from comparable initial
+information}, particularly goals that need structural proof steps or new
+terms. That is not the same as a stronger logic, a change to Lean's trusted
+axioms, uniform speed improvement, logical completeness, or success-set
+inclusion at a fixed total budget. Those are different claims and they should
+never be argued for interchangeably.
+
+\begin{definition}
+For a tactic implementation $T$, an environment $E$, a goal $G$, and a
+resource allocation $B$, write $T(E,G;B)\downarrow$ when $T$ returns a proof
+accepted under the selected trust policy within that allocation.
+\end{definition}
+
+\forge{} offers two modes, and an evaluation must report both.
+
+In \emph{compatibility mode} it first runs the stock \grind{} invocation, with
+the same input, options, and solver budget, before running any new machinery.
+In \emph{fixed-budget mode} it partitions a single budget among workers and
+may sacrifice some baseline successes in exchange for others.
+
+\begin{proposition}[Conditional baseline preservation]
+\label{prop:preservation}
+Assume the stock run is reproduced deterministically with identical inputs and
+resources, and that its successful proof is returned immediately. If
+compatibility mode allocates that full run before spending any additional
+extension resources, then every success of the stock invocation is also a
+success of compatibility mode.
+\end{proposition}
+\begin{proof}
+The first stage is the stock invocation itself. A success exits before any
+extension can change its state or consume its reserved allocation.
+\end{proof}
+
+Proposition~\ref{prop:preservation} is a \emph{scheduling} property, not a
+superiority result at equal cost. Process startup, memory pressure, imports,
+and global wall-clock limits can invalidate an operational reading of it
+unless they are controlled. Nor can any finite-budget heuristic promise
+pointwise dominance over another heuristic at exactly the same cost. A fair
+experiment reports compatibility mode and fixed-budget mode separately, and
+never presents the preservation property as an equal-cost performance theorem.
+
+Failure-triggered intervention has recent precedent in research on \grind{}
+itself; the cascade is prior art and is not claimed here as an
+invention~\cite{learned-interventions}.
+
+\subsection{Where new coverage can realistically come from}
+
+The target is not ``everything \grind{} cannot prove''. It is a specific
+collection of mechanisms with a plausible cost/coverage tradeoff:
+
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{Proof structure.} Select induction principles, generalise
+  changing state, construct existential witnesses, and establish auxiliary
+  lemmas before using them.
+\item \textbf{Missing algebraic consequences.} Discover hidden sums of
+  squares, domain-dependent polynomial positivity, and exact zero information
+  that can be shared with other engines.
+\item \textbf{Directed obligation solving.} Choose theorem applications from
+  the conclusion backward, create their side conditions explicitly, and use
+  successful side conditions to activate guarded forward reasoning.
+\end{enumerate}
+
+These are proposed extensions, not assertions that every example requiring one
+will fail under all existing \grind{} configurations or library annotations.
+Some will already be solved by \grind{}, \code{nlinarith}, Aesop, or a
+suitable library theorem. Only controlled runs on a real corpus can identify
+genuinely new coverage.
+
+\subsection{The deliverable and its evidence levels}
+
+This document deliberately keeps four things apart, and the reader is asked to
+keep them apart too:
+
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{Mathematical soundness arguments.} The propositions and theorems
+  below explain why each certificate format implies the statement it claims.
+  These are ordinary mathematics and are independent of any implementation.
+\item \textbf{Tested Python checking.} Executable prototypes synthesise and
+  re-check certificates in exact rational arithmetic, with negative and
+  mutation tests. This is evidence about programs, not about Lean.
+\item \textbf{Generated Lean candidate source.} Some workers emit Lean proof
+  scripts. Where a script has not been compiled, it is \emph{candidate
+  source}, and saying so is not a formality.
+\item \textbf{The proposed production implementation.} The Lean tactic, its
+  reflected checkers, its \grind{} adapter, and its measured performance.
+  None of this exists yet.
+\end{enumerate}
+
+\begin{remark}
+A Python check is not a Lean-kernel proof. The prototype checkers are
+hand-written research code; several share representation and matching routines
+with the searches they are meant to audit. ``Search-free replay'' means the
+numerical and symbolic search libraries are not loaded --- it does not mean an
+independently implemented formal verification.
+\end{remark}
+
+\subsection{What was actually built, and what was not}
+
+Across the nine contributing efforts, the following algorithm families were
+implemented and executed in Python: exact sparse rational polynomial
+arithmetic; exact quadratic decomposition by symmetric pivoting; finite
+polynomial-cone search with rational repair; Bernstein box subdivision with
+checked coverage; square-factor and Sturm certificates for univariate
+intervals; polynomial recurrence and accumulator-invariant synthesis by exact
+CEGIS; affine and integer-lattice witness synthesis; demand-directed ground
+Horn reasoning; a typed equational prover with structural-induction replay;
+proof-logging CDCL with an integer-difference-logic theory solver; and
+standard-library-only replay of every stored certificate.
+
+The following were \emph{not} built by anyone: an installed \code{forge}
+tactic; a Lean formalisation of any checker; the full obligation scheduler
+against real Lean snapshots; native \grind{} state access; a dependent-type
+reifier; general quantifier instantiation; higher-order synthesis; external
+SMT proof reconstruction; a semidefinite backend; and any measured comparison
+against a Lean tactic.
+
+Section~\ref{sec:experiments} reports what each of the nine runs actually
+observed. Those runs used different seeds, different generators, and different
+case sets; their counts are not comparable and must never be pooled into a
+single accuracy figure.

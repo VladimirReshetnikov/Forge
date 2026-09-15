@@ -1,0 +1,441 @@
+% ---------------------------------------------------------------------------
+% Unified bibliography.
+%
+% Merged from the bibliographies of the nine independent proposals. Where
+% several proposals cited the same work under different keys, the entry was
+% kept once under the canonical key below and the richest of the nine
+% descriptions was retained. Dates of inspection are those recorded by the
+% original authors; nothing here was re-fetched, and no URL was verified in
+% the merge environment.
+% ---------------------------------------------------------------------------
+\begin{thebibliography}{99}
+\small
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{0pt}
+\addcontentsline{toc}{section}{References}
+
+% --- Lean reference manual: grind -----------------------------------------
+
+\bibitem{grind-ref}
+Lean contributors. \emph{The Lean Language Reference: The \texttt{grind} tactic}.
+Rolling reference; inspected 14 September 2026, when the served version was
+4.34.0. Describes \texttt{grind} as cooperating proof-producing engines
+organised around contradiction, congruence closure, constraint propagation,
+E-matching, guided case analysis, and theory solvers.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/}.
+
+\bibitem{grind-paper}
+Kim Morrison and Leonardo de Moura.
+\emph{\texttt{grind}: An SMT-Inspired Tactic for Lean 4 (Short Paper ---
+System Description)}. IJCAR 2026, LNCS 16688, pp.~106--114.
+DOI: \href{https://doi.org/10.1007/978-3-032-32589-1_7}{10.1007/978-3-032-32589-1\_7}.
+Author's HTML version: \url{https://kim-em.github.io/papers/grind/}.
+
+\bibitem{grind-ring}
+Lean contributors. \emph{Algebraic Solver (Commutative Rings, Fields)}.
+The Lean Language Reference. Inspected 14 September 2026.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/Algebraic-Solver-_LPAR_Commutative-Rings___-Fields_RPAR_/}.
+
+\bibitem{grind-linarith}
+Lean contributors. \emph{Linear Arithmetic Solver}. The Lean Language Reference.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/Linear-Arithmetic-Solver/}.
+
+\bibitem{grind-lia}
+Lean contributors. \emph{Linear Integer Arithmetic}. The Lean Language
+Reference. Documents the integer constraint forms and model-based theory
+combination that are part of the baseline.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/Linear-Integer-Arithmetic/}.
+
+\bibitem{grind-ematch}
+Lean contributors. \emph{E-matching}. The Lean Language Reference.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/E___matching/}.
+
+\bibitem{grind-cases}
+Lean contributors. \emph{Case Analysis}. The Lean Language Reference.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/Case-Analysis/}.
+
+% --- Lean release and pinned implementation sources ------------------------
+
+\bibitem{lean-release-434}
+Lean project. \emph{Lean v4.34.0 release}, published 14 September 2026;
+release metadata inspected through the GitHub API on the same date, with
+publication timestamp \texttt{2026-09-14T14:04:36Z}. Release notes include
+``Bit-blasting Inside \texttt{grind =>}''.
+\url{https://github.com/leanprover/lean4/releases/tag/v4.34.0}.
+
+\bibitem{lean-reference}
+Lean project. \emph{The Lean Language Reference}. Current version observed as
+4.34.0 on 14 September 2026.
+\url{https://lean-lang.org/doc/reference/latest/}.
+
+\bibitem{grind-config}
+Lean contributors. \codepath{src/Init/Grind/Config.lean}, tag \texttt{v4.34.0}.
+Pinned implementation source for the search-branch, E-matching, generation,
+and instance limits quoted in this article.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Grind/Config.lean}.
+
+\bibitem{grind-types}
+Lean contributors. \codepath{src/Lean/Meta/Tactic/Grind/Types.lean}, tag
+\texttt{v4.34.0}. Pinned implementation source for the saved-state machinery
+and proof-bearing types.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind/Types.lean}.
+
+\bibitem{grind-main}
+Lean contributors. \codepath{src/Lean/Meta/Tactic/Grind/Main.lean}, tag
+\texttt{v4.34.0}. Source of the \texttt{Params}, \texttt{assertExtra},
+\texttt{GrindM.run}, \texttt{mkGoalCore} and \texttt{Result} entry points
+discussed in the integration section.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind/Main.lean}.
+
+\bibitem{grind-action}
+Leonardo de Moura and Lean contributors.
+\codepath{src/Lean/Meta/Tactic/Grind/Action.lean}, tag \texttt{v4.34.0}.
+Inspected source describing the continuation-based control interface,
+backtracking, and script reconstruction. Inspected blob:
+\texttt{ad212d7c8ef8277b4be3650d43738ee98a32cbf5}.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind/Action.lean}.
+
+\bibitem{grind-finish}
+Lean contributors. \codepath{src/Lean/Meta/Tactic/Grind/Finish.lean}, tag
+\texttt{v4.34.0}. Inspected blob:
+\texttt{6bae01e1c2c4772d0cabe99ff74437492ccebfc5}.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind/Finish.lean}.
+
+\bibitem{grind-imports}
+Lean contributors. \codepath{src/Lean/Meta/Tactic/Grind.lean}, tag
+\texttt{v4.34.0}. Inspected blob:
+\texttt{db642e7864020148fab27822bf83c445de83d02d}.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind.lean}.
+
+\bibitem{grind-commring}
+Lean contributors.
+\codepath{src/Lean/Meta/Tactic/Grind/Arith/CommRing/Types.lean}, tag
+\texttt{v4.34.0}. Commutative-ring constraint types.
+\url{https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Arith/CommRing/Types.lean}.
+
+\bibitem{grind-api}
+Lean contributors. \emph{Lean.Meta.Tactic.Grind.Types}. Generated API
+documentation, including solver-extension interfaces. Inspected
+14 September 2026.
+\url{https://lean-lang.org/doc/api/Lean/Meta/Tactic/Grind/Types.html}.
+
+\bibitem{mathlib-pin}
+Mathlib contributors. Repository revision
+\texttt{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa} and its
+\texttt{lean-toolchain} file, which specifies
+\texttt{leanprover/lean4:v4.34.0}.
+\url{https://github.com/leanprover-community/mathlib4/blob/1cf325a0cf67aca2b04d76b5380ff6a9e410aefa/lean-toolchain}.
+
+% --- Trust boundary: native evaluation, SAT, proof validation -------------
+
+\bibitem{tactic-reference}
+Lean contributors. \emph{The Lean Language Reference: Tactic Reference}.
+Entries for \texttt{native\_decide}, \texttt{bv\_decide}, \texttt{decide\_cbv},
+\texttt{omega}, induction, SAT-solver integration, and call-by-value
+evaluation, with their associated trust behaviour. Inspected
+14 September 2026.
+\url{https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Tactic-Reference/}.
+
+\bibitem{validating-proofs}
+Lean contributors. \emph{Validating a Lean Proof}. The Lean Language
+Reference, including native-computation changes since Lean 4.29.0.
+\url{https://lean-lang.org/doc/reference/latest/ValidatingProofs/}.
+
+\bibitem{native-infra}
+Lean contributors. \emph{Lean.Meta.Native}, source at tag \texttt{v4.34.0};
+in particular \code{nativeEqTrue} and its generated-axiom path.
+\url{https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Native.lean}.
+
+\bibitem{native-rfc}
+Lean contributors. \emph{RFC: One axiom per native computation}, issue 12216,
+opened 28 January 2026. Historical design discussion; the exact current
+behaviour must be audited against the pinned implementation rather than
+assumed from this thread.
+\url{https://github.com/leanprover/lean4/issues/12216}.
+
+\bibitem{bv-decide-api}
+Lean contributors. \emph{Lean.Elab.Tactic.BVDecide}. Generated source API
+documentation. Inspected 14 September 2026.
+\url{https://leanprover-community.github.io/mathlib4_docs/Lean/Elab/Tactic/BVDecide.html}.
+
+\bibitem{lean4lean}
+Mario Carneiro. \emph{Lean4Lean: Towards a Verified Typechecker for Lean,
+in Lean}. arXiv:2403.14064, 2024.
+\url{https://arxiv.org/abs/2403.14064}.
+
+% --- Lean automation ecosystem --------------------------------------------
+
+\bibitem{aesop}
+Aesop contributors. \emph{Aesop: Automated Extensible Search for Obvious
+Proofs} (white-box automation for Lean~4). Repository documentation,
+including the search tree, safe/unsafe rule classification, best-first
+exploration, and induction examples. Observed README blob:
+\texttt{f75ec1f8bebcf6d857fc3954cf91cf99f323a758}. Inspected
+14 September 2026.
+\url{https://github.com/leanprover-community/aesop}.
+
+\bibitem{duper}
+Joshua Clune, Yicheng Qian, Alex Bentkamp, and contributors. \emph{Duper}.
+Repository README: proof-producing saturation, manual premise selection, and
+a configurable portfolio. Observed README blob:
+\texttt{1859f7fa914fbd8151b274fd34e46f3a09ef1b2d}. Inspected
+14 September 2026.
+\url{https://github.com/leanprover-community/duper}.
+
+\bibitem{lean-auto}
+Yicheng Qian, Joshua Clune, Clark Barrett, and Jeremy Avigad.
+\emph{Lean-auto: An Interface between Lean 4 and Automated Theorem Provers}.
+CAV 2025; arXiv:2505.14929. Translation and monomorphization infrastructure.
+\url{https://arxiv.org/abs/2505.14929};
+\url{https://github.com/leanprover-community/lean-auto}.
+
+\bibitem{lean-smt}
+Abdalrhman Mohamed, Tomaz Mascarenhas, Harun Khan, Haniel Barbosa,
+Andrew Reynolds, Yicheng Qian, Cesare Tinelli, and Clark Barrett.
+\emph{Lean-SMT: An SMT tactic for discharging proof goals in Lean}.
+CAV 2025; arXiv:2505.15796v1. Documented behaviour includes returning
+proof-reconstruction holes as goals; its supported theories are not
+equivalent to the full capability set of cvc5.
+\url{https://arxiv.org/abs/2505.15796};
+\url{https://github.com/ufmg-smite/lean-smt}.
+
+\bibitem{query-smt}
+Joshua Clune, Haniel Barbosa, and Jeremy Avigad.
+\emph{Hint-Based SMT Proof Reconstruction}. arXiv:2601.14495, January 2026.
+\url{https://arxiv.org/abs/2601.14495};
+\url{https://github.com/JOSHCLUNE/QuerySMT}.
+
+\bibitem{lean-hammer}
+Thomas Zhu, Joshua Clune, Jeremy Avigad, Albert Qiaochu Jiang, and
+Sean Welleck. \emph{Premise Selection for a Lean Hammer}.
+arXiv:2506.07477, 2025 (later versions to 25 February 2026).
+\url{https://arxiv.org/abs/2506.07477};
+\url{https://github.com/JOSHCLUNE/LeanHammer}.
+
+\bibitem{lean-sos}
+Lean SOS contributors. \emph{SOS: sum-of-squares nonlinear real arithmetic in
+Lean 4}, after Harrison's decision procedure. Repository README, architecture,
+certificate interface, and stated limitations. Inspected 14 September 2026.
+Its documented architecture separates reification, search, checking, and
+verification.
+\url{https://github.com/leanprover/sos}.
+
+\bibitem{sos-engine}
+Lean SOS project. \codepath{SOS/Engine.lean}, observed \code{main} source,
+14 September 2026. Source of the \code{SOS.Engine.solve} and
+\code{SOS.Engine.Result.check} interfaces named as integration targets.
+\url{https://raw.githubusercontent.com/leanprover/sos/main/SOS/Engine.lean}.
+
+\bibitem{sos-core}
+Lean SOS project. \codepath{SOS/Core.lean}, observed \code{main} source.
+\url{https://raw.githubusercontent.com/leanprover/sos/main/SOS/Core.lean}.
+
+\bibitem{sos-toolchain}
+Lean SOS project. \texttt{lean-toolchain}, retrieved \code{main} snapshot
+specifying \code{v4.32.0-rc1}. Recorded because it differs from the
+\texttt{v4.34.0} baseline used here; it is not a verified common build
+manifest.
+\url{https://raw.githubusercontent.com/leanprover/sos/main/lean-toolchain}.
+
+\bibitem{hex-mv-poly}
+Lean Hex project. \emph{hex-mv-poly: Mathlib-free executable multivariate
+polynomials for Lean 4}. The computational polynomial substrate used by the
+Lean \code{sos} project.
+\url{https://github.com/leanprover/hex-mv-poly}.
+
+\bibitem{lean-lp}
+Lean LP contributors. \emph{Linear programming in Lean 4}. Repository package,
+backend, tactic, and trust-model documentation. Inspected 14 September 2026.
+\url{https://github.com/leanprover/lp}.
+
+\bibitem{lp-blog}
+Kim Morrison. \emph{Verified linear programming}, 14 June 2026.
+Author's technical overview.
+\url{https://kim-em.github.io/blog/2026-6-14-verified-linear-programming/}.
+
+\bibitem{pblean}
+Stefan Szeider. \emph{PBLean: Pseudo-Boolean Proof Certificates for Lean 4}.
+arXiv:2602.08692, 2026, revised 2 April 2026.
+\url{https://arxiv.org/abs/2602.08692}.
+
+\bibitem{learned-interventions}
+Evan Wang, Simon Chess, Sophie Szeto, and Theodore Meek.
+\emph{Learned Interventions in Lean 4 \texttt{grind}}.
+arXiv:2607.22972v2, 28 July 2026. Cited for its stated approach only; its
+experiments are not reproduced here, and the failure-triggered cascade it
+describes is prior art rather than a contribution of this design.
+\url{https://arxiv.org/abs/2607.22972}.
+
+% --- Mathlib tactics ------------------------------------------------------
+
+\bibitem{mathlib-linarith}
+Mathlib contributors. \emph{Mathlib.Tactic.Linarith.Frontend}. Generated
+documentation and implementation overview: certificate search separated from
+proof reconstruction, plus the specific nonlinear preprocessing of
+\code{nlinarith}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Linarith/Frontend.html}.
+
+\bibitem{mathlib-linarith-verify}
+Mathlib contributors. \emph{Mathlib.Tactic.Linarith.Verification}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Linarith/Verification.html}.
+
+\bibitem{mathlib-positivity}
+Mathlib contributors. \emph{Mathlib.Tactic.Positivity.Basic} and
+\emph{Mathlib.Tactic.Positivity.Core}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Positivity/Basic.html}.
+
+\bibitem{mathlib-ring}
+Mathlib contributors. \emph{Mathlib.Tactic.Ring.Basic}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Ring/Basic.html}.
+
+\bibitem{mathlib-linear-combination}
+Mathlib contributors. \emph{Mathlib.Tactic.LinearCombination}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/LinearCombination.html}.
+
+% --- Equality saturation --------------------------------------------------
+
+\bibitem{lean-egg}
+Marcus Rossel and contributors. \emph{lean-egg}. Repository README, marked
+deprecated when accessed on 14 September 2026 and directing users toward
+\texttt{grind}. Observed blob:
+\texttt{0dbfa063b5a77c6e892eaa265f068437980812c1}. Also listed on Lean
+Reservoir as \texttt{@marcusrossel/egg}.
+\url{https://github.com/marcusrossel/lean-egg}.
+
+\bibitem{egg-lean-paper}
+Marcus Rossel and Andr\'es Goens. \emph{Bridging Syntax and Semantics of Lean
+Expressions in E-Graphs}. arXiv:2405.10188, 2024.
+\url{https://arxiv.org/abs/2405.10188}.
+
+\bibitem{eqsat-paper}
+Marcus Rossel, Rudi Schneider, Thomas Koehler, Michel Steuwer, and
+Andr\'es Goens. \emph{Towards Pen-and-Paper-Style Equational Reasoning in
+Interactive Theorem Provers by Equality Saturation}. Proceedings of the ACM
+on Programming Languages, 2026. DOI: 10.1145/3776667.
+\url{https://doi.org/10.1145/3776667}.
+
+\bibitem{egg}
+Max Willsey, Chandrakana Nandi, Yisu Remy Wang, Oliver Flatt,
+Zachary Tatlock, and Pavel Panchekha. \emph{egg: Fast and Extensible Equality
+Saturation}. Proceedings of the ACM on Programming Languages 5 (POPL), 2021.
+DOI: 10.1145/3434304.
+\url{https://arxiv.org/abs/2004.03082}.
+
+\bibitem{egg-library}
+The egg contributors. \emph{egg: e-graphs good}. Project and library
+documentation.
+\url{https://egraphs-good.github.io/};
+\url{https://github.com/egraphs-good/egg}.
+
+% --- Induction and lemma discovery ----------------------------------------
+
+\bibitem{cclemma}
+Cole Kurashige, Ruyi Ji, Aditya Giridharan, Mark Barbone, Daniel Noor,
+Shachar Itzhaky, Ranjit Jhala, and Nadia Polikarpova.
+\emph{CCLemma: E-Graph Guided Lemma Discovery for Inductive Equational
+Proofs}. Proceedings of the ACM on Programming Languages 8 (ICFP),
+article 264, 2024. DOI: 10.1145/3674653.
+\url{https://icfp24.sigplan.org/details/icfp-2024-papers/29/CCLemma-E-Graph-Guided-Lemma-Discovery-for-Inductive-Equational-Proofs}.
+
+\bibitem{rippling}
+Alan Bundy, Andrew Stevens, Frank van Harmelen, Andrew Ireland, and
+Alan Smaill. \emph{Rippling: A heuristic for guiding inductive proofs}.
+Artificial Intelligence, 62(2):185--253, 1993.
+\url{https://www.sciencedirect.com/science/article/pii/000437029390079Q}.
+
+\bibitem{directed-lemma-synthesis}
+Yican Sun, Ruyi Ji, Jian Fang, Xuanlin Jiang, Mingshuai Chen, and
+Yingfei Xiong. \emph{Proving Functional Program Equivalence via Directed
+Lemma Synthesis}. 2024.
+\url{https://arxiv.org/abs/2405.11535}.
+
+\bibitem{cegis-sketching}
+Armando Solar-Lezama. \emph{Program Synthesis by Sketching}. PhD thesis,
+University of California, Berkeley; Technical Report UCB/EECS-2008-177, 2008.
+The origin of the counterexample-guided inductive synthesis loop reused by
+the invariant and witness workers.
+\url{https://www2.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-177.html}.
+
+\bibitem{canonical}
+Chase Norman and Jeremy Avigad. \emph{Canonical for Automated Theorem Proving
+in Lean}. 2025.
+\url{https://arxiv.org/abs/2504.06239}.
+
+\bibitem{canonical-min}
+Chase Norman and Jeremy Avigad. \emph{Implementing Dependent Type Theory
+Inhabitation and Unification}. 2026. Introduces DTTBench.
+\url{https://arxiv.org/abs/2603.01463}.
+
+% --- Decision procedures, certificates, and proof formats ------------------
+
+\bibitem{harrison-sos}
+John Harrison. \emph{Verifying nonlinear real formulas via sums of squares}.
+In \emph{Theorem Proving in Higher Order Logics (TPHOLs 2007)}, LNCS 4732,
+pp.~102--118, Springer, 2007. The foundational separation of sophisticated
+certificate search from comparatively straightforward verification.
+DOI: \href{https://doi.org/10.1007/978-3-540-74591-4_9}{10.1007/978-3-540-74591-4\_9}.
+\url{https://www.cl.cam.ac.uk/~jrh13/papers/sos.html}.
+
+\bibitem{dpll-t}
+Robert Nieuwenhuis, Albert Oliveras, and Cesare Tinelli. \emph{Solving SAT and
+SAT Modulo Theories: From an Abstract Davis--Putnam--Logemann--Loveland
+Procedure to DPLL(T)}. Journal of the ACM 53(6), 937--977, 2006.
+DOI: \href{https://doi.org/10.1145/1217856.1217859}{10.1145/1217856.1217859}.
+
+\bibitem{rational-sos}
+Victor Magron, Mohab Safey El Din, and Trung-Hieu Vu. \emph{Sum of Squares
+Decompositions of Polynomials over their Gradient Ideals with Rational
+Coefficients}. arXiv:2107.11825, 2021.
+\url{https://arxiv.org/abs/2107.11825}.
+
+\bibitem{bernstein-pvs}
+NASA Langley Formal Methods Program. \emph{PVS Bernstein Library}. Prior art
+for formalised Bernstein-basis bounds on boxes.
+\url{https://shemesh.larc.nasa.gov/fm/pvs/Bernstein/}.
+
+\bibitem{cvc5-proofs}
+cvc5 developers. \emph{Proof Production}. Documentation of the Cooperating
+Proof Calculus and external proof formats.
+\url{https://cvc5.github.io/docs/latest/proofs/proofs.html}.
+
+\bibitem{z3-quantifiers}
+Z3 project. \emph{Quantifiers}. Z3 Guide, including patterns and model-based
+quantifier instantiation.
+\url{https://microsoft.github.io/z3guide/docs/logic/Quantifiers/}.
+
+\bibitem{mosek-cookbook}
+MOSEK contributors. \emph{MOSEK Modeling Cookbook}: linear optimization,
+infeasibility certificates, and duality.
+\url{https://docs.mosek.com/modeling-cookbook/linear.html}.
+
+% --- Numerical and symbolic tooling used by the prototypes ----------------
+
+\bibitem{scipy-linprog}
+SciPy contributors. \emph{scipy.optimize.linprog}, including
+\code{method='highs'}. Official API documentation. The executed prototypes
+used SciPy 1.17.0; the online reference may be newer. This is an optimization
+interface, not a proof system.
+\url{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html};
+\url{https://docs.scipy.org/doc/scipy/reference/optimize.linprog-highs.html}.
+
+\bibitem{sympy-polys}
+SymPy contributors. \emph{Polynomials Manipulation Module Reference} and the
+matrix/linear-algebra modules. Used for rational factorization, Sturm
+sequences, root counting, and independent symbolic cross-checks. Executed
+version: SymPy 1.14.0.
+\url{https://docs.sympy.org/latest/modules/polys/reference.html}.
+
+\bibitem{cvxpy}
+Steven Diamond and Stephen Boyd. \emph{CVXPY: A Python-Embedded Modeling
+Language for Convex Optimization}. arXiv:1603.00943, 2016. Proposed optional
+semidefinite front end; not an installed or tested dependency of any
+prototype here.
+\url{https://arxiv.org/abs/1603.00943};
+\url{https://www.cvxpy.org/tutorial/constraints/index.html}.
+
+\bibitem{csdp}
+COIN-OR. \emph{CSDP: A solver for semidefinite programming problems}.
+Proposed optional backend; not used in any executed experiment.
+\url{https://github.com/coin-or/Csdp}.
+
+\end{thebibliography}

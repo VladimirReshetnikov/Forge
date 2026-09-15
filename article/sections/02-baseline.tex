@@ -1,0 +1,192 @@
+\section{A strong baseline, not a straw man}
+\label{sec:baseline}
+
+The Lean reference describes \grind{} as cooperating proof-producing engines
+organised around contradiction, congruence closure, constraint propagation,
+E-matching, guided case analysis, and theory solvers. That is already a
+shared-fact architecture, not a sequence of independent tactic
+calls~\cite{grind-ref,grind-paper}. A credible successor must reuse those
+strengths rather than rediscover them.
+
+The baseline must also be \emph{dated}. Lean v4.34.0 was released on
+14~September 2026~\cite{lean-release-434}. Designing against a remembered
+version of \grind{} is the most common way to overstate a contribution.
+Table~\ref{tab:baseline} records capabilities that the pinned configuration
+and implementation sources show are already present, and what each implies for
+this design.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.17\textwidth}Xp{0.30\textwidth}@{}}
+\toprule
+Area & Already present in the inspected source & Consequence for this design \\
+\midrule
+Equality &
+Congruence reasoning, function-valued congruence, extensionality controls,
+injectivity support &
+Do not advertise ordinary e-graphs or function equalities as new. \\
+Arithmetic &
+Ring and field algebra, linear arithmetic, integer arithmetic,
+associative/commutative reasoning, order support, model-based theory
+combination &
+Add certified inequality reasoning and structure, not a duplicate ring
+normaliser. \\
+Quantifiers, search &
+E-matching, term-generation limits, case splits, lookahead &
+Distinguish goal-directed \emph{construction} from existing instantiation and
+splitting. \\
+Bit-vectors &
+\code{grind => bv\_decide} encodes relevant equivalence classes and facts
+learned by theory solvers and E-matching into the SAT problem &
+Basic cooperation between bit-blasting and \grind{} is existing
+functionality, not a \forge{} innovation. \\
+Conditional rewriting &
+\grind{} discharges side conditions for conditional \code{Sym.simp} theorems &
+The proposal is broader cross-worker obligation scheduling, not the invention
+of guarded rewriting. \\
+Libraries &
+Configurable library suggestions and local-definition use &
+Improve retrieval and obligation-driven use; do not claim retrieval is wholly
+absent. \\
+Engineering &
+Saved states, proof-related diagnostics, explicit search limits &
+Reuse existing machinery behind a versioned adapter. \\
+\bottomrule
+\end{tabularx}
+\caption{Baseline features from the pinned Lean v4.34.0 configuration and
+implementation sources~\cite{grind-config,grind-types,grind-lia,grind-ematch,lean-release-434}.
+The table is not a completeness claim for any theory.}
+\label{tab:baseline}
+\end{table}
+
+For reproducible comparison, the pinned configuration source records defaults
+including nine search-branch splits, five E-matching rounds before a split,
+generation bounds of eight, and one thousand E-matching instances per
+branch~\cite{grind-config}. Many further limits are exposed. A future
+benchmark should record the \emph{effective options}, not merely write
+``default \grind{}'', and should include a reasonably tuned baseline as well
+as the stock one.
+
+\subsection{Related systems: reuse, do not relabel}
+
+Aesop already provides rule-based AND/OR proof search, distinguishes
+normalisation from safe and unsafe rules, and uses best-first exploration.
+Its documented induction examples still perform induction explicitly. It is a
+source of search infrastructure, not a feature to rediscover~\cite{aesop}.
+
+Duper supplies proof-producing saturation over supplied facts, with manual
+premise selection and a configurable portfolio. It is a complementary
+clause-search worker, especially after a relevance filter has selected a small
+premise set~\cite{duper}.
+
+Mathlib's \code{linarith} separates certificate search from proof
+reconstruction, and \code{nlinarith} adds specific nonlinear preprocessing.
+That is the right architectural precedent, but it is not a general
+sum-of-squares solver~\cite{mathlib-linarith}. Foundational checking of
+numerically discovered SOS certificates has a substantial history; Harrison's
+HOL Light work explicitly separates sophisticated search from relatively
+straightforward verification~\cite{harrison-sos}.
+
+There is already a Lean \code{sos} project implementing proof-producing
+nonlinear reasoning with rational certificates. Its documented architecture
+separates reification, search, checking, and verification; named interfaces
+include \code{SOS.Engine.solve} and \code{SOS.Engine.Result.check}, and
+\code{sos?} can emit a replayable witness. Its computational polynomial
+substrate is \code{Hex.MvPoly}~\cite{lean-sos,sos-engine,sos-core,hex-mv-poly}.
+These are concrete integration targets. The \forge{} contribution is
+\emph{when} to request such a certificate and \emph{how} to return its proved
+consequences to structural and saturation workers --- not the invention of
+sum-of-squares certificates.
+
+The historical \code{lean-egg} project should not become a mandatory new
+dependency: its repository is marked as no longer developed and directs users
+towards \grind{}~\cite{lean-egg}. The useful idea is bounded, proof-producing
+equality search, not allegiance to that
+package~\cite{egg,egg-lean-paper,eqsat-paper}.
+
+\begin{remark}[A version caveat that matters]
+The nine contributing efforts observed the Lean \code{sos} project's
+\texttt{lean-toolchain} pinning \code{v4.32.0-rc1}, against a \code{v4.34.0}
+baseline~\cite{sos-toolchain}. These projects do not automatically form a
+build-compatible package set on the day a new Lean release appears. Pin the
+core toolchain, select mutually compatible Mathlib and optional-backend
+revisions, and keep their adapters separate. No \code{lake-manifest.json} is
+supplied here for a combination that was never built.
+\end{remark}
+
+\subsection{A dependency map with integration decisions}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
+\toprule
+Component & What it provides & Integration decision \\
+\midrule
+\endhead
+Lean core / \grind{} &
+Shared equality and local-theory reasoning, proof terms, saved states. &
+Keep as the default local closer; start at the tactic boundary, move to a
+version-pinned adapter only where measurement justifies
+it.~\cite{grind-ref,grind-main} \\
+Aesop &
+Best-first AND/OR proof search with indexed rules. &
+Reuse rule-search ideas and adapters; do not claim AND/OR search is
+novel.~\cite{aesop} \\
+Mathlib tactics &
+\code{simp}, \code{ring}, \code{linarith}, \code{nlinarith},
+\code{positivity}, \code{linear\_combination}, cast normalisation. &
+Cheap proof reconstruction and preprocessing before expensive
+search.~\cite{mathlib-ring,mathlib-linarith,mathlib-positivity,mathlib-linear-combination} \\
+Lean \code{sos} &
+Rational nonlinear certificates and a proof-producing tactic. &
+The production nonlinear backend. Do not replace it with the prototype's
+restricted LP dictionary.~\cite{lean-sos} \\
+Lean \code{lp} &
+Verified linear programming. &
+Candidate backend for the linear feasibility problems underlying cone and
+witness search.~\cite{lean-lp,lp-blog} \\
+Duper &
+Proof-producing saturation inside Lean. &
+An optional, separately pinned first-order worker over a small retrieved
+premise set --- never an unchecked external verdict.~\cite{duper} \\
+\code{lean-auto} &
+Translation and monomorphization infrastructure. &
+Reuse rather than invent an unverified dependent-to-first-order
+erasure.~\cite{lean-auto} \\
+\code{lean-smt} / cvc5 &
+SMT search with Lean reconstruction; unsupported steps remain goals. &
+Optional backend with an explicit residual-obligation
+interface.~\cite{lean-smt,cvc5-proofs} \\
+QuerySMT / LeanHammer &
+Hint-based reconstruction and premise selection. &
+Prior art for the retrieval and reconstruction lanes.~\cite{query-smt,lean-hammer} \\
+PBLean &
+Pseudo-Boolean proof certificates for Lean~4. &
+Reference point for the Boolean certificate lane.~\cite{pblean} \\
+Z3 &
+Candidate models and quantified search techniques. &
+Untrusted search assistance; a verdict is not a Lean
+proof.~\cite{z3-quantifiers} \\
+\code{egg} / CCLemma &
+Equality saturation and inductive-lemma-search prior art. &
+Algorithmic references and possible isolated search
+processes.~\cite{egg,cclemma} \\
+Canonical &
+Dependent type-theory inhabitation and unification. &
+Integrate by its proof-term interface, not by flattening away the
+dependencies that make its task meaningful.~\cite{canonical,canonical-min} \\
+\bottomrule
+\end{longtable}
+
+\subsection{A portfolio alone is not the proposal}
+
+Running \code{first | grind | aesop | nlinarith} is a portfolio. The important
+difference is that in \forge{} an \emph{unsuccessful} attempt still produces
+structured, reusable information: which recursive argument changed, which
+equality would enable progress, which witness template was insufficient, and
+which arithmetic side condition remains. That feedback directs the next
+attempt, and every checked intermediate result returns to the shared proof
+state.
+
+A benchmark must therefore include a same-workers, same-budget,
+\emph{non-communicating} portfolio as a baseline. That is the experiment that
+distinguishes ``integration helps'' from ``we added more solvers''
+(Section~\ref{sec:evaluation}).
