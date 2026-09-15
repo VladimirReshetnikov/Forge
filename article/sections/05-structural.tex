@@ -526,6 +526,153 @@ An invariant does not prove that a loop or a recursive definition terminates.
 Termination is a separate obligation.
 \end{remark}
 
+\subsection{Negative verdicts: when ``not found'' may become ``does not exist''}
+\label{sec:negative}
+
+Everywhere else in this document a bounded search that finds nothing returns
+\unknown{}, and that rule is not negotiable. But \unknown{} is not the only
+possible negative answer, and treating it as such gives up a real capability. A
+tactic that can sometimes report \emph{provably no such term exists} is doing
+something \code{exact?}, \code{tauto}, Aesop, \code{decide} and \code{omega} do
+not (\S\ref{sec:tactic-gap}) --- and something a user acts on very differently
+from a timeout.
+
+Exactly one worker in this collection can already do it: integer-lattice
+elimination emits a divisibility obstruction that \emph{proves} no integer
+solution exists (Proposition~\ref{prop:lattice}). The question is what makes
+that legitimate, and what else could qualify.
+
+\subsubsection*{Exhausted is not truncated}
+
+The first requirement is a distinction the worker contract of
+\S\ref{sec:architecture} does not draw. \code{Unknown(reason)} conflates two
+outcomes that are logically different:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{exhausted} --- the search space was covered and contained no
+  solution;
+\item \textbf{truncated} --- a budget, depth cap, queue bound, candidate
+  cutoff, or omitted plan stopped the search early.
+\end{itemize}
+
+Only the first can support a negative conclusion, and a worker must therefore
+report which occurred rather than leaving the caller to guess. A useful shape
+for a resumable search is a small-step machine whose event type makes the
+distinction unforgeable:
+
+\begin{lstlisting}
+inductive SearchEvent where
+  | found     (evidence : Certificate) (next : Machine)
+  | stepped   (next : Machine)             -- administrative progress
+  | exhausted (summary : ExhaustionSummary)
+  | truncated (reason  : TruncationReason)
+\end{lstlisting}
+
+with the invariants that every transition consumes its documented choice count;
+that administrative steps cannot be mistaken for exhaustion; that a truncated
+branch contributes nothing to global negative evidence; and that a plan
+scheduler shares a global budget rather than resetting a local one per plan.
+That last invariant is the same one \S\ref{sec:architecture} states for nested
+actions, and it is load-bearing here: a search whose sub-searches each reset
+their own budget can report \code{exhausted} having covered very little.
+
+\subsubsection*{The completeness ledger}
+
+Exhaustion of the search is necessary but not sufficient. The \emph{problem}
+handed to the search must also have been a faithful rendering of the goal, and
+that is a separate obligation with its own failure modes: an unsupported
+subterm silently abstracted to an atom, a family description truncated at a
+recursion bound, an instance binder dropped, a plan omitted from the
+enumeration.
+
+The mechanism that makes this checkable is a \emph{completeness ledger}: a data
+structure carried alongside the reified problem whose constructors name exactly
+which obligation is missing. It is not a Boolean. Any entry in it weakens a
+no-solution result to \unknown{}, and because its constructors are named, the
+diagnostic can say \emph{why} the negative verdict was withheld.
+
+\begin{invariant}[Negative evidence requires an intact chain]
+\label{inv:negative}
+A ``provably no solution'' verdict requires \emph{both} that the search
+reported \code{exhausted}, \emph{and} that the completeness ledger for the
+reified problem is empty. Failure of either yields \unknown{}. The display layer
+must never upgrade \unknown{} to a refutation.
+\end{invariant}
+
+For a term-synthesis worker over a dependently typed goal this specialises to a
+two-axis rule: a negative verdict requires that no quantified occurrence was
+left opaque or bounded-instantiated, \emph{and} that no atom is hiding
+dependent structure. Otherwise the answer is ``no term found within bounds''.
+
+\subsubsection*{Portfolio asymmetry}
+
+A portfolio that mixes a complete worker with incomplete ones needs an explicit
+rule, or the incomplete ones will corrupt the complete one's verdicts. The rule
+is asymmetric:
+
+\begin{itemize}[leftmargin=1.4em]
+\item An incomplete worker's \emph{candidates} improve coverage and ranking.
+\item An incomplete worker's \emph{failure} can neither create nor cancel a
+  refutation.
+\item A complete worker's negative evidence survives only if its own
+  fragment, translation and search completeness chain is intact
+  (Invariant~\ref{inv:negative}).
+\item A wrapper that transforms the problem --- a classical translation, a
+  strengthened goal --- produces a \emph{new} problem, and must drop any
+  evidence that no longer denotes it.
+\end{itemize}
+
+Concretely: a Bernstein worker timing out says nothing about a goal that the
+Sturm worker of \S\ref{sec:sturm} decides, and the scheduler must not let the
+first result suppress the second.
+
+\subsubsection*{What could qualify}
+
+Three further sources of genuine negative evidence are available to this
+design, and only the first is implemented.
+
+\emph{Lattice obstructions} (implemented). $g \nmid r$ after unimodular
+elimination proves that $Ax=b$ has no integer solution. The certificate is
+replayable and the checker verifies $\det U=\pm1$ independently.
+
+\emph{Checked countermodels} (partially implemented). An exact rational point
+at which the target is negative, \emph{validated independently} for membership
+in the domain and for sign, refutes a nonnegativity goal. One Bernstein
+implementation already returns such a point as a three-valued
+\textsc{refuted} outcome with a separate \code{check\_witness}. The discipline
+that makes this sound is worth stating as a formula: a solver's output is not
+semantic evidence, and only
+\[
+\text{sealed problem} \;+\; \text{canonical query} \;+\;
+\text{bounded observation} \;+\; \text{independent replay}
+\]
+produces a countermodel receipt. A satisfying assignment to an abstraction
+remains a \code{Candidate}.
+
+\emph{Intuitionistic propositional inhabitation} (not implemented; the largest
+available addition). A terminating decision procedure for the implicational
+propositional fragment --- Dyckhoff's \textsf{LJT} being the standard choice ---
+decides inhabitation rather than merely searching for it. Within its fragment,
+exhaustion \emph{is} a proof of non-inhabitation, so it satisfies
+Invariant~\ref{inv:negative} by construction, provided the translation into the
+fragment records its own gaps in the ledger.
+
+Two properties make this unusually good value here. First, it operates on the
+\emph{propositional skeleton} of a goal, so dependent subformulas that only
+need to be transported rather than analysed can be alpha-normalised to opaque
+atoms and the goal still decided: $(\forall n:\N,\,P\,n)\to Q\to(\forall
+n:\N,\,P\,n)$ is closed by $\lambda h\,\_\Rightarrow h$ without the worker ever
+looking inside $P$. Second, it composes with a classical fallback that is
+complete for the same fragment. By Glivenko's theorem, a propositional formula
+is classically provable exactly when its double negation is intuitionistically
+provable, so re-running the same decision procedure on $\neg\neg G$ decides
+classical propositional provability, and a resulting term
+$t:\neg G\to\bot$ reconstructs as \code{Classical.byContradiction t}.
+Peirce's law is the standard illustration: constructively uninhabited, and the
+fallback supplies the classical witness. The honesty condition is that
+\emph{quantified goals skip the fallback}, since Glivenko does not extend past
+the propositional fragment without double-negation shifts.
+
 \subsection{Witness synthesis: construct terms, not satisfying assignments}
 
 \subsubsection*{The logical distinction}
@@ -660,6 +807,7 @@ whose determinant is $(sa+tb)/g=1$ and which sends the pair to $(g,0)$; a sign
 flip makes the final first entry nonnegative.
 
 \begin{proposition}[Lattice elimination]
+\label{prop:lattice}
 Each successful row update preserves \eqref{eq:lattice}, and a reported
 divisibility obstruction proves that no integer solution exists.
 \end{proposition}

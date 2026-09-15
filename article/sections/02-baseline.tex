@@ -67,6 +67,52 @@ benchmark should record the \emph{effective options}, not merely write
 ``default \grind{}'', and should include a reasonably tuned baseline as well
 as the stock one.
 
+\subsection{The neighbouring tactics, and the gap between them}
+\label{sec:tactic-gap}
+
+\grind{} is the baseline this design builds on, but it is not the only tactic a
+new capability has to be measured against. Four others bound the space, and
+naming them is what makes the remaining gap precise rather than rhetorical.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
+\toprule
+Tactic & What it does & What it does not do \\
+\midrule
+\endhead
+\code{exact?} / \code{apply?} &
+Finds an \emph{existing} library lemma that closes the goal. &
+Cannot \emph{compose} a new term. Fails on
+$(A\to B\to C)\to(A\to B)\to A\to C$ unless that exact lemma exists. \\
+\code{tauto} / \code{itauto} &
+Decides propositional goals; \code{itauto} is intuitionistically complete. &
+\code{Prop} only; needs Mathlib imported; no negative verdicts surfaced as
+such; nothing for \code{Type}. \\
+Aesop &
+General rule-based proof search. &
+Heuristic; no non-inhabitation answers.~\cite{aesop} \\
+\code{decide} &
+Decidable ground propositions. &
+Nothing polymorphic or data-level. \\
+\code{omega} &
+Linear integer and natural arithmetic. &
+The reference explicitly does not describe it as complete for every
+integer-linear problem.~\cite{tactic-reference} \\
+\bottomrule
+\end{longtable}
+
+The gap this leaves is \emph{higher-order plumbing that has to be constructed
+rather than retrieved}: currying and uncurrying, projections, composition,
+distribution laws such as $A\times(B\oplus C)\to(A\times B)\oplus(A\times C)$,
+and continuation shuffles such as $((A\to B)\to A)\to(A\to A)$. These are terms
+one writes constantly. \code{exact?} cannot build them, \code{tauto} covers only
+the \code{Prop} shadow of them, and Aesop will search for them without ever
+being able to report that a particular one does not exist.
+
+That last point is the one worth dwelling on, because it is a capability and
+not merely a diagnostic. \S\ref{sec:negative} argues that a tactic which can
+sometimes say \emph{provably no such term exists} is doing something none of
+the five above does.
+
 \subsection{Related systems: reuse, do not relabel}
 
 Aesop already provides rule-based AND/OR proof search, distinguishes

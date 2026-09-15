@@ -103,6 +103,92 @@ and measuring the resulting cost. That route is proposed here, not implemented.
 Lean4Lean is the relevant reference point for what independent kernel-level
 assurance would mean~\cite{lean4lean}.
 
+\subsection{Two ways to accept a proof the kernel never checked}
+\label{sec:kernel-traps}
+
+The acceptance judgement above is not self-executing. In the pinned Lean
+v4.34.0 source there are two concrete paths by which an implementation that
+believes it is kernel-checking is not. Both were verified directly against the
+installed toolchain rather than inferred, and neither appears in any of the
+nine source proposals.
+
+\paragraph{An inherited option can switch the kernel off.}
+\code{Lean.Kernel.Environment.addDecl} branches on a builtin option:
+
+\begin{lstlisting}
+def Kernel.Environment.addDecl (env : Environment) (opts : Options)
+    (decl : Declaration) (cancelTk? : Option IO.CancelToken := none)
+    : Except Exception Environment :=
+  if debug.skipKernelTC.get opts then
+    addDeclWithoutChecking env decl
+  else
+    addDeclCore env ... decl cancelTk?
+\end{lstlisting}
+
+The option's own registration carries the warning: \emph{``skip kernel type
+checker. WARNING: setting this option to true may compromise soundness because
+your proofs will not be checked by the Lean kernel.''} Its default is
+\code{false}, but the value used is whichever \code{Options} the caller passes
+--- so a verifier that inherits ambient options inherits whatever the
+surrounding file, project, or an enclosing tactic set. A certificate pipeline
+must \emph{pin the option off} in the options it passes, not merely refrain
+from setting it.
+
+This is not hypothetical for the Boolean lane of \S\ref{sec:boolean}. The
+v4.34.0 documentation for \code{bv\_decide} lists the same option as a
+supported knob: it ``may be set to true to disable actually checking the LRAT
+proof'', leaving a run that ``still runs bitblasting + SAT solving, so this
+option essentially trusts the SAT solver''. A benchmark that did not pin the
+option would be comparing two different trust profiles while reporting one.
+
+\paragraph{The ordinary declaration path is asynchronous.}
+\code{Lean.addDecl} in \code{CoreM} goes through \code{env.addConstAsync},
+commits \emph{preliminary} constant information immediately, and --- when
+\code{Elab.async} is set --- defers the actual check to a task:
+
+\begin{lstlisting}
+let async <- env.addConstAsync (reportExts := false) name kind ...
+async.commitConst async.asyncEnv (some info) ...     -- reported immediately
+...
+if Elab.async.get (<- getOptions) then
+  let t <- BaseIO.mapTask checkAct env.checked        -- checked later
+  Core.logSnapshotTask { ... task := t, ... }
+\end{lstlisting}
+
+So the declaration becomes visible before the kernel has accepted it.
+An acceptance step that adds a declaration and then observes that it is present
+has observed nothing. The acceptance decision must either call the synchronous
+\code{Kernel.Environment.addDecl} directly, or await the environment's checked
+task before answering.
+
+\begin{invariant}[Synchronous, option-pinned checking]
+\label{inv:sync}
+Acceptance calls the synchronous kernel entry point with
+\code{debug.skipKernelTC} explicitly set to \code{false} in the options it
+passes, and does not report success on the basis of a declaration's visibility.
+\end{invariant}
+
+\paragraph{A stamp that cannot be forged.}
+The corresponding discipline in the type is that the evidence of checking must
+be constructible only by the checker. A suitable shape is an opaque stamp
+returned by the verifier, binding the candidate, the expected type, the
+environment and toolchain identity, and the options actually used. A
+fingerprint may be a \emph{view} of that association; it must not be a
+constructor for it. A \code{Bool} field named \code{kernelChecked} that any
+caller can set to \code{true} is the same mistake as the \code{CheckedProof}
+structure of the previous remark, one layer down.
+
+A workable verification pipeline, then, is: instantiate all assigned
+metavariables and reject any remaining expression or universe metavariables;
+check that every free variable belongs to the captured local context and that
+no local declaration has escaped its scope; abstract the local context into a
+closed type and value, preserving binder information and dependency order;
+build a fresh private declaration; call the synchronous kernel checker on a
+scratch environment with the option pinned; discard that environment unless the
+result is committed; and delaborate independently for display, optionally
+re-elaborating the displayed text to establish that what the user is shown is
+what was checked.
+
 \subsection{Diagnostic holes are not accepted proofs}
 
 The inspected \grind{} configuration includes an option concerning admitted
