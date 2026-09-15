@@ -72,6 +72,108 @@ boundary --- an expression can type-check because an imported axiom states the
 desired result.
 \end{remark}
 
+\subsection{A status lattice: ten outcomes, and what each licenses}
+\label{sec:lattice}
+
+A binary split between ``certificate accepted'' and ``no certificate''
+under-specifies this system badly. Every real integration lives in the middle,
+and the middle is where a design silently upgrades a heuristic into evidence.
+The remedy is to enumerate the outcomes and attach to each one the consequence
+it \emph{permits} --- so that permission is a property of the outcome rather
+than a decision the consuming code makes locally.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.47\textwidth}@{}}
+\toprule
+Outcome & Typical producer & Permitted consequence \\
+\midrule
+\endhead
+Preparation refused &
+reifier, fragment classifier &
+Retain the goal with the refusal class. Never a negative result about the
+goal. \\
+Unassessed &
+budget, policy, inapplicable domain &
+Retain. Carries no information about the goal at all. \\
+Heuristic status &
+raw solver \code{sat} / \code{unsat} / \code{unknown}; a learned score &
+Guide search and ranking. \emph{Never} evidence. \\
+Candidate proposed &
+any untrusted search &
+Enter the obligation graph as a candidate. Never the fact store. \\
+Countermodel observed &
+solver model, sampled point &
+None yet. Decode and replay it before it means anything. \\
+Countermodel replayed &
+independent evaluator on the sealed problem &
+Refute the \emph{modelled} statement for \emph{this} candidate, subject to the
+recorded assumptions and the model's scope. \\
+Validated within bounds &
+exhaustive finite evaluation &
+A bounded positive receipt. May rank, and may discharge an explicitly bounded
+claim. Does \emph{not} assert an unbounded theorem. \\
+Certificate checked &
+exact rational replay &
+The stated mathematical claim holds, given the stated hypotheses. Still Python,
+not Lean. \\
+Kernel-accepted &
+synchronous kernel check, options pinned &
+Proof-grade for the exact original goal in the active environment, under the
+declared axiom policy. \\
+Unknown / timeout / resource limit &
+any worker &
+Preserve the candidate. Never implicitly success, and never implicitly
+failure. \\
+Internal inconsistency &
+any invariant violation &
+Fail the stage \emph{closed}, invalidate the affected caches and sessions, and
+preserve the prior result. \\
+\bottomrule
+\end{longtable}
+
+Three rules govern movement through this lattice.
+
+\begin{invariant}[Evidence is attached to a tuple, not a name]
+\label{inv:tuple}
+A claim is attached to the exact tuple of domain, inventory, encoding,
+candidate, hypotheses and policy that produced it. No cache key, diagnostic
+name, rendered term, hash, model, or solver session may stand in for that tuple
+unless the substitution has itself been checked.
+\end{invariant}
+
+\begin{invariant}[Guidance and authority are separate]
+Fingerprints, sample signatures, solver scores, learned clauses and unsat cores
+may direct enumeration without becoming evidence. Evidence requires the
+independent validation path; a proof-grade claim additionally requires the
+declared proof authority.
+\end{invariant}
+
+\begin{invariant}[Pruning states its approximation polarity]
+\label{inv:polarity}
+An \emph{over}-approximation of the remaining search space may justify pruning
+--- when even the over-approximation is unsatisfiable, nothing was lost. An
+\emph{under}-approximation may produce witnesses but may \emph{never} justify
+pruning. An exact encoding may do either. Any translation that drops a
+distinction the domain cares about must degrade to \emph{inapplicable} or
+\emph{unknown}: it must not silently strengthen a precondition, weaken a
+postcondition, replace a total function by a partial one, equate distinct
+nominal families, erase overflow, or assume termination.
+\end{invariant}
+
+Invariant~\ref{inv:polarity} is the safety argument for any learned or
+numerical pruning this design might later acquire, and it is the one most
+easily lost when a heuristic is described as ``just a filter''.
+
+\begin{remark}[Caches and fingerprints]
+Two corollaries of Invariant~\ref{inv:tuple} are worth stating because they are
+cheap to get wrong. A reusable artefact should be reduced to the minimal
+\emph{re-checkable input}, and every reuse must re-run the check --- a store
+holding inputs is a search heuristic and is safe, whereas a store holding
+verdicts is a cache and is not. And a fingerprint that keys a cached result
+must include the solver version, invocation profile, parameters, encoding
+version and objective order; a fingerprint over the problem alone is unsound
+across a solver upgrade.
+\end{remark}
+
 \subsection{Kernel-only and native-checked are different profiles}
 
 The Lean kernel verifies derivations relative to the axioms they use, so a
@@ -188,6 +290,127 @@ scratch environment with the option pinned; discard that environment unless the
 result is committed; and delaborate independently for display, optionally
 re-elaborating the displayed text to establish that what the user is shown is
 what was checked.
+
+\subsection{What a working verification boundary looks like}
+\label{sec:boundary-impl}
+
+The preceding subsections say what acceptance must establish. None of the nine
+proposals built it. A neighbouring project has, for term synthesis rather than
+for certificates, and its shape is worth recording because several of its
+decisions are not the obvious ones.
+
+\paragraph{Re-elaborate the original goal text, every time.}
+The candidate is checked by sending Lean a program of the form
+\begin{lstlisting}
+noncomputable example : (GOAL) := (TERM)
+\end{lstlisting}
+where \code{GOAL} is the user's original text, parenthesised, re-parsed and
+re-elaborated on every single candidate. There is no ``reuse the already
+elaborated goal expression'' shortcut. That is crude, and it is exactly the
+invariant of \S\ref{sec:trust}: a proof of the \emph{exact original goal}
+rather than of a restatement, made unforgeable by never holding on to the
+restatement.
+
+Two modifiers carry weight. \code{example} rather than \code{def} makes the
+check \emph{ephemeral}: it adds no declaration, so neither success nor failure
+mutates the session. \code{noncomputable} disables executable-code generation
+without weakening elaboration, universe checking, safety checking, or the
+kernel type check --- so a candidate is not rejected for a compilation failure
+that is not a type error.
+
+One modifier is a mistake worth not copying: \code{autoImplicit} must be
+\emph{off} at a certificate boundary. With it on, an unbound identifier in the
+goal --- a typo, or a name that has fallen out of scope --- is silently
+generalised into an implicit parameter, so the candidate is verified against a
+generalised goal rather than the one that was asked.
+
+\paragraph{Committed environment as a positive requirement.}
+The natural formulation of acceptance is ``no errors and no \code{sorry}''.
+That is not enough, and the gap is easy to miss: a response carrying no error
+diagnostics, no \code{sorry} obligations, \emph{and no environment} means the
+elaborator never committed a checked command at all. The reference
+implementation checks for a committed environment on three of its four
+verification paths and omits it on the fourth --- which is precisely the
+``looks well-typed'' hole this section warns about, surviving in production
+code that is otherwise careful.
+
+\begin{invariant}[Positive evidence of checking]
+\label{inv:positive}
+Acceptance requires a positive signal that the checker ran and committed ---
+not merely the absence of complaints.
+\end{invariant}
+
+\paragraph{A closed rejection vocabulary with a documented precedence.}
+Failure classification should be an enumeration, not a string, and its order
+should be fixed: transport failure, then a protocol-level fatal response, then
+an error diagnostic, then a remaining \code{sorry}. Two consequences follow.
+Transport failure is \emph{not} a semantic failure --- Lean rejecting a term is
+a healthy outcome that belongs to the semantic classifier, while a dead
+subprocess belongs to the liveness layer, and conflating them is how a timeout
+becomes a refutation. And infrastructure degradation must \emph{void} results
+computed under it: if the channel failed at any point during a batch, a
+successful-looking result from that batch is converted to a failure when the
+scope closes, even if no individual step noticed.
+
+\paragraph{The \code{sorry} check is structural, not textual.}
+A protocol that reports outstanding proof obligations as data lets the checker
+reject on that data rather than by grepping the source, which catches
+\code{sorry} introduced by a tactic or by elaboration error recovery, not only
+\code{sorry} the user typed.
+
+\paragraph{Two tiers, because the fast gate cannot afford the slow check.}
+The in-session gate --- errors, obligations, committed environment --- costs on
+the order of a hundred to a few hundred milliseconds per candidate. A
+transitive axiom audit is far more expensive and does not belong in that loop.
+The workable split is a \emph{fast} per-candidate gate in the session, and a
+\emph{slow} out-of-session gate that replays each accepted result in a fresh
+process, in an environment containing only what that result needs, and requires
+an empty axiom inventory. The fast gate filters; the slow gate is what an
+assurance claim rests on.
+
+That cost figure has an architectural consequence, not merely an engineering
+one. If verification dominates, then verifying lazily --- best candidate first,
+stopping at a quota, never forcing the tail --- is the design, not an
+optimisation. It is also why the scheduler of \S\ref{sec:architecture} needs a
+verification budget distinct from its search budget: each failed reconstruction
+costs real time, and a worker that proposes many cheap candidates can exhaust
+the checker while a worker that proposes one expensive one never runs.
+
+\paragraph{Make the receipt unforgeable in the type system.}
+\S\ref{sec:trust} observed that naming a structure \code{CheckedProof} does not
+make its contents checked. The constructive version of that remark is an
+abstract type whose constructor is not exported, produced only by the function
+that actually calls the checker:
+
+\begin{lstlisting}
+-- Opaque receipt that the verification callback accepted a candidate.
+-- This records only callback acceptance at this boundary. It is NOT
+-- behavioural evidence, a solver certificate, or a kernel proof. A caller
+-- needing a stronger claim must retain and replay that authority separately.
+opaque Verified (candidate : Type) : Type
+\end{lstlisting}
+
+Three properties make this an enforced boundary rather than a convention: the
+constructor is module-private, so nothing downstream can mint one; the type
+parameter is nominal, so no coercion can forge one across representationally
+equal types; and the documentation deliberately \emph{under}-claims, fixing a
+ceiling that everything downstream must respect.
+
+\paragraph{Ranking is a capability too.}
+An overlooked hole: the boundary usually governs \emph{admission} and leaves
+\emph{presentation} ungoverned. But a ranker that may reorder or filter a set
+of checked results can drop one, duplicate one, or --- worse --- reassociate a
+result with another's evidence. The fix is to hand the ranker opaque,
+epoch-scoped handles and validate that what comes back is a total, injective
+map into what went out, checking collection limits, length, index range and
+duplication, and \emph{reconstructing the output from the original receipts at
+the proposed indices} rather than from anything the ranker returned. Any seal
+failure falls back atomically to the original batch in its original order.
+
+The same discipline answers a question \S\ref{sec:search-ir} raises: identity
+for selection purposes must be a private index, not payload equality, because
+equal payloads are still different occurrences and only one of them may carry
+the authority.
 
 \subsection{Diagnostic holes are not accepted proofs}
 
