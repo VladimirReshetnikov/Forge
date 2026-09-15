@@ -1,0 +1,25 @@
+SAT TESTS {'cnf_cases': 1000, 'idl_cases': 500, 'sat': 1278, 'unsat': 222, 'unsat_certificates_replayed': 222, 'truncated_certificates_rejected': 222, 'edge_cases': 5, 'theory_mutations_rejected': 2, 'large_integer_oracle_regressions': 2}
+BENCH padded-core-0 1 1
+BENCH padded-core-4 31 5
+BENCH padded-core-8 511 9
+BENCH padded-core-12 8191 13
+BENCH pigeonhole-4-3 8 8
+BENCH pigeonhole-5-4 51 39
+BENCH pigeonhole-6-5 374 148
+POLY quartic-square certified
+POLY three-squares-quartic certified
+POLY cauchy-schwarz-2 certified
+POLY box-bilinear certified
+POLY interval-product certified
+POLY equality-constrained certified
+POLY positive-slack certified
+POLY false-polynomial unknown: no usable LP solution in this dictionary
+POLY motzkin-bounded-search unknown: no usable LP solution in this dictionary
+POLY dictionary-ratio-gap unknown: no usable LP solution in this dictionary
+INDUCT 0 a + n
+INDUCT 1 a + n**2/2 + n/2
+INDUCT 2 a + n**3/3 + n**2/2 + n/6
+INDUCT 3 a + n**4/4 + n**3/2 + n**2/4
+INDUCT 4 a + n**5/5 + n**4/2 + n**3/3 - n/30
+INDUCT 5 a + n**6/6 + n**5/2 + 5*n**4/12 - n**2/12
+ALL ASSERTIONS PASSED; results in results

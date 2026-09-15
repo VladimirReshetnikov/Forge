@@ -1,0 +1,175 @@
+{
+  "observed_date": "2026-09-14",
+  "baseline": "Lean v4.34.0",
+  "note": "Primary-source observations, not a bundled source checkout. Unpinned documentation URLs can change.",
+  "sources": [
+    {
+      "key": "lean-version",
+      "urls": [
+        "https://lean-lang.org/doc/reference/latest/"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "lean-release",
+      "urls": [
+        "https://github.com/leanprover/lean4/releases/tag/v4.34.0"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "grind-overview",
+      "urls": [
+        "https://lean-lang.org/doc/reference/latest/The--grind--tactic/"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "grind-ring",
+      "urls": [
+        "https://lean-lang.org/doc/reference/latest/The--grind--tactic/Algebraic-Solver-_LPAR_Commutative-Rings___-Fields_RPAR_/"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "grind-imports",
+      "urls": [
+        "https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind.lean"
+      ],
+      "observed_git_blob_sha1": [
+        "db642e7864020148fab27822bf83c445de83d02d"
+      ]
+    },
+    {
+      "key": "grind-action",
+      "urls": [
+        "https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind/Action.lean"
+      ],
+      "observed_git_blob_sha1": [
+        "ad212d7c8ef8277b4be3650d43738ee98a32cbf5"
+      ]
+    },
+    {
+      "key": "grind-finish",
+      "urls": [
+        "https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Grind/Finish.lean"
+      ],
+      "observed_git_blob_sha1": [
+        "6bae01e1c2c4772d0cabe99ff74437492ccebfc5"
+      ]
+    },
+    {
+      "key": "tactic-reference",
+      "urls": [
+        "https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Tactic-Reference/"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "aesop",
+      "urls": [
+        "https://github.com/leanprover-community/aesop"
+      ],
+      "observed_git_blob_sha1": [
+        "f75ec1f8bebcf6d857fc3954cf91cf99f323a758"
+      ]
+    },
+    {
+      "key": "learned",
+      "urls": [
+        "https://arxiv.org/abs/2607.22972"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "nlinarith",
+      "urls": [
+        "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Linarith/Frontend.html"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "positivity",
+      "urls": [
+        "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Positivity/Core.html"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "scipy",
+      "urls": [
+        "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "sympy",
+      "urls": [
+        "https://docs.sympy.org/latest/modules/polys/domainmatrix.html"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "lean-egg",
+      "urls": [
+        "https://github.com/marcusrossel/lean-egg"
+      ],
+      "observed_git_blob_sha1": [
+        "0dbfa063b5a77c6e892eaa265f068437980812c1"
+      ]
+    },
+    {
+      "key": "eqsat-paper",
+      "urls": [
+        "https://doi.org/10.1145/3776667"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "egg-library",
+      "urls": [
+        "https://egraphs-good.github.io/",
+        "https://github.com/egraphs-good/egg"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "duper",
+      "urls": [
+        "https://github.com/leanprover-community/duper"
+      ],
+      "observed_git_blob_sha1": [
+        "1859f7fa914fbd8151b274fd34e46f3a09ef1b2d"
+      ]
+    },
+    {
+      "key": "lean-auto",
+      "urls": [
+        "https://github.com/leanprover-community/lean-auto"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "querysmt",
+      "urls": [
+        "https://arxiv.org/abs/2601.14495",
+        "https://github.com/JOSHCLUNE/QuerySMT"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "lean-smt",
+      "urls": [
+        "https://arxiv.org/abs/2505.15796"
+      ],
+      "observed_git_blob_sha1": []
+    },
+    {
+      "key": "cvc5-proofs",
+      "urls": [
+        "https://cvc5.github.io/docs/latest/proofs/proofs.html"
+      ],
+      "observed_git_blob_sha1": []
+    }
+  ]
+}

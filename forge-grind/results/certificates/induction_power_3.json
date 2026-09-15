@@ -1,0 +1,58 @@
+{
+  "kind": "induction",
+  "increment": {
+    "variables": 2,
+    "terms": [
+      {
+        "powers": [
+          3,
+          0
+        ],
+        "numerator": 1,
+        "denominator": 1
+      }
+    ]
+  },
+  "certificate": {
+    "invariant": {
+      "variables": 2,
+      "terms": [
+        {
+          "powers": [
+            0,
+            1
+          ],
+          "numerator": 1,
+          "denominator": 1
+        },
+        {
+          "powers": [
+            2,
+            0
+          ],
+          "numerator": 1,
+          "denominator": 4
+        },
+        {
+          "powers": [
+            3,
+            0
+          ],
+          "numerator": -1,
+          "denominator": 2
+        },
+        {
+          "powers": [
+            4,
+            0
+          ],
+          "numerator": 1,
+          "denominator": 4
+        }
+      ]
+    },
+    "generalized": [
+      "a"
+    ]
+  }
+}

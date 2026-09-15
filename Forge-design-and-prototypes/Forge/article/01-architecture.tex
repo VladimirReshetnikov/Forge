@@ -1,0 +1,310 @@
+\section{Design summary}
+
+\textbf{Design decision: retain \Grind{} as a local reasoning engine and build a
+structural, certificate-driven proof search system around it.} I call this
+system \Forge{}. The name denotes the proposed design, not an existing released
+Lean package.
+
+A saturation engine is very effective when useful ground terms and useful
+lemmas are already present. A much wider class of goals requires making one of
+those things exist. For example, proving a tail-recursive reverse function
+correct may require strengthening its specification from an empty accumulator
+to an arbitrary accumulator. Proving an existential statement may require
+constructing a function of the universally quantified inputs rather than
+choosing one concrete value. Proving a quantified consequence may require
+inventing an arithmetic term that does not occur in a trigger-compatible form.
+
+\Forge{} therefore alternates between two kinds of progress:
+\[
+\boxed{\text{local consequence search}}
+\quad\longleftrightarrow\quad
+\boxed{\text{structural proof search}}.
+\]
+It treats \Grind{}, simplification, exact arithmetic certificates, lemma
+applications, and induction as cooperating workers. Every successful worker
+must return a Lean proof, a replayable certificate with a Lean soundness
+argument, or explicitly unsolved subgoals. A plausible conjecture is never
+entered into the proved-fact database.
+
+The main proposed additions are a demand-driven induction and lemma-discovery
+worker; a synthesis worker for source-level witnesses and arithmetic
+instantiations; a nonlinear worker with exact certificates; and a controller
+that preserves proof states, dependencies, and useful facts between these
+operations. Higher-order and external ATP workers fit the same interface.
+
+This is an engineering synthesis, not a claim that its constituent algorithms
+are new. Aesop already supplies structured proof search; CCLemma provides
+important prior art for e-graph-guided inductive lemma discovery; and existing
+Lean tools provide SMT reconstruction and sum-of-squares reasoning. The value
+of this proposal is the concrete integration, the demand protocol, and the
+precise boundary between evidence, conjectures, and checked results.
+\cite{aesop,cclemma,leansmt,sos}
+
+\subsection{What ``more powerful'' should mean}
+
+Here it means \emph{more goals solved automatically from comparable initial
+information}, particularly goals that need structural proof steps or new
+terms. It does not mean a stronger logic, a change to Lean's trusted axioms,
+or a theorem that no invocation of \Grind{} could ever prove the same result.
+Once the right induction hypotheses and auxiliary lemmas are supplied, a local
+solver may finish a proof that it would not discover by itself.
+
+Nor can a finite-budget heuristic promise pointwise dominance over another
+heuristic while taking exactly the same resources. Two operating modes make
+the tradeoff explicit. A \emph{baseline-preserving} mode runs an ordinary
+\Grind{} attempt with budget $B$ and permits additional search afterward; it
+preserves that attempt's successes at additional cost. A \emph{competitive}
+mode shares one budget among workers; it must be benchmarked and may lose
+individual baseline successes. These must not be conflated in evaluation.
+
+\subsection{What was actually built}
+
+The archive contains a typed first-order list prover with structural-induction
+replay and accumulator generalization; a counterexample-guided polynomial
+recurrence solver; an affine-witness synthesizer with Farkas certificates; a
+finite-dictionary square-certificate solver; and an exact Bernstein subdivision
+solver. The latter two live in one module. Their checkers are executable Python,
+not formally verified Lean implementations.
+
+The important result is qualitative as well as numerical. The list prover's
+fixed-accumulator induction attempt fails, whereas a generated generalization
+succeeds. The affine-witness worker solves a universally quantified strip
+problem for which its constant-witness template fails. Subdivision certifies
+16 of the 41 positive-polynomial cases that the root-only Bernstein check does
+not certify. Those are ablations within the prototypes, not measurements
+against \Grind{}.
+
+\section{The baseline: what should not be reinvented}
+
+The documented \Grind{} architecture already combines congruence closure,
+propositional propagation, E-matching, guided case splitting, and specialized
+arithmetic/algebraic reasoning. It produces ordinary Lean proof terms and uses
+a shared state to let the components exchange consequences. Describing a new
+e-graph with a linear arithmetic solver as a major improvement would therefore
+miss the baseline.\cite{grind}
+
+The baseline must also be dated. Lean 4.34.0 was released on September 14,
+2026. Its \code{grind => bv_decide} integration encodes relevant equivalence
+classes and facts learned by theory solvers and E-matching into the SAT
+problem. Basic cooperation between bit-blasting and \Grind{} is consequently
+\emph{existing functionality}, not a proposed \Forge{} innovation.\cite{release434}
+
+Likewise, the linear arithmetic component handles several integer constraint
+forms and already has model-based theory combination. That is not the same
+thing as general model-based quantified instantiation, but it rules out a
+claim that merely exchanging model-induced equalities is new.\cite{grindlia}
+The release notes also describe \Grind{} discharging side conditions for
+conditional \code{Sym.simp} theorems. \Forge{}'s proposal is broader
+cross-worker obligation scheduling, not the invention of guarded rewriting.
+\cite{release434}
+
+\subsection{A dependency map, with integration decisions}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.37\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
+\toprule
+Component & Reuse & Integration decision \\
+\midrule
+\endhead
+Lean core / \Grind{} & Shared equality and local-theory reasoning. & Keep as the default local closer; initially use the tactic boundary.\cite{grind,grindsource} \\
+Aesop & Best-first AND--OR proof search and indexed rules. & Reuse rule-search ideas and adapters rather than claiming a new generic search tree.\cite{aesop} \\
+Mathlib tactics & \code{simp}, \code{ring}, \code{linarith}, \code{nlinarith}, \code{positivity}, \code{linear_combination}. & Cheap proof reconstruction and preprocessing before expensive searches.\cite{linarith,positivity,lincomb} \\
+Lean \code{sos} & Rational nonlinear certificates and a proof-producing tactic. & Optional production nonlinear backend; do not replace it with the prototype's restricted LP dictionary.\cite{sos} \\
+Duper & Proof-producing automated reasoning inside Lean. & A separate lemma/first-order search worker, not an unchecked external verdict.\cite{duper} \\
+\code{lean-auto} & Translation and monomorphization infrastructure. & Reuse rather than invent an unverified dependent-to-first-order erasure.\cite{leanauto} \\
+\code{lean-smt} / cvc5 & SMT search with Lean reconstruction; unsupported proof steps can remain goals. & Optional backend with an explicit residual-obligation interface.\cite{leansmt} \\
+Z3 & Candidate models and quantified search techniques. & Untrusted search assistance; a verdict is not a Lean proof.\cite{z3quant} \\
+\code{egg} / CCLemma & Equality-saturation and inductive-lemma-search prior art. & Algorithmic references and possible isolated search processes.\cite{egg,cclemma} \\
+\bottomrule
+\end{longtable}
+
+The historical \code{lean-egg} project is not selected as a new foundational
+dependency: its README says it is no longer developed and recommends
+\Grind{}.\cite{leanegg}
+
+These projects do not automatically form a build-compatible package set on the
+day a new Lean release appears. Pin the core toolchain and select mutually
+compatible Mathlib and optional-backend revisions; keep their adapters
+separate. The archive does not invent a tested \code{lake-manifest.json} for a
+combination that was not built.
+
+\section{A proof-producing obligation graph}
+\status{Specified architecture. The Python prototypes implement several workers and
+certificate formats, not this Lean controller.}
+
+\subsection{Three distinct data structures}
+
+A single global collection of ``facts'' is too ambiguous. The controller
+maintains three stores with different admission rules.
+
+The \emph{proved-fact store} contains propositions together with Lean proof
+expressions valid in a particular local context. Each fact records its source,
+its assumptions, and the proof dependencies needed to reconstruct it. A
+worker may consume it as evidence.
+
+The \emph{obligation graph} contains goals waiting for proofs: ordinary goals,
+side conditions, candidate lemmas, induction cases, witness specifications,
+and proof-reconstruction holes. An AND node is solved only after all required
+children are solved. An OR node records alternative approaches to the same
+goal. Failed attempts and exhausted budgets do not become logical facts.
+
+The \emph{search store} contains models, candidate terms, speculative
+rewrites, usefulness scores, and unsuccessful attempts. These may direct
+search. They are not accepted as hypotheses by another proof worker. In
+particular, a conjectural equality may merge nodes in an isolated exploration
+graph, but must not merge nodes in the proved equality state.
+
+\subsection{An explicit request protocol}
+
+The following is a proposed interface, not a transcription of a released Lean
+API. The goal identifier denotes an obligation in a snapshot with a known
+typed context.
+
+\begin{lstlisting}
+Demand :=
+  Prove(goal)
+  ProveGuard(context, proposition)
+  FindWitness(context, binders, specification, grammar)
+  Instantiate(context, theorem, desired_consequence)
+  Generalize(context, recursive_call, blocked_goal)
+  FindLemma(context, left_frontier, right_frontier)
+  ProveInduction(context, motive, recursor_candidates)
+  Reconstruct(context, source_goal, external_certificate)
+
+WorkerResult :=
+  Proved(lean_proof, dependencies, replay_record)
+  Progress(checked_facts, new_obligations, continuation)
+  Candidate(untrusted_evidence, proposed_next_demands)
+  Unknown(reason, diagnostics, continuation)
+\end{lstlisting}
+
+A worker returning \code{Progress} must not pretend that its residual goals
+are solved. The controller may tentatively construct a parent proof containing
+metavariables, but an overall success is reported only after those
+metavariables are assigned and the completed expression is checked.
+
+A counterexample belongs in \code{Candidate} unless its terms, hypotheses,
+and the negation of the source conclusion have all been validated in Lean.
+For an abstraction-based SMT translation, a satisfying assignment may simply
+be a model of an overapproximation.
+
+\subsection{The snapshot and its identity}
+
+A proposed \code{GoalSnapshot} contains the environment revision, local
+context, local instances, metavariable context, target expression, transparency
+configuration, branch assumptions, normalization version, and worker state.
+The controller must restore \emph{all} of the relevant state on backtracking.
+Restoring just the visible list of hypotheses is insufficient: a worker may
+have instantiated metavariables or created local declarations with identities
+used by other expressions.
+
+A persistent fact key includes its type and context identity, not just the
+pretty-printed proposition. Names printed as \code{x} can denote different
+free variables in sibling goals. Implicit typeclass arguments and universe
+instances also matter. Two syntactically similar applications of an overloaded
+operation can have different meanings because their instances differ.
+
+Pure syntax nodes can be shared globally when their identities are stable.
+Proof-bearing facts are shared only when their assumptions can be transported
+into the destination context. One safe reuse method abstracts a proof over
+its exact free-variable dependencies and then explicitly instantiates that
+closed theorem in the destination context.
+
+\subsection{Facts carry explanations, not only truth flags}
+
+For example, a nonlinear worker may prove $0<c$ from polynomial constraints.
+That proof justifies $c\ne0$, which unlocks a division rewrite. The rewrite's
+proof yields an equality, which may enable congruence closure, which may make
+an E-matching instance useful. The sequence should be represented as a proof
+DAG with explicit edges, not repeated reparsing of tactic text.
+
+A fact introduced under a split assumption $b$ has a dependency on $b$.
+It cannot be used in the $\neg b$ branch. If both branches prove the same
+proposition, their proofs are combined using the appropriate eliminator.
+There is no ``most likely branch'' rule in the logical layer.
+
+\section{Search control: structural changes before blind saturation}
+
+\subsection{The main loop}
+
+\begin{lstlisting}
+solve(snapshot, budget):
+  normalize_and_introduce(snapshot)
+  queue = initial_demands(snapshot)
+  while queue is nonempty and budget remains:
+    demand = fair_priority_pop(queue)
+    state = restore(demand.snapshot)
+    result = select_worker(demand).run(state, local_budget)
+    match result:
+      Proved(p, deps, record):
+        validate_in_exact_context(p, demand.goal)
+        commit_proof(demand, p, deps, record)
+        wake_dependent_obligations()
+      Progress(facts, children, continuation):
+        validate_and_commit_each_fact(facts)
+        add_children_without_assuming_them(children)
+        schedule(continuation)
+      Candidate(evidence, suggestions):
+        store_as_untrusted(evidence)
+        schedule(suggestions)
+      Unknown(reason, diagnostics, continuation):
+        record_failure_without_logical_inference(reason)
+        schedule_if_budget_policy_allows(continuation)
+  return checked_root_proof_or_explicit_failure()
+\end{lstlisting}
+
+A useful first implementation is single-threaded and deterministic. Search
+parallelism is optional, and is not a prerequisite for stronger reasoning.
+External processes can propose certificates independently, but a single Lean
+context owns proof reconstruction and commits.
+
+\subsection{Selecting the next action}
+
+The controller detects the shape of the obstruction rather than increasing
+all budgets indiscriminately. A recursive call whose accumulator changes
+suggests generalization. A goal beginning with an existential suggests witness
+synthesis. A universal theorem with an arithmetic-shaped trigger suggests
+constrained instantiation. A nonnegative polynomial goal with usable bounds
+suggests an arithmetic certificate. An equality of functions suggests an
+extensionality step before first-order reasoning.
+
+The priority score can initially be a transparent hand-tuned combination of
+estimated cost, overlap with target symbols, number of blocked dependents,
+recursion relevance, and past unsuccessful attempts. These are engineering
+heuristics, not calibrated probabilities. Keep a fair queue lane with growing
+budgets so that a continuously regenerated cheap task cannot starve every
+structural attempt. Every global budget must also account for reification,
+proof reconstruction, and kernel checking.
+
+\subsection{Do not retrieve the entire library}
+
+Maintain indexes by conclusion head, referenced recursive definitions,
+argument types, equality orientation, and the heads of premises. A blocked
+obligation drives the query. Start with local hypotheses, equations of the
+mentioned definitions, relevant extensionality lemmas, and a small retrieved
+lemma set. Expand retrieval only if these fail.
+
+A discrimination-tree or comparable structural index provides the first
+filter; a dependency-aware score ranks the survivors. Candidate lemma
+applications are elaborated in the exact goal context before they can affect
+search. Text similarity or an optional language model can propose candidates,
+but the system does not need either for the algorithms demonstrated here.
+
+Aesop's best-first rule organization is a practical model for the outer search.
+\Forge{} adds domain-specific demands and cross-worker continuations rather
+than claiming that AND--OR search itself is novel.\cite{aesop}
+
+\subsection{A representative cooperative proof}
+
+Consider a program theorem that combines a tail-recursive list function with
+a polynomial cost recurrence. The controller can discover an accumulator
+specification, prove it by list induction, synthesize a closed form for the
+cost by arithmetic induction, and pass the resulting equalities to \Grind{}
+to close the original verification condition. Neither generated theorem is
+asserted until its own proof is complete.
+
+The important distinction from
+\code{first | grind | aesop | nlinarith} is that unsuccessful attempts still
+produce structured, reusable information: which recursive argument changed,
+which equality would enable progress, which witness template was insufficient,
+and which arithmetic side condition remains. This feedback directs the next
+attempt, and checked intermediate results return to the shared proof state.

@@ -1,0 +1,58 @@
+{
+  "certificate": {
+    "kind": "nonnegative_cone",
+    "terms": [
+      {
+        "hypotheses": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                1
+              ],
+              "1"
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1"
+      }
+    ]
+  },
+  "hypotheses": [],
+  "kind": "cone",
+  "target": {
+    "n": 2,
+    "terms": [
+      [
+        [
+          0,
+          2
+        ],
+        "1"
+      ],
+      [
+        [
+          1,
+          1
+        ],
+        "-2"
+      ],
+      [
+        [
+          2,
+          0
+        ],
+        "1"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "certificate": null,
+  "diagnostics": {
+    "columns": 9,
+    "lp_status": 2,
+    "mutation_rejections": 0,
+    "name": "dictionary-ratio-gap",
+    "rows": 6,
+    "seconds": 0.001091138999981922,
+    "status": "unknown: no usable LP solution in this dictionary"
+  },
+  "equality_assumptions": [],
+  "nonnegative_assumptions": [],
+  "target": {
+    "n": 2,
+    "terms": [
+      [
+        [
+          0,
+          2
+        ],
+        "1"
+      ],
+      [
+        [
+          1,
+          1
+        ],
+        "4"
+      ],
+      [
+        [
+          2,
+          0
+        ],
+        "4"
+      ]
+    ]
+  }
+}

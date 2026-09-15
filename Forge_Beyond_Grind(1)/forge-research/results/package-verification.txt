@@ -1,0 +1,13 @@
+Delivery verified from an extracted ZIP copy.
+
+$ /opt/pyvenv/bin/python -m pytest -q
+................................................................         [100%]
+64 passed in 2.54s
+
+$ /opt/pyvenv/bin/python -S scripts/verify_artifacts.py
+1238 saved artifacts replayed successfully using standard-library-only checkers.
+This is object-level/exact Python replay, not Lean kernel verification.
+
+Fresh extracted experiment reproduction: all family/status counts match the recorded run.
+1238 saved artifacts replayed successfully using standard-library-only checkers.
+This is object-level/exact Python replay, not Lean kernel verification.

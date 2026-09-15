@@ -1,0 +1,660 @@
+\section{Automatic induction and demand-driven lemma discovery}
+\status{The list fragment, changing-argument detection, bounded RHS synthesis,
+structural induction, and trace replay are implemented. General dependent
+induction and e-graph-guided frontier discovery are specified but not implemented.}
+
+\subsection{Choose an induction variable from recursive structure}
+
+Collect recursive applications in the definitions mentioned by the goal and
+its relevant hypotheses. For each function, record which argument positions
+are destructed by pattern matching, which are passed to recursive calls as
+proper subterms, and which non-structural arguments change. Rank induction
+candidates by how many blocked recursive calls they expose after one
+constructor split. Do not select a variable merely because its type has an
+induction principle.
+
+For a first implementation, restrict automatic induction to standard
+structural recursion over supported inductive types. A later adapter can use
+functional or well-founded induction principles associated with a recursive
+definition. It must construct an actual Lean recursor application; recognizing
+a decreasing-looking expression is not a replacement for a termination or
+well-foundedness proof.
+
+The candidate motive is a typed function from the induction index to a
+proposition. Generalize parameters whose values vary in recursive calls.
+Close that set under dependencies in the local telescope: if a generalized
+variable occurs in the type of another variable or hypothesis, that dependent
+binder must be generalized or explicitly transported as well.
+
+For instance, in a context containing $x:A$, $y:B(x)$, and $h:C(x,y)$,
+induction on $x$ may require a motive of the form
+\[
+M(x)\;:=\;\forall y:B(x),\; C(x,y)\to P(x,y),
+\]
+not a proposition containing the old fixed $y$ at every new value of $x$.
+In Lean, use elaboration and the existing induction machinery to build this
+motive; do not manufacture a well-typed-looking first-order erasure.
+
+\subsection{The accumulator example, including the obstruction}
+
+Write $A$ for append, $R$ for ordinary reverse, and $\operatorname{RA}$ for
+accumulator reverse. The defining equations are
+\begin{align*}
+A([],y)&=y,& A(h::t,y)&=h::A(t,y),\\
+R([])&=[],&R(h::t)&=A(R(t),[h]),\\
+\operatorname{RA}([],a)&=a,&
+\operatorname{RA}(h::t,a)&=\operatorname{RA}(t,h::a).
+\end{align*}
+Suppose the requested theorem is
+\[
+\operatorname{RA}(x,[])=R(x).
+\]
+Inducting on $x$ without generalization gives an induction hypothesis only
+about $\operatorname{RA}(t,[])$. But the recursive call in the step case is
+$\operatorname{RA}(t,[h])$. The induction hypothesis does not match.
+Increasing a rewriting budget cannot make this particular hypothesis say
+something stronger.
+
+The changing-argument detector sees that argument 0 is destructed structurally
+and argument 1 changes from $a$ to $h::a$. It replaces the fixed empty
+accumulator with a fresh parameter and asks for a right-hand side in a typed
+grammar:
+\[
+L ::= []\mid x\mid a\mid R(L)\mid A(L,L).
+\]
+The successful candidate is
+\begin{equation}\label{eq:accspec}
+\forall x\,a,\qquad \operatorname{RA}(x,a)=A(R(x),a).
+\end{equation}
+The base case is immediate. For the step case, the generalized induction
+hypothesis gives
+\[
+\operatorname{RA}(t,h::a)=A(R(t),h::a).
+\]
+The target's other side is
+\[
+A(R(h::t),a)=A(A(R(t),[h]),a)
+          =A(R(t),A([h],a))=A(R(t),h::a),
+\]
+where the middle equality uses append associativity. Instantiating
+\eqref{eq:accspec} at $a=[]$ and using append's right identity proves the
+original theorem.
+
+The implemented grammar enumerator finds this RHS as candidate 32. It filters
+candidates using all 49 pairs of lists of length at most two over the alphabet
+$\{0,1\}$. Exactly one candidate reaches the proof search before success.
+These finite examples are \emph{not} its proof: the candidate then passes
+symbolic induction and independent trace replay.
+
+\subsection{What the miniature checker actually permits}
+
+There are separate syntax constructors for universal pattern variables and
+rigid free variables. In an induction step, the tail is a rigid free variable.
+Other generalized parameters remain variables of the induction-hypothesis
+rule. Thus the hypothesis can be instantiated at a new accumulator, but cannot
+be applied to an arbitrary longer list.
+
+Every rewrite certificate contains a rule identifier and a subterm path. The
+checker retrieves the rule from the defining equations, an earlier checked
+lemma, or the current local induction hypothesis. It matches the left-hand
+side, checks repeated-variable identity and sorts, replaces the selected
+subterm, and continues. The endpoints of the two replayed sides must be
+syntactically identical.
+
+The public theorem-installation operation first checks both induction cases.
+A lemma is not available while its own certificate is being checked. This
+rejects a forged proof that cites its own conclusion. The prototype does not
+implement simultaneous induction; a production extension would need an
+explicit joint motive and recursor rather than relaxing this restriction.
+
+\begin{proposition}[Soundness of the list certificate format]
+Assume that previously installed equations are valid for all finite lists.
+If the miniature checker accepts an induction certificate, its universally
+quantified equation holds for all finite lists under the supplied definitions.
+\end{proposition}
+\begin{proof}
+Each defining rewrite preserves the interpreted value. Each installed lemma
+instance preserves it by the assumption, and congruence permits replacement
+inside a typed term context. Consequently an accepted base trace proves the
+empty-list case. In the step trace, the only additional rule is the desired
+statement for the rigid tail, universally quantified over its generalized
+parameters. That rule is valid under the structural induction hypothesis.
+The accepted step trace therefore proves the constructor case. Structural
+induction establishes the universal equation.
+\end{proof}
+
+This is a mathematical justification of a small format, not a machine-checked
+Lean proof of the Python implementation. Bugs in the checker remain possible;
+the negative tests and replay separation reduce that risk but do not turn
+Python into Lean's kernel.
+
+\subsection{Discover the helper lemma, not only the generalization}
+
+The prototype supplies four seed \emph{statements}: append associativity,
+append's right identity, reverse of append, and reverse involution. It searches
+and checks their proofs, but does not claim to have invented all four
+statements. In particular, associativity is available when the accumulator
+lemma is synthesized.
+
+The full design adds a demand-driven lemma explorer. After a failed induction
+step, retain the normalized left and right frontiers and the rewrites that
+led to them. Bounded equality saturation can expose alternative forms that a
+one-way normalizer would discard. For the accumulator example, unfolding
+append in reverse can expose $h::a$ as $A([h],a)$. The remaining frontier then
+suggests
+\[
+A(A(u,v),w)=A(u,A(v,w)).
+\]
+Prove that generalized statement separately, and only then install it.
+
+A practical candidate-generation algorithm is:
+\begin{lstlisting}
+find_lemma(left_frontier, right_frontier):
+  expand each frontier using a bounded set of proved equalities
+  identify pairs separated by a small structural difference
+  anti-unify shared subterms, preserving repeated-variable identity
+  abstract a well-typed parameter telescope
+  reject trivial, cyclic, or irrelevant candidates
+  filter candidates with executable counterexamples where available
+  prove surviving candidates in a separate obligation
+  return only checked lemmas to the main equality state
+\end{lstlisting}
+
+Typed anti-unification starts in a deliberately restricted fragment:
+fully applied, homogeneous first-order terms with compatible types. Memoize
+pairs of subterms so that anti-unifying $f(a,a)$ and $f(b,b)$ gives $f(z,z)$,
+not $f(z_1,z_2)$. In a dependent fragment, any abstraction that changes a term's
+type needs a typed telescope and possibly transport proofs. Failure to find
+such an abstraction is an ordinary search failure.
+
+This goal-directed exploration is strongly related to CCLemma's approach.
+Its authors use e-graphs to focus inductive lemma discovery on useful proof
+frontiers. The present proposal adapts that line of work to a Lean
+proof-producing controller; it does not claim to originate the method.
+\cite{cclemma}
+
+\subsection{Budgeting and termination of exploration}
+
+Impose separate limits on term size, saturation nodes, candidate count,
+induction depth, and lemma-dependency depth. Use term fingerprints and
+alpha-normalized candidate telescopes to avoid reproving the same lemma under
+new binder names. Never accept a cyclic dependency merely because every edge
+looks like a useful lemma application.
+
+Bounded enumeration is exponential in its grammar size. The initial list
+experiment is intentionally tiny. The production advantage must come from
+recursive-call analysis, relevance filtering, typed indexing, and frontier
+selection, not from assuming unrestricted enumeration will be cheap.
+
+\section{Polynomial recurrence invariants by exact CEGIS}
+\status{Implemented and tested on 65 recurrence problems, including five power-sum
+families and 60 seeded random polynomial increments.}
+
+\subsection{The fragment and the certificate}
+
+Consider the recurrence
+\begin{equation}\label{eq:recurrence}
+T(0)=t_0,\qquad T(n+1)=T(n)+f(n),\qquad n\in\N,
+\end{equation}
+where $t_0\in\Q$ and $f\in\Q[X]$. Search for $q\in\Q[X]$ such that
+\begin{equation}\label{eq:rec-cert}
+q(0)=t_0,\qquad q(X+1)-q(X)=f(X).
+\end{equation}
+The certificate is just the exact coefficient list of $q$. Its checker
+computes the shift $q(X+1)$ using polynomial arithmetic and compares exact
+coefficients. It does not sample the step relation or trust an interpolator.
+
+\begin{proposition}
+If \eqref{eq:rec-cert} holds, then $T(n)=q(n)$ for every $n\in\N$.
+\end{proposition}
+\begin{proof}
+The base equality is the first certificate condition. If $T(n)=q(n)$, then
+\eqref{eq:recurrence} and the second condition imply
+$T(n+1)=q(n)+f(n)=q(n+1)$. Apply induction on $n$.
+\end{proof}
+
+In Lean, this certificate can be reconstructed with ordinary induction,
+explicit casts, and polynomial normalization. A compact reflected checker is
+an optimization, not a requirement for the first implementation.
+
+\subsection{Counterexamples direct the coefficient search}
+
+For degree bound $d$, write $q(X)=\sum_{i=0}^d c_iX^i$. Maintain exact sample
+constraints $q(n)=T(n)$ and solve the resulting rational linear system.
+Free coefficients are initially set to zero. Check the candidate's base and
+step identities. If the step residual
+\[
+r(X)=q(X+1)-q(X)-f(X)
+\]
+is nonzero, choose a natural $n$ with $r(n)\ne0$ and add both $q(n)=T(n)$ and
+$q(n+1)=T(n+1)$ to the sample set. At least one is a new constraint: if both
+were already satisfied by the candidate, their difference would force
+$r(n)=0$.
+
+A nonzero degree-$k$ polynomial cannot vanish at all of $0,1,\ldots,k$.
+The implementation uses this elementary fact to find an exact counterexample
+without an SMT solver. If the coefficient constraints become inconsistent,
+increase the degree bound. The proposal is therefore counterexample-guided,
+while its acceptance test is an exact induction certificate.
+
+\subsection{A completeness statement for this small fragment}
+
+For a nonzero polynomial $f$ of degree $k$, the finite-difference map
+$q\mapsto q(X+1)-q(X)$ sends a leading term $aX^{k+1}$ to
+$(k+1)aX^k$ plus lower terms. Over $\Q$, solve for the leading coefficient,
+subtract its difference, and continue downward. Thus there is a degree
+$k+1$ solution, unique after fixing $q(0)$. The zero increment gives a constant
+solution.
+
+For a fixed candidate degree, each unsuccessful iteration adds an independent
+constraint or detects inconsistency. Hence exact linear solving and a degree
+budget at least $k+1$ suffice for termination on this fragment. This does not
+assert completeness for arbitrary recurrences, nonlinear state updates,
+piecewise definitions, or integer formulas involving truncated division.
+
+\subsection{An example and an overfitting trap}
+
+For $f(X)=X+1$, the discovered result is
+\[
+q(X)=\frac{X(X+1)}2.
+\]
+For increments $(X+1)^2,\ldots,(X+1)^5$, the output contains the corresponding
+power-sum polynomials; the exact formulas and all failed candidate residuals
+are in \code{results/certificates/recurrences.json}.
+
+An interpolated expression
+\[
+\widetilde q(X)=\frac{X(X+1)}2+X(X-1)(X-2)(X-3)
+\]
+agrees with the triangular-number formula on the first four inputs. It is
+nevertheless rejected by the step checker. This is a small, concrete example
+of why testing-based conjecture generation and proof acceptance must be
+separate operations.
+
+\subsection{Generalization to richer invariants}
+
+A next worker can search polynomial invariants $I(n,s)$ for a state transition
+$s'=F(n,s)$. It must prove the initial condition and the implication
+\[
+I(n,s)\land \operatorname{Guard}(n,s)
+\;\Longrightarrow\; I(n+1,F(n,s)).
+\]
+Coefficient comparison handles identities; exact nonlinear certificates can
+handle some inequalities. The invariant template and degree bound are explicit
+search parameters. Counterexamples refine coefficients or force a richer
+motive. This is a concrete extension path, but the supplied recurrence module
+implements only the additive univariate fragment above.
+
+\section{Synthesize witnesses, not merely satisfying assignments}
+\status{Affine witness synthesis with exact Farkas certificates is implemented.
+Piecewise witnesses, integer witnesses, and dependent-type witness synthesis
+are proposed extensions.}
+
+\subsection{The logical distinction}
+
+To prove $\forall x\,\exists y\,P(x,y)$, a satisfying assignment for one value
+of $x$ is not enough. A useful synthesizer produces a term $y=w(x)$ and proves
+$\forall x\,P(x,w(x))$. For example,
+\[
+\forall x\in\R,\quad \exists y\in\R,\quad x+1\le y\le x+2
+\]
+has the witness $w(x)=x+1$. No constant witness works for every real $x$.
+The prototype's constant-only template returns no certificate; its affine
+template returns the source-level witness $x+1$ with an exact check.
+
+In the Lean controller, witness binders retain their dependencies. A witness
+for the second existential may refer to an earlier witness, but not to a
+future binder or a branch-local variable outside its scope. A witness is
+elaborated as an ordinary Lean term before its specification is discharged.
+
+\subsection{Jointly solve for an affine witness and its proof}
+
+Let the input domain be the rational polyhedron
+\[
+g(x)=Ax+b\ge0,
+\]
+and the target constraints be
+\[
+h(x,y)=Cx+Dy+e\ge0.
+\]
+All inequalities are componentwise and non-strict. Seek $y=Mx+c$. A sufficient
+certificate consists of a nonnegative matrix $\Lambda$ and nonnegative vector
+$s$ satisfying
+\begin{align}
+C+DM&=\Lambda A,\label{eq:farkas-linear}\\
+e+Dc&=\Lambda b+s.\label{eq:farkas-constant}
+\end{align}
+These equations are \emph{linear in the unknowns} $M,c,\Lambda,s$, because
+$A,b,C,D,e$ are fixed problem data. Witness synthesis and proof search can
+therefore be one linear feasibility problem, rather than enumerating many
+candidate affine functions and invoking a verifier separately.
+
+\begin{proposition}[Affine witness certificate]
+If \eqref{eq:farkas-linear}--\eqref{eq:farkas-constant} hold and
+$\Lambda,s\ge0$, then for every $x$ satisfying $Ax+b\ge0$, the term
+$y=Mx+c$ satisfies $Cx+Dy+e\ge0$.
+\end{proposition}
+\begin{proof}
+Substitution gives
+$Cx+D(Mx+c)+e=\Lambda(Ax+b)+s$.
+Every entry on the right is a sum of nonnegative multiples of nonnegative
+quantities, plus a nonnegative slack.
+\end{proof}
+
+For a nonempty rational polyhedron, the affine implication form of Farkas'
+lemma also gives a completeness route for a \emph{fixed affine witness}:
+validity of each non-strict affine target inequality has such multipliers.
+The combined exact feasibility formulation therefore captures the existence
+of affine witnesses in that fragment. This is the standard polyhedral dual-certificate reasoning.\cite{mosek}
+The floating-point proposer is not a complete exact LP algorithm, and an empty domain needs separate handling
+for a completeness claim. Neither qualification affects certificate soundness.
+
+\subsection{Implementation details and exact reconstruction}
+
+With $n$ inputs, $m$ outputs, $r$ domain constraints, and $q$ target constraints,
+the encoding uses
+\[
+m(n+1)+q(r+1)
+\]
+unknowns and $q(n+1)$ coefficient equations, before template restrictions.
+Entries of $M,c$ are unrestricted; entries of $\Lambda,s$ are constrained
+nonnegative. A constant-only grammar adds equations $M=0$.
+
+The prototype calls SciPy's \code{linprog} with the HiGHS backend. That API
+is an optimization interface, not a proof system.\cite{scipylp} The returned
+numbers are rationalized and all coefficient equations and sign constraints
+are checked with exact fractions. If that fails, a second attempt uses the
+numerically suggested support and exact rational elimination. If the exact
+check still fails, the answer is ``no certificate found.''
+
+A numerical zero threshold is used only to select a support for the second
+search attempt. There is no numerical tolerance in the acceptance condition.
+The serialized certificate includes each witness, each multiplier row, and
+each slack. Its replay code imports no optimization library.
+
+For Lean reconstruction, produce the witness tuple first, then prove every
+target inequality from the recorded nonnegative combination. The coefficient
+identity can be checked by polynomial normalization, and the sign proof can
+be built from the domain hypotheses. One can use ordinary tactic reconstruction
+initially and a reflected matrix checker later.
+
+\subsection{Beyond a single affine template}
+
+There are valid specifications with no witness in the chosen grammar.
+For piecewise-affine witnesses, permit a bounded decision tree whose guards
+are source-level affine comparisons. Synthesize an affine witness under each
+leaf's domain assumptions, and prove the guard partition covers the original
+domain. Never silently assume that finitely many sampled regions cover it.
+
+For integer or natural-number witnesses, a rational affine solution is not
+sufficient. Require integral coefficients where that suffices, or introduce
+explicit division/remainder templates with associated arithmetic obligations.
+A practical first integer grammar is
+\[
+w(x) ::= c+\sum_i a_ix_i\mid
+\left\lfloor\frac{c+\sum_i a_ix_i}{d}\right\rfloor\mid
+\operatorname{ite}(g,w_1,w_2),\quad d>0.
+\]
+Each candidate must be checked in the source integer semantics. The current
+prototype deliberately does not interpret a real solution as an integer
+proof.
+
+\section{Theory-constrained quantifier instantiation}
+\status{Specified algorithm; no general E-matching or MBQI implementation is included
+in the prototype archive.}
+
+\subsection{Solve for missing terms before increasing instance limits}
+
+Trigger-based instantiation works from terms present in the equality state.
+The documented E-matching machinery is therefore an important baseline, not
+something to discard.\cite{grindematch} \Forge{} adds a demand that works
+backward from a desired consequence to source terms for the theorem's binders.
+
+Consider an integer predicate $P$, hypotheses
+\[
+\forall k\in\Z,\ P(2k+1),\qquad n\bmod2=1,
+\]
+and goal $P(n)$. A useful instantiation is $k=n\mathbin{/}2$. The controller
+can synthesize that term from the arithmetic shape, then prove
+\[
+2(n\mathbin{/}2)+1=n
+\]
+using the oddness assumption and integer division facts. It applies the
+original universal theorem and transports along this checked equality.
+
+This is an algorithmic example, not a measured claim that the current
+\Grind{} fails on that exact input. The included Lean example shows the
+intended proof shape but was not compiled.
+
+\subsection{A concrete constrained-matching algorithm}
+
+Given a selected theorem conclusion $C(z)$ and a requested atom $G$, first
+perform typed syntactic matching on the uninterpreted structure. Instead of
+failing at an interpreted arithmetic subterm, emit an equality constraint
+between that subterm and the corresponding source expression.
+
+For linear integer patterns, solve the resulting constraints for missing
+binders using divisibility, linear elimination, or a bounded grammar of
+quotient/remainder terms. For affine rational patterns, exact linear solving
+can directly produce terms. For constructor patterns, use constructor
+injectivity and source-level constructor terms. Underconstrained binders are
+handled by a bounded typed grammar, not arbitrary model objects.
+
+Each candidate substitution $\theta$ creates ordinary proof obligations for
+the matching equalities and any theorem premises. After those are proved,
+construct the theorem application $C(\theta)$ and its transport to $G$.
+Nothing about the search solver needs to be trusted: an incorrect candidate
+simply fails reconstruction.
+
+Several triggers or repeated binders produce a \emph{joint} constraint system.
+Solving each occurrence independently would lose the equality relationship
+between two occurrences of the same variable. Cache instances using the
+theorem identity, universe/type instantiations, the complete substitution,
+and its valid branch context.
+
+\subsection{Model-guided instantiation, with a narrow trust boundary}
+
+If constrained matching is insufficient, use a model-based loop inspired by
+quantified SMT procedures. Candidate-model and pattern-based instantiation
+are established techniques in systems such as Z3.\cite{z3quant} They can
+suggest useful instances even when naive trigger firing stagnates.
+
+The proposed loop freezes a relevant typed abstraction, obtains a candidate
+model, and searches for a violated universal instance in that model. It then
+tries to reify the candidate values as source terms and verifies the associated
+instance in Lean. Numerals can often be reified directly. An uninterpreted
+model-domain element cannot simply become a new arbitrary Lean constant:
+find a denoting term already available, enumerate a term, or abandon that
+candidate. Internal Skolem symbols likewise require scoped witnesses or
+hypothesis elimination, not new axioms.
+
+A satisfying model of an abstraction is not automatically a countermodel of
+the Lean goal. Conversely, an external unsatisfiability result is not accepted
+without proof reconstruction or an appropriate verified certificate. In this
+architecture, model search is an instance generator; Lean remains responsible
+for every asserted consequence.
+
+Generation limits, trigger selectivity, repeated-instance suppression, and
+fair round scheduling are still necessary. There is no claim that this loop
+is complete for arbitrary quantified dependent type theory.
+
+\section{Nonlinear reasoning with exact certificates}
+\status{Finite-dictionary square search and Bernstein subdivision are implemented.
+A full SDP solver and its Lean integration are reused/proposed, not implemented
+by these Python modules.}
+
+\subsection{A nonlinear worker should expose multiple certificate classes}
+
+Start with cheap normalization and obvious sign facts. Use Mathlib's
+\code{positivity} and arithmetic tactics as proof-producing preprocessors or
+closers where appropriate.\cite{positivity,linarith} Then select a more
+specialized certificate class according to the target and assumptions:
+algebraic identities, nonnegative square combinations, bounded-box Bernstein
+certificates, or an optional stronger semialgebraic backend.
+
+Do not confuse polynomial equality reasoning with order reasoning. Reducing
+polynomials modulo equalities does not by itself prove nonnegativity.
+Conversely, knowing a square is nonnegative does not solve all nonlinear
+integer arithmetic problems.
+
+\subsection{Square certificates and the existing Lean SOS backend}
+
+For constraints $g_i(x)\ge0$ and equations $e_j(x)=0$, a useful certificate
+shape is
+\begin{equation}\label{eq:sos}
+p=\sum_k a_kq_k^2
+   +\sum_{i,k} b_{ik}r_{ik}^2g_i
+   +\sum_j h_je_j,
+\qquad a_k,b_{ik}\in\Q_{\ge0}.
+\end{equation}
+Checking the polynomial identity and the rational signs proves $p\ge0$ under
+the source constraints. The polynomial multipliers $h_j$ of equalities need
+no sign condition.
+
+There is already a Lean \code{sos} project implementing proof-producing
+nonlinear reasoning with rational certificates. Its documented architecture
+separates reification, search, checking, and verification; named interfaces
+include \code{SOS.Engine.solve}, \code{SOS.Engine.Result.check}, and the
+Mathlib-side verifier. \code{sos?} can emit a replayable witness. Its
+computational polynomial substrate uses \code{Hex.MvPoly}.\cite{sos}
+These are concrete integration targets, subject to revision compatibility.
+The \Forge{} contribution is when to request such a certificate and how to
+return its proved consequences to structural and saturation workers.
+
+\subsection{What the implemented square search does}
+
+The prototype uses only the first two sums of \eqref{eq:sos}. It chooses a
+finite dictionary of candidate square roots, constructs their squares and
+constraint-multiplied squares, and solves for nonnegative rational weights.
+Once the roots are fixed, coefficient matching is a linear feasibility
+problem. For two variables and root degree at most two, the default dictionary
+has 36 roots: monomials and their pairwise sums and differences.
+
+This is simpler and much less general than searching over arbitrary positive
+semidefinite Gram matrices. It is useful as a cheap stage and as an experiment
+in exact search/replay separation, not as a proposed replacement for a full
+SOS implementation. Its failure proves only that this search did not find a
+certificate. In particular, a nonnegative polynomial need not be a sum of
+polynomial squares at all.
+
+The checker reconstructs the whole polynomial from the supplied weights and
+roots, checks each weight exactly, verifies constraint indices, and compares
+the result with the target supplied by the caller. A weight of $-1$ cannot be
+smuggled through because the polynomial identity happens to be correct.
+Removing a necessary constraint from the problem also makes replay fail.
+
+\subsection{Bernstein certificates on rational boxes}
+
+Suppose the domain is a rational box
+$B=\prod_{i=1}^m[a_i,b_i]$, with $a_i<b_i$. Substitute
+$x_i=a_i+(b_i-a_i)t_i$ to obtain
+\[
+\widetilde p(t)=\sum_\beta c_\beta t^\beta,\qquad 0\le t_i\le1.
+\]
+Let $d_i$ be a coordinatewise degree bound. Define
+\[
+B_{\alpha,d}(t)=\prod_i\binom{d_i}{\alpha_i}
+ t_i^{\alpha_i}(1-t_i)^{d_i-\alpha_i}.
+\]
+Each basis function is nonnegative on the unit box and their sum is one.
+The Bernstein coefficients are
+\begin{equation}\label{eq:bernstein}
+b_\alpha=\sum_{\beta\le\alpha}c_\beta
+ \prod_i\frac{\binom{\alpha_i}{\beta_i}}{\binom{d_i}{\beta_i}}.
+\end{equation}
+Thus $p\ge0$ on $B$ if every $b_\alpha\ge0$; it is strictly positive if every
+$b_\alpha>0$.
+
+\begin{proposition}[Bernstein coefficient identity]
+The coefficients in \eqref{eq:bernstein} satisfy
+$\widetilde p(t)=\sum_\alpha b_\alpha B_{\alpha,d}(t)$.
+\end{proposition}
+\begin{proof}
+In one variable, use
+\[
+ t^k=\sum_{j=k}^d
+ \frac{\binom{j}{k}}{\binom{d}{k}}
+ \binom{d}{j}t^j(1-t)^{d-j}.
+\]
+The binomial identity
+$\binom{d}{j}\binom{j}{k}/\binom{d}{k}=\binom{d-k}{j-k}$
+reduces the right-hand side to
+$t^k(t+(1-t))^{d-k}=t^k$. Take products across coordinates and apply linearity
+to the monomial expansion of $\widetilde p$.
+\end{proof}
+
+Negative Bernstein coefficients are \emph{not} counterexamples. They mean
+only that this sufficient condition has not proved the desired sign. A
+search worker can split a box at a rational midpoint and repeat the check.
+A returned negative point is a different result and must be evaluated exactly.
+
+\subsection{The partition certificate is part of the proof}
+
+The implemented certificate is a binary tree. A leaf asks the checker to
+recompute the Bernstein coefficients for its inherited box. An internal node
+specifies an axis, a rational split point strictly inside that axis's
+interval, and both children. The child boxes are derived by the checker, not
+accepted as arbitrary boxes from the certificate.
+
+This design makes coverage explicit. There is no way to omit a difficult
+corner by supplying an incomplete list of favorable boxes. A missing child,
+an invalid split axis, or a split point at an interval endpoint is rejected.
+The root box and polynomial are separate problem inputs.
+
+For
+\[
+p(x)=\left(x-\tfrac12\right)^2+\tfrac1{100},\qquad x\in[0,1],
+\]
+the degree-two coefficients at the root are
+$13/50,-6/25,13/50$. The root check cannot certify positivity. Splitting at
+$1/2$ gives coefficient lists
+\[
+(13/50,1/100,1/100),\qquad(1/100,1/100,13/50),
+\]
+so two leaves suffice for strict positivity. This is an exact calculation,
+not a numerical plot or an assertion based on sampled values.
+
+\subsection{Limits, completeness, and complementary strengths}
+
+For a polynomial strictly positive on a compact box, sufficiently fine
+subdivision eventually makes every Bernstein coefficient positive. A direct
+justification is that the transformed higher-degree coefficients tend
+uniformly to zero as box widths shrink, while the constant terms stay above
+a positive minimum. Consequently every local Bernstein coefficient is
+$p(a)+O(\max_i(b_i-a_i))$ with a uniform bound over the original box.
+The prototype cycles split axes so every coordinate shrinks along a branch.
+An unlimited fair subdivision search therefore has a useful completeness
+property for strictly positive polynomials on a fixed compact box.
+
+Nonnegative polynomials with zeros are different. The prototype returns
+\code{unknown} for $(x-y)^2$ on $[0,1]^2$ at depth four, even though a single
+square certificate proves the result immediately. A search timeout or an
+uncertified leaf must not be reported as a refutation.
+
+Coordinatewise degrees create $\prod_i(d_i+1)$ Bernstein coefficients, and a
+binary tree can have exponentially many leaves in its depth bound. Exact
+coefficient bit sizes also grow under repeated substitution. This procedure
+is attractive for low-dimensional bounded problems, not a universal substitute
+for nonlinear arithmetic.
+
+\subsection{Integrating domains, casts, and division safely}
+
+The controller must establish that the source assumptions imply the box bounds
+before applying a Bernstein theorem. Polynomial reification must preserve
+variable identity, source operations, and casts. A real-field certificate
+cannot be applied directly to an arbitrary ring or a finite characteristic
+field.
+
+For natural or integer inequalities, explicitly prove the embedding into an
+ordered field and translate the relevant operations. Integer division,
+truncated subtraction, and modular arithmetic are not field operations.
+Clearing denominators in inequalities requires a sign proof; clearing a field
+denominator in an equality generally requires a nonzero proof. These become
+\code{ProveGuard} obligations. If the guard fails, the rewrite is unavailable,
+not approximately valid.
+
+A checked sign or equality from this worker is useful beyond its original
+goal. It can unlock a conditional rewrite, expose a useful quantified
+instance, or finish an induction step. That is why the arithmetic worker
+returns individual proved consequences and their assumptions, not just a
+Boolean ``solved'' flag.

@@ -1,0 +1,135 @@
+{
+  "certificate": {
+    "cone": [
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                0,
+                2
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1/2"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                2,
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1/2"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                2
+              ],
+              "1"
+            ],
+            [
+              [
+                2,
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1/2"
+      }
+    ],
+    "ideal": []
+  },
+  "diagnostics": {
+    "columns": 36,
+    "lp_status": 0,
+    "mutation_rejections": 2,
+    "name": "three-squares-quartic",
+    "nonzero_columns": 3,
+    "rows": 15,
+    "seconds": 0.0024024199999530538,
+    "status": "certified"
+  },
+  "equality_assumptions": [],
+  "nonnegative_assumptions": [],
+  "target": {
+    "n": 2,
+    "terms": [
+      [
+        [
+          0,
+          0
+        ],
+        "1"
+      ],
+      [
+        [
+          0,
+          2
+        ],
+        "-1"
+      ],
+      [
+        [
+          0,
+          4
+        ],
+        "1"
+      ],
+      [
+        [
+          2,
+          0
+        ],
+        "-1"
+      ],
+      [
+        [
+          2,
+          2
+        ],
+        "-1"
+      ],
+      [
+        [
+          4,
+          0
+        ],
+        "1"
+      ]
+    ]
+  }
+}

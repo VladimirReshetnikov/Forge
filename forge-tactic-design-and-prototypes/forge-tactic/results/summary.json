@@ -1,0 +1,144 @@
+{
+  "scope": "Python algorithm experiments only; no Lean compiler and no grind execution",
+  "cone": {
+    "sparse": {
+      "proved": 17,
+      "total": 60,
+      "search_seconds": 0.07402605199979462,
+      "replay_seconds": 0.0013182970000116256
+    },
+    "enriched": {
+      "proved": 60,
+      "total": 60,
+      "search_seconds": 0.19717870200031484,
+      "replay_seconds": 0.007923420999986774
+    }
+  },
+  "bernstein": {
+    "total": 21,
+    "unsplit_proved": 0,
+    "subdivided_proved": 21,
+    "min_leaves": 2,
+    "max_leaves": 21,
+    "search_seconds": 0.049056351999752223,
+    "replay_seconds": 0.08328798500008361
+  },
+  "invariants": {
+    "proved": 121,
+    "total": 121,
+    "search_seconds": 0.0610334399993917,
+    "replay_seconds": 0.024263142001018423,
+    "out_of_template_unknown": 5
+  },
+  "horn": [
+    {
+      "noise_chains": 10,
+      "variant": "full_closure",
+      "total_rules": 252,
+      "selected_rules": 252,
+      "firings": 252,
+      "index_seconds": 7.25589999319709e-05,
+      "query_seconds": 0.00016061300004821533,
+      "cold_total_seconds": 0.00023317199998018623,
+      "original_proof_steps": 252,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 10,
+      "variant": "early_goal",
+      "total_rules": 252,
+      "selected_rules": 252,
+      "firings": 122,
+      "index_seconds": 7.25589999319709e-05,
+      "query_seconds": 0.00010155300003589218,
+      "cold_total_seconds": 0.00017411199996786308,
+      "original_proof_steps": 122,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 10,
+      "variant": "demand",
+      "total_rules": 252,
+      "selected_rules": 12,
+      "firings": 12,
+      "index_seconds": 7.25589999319709e-05,
+      "query_seconds": 2.3394999971060315e-05,
+      "cold_total_seconds": 9.595399990303122e-05,
+      "original_proof_steps": 12,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 100,
+      "variant": "full_closure",
+      "total_rules": 2412,
+      "selected_rules": 2412,
+      "firings": 2412,
+      "index_seconds": 0.0007122740000795602,
+      "query_seconds": 0.001593511999999464,
+      "cold_total_seconds": 0.0023057860000790242,
+      "original_proof_steps": 2412,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 100,
+      "variant": "early_goal",
+      "total_rules": 2412,
+      "selected_rules": 2412,
+      "firings": 1112,
+      "index_seconds": 0.0007122740000795602,
+      "query_seconds": 0.0009633120000671624,
+      "cold_total_seconds": 0.0016755860001467227,
+      "original_proof_steps": 1112,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 100,
+      "variant": "demand",
+      "total_rules": 2412,
+      "selected_rules": 12,
+      "firings": 12,
+      "index_seconds": 0.0007122740000795602,
+      "query_seconds": 4.184299996268237e-05,
+      "cold_total_seconds": 0.0007541170000422426,
+      "original_proof_steps": 12,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 1000,
+      "variant": "full_closure",
+      "total_rules": 24012,
+      "selected_rules": 24012,
+      "firings": 24012,
+      "index_seconds": 0.008486733000040658,
+      "query_seconds": 0.019246391000024232,
+      "cold_total_seconds": 0.02773312400006489,
+      "original_proof_steps": 24012,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 1000,
+      "variant": "early_goal",
+      "total_rules": 24012,
+      "selected_rules": 24012,
+      "firings": 11012,
+      "index_seconds": 0.008486733000040658,
+      "query_seconds": 0.11527879600009783,
+      "cold_total_seconds": 0.12376552900013849,
+      "original_proof_steps": 11012,
+      "minimized_steps": 12
+    },
+    {
+      "noise_chains": 1000,
+      "variant": "demand",
+      "total_rules": 24012,
+      "selected_rules": 12,
+      "firings": 12,
+      "index_seconds": 0.008486733000040658,
+      "query_seconds": 0.0002474030000030325,
+      "cold_total_seconds": 0.00873413600004369,
+      "original_proof_steps": 12,
+      "minimized_steps": 12
+    }
+  ],
+  "tests": "See pytest.txt for the actual separate pytest run."
+}

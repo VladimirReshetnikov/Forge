@@ -1,0 +1,262 @@
+\section{Libraries, modules, and implementation boundaries}
+
+\subsection{Use existing libraries for what they already do well}
+
+The proposed implementation should use Lean's metaprogramming framework for elaboration, local contexts, metavariable goals, induction, and proof construction. A discrimination-tree index and an environment extension can store premise-search metadata. Internal \code{Lean.Meta.Tactic.Grind} access belongs behind a small adapter because source compatibility is not guaranteed between Lean releases~\cite{grindtypes,grindconfig}.
+
+Mathlib supplies normalization and proof-producing leaf tactics; the important initial components are \code{ring}, \code{linarith}/\code{nlinarith}, \code{positivity}, \code{norm\_num}, and cast normalization~\cite{ring,linarith,positivity}. Use them to reconstruct small certificates rather than introducing a second independent arithmetic proof language prematurely. For larger certificates, a reflected checker becomes worthwhile once its soundness theorem is established.
+
+Aesop can supply or inform structural proof-search infrastructure. Duper can be an optional, separately pinned saturation worker over a small retrieved premise set~\cite{aesop,duper}. Neither should become a mandatory dependency for the exact arithmetic checker. Dependency conflicts and toolchain mismatches should disable the optional worker with an explicit diagnostic rather than break the core tactic.
+
+The executable Python package uses \code{fractions.Fraction} and a small sparse polynomial implementation for checking. SciPy/HiGHS is used only by the finite-cone oracle. SymPy is used by univariate search and independent tests, not by the standard-library-only certificate rechecker. CVXPY is a proposed SDP front end, not an installed or tested dependency of this prototype~\cite{scipy,sympy,cvxpy}.
+
+\subsection{A suggested Lean module layout}
+
+The following paths are an implementation plan, not files claimed to exist in the archive:
+
+\begin{lstlisting}
+Forge/Frontend.lean             -- syntax, configuration, diagnostics
+Forge/Core/GoalGraph.lean       -- AND/OR obligations and proof assembly
+Forge/Core/Facts.lean           -- scoped propositions, proof dependencies
+Forge/Core/Scheduler.lean       -- deterministic quotas and budgets
+Forge/Grind/Adapter.lean        -- pinned-version interface to grind
+Forge/Arithmetic/Reify.lean     -- typed polynomial views and bridge proofs
+Forge/Arithmetic/Cone.lean      -- cone semantics and exact replay
+Forge/Arithmetic/Quadratic.lean -- quadratic search adapter
+Forge/Arithmetic/Bernstein.lean -- coefficients, coverage, replay
+Forge/Arithmetic/Sturm.lean     -- verified univariate root-count checker
+Forge/Structural/Induct.lean    -- scheme and generalization search
+Forge/Structural/Witness.lean   -- typed witness grammars and obligations
+Forge/Oracle/Protocol.lean      -- bounded certificate data, never code
+Forge/Replay/AxiomPolicy.lean   -- dependency/axiom audit
+\end{lstlisting}
+
+The Python modules in the archive mirror the arithmetic and synthesis responsibilities, but do not implement the Lean goal graph, local-context API, or metaprogramming adapters. Keeping the boundaries explicit is preferable to shipping a thin tactic macro and describing it as the complete system.
+
+\subsection{A proposed user interface}
+
+A useful terminal tactic should have a small default interface, an explanatory mode, and explicit controls for expensive or trust-changing workers. For example, the following is \emph{proposed syntax only}:
+
+\begin{lstlisting}
+forge
+forge? [selectedLemma, recursiveDefinition]
+forge (config := {
+  mode := .compatibility
+  inductionDepth := 2
+  witnessDegree := 1
+  polynomialDegree := 8
+  externalSearch := true
+  trustMode := .kernelOnly
+})
+\end{lstlisting}
+
+A successful explanatory invocation should emit a smaller replay plan: the chosen induction scheme, generalized variables, witness expressions, necessary library lemmas, and concrete certificate data. It should not require the original broad search again. On failure it should identify the first substantive blocked obligation or exhausted budget, not print thousands of irrelevant facts.
+
+Parameters must describe real implementation limits. For example, a polynomial-degree bound and a certificate monomial bound control different sources of explosion and should not be conflated. A trust option must not silently change because a faster worker happens to be available.
+
+\subsection{The external certificate protocol}
+
+Exchange structured data, not executable code. The problem request should contain a versioned schema, registered variable identifiers, exact rational coefficients, normalized relation kinds, input bounds, and a resource envelope. Returned certificates may reference only registered expressions and hypotheses. The Lean side reconstructs the original semantics from its own registry.
+
+The parser must reject malformed dimensions, duplicate or noncanonical monomials when canonical form is required, negative exponents, oversized integers, unknown references, invalid tree splits, and unsupported certificate variants. It should not use \code{eval}, run a returned script, load arbitrary shared libraries, or trust a theorem name supplied by the external solver.
+
+The packaged JSON decoder demonstrates modest checks on dimensions, sizes, rational encodings, and certificate structure. It is not a hardened sandbox. In production, enforce limits \emph{before} expensive polynomial expansion as well as after it, and isolate search processes from the proof-checking process. A denial of service is not a soundness failure, but it still makes a tactic unusable.
+
+\section{Trust: what exactly is being checked?}
+
+\subsection{Three distinct layers}
+
+It is essential to distinguish mathematical certificate soundness, software correctness of a Python checker, and a proof accepted by Lean. The propositions in this report explain why the certificates imply the desired statements. Tests provide evidence about the Python implementation. Neither alone supplies a Lean theorem. A completed tactic must reconstruct a Lean proof or use a formally verified checker whose result is established inside Lean.
+
+For the prototype, \code{python -S verify\_certificates.py} rechecks all 198 stored certificates without loading site packages. This demonstrates independence from the numerical and symbolic search libraries. It does not eliminate trust in Python, the handwritten checker, or the host execution environment, and is not described as kernel verification.
+
+\subsection{Axiom auditing is part of acceptance}
+
+The Lean kernel verifies derivations relative to the axioms they use. A strict automation policy should therefore inspect the transitive axiom dependencies of the final proof and its auxiliary declarations. A practical whitelist may allow the project's usual logical axioms, such as propositional extensionality, quotient soundness, and classical choice when permitted, while rejecting admitted proofs and compiler-result axioms.
+
+The current tactic reference explicitly documents that \code{native\_decide} and \code{bv\_decide} rely on native code generation and associated trusted results. Thus ``the SAT solver returns a checked certificate'' does not by itself mean ``no compiler trust is added''. \forge{} should put that route behind an opt-in trust mode rather than enabling it under a kernel-only label~\cite{tacticref}.
+
+A kernel-only bitvector route would require replaying a supported certificate checker through a reduction/proof mechanism that does not introduce native-result axioms, and measuring the resulting cost. That route is proposed, not implemented here. A project willing to accept native-code trust can use the existing worker, provided the trust profile is visible in the trace and output metadata.
+
+\subsection{Diagnostic holes are not accepted proofs}
+
+The inspected \grind{} configuration includes an option concerning admitted branches in trace-oriented diagnostics~\cite{grindconfig}. That is not a claim that ordinary successful \grind{} proofs are unsound. It is a reminder that a coordinator must never mistake a diagnostic artifact for a finished proof. The root declaration's dependencies must be checked for admitted terms even when an inner tool reports a successful diagnostic operation.
+
+The candidate Lean files in this archive deliberately contain no admitted theorem bodies or new oracle axioms. Because they were not compiled here, their status remains \emph{candidate source}, not ``kernel checked''. The distinction is recorded in the README and status metadata.
+
+\subsection{The proof-cost budget}
+
+Search can produce a valid but impractically large certificate. Track certificate term count, proof-DAG size, replay time, and axiom-audit time. Share repeated polynomial normalizations and repeated nonnegativity proofs. Prefer sparse certificates and small rational coefficients when several valid certificates are available, but never alter a certificate approximately merely to reduce its size.
+
+When a proof is rejected for size or replay budget, return a useful \unknown{} diagnostic and preserve the candidate certificate as an optional debugging artifact. Do not accept a partial proof or silently raise the trust level to finish the goal.
+
+\section{Executed experiments}
+
+\subsection{Environment and reproducibility}
+
+The Python experiments ran under Python 3.13.5 on the Linux environment described in \code{results/experiments.json}, using NumPy 2.3.5, SciPy 1.17.0, SymPy 1.14.0, and pytest 9.0.2. These are the versions actually executed, not the versions advertised by the latest online documentation. The certificate checkers use exact rational arithmetic.
+
+No \code{lean}, \code{lake}, or \code{elan} executable was available in the environment. Direct network access from the execution container was also unavailable, so no local Lean installation or compilation is claimed. Public documentation and GitHub sources were inspected through the available research tools. The candidate replay project pins Lean v4.34.0 and Mathlib commit
+\begin{center}\small\ttfamily
+1cf325a0cf67aca2b04d76b5380ff6a9e410aefa
+\end{center}
+whose \code{lean-toolchain} file specifies that Lean version~\cite{mathlibpin}. Optional Aesop or Duper integration is not part of this replay project.
+
+\subsection{Unit, mutation, and independent tests}
+
+The final pytest run reports \textbf{275 passed}. These are test instances, not 275 Lean theorems. Some tests contain several assertions. The suite covers exact arithmetic identities, rational quadratic decompositions, finite-cone repair, conditional certificates, Bernstein coverage, recurrence formulas, affine witnesses, univariate multiplicities, invalid inputs, and explicit \unknown{} cases.
+
+Mutation checks change targets, weights, hypotheses, recurrence base terms, affine offsets, Bernstein split points, child nodes, claimed bounds, and Sturm chains. The checker must reject such changes when they invalidate the certificate. Independent SymPy tests reconstruct Bernstein expansions symbolically, expand quadratic certificates, and compare univariate root counts. These cross-checks reduce dependence on one implementation's internal representation, but do not amount to a formal verification of the code.
+
+The tests also preserve limitations as regression cases. A degree-limited recurrence search can fail on a valid higher-degree answer. Integer affine synthesis rejects a merely rational witness. Bernstein-only search fails at a non-dyadic interior zero. A higher-degree polynomial is outside the exact quadratic worker. Returning \unknown{} in these situations is expected behavior.
+
+\subsection{Constructed component benchmark}
+
+The benchmark contains 198 deterministic instances. Many are generated from known certificate families by construction, and the same mechanism families are used in tests. There is no held-out theorem corpus. Their purpose is to establish reproducibility, exercise the search-to-check interfaces, and expose the effect of specific mechanisms, not estimate performance on Mathlib.
+
+Each case is searched three times after numerical-library warm-up. Table~\ref{tab:results} reports the median of the per-case median search times and the corresponding explicit recheck times. A search may already perform internal validation, so the recheck column is not the amount of checking hidden inside the search column. These are local Python timings, not Lean compilation or kernel-checking times.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Component & Certified & Ablation & Search ms & Recheck ms \\
+\midrule
+Quadratic SOS & 60/60 & 1 & 0.864 & 0.701 \\
+Finite cone LP & 17/17 & 0 & 1.699 & 0.295 \\
+Bernstein box & 18/18 & 1 & 0.685 & 0.389 \\
+Polynomial recurrence & 33/33 & --- & 2.513 & 0.403 \\
+Integral affine witness & 40/40 & --- & 0.074 & 0.027 \\
+Univariate with zeros & 30/30 & 0 & 1.930 & 0.505 \\
+\bottomrule
+\end{tabular}
+\caption{Executed Python mechanism experiments. Ablations are restricted versions of these prototype mechanisms, \textbf{not \grind{}}. A dash means no ablation was run.}
+\label{tab:results}
+\end{table}
+
+The quadratic ablation only recognizes an expanded nonnegative combination of even monomials. The finite-cone ablation removes richer square candidates or, for the domain example, the hypothesis products. The Bernstein ablation disallows subdivision. The univariate ablation runs dyadic Bernstein search to depth 12 without factorization. These are deliberately narrow mechanism tests, not competitive theorem-prover baselines.
+
+All returned benchmark certificates are stored in \code{results/certificates.json}. A separate run of the standard-library-only decoder and checker accepted \textbf{198/198}. Raw per-instance measurements, certificate sizes, leaf counts where applicable, and family summaries are included. Re-running the script will change timings but should reproduce the algebraic outcomes.
+
+\subsection{What the results establish}
+
+They establish that the supplied implementations actually synthesize certificates in six distinct fragments; that certificate replay is separable from the search libraries; that the specified mutation tests are rejected; and that the exact-zero-aware worker solves examples where the chosen subdivision-only mechanism is structurally insufficient.
+
+They do \emph{not} establish that \forge{} is implemented as a Lean tactic, that any candidate Lean script compiles, that the certificates are checked by Lean, that the methods outperform existing Lean tactics, or that their success rate transfers to user developments. Those claims require different experiments. The system design is intended to produce substantially more capable automation, but the measured evidence here is component-level.
+
+\section{How to evaluate an actual Lean implementation fairly}
+
+\subsection{Baselines and information access}
+
+At minimum compare stock \grind{}, tuned \grind{} with explicit budgets and relevant suggestion settings, a simple public-tactic portfolio, and the full \forge{} system. On suitable subsets include Aesop, \code{nlinarith}, \code{omega}, and Duper where they are applicable. The comparison should not handicap \grind{} by withholding library annotations that the new tactic receives.
+
+Use the same imports, local context, theorem statement, typeclass environment, and available premise universe. If the new system performs premise retrieval, provide a matched retrieval condition to the baseline or report the retrieval effect separately. Do not compare stock search time to replay of a certificate precomputed by the new method: either count that search cost or label the experiment as replay-only.
+
+\subsection{A useful corpus design}
+
+Build a mixture of existing development goals and newly written examples. Stratify by recursive proofs, arithmetic inequalities, existential constructions, equality-plus-arithmetic interactions, and already-easy baseline goals. Include valid but unsupported problems and false conjectures to exercise safe failure.
+
+Split by theorem dependency families or development modules, not random near-duplicate statements. Freeze retrieval indexes and policy tuning before the held-out run. Exclude the target theorem, its equivalent aliases, and direct answers introduced by the benchmark harness from the premise universe. Imported mathematical theorems that genuinely belong to the environment are allowed, but both systems must have the same opportunity to use them.
+
+The synthetic examples in this archive are useful unit tests and regression tests. They should not become the only evidence for a broad claim of mathematical automation progress.
+
+\subsection{Resources and metrics}
+
+Report total CPU time, wall time, peak memory, heartbeats where relevant, external-process time, replay time, proof size, and axiom dependencies. Distinguish cold import costs from warm elaboration costs. Run methods in isolated processes so a previous theorem's auxiliary declarations and caches do not leak into another method's state.
+
+The primary outcome is the number of accepted proofs under an identical total resource budget. Report paired wins and losses, not just total solved counts. Use paired confidence intervals or a paired test for success differences, and inspect regressions by problem family. For times, use budget curves or censored-runtime summaries rather than averaging only the successful cases and ignoring timeouts.
+
+Compatibility mode has a different question: how much additional resource rescues failures without replacing the successful baseline run? Plot rescue coverage against that \emph{additional} budget. Never present its success-set-preservation property as an equal-cost performance theorem.
+
+\subsection{Ablations that would test the actual design}
+
+Remove one capability at a time: backward obligation production, induction generalization, affine witnesses, hidden-quadratic certificates, hypothesis-product cones, Bernstein subdivision, zero-aware univariate search, cross-worker fact exchange, and relevance-based scheduling. In particular, compare a noncommunicating portfolio with the same workers against the shared-fact coordinator. That experiment tests whether integration, rather than just adding more solvers, delivers the intended benefit.
+
+A possible engineering acceptance gate is a material positive rescue rate on a preregistered held-out set while maintaining a controlled regression rate on the full corpus. A numerical threshold should be selected for the intended workload before running the test. This report does not predict or claim a particular percentage improvement.
+
+\section{Implementation sequence and acceptance gates}
+
+\subsection{Milestone 1: trustworthy orchestration}
+
+Implement the frontend, deterministic compatibility mode, full state rollback, worker contracts, and axiom-policy audit. Add an end-to-end test where a deliberately malformed proof or admitted theorem is rejected. Add a regression test showing that a failed branch cannot leak a local equality into its sibling. At this stage, only existing proof-producing leaf tactics need run.
+
+\subsection{Milestone 2: exact algebraic replay}
+
+Implement typed reification and cone replay in Lean. Port or call the Python quadratic and finite-cone oracles through a bounded data protocol. Compile the generated examples and replace any fragile tactic scripting with direct theorem applications where practical. Acceptance requires successful Lean checking of every claimed end-to-end example, mutation rejection at the data boundary, and recorded axiom dependencies.
+
+This stage can already add useful nonlinear facts to a stock \grind{} leaf. It need not wait for a complete custom induction planner or general SDP search.
+
+\subsection{Milestone 3: structural planning and witnesses}
+
+Add explicit theorem-application obligations, affine witnesses, and bounded induction with dependency-directed generalization. Implement the accumulator example, natural-number polynomial recurrences, and a small family of recursive data-structure proofs. Check that synthesized lemmas are proved before they are shared and that failed structural alternatives restore the original goal.
+
+An induction ``success'' should include the selected principle and a reconstructed motive in its replay trace. A witness ``success'' should include the witness term and every bound, integrality, and typeclass obligation needed for it.
+
+\subsection{Milestone 4: domain-aware positivity}
+
+Formalize the Bernstein coefficient and coverage rules, then add compact-box certificates. Integrate a verified Sturm/root-count result or prove the required checker soundness theorem before accepting the univariate certificates in Lean. The univariate part is a substantial verification task and should not be hidden behind an unchecked foreign call.
+
+The initial explicit 32-leaf replay can validate the Bernstein search-to-source path, but production acceptance should prefer a reusable checked certificate theorem over a large amount of duplicated tactic text when that improves proof size and reliability.
+
+\subsection{Milestone 5: efficient cooperation}
+
+Add incremental fact subscriptions, proof-DAG sharing, and the version-pinned \grind{} adapter. Implement bound-derived product envelopes and target-driven certificate candidates. Measure whether repeated leaf restarts are a significant cost before investing in invasive internal hooks. Keep a terminal-tactic fallback so a Lean upgrade need not disable the entire system.
+
+\subsection{Milestone 6: optional broader search}
+
+Only after the preceding layers are reliable, add Duper premise search, SDP proposals with exact reconstruction, or a learned ranking policy. Learned components may choose which candidate to try; they do not decide which statements are accepted. Native-trust bitvector workers remain opt-in. Every optional dependency has its own toolchain and feature-compatibility check.
+
+\section{Reproducing and extending this package}
+
+\subsection{Python commands}
+
+From the archive root, create an isolated Python environment and install the pinned dependencies in \code{prototype/requirements.txt}. Then run:
+
+\begin{lstlisting}
+cd prototype
+python -m pytest -q
+python run_experiments.py
+python -S verify_certificates.py
+python emit_lean.py
+\end{lstlisting}
+
+The first command exercises the final test suite. The second overwrites the experiment JSON/CSV files with new timings. The third rechecks stored certificates without numerical or symbolic third-party libraries. The last regenerates the uncompiled Lean candidates. The exact checkers can also be imported directly without installing SciPy or SymPy; only the corresponding search functions import those libraries.
+
+\subsection{Lean candidate compilation}
+
+In an environment with the pinned Lean toolchain available, the candidate project can be prepared and checked with:
+
+\begin{lstlisting}
+cd lean
+lake update
+lake build
+\end{lstlisting}
+
+These commands were \emph{not} run in the authoring environment. The project imports Mathlib and may need its dependencies and compiled artifacts before building. The supplied \code{run\_checks.py} records a local build result without overwriting the original execution-status record. A failed compilation is evidence to fix the candidate source, not permission to replace a proof with an admission.
+
+The generated candidates cover a hidden quadratic certificate, seven power-sum recurrence proofs, an integral affine witness, a 32-leaf Bernstein proof, an accumulator induction, a cross-theory equality, and a factored univariate sign proof. The latter is not a generic Lean replay of the Sturm checker.
+
+\subsection{Archive map}
+
+\begin{lstlisting}
+article/forge.tex                 -- main article source
+article/forge.pdf                 -- rendered article
+article/sections/                -- editable section sources
+prototype/forge/                 -- exact representations and algorithms
+prototype/tests/                 -- unit, mutation, independent tests
+prototype/run_experiments.py     -- deterministic benchmark generator
+prototype/verify_certificates.py -- standard-library-only recheck
+prototype/emit_lean.py           -- candidate Lean source generator
+lean/                           -- pinned, uncompiled replay project
+results/                        -- actual logs, data, certificates, status
+README.md                       -- instructions and limitations
+\end{lstlisting}
+
+\Needspace{24\baselineskip}
+\section{Conclusion}
+
+The most promising route beyond \grind{} is not to replace its existing equality and arithmetic infrastructure. It is to surround that infrastructure with proof-structure search and feed it new, independently validated mathematical consequences. The concrete components proposed here cover three complementary kinds of progress: discovering a certificate, discovering an invariant, and constructing a witness.
+
+The arithmetic design is deliberately broader than one SOS tactic. Exact quadratic decomposition handles hidden global quadratic positivity. Finite cones exploit useful factors and hypotheses. Bernstein trees exploit compact domains. Square-factor/Sturm certificates handle univariate zeros that obstruct subdivision. Polynomial recurrence and affine-witness synthesis show how exact algebra can generate the structure of a proof, not only close its final arithmetic goal.
+
+The supplied code makes these mechanisms testable: 275 test instances passed, 198 constructed problems yielded certificates, and every stored certificate was rechecked without the search libraries. The complete Lean tactic, generic Lean certificate checkers, and performance advantage over \grind{} remain implementation and evaluation work, explicitly separated from the completed experiments. The result is a concrete, falsifiable design for substantially stronger automation, with working algorithmic building blocks and a precise account of what still has to be proved and measured.

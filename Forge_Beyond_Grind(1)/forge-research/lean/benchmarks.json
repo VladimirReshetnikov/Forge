@@ -1,0 +1,27 @@
+[
+  {
+    "id": "cyclic_quadratic",
+    "statement": "(x y z : Real) : 0 <= x^2+y^2+z^2-x*y-y*z-z*x",
+    "prelude": ""
+  },
+  {
+    "id": "box_product",
+    "statement": "(x : Real) (h0 : 0 <= x) (h1 : x <= 1) : x^2 <= x",
+    "prelude": ""
+  },
+  {
+    "id": "simplex",
+    "statement": "(x y : Real) (h : x+y=1) : (1:Real)/2 <= x^2+y^2",
+    "prelude": ""
+  },
+  {
+    "id": "residue_witness",
+    "statement": "(n : Int) : Exists (fun k : Int => n <= k ∧ k < n+5 ∧ k % 5 = 2)",
+    "prelude": ""
+  },
+  {
+    "id": "qrev_custom",
+    "statement": "(xs acc : List Nat) : qrev xs acc = app (rev xs) acc",
+    "prelude": "def app : List Nat -> List Nat -> List Nat\n| [], ys => ys\n| x :: xs, ys => x :: app xs ys\ndef rev : List Nat -> List Nat\n| [] => []\n| x :: xs => app (rev xs) [x]\ndef qrev : List Nat -> List Nat -> List Nat\n| [], acc => acc\n| x :: xs, acc => qrev xs (x :: acc)\n"
+  }
+]

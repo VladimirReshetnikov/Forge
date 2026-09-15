@@ -1,0 +1,575 @@
+[
+  {
+    "name": "append_assoc",
+    "certificate": {
+      "equation": {
+        "left": {
+          "op": "app",
+          "args": [
+            {
+              "op": "app",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L"
+                },
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            },
+            {
+              "op": "var",
+              "args": [],
+              "name": "zs",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        },
+        "right": {
+          "op": "app",
+          "args": [
+            {
+              "op": "var",
+              "args": [],
+              "name": "xs",
+              "sort": "L"
+            },
+            {
+              "op": "app",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L"
+                },
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "zs",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        }
+      },
+      "variable": "xs",
+      "base": {
+        "left": [
+          {
+            "rule": "def.app.nil",
+            "path": [
+              0
+            ]
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.app.nil",
+            "path": []
+          }
+        ]
+      },
+      "step": {
+        "left": [
+          {
+            "rule": "def.app.cons",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "def.app.cons",
+            "path": []
+          },
+          {
+            "rule": "local.IH",
+            "path": [
+              1
+            ]
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.app.cons",
+            "path": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "append_right_nil",
+    "certificate": {
+      "equation": {
+        "left": {
+          "op": "app",
+          "args": [
+            {
+              "op": "var",
+              "args": [],
+              "name": "xs",
+              "sort": "L"
+            },
+            {
+              "op": "nil",
+              "args": [],
+              "name": "",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        },
+        "right": {
+          "op": "var",
+          "args": [],
+          "name": "xs",
+          "sort": "L"
+        }
+      },
+      "variable": "xs",
+      "base": {
+        "left": [
+          {
+            "rule": "def.app.nil",
+            "path": []
+          }
+        ],
+        "right": []
+      },
+      "step": {
+        "left": [
+          {
+            "rule": "def.app.cons",
+            "path": []
+          },
+          {
+            "rule": "local.IH",
+            "path": [
+              1
+            ]
+          }
+        ],
+        "right": []
+      }
+    }
+  },
+  {
+    "name": "reverse_append",
+    "certificate": {
+      "equation": {
+        "left": {
+          "op": "rev",
+          "args": [
+            {
+              "op": "app",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L"
+                },
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        },
+        "right": {
+          "op": "app",
+          "args": [
+            {
+              "op": "rev",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            },
+            {
+              "op": "rev",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        }
+      },
+      "variable": "xs",
+      "base": {
+        "left": [
+          {
+            "rule": "def.app.nil",
+            "path": [
+              0
+            ]
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.rev.nil",
+            "path": [
+              1
+            ]
+          },
+          {
+            "rule": "append_right_nil",
+            "path": []
+          }
+        ]
+      },
+      "step": {
+        "left": [
+          {
+            "rule": "def.app.cons",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "def.rev.cons",
+            "path": []
+          },
+          {
+            "rule": "local.IH",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "append_assoc",
+            "path": []
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.rev.cons",
+            "path": [
+              1
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "reverse_involution",
+    "certificate": {
+      "equation": {
+        "left": {
+          "op": "rev",
+          "args": [
+            {
+              "op": "rev",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        },
+        "right": {
+          "op": "var",
+          "args": [],
+          "name": "xs",
+          "sort": "L"
+        }
+      },
+      "variable": "xs",
+      "base": {
+        "left": [
+          {
+            "rule": "def.rev.nil",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "def.rev.nil",
+            "path": []
+          }
+        ],
+        "right": []
+      },
+      "step": {
+        "left": [
+          {
+            "rule": "def.rev.cons",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "reverse_append",
+            "path": []
+          },
+          {
+            "rule": "def.rev.cons",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "def.rev.nil",
+            "path": [
+              0,
+              0
+            ]
+          },
+          {
+            "rule": "def.app.nil",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "local.IH",
+            "path": [
+              1
+            ]
+          },
+          {
+            "rule": "def.app.cons",
+            "path": []
+          },
+          {
+            "rule": "def.app.nil",
+            "path": [
+              1
+            ]
+          }
+        ],
+        "right": []
+      }
+    }
+  },
+  {
+    "name": "revacc_spec",
+    "certificate": {
+      "equation": {
+        "left": {
+          "op": "revacc",
+          "args": [
+            {
+              "op": "var",
+              "args": [],
+              "name": "xs",
+              "sort": "L"
+            },
+            {
+              "op": "var",
+              "args": [],
+              "name": "acc1",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        },
+        "right": {
+          "op": "app",
+          "args": [
+            {
+              "op": "rev",
+              "args": [
+                {
+                  "op": "var",
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L"
+                }
+              ],
+              "name": "",
+              "sort": "L"
+            },
+            {
+              "op": "var",
+              "args": [],
+              "name": "acc1",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        }
+      },
+      "variable": "xs",
+      "base": {
+        "left": [
+          {
+            "rule": "def.revacc.nil",
+            "path": []
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.rev.nil",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "def.app.nil",
+            "path": []
+          }
+        ]
+      },
+      "step": {
+        "left": [
+          {
+            "rule": "def.revacc.cons",
+            "path": []
+          },
+          {
+            "rule": "local.IH",
+            "path": []
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.rev.cons",
+            "path": [
+              0
+            ]
+          },
+          {
+            "rule": "append_assoc",
+            "path": []
+          },
+          {
+            "rule": "def.app.cons",
+            "path": [
+              1
+            ]
+          },
+          {
+            "rule": "def.app.nil",
+            "path": [
+              1,
+              1
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "revacc_original",
+    "certificate": {
+      "equation": {
+        "left": {
+          "op": "revacc",
+          "args": [
+            {
+              "op": "var",
+              "args": [],
+              "name": "xs",
+              "sort": "L"
+            },
+            {
+              "op": "nil",
+              "args": [],
+              "name": "",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        },
+        "right": {
+          "op": "rev",
+          "args": [
+            {
+              "op": "var",
+              "args": [],
+              "name": "xs",
+              "sort": "L"
+            }
+          ],
+          "name": "",
+          "sort": "L"
+        }
+      },
+      "variable": "xs",
+      "base": {
+        "left": [
+          {
+            "rule": "def.revacc.nil",
+            "path": []
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.rev.nil",
+            "path": []
+          }
+        ]
+      },
+      "step": {
+        "left": [
+          {
+            "rule": "def.revacc.cons",
+            "path": []
+          },
+          {
+            "rule": "revacc_spec",
+            "path": []
+          }
+        ],
+        "right": [
+          {
+            "rule": "def.rev.cons",
+            "path": []
+          }
+        ]
+      }
+    }
+  }
+]

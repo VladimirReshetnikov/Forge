@@ -1,0 +1,68 @@
+{
+  "assertions_passed": 1680,
+  "bernstein": {
+    "adaptive_solved": 8,
+    "cases": 10,
+    "corruption_rejections": 7,
+    "expected_true_cases": 9,
+    "negative_case": "unknown, not certified",
+    "no_subdivision_solved": 3,
+    "nondyadic_boundary_case": "unknown at depth 12",
+    "suite_seconds": 0.3793794449999268
+  },
+  "cone": {
+    "basis_enrichment_control": "unknown -> checked_python",
+    "constructed_cases": 30,
+    "constructed_solved": 30,
+    "corruption_rejections": 5,
+    "curated_cases": 10,
+    "diagonal_solved": 0,
+    "full_solved": 9,
+    "pair_squares_solved": 4,
+    "suite_seconds": 0.8095524029999979
+  },
+  "environment": {
+    "lean_status": "NOT_RUN: no Lean executable available in this environment",
+    "machine": "x86_64",
+    "numpy": "2.3.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "scipy": "1.17.0",
+    "seed": 20260914,
+    "sympy": "1.14.0"
+  },
+  "horn": {
+    "corruption_rejections": 3,
+    "firing_budget": 100,
+    "random_graphs": 250,
+    "random_mode_comparisons": 500,
+    "sliced_solved": 12,
+    "suite_seconds": 0.10175215700007811,
+    "synthetic_problems": 12,
+    "unsliced_solved": 3
+  },
+  "induction": {
+    "corruption_rejections": 18,
+    "subject_selection": "supplied in this prototype",
+    "suite_seconds": 0.018826052999997955,
+    "theorems": 8,
+    "with_generalization": 8,
+    "without_generalization": 6
+  },
+  "interpretation": "Mechanism experiments and negative controls; not a Lean/grind comparison. Timings are single runs, not calibrated benchmarks.",
+  "polynomial_properties": {
+    "assertions": 481,
+    "random_polynomials": 120,
+    "suite_seconds": 0.7913127479999957
+  },
+  "quadratic": {
+    "constructed_cases": 60,
+    "constructed_solved": 60,
+    "curated_cases": 4,
+    "curated_solved": 4,
+    "negative_controls_rejected": 4,
+    "search": "exact rational symmetric pivoting; no numeric oracle",
+    "suite_seconds": 0.1714040379999915
+  },
+  "total_seconds": 2.2727205490000415
+}

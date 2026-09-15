@@ -1,0 +1,115 @@
+{
+  "kind": "sos",
+  "problem": {
+    "target": {
+      "variables": 2,
+      "terms": [
+        {
+          "powers": [
+            0,
+            2
+          ],
+          "numerator": 5,
+          "denominator": 7
+        },
+        {
+          "powers": [
+            0,
+            4
+          ],
+          "numerator": 2,
+          "denominator": 3
+        },
+        {
+          "powers": [
+            1,
+            1
+          ],
+          "numerator": -10,
+          "denominator": 7
+        },
+        {
+          "powers": [
+            2,
+            0
+          ],
+          "numerator": 5,
+          "denominator": 7
+        },
+        {
+          "powers": [
+            2,
+            2
+          ],
+          "numerator": -4,
+          "denominator": 3
+        },
+        {
+          "powers": [
+            4,
+            0
+          ],
+          "numerator": 2,
+          "denominator": 3
+        }
+      ]
+    },
+    "ge": [],
+    "eq": []
+  },
+  "certificate": {
+    "positive": [
+      {
+        "weight": "5/7",
+        "square": {
+          "variables": 2,
+          "terms": [
+            {
+              "powers": [
+                0,
+                1
+              ],
+              "numerator": 1,
+              "denominator": 1
+            },
+            {
+              "powers": [
+                1,
+                0
+              ],
+              "numerator": -1,
+              "denominator": 1
+            }
+          ]
+        },
+        "assumptions": []
+      },
+      {
+        "weight": "2/3",
+        "square": {
+          "variables": 2,
+          "terms": [
+            {
+              "powers": [
+                0,
+                2
+              ],
+              "numerator": 1,
+              "denominator": 1
+            },
+            {
+              "powers": [
+                2,
+                0
+              ],
+              "numerator": -1,
+              "denominator": 1
+            }
+          ]
+        },
+        "assumptions": []
+      }
+    ],
+    "ideal": []
+  }
+}

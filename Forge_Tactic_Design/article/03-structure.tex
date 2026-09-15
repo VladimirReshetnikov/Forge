@@ -1,0 +1,262 @@
+\section{Induction as a search action}
+
+\subsection{Generate a justified induction problem}
+
+More ground reasoning is not a substitute for a structural argument. Forge
+should inspect recursive definitions occurring in the goal, their equation
+theorems, and the arguments on which recursive calls decrease. This yields a
+small, ranked set of induction candidates. Structural induction on a list or
+natural number is the first case; a function-specific induction theorem or a
+well-founded recursor is used when the recursion requires it.
+
+The algorithm must preserve the distinction between discovering an induction
+hypothesis and assuming an arbitrary stronger assertion. A generalization
+creates a \emph{new theorem to prove}, with its own base and step obligations.
+Only the checked induction principle closes that theorem. An open induction
+branch cannot contribute its conjectured invariant as a global fact.
+
+A concrete procedure is:
+\begin{enumerate}
+\item Read the target and selected hypotheses as a dependency graph. Identify
+recursive calls and the local variables in their changing argument positions.
+\item Rank induction variables using occurrence in decreasing arguments,
+recursor size, and expected branch count. Start with one variable, then bounded
+pairs or a function-specific induction principle.
+\item Form a generalization set from variables changed by the recursive calls.
+Take its dependent-type closure, so reverting a variable does not strand local
+declarations whose types depend on it.
+\item Revert the selected declarations, apply the actual recursor or induction
+theorem, introduce branch parameters and induction hypotheses, and unfold only
+relevant equation lemmas.
+\item Solve the resulting AND-branches cooperatively. On failure, retain the
+residual goal to suggest a wider generalization or a missing auxiliary lemma,
+but do not reuse the unproved assertion as evidence.
+\end{enumerate}
+
+A ``safe'' transformation is not necessarily cheap. Even semantically
+appropriate induction can create an enormous proof search. Put a hard bound
+on branch count and total candidate recursors before invoking it.
+
+\subsection{Worked accumulator example}
+
+Define, mathematically,
+\begin{align*}
+ \operatorname{revAcc}([],a)&=a,\\
+ \operatorname{revAcc}(x::s,a)&=\operatorname{revAcc}(s,x::a).
+\end{align*}
+The natural target is
+$\operatorname{revAcc}(s,[])=\operatorname{reverse}(s)$.
+A weak induction hypothesis talks only about the accumulator $[]$, whereas the
+recursive call uses $x::a$. It does not match.
+
+The changed-argument analysis identifies the accumulator, suggesting
+\begin{equation}\label{eq:rev-inv}
+ \forall a,\quad \operatorname{revAcc}(s,a)
+       =\operatorname{reverse}(s)\mathbin{+\!+}a.
+\end{equation}
+The empty-list case follows from the equations. In the cons case, the induction
+hypothesis instantiated at $x::a$ gives
+\[
+ \operatorname{revAcc}(x::s,a)
+ =\operatorname{reverse}(s)\mathbin{+\!+}(x::a).
+\]
+The recursive equation for reverse and associativity of append identify this
+with $\operatorname{reverse}(x::s)\mathbin{+\!+}a$.
+Specializing the now-proved generalized theorem at $a=[]$ gives the original
+target. The complete proof idea is the quantified accumulator invariant, not
+an unexplained instruction to ``try induction harder.''
+
+The library may already contain a theorem that makes this example trivial.
+That does not invalidate the generalization mechanism, but it changes the
+benchmark. Tests of structural synthesis must use fresh definitions or control
+which equivalent high-level lemmas are available. Never count retrieval of an
+already-proved target as evidence that induction synthesis worked.
+
+\subsection{Failure-guided auxiliary lemmas}
+
+After an unsuccessful step, compare the recursive call with the induction
+hypothesis. Mismatched accumulator arguments suggest generalization;
+mismatched compositions suggest a fusion lemma; polynomial differences suggest
+an invariant template. A candidate lemma is ranked by term size, number of new
+quantifiers, and whether its recursive calls have a clear decreasing argument.
+Try at most a bounded number at each size.
+
+For a function $f$ with an accumulator update $a\mapsto T(a,x)$, templates can
+include
+\[
+ f(s,a)=H(s,a),\qquad
+ \mu(f(s,a))=\mu(a)+J(s),\qquad
+ R(f(s,a),s,a).
+\]
+The template vocabulary is built from the goal, equation theorems, and a small
+approved operator set. The resulting lemma is an OR-alternative with a separate
+AND proof tree. If its proof closes, inject its specialization into the parent.
+Otherwise discard it or widen the budget. This avoids mutually recursive
+``helper lemmas'' becoming a circular proof.
+
+\section{Polynomial invariant synthesis with exact validation}
+
+\subsection{From recurrence data to a theorem candidate}
+
+For a state transition $T$ and starting state $s_0$, an equality invariant
+$I(s)=0$ is justified by
+\[
+ I(s_0)=0,\qquad I(T(s))=I(s).
+\]
+The second identity is a convenient sufficient condition. More generally it
+would suffice to prove $I(s)=0\Rightarrow I(T(s))=0$, but that is not the
+certificate language implemented here.
+
+The prototype considers additive polynomial recurrences
+\begin{equation}\label{eq:additive}
+ n'=n+1,\qquad s'=s+p(n),\qquad (n_0,s_0)=(0,c),
+\end{equation}
+where $p\in\Q[n]$. It proposes a polynomial $Q(n)$ and sets
+$I(n,s)=s-Q(n)$. The certificate obligations become
+\begin{equation}\label{eq:fdiff}
+ Q(0)=c,\qquad Q(n+1)-Q(n)=p(n).
+\end{equation}
+Given a degree bound $d$, sampling the recurrence at $d+1$ points and
+interpolating suggests $Q$. \emph{Sampling is only discovery.} The validator
+substitutes the polynomial transition into $I$ and compares exact coefficient
+maps for the universal identity.
+
+A production synthesizer should also support direct coefficient solving.
+Write $Q(n)=\sum_{i=0}^{d}c_i n^i$, expand \eqref{eq:fdiff}, and solve the
+resulting rational linear system. This removes numerical concerns and avoids
+a dependence on the availability of inexpensive evaluation samples. The
+interpolation implementation was chosen here because it makes the separation
+between plausible evidence and universal checking particularly explicit.
+
+\subsection{Example: sum of squares}
+
+For $p(n)=(n+1)^2$ and $c=0$, the discovered expression is
+\[
+ Q(n)=\frac{n(n+1)(2n+1)}6.
+\]
+Equivalently take the denominator-cleared invariant
+\[
+ J(n,s)=6s-n(n+1)(2n+1).
+\]
+Its step difference is
+\begin{align*}
+ J(n+1,s+(n+1)^2)-J(n,s)
+ &=6(n+1)^2\\
+ &\quad-(n+1)(n+2)(2n+3)+n(n+1)(2n+1)\\
+ &=0.
+\end{align*}
+Its base value is zero. Ordinary induction on the number of iterations
+therefore proves the equality for every reachable state. No extrapolation from
+finite data is involved after the two identities have been checked.
+
+The tests include a hostile interpolation example: an added high-degree term
+vanishes at all sampled points but violates the recurrence identity elsewhere.
+The exact validator rejects the proposed invariant. This is an essential test
+for any counterexample-guided or sample-based synthesis component.
+
+\begin{proposition}[Invariant certificate soundness]
+Let $s_{k+1}=T(s_k)$. If $I(s_0)=0$ and $I\circ T=I$, then
+$I(s_k)=0$ for every $k\in\N$.
+\end{proposition}
+\begin{proof}
+The claim for $k=0$ is the base condition. If $I(s_k)=0$, then
+$I(s_{k+1})=I(T(s_k))=I(s_k)=0$. Apply induction.
+\end{proof}
+
+\subsection{Generalizing the invariant engine}
+
+For a polynomial state vector $\vec x$, use the template
+\[
+ I(\vec x)=\sum_{|\alpha|\leq d}c_\alpha\vec x^\alpha.
+\]
+Because $T$ is fixed, the coefficients of $I(T(\vec x))-I(\vec x)$ are linear
+in the unknown $c_\alpha$. A rational nullspace computation discovers conserved
+polynomials, with the additional linear constraint $I(s_0)=0$. Reject the
+identically zero invariant and rank remaining candidates by relevance to the
+postcondition. This is an immediately implementable extension, although the
+shipped discovery routine handles only \eqref{eq:additive}.
+
+A more expressive certificate permits a vector of invariant equalities:
+\[
+ I_i(T(\vec x))=\sum_j h_{ij}(\vec x)I_j(\vec x).
+\]
+This proves preservation of their common zero set. Bounded-degree multiplier
+search reduces the check to exact identities, but jointly discovering the
+$I_j$ and multipliers is no longer the same easy linear problem. Separate
+candidate generation from multiplier certification, or fix one side at a time;
+do not describe the joint bilinear search as linear algebra.
+
+Inequality invariants require base and preservation \emph{inequalities}. The
+PolyCone plugin can certify these under transition guards and existing
+invariants. Termination remains a different obligation: an invariant does not
+prove that a loop or recursive definition terminates. For already accepted
+Lean definitions, use their existing recursion principles; for a proposed new
+recursive program, termination must be proved separately.
+
+\section{Existential witnesses and counterexample-guided synthesis}
+
+\subsection{Construct witnesses in the correct scope}
+
+For a goal $\exists y:\tau,\ P(\vec x,y)$, the useful output is a term $t$ of
+\emph{exactly} type $\tau$ and a proof of $P(\vec x,t)$. Search begins with
+terms already in scope, constructor applications, affine expressions suggested
+by equations, and terms built from the relevant theorem signatures. Candidate
+terms must not depend on variables introduced inside a later branch or a
+future universal quantifier.
+
+For
+\[
+ \forall n\in\N,\quad\exists m\in\N,\quad m>n\ \wedge\ m\equiv0\pmod2,
+\]
+a bounded affine grammar can propose $m=2(n+1)$. The remaining proof obligations
+are natural-number arithmetic and divisibility. Construct the existential
+proof explicitly after those obligations close. A real-valued LP solution for
+$m$ would not be a natural-number witness; domain checks are part of the
+construction, not an optional verification pass.
+
+\subsection{A concrete CEGIS loop}
+
+Counterexample-guided inductive synthesis (CEGIS) alternates candidate proposals
+and attempted refutations of their universal correctness. For an affine
+integer grammar $t(\vec x)=c_0+\sum_i c_i x_i$, enumerate bounded integer
+coefficient vectors or ask an integer solver for coefficients that satisfy a
+finite sample set. Once a candidate is found, ask the cooperative prover to
+establish $\forall\vec x,\ P(\vec x,t(\vec x))$ under the actual assumptions.
+
+\begin{Code}
+synthesize(grammar, samples, goal, budget):
+  repeat within term-size and coefficient bounds:
+    t := candidate fitting every validated sample
+    result := prove_universally(goal specialized at t)
+    if result is a checked proof:
+      return explicit witness t and proof
+    if result contains a validated counterexample:
+      add it to samples
+    otherwise:
+      schedule a different candidate or a larger proof budget
+  return unknown
+\end{Code}
+
+An external model is not automatically a Lean counterexample. Recheck its
+values against the encoded operations and assumptions, especially casts,
+truncating subtraction, division, and finite types. A spurious model should
+refine the encoding or be ignored; it must not eliminate a valid candidate.
+Likewise, failure to prove a candidate does not mean it is false.
+
+This module is specified, not implemented in the package. A reasonable first
+implementation restricts the grammar to constructors, affine arithmetic, and
+finite tuples, reusing \code{omega}, \code{linarith}, and \grind\ for residual
+proofs. The current reference explicitly does not describe \code{omega} as a
+complete procedure for every integer-linear problem \cite{lean-tactics}; the
+integration should preserve ordinary tactic failure semantics.
+
+\subsection{Models guide search; they do not certify theorems}
+
+The same discipline applies to learned premise selection, algebraic pattern
+recognition, and suggestions from a computer algebra system. A proposed
+factorization becomes useful only after the exact identity is proved. A
+proposed induction invariant becomes useful only after base and preservation
+are proved. A proposed witness becomes useful only after its universally
+scoped specification is proved. This uniform boundary makes the architecture
+compatible with more ambitious search methods without enlarging the logical
+trust base merely because a search component is complicated.

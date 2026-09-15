@@ -1,0 +1,68 @@
+{
+  "certificate": {
+    "cone": [
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                2
+              ],
+              "1"
+            ],
+            [
+              [
+                2,
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1"
+      }
+    ],
+    "ideal": []
+  },
+  "diagnostics": {
+    "columns": 36,
+    "lp_status": 0,
+    "mutation_rejections": 2,
+    "name": "quartic-square",
+    "nonzero_columns": 1,
+    "rows": 15,
+    "seconds": 0.19344351799986725,
+    "status": "certified"
+  },
+  "equality_assumptions": [],
+  "nonnegative_assumptions": [],
+  "target": {
+    "n": 2,
+    "terms": [
+      [
+        [
+          0,
+          4
+        ],
+        "1"
+      ],
+      [
+        [
+          2,
+          2
+        ],
+        "-2"
+      ],
+      [
+        [
+          4,
+          0
+        ],
+        "1"
+      ]
+    ]
+  }
+}

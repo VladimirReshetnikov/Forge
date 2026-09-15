@@ -1,0 +1,345 @@
+\section{Executed experiments and their interpretation}
+
+\subsection{Environment and reproducibility}
+
+The recorded run used Python 3.13.5 on Linux, NumPy 2.3.5, and SciPy 1.17.0.
+The sparse polynomial representation and all acceptance checks use Python's
+standard library, chiefly exact \code{Fraction} arithmetic. SciPy is used only
+for LP proposal generation. SymPy was available but is not needed by the
+supplied prototypes.
+
+The recorded seeds are 420 for recurrence cases, 421 for witnesses, 422 for
+square certificates, and 423 for Bernstein cases. The test suite uses separate
+fixed seeds for its randomized regression checks. The archive includes every
+accepted certificate and its stated problem, not just aggregate counts.
+
+No Lean executable was available, and an attempted toolchain acquisition did
+not succeed. Consequently no Lean tactic was run, no imported Lean library
+combination was compiled, and no kernel-checking time was measured. The file
+\code{lean/ReplayExamples.lean} is explicitly labeled uncompiled and is excluded
+from all success counts.
+
+\subsection{Results}
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Experiment family & Cases & Exact replays & Time (s) \\
+\midrule
+List induction and generalization & 6 & 6 & 0.005 \\
+Polynomial additive recurrences & 65 & 65 & 0.241 \\
+Affine witnesses with Farkas certificates & 63 & 63 & 0.352 \\
+Finite-dictionary square certificates & 40 & 40 & 0.648 \\
+Bernstein box certificates & 41 & 41 & 0.067 \\
+\midrule
+Total certificate cases & 215 & 215 & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The times are one local Python run, rounded from
+\code{results/results.json}. Each family includes its search and immediate
+checks; these are not independent hardware-normalized benchmark timings or
+predictions of Lean performance. The separate replay run verifies all 215
+stored certificates without redoing search.
+
+The list family contains four supplied seed statements with searched proofs,
+the synthesized accumulator specification, and the original specialized
+specification. Its six proof traces contain respectively 6, 3, 8, 10, 9, and
+5 rewrites. These are small proofs, as expected for a deliberately restricted
+language.
+
+The recurrence family comprises five named power sums and 60 seeded random
+polynomial increments with rational coefficients and rational initial values.
+It required 312 candidates in total. The exact step checks generated 247
+counterexamples before the 65 final certificates were accepted.
+
+The witness family comprises three named inequality problems, 40 problems
+whose equalities force affine witnesses, and 20 constructed polyhedral
+inequality problems. These exercise both the coefficient synthesis and the
+nonnegative multiplier checks. They are not an evaluation on arbitrary
+quantified formulas.
+
+The 40 square-certificate problems are \emph{constructed from the same finite
+dictionary used by the search}. Their 100\% success rate therefore tests
+implementation and rational reconstruction on that designed distribution;
+it must not be presented as general nonlinear proving coverage.
+
+The 41 Bernstein problems are strictly positive low-degree polynomials made
+from squares plus positive rational constants. Root-only checking certifies
+25. Subdivision certifies all 41, using 82 leaves in total and a maximum split
+depth of four. A full SOS solver or another tactic may also solve these
+problems; no comparative claim is made about them.
+
+\Needspace{10\baselineskip}
+\subsection{Ablations that demonstrate the mechanisms}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.32\textwidth}>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.33\textwidth}@{}}
+\toprule
+Problem / mechanism & Restricted attempt & Enabled mechanism \\
+\midrule
+\endhead
+Accumulator reverse & Induction with empty accumulator fixed: no proof. & Changing-argument generalization and typed RHS enumeration: checked proof. \\
+Universal strip $x+1\le y\le x+2$ & Constant witness template: no certificate. & Affine template: $y=x+1$, exactly checked. \\
+41 positive box polynomials & Root Bernstein coefficients: 25 certified. & Rational subdivision: 41 certified. \\
+Triangular-number interpolation trap & First four values agree with a false formula. & Exact induction-step identity rejects it. \\
+Diagonal square $(x-y)^2$ & Bernstein search at depth four: unknown. & Square certificate is available directly. \\
+\bottomrule
+\end{longtable}
+
+These ablations answer the question ``does the proposed mechanism do something
+that its restricted precursor does not?'' They do not answer ``how many more
+Mathlib goals does \Forge{} solve than \Grind{}?'' That second question requires
+an implemented Lean tactic and a controlled comparison.
+
+\subsection{Negative and adversarial tests}
+
+All 31 unittest methods passed. Several contain multiple seeded trials,
+including exact polynomial arithmetic, Bernstein reconstruction, recurrence
+identities, and semantic cross-checks of the list equations. The suite also
+rejects a false reverse identity, wrong-tail induction matching, an unknown
+or self-referential rule, a corrupt rewrite path, and ill-sorted terms.
+
+Arithmetic checks reject negative square weights, certificates attached to a
+changed target, omitted domain constraints, an incorrect witness coefficient,
+inexact witness-certificate values, and negative slacks. Partition checks
+reject missing children, boundary split points, and invalid axes. Strict
+positivity and weak nonnegativity are tested separately.
+
+The Motzkin polynomial
+\[
+x^4y^2+x^2y^4+1-3x^2y^2
+\]
+is a deliberate unsuccessful plain-square-dictionary case. No certificate is
+reported. The test is a regression boundary for this solver, not evidence
+that the polynomial is negative. Similarly, insufficient recurrence degree
+or insufficient grammar size returns no proof, and a depth-limited Bernstein
+failure remains unknown.
+
+\subsection{What the evidence does and does not establish}
+
+It establishes that the included programs ran, that the reported certificates
+passed their specified exact Python checks, and that the listed negative
+cases were rejected. Together with the mathematical arguments, it supports
+the feasibility of several workers and the usefulness of generalization,
+certificate synthesis, and subdivision in their stated fragments.
+
+It does not establish correctness of a Lean implementation that has not been
+written, completeness outside those fragments, robustness of a dependent-type
+reifier, improved performance on a representative corpus, or a measured
+advantage over current \Grind{}. There is also shared substrate between
+search and replay: both use the same term or polynomial representation.
+``Search-free replay'' is not the same as an independently implemented formal
+verification of that representation.
+
+\Needspace{9\baselineskip}
+\section{How to demonstrate genuine superiority over \Grind{}}
+
+\subsection{Freeze the comparison, including its theorem knowledge}
+
+Use a pinned Lean release, a compatible pinned Mathlib revision, fixed imported
+modules, and recorded backend versions. Preserve each source goal and its
+original hypotheses. Avoid accidentally making the tested theorem itself,
+a renamed duplicate, or a future theorem dependent on it available through
+library retrieval. This is especially important when benchmarks are extracted
+from an already compiled mathematical library.
+
+Compare ordinary \Grind{}, \Grind{} with explicit relevant equations/lemmas,
+and the current shared-state bit-vector route where applicable. Also compare
+Aesop, a simple tactic portfolio, and appropriate specialized tools such as
+SOS, Duper, or Lean-SMT. A system that wins only against an artificially weak
+baseline has not demonstrated the desired improvement.
+
+For structural problems, distinguish three input conditions: definitions only;
+a common relevant helper-lemma set; and an oracle-assisted set containing the
+handwritten proof's helper lemmas. The gap between the first two conditions
+measures lemma acquisition, while the last helps separate discovery failures
+from local proof failures.
+
+\subsection{The benchmark families}
+
+The most informative families are recursive data-structure theorems needing
+induction or changing accumulators; polynomial cost and invariant proofs;
+quantified statements needing new arithmetic terms; constructive existential
+specifications; mixed guarded arithmetic and rewriting; and higher-order or
+indexed-datatype obligations.
+
+Add a large control set of goals already handled well by \Grind{}, including
+its arithmetic and bit-vector strengths. The control set detects whether the
+new controller wastes resources on familiar cases. DTTBench, introduced with
+Canonical-min, is relevant additional material for the typed-inhabitation
+worker, but does not replace a Lean integration benchmark.\cite{canonicalmin}
+
+Hold out whole problem families when tuning heuristic weights. Renaming
+variables or slightly changing constants in a training problem does not
+create an independent test set for lemma-discovery heuristics.
+
+\subsection{Metrics and ablations}
+
+Report solved fraction, wall time, Lean heartbeats where meaningful, peak
+memory, proof/certificate size, reconstruction time, and kernel checking time.
+Record failed translations, unsupported fragments, timeouts, rejected
+certificates, and residual reconstruction goals separately. A solver verdict
+with an unclosed proof hole is not a solved benchmark.
+
+Run at least the following ablations: no induction; induction without
+generalization; no helper-lemma discovery; no constrained instantiation;
+constant-only witnesses; no nonlinear certificate worker; and stateless local
+solver restarts versus the incremental adapter. Include the simple portfolio
+with the same total budget to measure the controller's interactions rather
+than merely its larger collection of tools.
+
+The principal evidence for ``significantly more capable'' should be a
+substantial held-out solved-set increase in structural and synthesis-heavy
+families, while retaining most control-set successes and producing acceptable
+proof-checking costs. A speed claim requires repeated controlled runs; a
+capability claim requires concrete additional checked goals. Neither follows
+from the present prototype counts alone.
+
+\section{Assessment and recommended starting point}
+
+The most promising first implementation is \emph{not} a complete new SMT
+solver and not a rewrite of \Grind{}. It is a narrow Lean controller that
+combines automatic generalization and induction with an exact witness and
+recurrence-certificate pipeline. This already changes the shapes of proofs
+that can be found automatically. It also provides clear interfaces for adding
+stronger nonlinear and quantified reasoning afterward.
+
+The highest-risk engineering tasks are preserving dependent contexts through
+generalization, maintaining valid state across local solver restarts or
+snapshots, producing compact proof reconstruction, and keeping candidate
+lemmas out of the proved state. The numerical search itself is comparatively
+easy to sandbox because an exact certificate can reject a bad proposal.
+
+The Python experiments give a concrete foothold: a synthesized accumulator
+lemma, exact recurrence invariants, parametric witnesses with proof
+multipliers, and complementary polynomial certificates. The proposed Lean
+architecture explains how these become cooperating proof workers rather
+than isolated demos. That is a technically plausible route to a tactic
+substantially more useful than unassisted local saturation on the targeted
+goal families. Its eventual superiority should be earned by the pinned,
+proof-checked benchmark program just described.
+
+\appendix
+\section{Artifact inventory and commands}
+
+The archive is organized as follows:
+\begin{lstlisting}
+article/
+  forge.tex, 01-architecture.tex, 02-algorithms.tex
+  03-integration.tex, 04-evaluation.tex, references.tex
+  forge.pdf
+prototype/
+  forge_proto/{poly,linear,induction,recurrence,
+               witness,positivity}.py
+  tests/test_forge.py
+  run_experiments.py
+  replay_certificates.py
+  requirements.txt, README.md
+results/
+  results.json, experiments.log, tests.log, replay.log
+  certificates/{induction,recurrences,witnesses,
+                sos,bernstein}.json
+lean/
+  ReplayExamples.lean
+README.md, SOURCES.md
+\end{lstlisting}
+
+From \code{prototype/}, reproduce the executed work with:
+\begin{lstlisting}
+python -m pip install -r requirements.txt
+python -m unittest discover -s tests -v
+python run_experiments.py --output ../results
+python -S replay_certificates.py ../results/certificates
+\end{lstlisting}
+The \code{-S} option disables third-party site-package loading. The last
+command succeeds because checking does not require the numerical proposer.
+It reports 6 induction, 65 recurrence, 63 witness, 40 square, and 41 Bernstein
+certificates, totaling 215.
+
+Build this article from \code{article/} with two runs of LuaLaTeX:
+\begin{lstlisting}
+lualatex -interaction=nonstopmode -halt-on-error forge.tex
+lualatex -interaction=nonstopmode -halt-on-error forge.tex
+\end{lstlisting}
+The document uses Linux Libertine O, Lato, and DejaVu Sans Mono installed as
+system fonts. Font files are not included. Another available font family can
+be selected by changing the three \code{fontspec} declarations.
+
+\section{Certificate representations}
+
+\subsection{Polynomials}
+
+A polynomial stores a positive variable count and a sorted list of nonzero
+rational coefficients paired with nonnegative exponent tuples. Rational
+coefficients are serialized as exact strings such as \code{"3/7"}. Canonical
+construction rejects malformed exponent vectors, zero entries, and duplicate
+or unsorted serialized terms.
+
+The variable table binding these indices to Lean expressions is a separate
+production concern. The Python arithmetic certificates use fixed mathematical
+variables and do not implement that Lean source map.
+
+\subsection{Induction traces}
+
+An induction certificate contains an equation, its induction variable, and
+two equality traces. Each equality trace has a sequence of rewrites for its
+left and right sides. A rewrite is a pair \code{(rule_name, subterm_path)}.
+The checker derives the base/step contexts and the only permitted induction
+hypothesis; these are not arbitrary claims supplied by the certificate.
+
+The fixture stores certificates in dependency order. Replay installs each
+one only after checking it against defining equations and earlier installed
+lemmas. The experiment's seed statements therefore do not enter as axioms.
+
+\subsection{Affine and square certificates}
+
+An affine witness certificate stores one affine expression per output,
+one nonnegative multiplier row per target inequality, and one nonnegative
+slack per target inequality. Verification is exact coefficient equality in
+\eqref{eq:farkas-linear}--\eqref{eq:farkas-constant}.
+
+A square certificate stores weighted square roots with an optional index of
+a source nonnegative constraint. It is checked against the separately supplied
+target and constraint list. The current format has no arbitrary equality
+multipliers; adding those is a straightforward extension of the identity
+checker, but not an implemented feature claimed by the experiments.
+
+\subsection{Bernstein trees}
+
+A leaf contains only its kind. A split contains an axis, exact split point,
+and two subtrees. The checker derives all bounds from the root domain and
+recomputes all leaf coefficients. Node/depth limits are operational rejection
+limits. They are not mathematical assumptions about positivity.
+
+\subsection{A production interchange format}
+
+A production format should additionally carry a schema version, source-goal
+identifier, environment/encoding revision, variable-map identifier, required
+assumptions, and claimed result kind. The Lean process resolves these
+identifiers against its own state rather than accepting oracle-provided
+expressions as authoritative. Resource limits should bound integer bit sizes,
+monomial counts, degrees, tree nodes, and proof depth before expensive checking.
+
+\section{Known limitations of the delivered code}
+
+The prototypes do not implement the full obligation scheduler, actual Lean
+snapshots, native \Grind{} state access, dependent typing, general quantifier
+instantiation, higher-order synthesis, or external SMT proof reconstruction.
+The square search is a finite linear dictionary, not semidefinite programming.
+Affine synthesis is over rational/real non-strict polyhedral constraints,
+not mixed-integer or arbitrary quantified arithmetic. The recurrence solver
+handles additive polynomial increments only.
+
+The exact checkers are ordinary Python programs. They have executable
+regression tests and elementary soundness arguments for their formats, but
+are not themselves formally verified. Several share representation and
+matching routines with their search counterparts. This is appropriate for a
+prototype and is precisely why the Lean implementation must reconstruct
+proofs or use a checker with a proved soundness theorem.
+
+The Lean examples are uncompiled illustrations with no \code{sorry}
+placeholders. Absence of \code{sorry} is not evidence that they compile, and
+no such claim is made. The package is an actionable research/design artifact
+with tested algorithmic components, not a released drop-in replacement for
+\Grind{}.

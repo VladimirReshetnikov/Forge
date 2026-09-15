@@ -1,0 +1,74 @@
+{
+  "invariant_coefficients": [
+    [
+      [
+        1,
+        0
+      ],
+      "1"
+    ],
+    [
+      [
+        0,
+        1
+      ],
+      "1"
+    ]
+  ],
+  "result": {
+    "base_residual": "0",
+    "candidates": 4,
+    "degree": 1,
+    "polynomial": "a + n",
+    "power": 0,
+    "sample_count": 3,
+    "seconds": 0.0057334740001806495,
+    "step_residual": "0"
+  },
+  "trace": {
+    "base_residual": "0",
+    "degree": 1,
+    "history": [
+      {
+        "accepted": false,
+        "candidate": "0",
+        "degree": 0,
+        "samples": 1
+      },
+      {
+        "degree": 0,
+        "event": "inconsistent samples",
+        "samples": 2
+      },
+      {
+        "accepted": false,
+        "candidate": "a",
+        "degree": 1,
+        "samples": 2
+      },
+      {
+        "accepted": true,
+        "candidate": "a + n",
+        "degree": 1,
+        "samples": 3
+      }
+    ],
+    "power": 0,
+    "sample_count": 3,
+    "samples": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "step_residual": "0"
+  }
+}

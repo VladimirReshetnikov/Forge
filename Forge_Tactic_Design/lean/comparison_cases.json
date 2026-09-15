@@ -1,0 +1,38 @@
+[
+  {
+    "name": "shifted_square",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 : \u211d)\n    : 0 \u2264 ((49 : \u211d) + (-14 : \u211d) * (x0) + (1 : \u211d) * (x0) ^ 2) := by\n"
+  },
+  {
+    "name": "two_variable_AMGM",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 : \u211d)\n    : 0 \u2264 ((1 : \u211d) * (x1) ^ 2 + (-2 : \u211d) * (x0) * (x1) + (1 : \u211d) * (x0) ^ 2) := by\n"
+  },
+  {
+    "name": "box_cubic",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 : \u211d)\n    (hg0 : 0 \u2264 ((1 : \u211d) * (x0)))\n    (hg1 : 0 \u2264 ((1 : \u211d) + (-1 : \u211d) * (x0)))\n    (hg2 : 0 \u2264 ((1 : \u211d) * (x1)))\n    (hg3 : 0 \u2264 ((1 : \u211d) + (-1 : \u211d) * (x1)))\n    : 0 \u2264 ((1 : \u211d) * (x0) * (x1) + (-1 : \u211d) * (x0) ^ 2 * (x1)) := by\n"
+  },
+  {
+    "name": "box_quartic",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 : \u211d)\n    (hg0 : 0 \u2264 ((1 : \u211d) * (x0)))\n    (hg1 : 0 \u2264 ((1 : \u211d) + (-1 : \u211d) * (x0)))\n    (hg2 : 0 \u2264 ((1 : \u211d) * (x1)))\n    (hg3 : 0 \u2264 ((1 : \u211d) + (-1 : \u211d) * (x1)))\n    : 0 \u2264 ((1 : \u211d) * (x0) * (x1) + (-1 : \u211d) * (x0) * (x1) ^ 2 + (-1 : \u211d) * (x0) ^ 2 * (x1) + (1 : \u211d) * (x0) ^ 2 * (x1) ^ 2) := by\n"
+  },
+  {
+    "name": "equality_ideal",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 : \u211d)\n    (he0 : ((1 : \u211d) * (x1) + (-1 : \u211d) * (x0)) = 0)\n    : 0 \u2264 ((1 : \u211d) + (1 : \u211d) * (x1) ^ 2 + (-2 : \u211d) * (x0)) := by\n"
+  },
+  {
+    "name": "rational_margin",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 : \u211d)\n    : 0 \u2264 (((397 : \u211d) / 873) + ((-4 : \u211d) / 3) * (x0) + (1 : \u211d) * (x0) ^ 2) := by\n"
+  },
+  {
+    "name": "Cauchy_Schwarz_2",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 x2 x3 : \u211d)\n    : 0 \u2264 ((1 : \u211d) * (x1) ^ 2 * (x2) ^ 2 + (-2 : \u211d) * (x0) * (x1) * (x2) * (x3) + (1 : \u211d) * (x0) ^ 2 * (x3) ^ 2) := by\n"
+  },
+  {
+    "name": "lower_bound_cubic",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 x2 : \u211d)\n    (hg0 : 0 \u2264 ((-1 : \u211d) + (1 : \u211d) * (x0)))\n    (hg1 : 0 \u2264 ((-2 : \u211d) + (1 : \u211d) * (x1)))\n    (hg2 : 0 \u2264 ((-3 : \u211d) + (1 : \u211d) * (x2)))\n    : 0 \u2264 ((-6 : \u211d) + (2 : \u211d) * (x2) + (3 : \u211d) * (x1) + (-1 : \u211d) * (x1) * (x2) + (6 : \u211d) * (x0) + (-2 : \u211d) * (x0) * (x2) + (-3 : \u211d) * (x0) * (x1) + (1 : \u211d) * (x0) * (x1) * (x2)) := by\n"
+  },
+  {
+    "name": "three_variable_variance",
+    "prefix": "import Mathlib\n\ntheorem comparison_goal (x0 x1 x2 : \u211d)\n    : 0 \u2264 ((1 : \u211d) * (x2) ^ 2 + (-1 : \u211d) * (x1) * (x2) + (1 : \u211d) * (x1) ^ 2 + (-1 : \u211d) * (x0) * (x2) + (-1 : \u211d) * (x0) * (x1) + (1 : \u211d) * (x0) ^ 2) := by\n"
+  }
+]

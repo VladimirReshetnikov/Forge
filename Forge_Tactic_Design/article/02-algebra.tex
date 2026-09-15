@@ -1,0 +1,278 @@
+\section{PolyCone: search for nonlinear inequality certificates}
+
+\subsection{Certificate language and its soundness}
+
+Let $p,g_1,\ldots,g_m,f_1,\ldots,f_r\in\Q[x_1,\ldots,x_n]$.
+Assume the current context proves $g_i(\vec x)\geq0$ and
+$f_j(\vec x)=0$. A certificate for $p(\vec x)\geq0$ is the exact polynomial
+identity
+\begin{equation}\label{eq:cone}
+ p=\sum_{k=1}^{s}\lambda_k q_k^2\prod_{i=1}^{m}g_i^{e_{ki}}
+   +\sum_{j=1}^{r}h_j f_j,
+ \qquad \lambda_k\in\Q_{\geq0},\quad e_{ki}\in\N,
+\end{equation}
+where $q_k,h_j$ are rational polynomials. Repetition of a factor is permitted;
+the empty product is 1. The equality multipliers $h_j$ may have either sign.
+
+\begin{proposition}[Cone-certificate soundness]\label{prop:cone}
+If identity \eqref{eq:cone} holds and all of its sign and equality hypotheses
+hold at a real valuation, then $p$ is nonnegative at that valuation.
+\end{proposition}
+\begin{proof}
+Every square is nonnegative. Products of the nonnegative $g_i$, the square,
+and $\lambda_k$ are nonnegative, so their sum is nonnegative. Each $h_jf_j$
+vanishes at the valuation. Evaluating the polynomial identity gives the claim.
+\end{proof}
+
+This proof is small compared with the search for the identity. The implemented
+checker independently reconstructs both sums using rational sparse-polynomial
+arithmetic, checks factor indices and coefficient signs, and compares the
+result with $p$ exactly. It does not consult the LP solver or a numerical
+residual threshold. Its input hypotheses remain hypotheses: a Lean adapter
+must supply their actual proofs in the current scope.
+
+\subsection{Finite dictionary construction}
+
+For degree cap $D$, generate a bounded collection of columns
+\[
+ c_k=q_k^2\prod_i g_i^{e_{ki}},\qquad \deg c_k\leq D.
+\]
+Begin with monomial $q_k$ of degree at most $D/2$. Add binomial candidates
+suggested by the target: unit sums and differences, exact rational square-root
+ratios of positive even-degree terms, and completing-square expressions
+inferred from cross coefficients. If
+\[
+ a u^2+cuv+bv^2
+\]
+appears, with $a>0$, try $q=u+(c/(2a))v$; when $b>0$, also try the opposite
+orientation. This is a proposal mechanism, not a rule asserting that the
+remaining polynomial is nonnegative.
+
+The completing-square proposal matters in practice. The initial heuristic
+recognized $(x-2/3)^2$, but a positive extra constant obscured its coefficient
+ratio in $(x-2/3)^2+1/97$. Adding the cross-coefficient construction recovered
+the intended square. A regression test now covers this case. The unsuccessful
+initial search returned \code{unknown}; it did not accept an approximate proof.
+
+Form products of known nonnegative constraints subject to the same degree cap.
+Include columns $m f_j$ for monomials $m$ of degree at most $D-\deg f_j$; their
+multipliers are unrestricted rational variables. Deduplicate identical columns
+and retain their construction recipes. Avoid expanding the global Cartesian
+product when most constraints concern unrelated variables: partition by
+variable support and request cross-component products only when the target
+connects those components.
+
+The shipped implementation uses a simple bounded enumeration and a limit of
+4,000 generators. It is a research implementation, not an optimized sparse
+SOS package. A production implementation needs a separate bound on enumeration
+work, monomial count, coefficient bit length, and external-solver time; a cap
+on successfully admitted columns alone is insufficient as a denial-of-service
+or worst-case complexity control.
+
+\subsection{Search becomes linear algebra with an untrusted oracle}
+
+Expand the columns and target in a common monomial basis. The certificate
+search is
+\begin{equation}\label{eq:lp}
+ A\lambda+Bh=b,\qquad \lambda\geq0,
+\end{equation}
+where the $h$ coordinates are free. The Python prototype calls SciPy's
+\code{linprog(method="highs")} to propose a solution \cite{scipy-lp}.
+It minimizes the sum of cone coefficients as a simple heuristic. A production
+objective should also penalize large polynomial terms, expensive guard proofs,
+and predicted replay cost; minimizing coefficient sum is not proof-size
+minimization.
+
+Floating-point coefficients are converted to rational candidates with bounded
+denominators and checked exactly. If that fails, solve the proposed active
+support with exact SymPy linear algebra, set any remaining free parameters to
+zero, and check the result again. A negative reconstructed coefficient, an
+inconsistent support, or a failed identity causes rejection. No tolerance is
+used at the acceptance boundary.
+
+\begin{Code}
+polycone(target, inequalities, equalities, D):
+  columns := degree-bounded products and proposed squares
+  add ideal columns with unrestricted coefficients
+  numerical_candidate := solve_linear_program(columns, target)
+  if no candidate: return unknown
+  rational_candidate := reconstruct(numerical_candidate)
+  if exact_check(rational_candidate): return certificate
+  support_candidate := exact_solve(numerical_support)
+  if exact_check(support_candidate): return certificate
+  return unknown
+\end{Code}
+
+The choice of zero values for free reconstruction parameters is incomplete:
+a different rational point on the same support could have nonnegative
+coefficients. Similarly, numerical infeasibility does not establish
+nonnegativity failure and may not even establish infeasibility of the exact
+finite problem. These are performance limitations only because every
+successful result passes an independent exact check.
+
+\subsection{Worked certificates}
+
+Several tested cases explain the range of the certificate language.
+For the two-dimensional Cauchy--Schwarz inequality,
+\[
+ (a^2+b^2)(c^2+d^2)-(ac+bd)^2=(ad-bc)^2.
+\]
+For variance in three variables,
+\[
+ x^2+y^2+z^2-xy-yz-zx
+ =\tfrac12(x-y)^2+\tfrac12(y-z)^2+\tfrac12(z-x)^2.
+\]
+Both follow from squares without order assumptions on the variables.
+For $x,y\in[0,1]$,
+\[
+ xy(1-x)(1-y)\geq0
+\]
+uses four known nonnegative factors. The identity has degree 4 and is rejected
+by the prototype's degree-2 search before LP construction.
+
+Equality hypotheses contribute differently. Under $y=x$,
+\[
+ y^2-2x+1=(x-1)^2+(x+y)(y-x).
+\]
+The second term need not be nonnegative; it vanishes because of the equality.
+Treating all certificate multipliers as nonnegative would unnecessarily lose
+this useful algebraic flexibility.
+
+\subsection{Theory cooperation through generated inequalities}
+
+The plugin should return useful consequences before it can prove the final
+goal. Suppose $l_x\leq x\leq u_x$, $l_y\leq y\leq u_y$, and a shared atom
+$z$ is certified equal to $xy$. The four products of interval distances yield
+\begin{align*}
+ z&\geq l_x y+l_y x-l_xl_y, &
+ z&\geq u_x y+u_y x-u_xu_y,\\
+ z&\leq u_x y+l_y x-u_xl_y, &
+ z&\leq l_x y+u_y x-l_xu_y.
+\end{align*}
+For instance, the first follows from $(x-l_x)(y-l_y)\geq0$.
+These inequalities are linear in the shared atoms $x,y,z$ and can strengthen
+an existing linear arithmetic solver. Their derivations remain polynomial
+certificates with explicit bound dependencies. The proposal is to generate
+such cuts on demand, not to replace the linear engine.
+
+For natural numbers and integers, use their actual semantics. Natural
+subtraction is truncated; machine arithmetic may wrap; division and remainder
+have domain-specific rules. Reify into an ordered field only after proving the
+necessary cast and operation correspondence. A real-arithmetic relaxation can
+supply a sufficient certificate for an integer theorem after a checked
+embedding, but it cannot justify an integer witness or an integer-specific cut
+without an additional argument.
+
+Strict inequalities require separate bookkeeping. A positive rational margin
+in a certificate is enough to prove strict positivity; nonnegativity alone is
+not. Rational-expression normalization requires denominator conditions. These
+conditions are obligations on the fact graph, not informal side notes in an
+external certificate.
+
+\subsection{Limits and a concrete SOS escalation}
+
+The number of monomials of total degree at most $D$ in $n$ variables is
+$\binom{n+D}{D}$. Even before proof reconstruction, indiscriminate degree and
+variable growth can make the coefficient problem too large. Apply cheap
+symbolic factorization and variable separation first, then expand a bounded
+basis in increments, recording which expansion helped.
+
+A finite binomial-square dictionary is strictly more restrictive than arbitrary
+sum-of-squares search. An optional escalation can introduce a Gram matrix
+$Q\succeq0$ with $p=v^{\mathsf T}Qv$ or its constrained analogue, solve for $Q$
+using a semidefinite optimizer, and reconstruct an \emph{exact} rational
+factorization
+\[
+ Q=L\,\operatorname{diag}(d_1,\ldots,d_t)L^{\mathsf T},\qquad d_i\geq0.
+\]
+The resulting weighted squares fit the same certificate checker. A numerical
+claim of positive semidefiniteness is not accepted; an exact factorization and
+identity are required. Singular matrices and rational reconstruction can make
+this escalation fail. No SDP solver is implemented in this package.
+
+The tested Motzkin polynomial
+\[
+ M(x,y)=x^4y^2+x^2y^4+1-3x^2y^2
+\]
+is nonnegative by arithmetic--geometric mean applied to the three nonnegative
+terms $x^4y^2$, $x^2y^4$, and 1. The finite unconstrained square dictionary does
+not certify it. Its status is therefore \code{unknown}, despite truth. No
+bounded cone in this report is advertised as a complete real-algebraic decision
+procedure. Rational multipliers, richer positivity theorems, or other proof
+methods require explicit new certificate forms and soundness lemmas rather
+than a more generous floating-point tolerance.
+
+\section{Bernstein certificates on rational boxes}
+
+\subsection{A complementary proof language}
+
+A local box constraint can make a positivity proof easier than a global
+square decomposition. Map $x\in[a,b]$, $a<b$, to $t=(x-a)/(b-a)\in[0,1]$.
+For degree $d$ write the polynomial exactly as
+\[
+ p(a+(b-a)t)=\sum_{k=0}^{d} b_k B_{k,d}(t),\qquad
+ B_{k,d}(t)=\binom{d}{k}t^k(1-t)^{d-k}.
+\]
+If every $b_k\geq0$, each summand is nonnegative on the interval. Products of
+these bases give a certificate for a multivariate box.
+
+For power coefficients $a_j$ on $[0,1]$, the conversion formula is
+\[
+ b_k=\sum_{j=0}^{k}a_j\frac{\binom{k}{j}}{\binom{d}{j}}.
+\]
+To verify it, use
+$t^j=\sum_{k=j}^{d}\binom{k}{j}\binom{d}{j}^{-1}B_{k,d}(t)$,
+which follows by expanding the binomial theorem for the remaining degree
+$d-j$. The multivariate conversion is its tensor product.
+
+The prototype discovery routine computes the coefficients after an affine
+change of variables. Its checker takes a deliberately different route:
+it reconstructs every basis term directly in the original coordinates,
+\[
+ \binom{d}{k}\frac{(x-a)^k(b-x)^{d-k}}{(b-a)^d},
+\]
+and checks the resulting polynomial identity exactly. Both routines share the
+sparse rational arithmetic layer, so their implementation independence is not
+complete. Differential tests against SymPy address that shared layer but do
+not constitute formal verification.
+
+\subsection{Subdivision is a proof tree, not sampling}
+
+If some coefficients are negative, bisect a box coordinate and try both
+children. A successful certificate is a complete binary tree of boxes, with
+nonnegative-coefficient leaves. The checker verifies the root box, each cut's
+location, the exact two child boxes, and every leaf identity. A gap in the
+cover invalidates the entire certificate even if every retained leaf looks
+correct. Testing finitely many points is never an acceptance rule.
+
+For
+\[
+ p(x)=x^2-x+\tfrac13\quad\text{on }[0,1],
+\]
+the degree-2 coefficients are $(1/3,-1/6,1/3)$, so the initial box does not
+certify positivity. On $[0,1/2]$ they become $(1/3,1/12,1/12)$, and on
+$[1/2,1]$ they become $(1/12,1/12,1/3)$. Two leaves prove the entire interval.
+This example is included in the tests and measurements.
+
+\subsection{Why true statements can remain unresolved}
+
+The polynomial $(x-1/3)^2$ is nonnegative, yet midpoint subdivision never makes
+$1/3$ an endpoint of an interval with dyadic endpoints. On the leaf containing
+that point in its interior, all Bernstein basis functions are strictly
+positive there. If every coefficient were nonnegative and their sum were zero
+at that interior point, every coefficient would have to vanish. The polynomial
+would then vanish identically on the leaf, which it does not. Thus this
+particular subdivision strategy cannot finish, not merely because the tested
+depth cap is too small.
+
+This is a useful division of labor: the cone routine can recognize the square,
+while a naive box routine cannot. Conversely, box constraints can certify
+polynomials that a small global dictionary misses. Route a problem according
+to observed structure, preserve both alternatives, and report the actual
+certificate family that succeeded.
+
+A production splitter can use rational root isolation or symbolic factorization
+to expose zero sets before subdivision. That is a concrete improvement, but
+it requires certified root information and complete domain decomposition.
+Adaptive numerical guesses about root locations remain proposals until those
+obligations are discharged.

@@ -1,0 +1,2406 @@
+[
+  {
+    "name": "midpoint_well",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "13/50"
+        ],
+        [
+          [
+            1
+          ],
+          "-1"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "leaf"
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 3,
+    "leaves": 2,
+    "depth": 1
+  },
+  {
+    "name": "univariate_00",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "49/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "leaf"
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 3,
+    "leaves": 2,
+    "depth": 1
+  },
+  {
+    "name": "univariate_01",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "169/90"
+        ],
+        [
+          [
+            1
+          ],
+          "32/3"
+        ],
+        [
+          [
+            2
+          ],
+          "16"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_02",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "19/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "univariate_03",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "169/90"
+        ],
+        [
+          [
+            1
+          ],
+          "8/3"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_04",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_05",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_06",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_07",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "19/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "split",
+          "axis": 0,
+          "point": "1/8",
+          "left": {
+            "kind": "leaf"
+          },
+          "right": {
+            "kind": "leaf"
+          }
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 7,
+    "leaves": 4,
+    "depth": 3
+  },
+  {
+    "name": "univariate_08",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "49/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-4"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "univariate_09",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "169/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "univariate_10",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ],
+        [
+          [
+            1
+          ],
+          "-6"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "split",
+          "axis": 0,
+          "point": "3/8",
+          "left": {
+            "kind": "leaf"
+          },
+          "right": {
+            "kind": "leaf"
+          }
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 7,
+    "leaves": 4,
+    "depth": 3
+  },
+  {
+    "name": "univariate_11",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ],
+        [
+          [
+            1
+          ],
+          "6"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_12",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ],
+        [
+          [
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            2
+          ],
+          "16"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "univariate_13",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "49/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-8/3"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "univariate_14",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "49/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "leaf"
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 3,
+    "leaves": 2,
+    "depth": 1
+  },
+  {
+    "name": "univariate_15",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1/10"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_16",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "49/90"
+        ],
+        [
+          [
+            1
+          ],
+          "8/3"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "univariate_17",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "19/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "split",
+          "axis": 0,
+          "point": "1/8",
+          "left": {
+            "kind": "leaf"
+          },
+          "right": {
+            "kind": "leaf"
+          }
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 7,
+    "leaves": 4,
+    "depth": 3
+  },
+  {
+    "name": "univariate_18",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "11/10"
+        ],
+        [
+          [
+            1
+          ],
+          "-6"
+        ],
+        [
+          [
+            2
+          ],
+          "9"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "split",
+          "axis": 0,
+          "point": "3/8",
+          "left": {
+            "kind": "leaf"
+          },
+          "right": {
+            "kind": "leaf"
+          }
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 7,
+    "leaves": 4,
+    "depth": 3
+  },
+  {
+    "name": "univariate_19",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "19/90"
+        ],
+        [
+          [
+            1
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 0,
+        "point": "1/4",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "leaf"
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "bivariate_00",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "33/4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "8"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "12"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_01",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "5/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_02",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "33/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-16"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "8"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "-12"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "12"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 1,
+        "point": "1/2",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "split",
+          "axis": 0,
+          "point": "1/4",
+          "left": {
+            "kind": "split",
+            "axis": 1,
+            "point": "3/4",
+            "left": {
+              "kind": "leaf"
+            },
+            "right": {
+              "kind": "leaf"
+            }
+          },
+          "right": {
+            "kind": "split",
+            "axis": 1,
+            "point": "3/4",
+            "left": {
+              "kind": "leaf"
+            },
+            "right": {
+              "kind": "leaf"
+            }
+          }
+        }
+      },
+      "right": {
+        "kind": "split",
+        "axis": 1,
+        "point": "1/2",
+        "left": {
+          "kind": "split",
+          "axis": 0,
+          "point": "3/4",
+          "left": {
+            "kind": "leaf"
+          },
+          "right": {
+            "kind": "leaf"
+          }
+        },
+        "right": {
+          "kind": "split",
+          "axis": 0,
+          "point": "3/4",
+          "left": {
+            "kind": "split",
+            "axis": 1,
+            "point": "3/4",
+            "left": {
+              "kind": "leaf"
+            },
+            "right": {
+              "kind": "leaf"
+            }
+          },
+          "right": {
+            "kind": "leaf"
+          }
+        }
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 19,
+    "leaves": 10,
+    "depth": 4
+  },
+  {
+    "name": "bivariate_03",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "33/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "8"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "2"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_04",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "5/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "5"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_05",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "5/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "5"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_06",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "9/4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "8"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_07",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "9/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_08",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "17/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "5"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "6"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "2"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_09",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "21/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "-4"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_10",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "5/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "8"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "-12"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "split",
+        "axis": 1,
+        "point": "1/2",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      },
+      "right": {
+        "kind": "split",
+        "axis": 1,
+        "point": "1/2",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 7,
+    "leaves": 4,
+    "depth": 2
+  },
+  {
+    "name": "bivariate_11",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "9/4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "-2"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "6"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_12",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "17/4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_13",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "2"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_14",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "21/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "12"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "8"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "-6"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "2"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_15",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "5/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "5"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "8"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "4"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_16",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "33/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "4"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "12"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_17",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "9/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "5"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "-4"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "2"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "leaf"
+      },
+      "right": {
+        "kind": "split",
+        "axis": 1,
+        "point": "1/2",
+        "left": {
+          "kind": "leaf"
+        },
+        "right": {
+          "kind": "leaf"
+        }
+      }
+    },
+    "checked": true,
+    "root_only_certified": false,
+    "visited": 5,
+    "leaves": 3,
+    "depth": 2
+  },
+  {
+    "name": "bivariate_18",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "21/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "6"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "6"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  },
+  {
+    "name": "bivariate_19",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "17/4"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "-8"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "5"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "tree": {
+      "kind": "leaf"
+    },
+    "checked": true,
+    "root_only_certified": true,
+    "visited": 1,
+    "leaves": 1,
+    "depth": 0
+  }
+]

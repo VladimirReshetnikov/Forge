@@ -1,0 +1,88 @@
+{
+  "kind": "sos",
+  "problem": {
+    "target": {
+      "variables": 2,
+      "terms": [
+        {
+          "powers": [
+            1,
+            0
+          ],
+          "numerator": 1,
+          "denominator": 1
+        },
+        {
+          "powers": [
+            2,
+            0
+          ],
+          "numerator": -1,
+          "denominator": 1
+        }
+      ]
+    },
+    "ge": [
+      {
+        "variables": 2,
+        "terms": [
+          {
+            "powers": [
+              1,
+              0
+            ],
+            "numerator": 1,
+            "denominator": 1
+          }
+        ]
+      },
+      {
+        "variables": 2,
+        "terms": [
+          {
+            "powers": [
+              0,
+              0
+            ],
+            "numerator": 1,
+            "denominator": 1
+          },
+          {
+            "powers": [
+              1,
+              0
+            ],
+            "numerator": -1,
+            "denominator": 1
+          }
+        ]
+      }
+    ],
+    "eq": []
+  },
+  "certificate": {
+    "positive": [
+      {
+        "weight": "1",
+        "square": {
+          "variables": 2,
+          "terms": [
+            {
+              "powers": [
+                0,
+                0
+              ],
+              "numerator": 1,
+              "denominator": 1
+            }
+          ]
+        },
+        "assumptions": [
+          0,
+          1
+        ]
+      }
+    ],
+    "ideal": []
+  }
+}

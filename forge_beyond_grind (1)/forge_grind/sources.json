@@ -1,0 +1,221 @@
+{
+  "note": "Primary sources used in the article. Mutable references are not a reproducible common Lean dependency manifest. No third-party source or font binaries are bundled.",
+  "sources": [
+    {
+      "key": "grind",
+      "bibliographic_description": "Lean project. The grind tactic. Lean Language Reference. Observed September 14, 2026. ",
+      "url": "https://lean-lang.org/doc/reference/latest/The--grind--tactic/",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "release",
+      "bibliographic_description": "Lean project. Lean 4.34.0 release. September 14, 2026. ",
+      "url": "https://github.com/leanprover/lean4/releases/tag/v4.34.0",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "release/tag-pinned",
+      "version": "v4.34.0"
+    },
+    {
+      "key": "config",
+      "bibliographic_description": "Lean project. Grind configuration, tag v4.34.0. ",
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Init/Grind/Config.lean",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "release/tag-pinned",
+      "version": "v4.34.0"
+    },
+    {
+      "key": "commring",
+      "bibliographic_description": "Lean project. Grind commutative-ring constraint types, tag v4.34.0. ",
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Arith/CommRing/Types.lean",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "release/tag-pinned",
+      "version": "v4.34.0"
+    },
+    {
+      "key": "lia",
+      "bibliographic_description": "Lean project. Linear Integer Arithmetic. Lean Language Reference. ",
+      "url": "https://lean-lang.org/doc/reference/latest/The--grind--tactic/Linear-Integer-Arithmetic/",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "aesop",
+      "bibliographic_description": "Lean community. Aesop: White-box automation for Lean 4. Repository documentation. ",
+      "url": "https://github.com/leanprover-community/aesop",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "duper",
+      "bibliographic_description": "Lean community. Duper. Repository documentation. ",
+      "url": "https://github.com/leanprover-community/duper",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "auto",
+      "bibliographic_description": "Lean community. Lean-auto: Experiments on automation for Lean. Repository documentation. ",
+      "url": "https://github.com/leanprover-community/lean-auto",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "autopaper",
+      "bibliographic_description": "Yicheng Qian, Joshua Clune, Clark Barrett, and Jeremy Avigad. Lean-auto: An Interface between Lean 4 and Automated Theorem Provers. 2025. ",
+      "url": "https://arxiv.org/abs/2505.14929",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "paper landing page",
+      "version": null
+    },
+    {
+      "key": "smt",
+      "bibliographic_description": "Lean-SMT project. Lean-SMT. Repository documentation. ",
+      "url": "https://github.com/ufmg-smite/lean-smt",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "querysmt",
+      "bibliographic_description": "Joshua Clune, Haniel Barbosa, and Jeremy Avigad. Hint-Based SMT Proof Reconstruction. January 2026, arXiv:2601.14495v1. ",
+      "url": "https://arxiv.org/html/2601.14495v1",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "versioned paper",
+      "version": "v1"
+    },
+    {
+      "key": "sos",
+      "bibliographic_description": "Lean SOS project. Harrison's sum-of-squares decision procedure for nonlinear real arithmetic in Lean 4. Repository documentation. ",
+      "url": "https://github.com/leanprover/sos",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "sosengine",
+      "bibliographic_description": "Lean SOS project. SOS/Engine.lean, observed main source, September 14, 2026. ",
+      "url": "https://raw.githubusercontent.com/leanprover/sos/main/SOS/Engine.lean",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "soscore",
+      "bibliographic_description": "Lean SOS project. SOS/Core.lean, observed main source. ",
+      "url": "https://raw.githubusercontent.com/leanprover/sos/main/SOS/Core.lean",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "sostoolchain",
+      "bibliographic_description": "Lean SOS project. lean-toolchain, retrieved main snapshot specifying v4.32.0-rc1; not a verified common build manifest. ",
+      "url": "https://raw.githubusercontent.com/leanprover/sos/main/lean-toolchain",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "hex",
+      "bibliographic_description": "Lean Hex project. hex-mv-poly: Mathlib-free executable multivariate polynomials for Lean 4. ",
+      "url": "https://github.com/leanprover/hex-mv-poly",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "linarith",
+      "bibliographic_description": "Mathlib community. Mathlib.Tactic.Linarith.Frontend. API documentation. ",
+      "url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Linarith/Frontend.html",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "positivity",
+      "bibliographic_description": "Mathlib community. Mathlib.Tactic.Positivity.Basic. API documentation. ",
+      "url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Positivity/Basic.html",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "leanegg",
+      "bibliographic_description": "Marcus Rossel and contributors. lean-egg. Repository, including current deprecation notice. ",
+      "url": "https://github.com/marcusrossel/lean-egg",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "egg",
+      "bibliographic_description": "E-graphs community. egg: e-graphs good. Rust library repository. ",
+      "url": "https://github.com/egraphs-good/egg",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "lemmasynthesis",
+      "bibliographic_description": "Yican Sun, Ruyi Ji, Jian Fang, Xuanlin Jiang, Mingshuai Chen, and Yingfei Xiong. Proving Functional Program Equivalence via Directed Lemma Synthesis. 2024. ",
+      "url": "https://arxiv.org/abs/2405.11535",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "paper landing page",
+      "version": null
+    },
+    {
+      "key": "highs",
+      "bibliographic_description": "SciPy developers. linprog(method='highs'). Optimization API documentation. The executed artifact uses SciPy 1.17.0; the moving online documentation may differ. ",
+      "url": "https://docs.scipy.org/doc/scipy/reference/optimize.linprog-highs.html",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "csdp",
+      "bibliographic_description": "COIN-OR. CSDP: A solver for semidefinite programming problems. ",
+      "url": "https://github.com/coin-or/Csdp",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "sympy",
+      "bibliographic_description": "SymPy developers. Polynomial Manipulation: Reference. ",
+      "url": "https://docs.sympy.org/latest/modules/polys/reference.html",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "tactics",
+      "bibliographic_description": "Lean project. Tactic Reference, especially decision procedures, native evaluation, and SAT integration. ",
+      "url": "https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Tactic-Reference/",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "mutable documentation/source snapshot",
+      "version": null
+    },
+    {
+      "key": "grindmain",
+      "bibliographic_description": "Lean project. Grind main entry points, tag v4.34.0. ",
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Main.lean",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "release/tag-pinned",
+      "version": "v4.34.0"
+    },
+    {
+      "key": "grindtypes",
+      "bibliographic_description": "Lean project. Grind state and proof-bearing types, tag v4.34.0. ",
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Types.lean",
+      "observed_date": "2026-09-14",
+      "snapshot_status": "release/tag-pinned",
+      "version": "v4.34.0"
+    }
+  ]
+}

@@ -1,0 +1,336 @@
+\section{The design decision}
+
+\textbf{Build a proof coordinator around \grind, not a replacement for its
+successful core.} The proposed tactic, \forge, uses a protected stock-search
+lane and a richer search lane. The latter combines backward demands, checked
+forward consequences, bounded structural proof search, and specialized
+certificate producers. Crucially, those producers can return \emph{useful
+lemmas}, not only a verdict on the entire goal. An inequality certificate can
+supply an induction step; an induction lemma can expose arithmetic facts;
+a synthesized witness can turn a quantified problem into a local \grind\ call.
+
+``More powerful'' has three distinct meanings. \emph{Coverage} concerns which
+proof patterns the tactic can discover. \emph{Efficiency} concerns resources
+used on common goals. \emph{Reliability} concerns successful replay, predictable
+failure, and the trusted assumptions of the resulting theorem. Forge targets
+all three, but this report provides experimental evidence only for isolated
+Python mechanisms. It does not claim measured Lean-level coverage gains or a
+universal speedup.
+
+\subsection{What should become easier}
+
+The intended gains are concentrated where an otherwise short proof needs one
+missing idea: strengthening an induction hypothesis, manufacturing a useful
+term absent from the ground context, choosing a product of known nonnegative
+expressions, finding an existential witness, or extracting a finite Boolean
+subproblem. A large library can contain all the necessary lemmas and still
+leave these decisions unresolved.
+
+For example, from $x\geq 1$, $y\geq 2$, and $z\geq 3$, a useful intermediate
+fact is
+\[
+ (x-1)(y-2)(z-3)\geq0.
+\]
+This is not difficult mathematics. The automation problem is selecting that
+product, recording its dependencies, and making it available when a polynomial
+normalizer or another solver needs it. Likewise, a proof about an accumulator
+function may need a universally quantified accumulator invariant before any
+amount of ground simplification helps.
+
+The proposed architecture makes those choices explicit, bounded, inspectable,
+and replayable. It does not promise automatic discovery of arbitrary creative
+mathematics, complete higher-order proof search under finite resources, or
+complete nonlinear arithmetic from a fixed-degree certificate basis.
+
+\subsection{Implemented, specified, and still to be built}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}p{0.28\textwidth}YY@{}}
+\toprule
+Component & Delivered evidence & Production work still needed\\
+\midrule
+Demand-directed inference & Python tabling, dependency closure, proof DAG checker, differential tests & Typed Lean terms, e-class matching, library index, scoped metavariables\\
+Nonlinear cone & Exact sparse identities; LP proposals; rational reconstruction & Lean reification, checker theorem or proof replay integration, scheduling\\
+Bernstein positivity & Exact box certificates and complete-cover checking & Lean basis lemmas, dependent proof replay, richer split policies\\
+Recurrence invariants & Interpolation proposals; exact base and transition identities & Extract Lean recursive definitions and apply appropriate recursors\\
+Induction and witnesses & Detailed algorithms and worked derivations & Implement search, generalization, typed candidate synthesis\\
+SAT/SMT/superposition & Concrete adapters and trust contracts specified & Version-compatible integrations, proof-rule coverage, testing\\
+Whole \forge\ tactic & Architecture, interface, acceptance protocol & Not implemented; no Lean head-to-head results\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Begin with the actual baseline}
+
+\subsection{Do not underestimate current \grind}
+
+The current reference describes a cooperating collection of congruence closure,
+constraint propagation, E-matching, guided case analysis, and theory solvers.
+Its examples include nontrivial polynomial identities and finite-field
+reasoning, not merely linear inequalities. It builds ordinary Lean proof
+terms. The documentation also identifies large combinatorial Boolean search
+as a poor fit and recommends a SAT-backed route for such problems
+\cite{lean-grind}.
+
+Consequently, ``add nonlinear arithmetic'' is too imprecise as a contribution.
+Forge's algebraic extension is \emph{search for nonnegativity certificates and
+useful inequality cuts}, rather than rediscovering polynomial equality
+normalization. Similarly, ``add an e-graph,'' ``share facts,'' and ``support
+plugins'' describe capabilities already present, not substantive extensions.
+
+The inspected implementation and API also contain theorem guards, delayed
+instances, support for extensionality and function congruence,
+model-based theory-combination hooks, and a solver-extension interface.
+The \code{Action} control layer uses continuations to accommodate branching,
+nonchronological backtracking, and replay-script extraction
+\cite{grind-types,grind-action}. Forge should exploit those mechanisms instead
+of replacing them with an incompatible second notion of proof state.
+
+\subsection{Related systems to reuse rather than relabel}
+
+Aesop supplies a useful model for normalization rules and safe/unsafe
+AND--OR search \cite{aesop}. Mathlib's \code{linarith} already separates an
+untrusted search oracle from certificate reconstruction; \code{nlinarith}
+adds nonlinear preprocessing \cite{linarith}. Thus, an LP oracle followed by an
+exact identity check is not itself novel. The extra proposal is a goal-sensitive
+product-and-square dictionary, cooperation with structural search, and the
+protocol for feeding certified consequences back into a persistent context.
+
+Duper is a concrete candidate for bounded superposition-based reasoning,
+including higher-order capabilities \cite{duper}. Lean-SMT demonstrates a
+route through preprocessing and proof-producing external SMT search, with
+Lean-side reconstruction \cite{lean-smt}. These systems are optional lanes,
+not reasons to erase type information or trust an external solver's answer.
+A dependency must pass a compatibility and proof-reconstruction test before it
+is enabled; the mere existence of a repository does not establish compatibility
+with the target toolchain.
+
+Recent work on interventions inside \grind\ is particularly relevant. It
+reports that always-on changes can rescue some problems while breaking other
+previously successful searches, and advocates interventions after baseline
+failure \cite{interventions}. Forge adopts that deployment discipline. It does
+not claim that a fallback cascade or bounded lookahead is a new invention.
+
+\subsection{Version and provenance}
+
+The inspected Lean release is \textbf{4.34.0}. The supplied replay project pins
+mathlib to commit
+\begin{center}
+\code{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
+\end{center}
+The upstream toolchain at that revision specifies Lean 4.34.0. These facts were
+read on 14 September 2026 in the America/Los\_Angeles time zone
+\cite{lean-release,mathlib-revision}. The corresponding commit timestamp can
+fall on 15 September in UTC. Pinning a compatible-looking pair is not a
+successful build: the generated project was not compiled here.
+
+\section{Architecture: proof obligations rather than opaque tactic calls}
+
+\subsection{The persistent state}
+
+At a logical level a search node is a sequent $\Gamma\vdash G$, together with a
+resource account and a persistent snapshot. Its auxiliary data are:
+\begin{itemize}
+\item a typed term index and the local \grind\ state, with equality explanations;
+\item certified facts, pending guarded facts, and backward demands;
+\item an AND--OR graph of proof obligations and alternatives, with dependency
+and scope information;
+\item a certificate store, learned failure summaries, and a replay-cost estimate.
+\end{itemize}
+
+The distinction between \emph{fact} and \emph{demand} is fundamental. A fact
+contains an expression $p$ and a proof of $p$ in a specified context. A demand
+merely asks for such a proof. A proposed lemma is not inserted into the fact
+store until it has been proved. Otherwise, two unsuccessful searches could
+``prove'' each other through circular assumptions.
+
+Represent a guarded proposal as
+\[
+ (\Gamma;\ g_1,\ldots,g_k;\ p;\ c),
+ \qquad c:\Gamma\vdash g_1\to\cdots\to g_k\to p.
+\]
+The watchers for the $g_i$ may awaken when equalities or arithmetic bounds
+change. Once each guard has a proof in a permitted scope, ordinary application
+of $c$ produces a fact. Before that point, $p$ is only a conditional proposal.
+This is also how a division normalization can wait for a nonzero denominator
+instead of silently assuming it.
+
+\subsection{Scope, identity, and transport}
+
+Every stored theorem application records its local-context identifier,
+free-variable dependencies, instantiated universes, typeclass instances,
+metavariable assignments, and proof parents. A fact valid under a branch
+assumption cannot leak into its sibling. To move a fact outside its original
+scope, first abstract the branch assumptions and then prove the resulting
+implication in the receiving context.
+
+For example, a branch may prove $x^{-1}x=1$ using $x\ne0$. After backtracking,
+the reusable result is $x\ne0\to x^{-1}x=1$, not the unguarded equality.
+Caching only the printed expression loses this distinction. Environment
+revision, transparency policy, and dependency closure must be part of a cache
+key or explicitly revalidated on lookup.
+
+Lean expressions also cannot be treated as an untyped term algebra.
+Homogeneous equality requires compatible types; dependent applications may
+need heterogeneous equality and transport. Existing \grind\ services should
+supply equality explanations. Forge should never identify terms just because
+their pretty-printed strings agree, or because an external first-order encoding
+mapped them to the same symbol.
+
+\subsection{The cooperative action protocol}
+
+A plugin returns one of four logical outcomes: no applicable action, checked
+progress, a closed proof, or an unresolved result with a reason. A progress
+result carries a certified lemma or a well-formed refinement of the goal into
+subgoals. Failure, numerical trouble, unsupported syntax, and timeout do not
+mean falsehood.
+
+\begin{Code}
+cooperate(node, budget):
+  saturate cheap certified consequences
+  if the goal has a checked proof: return that proof
+  enqueue demands extracted from the goal and pending guards
+  repeat while resources remain:
+    choose an action with a bounded local budget
+    run it against an isolated snapshot
+    if it returns a certificate:
+      reconstruct and check its exact proposition
+      merge only scoped, certified consequences
+    if it returns subgoals:
+      register an AND-node and its proof-combining continuation
+    if it closes an OR-alternative:
+      retain its proof and cancel unnecessary siblings
+    age postponed actions; periodically service the fair lane
+  return unknown with residual obligations and resource statistics
+\end{Code}
+
+This is stronger than repeatedly restarting \code{first | grind | nlinarith |
+aesop}: the plugins exchange selected lemmas, guard proofs, and demand
+information. Nevertheless, the first usable integration can begin with
+independent leaf calls while the shared-state adapter is tested. That
+engineering milestone should not be advertised as the complete architecture.
+
+\subsection{A precise fallback guarantee}
+
+Let $B(G,H)$ denote the result of stock \grind\ on $G$ under a fixed budget
+$H$ and a fixed environment. Run that exact computation first. If it succeeds,
+return its proof. Only if it fails, restore the initial snapshot and spend an
+additional budget $K$ on Forge's extensions.
+
+\begin{proposition}[Additive-budget preservation]
+Assuming identical baseline inputs, resource accounting, and execution
+conditions, the cascade succeeds on every goal for which $B(G,H)$ succeeds.
+\end{proposition}
+\begin{proof}
+The successful baseline execution is performed unchanged, and its result is
+returned before any extension is run.
+\end{proof}
+
+This elementary guarantee is about \emph{additional resources}. It is not a
+proof that allocating part of the same total budget $H$ to new machinery
+preserves all baseline successes. Nor does a simultaneously running baseline
+thread receive an identical wall-clock or memory budget if the other threads
+contend with it. Report additive-budget and fixed-total-budget experiments
+separately. Fairness prevents starvation in an unbounded search; it does not
+make a bad finite-budget allocation free.
+
+\section{Demand-directed instantiation and intermediate lemmas}
+
+\subsection{Backward demands with forward proof completion}
+
+Suppose a theorem has an instantiated conclusion matching the wanted fact:
+\[
+ A_1(\vec t)\to\cdots\to A_k(\vec t)\to C(\vec t).
+\]
+Rather than forward-generating every instance of every theorem, create demands
+for the $A_i(\vec t)$ when $C(\vec t)$ is useful. A conclusion index retrieves
+candidate declarations by typed head symbols, argument structure, and relevant
+relation classes. Matching is modulo certified equality when useful, but
+elaboration decides whether the proposed instantiation is legal.
+
+A candidate whose conclusion does not determine every parameter needs a second
+phase: enumerate a bounded typed term grammar, solve a small witness problem,
+or leave it to the fair forward lane. It must not arbitrarily instantiate a
+universally quantified theorem variable with an ill-scoped metavariable.
+
+The Python prototype deliberately avoids that difficulty. Its rules are
+single-sort Horn clauses whose body variables all occur in the head. Matching
+a \emph{ground} demanded head therefore determines the substitution for every
+premise. There is no higher-order unification, dependent typing, equality
+reasoning, or library retrieval in this prototype.
+
+\subsection{Tabling prevents cyclic pseudo-proofs}
+
+Build a finite, budgeted backward closure of ground demands and candidate rule
+instances. Then propagate actual proofs forward over that dependency graph.
+Each rule instance has a counter of unresolved premises. Input facts initialize
+the agenda; proving a premise decreases the counters of its dependents. A rule
+fires only when every premise is proved. Store the proof node at that moment.
+
+This is not a depth-first convention that treats ``currently being visited''
+as success. Rules $P\to Q$ and $Q\to P$, without a base fact, prove neither.
+The certificate is a topologically ordered DAG: every premise index is strictly
+smaller than its conclusion's index. Its checker reconstructs the exact
+substitution and conclusion for each theorem application.
+
+\begin{proposition}[Relative completeness of the finite Horn core]
+For a fixed finite set of ground candidate rule instances, if the dependency
+agenda is exhausted without a resource cutoff, every fact in their least
+forward closure is eventually proved. In particular, a backward-relevant
+closure containing a ground derivation of the target will discover a proof.
+\end{proposition}
+\begin{proof}
+Induct on the height of a finite derivation. Height-zero input facts enter the
+agenda initially. Once all smaller-height premises of an instance have entered,
+its unresolved counter reaches zero, so its conclusion is enqueued. Tabling
+ensures repeated discoveries do not obstruct this propagation.
+\end{proof}
+
+The statement concerns the fixed finite closure, not unrestricted first-order
+logic. A depth cap can exclude a necessary derivation. With function symbols,
+the full relevant closure may be infinite. Such outcomes are reported as
+\code{unknown}, not as refutations.
+
+\subsection{A family that isolates the advantage}
+
+Take a base fact $P(a)$ and the two rules
+\[
+ P(x)\to P(g(x)),\qquad P(x)\to P(f(x)).
+\]
+Ask for $P(f^d(a))$. In the supplied breadth-first forward implementation, the
+$g$-rule precedes the $f$-rule. The goal is therefore the last word generated at
+depth $d$, after
+\[
+ 1+2+\cdots+2^d=2^{d+1}-1
+\]
+facts. Backward demand generation produces exactly the $d+1$ facts on the
+$f$-chain. Both returned proofs contain $d+1$ nodes.
+
+At depth 14 the measured counts are 32,767 versus 15. This is an intentionally
+adversarial \emph{Python Horn experiment}, not a reconstruction of \grind.
+Current \grind\ already sees a negated goal and performs sophisticated
+instantiation; this example cannot establish that it would suffer the same
+expansion. What the experiment establishes is the implemented dependency
+mechanism and its exact work reduction on this family.
+
+\subsection{Library retrieval and induction of useful demands}
+
+A production index should first use deterministic structure: conclusion head,
+constants, type constructor, theorem arity, and normalized argument positions.
+An inexpensive text ranker can supplement these features. Neural ranking is
+optional; it is never proof evidence. After retrieving a declaration, instantiate
+it through Lean's elaborator, generate its side goals, and attach its actual
+proof term. Never trust a textual theorem statement supplied by a model.
+
+Useful demands need not be the final goal. Sources include a missing denominator
+condition, the guard of a conditional rewrite, the precondition of an induction
+step, and a sign condition requested by the nonlinear solver. Give these
+consumers a small number of ranked requests rather than internalizing every
+retrieved theorem globally. Cache failed instantiations by the exact context
+and budget, but invalidate failures when relevant facts change.
+
+Demand search, like any relevance filter, can miss a surprising intermediate
+lemma. Reserve a fair lane for ordinary instantiation and gradually widen the
+retrieval and term-generation bounds. The practical objective is to find a
+short proof cheaply, not to turn a relevance heuristic into an unjustified
+completeness claim.

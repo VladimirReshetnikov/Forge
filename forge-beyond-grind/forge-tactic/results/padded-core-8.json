@@ -1,0 +1,49 @@
+{
+  "atoms": {},
+  "clauses": [
+    [
+      9,
+      10
+    ],
+    [
+      9,
+      -10
+    ],
+    [
+      -9,
+      10
+    ],
+    [
+      -9,
+      -10
+    ]
+  ],
+  "n": 10,
+  "proof": [
+    {
+      "clause": [
+        -9
+      ],
+      "kind": "rup"
+    },
+    {
+      "clause": [],
+      "kind": "rup"
+    }
+  ],
+  "stats": {
+    "cdcl_conflicts": 2,
+    "cdcl_decisions": 9,
+    "cdcl_seconds": 3.818799996224698e-05,
+    "clauses": 4,
+    "dpll_conflicts": 512,
+    "dpll_decisions": 511,
+    "dpll_seconds": 0.0018504970000776666,
+    "learned": 1,
+    "name": "padded-core-8",
+    "nonchronological_backjumps": 1,
+    "proof_additions": 2,
+    "replay_seconds": 1.5652999991289107e-05,
+    "variables": 10
+  }
+}

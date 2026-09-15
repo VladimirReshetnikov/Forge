@@ -1,0 +1,87 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{enumitem,xcolor,listings,fancyhdr,etoolbox,needspace}
+\usepackage{hyperref}
+\definecolor{ink}{HTML}{183A4A}
+\definecolor{accent}{HTML}{167D8D}
+\definecolor{codebg}{HTML}{F4F6F7}
+\definecolor{muted}{HTML}{52646B}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=accent,urlcolor=accent,
+  pdftitle={FORGE: Beyond grind through structural search and certified algebra},
+  pdfauthor={OpenAI},pdfsubject={Lean tactic design, exact certificates, prototypes and experiments}}
+\urlstyle{same}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.18}
+\setlist{nosep,leftmargin=1.5em,topsep=4pt}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{codebg},
+  frame=single,rulecolor=\color{black!15},breaklines=true,columns=fullflexible,
+  keepspaces=true,showstringspaces=false,tabsize=2,xleftmargin=4pt,xrightmargin=4pt,
+  aboveskip=9pt,belowskip=9pt}
+\BeforeBeginEnvironment{lstlisting}{\par\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{lstlisting}{\end{minipage}\par}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}FORGE\quad /\quad Research and design}
+\fancyhead[R]{\small\color{muted}14 September 2026}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{theorem}[proposition]{Theorem}
+\newtheorem{lemma}[proposition]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[proposition]{Definition}
+\newcommand{\forge}{\textsc{Forge}}
+\newcommand{\grind}{\texttt{grind}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\unknown}{\ensuremath{\mathsf{Unknown}}}
+\newcommand{\status}[1]{\textbf{Status:} #1.}
+\newcommand{\code}[1]{\texttt{#1}}
+\begin{document}
+\begin{titlepage}
+\vspace*{14mm}
+{\color{accent}\large TECHNICAL DESIGN STUDY\par}
+\vspace{12mm}
+{\color{ink}\Huge\bfseries FORGE\par}
+\vspace{5mm}
+{\color{ink}\LARGE Beyond \texttt{grind} through structural search and certified algebra\par}
+\vspace{9mm}
+{\large Concrete algorithms, exact prototypes, and a reproducible evaluation package\par}
+\vspace{13mm}
+\noindent\rule{\textwidth}{0.8pt}
+\vspace{5mm}
+{\large Prepared for Vladimir Reshetnikov\par}
+{14 September 2026\par}
+\vspace{12mm}
+\begin{minipage}{0.94\textwidth}
+\textbf{What is delivered.} A proposed Lean automation architecture and six executable Python search components, with exact certificate checking, generated Lean replay candidates, test code, and machine-readable results.
+
+\textbf{What was measured.} All \textbf{275 test instances} passed. All \textbf{198 constructed component-benchmark instances} produced certificates that passed a separate, standard-library-only recheck.
+
+\textbf{What was not measured.} No Lean executable was available in the authoring environment. The Lean files have \textbf{not been compiled}. The complete \code{forge} tactic is a design, not an implemented product, and no head-to-head advantage over \grind{} is claimed from these measurements.
+\end{minipage}
+\vfill
+{\small\color{muted}Baseline source snapshot: Lean v4.34.0. Candidate replay environment: the exact Mathlib revision recorded in the package. Search is replaceable; acceptance must remain proof-producing.}
+\end{titlepage}
+
+\begin{abstract}
+A substantially more capable successor to \grind{} should not merely increase its search limits or rename a portfolio of existing tactics. It should retain \grind{} as a fast, trusted proof-producing core while addressing three different sources of failure: missing proof structure, missing intermediate mathematical facts, and missing existential constructions. This report proposes \forge{}, a typed, scope-aware coordination layer around structural AND/OR search, goal-directed theorem application, induction with generalization, witness synthesis, and exact nonlinear certificates. The concrete arithmetic design includes rational quadratic decomposition, finite-cone linear programming with exact repair, multivariate Bernstein subdivision, and univariate square-factor/Sturm certificates that tolerate exact zeros. Polynomial recurrence synthesis and affine witness synthesis provide executable examples of structure-producing automation.
+
+The report specifies algorithms, soundness arguments, integration contracts, resource accounting, libraries, trust modes, and an implementation sequence. Six components are prototyped and tested in Python; stored certificates can be rechecked without importing SciPy, NumPy, or SymPy. The experiments isolate useful mechanisms but are deliberately not presented as evidence that the unimplemented Lean tactic outperforms \grind{}. A separate evaluation protocol explains how to establish that claim fairly.
+\end{abstract}
+\tableofcontents
+\clearpage
+\input{sections/01-design}
+\input{sections/02-algorithms}
+\input{sections/03-integration-evaluation}
+\input{sections/04-references}
+\end{document}

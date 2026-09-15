@@ -1,0 +1,288 @@
+\section{The proposal in one page}
+
+\forge{} is a \emph{proof-producing automation system with a structural search layer}, not a new foundational logic. It preserves the existing Lean kernel and treats search engines, learned rankings, computer-algebra systems, and numerical solvers as fallible advisers. Its intended user-facing entry point is a terminal tactic, with an explanatory variant that emits a smaller replay script.
+
+The main design choice is to separate two tasks that are often conflated. A \emph{structural planner} chooses a proof shape: introduce a binder, construct a witness, apply a theorem, prove an auxiliary lemma, or use an induction principle. A \emph{local saturation engine} derives consequences in the resulting context. \grind{} is an excellent candidate for the second role. The proposed improvement is to supply proof structure and certified facts that are not available from local saturation alone, and to feed useful consequences back rather than restarting every tool from an unchanged goal.
+
+For example, a nonlinear worker may prove $0\le p(x,y)$, combine it with an existing $p(x,y)\le0$, and obtain $p(x,y)=0$. The equality is then useful to congruence closure even when the final target is an equality between uninterpreted function applications. An induction planner may generalize an accumulator, synthesize its polynomial invariant, and invoke \grind{} only on the base and step obligations. A witness worker may construct a parametric solution of a linear system and leave integrality or bound obligations to other workers. In all three cases, the benefit comes from \emph{coordination around checked intermediate claims}.
+
+The highest-priority implementation is therefore a small system with strong interfaces: a baseline-preserving entry point, typed reification and certificate replay, a scope-safe fact store, polynomial certificates, a bounded induction planner, and a witness synthesizer. General higher-order search, semidefinite programming, and learned scheduling are optional later extensions. They are not prerequisites for demonstrating useful new coverage.
+
+\subsection{Two meanings of ``more powerful''}
+
+The desired outcome is substantially higher automatic coverage on useful Lean developments. That does not mean uniform speed improvement, logical completeness, or success-set inclusion at a fixed total budget. Those are different claims.
+
+\begin{definition}
+For a tactic implementation $T$, an environment $E$, a goal $G$, and a resource allocation $B$, write $T(E,G;B)\downarrow$ when it returns a proof accepted under the selected trust policy within that allocation.
+\end{definition}
+
+\forge{} should offer two modes. In \emph{compatibility mode}, it first runs the stock \grind{} invocation, with the same input, options, and solver budget, before running new machinery. In \emph{fixed-budget mode}, it partitions a single budget among workers and may sacrifice some baseline successes in exchange for others.
+
+\begin{proposition}[Conditional baseline preservation]
+Assume the stock run is reproduced deterministically with identical inputs and resources, and its successful proof is returned immediately. If compatibility mode allocates that full run before spending additional extension resources, then every success of the stock invocation is also a success of compatibility mode.
+\end{proposition}
+\begin{proof}
+The first stage is the stock invocation itself. A success exits before any extension can change its state or consume its reserved allocation.
+\end{proof}
+
+This is a scheduling property, not a superiority result at equal cost. Process startup, memory pressure, imports, and global wall-clock limits can invalidate an operational interpretation unless controlled. A fair experiment must therefore report both modes. Failure-triggered interventions also have recent precedent in research on \grind{}; the cascade itself is not claimed as a new invention here~\cite{learned}.
+
+\section{A strong baseline, not a straw man}
+
+The reference describes \grind{} as cooperating proof-producing engines organized around contradiction, congruence closure, constraint propagation, E-matching, guided case analysis, and theory solvers. This is already a shared-fact architecture, not a sequence of independent tactic calls~\cite{grindref}. A credible successor must reuse those strengths.
+
+The v4.34.0 configuration source is particularly important because it prevents several obsolete claims about missing functionality. Table~\ref{tab:baseline} records capabilities that must be counted as baseline features~\cite{grindconfig,grindtypes}.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.25\textwidth}Xp{0.28\textwidth}@{}}
+\toprule
+Area & Already present in the inspected source & Consequence for this design \\
+\midrule
+Equality & Congruence reasoning, function-valued congruence, extensionality controls, injectivity support & Do not advertise ordinary e-graphs or function equalities as new. \\
+Arithmetic & Ring and field-related algebra, linear arithmetic, integer arithmetic, associative/commutative reasoning, order support & Add certified inequality reasoning and structure, not a duplicate ring normalizer. \\
+Quantifiers and search & E-matching, term-generation limits, case splits, lookahead, model-based theory combination & Distinguish goal-directed construction from existing instantiation and splitting. \\
+Libraries & Configurable library suggestions and local-definition use & Improve retrieval and obligation-driven use; do not claim retrieval is wholly absent. \\
+Engineering & Saved states, proof-related diagnostics, explicit search limits & Reuse existing machinery behind a versioned adapter. \\
+\bottomrule
+\end{tabularx}
+\caption{Baseline features from the pinned Lean configuration and implementation sources. The table is not a claim of completeness for any theory.}
+\label{tab:baseline}
+\end{table}
+
+For reproducible comparisons, the source defaults include nine search-branch splits, five E-matching rounds before a split, generation bounds of eight, and a thousand E-matching instances per branch. The source exposes many additional limits. A future benchmark should record effective options, not merely write ``default \grind{}'', and should include a reasonable tuned baseline~\cite{grindconfig}.
+
+\subsection{Where new coverage can realistically come from}
+
+The target is not ``everything \grind{} cannot prove''. It is a collection of mechanisms with a plausible cost/coverage tradeoff:
+
+\begin{enumerate}
+\item \textbf{Proof structure:} select induction principles, generalize dependent state, construct existential witnesses, and establish auxiliary lemmas before using them.
+\item \textbf{Missing algebraic consequences:} discover hidden sums of squares, domain-dependent polynomial positivity, and exact zero information that can be shared with other engines.
+\item \textbf{Directed obligation solving:} choose theorem applications from the conclusion backward, create their side conditions explicitly, and use successful side conditions to activate guarded forward reasoning.
+\end{enumerate}
+
+These are proposed extensions, not assertions that every example requiring one will fail under all existing \grind{} configurations or library annotations. Some will already be solved by \grind{}, \code{nlinarith}, Aesop, or a suitable theorem. Only actual controlled runs can identify new coverage on a particular corpus.
+
+\subsection{Relationship to existing automation}
+
+Aesop already provides rule-based AND/OR proof search, distinguishes normalization and safe/unsafe rules, and uses best-first exploration. Its documented induction examples still perform induction explicitly. It is a useful source of search infrastructure, not a feature to rediscover~\cite{aesop}. Duper supplies proof-producing saturation over supplied facts; its README describes manual premise selection and a configurable portfolio. It is a complementary clause-search worker, especially after a relevance filter has selected a small premise set~\cite{duper}.
+
+Mathlib's \code{linarith} separates certificate search from proof reconstruction, and \code{nlinarith} adds specific nonlinear preprocessing. That is an appropriate architectural precedent, but it is not a full general sums-of-squares solver~\cite{linarith}. Foundational checking of numerically discovered SOS certificates also has a substantial history; Harrison's HOL Light work explicitly separates sophisticated search from relatively straightforward verification~\cite{harrison}.
+
+The old \code{lean-egg} project should not be a mandatory new dependency: its repository says it is no longer developed and directs users toward \grind{}~\cite{egg}. The useful idea is bounded, proof-producing equality search, not allegiance to that particular package.
+
+\section{Architecture: structural search around a shared fact store}
+
+\subsection{The layers}
+
+At the outer layer, an AND/OR search graph represents structural choices. An AND node contains obligations that must all be proved, such as the premises of a theorem application or all cases of an induction. An OR node contains alternative proof plans. Each open leaf has a local context and a target.
+
+At a leaf, a coordination layer exposes certified facts and typed views to specialized workers. \grind{} maintains its own efficient internal equality and theory state. The initial integration should use supported terminal tactic calls and explicit proved lemmas. A later, version-pinned adapter may subscribe directly to internal events and add proved facts without restarting saturation. The latter is an engineering optimization and must not be assumed to exist in the prototype.
+
+The acceptance layer reconstructs a Lean proof of each returned proposition, checks scope and dependencies, and ultimately constructs a proof of the original goal. Numerical success, satisfiability status, an unverified certificate, and a plausible conjecture are never accepted as facts.
+
+\subsection{A concrete worker contract}
+
+The following is an interface specification, not compiled Lean source:
+
+\begin{lstlisting}
+Worker.supports : GoalView -> SupportReport
+Worker.step     : Snapshot -> DeltaFacts -> Budget -> WorkerResult
+
+WorkerResult :=
+  | solved     (proof : CheckedProofRef)
+  | progress   (facts : Array ScopedFact)
+               (obligations : Array ConditionalObligation)
+               (resumeToken : OpaqueToken)
+  | candidate  (kind : CertificateKind) (payload : BoundedData)
+  | unknown    (reason : FailureReason)
+
+ScopedFact := {
+  proposition : Expr,
+  proof       : Expr,
+  scope       : ScopeId,
+  dependencies: Array FactId
+}
+\end{lstlisting}
+
+\code{CheckedProofRef} is a capability issued by the acceptance layer, not by an external process. An external solver can return only data or a candidate. A native Lean tactic worker may return a proof expression, but the coordinator still verifies its type, local-variable support, auxiliary declarations, and allowed axioms before committing it.
+
+A conditional obligation is a directed dependency, not an assertion. For instance, cancellation of $a$ in a field creates an obligation $a\ne0$. Until that proof exists, the cancelled equality cannot enter the fact store. The result protocol must keep a conjectured fact visibly different from a proved fact even when both share the same proposition.
+
+\subsection{Typed views and scope keys}
+
+The system needs a small number of explicit views: equality/Boolean facts, affine constraints, polynomial constraints, recursive-definition equations, and existential goals. Each view stores both the reified object and a proof connecting it to the original Lean expression. An opaque subterm may be represented by a fresh polynomial variable, but it must retain the correct type and identity.
+
+A suitable key contains the expression, its type, universe levels where relevant, the identity of the ordered ring or field instance, a local-context fingerprint, and a scope identifier. Printed text is not a safe key. Neither are expression pointers suitable for persistent caches across environments. Alpha-equivalence and definitional equality can improve sharing, but any metavariable assignments they create must remain local to the search branch.
+
+For example, $x-y$ over $\N$ is truncated subtraction, whereas over $\Z$ or $\R$ it is ring subtraction. A syntactic translator that treats these identically is unsound. A \code{Fin n} expression is not automatically an integer with unrestricted arithmetic. A proposition about real division cannot be transported through a denominator without a suitable nonzero or sign guard. Typeclass instances must be part of the interpretation, not inferred from a convenient printed operator.
+
+\subsection{State restoration and proof transport}
+
+A failed worker must not leave metavariable assignments, postponed constraints, fresh hypotheses, or changed transparency settings in another branch. The inspected \grind{} implementation already has saved-state machinery~\cite{grindtypes}; \forge{} should use a thin adapter rather than copy its internal data structures blindly.
+
+There is a subtler issue: a successful worker may introduce auxiliary theorem declarations and return a proof referring to them. Restoring the environment and retaining only the final expression would create dangling references. A commit must therefore preserve the required declaration closure, after checking it, or reconstruct a self-contained proof term in the parent environment. External results must be re-elaborated against the exact destination context rather than transporting free-variable identifiers between unrelated goals.
+
+Facts proved using a branch hypothesis can be shared only within that branch or a descendant. To share them upward, discharge the hypothesis and transport an implication, or combine proofs from a complete case split. This rule applies just as strongly to numerical bounds, inferred equalities, and cached certificates as to ordinary theorem applications.
+
+\subsection{Event-driven cooperation}
+
+Workers should subscribe to deltas rather than repeatedly scan the entire context. Typical events are: a new bound on an arithmetic expression, a new equality joining two term classes, a proved side condition, an instantiated theorem, and a changed target after structural decomposition.
+
+The coordinator normalizes a returned fact, checks whether it adds information, stores its proof, and notifies only relevant subscribers. For example, changing an interval bound invalidates or strengthens a Bernstein search problem; learning a polynomial equality may reduce the dimension of a subsequent positivity certificate; proving an existential witness's denominator nonzero activates its algebraic replay.
+
+Logical circularity and scheduling cycles must be distinguished. A worker waiting for a fact that another worker might establish is an ordinary dependency cycle; it may require a different search action. It does not permit both workers to assume their outputs. Track these dependencies as strongly connected components and either pursue an independent obligation, perform a justified case split, or return a diagnostic explaining the blockage.
+
+\subsection{An explicit scheduler}
+
+The initial implementation should use deterministic cost-aware scheduling, not require a trained model. Each task has a relevance estimate, expected information gain, recent cost, age, and a resource ceiling. A simple score is
+\[
+  s(a)=w_r R(a)+w_g G(a)+w_a A(a)-w_c\widehat C(a),
+\]
+with the weights fixed in the experiment manifest. This is only a heuristic. Reserve a minimum quota for every eligible worker class so that a high-scoring stream of cheap actions does not starve structural search.
+
+\begin{lstlisting}
+solve(goal, mode, budgets):
+  if mode == compatibility:
+    run exact_stock_grind(goal, budgets.stock)
+    if accepted: return proof
+    restore_original_goal()
+  agenda := initial_structural_and_local_tasks(goal)
+  while resources_remain:
+    action := choose_with_reserved_worker_quotas(agenda)
+    snapshot := save_full_branch_state()
+    result := run_bounded(action)
+    restore_or_commit_only_checked_changes(snapshot, result)
+    if original_goal_has_checked_proof(): return proof
+    enqueue_new_obligations_and_relevant_delta_subscribers()
+  return Unknown(with_structured_diagnostics)
+\end{lstlisting}
+
+Heartbeats alone are insufficient for external numerical code. Maintain separate limits on wall time, memory, instantiated theorems, polynomial monomials, rational bit lengths, certificate size, induction depth, and replay work. External workers should run in bounded child processes without network access. A process timeout returns \unknown{} and cannot create a theorem.
+
+Finite budgets imply incompleteness. Fair worker quotas do not make unrestricted Lean proof search complete. They make the search policy interpretable and reduce avoidable starvation.
+
+\section{Directed theorem use and constructive witnesses}
+
+\subsection{Backward application complements forward matching}
+
+Use a conclusion index over theorem types, initially a discrimination tree keyed by the target's head symbol and normalized type structure. Retrieve a bounded list of candidates, instantiate universes, and unify the theorem conclusion with the target. Successful unification creates premises as AND obligations and instantiation choices as OR alternatives. Explicit dependencies prevent the theorem's conclusion from becoming available before its premises are proved.
+
+Suppose a theorem has the shape
+\[
+  \forall x,\;P(x)\to Q(f(x)).
+\]
+For a goal $Q(f(u))$, backward application immediately proposes the obligation $P(u)$ and introduces useful terms even when no suitable trigger was present in the initial forward state. For a goal $Q(t)$ with arbitrary $t$, it does \emph{not} justify inventing an inverse of $f$. The system must unify $t$ with an application already known to be equal, synthesize a candidate $u$ and prove $f(u)=t$, or decline the application.
+
+Premise retrieval should combine the target with currently blocked obligations, not just a bag of symbols from the original goal. A theorem resolving a denominator guard can be more useful than one mentioning the final function symbol. Existing library-suggestion support remains part of the baseline; the proposed addition is its integration with explicit obligation production and feedback.
+
+\subsection{Witness grammars and universal validation}
+
+For a goal $\forall x\,\exists y,\Phi(x,y)$, the witness worker seeks a term $t(x)$ and creates the universal obligation $\Phi(x,t(x))$. The search grammar should be type-directed and size-bounded: local variables, constructors, projections, selected recursive calls, affine combinations, and guarded division or remainder operations. Piecewise terms are permitted only with exhaustive, proved branch conditions.
+
+Counterexample-guided search can quickly reject candidates using samples or a model of an abstraction. Such rejection improves search, but passing samples is never evidence sufficient to prove the universal obligation. A candidate can be used only after Lean proves the resulting statement. Over \code{Fin n}, witness construction includes a bound proof; over \code{Nat}, it includes nonnegativity where a signed intermediate representation is used.
+
+\subsection{Executable affine synthesis}
+\status{Implemented and tested in Python; candidate Lean replay emitted}
+
+The implemented fragment solves
+\[
+  A w=B x+c
+\]
+by searching for an affine witness $w=W x+d$. Coefficient matching gives the exact linear systems
+\[
+  A W=B,\qquad A d=c.
+\]
+The oracle performs rational reduced row-echelon elimination, independently for each column of $B$ and for $c$. Free variables are set to zero. The checker multiplies the proposed matrices again and compares every entry exactly. No sampled values of $x$ are involved.
+
+Over $\Q$, this is complete for the affine-witness template, ignoring resource bounds. The implemented integer mode merely requires every coefficient of $W$ and $d$ to be integral. It is intentionally incomplete: a different choice of free variables might yield an integral solution even when the default rational solution does not.
+
+A production integer worker should compute a Smith normal form $UAV=D$ with unimodular $U,V$, validate the transformation identities and unimodularity certificates, and solve the divisibility conditions in $D z=U(Bx+c)$. This may require assumptions on $x$, rather than an unconditional affine term. It is a specified extension, not part of the executable prototype.
+
+For example, $2w=x$ has the rational witness $x/2$, but no integer witness for every integer $x$. An integer solver must obtain a parity assumption or fail. It must never reinterpret rational division as integer arithmetic silently.
+
+\subsection{Worked affine example}
+
+The system
+\[
+ u+2v=3x-y+5,\qquad v=2x+4y-3
+\]
+has the integral affine solution
+\[
+ v=2x+4y-3,\qquad u=-x-9y+11.
+\]
+A replay simply constructs these expressions and proves the two identities with \code{ring}. The corresponding candidate script is included in \code{lean/GeneratedReplay.lean}. This is a construction, not just a contradiction proof of an existential statement.
+
+\section{Induction, generalization, and invariant synthesis}
+
+\subsection{Selecting a scheme from recursive structure}
+
+The induction planner starts from recursive calls visible in the target and relevant hypotheses. For each, it records the recursive arguments, arguments that change across calls, and the equations that the definition generates. It then proposes a bounded collection of structural or functional induction schemes. User-specified schemes take priority. Blind induction on every natural variable is not acceptable.
+
+Each candidate plan has an explicit Lean motive, an induction principle, generalized variables, and recursive hypotheses available in each case. Indexed inductive families require motives that retain their indices and dependent hypotheses. A case split on an inductive value does not automatically supply an induction hypothesis; confusing the two is a design error.
+
+Generalization follows a dependency closure. If an accumulator changes in a recursive call, generalize it; also revert hypotheses and local definitions whose types or values depend on it, then reintroduce them where appropriate. Candidate generalization sets are ordered by size and capped. This does not solve every induction problem, but it targets a common and mechanically detectable failure mode.
+
+\subsection{A motivating accumulator}
+
+Consider the recursive function
+\[
+ A(0,a)=a,\qquad A(n+1,a)=A(n,a+2n+1).
+\]
+The desired theorem is $A(n,a)=a+n^2$. Inducting on $n$ while keeping $a$ fixed gives a hypothesis about $A(n,a)$, whereas the recursive call needs $A(n,a+2n+1)$. Generalizing $a$ first gives
+\[
+  \forall a,\;A(n,a)=a+n^2,
+\]
+which specializes to the changed accumulator. The step reduces to
+\[
+ a+2n+1+n^2=a+(n+1)^2.
+\]
+The packaged \code{StructuralReplay.lean} gives an explicit candidate Lean proof over integer accumulators. The important automation problem is choosing the generalization, not performing the final ring calculation.
+
+\subsection{A bounded proof-progress measure}
+
+After introducing a case, identify the recursive call occurrences that could match the induction hypotheses. Prefer rewrites that decrease constructor mismatch, unmatched accumulator updates, and target size, in that order. A lexicographic measure provides a practical way to avoid repeatedly unfolding a recursive function in the wrong direction.
+
+When this fails, an auxiliary lemma may be proposed by anti-unifying a stuck term with an induction-hypothesis pattern or by introducing a polynomial invariant template. The proposed lemma becomes a separate proof obligation. It is never assumed in its own proof. General mutual or cyclic induction would require a distinct justified proof rule and is outside the initial implementation.
+
+This planner is specified at algorithm level but is not implemented in the Python prototype. What is implemented is the invariant-discovery subproblem below.
+
+\subsection{Exact polynomial recurrence synthesis}
+\status{Implemented and tested in Python}
+
+Let a sequence be defined by
+\[
+ S(0,\bm a)=I(\bm a),\qquad
+ S(n+1,\bm a)=S(n,\bm a)+P(n,\bm a),
+\]
+where $I,P$ have rational coefficients and $I$ is independent of $n$. Search for
+\[
+ F(n,\bm a)=\sum_{|\alpha|\le D}c_\alpha(n,\bm a)^\alpha.
+\]
+Substitute this ansatz into the base and step identities
+\begin{align}
+ F(0,\bm a)&=I(\bm a),\label{eq:base}\\
+ F(n+1,\bm a)-F(n,\bm a)&=P(n,\bm a).\label{eq:step}
+\end{align}
+Equating coefficients gives a rational linear system in the unknown $c_\alpha$. The search raises $D$ until it finds a solution or reaches a cap. The checker then recomputes both identities independently from the proposed polynomial.
+
+\begin{proposition}[Recurrence certificate]
+If a polynomial $F$ satisfies \eqref{eq:base} and \eqref{eq:step}, then $S(n,\bm a)=F(n,\bm a)$ for every $n\in\N$ and every admissible parameter tuple $\bm a$.
+\end{proposition}
+\begin{proof}
+The base identity proves the assertion at zero. Assuming it at $n$, substitute it into the recurrence and use \eqref{eq:step} to obtain the assertion at $n+1$.
+\end{proof}
+
+The algorithm is complete within each finite polynomial template because exact linear-system solving decides whether its coefficient equations are consistent. For rational polynomial increments, a polynomial antidifference exists; nevertheless, the implemented search may return \unknown{} when its degree cap is too small. General recurrences involving products with $S$, branching updates, or nonlinear state transformations are not accepted by this interface.
+
+For $P(n)=n^2$ and $I=0$, the synthesized result is
+\[
+ F(n)=\frac{n^3}{3}-\frac{n^2}{2}+\frac n6
+     =\frac{n(n-1)(2n-1)}6.
+\]
+The experiment includes power sums from exponent zero through eight and 24 parameterized polynomial recurrences. The generated Lean candidates instantiate natural-number induction and replay the identities over $\Q$; these scripts have not been compiled in this environment.
+
+\subsection{Scaling beyond the prototype}
+
+For $m$ variables and total degree $D$, there are $\binom{m+D}{D}$ template monomials. The small implementation enumerates a Cartesian exponent grid and filters it; this is simple but wastes work. A production version should enumerate bounded compositions directly, exploit sparse coefficient matrices, and use fraction-free or modular elimination to limit rational coefficient growth. None of these optimizations changes the acceptance condition: the base and step identities must still be checked exactly.

@@ -1,0 +1,230 @@
+\section{Experiments actually performed}
+
+\subsection{Environment and reproducibility}
+
+The execution environment was Linux x86\_64 with Python 3.13.5, NumPy 2.3.5,
+SciPy 1.17.0, SymPy 1.14.0, and pytest 9.0.2. The synthetic benchmark uses seed
+20260914. Numerical-library thread environment variables were set to one for
+the recorded run. Full version strings are in \path{results/benchmarks.json}.
+The test run completed with \textbf{73 passed in 1.11 seconds}.
+
+No \code{lean}, \code{lake}, or successful Lean execution route was available.
+The supplied Lean comparison runner therefore recorded \code{not\_run}, with
+that reason, rather than manufacturing zero failures or baseline timings.
+Source inspection, Python execution, and generated Lean source are three
+different forms of evidence and remain separately labeled throughout the
+package.
+
+The benchmarks were executed once for diagnostic purposes; there are no
+repeated-trial confidence intervals or hardware-normalized performance claims.
+The exact combinatorial counts and algebraic acceptance results are more
+informative here than submillisecond timings.
+
+\subsection{Summary of observed outcomes}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}p{0.34\textwidth}rY@{}}
+\toprule
+Experiment & Outcome & Interpretation\\
+\midrule
+Pytest suite & 73 passed & Includes parametrized, randomized, negative, and mutation tests\\
+Named nonlinear cases & 9 accepted / 12 & Two true cases unresolved; one deliberately false case unresolved\\
+Generated product-cone cases & 100 / 100 & Constructed inside the covered cone; not representative problem sampling\\
+Separate false-polynomial controls & 0 accepted / 24 & All returned unknown; exact negative witnesses checked separately\\
+Bernstein cases & 43 accepted / 45 & One true nondyadic-zero case and one false case unresolved\\
+Additive recurrence invariants & 49 / 49 & Polynomial increments; base and universal step identities checked\\
+Horn growth family & 5 depths & Both strategies prove all goals; search work differs sharply\\
+Actual Lean comparison & Not run & No measured superiority over \grind\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The 109 accepted nonlinear certificates are the nine named successes plus the
+100 generated cases. They are not 109 previously unsolved Lean theorems. The
+49 invariants concern a deliberately restricted polynomial recurrence class,
+not arbitrary recursive Lean programs.
+
+\subsection{Demand search: counts before speed claims}
+
+\input{horn-table.tex}
+
+The number of proof nodes in both returned certificates is $d+1$ at every
+depth. Thus the search-state reduction is not achieved by silently omitting
+necessary proof steps. At depth 14, forward search generated 32,766 rule
+instances and demand search generated 14; each yielded the same 15-node chain.
+The toy rule order intentionally makes the forward target last at its depth.
+A different forward strategy, or the actual \grind\ implementation, can behave
+differently.
+
+Correctness testing extends beyond this favorable family. The tests exercise
+pure dependency cycles, cycles with a base fact, multiple-premise AND-rules,
+wrong goals, invalid proof-parent indices, depth/fact limits, and randomized
+finite ground Horn systems compared across both search implementations.
+These tests support the implementation's behavior, not a completeness claim
+for general theorem proving.
+
+\subsection{Nonlinear cases, including unresolved truths}
+
+The named successful cases are a shifted square, two-variable AM--GM, a cubic
+box product, a quartic box product, an equality-ideal identity, a shifted square
+with rational margin, two-dimensional Cauchy--Schwarz, a product of three lower
+bounds, and three-variable variance. The quartic product under a degree-2 cap
+and the Motzkin polynomial remain unresolved. A nearly nonnegative but actually
+false shifted square also remains unresolved, as required.
+
+For the generated set, each target is a positive rational sum of six products
+of constraints from $x,1-x,y,1-y$, with product degree at most four. This
+construction intentionally places the targets inside the chosen certificate
+cone. It tests discovery, rational reconstruction, and checking on diverse
+coefficient combinations; it does not estimate performance on randomly chosen
+mathematical inequalities. The median recorded discovery time was about
+21.5 milliseconds and the largest about 103.6 milliseconds for this set.
+These are single-run local measurements, not a speed comparison with Lean.
+
+Each of the 24 additional negative controls has the form
+$(x-a)^2-\varepsilon$ with $\varepsilon>0$ rational. The benchmark separately
+checks its exact negative value at $a$. The cone routine itself returns
+\code{unknown}; it does not return a certified refutation. Tests also corrupt
+weights, remove sign assumptions, change targets by tiny rational quantities,
+and introduce invalid factor indices. The checker must reject those corruptions
+even if a numerical optimizer would regard the residual as negligible.
+
+\subsection{Bernstein and invariant evidence}
+
+The Bernstein set contains the worked two-leaf positive polynomial, a box
+product, a dyadic zero, a nondyadic zero, a false polynomial, and 40 strictly
+positive rational quadratics. The 43 accepted cases have complete checked
+subdivision trees. A test corrupts the box-cover geometry to ensure local
+positivity does not masquerade as a complete proof.
+
+The invariant set contains nine increments $(n+1)^k$ for $0\leq k\leq8$ and
+40 fixed-seed random rational polynomial increments with varied starting
+values. Every accepted proposal passes exact base and transition checks.
+The median recorded synthesis time was about 4.1 milliseconds. This includes
+interpolation and validation but not Lean recursor application, source
+elaboration, or kernel checking.
+
+The package exports the nine named cone certificates and all 49 invariant
+certificates as JSON. A separate reload-and-validate script accepted all 58
+saved records. The additional generated certificates and box trees are
+reproducibly rediscovered and checked by the benchmark script; they are not
+all serialized as separate proof artifacts.
+
+\subsection{What the Lean export does and does not establish}
+
+The exporter emits nine inequality theorems using explicit nonnegative terms,
+rational arithmetic, and polynomial identities. It also emits 49 recurrence
+proofs using a generic induction lemma for iteration and the generated exact
+base/step expressions. The files are \path{lean/Forge/Certificates.lean} and
+\path{lean/Forge/Invariants.lean}.
+
+They contain no deliberate admissions or new axioms. Nevertheless, the source
+was not compiled, so it is not a verified Lean deliverable. Elaboration details,
+tactic API changes, or dependency integration may require corrections. The
+right acceptance criterion is a successful build followed by an axiom and
+proof audit, not the plausible appearance of generated source. The included
+runner leaves this evidence gap explicit.
+
+\section{A fair evaluation for a real Forge implementation}
+
+\subsection{Benchmark strata and leak prevention}
+
+A subsequent Lean evaluation should use distinct strata: standard \grind\
+regressions; nonlinear inequalities; fresh recursive definitions needing
+induction; accumulator and fusion lemmas; existential constructions; Boolean
+and bit-vector goals; quantified first-order problems; and mixed goals in
+which one technique supplies a lemma to another. Keep easy goals, failed goals,
+and unsupported goals, not only examples chosen after an extension succeeds.
+
+Partition by theorem family and source module rather than individual nearby
+lemmas. Remove the target theorem from any retrieval index. Check for equivalent
+lemmas, renamed copies, and specialization leakage. A synthesis benchmark
+whose target is already available as a library fact primarily evaluates
+retrieval. That can be useful, but it is a different experiment.
+
+Record the complete imported environment, theorem attributes, simplification
+sets, seeds, solver versions, and tactic configuration. Reset proof state
+between runs; do not let a successful trial add a lemma that helps a later
+baseline run.
+
+\subsection{Baselines and ablations}
+
+Compare stock \grind, explicitly configured \grind\ variants, relevant
+individual tactics, and a straightforward portfolio. Then compare Forge with
+one extension removed at a time: demands, nonlinear cuts, induction
+generalization, invariant synthesis, witnesses, or external islands. Compare
+the cooperative version with the same engines run independently. Otherwise,
+a gain could come entirely from adding a known tactic rather than from the
+proposed information exchange.
+
+Use two resource protocols. Under \emph{fixed total resources}, all systems
+receive the same wall-clock limit, memory limit, core count, and appropriately
+reported heartbeat budget. Under \emph{additive fallback resources}, allow the
+unchanged baseline budget plus a declared extension budget, reporting both
+budgets and the extra cost. Neither protocol substitutes for the other.
+
+Metrics should include checked solved goals, timeouts, elaboration errors,
+unsupported translations, proof bytes, reconstruction time, kernel replay time,
+and unexpected axioms. Report paired wins and losses, not only aggregate
+success. Repeat timings in randomized order and report confidence intervals
+or paired distributions. Include proof checking in the main end-to-end result,
+while retaining search-only timing for diagnosis.
+
+The supplied comparison script is much smaller: it tries existing tactics on
+nine exported certificate contexts, records compiler diagnostics, and optionally
+builds the replay library. It is a smoke-test scaffold, not an implementation
+of this full protocol.
+
+\section{Development sequence and acceptance gates}
+
+\textbf{Stage 1: reliable replay.} Compile the generated Lean files, fix any
+elaboration issues, and audit their axioms. Implement a typed polynomial
+reifier and explicit certificate replay before connecting an external oracle.
+Reject malformed certificates and wrong-context assumptions in Lean tests.
+A successful stage means that a saved certificate proves the exact intended
+Lean theorem, not that discovery is fast.
+
+\textbf{Stage 2: nonlinear integration.} Connect the bounded LP proposal service
+to the reifier and checker. Add the goal-sensitive square dictionary, product
+cuts, and failure diagnostics. Start with real polynomial inequalities and
+explicit hypotheses; postpone complicated casts and rational expressions until
+their transport lemmas are tested. Measure against \code{nlinarith} and stock
+\grind, including cases they already solve.
+
+\textbf{Stage 3: structural coordination.} Implement the scoped obligation graph,
+tabled demands, and one-variable structural induction with changed-argument
+generalization. Port additive invariant synthesis and prove its recurrence
+transport. Demonstrate mixed examples in which synthesized structure feeds
+facts to the algebraic engine. Keep a replay script for every success.
+
+\textbf{Stage 4: richer synthesis and delegation.} Add typed witness grammars,
+selected solver islands, and optional broader certificate search. Each backend
+must pass a proof-rule coverage matrix and strict/native trust-profile audit.
+A missing or incompatible backend should disable only its lane.
+
+\textbf{Stage 5: validated deployment.} Run the controlled repository-scale
+benchmarks, tune scheduling on a separate training set, preserve stock behavior
+in conservative mode, and publish wins, regressions, unsupported cases, and
+proof-checking costs. Do not release an experimental always-on policy merely
+because it improves an aggregate score on its tuning examples.
+
+These are dependency-ordered milestones, not a promised schedule. The highest
+risk is the typed, scoped, version-compatible bridge into Lean and the quality
+of the cooperative search policy, not the small algebraic checker alone.
+
+\section{Conclusion}
+
+The credible path beyond \grind\ is to supply the proof structures and
+certificates that local saturation lacks, while retaining its mature core.
+Forge makes that path concrete: demand-directed obligations, exact nonlinear
+certificates, complete box proofs, justified induction generalization,
+polynomial invariants, typed witnesses, and narrowly translated solver islands.
+Its organizing rule is that speculative search may be aggressive but every
+logical consequence must have a checkable derivation in its actual scope.
+
+The executable work supports four parts of this proposal and exposes meaningful
+limitations. It does not establish a finished Lean tactic or measured dominance
+over \grind. The next decisive evidence is a typed Lean implementation with
+successful kernel replay and a paired, controlled evaluation. The supplied
+source, saved certificates, tests, and integration contracts make that a
+specific engineering program rather than a vague aspiration.

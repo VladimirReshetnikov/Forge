@@ -1,0 +1,2397 @@
+{
+  "kind": "induction_sequence",
+  "theorems": [
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [],
+              "name": "xs",
+              "sort": "L",
+              "variable": true
+            },
+            {
+              "args": [],
+              "name": "nil",
+              "sort": "L",
+              "variable": false
+            }
+          ],
+          "name": "app",
+          "sort": "L",
+          "variable": false
+        },
+        "name": "append_right_identity",
+        "rhs": {
+          "args": [],
+          "name": "xs",
+          "sort": "L",
+          "variable": true
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [],
+                "name": "nil",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "app_nil"
+            }
+          ],
+          "right": []
+        },
+        "generalize": [],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "app_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [],
+                    "name": "$tail",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "$ih"
+            }
+          ],
+          "right": []
+        },
+        "subject": "xs"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L",
+                  "variable": true
+                },
+                {
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "app",
+              "sort": "L",
+              "variable": false
+            },
+            {
+              "args": [],
+              "name": "zs",
+              "sort": "L",
+              "variable": true
+            }
+          ],
+          "name": "app",
+          "sort": "L",
+          "variable": false
+        },
+        "name": "append_associativity",
+        "rhs": {
+          "args": [
+            {
+              "args": [],
+              "name": "xs",
+              "sort": "L",
+              "variable": true
+            },
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L",
+                  "variable": true
+                },
+                {
+                  "args": [],
+                  "name": "zs",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "app",
+              "sort": "L",
+              "variable": false
+            }
+          ],
+          "name": "app",
+          "sort": "L",
+          "variable": false
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "ys",
+                    "sort": "L",
+                    "variable": true
+                  },
+                  {
+                    "args": [],
+                    "name": "zs",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "app_nil"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "ys",
+                    "sort": "L",
+                    "variable": true
+                  },
+                  {
+                    "args": [],
+                    "name": "zs",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "app_nil"
+            }
+          ]
+        },
+        "generalize": [],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "zs",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "app_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [],
+                        "name": "zs",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "app_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "zs",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "$ih"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "zs",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "app_cons"
+            }
+          ]
+        },
+        "subject": "xs"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [],
+              "name": "n",
+              "sort": "N",
+              "variable": true
+            },
+            {
+              "args": [],
+              "name": "z",
+              "sort": "N",
+              "variable": false
+            }
+          ],
+          "name": "add",
+          "sort": "N",
+          "variable": false
+        },
+        "name": "add_right_zero",
+        "rhs": {
+          "args": [],
+          "name": "n",
+          "sort": "N",
+          "variable": true
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [],
+                "name": "z",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "add_zero"
+            }
+          ],
+          "right": []
+        },
+        "generalize": [],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "N",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "z",
+                        "sort": "N",
+                        "variable": false
+                      }
+                    ],
+                    "name": "add",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "add_succ"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$tail",
+                    "sort": "N",
+                    "variable": true
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "$ih"
+            }
+          ],
+          "right": []
+        },
+        "subject": "n"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [],
+              "name": "n",
+              "sort": "N",
+              "variable": true
+            },
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "m",
+                  "sort": "N",
+                  "variable": true
+                }
+              ],
+              "name": "s",
+              "sort": "N",
+              "variable": false
+            }
+          ],
+          "name": "add",
+          "sort": "N",
+          "variable": false
+        },
+        "name": "add_right_successor",
+        "rhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "n",
+                  "sort": "N",
+                  "variable": true
+                },
+                {
+                  "args": [],
+                  "name": "m",
+                  "sort": "N",
+                  "variable": true
+                }
+              ],
+              "name": "add",
+              "sort": "N",
+              "variable": false
+            }
+          ],
+          "name": "s",
+          "sort": "N",
+          "variable": false
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "m",
+                    "sort": "N",
+                    "variable": true
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "add_zero"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "m",
+                    "sort": "N",
+                    "variable": true
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "add_zero"
+            }
+          ]
+        },
+        "generalize": [],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "N",
+                        "variable": true
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "m",
+                            "sort": "N",
+                            "variable": true
+                          }
+                        ],
+                        "name": "s",
+                        "sort": "N",
+                        "variable": false
+                      }
+                    ],
+                    "name": "add",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "add_succ"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "N",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "m",
+                            "sort": "N",
+                            "variable": true
+                          }
+                        ],
+                        "name": "add",
+                        "sort": "N",
+                        "variable": false
+                      }
+                    ],
+                    "name": "s",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "$ih"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "N",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "m",
+                            "sort": "N",
+                            "variable": true
+                          }
+                        ],
+                        "name": "add",
+                        "sort": "N",
+                        "variable": false
+                      }
+                    ],
+                    "name": "s",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "add_succ"
+            }
+          ]
+        },
+        "subject": "n"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L",
+                  "variable": true
+                },
+                {
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "app",
+              "sort": "L",
+              "variable": false
+            }
+          ],
+          "name": "rev",
+          "sort": "L",
+          "variable": false
+        },
+        "name": "reverse_append",
+        "rhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "ys",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "rev",
+              "sort": "L",
+              "variable": false
+            },
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "rev",
+              "sort": "L",
+              "variable": false
+            }
+          ],
+          "name": "app",
+          "sort": "L",
+          "variable": false
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "ys",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "rev",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "app_nil"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "ys",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "nil",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "rev_nil"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "ys",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "rev",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "append_right_identity"
+            }
+          ]
+        },
+        "generalize": [],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "rev",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "app_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "rev_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "ys",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "$ih"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "ys",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "append_associativity"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "ys",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "rev_cons"
+            }
+          ]
+        },
+        "subject": "xs"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "rev",
+              "sort": "L",
+              "variable": false
+            }
+          ],
+          "name": "rev",
+          "sort": "L",
+          "variable": false
+        },
+        "name": "reverse_involution",
+        "rhs": {
+          "args": [],
+          "name": "xs",
+          "sort": "L",
+          "variable": true
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "nil",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "rev",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "rev_nil"
+            },
+            {
+              "after": {
+                "args": [],
+                "name": "nil",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "rev_nil"
+            }
+          ],
+          "right": []
+        },
+        "generalize": [],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "rev",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "rev_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "reverse_append"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "rev_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0,
+                0
+              ],
+              "rule": "rev_nil"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "app_nil"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "$tail",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "$ih"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "nil",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "app_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$head",
+                    "sort": "E",
+                    "variable": true
+                  },
+                  {
+                    "args": [],
+                    "name": "$tail",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "cons",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "app_nil"
+            }
+          ],
+          "right": []
+        },
+        "subject": "xs"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [],
+              "name": "xs",
+              "sort": "L",
+              "variable": true
+            },
+            {
+              "args": [],
+              "name": "a",
+              "sort": "L",
+              "variable": true
+            }
+          ],
+          "name": "ra",
+          "sort": "L",
+          "variable": false
+        },
+        "name": "reverse_accumulator",
+        "rhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "rev",
+              "sort": "L",
+              "variable": false
+            },
+            {
+              "args": [],
+              "name": "a",
+              "sort": "L",
+              "variable": true
+            }
+          ],
+          "name": "app",
+          "sort": "L",
+          "variable": false
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [],
+                "name": "a",
+                "sort": "L",
+                "variable": true
+              },
+              "path": [],
+              "rule": "ra_nil"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "nil",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "a",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "rev_nil"
+            },
+            {
+              "after": {
+                "args": [],
+                "name": "a",
+                "sort": "L",
+                "variable": true
+              },
+              "path": [],
+              "rule": "app_nil"
+            }
+          ]
+        },
+        "generalize": [
+          "a"
+        ],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$tail",
+                    "sort": "L",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "a",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "ra",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "ra_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "a",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "$ih"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "rev",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "a",
+                    "sort": "L",
+                    "variable": true
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "rev_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$head",
+                            "sort": "E",
+                            "variable": true
+                          },
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          }
+                        ],
+                        "name": "cons",
+                        "sort": "L",
+                        "variable": false
+                      },
+                      {
+                        "args": [],
+                        "name": "a",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "app",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [],
+              "rule": "append_associativity"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "nil",
+                            "sort": "L",
+                            "variable": false
+                          },
+                          {
+                            "args": [],
+                            "name": "a",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "app",
+                        "sort": "L",
+                        "variable": false
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1
+              ],
+              "rule": "app_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "rev",
+                    "sort": "L",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$head",
+                        "sort": "E",
+                        "variable": true
+                      },
+                      {
+                        "args": [],
+                        "name": "a",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "cons",
+                    "sort": "L",
+                    "variable": false
+                  }
+                ],
+                "name": "app",
+                "sort": "L",
+                "variable": false
+              },
+              "path": [
+                1,
+                1
+              ],
+              "rule": "app_nil"
+            }
+          ]
+        },
+        "subject": "xs"
+      }
+    },
+    {
+      "equation": {
+        "lhs": {
+          "args": [
+            {
+              "args": [],
+              "name": "xs",
+              "sort": "L",
+              "variable": true
+            },
+            {
+              "args": [],
+              "name": "n",
+              "sort": "N",
+              "variable": true
+            }
+          ],
+          "name": "la",
+          "sort": "N",
+          "variable": false
+        },
+        "name": "length_accumulator",
+        "rhs": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [],
+                  "name": "xs",
+                  "sort": "L",
+                  "variable": true
+                }
+              ],
+              "name": "length",
+              "sort": "N",
+              "variable": false
+            },
+            {
+              "args": [],
+              "name": "n",
+              "sort": "N",
+              "variable": true
+            }
+          ],
+          "name": "add",
+          "sort": "N",
+          "variable": false
+        }
+      },
+      "proof": {
+        "base": {
+          "left": [
+            {
+              "after": {
+                "args": [],
+                "name": "n",
+                "sort": "N",
+                "variable": true
+              },
+              "path": [],
+              "rule": "la_nil"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "z",
+                    "sort": "N",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "n",
+                    "sort": "N",
+                    "variable": true
+                  }
+                ],
+                "name": "add",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "length_nil"
+            },
+            {
+              "after": {
+                "args": [],
+                "name": "n",
+                "sort": "N",
+                "variable": true
+              },
+              "path": [],
+              "rule": "add_zero"
+            }
+          ]
+        },
+        "generalize": [
+          "n"
+        ],
+        "step": {
+          "left": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": "$tail",
+                    "sort": "L",
+                    "variable": true
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "n",
+                        "sort": "N",
+                        "variable": true
+                      }
+                    ],
+                    "name": "s",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "la",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "la_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "$tail",
+                        "sort": "L",
+                        "variable": true
+                      }
+                    ],
+                    "name": "length",
+                    "sort": "N",
+                    "variable": false
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [],
+                        "name": "n",
+                        "sort": "N",
+                        "variable": true
+                      }
+                    ],
+                    "name": "s",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "add",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "$ih"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "length",
+                        "sort": "N",
+                        "variable": false
+                      },
+                      {
+                        "args": [],
+                        "name": "n",
+                        "sort": "N",
+                        "variable": true
+                      }
+                    ],
+                    "name": "add",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "add_right_successor"
+            }
+          ],
+          "right": [
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "length",
+                        "sort": "N",
+                        "variable": false
+                      }
+                    ],
+                    "name": "s",
+                    "sort": "N",
+                    "variable": false
+                  },
+                  {
+                    "args": [],
+                    "name": "n",
+                    "sort": "N",
+                    "variable": true
+                  }
+                ],
+                "name": "add",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [
+                0
+              ],
+              "rule": "length_cons"
+            },
+            {
+              "after": {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "args": [],
+                            "name": "$tail",
+                            "sort": "L",
+                            "variable": true
+                          }
+                        ],
+                        "name": "length",
+                        "sort": "N",
+                        "variable": false
+                      },
+                      {
+                        "args": [],
+                        "name": "n",
+                        "sort": "N",
+                        "variable": true
+                      }
+                    ],
+                    "name": "add",
+                    "sort": "N",
+                    "variable": false
+                  }
+                ],
+                "name": "s",
+                "sort": "N",
+                "variable": false
+              },
+              "path": [],
+              "rule": "add_succ"
+            }
+          ]
+        },
+        "subject": "xs"
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+test_automatic_accumulator_generalization (test_forge.InductionTests.test_automatic_accumulator_generalization) ... ok
+test_false_reverse_identity_not_proved (test_forge.InductionTests.test_false_reverse_identity_not_proved) ... ok
+test_random_semantic_crosscheck (test_forge.InductionTests.test_random_semantic_crosscheck) ... ok
+test_rigid_induction_tail (test_forge.InductionTests.test_rigid_induction_tail) ... ok
+test_seed_theorems_have_replayable_proofs (test_forge.InductionTests.test_seed_theorems_have_replayable_proofs) ... ok
+test_small_grammar_limit_returns_no_proof (test_forge.InductionTests.test_small_grammar_limit_returns_no_proof) ... ok
+test_sort_mismatch_rejected (test_forge.InductionTests.test_sort_mismatch_rejected) ... ok
+test_trace_corruption_and_dependency_loss (test_forge.InductionTests.test_trace_corruption_and_dependency_loss) ... ok
+test_unknown_or_cyclic_rule_rejected (test_forge.InductionTests.test_unknown_or_cyclic_rule_rejected) ... ok
+test_bernstein_identity_random_exact (test_forge.PolynomialTests.test_bernstein_identity_random_exact) ... ok
+test_exact_linear_solver (test_forge.PolynomialTests.test_exact_linear_solver) ... ok
+test_invalid_polynomial (test_forge.PolynomialTests.test_invalid_polynomial) ... ok
+test_sparse_arithmetic_random_evaluation (test_forge.PolynomialTests.test_sparse_arithmetic_random_evaluation) ... ok
+test_constraint_multiplied_squares (test_forge.PositivityTests.test_constraint_multiplied_squares) ... ok
+test_diagonal_square_budget_unknown_not_false (test_forge.PositivityTests.test_diagonal_square_budget_unknown_not_false) ... ok
+test_negative_weights_rejected (test_forge.PositivityTests.test_negative_weights_rejected) ... ok
+test_nonsos_and_negative_targets_not_accepted (test_forge.PositivityTests.test_nonsos_and_negative_targets_not_accepted) ... ok
+test_partition_corruption_rejected (test_forge.PositivityTests.test_partition_corruption_rejected) ... ok
+test_refutation_is_a_checked_point (test_forge.PositivityTests.test_refutation_is_a_checked_point) ... ok
+test_sos_with_exact_replay (test_forge.PositivityTests.test_sos_with_exact_replay) ... ok
+test_strict_and_weak_signs_distinguished (test_forge.PositivityTests.test_strict_and_weak_signs_distinguished) ... ok
+test_subdivision_adds_a_certificate (test_forge.PositivityTests.test_subdivision_adds_a_certificate) ... ok
+test_degree_exhaustion_is_no_proof (test_forge.RecurrenceTests.test_degree_exhaustion_is_no_proof) ... ok
+test_interpolation_is_not_a_certificate (test_forge.RecurrenceTests.test_interpolation_is_not_a_certificate) ... ok
+test_random_additive_recurrences (test_forge.RecurrenceTests.test_random_additive_recurrences) ... ok
+test_triangular_closed_form (test_forge.RecurrenceTests.test_triangular_closed_form) ... ok
+test_affine_terms_not_single_model_values (test_forge.WitnessTests.test_affine_terms_not_single_model_values) ... ok
+test_corrupted_witness_rejected (test_forge.WitnessTests.test_corrupted_witness_rejected) ... ok
+test_domain_farkas_multipliers (test_forge.WitnessTests.test_domain_farkas_multipliers) ... ok
+test_inexact_certificate_rejected (test_forge.WitnessTests.test_inexact_certificate_rejected) ... ok
+test_unsatisfiable_goal_not_certified (test_forge.WitnessTests.test_unsatisfiable_goal_not_certified) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.607s
+
+OK

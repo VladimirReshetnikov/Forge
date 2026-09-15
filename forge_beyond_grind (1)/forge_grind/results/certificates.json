@@ -1,0 +1,4018 @@
+[
+  {
+    "kind": "theorem_bank",
+    "lemmas": [
+      {
+        "name": "app_right_nil",
+        "goal": {
+          "lhs": {
+            "symbol": "app",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "?xs",
+                "sort": "List",
+                "args": []
+              },
+              {
+                "symbol": "nil",
+                "sort": "List",
+                "args": []
+              }
+            ]
+          },
+          "rhs": {
+            "symbol": "?xs",
+            "sort": "List",
+            "args": []
+          }
+        },
+        "certificate": {
+          "kind": "list_induction",
+          "variable": "?xs",
+          "generalized": [],
+          "cases": {
+            "nil_left": [
+              {
+                "path": [],
+                "rule": "app.nil"
+              }
+            ],
+            "nil_right": [],
+            "cons_left": [
+              {
+                "path": [],
+                "rule": "app.cons"
+              },
+              {
+                "path": [
+                  1
+                ],
+                "rule": "IH"
+              }
+            ],
+            "cons_right": []
+          }
+        }
+      },
+      {
+        "name": "app_assoc",
+        "goal": {
+          "lhs": {
+            "symbol": "app",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "app",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?xs",
+                    "sort": "List",
+                    "args": []
+                  },
+                  {
+                    "symbol": "?ys",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              },
+              {
+                "symbol": "?zs",
+                "sort": "List",
+                "args": []
+              }
+            ]
+          },
+          "rhs": {
+            "symbol": "app",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "?xs",
+                "sort": "List",
+                "args": []
+              },
+              {
+                "symbol": "app",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?ys",
+                    "sort": "List",
+                    "args": []
+                  },
+                  {
+                    "symbol": "?zs",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "certificate": {
+          "kind": "list_induction",
+          "variable": "?xs",
+          "generalized": [
+            "?ys",
+            "?zs"
+          ],
+          "cases": {
+            "nil_left": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "app.nil"
+              }
+            ],
+            "nil_right": [
+              {
+                "path": [],
+                "rule": "app.nil"
+              }
+            ],
+            "cons_left": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "app.cons"
+              },
+              {
+                "path": [],
+                "rule": "app.cons"
+              },
+              {
+                "path": [
+                  1
+                ],
+                "rule": "IH"
+              }
+            ],
+            "cons_right": [
+              {
+                "path": [],
+                "rule": "app.cons"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "revAcc_spec",
+        "goal": {
+          "lhs": {
+            "symbol": "revAcc",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "?xs",
+                "sort": "List",
+                "args": []
+              },
+              {
+                "symbol": "?acc",
+                "sort": "List",
+                "args": []
+              }
+            ]
+          },
+          "rhs": {
+            "symbol": "app",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "rev",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?xs",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              },
+              {
+                "symbol": "?acc",
+                "sort": "List",
+                "args": []
+              }
+            ]
+          }
+        },
+        "certificate": {
+          "kind": "list_induction",
+          "variable": "?xs",
+          "generalized": [
+            "?acc"
+          ],
+          "cases": {
+            "nil_left": [
+              {
+                "path": [],
+                "rule": "revAcc.nil"
+              }
+            ],
+            "nil_right": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "rev.nil"
+              },
+              {
+                "path": [],
+                "rule": "app.nil"
+              }
+            ],
+            "cons_left": [
+              {
+                "path": [],
+                "rule": "revAcc.cons"
+              },
+              {
+                "path": [],
+                "rule": "IH"
+              }
+            ],
+            "cons_right": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "rev.cons"
+              },
+              {
+                "path": [],
+                "rule": "app_assoc"
+              },
+              {
+                "path": [
+                  1
+                ],
+                "rule": "app.cons"
+              },
+              {
+                "path": [
+                  1,
+                  1
+                ],
+                "rule": "app.nil"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "rev_append",
+        "goal": {
+          "lhs": {
+            "symbol": "rev",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "app",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?xs",
+                    "sort": "List",
+                    "args": []
+                  },
+                  {
+                    "symbol": "?ys",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          },
+          "rhs": {
+            "symbol": "app",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "rev",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?ys",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              },
+              {
+                "symbol": "rev",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?xs",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "certificate": {
+          "kind": "list_induction",
+          "variable": "?xs",
+          "generalized": [
+            "?ys"
+          ],
+          "cases": {
+            "nil_left": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "app.nil"
+              }
+            ],
+            "nil_right": [
+              {
+                "path": [
+                  1
+                ],
+                "rule": "rev.nil"
+              },
+              {
+                "path": [],
+                "rule": "app_right_nil"
+              }
+            ],
+            "cons_left": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "app.cons"
+              },
+              {
+                "path": [],
+                "rule": "rev.cons"
+              },
+              {
+                "path": [
+                  0
+                ],
+                "rule": "IH"
+              },
+              {
+                "path": [],
+                "rule": "app_assoc"
+              }
+            ],
+            "cons_right": [
+              {
+                "path": [
+                  1
+                ],
+                "rule": "rev.cons"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "rev_invol",
+        "goal": {
+          "lhs": {
+            "symbol": "rev",
+            "sort": "List",
+            "args": [
+              {
+                "symbol": "rev",
+                "sort": "List",
+                "args": [
+                  {
+                    "symbol": "?xs",
+                    "sort": "List",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          },
+          "rhs": {
+            "symbol": "?xs",
+            "sort": "List",
+            "args": []
+          }
+        },
+        "certificate": {
+          "kind": "list_induction",
+          "variable": "?xs",
+          "generalized": [],
+          "cases": {
+            "nil_left": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "rev.nil"
+              },
+              {
+                "path": [],
+                "rule": "rev.nil"
+              }
+            ],
+            "nil_right": [],
+            "cons_left": [
+              {
+                "path": [
+                  0
+                ],
+                "rule": "rev.cons"
+              },
+              {
+                "path": [],
+                "rule": "rev_append"
+              },
+              {
+                "path": [
+                  0
+                ],
+                "rule": "rev.cons"
+              },
+              {
+                "path": [
+                  0,
+                  0
+                ],
+                "rule": "rev.nil"
+              },
+              {
+                "path": [
+                  0
+                ],
+                "rule": "app.nil"
+              },
+              {
+                "path": [
+                  1
+                ],
+                "rule": "IH"
+              },
+              {
+                "path": [],
+                "rule": "app.cons"
+              },
+              {
+                "path": [
+                  1
+                ],
+                "rule": "app.nil"
+              }
+            ],
+            "cons_right": []
+          }
+        }
+      }
+    ],
+    "specialization": {
+      "goal": {
+        "lhs": {
+          "symbol": "revAcc",
+          "sort": "List",
+          "args": [
+            {
+              "symbol": "?xs",
+              "sort": "List",
+              "args": []
+            },
+            {
+              "symbol": "nil",
+              "sort": "List",
+              "args": []
+            }
+          ]
+        },
+        "rhs": {
+          "symbol": "rev",
+          "sort": "List",
+          "args": [
+            {
+              "symbol": "?xs",
+              "sort": "List",
+              "args": []
+            }
+          ]
+        }
+      },
+      "left": [
+        {
+          "path": [],
+          "rule": "revAcc_spec"
+        },
+        {
+          "path": [],
+          "rule": "app_right_nil"
+        }
+      ],
+      "right": []
+    }
+  },
+  {
+    "kind": "horn",
+    "depth": 4,
+    "goal": {
+      "predicate": "P",
+      "argument": {
+        "symbol": "f",
+        "sort": "U",
+        "args": [
+          {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "a",
+                        "sort": "U",
+                        "args": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "facts": [
+      {
+        "predicate": "P",
+        "argument": {
+          "symbol": "a",
+          "sort": "U",
+          "args": []
+        }
+      }
+    ],
+    "rules": [
+      {
+        "name": "step.f",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      },
+      {
+        "name": "step.g",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "g",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      }
+    ],
+    "proof": [
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "a",
+            "sort": "U",
+            "args": []
+          }
+        },
+        "rule": "@fact",
+        "parents": []
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "a",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          0
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "a",
+                    "sort": "U",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          1
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "a",
+                        "sort": "U",
+                        "args": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          2
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "a",
+                            "sort": "U",
+                            "args": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "horn",
+    "depth": 8,
+    "goal": {
+      "predicate": "P",
+      "argument": {
+        "symbol": "f",
+        "sort": "U",
+        "args": [
+          {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "a",
+                                        "sort": "U",
+                                        "args": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "facts": [
+      {
+        "predicate": "P",
+        "argument": {
+          "symbol": "a",
+          "sort": "U",
+          "args": []
+        }
+      }
+    ],
+    "rules": [
+      {
+        "name": "step.f",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      },
+      {
+        "name": "step.g",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "g",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      }
+    ],
+    "proof": [
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "a",
+            "sort": "U",
+            "args": []
+          }
+        },
+        "rule": "@fact",
+        "parents": []
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "a",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          0
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "a",
+                    "sort": "U",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          1
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "a",
+                        "sort": "U",
+                        "args": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          2
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "a",
+                            "sort": "U",
+                            "args": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          3
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "a",
+                                "sort": "U",
+                                "args": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          4
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "a",
+                                    "sort": "U",
+                                    "args": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          5
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "a",
+                                        "sort": "U",
+                                        "args": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          6
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "a",
+                                            "sort": "U",
+                                            "args": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          7
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "horn",
+    "depth": 12,
+    "goal": {
+      "predicate": "P",
+      "argument": {
+        "symbol": "f",
+        "sort": "U",
+        "args": [
+          {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "a",
+                                                        "sort": "U",
+                                                        "args": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "facts": [
+      {
+        "predicate": "P",
+        "argument": {
+          "symbol": "a",
+          "sort": "U",
+          "args": []
+        }
+      }
+    ],
+    "rules": [
+      {
+        "name": "step.f",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      },
+      {
+        "name": "step.g",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "g",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      }
+    ],
+    "proof": [
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "a",
+            "sort": "U",
+            "args": []
+          }
+        },
+        "rule": "@fact",
+        "parents": []
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "a",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          0
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "a",
+                    "sort": "U",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          1
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "a",
+                        "sort": "U",
+                        "args": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          2
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "a",
+                            "sort": "U",
+                            "args": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          3
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "a",
+                                "sort": "U",
+                                "args": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          4
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "a",
+                                    "sort": "U",
+                                    "args": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          5
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "a",
+                                        "sort": "U",
+                                        "args": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          6
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "a",
+                                            "sort": "U",
+                                            "args": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          7
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "a",
+                                                "sort": "U",
+                                                "args": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          8
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "a",
+                                                    "sort": "U",
+                                                    "args": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          9
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "a",
+                                                        "sort": "U",
+                                                        "args": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          10
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "a",
+                                                            "sort": "U",
+                                                            "args": []
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          11
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "horn",
+    "depth": 16,
+    "goal": {
+      "predicate": "P",
+      "argument": {
+        "symbol": "f",
+        "sort": "U",
+        "args": [
+          {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "f",
+                                                            "sort": "U",
+                                                            "args": [
+                                                              {
+                                                                "symbol": "f",
+                                                                "sort": "U",
+                                                                "args": [
+                                                                  {
+                                                                    "symbol": "f",
+                                                                    "sort": "U",
+                                                                    "args": [
+                                                                      {
+                                                                        "symbol": "a",
+                                                                        "sort": "U",
+                                                                        "args": []
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "facts": [
+      {
+        "predicate": "P",
+        "argument": {
+          "symbol": "a",
+          "sort": "U",
+          "args": []
+        }
+      }
+    ],
+    "rules": [
+      {
+        "name": "step.f",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      },
+      {
+        "name": "step.g",
+        "head": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "g",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "?x",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "body": [
+          {
+            "predicate": "P",
+            "argument": {
+              "symbol": "?x",
+              "sort": "U",
+              "args": []
+            }
+          }
+        ]
+      }
+    ],
+    "proof": [
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "a",
+            "sort": "U",
+            "args": []
+          }
+        },
+        "rule": "@fact",
+        "parents": []
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "a",
+                "sort": "U",
+                "args": []
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          0
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "a",
+                    "sort": "U",
+                    "args": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          1
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "a",
+                        "sort": "U",
+                        "args": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          2
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "a",
+                            "sort": "U",
+                            "args": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          3
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "a",
+                                "sort": "U",
+                                "args": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          4
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "a",
+                                    "sort": "U",
+                                    "args": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          5
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "a",
+                                        "sort": "U",
+                                        "args": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          6
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "a",
+                                            "sort": "U",
+                                            "args": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          7
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "a",
+                                                "sort": "U",
+                                                "args": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          8
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "a",
+                                                    "sort": "U",
+                                                    "args": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          9
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "a",
+                                                        "sort": "U",
+                                                        "args": []
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          10
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "a",
+                                                            "sort": "U",
+                                                            "args": []
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          11
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "f",
+                                                            "sort": "U",
+                                                            "args": [
+                                                              {
+                                                                "symbol": "a",
+                                                                "sort": "U",
+                                                                "args": []
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          12
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "f",
+                                                            "sort": "U",
+                                                            "args": [
+                                                              {
+                                                                "symbol": "f",
+                                                                "sort": "U",
+                                                                "args": [
+                                                                  {
+                                                                    "symbol": "a",
+                                                                    "sort": "U",
+                                                                    "args": []
+                                                                  }
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          13
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "f",
+                                                            "sort": "U",
+                                                            "args": [
+                                                              {
+                                                                "symbol": "f",
+                                                                "sort": "U",
+                                                                "args": [
+                                                                  {
+                                                                    "symbol": "f",
+                                                                    "sort": "U",
+                                                                    "args": [
+                                                                      {
+                                                                        "symbol": "a",
+                                                                        "sort": "U",
+                                                                        "args": []
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          14
+        ]
+      },
+      {
+        "fact": {
+          "predicate": "P",
+          "argument": {
+            "symbol": "f",
+            "sort": "U",
+            "args": [
+              {
+                "symbol": "f",
+                "sort": "U",
+                "args": [
+                  {
+                    "symbol": "f",
+                    "sort": "U",
+                    "args": [
+                      {
+                        "symbol": "f",
+                        "sort": "U",
+                        "args": [
+                          {
+                            "symbol": "f",
+                            "sort": "U",
+                            "args": [
+                              {
+                                "symbol": "f",
+                                "sort": "U",
+                                "args": [
+                                  {
+                                    "symbol": "f",
+                                    "sort": "U",
+                                    "args": [
+                                      {
+                                        "symbol": "f",
+                                        "sort": "U",
+                                        "args": [
+                                          {
+                                            "symbol": "f",
+                                            "sort": "U",
+                                            "args": [
+                                              {
+                                                "symbol": "f",
+                                                "sort": "U",
+                                                "args": [
+                                                  {
+                                                    "symbol": "f",
+                                                    "sort": "U",
+                                                    "args": [
+                                                      {
+                                                        "symbol": "f",
+                                                        "sort": "U",
+                                                        "args": [
+                                                          {
+                                                            "symbol": "f",
+                                                            "sort": "U",
+                                                            "args": [
+                                                              {
+                                                                "symbol": "f",
+                                                                "sort": "U",
+                                                                "args": [
+                                                                  {
+                                                                    "symbol": "f",
+                                                                    "sort": "U",
+                                                                    "args": [
+                                                                      {
+                                                                        "symbol": "f",
+                                                                        "sort": "U",
+                                                                        "args": [
+                                                                          {
+                                                                            "symbol": "a",
+                                                                            "sort": "U",
+                                                                            "args": []
+                                                                          }
+                                                                        ]
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "rule": "step.f",
+        "parents": [
+          15
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "cone",
+    "name": "quartic",
+    "target": {
+      "variables": 3,
+      "terms": [
+        [
+          [
+            0,
+            0,
+            4
+          ],
+          "1"
+        ],
+        [
+          [
+            0,
+            2,
+            2
+          ],
+          "-1"
+        ],
+        [
+          [
+            0,
+            4,
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            2,
+            0,
+            2
+          ],
+          "-1"
+        ],
+        [
+          [
+            2,
+            2,
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            4,
+            0,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "guards": [],
+    "certificate": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1/2",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  0,
+                  2
+                ],
+                "1"
+              ],
+              [
+                [
+                  0,
+                  2,
+                  0
+                ],
+                "-1"
+              ]
+            ]
+          },
+          "guards": []
+        },
+        {
+          "weight": "1/2",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  0,
+                  2
+                ],
+                "1"
+              ],
+              [
+                [
+                  2,
+                  0,
+                  0
+                ],
+                "-1"
+              ]
+            ]
+          },
+          "guards": []
+        },
+        {
+          "weight": "1/2",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  2,
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  2,
+                  0,
+                  0
+                ],
+                "-1"
+              ]
+            ]
+          },
+          "guards": []
+        }
+      ]
+    }
+  },
+  {
+    "kind": "cone",
+    "name": "product",
+    "target": {
+      "variables": 3,
+      "terms": [
+        [
+          [
+            1,
+            1,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "guards": [
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            "1"
+          ]
+        ]
+      },
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              0,
+              1,
+              0
+            ],
+            "1"
+          ]
+        ]
+      }
+    ],
+    "certificate": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  0,
+                  0
+                ],
+                "1"
+              ]
+            ]
+          },
+          "guards": [
+            0,
+            1
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "cone",
+    "name": "cube",
+    "target": {
+      "variables": 3,
+      "terms": [
+        [
+          [
+            3,
+            0,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "guards": [
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            "1"
+          ]
+        ]
+      }
+    ],
+    "certificate": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                "1"
+              ]
+            ]
+          },
+          "guards": [
+            0
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "cone",
+    "name": "unit_interval",
+    "target": {
+      "variables": 3,
+      "terms": [
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            2,
+            0,
+            0
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "guards": [
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            "1"
+          ]
+        ]
+      },
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              0,
+              0,
+              0
+            ],
+            "1"
+          ],
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            "-1"
+          ]
+        ]
+      }
+    ],
+    "certificate": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  0,
+                  0
+                ],
+                "1"
+              ]
+            ]
+          },
+          "guards": [
+            0,
+            1
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "cone",
+    "name": "guarded_cubic",
+    "target": {
+      "variables": 3,
+      "terms": [
+        [
+          [
+            0,
+            3,
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1,
+            2,
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            2,
+            1,
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            3,
+            0,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "guards": [
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            "1"
+          ]
+        ]
+      },
+      {
+        "variables": 3,
+        "terms": [
+          [
+            [
+              0,
+              1,
+              0
+            ],
+            "1"
+          ]
+        ]
+      }
+    ],
+    "certificate": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  1,
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                "-1"
+              ]
+            ]
+          },
+          "guards": [
+            0
+          ]
+        },
+        {
+          "weight": "1",
+          "square": {
+            "variables": 3,
+            "terms": [
+              [
+                [
+                  0,
+                  1,
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                "-1"
+              ]
+            ]
+          },
+          "guards": [
+            1
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "cone",
+    "name": "supplied_three_term_square",
+    "target": {
+      "variables": 2,
+      "terms": [
+        [
+          [
+            0,
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          "1"
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            2,
+            0
+          ],
+          "1"
+        ]
+      ]
+    },
+    "guards": [],
+    "certificate": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1",
+          "square": {
+            "variables": 2,
+            "terms": [
+              [
+                [
+                  0,
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  0,
+                  1
+                ],
+                "1"
+              ],
+              [
+                [
+                  1,
+                  0
+                ],
+                "1"
+              ]
+            ]
+          },
+          "guards": []
+        }
+      ]
+    }
+  },
+  {
+    "kind": "box",
+    "target": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3/10"
+        ],
+        [
+          [
+            1
+          ],
+          "-1"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "box": [
+      [
+        "0",
+        "1"
+      ]
+    ],
+    "strict": true,
+    "certificate": {
+      "kind": "split",
+      "axis": 0,
+      "point": "1/2",
+      "left": {
+        "kind": "leaf",
+        "lower": "1/20"
+      },
+      "right": {
+        "kind": "leaf",
+        "lower": "1/20"
+      }
+    }
+  },
+  {
+    "kind": "witness",
+    "witness": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "minus": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "1/10",
+          "square": {
+            "variables": 1,
+            "terms": [
+              [
+                [
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1
+                ],
+                "-2"
+              ]
+            ]
+          },
+          "guards": []
+        },
+        {
+          "weight": "1/2",
+          "square": {
+            "variables": 1,
+            "terms": [
+              [
+                [
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1
+                ],
+                "-1"
+              ]
+            ]
+          },
+          "guards": []
+        },
+        {
+          "weight": "2/5",
+          "square": {
+            "variables": 1,
+            "terms": [
+              [
+                [
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1
+                ],
+                "1/2"
+              ]
+            ]
+          },
+          "guards": []
+        }
+      ]
+    },
+    "plus": {
+      "kind": "nonnegative_cone",
+      "terms": [
+        {
+          "weight": "3/40",
+          "square": {
+            "variables": 1,
+            "terms": [
+              [
+                [
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1
+                ],
+                "-2"
+              ]
+            ]
+          },
+          "guards": []
+        },
+        {
+          "weight": "4/5",
+          "square": {
+            "variables": 1,
+            "terms": [
+              [
+                [
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1
+                ],
+                "1/2"
+              ]
+            ]
+          },
+          "guards": []
+        },
+        {
+          "weight": "1/8",
+          "square": {
+            "variables": 1,
+            "terms": [
+              [
+                [
+                  0
+                ],
+                "1"
+              ],
+              [
+                [
+                  1
+                ],
+                "2"
+              ]
+            ]
+          },
+          "guards": []
+        }
+      ]
+    }
+  }
+]

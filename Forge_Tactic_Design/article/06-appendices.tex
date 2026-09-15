@@ -1,0 +1,123 @@
+\appendix
+\section{Certificate formats and independent checking}
+
+\subsection{Sparse polynomials}
+
+A polynomial stores a positive variable count and a sorted list of distinct
+exponent vectors with nonzero rational coefficients. Variables are positional.
+Exponent vectors have exactly the declared dimension and contain nonnegative
+integers. Construction rejects noncanonical encodings instead of silently
+merging duplicate entries supplied in a purported certificate.
+
+For example, $x^2-2xy+y^2$ is represented schematically as
+\begin{Code}
+{
+  "nvars": 2,
+  "terms": [
+    [[0, 2], "1"],
+    [[1, 1], "-2"],
+    [[2, 0], "1"]
+  ]
+}
+\end{Code}
+
+All fractions in the exported JSON are exact strings such as \code{"1/97"}.
+The checker does not parse a decimal into a claim of approximate equality.
+An external-facing production parser should additionally bound sizes before
+constructing these values.
+
+\subsection{Cone and invariant records}
+
+A cone record contains the target polynomial, ordered lists of nonnegative
+and zero hypotheses, and a certificate. Each cone term contains a rational
+weight, a square polynomial, and a list of factor indices. An index can occur
+more than once. The equality part contains one arbitrary polynomial multiplier
+per zero hypothesis. The exact order is part of the certificate's meaning.
+
+An invariant record contains an invariant polynomial, an initial rational state,
+and one transition polynomial per state coordinate. The reload checker tests
+both base evaluation and exact polynomial substitution. It is independent of
+the interpolation and LP discovery functions. It is not independent of the
+shared rational-polynomial implementation, a limitation addressed by tests
+rather than concealed as formal verification.
+
+The essential cone-checking logic is the following executable pattern:
+\begin{Code}
+acc = zero_polynomial
+for term in certificate.terms:
+    reject unless term.weight is rational and nonnegative
+    p = term.weight * term.square**2
+    for i in term.factors:
+        reject unless i is a valid hypothesis index
+        p *= nonnegative_hypotheses[i]
+    acc += p
+for multiplier, equality in paired_ideal_entries:
+    acc += multiplier * equality
+accept exactly when acc == target
+\end{Code}
+
+The actual implementation also checks dimensions, array lengths, canonical
+polynomials, and malformed input. Exceptions representing invalid evidence
+lead to rejection. Resource-exhaustion behavior is an additional production
+requirement, not a theorem proved about the prototype.
+
+\subsection{Horn and box records}
+
+A Horn proof node records its ground conclusion, the rule index or input-fact
+marker, a complete ground substitution, and earlier premise-node indices.
+The checker verifies the instantiated rule body and head against those exact
+nodes. Trimming retains only ancestors of the root, preserving the topological
+order. A dependency cycle in the search graph may be legitimate, but the final
+proof certificate cannot justify itself through that cycle.
+
+A Bernstein certificate is either a leaf with a box, coordinate degrees, and
+all basis coefficients, or a split with an axis, interior rational cut, and
+both children. Every basis index must appear exactly once in canonical order.
+The checker reconstructs the polynomial at each leaf and checks the complete
+box cover recursively.
+
+\section{Reproducing the package}
+
+From the extracted package root, the Python path is:
+\begin{Code}
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -r prototype/requirements.txt
+bash scripts/reproduce.sh
+\end{Code}
+
+For the exact versions used in this run, substitute
+\path{prototype/requirements-tested.txt}. That file is a tested-version
+snapshot, not a promise that binary wheels exist for every platform.
+
+Individual actions can be run from \path{prototype/}:
+\begin{Code}
+python -m pytest -q
+python run_benchmarks.py --output ../results
+python validate_artifacts.py --results ../results
+python export_lean.py --results ../results --output ../lean
+\end{Code}
+
+The reproduction script regenerates measurements and certificates; wall-clock
+timings naturally vary. It does not download or install Lean. To attempt the
+uncompiled replay project on a machine with Lean/Lake and network access:
+\begin{Code}
+cd lean
+lake update
+lake exe cache get
+lake build
+cd ..
+python scripts/run_lean_comparisons.py --timeout 30
+\end{Code}
+
+The runner preserves compiler output and distinguishes timeout from nonzero
+exit. A nonzero compiler exit can be an elaboration or dependency failure,
+not necessarily a failed mathematical search. The runtime absence recorded in
+the supplied results is intentional and is not counted as either a solve or
+a regression.
+
+The article is built with LuaLaTeX. Its main source is
+\path{article/forge.tex}, which inputs the numbered chapter files,
+\path{horn-table.tex}, and \path{references.tex}. No font files are bundled.
+The build helper updates the numerical Horn table from the saved JSON before
+running the typesetter.

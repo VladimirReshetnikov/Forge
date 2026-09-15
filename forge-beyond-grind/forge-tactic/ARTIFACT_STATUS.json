@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-14",
+  "article_pages": 33,
+  "bibliographic_references": 25,
+  "integrated_lean_tactic_implemented": false,
+  "lean_examples_compiled": false,
+  "actual_grind_benchmark_performed": false,
+  "python_prototypes_tested": true,
+  "saved_certificate_replay": "Passed under python -S; Python standard library only",
+  "saved_certificates": {
+    "sat_and_theory": 8,
+    "polynomial": 8,
+    "induction": 6
+  },
+  "polynomial_discovery": {
+    "certified": 7,
+    "unknown": 3,
+    "manually_supplied_checker_examples": 1
+  },
+  "random_differential_tests": 1500,
+  "source_review_lean_release": "v4.34.0",
+  "third_party_lean_package_compatibility_tested": false,
+  "trust_note": "Python verification is not Lean kernel verification."
+}

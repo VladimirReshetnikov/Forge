@@ -1,0 +1,299 @@
+{
+  "all_assertions_passed": true,
+  "benchmarks": [
+    {
+      "cdcl_conflicts": 2,
+      "cdcl_decisions": 1,
+      "cdcl_seconds": 1.9679999923027935e-05,
+      "clauses": 4,
+      "dpll_conflicts": 2,
+      "dpll_decisions": 1,
+      "dpll_seconds": 2.9183999913584557e-05,
+      "learned": 1,
+      "name": "padded-core-0",
+      "nonchronological_backjumps": 0,
+      "proof_additions": 2,
+      "replay_seconds": 1.662600016061333e-05,
+      "variables": 2
+    },
+    {
+      "cdcl_conflicts": 2,
+      "cdcl_decisions": 5,
+      "cdcl_seconds": 2.823299996634887e-05,
+      "clauses": 4,
+      "dpll_conflicts": 32,
+      "dpll_decisions": 31,
+      "dpll_seconds": 0.00015892000010353513,
+      "learned": 1,
+      "name": "padded-core-4",
+      "nonchronological_backjumps": 1,
+      "proof_additions": 2,
+      "replay_seconds": 1.4732000181538751e-05,
+      "variables": 6
+    },
+    {
+      "cdcl_conflicts": 2,
+      "cdcl_decisions": 9,
+      "cdcl_seconds": 3.818799996224698e-05,
+      "clauses": 4,
+      "dpll_conflicts": 512,
+      "dpll_decisions": 511,
+      "dpll_seconds": 0.0018504970000776666,
+      "learned": 1,
+      "name": "padded-core-8",
+      "nonchronological_backjumps": 1,
+      "proof_additions": 2,
+      "replay_seconds": 1.5652999991289107e-05,
+      "variables": 10
+    },
+    {
+      "cdcl_conflicts": 2,
+      "cdcl_decisions": 13,
+      "cdcl_seconds": 5.130800013830594e-05,
+      "clauses": 4,
+      "dpll_conflicts": 8192,
+      "dpll_decisions": 8191,
+      "dpll_seconds": 0.028985291000026336,
+      "learned": 1,
+      "name": "padded-core-12",
+      "nonchronological_backjumps": 1,
+      "proof_additions": 2,
+      "replay_seconds": 1.6063999964899267e-05,
+      "variables": 14
+    },
+    {
+      "cdcl_conflicts": 9,
+      "cdcl_decisions": 8,
+      "cdcl_seconds": 0.0003739950000181125,
+      "clauses": 22,
+      "dpll_conflicts": 9,
+      "dpll_decisions": 8,
+      "dpll_seconds": 0.00022702299997945374,
+      "learned": 8,
+      "name": "pigeonhole-4-3",
+      "nonchronological_backjumps": 0,
+      "proof_additions": 9,
+      "replay_seconds": 0.00020024299988108396,
+      "variables": 12
+    },
+    {
+      "cdcl_conflicts": 40,
+      "cdcl_decisions": 39,
+      "cdcl_seconds": 0.0029891369999859307,
+      "clauses": 45,
+      "dpll_conflicts": 52,
+      "dpll_decisions": 51,
+      "dpll_seconds": 0.002142488000117737,
+      "learned": 39,
+      "name": "pigeonhole-5-4",
+      "nonchronological_backjumps": 0,
+      "proof_additions": 40,
+      "replay_seconds": 0.0030315320000227075,
+      "variables": 20
+    },
+    {
+      "cdcl_conflicts": 149,
+      "cdcl_decisions": 148,
+      "cdcl_seconds": 0.02624040299997432,
+      "clauses": 81,
+      "dpll_conflicts": 375,
+      "dpll_decisions": 374,
+      "dpll_seconds": 0.026262374999987514,
+      "learned": 148,
+      "name": "pigeonhole-6-5",
+      "nonchronological_backjumps": 0,
+      "proof_additions": 149,
+      "replay_seconds": 0.02075797799989232,
+      "variables": 30
+    }
+  ],
+  "environment": {
+    "lean": "not installed; no Lean execution or grind comparison was performed",
+    "numpy": "2.3.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "scipy": "1.17.0",
+    "sympy": "1.14.0"
+  },
+  "induction": {
+    "mutations_rejected": 12,
+    "synthesized": [
+      {
+        "base_residual": "0",
+        "candidates": 4,
+        "degree": 1,
+        "polynomial": "a + n",
+        "power": 0,
+        "sample_count": 3,
+        "seconds": 0.0057334740001806495,
+        "step_residual": "0"
+      },
+      {
+        "base_residual": "0",
+        "candidates": 6,
+        "degree": 2,
+        "polynomial": "a + n**2/2 + n/2",
+        "power": 1,
+        "sample_count": 4,
+        "seconds": 0.008554137000146511,
+        "step_residual": "0"
+      },
+      {
+        "base_residual": "0",
+        "candidates": 8,
+        "degree": 3,
+        "polynomial": "a + n**3/3 + n**2/2 + n/6",
+        "power": 2,
+        "sample_count": 5,
+        "seconds": 0.018157268000095428,
+        "step_residual": "0"
+      },
+      {
+        "base_residual": "0",
+        "candidates": 10,
+        "degree": 4,
+        "polynomial": "a + n**4/4 + n**3/2 + n**2/4",
+        "power": 3,
+        "sample_count": 6,
+        "seconds": 0.03378211899985217,
+        "step_residual": "0"
+      },
+      {
+        "base_residual": "0",
+        "candidates": 12,
+        "degree": 5,
+        "polynomial": "a + n**5/5 + n**4/2 + n**3/3 - n/30",
+        "power": 4,
+        "sample_count": 7,
+        "seconds": 0.062490060000072845,
+        "step_residual": "0"
+      },
+      {
+        "base_residual": "0",
+        "candidates": 14,
+        "degree": 6,
+        "polynomial": "a + n**6/6 + n**5/2 + 5*n**4/12 - n**2/12",
+        "power": 5,
+        "sample_count": 8,
+        "seconds": 0.10932253099986156,
+        "step_residual": "0"
+      }
+    ]
+  },
+  "polynomials": {
+    "manual_certificates": 1,
+    "planted_checker_crosschecks": 100,
+    "search_cases": [
+      {
+        "columns": 36,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "quartic-square",
+        "nonzero_columns": 1,
+        "rows": 15,
+        "seconds": 0.19344351799986725,
+        "status": "certified"
+      },
+      {
+        "columns": 36,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "three-squares-quartic",
+        "nonzero_columns": 3,
+        "rows": 15,
+        "seconds": 0.0024024199999530538,
+        "status": "certified"
+      },
+      {
+        "columns": 225,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "cauchy-schwarz-2",
+        "nonzero_columns": 1,
+        "rows": 70,
+        "seconds": 0.008470210000041334,
+        "status": "certified"
+      },
+      {
+        "columns": 19,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "box-bilinear",
+        "nonzero_columns": 2,
+        "rows": 6,
+        "seconds": 0.002103848999922775,
+        "status": "certified"
+      },
+      {
+        "columns": 12,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "interval-product",
+        "nonzero_columns": 1,
+        "rows": 6,
+        "seconds": 0.0016563229999064788,
+        "status": "certified"
+      },
+      {
+        "columns": 12,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "equality-constrained",
+        "nonzero_columns": 4,
+        "rows": 6,
+        "seconds": 0.0016454959998100094,
+        "status": "certified"
+      },
+      {
+        "columns": 9,
+        "lp_status": 0,
+        "mutation_rejections": 2,
+        "name": "positive-slack",
+        "nonzero_columns": 6,
+        "rows": 6,
+        "seconds": 0.0018703470000218658,
+        "status": "certified"
+      },
+      {
+        "columns": 9,
+        "lp_status": 2,
+        "mutation_rejections": 0,
+        "name": "false-polynomial",
+        "rows": 6,
+        "seconds": 0.0012508309998793266,
+        "status": "unknown: no usable LP solution in this dictionary"
+      },
+      {
+        "columns": 100,
+        "lp_status": 2,
+        "mutation_rejections": 0,
+        "name": "motzkin-bounded-search",
+        "rows": 28,
+        "seconds": 0.0033733469999788213,
+        "status": "unknown: no usable LP solution in this dictionary"
+      },
+      {
+        "columns": 9,
+        "lp_status": 2,
+        "mutation_rejections": 0,
+        "name": "dictionary-ratio-gap",
+        "rows": 6,
+        "seconds": 0.001091138999981922,
+        "status": "unknown: no usable LP solution in this dictionary"
+      }
+    ]
+  },
+  "sat_tests": {
+    "cnf_cases": 1000,
+    "edge_cases": 5,
+    "idl_cases": 500,
+    "large_integer_oracle_regressions": 2,
+    "sat": 1278,
+    "theory_mutations_rejected": 2,
+    "truncated_certificates_rejected": 222,
+    "unsat": 222,
+    "unsat_certificates_replayed": 222
+  },
+  "seed": 20260914,
+  "total_seconds": 1.0988193499999852
+}

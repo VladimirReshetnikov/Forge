@@ -1,0 +1,61 @@
+{
+  "families": [
+    {
+      "family": "Quadratic SOS",
+      "instances": 60,
+      "solved": 60,
+      "ablation_solved": 1,
+      "search_median_ms": 0.86366,
+      "recheck_median_ms": 0.7007335
+    },
+    {
+      "family": "Finite cone LP",
+      "instances": 17,
+      "solved": 17,
+      "ablation_solved": 0,
+      "search_median_ms": 1.699458,
+      "recheck_median_ms": 0.294727
+    },
+    {
+      "family": "Bernstein box",
+      "instances": 18,
+      "solved": 18,
+      "ablation_solved": 1,
+      "search_median_ms": 0.685155,
+      "recheck_median_ms": 0.38871100000000003
+    },
+    {
+      "family": "Polynomial recurrence",
+      "instances": 33,
+      "solved": 33,
+      "ablation_solved": null,
+      "search_median_ms": 2.512954,
+      "recheck_median_ms": 0.402786
+    },
+    {
+      "family": "Integral affine witness",
+      "instances": 40,
+      "solved": 40,
+      "ablation_solved": null,
+      "search_median_ms": 0.073824,
+      "recheck_median_ms": 0.027045
+    },
+    {
+      "family": "Univariate with zeros",
+      "instances": 30,
+      "solved": 30,
+      "ablation_solved": 0,
+      "search_median_ms": 1.930175,
+      "recheck_median_ms": 0.5051384999999999
+    }
+  ],
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sympy": "1.14.0",
+    "pytest": "9.0.2",
+    "lean_executed": false
+  }
+}

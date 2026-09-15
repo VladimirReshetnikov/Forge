@@ -1,0 +1,478 @@
+{
+  "scope": "Component microbenchmarks only. Lean/grind were not executed.",
+  "seed": 20260914,
+  "environment": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "scipy": "1.17.0",
+    "numpy": "2.3.5",
+    "sympy": "1.14.0"
+  },
+  "polynomial": {
+    "random_pairs": 50,
+    "exact_identity_crosschecks": 150
+  },
+  "sos": {
+    "curated": [
+      {
+        "case": "quadratic_dispersion",
+        "verified": true,
+        "median_ms": 2.185058000122808,
+        "candidates": 16,
+        "positive_candidates": 16,
+        "numeric_status": 0,
+        "certificate_terms": 3
+      },
+      {
+        "case": "quartic_dispersion",
+        "verified": true,
+        "median_ms": 6.755708000127925,
+        "candidates": 100,
+        "positive_candidates": 100,
+        "numeric_status": 0,
+        "certificate_terms": 3
+      },
+      {
+        "case": "positive_triple_product",
+        "verified": true,
+        "median_ms": 3.605267000011736,
+        "candidates": 68,
+        "positive_candidates": 68,
+        "numeric_status": 0,
+        "certificate_terms": 1
+      },
+      {
+        "case": "lagrange_identity",
+        "verified": true,
+        "median_ms": 13.145804000032513,
+        "candidates": 225,
+        "positive_candidates": 225,
+        "numeric_status": 0,
+        "certificate_terms": 1
+      },
+      {
+        "case": "box_quadratic",
+        "verified": true,
+        "median_ms": 1.7557819999183266,
+        "candidates": 12,
+        "positive_candidates": 12,
+        "numeric_status": 0,
+        "certificate_terms": 1
+      },
+      {
+        "case": "box_cubic",
+        "verified": true,
+        "median_ms": 2.472550999982559,
+        "candidates": 28,
+        "positive_candidates": 28,
+        "numeric_status": 0,
+        "certificate_terms": 2
+      },
+      {
+        "case": "inverse_pair_bound",
+        "verified": true,
+        "median_ms": 1.974781999933839,
+        "candidates": 10,
+        "positive_candidates": 9,
+        "numeric_status": 0,
+        "certificate_terms": 2
+      },
+      {
+        "case": "equality_transport",
+        "verified": true,
+        "median_ms": 2.33491399990271,
+        "candidates": 12,
+        "positive_candidates": 9,
+        "numeric_status": 0,
+        "certificate_terms": 2
+      },
+      {
+        "case": "weighted_quartic",
+        "verified": true,
+        "median_ms": 2.941195999937918,
+        "candidates": 36,
+        "positive_candidates": 36,
+        "numeric_status": 0,
+        "certificate_terms": 2
+      }
+    ],
+    "generated_successes": 24,
+    "positive_checks": 33,
+    "corruption_rejections": 36,
+    "expected_misses": [
+      {
+        "case": "box_without_products",
+        "status": "unknown",
+        "candidates": 11,
+        "positive_candidates": 11,
+        "numeric_status": 2
+      },
+      {
+        "case": "cross_square_without_binomials",
+        "status": "unknown",
+        "candidates": 3,
+        "positive_candidates": 3,
+        "numeric_status": 2
+      },
+      {
+        "case": "unequal_coefficient_square",
+        "status": "unknown",
+        "candidates": 9,
+        "positive_candidates": 9,
+        "numeric_status": 2
+      },
+      {
+        "case": "false_polynomial",
+        "status": "unknown",
+        "candidates": 9,
+        "positive_candidates": 9,
+        "numeric_status": 2
+      },
+      {
+        "case": "motzkin_dictionary_miss",
+        "status": "unknown",
+        "candidates": 100,
+        "positive_candidates": 100,
+        "numeric_status": 2
+      }
+    ]
+  },
+  "lattice": {
+    "one_row_grid": 539,
+    "random_feasible": 120,
+    "prefix_obstructions": 30,
+    "positive_checks": 689,
+    "feasible": 537,
+    "infeasible": 152,
+    "corruption_rejections": 240,
+    "elapsed_ms": 53.716674000042985
+  },
+  "induction": {
+    "cases": [
+      {
+        "case": "power_0",
+        "elapsed_ms": 0.7358980001299642,
+        "degree": 1,
+        "unknowns": 3,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1)*n + (1)*a"
+      },
+      {
+        "case": "power_1",
+        "elapsed_ms": 1.7838549999851239,
+        "degree": 2,
+        "unknowns": 5,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/2)*n^2 + (-1/2)*n + (1)*a"
+      },
+      {
+        "case": "power_2",
+        "elapsed_ms": 3.3557399999608606,
+        "degree": 3,
+        "unknowns": 7,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/3)*n^3 + (-1/2)*n^2 + (1/6)*n + (1)*a"
+      },
+      {
+        "case": "power_3",
+        "elapsed_ms": 5.104683000126897,
+        "degree": 4,
+        "unknowns": 9,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/4)*n^4 + (-1/2)*n^3 + (1/4)*n^2 + (1)*a"
+      },
+      {
+        "case": "power_4",
+        "elapsed_ms": 8.301834000121744,
+        "degree": 5,
+        "unknowns": 11,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/5)*n^5 + (-1/2)*n^4 + (1/3)*n^3 + (-1/30)*n + (1)*a"
+      },
+      {
+        "case": "power_5",
+        "elapsed_ms": 13.02402099986466,
+        "degree": 6,
+        "unknowns": 13,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/6)*n^6 + (-1/2)*n^5 + (5/12)*n^4 + (-1/12)*n^2 + (1)*a"
+      },
+      {
+        "case": "power_6",
+        "elapsed_ms": 20.469578000074762,
+        "degree": 7,
+        "unknowns": 15,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/7)*n^7 + (-1/2)*n^6 + (1/2)*n^5 + (-1/6)*n^3 + (1/42)*n + (1)*a"
+      },
+      {
+        "case": "power_7",
+        "elapsed_ms": 23.736875000167856,
+        "degree": 8,
+        "unknowns": 17,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/8)*n^8 + (-1/2)*n^7 + (7/12)*n^6 + (-7/24)*n^4 + (1/12)*n^2 + (1)*a"
+      },
+      {
+        "case": "power_8",
+        "elapsed_ms": 30.1109480001287,
+        "degree": 9,
+        "unknowns": 19,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/9)*n^9 + (-1/2)*n^8 + (2/3)*n^7 + (-7/15)*n^5 + (2/9)*n^3 + (-1/30)*n + (1)*a"
+      },
+      {
+        "case": "quadratic_increment",
+        "elapsed_ms": 1.9807409998975345,
+        "degree": 2,
+        "unknowns": 5,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1)*n^2 + (1)*a"
+      },
+      {
+        "case": "signed_cubic",
+        "elapsed_ms": 6.403477000048952,
+        "degree": 4,
+        "unknowns": 9,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(3/4)*n^4 + (-3/2)*n^3 + (-7/4)*n^2 + (19/2)*n + (1)*a"
+      },
+      {
+        "case": "random_0",
+        "elapsed_ms": 3.3087799999975687,
+        "degree": 3,
+        "unknowns": 7,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/3)*n^3 + (-1/2)*n^2 + (-11/6)*n + (1)*a"
+      },
+      {
+        "case": "random_1",
+        "elapsed_ms": 6.557878999956301,
+        "degree": 4,
+        "unknowns": 9,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(3/16)*n^4 + (-29/24)*n^3 + (15/16)*n^2 + (17/12)*n + (1)*a"
+      },
+      {
+        "case": "random_2",
+        "elapsed_ms": 8.191348000082144,
+        "degree": 4,
+        "unknowns": 9,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(-1/12)*n^4 + (-3/2)*n^3 + (9/4)*n^2 + (-1/6)*n + (1)*a"
+      },
+      {
+        "case": "random_3",
+        "elapsed_ms": 0.6735829999797716,
+        "degree": 1,
+        "unknowns": 3,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(-1/5)*n + (1)*a"
+      },
+      {
+        "case": "random_4",
+        "elapsed_ms": 1.7724079998515663,
+        "degree": 2,
+        "unknowns": 5,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(3/4)*n^2 + (-1/12)*n + (1)*a"
+      },
+      {
+        "case": "random_5",
+        "elapsed_ms": 3.3793860000059794,
+        "degree": 3,
+        "unknowns": 7,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(2/3)*n^3 + (-1)*n^2 + (-11/12)*n + (1)*a"
+      },
+      {
+        "case": "random_6",
+        "elapsed_ms": 10.786194000047544,
+        "degree": 5,
+        "unknowns": 11,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(-2/15)*n^5 + (11/60)*n^4 + (-31/180)*n^3 + (107/120)*n^2 + (-547/360)*n + (1)*a"
+      },
+      {
+        "case": "random_7",
+        "elapsed_ms": 6.216997000137781,
+        "degree": 4,
+        "unknowns": 9,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(-1/4)*n^4 + (7/18)*n^3 + (-29/60)*n^2 + (181/90)*n + (1)*a"
+      },
+      {
+        "case": "random_8",
+        "elapsed_ms": 0.6927930000983906,
+        "degree": 1,
+        "unknowns": 3,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(3/5)*n + (1)*a"
+      },
+      {
+        "case": "random_9",
+        "elapsed_ms": 9.767069999952582,
+        "degree": 5,
+        "unknowns": 11,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(1/5)*n^5 + (-1/2)*n^4 + (7/12)*n^3 + (-29/24)*n^2 + (-43/40)*n + (1)*a"
+      },
+      {
+        "case": "random_10",
+        "elapsed_ms": 0.7036089998564421,
+        "degree": 1,
+        "unknowns": 3,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(-1)*n + (1)*a"
+      },
+      {
+        "case": "random_11",
+        "elapsed_ms": 10.117446999856838,
+        "degree": 5,
+        "unknowns": 11,
+        "generalized": [
+          "a"
+        ],
+        "invariant": "(-3/10)*n^5 + (11/12)*n^4 + (-1/2)*n^3 + (5/12)*n^2 + (-8/15)*n + (1)*a"
+      }
+    ],
+    "positive_checks": 23,
+    "corruption_rejections": 46,
+    "execution_crosschecks": 897,
+    "ablations": {
+      "no_accumulator_term": "unknown",
+      "degree_too_low": "unknown"
+    }
+  },
+  "horn": {
+    "scaling": [
+      {
+        "distractor_chains": 0,
+        "mode": "forward",
+        "elapsed_ms": 0.0566450000860641,
+        "indexed_rules": 25,
+        "active_rules": 25,
+        "firings": 25,
+        "facts": 25
+      },
+      {
+        "distractor_chains": 0,
+        "mode": "demand",
+        "elapsed_ms": 0.04488800004764926,
+        "indexed_rules": 25,
+        "active_rules": 25,
+        "firings": 25,
+        "facts": 25
+      },
+      {
+        "distractor_chains": 10,
+        "mode": "forward",
+        "elapsed_ms": 0.23817800001779688,
+        "indexed_rules": 275,
+        "active_rules": 275,
+        "firings": 275,
+        "facts": 275
+      },
+      {
+        "distractor_chains": 10,
+        "mode": "demand",
+        "elapsed_ms": 0.08061200014708447,
+        "indexed_rules": 275,
+        "active_rules": 25,
+        "firings": 25,
+        "facts": 25
+      },
+      {
+        "distractor_chains": 100,
+        "mode": "forward",
+        "elapsed_ms": 3.6930479998318333,
+        "indexed_rules": 2525,
+        "active_rules": 2525,
+        "firings": 2525,
+        "facts": 2525
+      },
+      {
+        "distractor_chains": 100,
+        "mode": "demand",
+        "elapsed_ms": 1.0153079999781767,
+        "indexed_rules": 2525,
+        "active_rules": 25,
+        "firings": 25,
+        "facts": 25
+      },
+      {
+        "distractor_chains": 1000,
+        "mode": "forward",
+        "elapsed_ms": 58.97425700004533,
+        "indexed_rules": 25025,
+        "active_rules": 25025,
+        "firings": 25025,
+        "facts": 25025
+      },
+      {
+        "distractor_chains": 1000,
+        "mode": "demand",
+        "elapsed_ms": 11.424935000150072,
+        "indexed_rules": 25025,
+        "active_rules": 25,
+        "firings": 25,
+        "facts": 25
+      }
+    ],
+    "random_cyclic_programs": 80,
+    "positive_checks": 88,
+    "verified_derivations": 146,
+    "corruption_rejections": 8
+  },
+  "summary": {
+    "component_test_cases": 833,
+    "valid_certificate_checks": 891,
+    "corruption_rejections": 330,
+    "polynomial_crosschecks": 150,
+    "induction_execution_crosschecks": 897
+  }
+}

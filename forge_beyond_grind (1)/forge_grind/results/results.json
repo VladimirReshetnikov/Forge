@@ -1,0 +1,211 @@
+{
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sympy": "1.14.0",
+    "pytest": "9.0.2",
+    "lean_execution": "NOT RUN; runtime unavailable",
+    "measurement": "Single local run; mechanism demonstrations, not a Lean comparison"
+  },
+  "induction": {
+    "status": "certified",
+    "direct_induction_succeeded": false,
+    "candidate_count": 41,
+    "sample_count": 49,
+    "sample_survivors": 1,
+    "lemma": "revAcc(?xs, ?acc) = app(rev(?xs), ?acc)",
+    "specialization_checked": true,
+    "seconds": 0.001328231999991658,
+    "specialization": {
+      "goal": {
+        "lhs": {
+          "symbol": "revAcc",
+          "sort": "List",
+          "args": [
+            {
+              "symbol": "?xs",
+              "sort": "List",
+              "args": []
+            },
+            {
+              "symbol": "nil",
+              "sort": "List",
+              "args": []
+            }
+          ]
+        },
+        "rhs": {
+          "symbol": "rev",
+          "sort": "List",
+          "args": [
+            {
+              "symbol": "?xs",
+              "sort": "List",
+              "args": []
+            }
+          ]
+        }
+      },
+      "left": [
+        {
+          "path": [],
+          "rule": "revAcc_spec"
+        },
+        {
+          "path": [],
+          "rule": "app_right_nil"
+        }
+      ],
+      "right": []
+    },
+    "checked_lemmas": [
+      "app_right_nil",
+      "app_assoc",
+      "revAcc_spec",
+      "rev_append",
+      "rev_invol"
+    ]
+  },
+  "horn": [
+    {
+      "depth": 4,
+      "forward": {
+        "generated": 16,
+        "rule_attempts": 15,
+        "status": "certified"
+      },
+      "backward": {
+        "requests": 5,
+        "rule_attempts": 4,
+        "proof_nodes": 5,
+        "status": "certified"
+      },
+      "forward_seconds": 0.00011800799995853595,
+      "backward_seconds": 6.640999993123842e-05
+    },
+    {
+      "depth": 8,
+      "forward": {
+        "generated": 256,
+        "rule_attempts": 255,
+        "status": "certified"
+      },
+      "backward": {
+        "requests": 9,
+        "rule_attempts": 8,
+        "proof_nodes": 9,
+        "status": "certified"
+      },
+      "forward_seconds": 0.002640488999986701,
+      "backward_seconds": 0.0001256609999700231
+    },
+    {
+      "depth": 12,
+      "forward": {
+        "generated": 4096,
+        "rule_attempts": 4095,
+        "status": "certified"
+      },
+      "backward": {
+        "requests": 13,
+        "rule_attempts": 12,
+        "proof_nodes": 13,
+        "status": "certified"
+      },
+      "forward_seconds": 0.055840634999981376,
+      "backward_seconds": 0.0002251409999871612
+    },
+    {
+      "depth": 16,
+      "forward": {
+        "generated": 5000,
+        "rule_attempts": 5000,
+        "status": "node_cap"
+      },
+      "backward": {
+        "requests": 17,
+        "rule_attempts": 16,
+        "proof_nodes": 17,
+        "status": "certified"
+      },
+      "forward_seconds": 0.06796951599994827,
+      "backward_seconds": 0.0003653139999642008
+    }
+  ],
+  "nonlinear": [
+    {
+      "name": "quartic",
+      "polynomial": "1*x^4 - 1*x^2*y^2 - 1*x^2*z^2 + 1*y^4 - 1*y^2*z^2 + 1*z^4",
+      "candidates": 280,
+      "coefficient_equations": 35,
+      "seconds": 0.02342383699999573,
+      "status": "certified",
+      "terms": 3
+    },
+    {
+      "name": "product",
+      "polynomial": "1*x*y",
+      "candidates": 43,
+      "coefficient_equations": 10,
+      "seconds": 0.004426844999898094,
+      "status": "certified",
+      "terms": 1
+    },
+    {
+      "name": "cube",
+      "polynomial": "1*x^3",
+      "candidates": 80,
+      "coefficient_equations": 16,
+      "seconds": 0.006460745000026691,
+      "status": "certified",
+      "terms": 1
+    },
+    {
+      "name": "unit_interval",
+      "polynomial": "-1*x^2 + 1*x",
+      "candidates": 43,
+      "coefficient_equations": 10,
+      "seconds": 0.004019969000069068,
+      "status": "certified",
+      "terms": 1
+    },
+    {
+      "name": "guarded_cubic",
+      "polynomial": "1*x^3 - 1*x^2*y - 1*x*y^2 + 1*y^3",
+      "candidates": 121,
+      "coefficient_equations": 19,
+      "seconds": 0.00927638999996816,
+      "status": "certified",
+      "terms": 2
+    }
+  ],
+  "dictionary_control": {
+    "polynomial": "1*x^2 + 2*x*y + 2*x + 1*y^2 + 2*y + 1",
+    "search": {
+      "candidates": 21,
+      "coefficient_equations": 6,
+      "seconds": 0.0022587419999808844,
+      "status": "no_certificate_in_dictionary",
+      "optimizer_status": 2
+    },
+    "independent_supplied_certificate_checked": true
+  },
+  "bernstein": {
+    "polynomial": "1*x^2 - 1*x + 3/10",
+    "nodes": 3,
+    "leaves": 2,
+    "max_depth_used": 1,
+    "seconds": 0.0004677690000107759,
+    "status": "certified"
+  },
+  "witness": {
+    "status": "certified",
+    "candidate_count": 23,
+    "sample_count": 5,
+    "sample_survivors": 3,
+    "witness": "1*x^2 + 1",
+    "seconds": 0.00985490599998684
+  }
+}

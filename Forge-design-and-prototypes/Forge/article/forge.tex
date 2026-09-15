@@ -1,0 +1,113 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=24mm,headheight=15pt]{geometry}
+\usepackage{fontspec}
+\setmainfont{Linux Libertine O}
+\setsansfont{Lato}
+\setmonofont[Scale=0.80]{DejaVu Sans Mono}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[table]{xcolor}
+\definecolor{Accent}{HTML}{4F6254}
+\definecolor{Ink}{HTML}{242924}
+\definecolor{Pale}{HTML}{F0F3ED}
+\definecolor{DimGray}{HTML}{696969}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=1.5em}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,
+  breaklines=true,breakatwhitespace=false,showstringspaces=false,
+  frame=single,rulecolor=\color{Accent!35},backgroundcolor=\color{Pale!50},
+  xleftmargin=0.5em,xrightmargin=0.5em,aboveskip=0.8em,belowskip=0.8em,
+  commentstyle=\color{DimGray},keywordstyle=\bfseries}
+\usepackage{titlesec}
+\titleformat{\section}{\sffamily\Large\bfseries\color{Accent}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries\color{Ink}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{2.0ex plus 1ex minus .2ex}{1ex}
+\titlespacing*{\subsection}{0pt}{1.5ex plus .7ex minus .2ex}{.8ex}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\small\color{Accent}FORGE\quad Certificate-driven proof search}
+\fancyhead[R]{\sffamily\small Technical design and experiments}
+\fancyfoot[L]{\sffamily\scriptsize September 14, 2026}
+\fancyfoot[R]{\sffamily\small\thepage\ /\ \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=Accent,citecolor=Accent,urlcolor=Accent,
+  bookmarksdepth=2,
+  pdftitle={Forge: Beyond Grind with Structural Search and Exact Certificates},
+  pdfauthor={OpenAI},pdfsubject={Lean tactic design, algorithms, tested Python prototypes}}
+\usepackage{url}
+\urlstyle{same}
+\usepackage{needspace}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\Forge}{\textsf{Forge}}
+\newcommand{\Grind}{\code{grind}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\status}[1]{\par\smallskip\noindent\textbf{Implementation status.} #1\par\smallskip}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{invariant}[proposition]{Invariant}
+\newtheorem{definition}[proposition]{Definition}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.48em}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+\begin{document}
+\thispagestyle{empty}
+\vspace*{0.6cm}
+{\sffamily\small\bfseries\color{Accent}LEAN AUTOMATION\quad /\quad DESIGN + EXECUTABLE EXPERIMENTS\par}
+\vspace{0.7cm}
+{\sffamily\Huge\bfseries Forge\par}
+\vspace{0.25cm}
+{\sffamily\LARGE Beyond \texttt{grind} with structural search\par}
+{\sffamily\LARGE and exact certificates\par}
+\vspace{0.65cm}
+{\large A concrete architecture for automatic induction, lemma discovery,\newline
+quantifier instantiation, witness synthesis, and nonlinear reasoning\par}
+\vspace{0.6cm}
+{\color{Accent}\rule{\textwidth}{0.7pt}}
+\vspace{0.3cm}
+\textbf{Prepared for Vladimir Reshetnikov}\hfill September 14, 2026
+
+\begin{abstract}
+\noindent
+The most useful way to build a tactic substantially more capable than \Grind{} is
+not to replace its congruence closure or arithmetic engines. It is to let a
+proof-producing controller change the shape of the problem: invent a useful
+induction motive, generalize a changing accumulator, synthesize a quantified
+witness, discover a missing lemma, or request a certificate from a stronger
+arithmetic procedure. These operations must cooperate with saturation instead
+of running as an unconnected sequence of tactics.
+
+This article specifies \Forge{}, a proposed Lean tactic with a typed
+obligation graph, demand-driven structural search, theory-constrained
+instantiation, and a strict search/check separation. It identifies concrete
+Lean libraries and integration points, gives algorithms and mathematical
+justifications, and includes executed Python prototypes. The experiments
+produce 215 accepted certificates, replayed without third-party libraries,
+and 31 passing test methods. They demonstrate mechanisms and expose several
+failure boundaries; they do not establish a performance advantage over Lean.
+\end{abstract}
+
+\vfill
+\fcolorbox{Accent!40}{Pale}{\parbox{0.94\textwidth}{
+\textbf{Evidence boundary.} Lean 4.34.0 and current project documentation were
+inspected. No Lean executable was available in the execution environment.
+The Python prototypes and their exact checkers were executed; the proposed
+end-to-end tactic and the illustrative Lean file were not. All numerical
+results in this article refer to the supplied Python experiments.}}
+\newpage
+\setcounter{tocdepth}{1}
+\tableofcontents
+\newpage
+\input{01-architecture}
+\input{02-algorithms}
+\input{03-integration}
+\input{04-evaluation}
+\input{references}
+\end{document}

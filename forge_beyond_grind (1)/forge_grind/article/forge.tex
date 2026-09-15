@@ -1,0 +1,1556 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\setmonofont{DejaVu Sans Mono}[Scale=0.82]
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fvextra}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[unicode,hidelinks]{hyperref}
+\usepackage{bookmark}
+\usepackage{xurl}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\sffamily\bfseries}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\normalsize\sffamily\bfseries}{\thesubsubsection}{0.7em}{}
+\setlength{\parskip}{4.5pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\setlist{itemsep=2pt,topsep=4pt}
+\DefineVerbatimEnvironment{Code}{Verbatim}{breaklines=true,fontsize=\small,baselinestretch=1.03}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\FV}{\operatorname{FV}}
+\newcommand{\eval}{\operatorname{eval}}
+\newcommand{\app}{\operatorname{app}}
+\newcommand{\rev}{\operatorname{rev}}
+\newcommand{\racc}{\operatorname{revAcc}}
+\newcommand{\supp}{\operatorname{supp}}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{definition}[proposition]{Definition}
+\newtheorem{invariant}[proposition]{Invariant}
+\newtheorem{example}[proposition]{Example}
+\hypersetup{pdftitle={Forge: A Certificate-Driven Proof Planner Beyond Lean's grind},pdfsubject={Concrete tactic architecture, algorithms, independent prototypes, and evaluation},pdfauthor={}}
+\begin{document}
+\begin{center}
+{\LARGE\sffamily\bfseries Forge: A Certificate-Driven Proof Planner\\[5pt] Beyond Lean's \texttt{grind}}\par
+\end{center}
+\vspace{4mm}
+\begin{abstract}
+A substantially more capable general-purpose Lean tactic should not replace
+\code{grind}'s effective local reasoning with a collection of disconnected
+solvers. It should discover the proof structure that makes local reasoning
+succeed: the right induction motive, an auxiliary lemma, an existential witness,
+a missing theorem instance, a nonlinear inequality certificate, or a necessary
+representation bridge. This article specifies \emph{Forge}, a proposed
+certificate-driven proof planner that retains \code{grind} as a central engine
+and connects these capabilities through a typed, scope-aware graph of facts and
+obligations.
+
+The proposal includes concrete search algorithms, certificate formats, Lean
+integration boundaries, a dependency and trust policy, worked mathematical
+examples, and an implementation roadmap. Five mechanisms are prototyped in
+Python: demand-directed Horn reasoning, structural induction with accumulator
+lemma synthesis, sparse rational nonnegativity certificates, Bernstein box
+certificates, and polynomial witness synthesis. The accompanying suite passes
+69 tests; 13 persisted certificate bundles replay using only Python's standard
+library. These results validate small algorithmic fragments, not a completed
+Lean tactic or a measured advantage over \code{grind}. The Lean reference
+scripts are supplied but were not compiled because a Lean runtime was unavailable.
+\end{abstract}
+
+\section*{Executive assessment}
+\addcontentsline{toc}{section}{Executive assessment}
+\textbf{Recommendation.} Implement Forge as a proof planner with a shared
+obligation graph, not as a new monolithic decision procedure. Its first major
+capability gain should be \emph{automatic structural induction plus checked
+lemma discovery}. Its second should be \emph{witness and theory-certificate
+search driven by the needs of the current proof}. Reuse existing Lean arithmetic,
+superposition, simplification, and sum-of-squares infrastructure wherever
+possible.
+
+The critical distinction is between a proposed fact and a proved fact. Search
+engines may be heuristic, numerical, learned, or external. They may request
+additional assumptions, but they must not silently receive them. Only a proof
+of the exact requested statement, under explicitly recorded hypotheses, may
+enter the fact store. Completion means a closed proof of the original Lean
+goal with an approved axiom dependency set.
+
+\textbf{Status of this artifact.} The architecture and Lean-facing interfaces
+are a design. The Python algorithms, tests, benchmark runner, saved certificates,
+and independent replay command are implemented and executed. No end-to-end
+\code{forge} tactic, Lean-kernel port of the Python checkers, or comparative Lean
+benchmark is claimed. The dated source audit uses Lean 4.34.0 and sources observed
+on September 14, 2026; mutable third-party sources are explicitly distinguished
+from that pinned baseline.
+
+\clearpage
+{\small\setlength{\parskip}{0pt}\tableofcontents}
+\clearpage
+
+\section{The actual baseline: what must not be reinvented}
+\label{sec:baseline}
+
+\subsection{A versioned comparison, not a caricature}
+The starting reference is the Lean language manual's chapter on \code{grind}.
+It describes a proof-producing, SMT-inspired combination of congruence closure,
+propagation, quantified instantiation, case splitting, and theory reasoning.
+Its shared-state organization is already a major part of its strength.
+Adding an e-graph, arithmetic, or E-matching is therefore not, by itself, a
+meaningful advance over the baseline.\footnote{Lean project, \emph{The grind
+tactic}, language reference \cite{grind}.}
+
+The release page resolved to Lean \code{v4.34.0} during this audit, with a
+September 14, 2026 release date. The source-level baseline in this article is
+that tag, rather than an unspecified future meaning of \code{latest}.
+The executable was not available locally, so statements about its implementation
+are source observations, not newly run success or failure experiments.\footnote{Lean
+project, release \code{v4.34.0} \cite{release}.}
+
+The pinned configuration enables more than the minimal description suggests:
+extensionality, function extensionality and function-valued congruence,
+associative--commutative reasoning, order reasoning, model-based theory
+combination, integer and linear arithmetic, and commutative-ring reasoning.
+There is also an optional library-suggestion path. Selected resource defaults
+are five E-matching rounds, generation eight, 1,000 instances, and nine splits.
+These are budget parameters, not semantic limits of Lean.\footnote{Lean 4.34.0,
+\code{Init/Grind/Config.lean} \cite{config}.}
+
+The ring engine has tracked derivations for polynomial consequences, including
+superposition and simplification operations. Its proof objects retain algebraic
+side conditions associated with cancellation and characteristic. It is
+incorrect to describe it merely as a syntactic ring normalizer and then claim
+that adding Gr\"obner-style reasoning would be a new capability.\footnote{Lean
+4.34.0, commutative-ring constraint and derivation types \cite{commring}.}
+
+The integer-arithmetic reference describes a linear fragment with inequalities,
+equalities, disequalities, and divisibility, including natural-number
+translation. Nonlinear expressions may be abstracted as atoms in the linear
+solver. A satisfying assignment to that abstraction is not necessarily a model
+of the original nonlinear formulas.\footnote{Lean language reference,
+\emph{Linear Integer Arithmetic} \cite{lia}.}
+
+\subsection{Where a broader tactic can make a real difference}
+The opportunity is principally \emph{proof organization}. A local solver may
+succeed once a human has chosen an induction, strengthened the induction
+hypothesis, supplied a useful identity, constructed a witness, selected the
+right theorem, or exposed the right representation. Forge should automate those
+choices and feed their checked consequences back into local reasoning.
+
+This is a capability target, not a claim that every worked example below defeats
+current \code{grind}. Imported theorems, attributes, preprocessing, and tuning
+can change which tactic solves a particular goal. An example involving list
+reversal can become trivial when its correctness theorem is already available.
+A fair test must specify both the theorem statement and the environment in
+which it is presented.
+
+\begin{longtable}{p{0.25\linewidth}p{0.32\linewidth}p{0.35\linewidth}}
+\toprule
+Capability & Baseline to retain & Forge's proposed addition \\
+\midrule
+\endhead
+Local equality and arithmetic & Existing \code{grind} theory engines & Request and reuse missing structural or nonlinear consequences. \\
+Quantified reasoning & Existing E-matching and optional suggestions & Backward demand propagation, controlled new-term generation, and premise subgoals. \\
+Recursive functions & Defining equations and local reasoning & Choose induction motives; generalize changing parameters; synthesize and prove auxiliary lemmas. \\
+Existential conclusions & Any applicable existing logical rules & Search typed witness grammars and certify their universally quantified obligations. \\
+Nonlinear inequalities & Existing arithmetic tactics and external SOS library & Reuse certified engines, coordinate guards, prioritize sparse certificates, and add box reasoning. \\
+Trust and diagnostics & Lean proofs and solver traces & Exact-goal replay, explicit unresolved obligations, dependency audit, and reproducible proof artifacts. \\
+\bottomrule
+\end{longtable}
+
+\subsection{The meaning of ``more powerful''}
+Three different claims must be separated. \emph{Broader coverage} means solving
+additional families of goals with comparable human input. \emph{Better search}
+means solving more instances under a fixed resource budget. \emph{Faster replay}
+means a smaller or cheaper proof after search has finished. One can improve
+coverage while worsening latency on easy goals.
+
+Forge should expose a baseline-preserving configuration: run the original
+\code{grind} configuration before escalating, and retain its successful proof.
+With that original budget \emph{plus additional resources}, this preserves
+its successes. Under an unchanged total wall-clock budget, no such dominance
+follows: orchestration overhead and budget allocation can lose cases. A
+non-starving unbounded schedule that eventually reruns every baseline attempt
+preserves the corresponding eventual successes, but that observation is not a
+practical performance theorem.
+
+\section{Existing libraries and the boundary of the contribution}
+\label{sec:libraries}
+
+\subsection{Proof-search and external-prover components}
+Aesop already provides extensible proof search organized around goals and rules.
+Its AND/OR-style search and distinction between safer and branching rules are
+useful precedents and reusable infrastructure. Forge's proposed distinction is
+the exchange of \emph{typed demands and certified theory consequences} across
+that search, rather than the mere existence of backward search.\footnote{Aesop
+project documentation \cite{aesop}.}
+
+Duper is a Lean-integrated proof-producing prover, and a natural candidate for
+logical and superposition reasoning. Its fact-selection interface matters:
+\code{duper [*]} requests local facts, whereas bare \code{duper} should not be
+assumed to consume them automatically. A Forge adapter should pass an explicit,
+recorded premise slice.\footnote{Duper repository documentation \cite{duper}.}
+
+Lean-auto provides a translation and automation interface between Lean and
+external reasoning. Its README distinguishes reconstruction-capable paths from
+standalone SMT or TPTP invocation modes without reconstruction. An external
+\code{unsat} result is therefore not a uniform proof interface. Forge must
+accept a reconstructed proof or create explicit remaining obligations; it must
+not promote a solver answer to a theorem.\footnote{Lean-auto repository and
+interface paper \cite{auto,autopaper}.}
+
+Lean-SMT reconstructs cvc5 reasoning in Lean, but its documented interface can
+leave proof holes as Lean goals. That is useful partial progress, not completed
+verification. The adapter should import those goals as children of the current
+AND node and report success only after every child is discharged.\footnote{Lean-SMT
+repository \cite{smt}.}
+
+QuerySMT is particularly close prior work: it uses SMT-generated hints together
+with Lean reasoning, including \code{grind} and Duper. Combining these systems
+is not a new proposal here. Forge's additional design target is a persistent
+planner that can generate structural lemmas and witnesses, solve the resulting
+obligations, and let those results influence future search.\footnote{Clune,
+Barbosa, and Avigad, \emph{Hint-Based SMT Proof Reconstruction} \cite{querysmt}.}
+
+\subsection{Nonlinear arithmetic: reuse the existing SOS engine}
+A current \code{leanprover/sos} library already implements an end-to-end
+nonlinear-real-arithmetic tactic. Its documented pipeline includes reification,
+CSDP search, rational reconstruction, and certificate-based proof construction;
+it also provides a witness-oriented replay interface. Consequently, ``add an
+SOS tactic to Lean'' is not a novel component of Forge. The production design
+should reuse this library after compatibility and trust checks.\footnote{Lean
+SOS project, README \cite{sos}.}
+
+The inspected \code{SOS/Engine.lean} exposes \code{SOS.Engine.solve}, a structured
+problem/result interface, and deterministic result checking. Its configuration
+already includes degree deepening, constraint-product bounds, and optional
+refutation powers. Some README wording about fixed relaxation levels lags this
+source: the implementation is the stronger basis for planning integration.
+The separate \code{SOS.Core} module separates proof-facing data/checking from
+native search dependencies.\footnote{Lean SOS source, \code{Engine.lean} and
+\code{Core.lean} \cite{sosengine,soscore}.}
+
+There is a real compatibility task, not a ready-made common workspace. The
+retrieved SOS toolchain file specifies \code{v4.32.0-rc1}, whereas the inspected
+Lean baseline is 4.34.0. That retrieved file may itself be a cached snapshot.
+Resolve commits and manifests together before attempting an integration; do
+not assume all projects' moving \code{main} branches build with the same Lean
+release.\footnote{Retrieved SOS \code{lean-toolchain} \cite{sostoolchain}.}
+
+For sparse polynomial data, \code{Hex.MvPoly} is a concrete candidate substrate.
+Its repository describes fixed-arity canonical sparse polynomials with an
+explicit monomial order and proved operation/evaluation laws. Forge should
+reuse a compatible proof-facing representation rather than repeatedly expand
+large expressions into unreduced Lean syntax.\footnote{Hex multivariate
+polynomial library \cite{hex}.}
+
+\subsection{Other components and non-goals}
+Mathlib's \code{linarith} infrastructure constructs proof terms from arithmetic
+certificates; \code{nlinarith} adds useful nonlinear preprocessing. These are
+first-line closers, not mechanisms to discard.\footnote{Mathlib,
+\code{Mathlib.Tactic.Linarith.Frontend} \cite{linarith}.}
+Its \code{positivity} extensions cover compositional sign facts for arithmetic
+operations and other supported expressions, and should be tried before a
+costly numerical search.\footnote{Mathlib positivity extensions \cite{positivity}.}
+
+The \code{lean-egg} repository is now marked as no longer developed and directs
+users toward \code{grind}. It should not be the foundation of a new maintained
+Lean package. The Rust \code{egg} library remains a possible untrusted search
+component, but importing its data structures does not solve Lean's binder,
+dependent-type, or proof-reconstruction problems.\footnote{The \code{lean-egg}
+and \code{egg} repositories \cite{leanegg,egg}.}
+
+Induction and lemma synthesis are established research topics, not inventions
+of this article. Directed lemma synthesis for functional-program equivalence
+is a relevant source of stronger search heuristics. The present contribution
+is a concrete integration design and a small, inspectable executable study,
+not a claim to have originated these techniques.\footnote{Sun et al.,
+\emph{Proving Functional Program Equivalence via Directed Lemma Synthesis}
+\cite{lemmasynthesis}.}
+
+\section{A precise architecture for Forge}
+\label{sec:architecture}
+
+\subsection{The planner's state}
+A search session has the conceptual state
+\[
+ \mathcal S=(E,\Gamma,G,\mathcal O,\mathcal F,\mathcal D,\mathcal C,\mathcal Q,B).
+\]
+Here $E$ is an immutable environment snapshot; $\Gamma$ is a typed local-context
+snapshot; $G$ is the original target; $\mathcal O$ is an AND/OR obligation graph;
+$\mathcal F$ is a store of proved facts; $\mathcal D$ is a store of demands;
+$\mathcal C$ contains normalized terms and theory-specific representations;
+$\mathcal Q$ is a collection of work queues; and $B$ is a multidimensional
+resource budget. ``Immutable'' refers to a snapshot identity: a branch can
+produce a successor snapshot, but another branch does not mutate it in place.
+
+A fact record stores its proposition, proof, source scope, dependency support,
+and originating certificate identifier. A demand record stores a desired
+proposition or term shape, the consumer requesting it, the local context in
+which it is needed, and a bounded search plan. A demand carries \emph{no logical
+authority}. Two consumers may share one demand only after their scopes and
+instantiations have been reconciled.
+
+An obligation node is either a goal with alternative proof methods, an AND
+node requiring several subproofs, or a completed proof. A method such as
+applying a theorem creates an AND node for its premises. Choosing one of two
+theorems creates an OR choice. Induction creates an AND node for the recursor's
+minor premises; an existential witness creates an AND node for its remaining
+properties.
+
+\subsection{A small vocabulary of engine messages}
+The following is an interface specification, not existing Lean API syntax:
+\begin{Code}
+EngineMessage :=
+  Certified(proposition, proof, scope, dependencies)
+| Need(proposition, scope, consumer)
+| Refine(goal, subgoals, proofBuilder, savedContext)
+| Candidate(certificateData, expectedStatement, obligations)
+| Conflict(assumptions, checkedRefutation)
+| Unknown(reason, resumableSearchState)
+\end{Code}
+
+\code{Candidate} is intentionally separate from \code{Certified}. A numerical
+optimizer may return a polynomial decomposition, but its equality, sign
+conditions, interpretation map, and connection to the original Lean expression
+must be checked before a fact is emitted. An SMT engine may return a useful
+implication whose premises become demands. A failed external run emits
+\code{Unknown}, not a logical negation.
+
+The proof builder in \code{Refine} is a typed Lean function or replay procedure
+that combines proofs of its exact subgoals into a proof of its parent. It is not
+an unchecked promise that some later tactic will make the relationship true.
+Before a method is admitted to the planner, its parent/child relationship must
+be elaborated in its saved context.
+
+\subsection{Scope and dependency discipline}
+Let a branch have assumptions $A_1,\ldots,A_k$. If a solver proves $P$ using
+$A_2$ and $A_5$, the exported fact has support $\{2,5\}$ together with all
+necessary local variables and their type dependencies. It may be reused in a
+descendant containing that support. It may be exported upward only as a
+corresponding implication, after the proof is abstracted over those assumptions.
+It is not valid to copy the bare proposition $P$ into a sibling branch.
+
+Computing support requires the dependency closure of free variables in both
+the proof and the types of those variables. This matters in Lean: a term
+\code{x : Fin n} depends on \code{n}, and a local proof may mention a value only
+through a type. A syntactic set of visible hypothesis names is insufficient.
+Universe parameters and local typeclass instances are also part of the context.
+
+\begin{invariant}[Certified fact invariant]
+Every fact visible at a node has a checked proof in that node's local context,
+or a checked abstraction that is explicitly instantiated there. No candidate,
+relaxation model, sampled equation, or unresolved solver hint is a fact.
+\end{invariant}
+
+\begin{invariant}[Exact parent invariant]
+Every completed obligation contains a proof of its recorded target in its
+recorded context. A goal may be normalized only together with a proof-producing
+transport back to the previous target.
+\end{invariant}
+
+\begin{proposition}[Compositional soundness of the planner design]
+Assume the engine adapters produce valid Lean proofs or sound proof builders,
+and the two invariants are maintained. A completed root yields a Lean proof of
+$G$ under $\Gamma$. Untrusted search choices cannot invalidate this conclusion.
+\end{proposition}
+\begin{proof}
+Proceed in a topological order through the completed proof DAG. A leaf is a
+checked fact or a checked direct proof. At an AND node, apply the checked proof
+builder to the already justified children. At an OR node, use the one completed
+alternative. Scope abstraction and instantiation preserve the stated contexts.
+The exact-parent invariant transports the final result to $G$. This is a
+specification-level argument: correctness of an eventual implementation still
+requires Lean checking of the assembled term and an audit of its dependencies.
+\end{proof}
+
+\subsection{Why this is not a sequential tactic wrapper}
+Consider a goal that requires a bound on a recursive accumulator. Induction
+produces a step obligation. A theorem instance suggests an inequality whose
+premise is a polynomial nonnegativity claim. The nonlinear engine proves that
+claim, which enables the theorem instance, which closes the induction step.
+The resulting inductive lemma then simplifies an existential-witness obligation.
+A list of tactics run once in sequence has no explicit representation of this
+feedback loop or of the fact that several consumers need the same intermediate
+claim.
+
+Forge's planner persists those obligations, schedules their producers, and
+reactivates waiting consumers when a proof arrives. A sophisticated existing
+tactic could implement such behavior internally; the point is to make the
+coordination protocol explicit and reusable across independent engines.
+
+\section{Demand-directed quantified reasoning}
+\label{sec:demand}
+
+\subsection{Backward requests coupled to forward saturation}
+Suppose the goal requires $P(t)$ and a theorem has the form
+\[
+ \forall \bar x,\quad H_1(\bar x)\to\cdots\to H_m(\bar x)\to P(f(\bar x)).
+\]
+Match the conclusion against the requested atom, modulo already proved
+equalities. A successful substitution $\theta$ creates demands for
+$H_1\theta,\ldots,H_m\theta$. When all are proved, instantiate the theorem and
+publish $P(f(\bar x))\theta$. This can construct intermediate terms that a
+purely ground-driven process has not yet produced.
+
+The forward side remains essential. New proved equalities can enable previously
+blocked matches, and facts not directly anticipated by a goal can expose a
+contradiction. Use forward saturation as one queue and backward demands as
+another, with bounded widening rather than a permanent relevance filter.
+Requests are indexed by predicate/function head, type, and selected normalized
+argument features; theorem conclusions use a discrimination-tree index.
+
+For multi-premise rules, order joins by estimated selectivity and share partial
+matches. Store which premise instances have already been tried. Newly arriving
+facts extend only joins that mention their indexes, in the spirit of semi-naive
+evaluation. A failed join is not cached forever if it can be enabled by a later
+equality merge.
+
+\begin{Code}
+solveDemand(target, context, fuel):
+    if a scoped proof of target exists: return it
+    if fuel exhausted: return Unknown
+    for theorem in conclusionIndex(target):
+        for substitution in boundedTypedMatches(theorem, target):
+            premises := instantiatePremises(theorem, substitution)
+            create shared child demands for premises
+            when every child is proved:
+                replay theorem application
+                publish the checked target proof
+    schedule a fair forward-saturation slice
+\end{Code}
+
+\subsection{Variables absent from the conclusion}
+Backward matching does not determine every theorem parameter. In
+$\forall x\,y,\ R(x,y)\to P(x)$, a demand for $P(a)$ leaves $y$ unknown. Forge
+must not silently choose an arbitrary inhabitant. It can enumerate appropriately
+typed terms from the local context, ask a witness engine, exploit equalities,
+or leave the application suspended with an existential-style obligation.
+Every selected instantiation is checked by Lean.
+
+The executable Horn prototype deliberately handles only rules whose backward
+premises become ground after matching the head. It abstains on the example
+above even when a witness happens to exist. This sharply bounded fragment makes
+its behavior and certificate checker easier to audit; it is not the full
+quantifier algorithm proposed for Lean.
+
+\subsection{A measured branching example}
+Use an uninterpreted type, constant $a$, unary functions $f,g$, and rules
+\[
+ P(a),\qquad P(x)\to P(f(x)),\qquad P(x)\to P(g(x)).
+\]
+The target is $P(f^d(a))$. The included forward baseline expands a breadth-first
+frontier and stops as soon as the target is produced. With the supplied rule
+order, it generates exactly $2^d$ distinct facts for $d\ge1$: the preceding
+levels contain $2^d-1$ facts, and the first target at the next level adds one.
+A backward proof uses $d+1$ fact nodes.
+
+This is a separation of \emph{these two implemented Horn search policies}.
+It is not a measurement of \code{grind}, whose goal internalization, congruence
+classes, triggering, heuristics, and resource policy are not modeled by this
+baseline. The experiment demonstrates why demand information can matter; it
+does not establish a Lean speedup.
+
+The logical proof has linear size in $d$, but the Python implementation uses
+nested term objects. Hashing and comparing such terms can add depth-dependent
+costs. A production hash-consed term DAG is needed before translating the node
+count into an approximately linear implementation cost.
+
+\subsection{Proof certificates and termination controls}
+A Horn certificate is a topologically ordered DAG. Each node is either an
+explicit premise or a named rule instance whose parent indices are smaller
+than the node index. The checker independently matches the rule's head and all
+premises under one consistent substitution. The final node must be the exact
+requested goal.
+
+Cycle detection prevents immediate recursive demand loops. It is not a
+completeness argument for arbitrary recursive Horn programs: an active request
+may have another finite derivation that a particular bounded policy misses.
+The planner should use iterative depth bounds, table successful answers, and
+retain resumable alternatives. A timeout or active-cycle rejection must be
+reported as absence of a certificate, not as falsity.
+
+\section{Automatic induction and auxiliary-lemma discovery}
+\label{sec:induction}
+
+\subsection{Selecting an induction variable and motive}
+Induction should be an explicit planner action, not an unconditional tactic
+applied to every natural number or list. Analyze unresolved recursive
+applications after cheap simplification. For each application, inspect the
+defining equations and identify structurally decreasing arguments, parameters
+that change in recursive calls, and dependencies of the target on those
+arguments.
+
+Generate a bounded collection of plans: ordinary structural induction on a
+visible datatype variable; functional induction using the definition's available
+induction principle; and, later, well-founded induction with a supplied or
+proved decrease relation. Initially prefer one major premise. Trying arbitrary
+nested inductions before examining the residual goal is a recipe for a large
+search tree.
+
+A useful ranking function rewards recursive occurrences that become constructor
+applications and penalizes the number of constructors, dependent premises, and
+new generalized variables. Ranking affects only search order. The actual
+induction step must be performed by applying a Lean recursor or a checked
+induction theorem; Forge must not manufacture an unrestricted ``induction
+hypothesis'' as an ordinary axiom.
+
+The motive is the main source of additional capability. If a recursive call
+changes an accumulator, an induction hypothesis about one fixed accumulator may
+be useless. Generalize that parameter before induction. In a dependent context,
+also revert hypotheses whose types depend on a generalized variable, in a
+valid dependency order, and reintroduce them in each minor premise. The target
+then quantifies over the appropriate parameters and their assumptions.
+
+\subsection{A fully worked accumulator example}
+Write list concatenation as $\app$. Define
+\begin{align*}
+ \app([],a)&=a,&
+ \app(x::xs,a)&=x::\app(xs,a),\\
+ \rev([])&=[],&
+ \rev(x::xs)&=\app(\rev(xs),[x]),\\
+ \racc([],a)&=a,&
+ \racc(x::xs,a)&=\racc(xs,x::a).
+\end{align*}
+The original target is
+\begin{equation}\label{eq:original}
+ \forall xs,\quad \racc(xs,[])=\rev(xs).
+\end{equation}
+A direct induction yields an induction hypothesis about
+$\racc(xs,[])$, but the step contains $\racc(xs,[x])$. The desired
+strengthening is
+\begin{equation}\label{eq:strengthening}
+ \forall xs\,a,\quad \racc(xs,a)=\app(\rev(xs),a).
+\end{equation}
+
+The implemented prototype does not simply return the right-hand side of
+\eqref{eq:strengthening}. It notices that the second argument of the recursive
+\code{revAcc} call changes, replaces the original fixed accumulator by a
+variable, and enumerates a small right-hand-side grammar:
+\[
+ e ::= xs\mid a\mid []\mid \rev(e)\mid \app(e,e).
+\]
+Terms are enumerated in increasing syntax-tree size. There are 49 concrete
+sample environments: every pair of lists of length at most two over a two-element
+alphabet. Samples only reject candidates. The first surviving candidate that
+receives an induction certificate is the 41st enumerated term,
+$\app(\rev(xs),a)$.
+
+The actual generalization recognizer is deliberately specific to the
+\code{revAcc} equation. The general motive-analysis algorithm above is a design
+for the Lean implementation, not an already implemented generic recursion
+analyzer. This distinction prevents a tiny successful example from being
+misrepresented as general automatic induction.
+
+\subsection{The resulting proof, not just its tests}
+First prove concatenation's right identity and associativity by induction.
+These are named, separately checked lemmas in an acyclic theorem bank. The base
+case of \eqref{eq:strengthening} is
+$\racc([],a)=a=\app([],a)$.
+For the step, assume
+\[
+ \forall a,\quad\racc(xs,a)=\app(\rev(xs),a).
+\]
+Then
+\begin{align*}
+ \racc(x::xs,a)
+ &=\racc(xs,x::a)\\
+ &=\app(\rev(xs),x::a)\\
+ &=\app(\app(\rev(xs),[x]),a)\\
+ &=\app(\rev(x::xs),a).
+\end{align*}
+The middle equality uses associativity and the defining equation for appending
+a singleton. Specializing the proved lemma at $a=[]$ and using right identity
+proves \eqref{eq:original}.
+
+The prototype independently checks the base and step rewrite traces. In the
+step, the tail is a \emph{rigid eigenconstant}; only explicitly generalized
+parameters remain instantiable in the induction hypothesis. In the base case,
+the induction hypothesis is not available at all. These restrictions are
+essential. Treating the tail as an ordinary rewrite metavariable would allow
+an induction hypothesis to rewrite the original goal at an unjustified larger
+argument.
+
+\subsection{From failed residuals to stronger lemma synthesis}
+A production synthesizer should use failure information instead of enumerating
+all small theorems. Normalize both sides of an unclosed induction step and
+identify the unmatched recursive skeletons. Compute typed anti-unifiers of the
+original target and those residuals, recording substitutions back to each.
+Candidate lemmas should relate the same operations while replacing obstructing
+subterms by fresh parameters.
+
+There are three useful candidate sources. First, generalize a changing
+non-structural argument, as above. Second, propose a homomorphism/distribution
+lemma such as $\rev(\app(xs,ys))=\app(\rev(ys),\rev(xs))$ when nested calls
+obstruct normalization. Third, synthesize a stronger invariant containing a
+measure, bound, or relation required by the step. Each candidate becomes its
+own proof obligation, never a rewrite rule merely because it helped simplify
+another candidate.
+
+Use a typed, bounded grammar assembled from operations present in the residual,
+relevant constructors, and a small retrieved lemma vocabulary. Eliminate
+candidates that fail executable tests when testing is available. Quotient
+syntactically different candidates only by \emph{already proved} equalities;
+otherwise the quotient can discard the correct expression or conceal an
+unproved assumption. After a failed universal proof, retain the candidate as
+unproved; a failure need not yield a counterexample.
+
+A stronger future implementation can replace broad enumeration with the
+induction-friendly transformations studied in directed lemma synthesis. That
+is an algorithmic development path, not a claim that the included enumerator
+implements that research system.
+
+\subsection{Preventing circular discoveries}
+Each candidate lemma has a dependency set. It may use previous accepted lemmas
+and its own legally scoped induction hypotheses. It may not use itself as a
+global theorem, the original unproved target, or another candidate that depends
+back on it. The simplest initial policy is an append-only theorem bank ordered
+by accepted proofs. More elaborate mutually inductive schemes require an
+explicit joint induction principle, not a cycle in a generic dependency graph.
+
+The prototype's bank checks five list lemmas: concatenation right identity,
+concatenation associativity, the discovered accumulator specification,
+reversal over concatenation, and reversal involutivity. Only the accumulator
+specification's right-hand side is synthesized. The other four are supplied
+statements whose induction certificates are produced and replayed. All are
+about a small freely generated list fragment, not arbitrary dependent Lean
+objects.
+
+\section{Witness synthesis connected to proof obligations}
+\label{sec:witness}
+
+\subsection{A witness is a program with a proof obligation}
+For a goal $\exists y:\tau,\ P(y)$, create a typed grammar for $y$ from the
+local context and relevant constructors. The alternatives are not just constant
+terms: after universal variables have been introduced, a witness may depend on
+them. Instantiating a candidate $w$ produces the exact child goal $P(w)$.
+Success requires a proof of that child, followed by the ordinary existential
+introduction rule.
+
+For a goal $\forall x,\exists y,\ P(x,y)$, sampling individual values of $x$
+and finding unrelated values of $y$ does not construct a function or prove the
+theorem. The grammar must represent a well-typed expression $w(x)$, or the
+planner must produce another legitimate Lean proof of the existential statement.
+A synthesis oracle may help choose $w$ but cannot justify $P(x,w(x))$ by testing.
+
+\subsection{An executed polynomial-witness example}
+Consider
+\[
+ \forall x\in\R,\quad \exists y\in\R,\quad x\le y\ \wedge\ -x\le y.
+\]
+The prototype enumerates $w(x)=a+bx+cx^2$ with
+$a,b,c\in\{-2,-1,0,1,2\}$, ordered first by coefficient $\ell_1$ size and then
+lexicographically. Five values $x=-2,-1,0,1,2$ are used only as a rejection
+filter. The 23rd candidate is $w(x)=x^2+1$; three candidates reach universal
+certificate search before acceptance.
+
+The certificate engine separately proves $w-x\ge0$ and $w+x\ge0$ over all real
+inputs. A compact mathematical presentation is
+\[
+ x^2+1-x=(x-\tfrac12)^2+\tfrac34,\qquad
+ x^2+1+x=(x+\tfrac12)^2+\tfrac34.
+\]
+These are convenient explanatory decompositions. The numerical LP run actually
+returned different rational weighted-square decompositions, retained verbatim
+as data in the certificate file; both replay exactly. The artifact does not
+pretend that a hand-simplified certificate is the optimizer's original output.
+
+The example illustrates cross-component behavior: witness enumeration requests
+two universal nonlinear facts, and a theory certificate closes them. A
+production implementation should also try simpler witnesses such as an
+available absolute-value or maximum expression when the local library makes
+those cheap. Restricting the prototype to polynomials is an experiment design,
+not a recommended restriction on all Forge witnesses.
+
+\subsection{Guards and dependent witnesses}
+A candidate involving division, an array lookup, or a dependent constructor
+may require additional evidence. That evidence becomes an explicit child goal.
+For example, constructing a value of \code{Fin n} requires a value and a bound;
+constructing a term with a nonzero-denominator simplification requires the
+appropriate nonzeroness statement. Shared guard demands should be solved once
+and reused with their proofs.
+
+The planner should distinguish candidate elaboration failure from mathematical
+refutation. It should also preserve dependencies between witness metavariables:
+a later witness may depend on an earlier one. Eagerly closing a goal using a
+metavariable that another branch later instantiates is unsafe as a search-state
+operation even when Lean would ultimately reject the resulting term.
+
+\section{Exact nonlinear reasoning and certificate search}
+\label{sec:nonlinear}
+
+\subsection{The certificate language}
+Normalize a polynomial target over an explicitly selected ordered field.
+Let $g_j\ge0$ be proved inequality guards and $h_k=0$ proved equality guards.
+A general certificate can have the form
+\begin{equation}\label{eq:cone}
+ p = \sum_{J}\sum_i c_{J,i}q_{J,i}^2\prod_{j\in J}g_j
+       +\sum_k u_k h_k,
+ \qquad c_{J,i}\in\Q_{\ge0}.
+\end{equation}
+The finite index $J$ can be a set or a multiset, depending on the search policy.
+The polynomials $q_{J,i}$ and $u_k$ have rational coefficients. The equality is
+checked exactly, not by floating-point residuals.
+
+\begin{proposition}[Conditional cone certificate]
+If \eqref{eq:cone} holds as a polynomial identity and the stated guards hold at
+an input, then $p\ge0$ at that input.
+\end{proposition}
+\begin{proof}
+Each square is nonnegative, each coefficient is nonnegative, and each guard
+product is nonnegative. Their sum is nonnegative. Every equality-ideal term
+$u_kh_k$ evaluates to zero. Evaluating the polynomial identity gives the claim.
+\end{proof}
+
+This simple argument is the core reason an unreliable optimizer can be useful.
+It searches for data; a small checker verifies a mathematical identity and a
+finite list of sign conditions. The typed interpretation from rational
+polynomials to the original Lean field is part of the proof, not an implicit
+casting convention.
+
+The Python certificate checker implements the nonnegative-cone part, without
+equality-ideal multipliers. It accepts arbitrary sparse polynomials as square
+arguments, but its search grammar is much more restricted. A successful check
+is conditional on the supplied guards; the checker does not prove those guards
+from a Lean context.
+
+\subsection{The implemented sparse LP search}
+Let $D=\deg p$. For each guard product $g_J$ of bounded length, enumerate
+monomials of degree at most
+\[
+ d_J=\left\lfloor\frac{D-\deg g_J}{2}\right\rfloor.
+\]
+Create a dictionary containing each monomial $m$ and each binomial
+$m+cn$ for distinct monomials and
+$c\in\{-2,-1,-\tfrac12,\tfrac12,1,2\}$. The corresponding candidate columns
+are $q^2g_J$. Flatten their rational coefficients into a linear system
+\[
+ Aw=b,\qquad w\ge0.
+\]
+The prototype asks SciPy's HiGHS LP interface to minimize $\sum_iw_i$ subject
+to these constraints.\footnote{SciPy documentation,
+\code{linprog(method="highs")} \cite{highs}.}
+
+The returned floating-point weights are rationalized with a denominator cap
+of $10^6$. Tiny weights may be dropped during \emph{search reconstruction};
+this never weakens the final check. The reconstructed identity must match the
+target exactly using \code{fractions.Fraction}. A residual of $10^{-12}$ is
+not a proof. If exact replay fails, the result is \code{Unknown} even when the
+numerical solver reports success.
+
+With $M=\binom{n+d}{d}$ monomials, the unguarded dictionary has at most
+$M+6\binom M2$ entries before deduplication. Guard products increase this count
+combinatorially. Sparse coefficient storage, incremental degree bounds,
+coefficient-size limits, and proof-size limits are therefore necessary. The
+LP prototype is intentionally small; it is not a replacement for the existing
+Lean SOS library's more general SDP machinery.
+
+\subsection{An executed quartic certificate}
+For
+\[
+ p=x^4+y^4+z^4-x^2y^2-y^2z^2-z^2x^2,
+\]
+the search constructs 280 candidate columns and 35 coefficient equations.
+It finds a three-term certificate:
+\begin{equation}\label{eq:quartic}
+ p=\tfrac12(x^2-y^2)^2+\tfrac12(y^2-z^2)^2+\tfrac12(z^2-x^2)^2.
+\end{equation}
+The saved certificate is checked by exact coefficient comparison. This is a
+useful compact replay target, but it is not evidence that other existing Lean
+tactics cannot solve the theorem. In fact, supplying the three square facts
+makes the final arithmetic proof straightforward; the automation question is
+how to find and use those facts without human intervention.
+
+Other executed examples include $xy\ge0$ from $x,y\ge0$, $x^3\ge0$ from
+$x\ge0$, $x-x^2\ge0$ from $x,1-x\ge0$, and
+\[
+ x^3+y^3-xy(x+y)=(x+y)(x-y)^2\ge0
+ \quad\text{when }x,y\ge0.
+\]
+These exercise conditional guard products and squares, not just unguarded
+polynomial normalization.
+
+\subsection{A deliberate incompleteness control}
+The true polynomial $(x+y+1)^2$ has an obvious one-square certificate, which the
+checker accepts when explicitly supplied. The restricted LP dictionary fails
+to find a certificate for it. This failure is expected: a rank-one quadratic
+Gram matrix for the coefficient vector $(1,1,1)$ cannot be decomposed as a
+positive sum of rank-one vectors with only two nonzero coordinates, unless the
+summands lie in its one-dimensional range; none of the allowed nonzero
+binomial vectors do.
+
+Thus the \emph{checker} supports a larger certificate language than this
+\emph{searcher} can discover. The experiment is a useful protection against an
+inflated ``SOS-complete'' claim. A production solver should escalate to general
+Gram-matrix search or use the existing Lean SOS engine, rather than interpret
+this failure as a negative mathematical result.
+
+\subsection{Production search: reuse, rational reconstruction, and escalation}
+The recommended nonlinear adapter first tries cheap sign reasoning and existing
+arithmetic closers. It then tries a sparse dictionary search for a compact
+certificate, followed by the compatible Lean SOS engine. Only afterward should
+it increase degree, constraint-product, or refutation budgets. Those escalation
+parameters already exist in the inspected SOS engine; Forge's contribution is
+to allocate them according to outstanding proof obligations and reuse their
+results.
+
+For a general SOS block, write $\sigma=v^TQv$ in a monomial basis $v$, search
+for a positive semidefinite Gram matrix $Q$, and recover rational data. A
+weighted-square certificate can be extracted from an exact rational
+factorization $Q=LDL^T$ with nonnegative diagonal $D$. Zero pivots require care:
+a zero pivot is admissible only when the relevant residual off-diagonal entries
+are zero, or after a justified permutation/reconstruction. A floating-point
+``nearly positive semidefinite'' matrix is not adequate.
+
+CSDP is a concrete open-source SDP search backend; the existing Lean SOS
+integration is preferable to building a second unaudited wrapper.\footnote{The
+COIN-OR CSDP project \cite{csdp}.}
+A fallback oracle such as SymPy can suggest exact polynomial identities or
+perform differential tests, but a returned identity must still be checked in
+the chosen certificate representation.\footnote{SymPy polynomial tools
+reference \cite{sympy}.}
+
+To prove strict positivity, search for $p-\varepsilon\ge0$ with an exact
+$\varepsilon>0$, or use a properly justified strict-constraint refutation.
+A fixed global margin is sufficient but not necessary: $x>0$ implies $x>0$
+without a uniform rational lower bound. For infeasibility, a certificate for
+$-1$ in a nonnegative cone plus the equality ideal gives a contradiction.
+If $q>0$ is a strict hypothesis, a checked identity expressing $-q^m$ as a
+nonnegative cone plus vanishing ideal terms, with $m\ge1$, also gives a
+contradiction. All strictness and exponent side conditions must be retained.
+
+\subsection{Making nonlinear results useful to other engines}
+A successful certificate should not be used only to close the current goal.
+It can publish an inequality needed by a theorem application, a branch guard,
+a witness obligation, or an induction invariant. Conversely, a linear solver
+can publish proved bounds that tighten nonlinear search. The planner can rank
+candidate nonlinear consequences by the number of waiting consumers and the
+estimated cost of their certificates.
+
+One concrete extension is to introduce an abstraction variable $z=xy$ together
+with checked box bounds $\ell_x\le x\le u_x$ and
+$\ell_y\le y\le u_y$. The four elementary product inequalities yield
+\begin{align*}
+ z&\ge \ell_xy+\ell_yx-\ell_x\ell_y,\\
+ z&\ge u_xy+u_yx-u_xu_y,\\
+ z&\le u_xy+\ell_yx-u_x\ell_y,\\
+ z&\le \ell_xy+u_yx-\ell_xu_y.
+\end{align*}
+For example, the first follows from $(x-\ell_x)(y-\ell_y)\ge0$.
+These are proved linear consequences once the box assumptions and $z=xy$ are
+established. A linear model violating $z=xy$ can guide refinement, but it is
+not a counterexample to the original goal. This bound/cut exchange is proposed;
+it is not implemented in the supplied prototype.
+
+\section{Exact Bernstein certificates on bounded domains}
+\label{sec:bernstein}
+
+\subsection{The representation and bound}
+For a box $B=\prod_i[a_i,b_i]$ with rational endpoints and $a_i<b_i$, substitute
+$x_i=a_i+(b_i-a_i)t_i$. Express the resulting polynomial on $[0,1]^n$ as
+\[
+ p=\sum_{0\le k_i\le d_i}\beta_k
+       \prod_{i=1}^n\binom{d_i}{k_i}t_i^{k_i}(1-t_i)^{d_i-k_i}.
+\]
+Every basis function is nonnegative and the basis functions sum to one.
+Consequently, $\min_k\beta_k\le p\le\max_k\beta_k$ on the box.
+
+If the power-basis coefficients after substitution are $a_j$, the implemented
+conversion is
+\[
+ \beta_k=\sum_{j\le k} a_j
+          \prod_i\frac{\binom{k_i}{j_i}}{\binom{d_i}{j_i}}.
+\]
+All arithmetic uses exact rationals. A leaf certificate stores a claimed lower
+bound, but the checker recomputes it; the claim itself is never trusted.
+
+\subsection{A covering tree, not a collection of sampled boxes}
+When a leaf bound is insufficient, bisect its longest side at a rational
+midpoint. An internal certificate node records the split axis and split value
+and has exactly two children. The checker reconstructs the two child boxes
+from the parent, verifies that the split is interior, and checks both children.
+This inductive construction proves coverage automatically. Accepting a list
+of independently positive boxes without checking that they cover the original
+domain would leave a soundness gap.
+
+\begin{proposition}[Box-certificate soundness]
+If every leaf of a checked covering tree has a nonnegative Bernstein lower
+bound, then $p\ge0$ throughout the original box. If every leaf bound is strictly
+positive, then $p>0$ there.
+\end{proposition}
+\begin{proof}
+The Bernstein convex-combination identity proves the leaf claims. Each internal
+node's children cover its box, including their common boundary. Induction over
+the tree transports the property to the root.
+\end{proof}
+
+\subsection{An executed example and a termination qualification}
+For $p(x)=x^2-x+3/10$ on $[0,1]$, the initial Bernstein coefficients are
+\[
+ (3/10,-1/5,3/10).
+\]
+Their negative minimum is inconclusive, not a refutation. Splitting at $1/2$
+produces two leaves, each with exact lower bound $1/20>0$. The certificate has
+three nodes and proves strict positivity on the requested interval.
+
+The polynomial is actually positive on all of $\R$; an SOS proof is simpler.
+The bounded-domain experiment is intentionally used to exercise a different
+certificate mechanism. It should not be advertised as a case that demands
+Bernstein subdivision or defeats the SOS engine.
+
+For a polynomial with a positive minimum on a compact box, sufficiently fine
+uniform subdivisions yield positive Bernstein lower bounds. To see the
+mechanism, expand around a subbox endpoint. Under affine rescaling, every
+nonconstant coefficient contains at least one side-length factor; the
+correction of a Bernstein coefficient from the endpoint value tends uniformly
+to zero as all side lengths tend to zero. A positive minimum eventually
+absorbs that correction. This explains eventual success with unbounded fair
+subdivision, not any useful a priori complexity guarantee.
+
+If the minimum is zero, the same argument gives no finite strict certificate;
+a true non-strict inequality can also remain hard for a chosen subdivision
+policy. Production Forge should try symbolic factorization, exact boundary
+analysis, or another certificate language before subdividing indefinitely.
+The tensor-product basis has $\prod_i(d_i+1)$ coefficients, so dimension is
+an important practical limit.
+
+\section{Theory boundaries, SAT, and higher-order reasoning}
+\label{sec:boundaries}
+
+\subsection{Typed bridges rather than erased semantics}
+Sharing proved propositions is safer than assuming every solver's internal
+objects have interchangeable meanings. Each reifier should return a typed
+interpretation, an atom environment, and a proof that the encoded target denotes
+the original expression. If two solvers use different abstractions of a term,
+exchange a checked bridge theorem or retain the representations separately.
+
+For example, rational polynomial algebra treats subtraction as additive
+inversion. Natural-number subtraction is truncated. Translating
+\code{(a - b : Nat)} to a field difference requires a guard such as $b\le a$
+and an appropriate transport theorem; otherwise one must keep the operation
+opaque or split the relevant cases. Integer division is not field division,
+and fixed-width addition is not unbounded integer addition. These distinctions
+should be visible in the engine capability descriptors.
+
+Unknown real-valued applications can be polynomial atoms without being
+uninterpreted everywhere. One engine may know a theorem about $f(x)$ while the
+polynomial engine treats its value as one coordinate. Once that theorem gives
+a bound or equality, the bound is proved in the original context and can be
+translated into the polynomial representation. No global erasure of dependent
+types is necessary.
+
+\subsection{A conservative higher-order adapter}
+Extensionality is already present in the baseline. Forge's higher-order plan
+is to choose useful extensionality steps, expose resulting pointwise demands,
+and use a reconstruction-capable Duper/Lean-auto route when appropriate.
+Bound-variable identity, universe levels, and typeclass instances must remain
+part of theorem matching. Matching under binders should use Lean's own typed
+expression machinery, not the Python prototype's first-order matcher.
+
+Monomorphization and translation to first-order or higher-order external
+languages need explicit fragment checks and proof-producing transport. Empty
+types, dependent function domains, and quantifier well-formedness must not be
+silently replaced by the external solver's assumed nonempty sorts. Unsupported
+constructs should remain opaque where a sound abstraction permits that, or
+cause the adapter to abstain.
+
+\subsection{SAT and conflict learning}
+For Boolean or fixed-width bitvector obligations, a SAT-oriented backend may be
+much more suitable than broad quantified saturation. Forge can also use a
+checked conflict clause as a learned fact. If a branch refutation depends on
+assumptions $A_{i_1},\ldots,A_{i_r}$, derive the corresponding clause
+$\neg A_{i_1}\lor\cdots\lor\neg A_{i_r}$ with its proof. Conflict analysis may
+suggest a smaller support set, but replay must justify the actual clause.
+
+A proposed future CDCL-style coordinator can use these clauses to avoid
+repeated branches. The first implementation should reuse existing solver
+reasoning and branch-state machinery instead of writing another full SAT/SMT
+solver. The included prototype has no CDCL implementation, bit-blaster, or
+higher-order prover.
+
+Do not assume a generic Nelson--Oppen completeness theorem simply because
+solvers exchange equalities. Finite datatypes and fixed-width bitvectors do not
+satisfy the usual stably-infinite assumptions, and dependent encodings add
+further issues. The proof-producing architecture supports sound exchanges
+without claiming a blanket completeness result for the combined theory.
+
+\section{Trust profiles and final acceptance}
+\label{sec:trust}
+
+\subsection{Kernel checking and native evaluation are different profiles}
+The current Lean tactic reference explicitly distinguishes kernel reduction
+from native evaluation: \code{decide +native} and \code{native\_decide} enlarge
+the trusted base, and the \code{bv\_decide} documentation notes code-generator
+trust and generated axioms. Merely caching an LRAT file for \code{bv\_check}
+does not, by itself, establish a kernel-only replay profile.\footnote{Lean
+language reference, decision procedures and SAT integration \cite{tactics}.}
+
+Forge should therefore have two explicit profiles. The default
+\emph{standard-axiom, kernel-replay profile} permits the project's declared
+logical axioms, but no newly admitted solver or native-evaluation assertions.
+An optional \emph{native-evaluation profile} can accept a broader, explicitly
+reported dependency policy. These labels concern logical trust, not whether
+untrusted search is implemented in native code: an external optimizer is
+perfectly compatible with strict replay when its returned data is checked
+without trusting the optimizer.
+
+For a certified computation, prove the checker's soundness theorem once, then
+establish the concrete check with a supported kernel reduction path, such as
+\code{decide +kernel}, or with an ordinary proof term. The SOS source's
+proof-facing design is useful here. For a SAT checker, an adapter still has to
+verify that its selected replay route meets the requested profile; it should
+not claim a strict route exists merely because a tactic has ``check'' in its
+name.
+
+\subsection{An explicit acceptance procedure}
+An eventual \code{forge} invocation should perform the following final checks:
+\begin{enumerate}
+\item Restore the recorded original goal context and instantiate the selected
+proof's metavariables. Reject any unresolved term or universe metavariables.
+\item Infer and check the proof's type against the exact original target,
+using only legitimate definitional equality or recorded proof transports.
+\item Inspect the transitive declaration dependencies. Reject
+\code{sorryAx}, temporary admitted hypotheses, unapproved native assertions,
+and any axiom outside the declared policy. Existing project axioms must be
+reported, not quietly relabeled as part of the kernel.
+\item Validate the assembled declaration through Lean's normal checking path.
+For reproducibility, replay the exported proof in a clean pinned workspace
+with the original pre-theorem environment.
+\end{enumerate}
+
+Type inference in a running metaprogram is useful but is not the whole audit.
+An expression may type-check because an imported axiom states the desired
+result. Likewise, a tactic can appear to close the metavariable while its
+suggested source script leaves a hint unproved. Both require scrutiny beyond
+the visible number of remaining tactic goals.
+
+\subsection{Python certificates are not Lean proofs}
+The Python checker suite shares low-level term and rational-polynomial code
+with the search programs, though its replay algorithms do not call the search
+procedures. Differential tests against SymPy reduce the risk of some arithmetic
+implementation bugs, but they do not formally verify Python, its runtime, or
+the data model. The correct claim is \emph{independently replayed exact
+certificates for a specified fragment}, not kernel-checked Lean theorems.
+
+The command \code{python -S scripts/verify\_certificates.py} is useful evidence
+of separation: it replays persisted certificates without importing SciPy,
+NumPy, or SymPy. It is not a replacement for porting the checker and its
+soundness proof into Lean. The JSON parser also is not a hardened untrusted
+network service; production deployments need size, nesting, time, and memory
+limits in addition to mathematical validation.
+
+\section{Scheduling, retrieval, and proof-size control}
+\label{sec:scheduling}
+
+\subsection{A deterministic initial schedule}
+Start with a deterministic policy that can be reproduced and ablated. Give
+cheap normalization and the pinned baseline a short initial opportunity.
+Thereafter maintain separate queues for local saturation, theorem demands,
+structural plans, witness candidates, nonlinear certificates, and external
+logical search. Use fixed quanta plus a small fair-widening quota. Exact numeric
+weights should be tuning parameters, not hard-coded claims about all goals.
+
+One reasonable initial policy ranks actions by
+\[
+ \frac{\text{estimated probability of closing an obligation}
+       \times(1+\text{waiting consumers})}
+      {\text{estimated search cost}+\text{estimated replay cost}+1},
+\]
+subject to periodic service for each enabled queue. Initial estimates can be
+simple tables by goal class; no trained model is required. A learned ranking
+model may later improve efficiency, but it remains an untrusted heuristic and
+cannot modify the proof acceptance rules.
+
+Record a budget vector, not just a timeout: Lean heartbeats, external wall time,
+maximum term generation, theorem instances, induction depth, candidate grammar
+size, polynomial degree, certificate term count, coefficient bit length, and
+replay steps. Every expensive engine should return an explicit exhaustion reason.
+A mathematical failure and a resource failure must not have the same diagnostic.
+
+\subsection{Library retrieval driven by missing premises}
+The baseline already has a suggestion mechanism. Forge should improve how
+retrieval is used, not claim to introduce library search. Query a theorem index
+with both the goal and currently blocked premises. Prefer type-compatible
+conclusion heads, operations appearing in the residual, and theorems whose
+premises have likely producers in the active engines.
+
+Use staged top-$k$ retrieval: a small set first, then larger sets if search
+stalls. In a strict benchmark, build the index only from the original
+pre-theorem environment. Never inspect the target theorem's existing proof to
+choose premises unless the experiment is explicitly labeled an oracle-premise
+upper bound. Attributes that indirectly reintroduce a held-out theorem are
+also leakage.
+
+Retrieval can propose an induction lemma, a bridge theorem, or a normalization
+identity. It need not add every retrieved theorem to every solver. Record a
+small premise slice for each engine call, then minimize that slice after a
+successful proof if doing so makes replay materially cheaper.
+
+\subsection{Avoiding repeated work and invalid caches}
+A cache key must include the environment identity, original typed expressions,
+local-context identity, universe instantiations, transparency policy where
+relevant, and the dependency support of branch assumptions. Alpha-normalized
+pretty-printed goals are not enough. A proof of $P(x)$ under $h:x=0$ is not a
+proof of the same displayed goal under $h:x=1$.
+
+For an initial implementation, restrict cross-branch sharing to closed theorems
+or explicitly abstracted proofs. Share more aggressively only after context
+transport is implemented and tested. Persist certificate data and source-level
+replay recipes, not arbitrary serialized mutable metavariable contexts.
+
+Proof construction also has a budget. Hash-cons repeated certificate subterms,
+share derived lemmas, and prefer a compact algebraic identity over thousands of
+small rewrites when its checking cost is lower. Preserve a readable proof
+script where practical, but retain the exact certificate when a short script
+would rerun nondeterministic search.
+
+\section{Concrete Lean implementation plan}
+\label{sec:implementation}
+
+\subsection{Integration points that actually exist}
+The pinned source contains \code{Lean.Meta.Grind.main}, parameter constructors
+including \code{mkDefaultParams}, and a result structure with failure and
+instrumentation information. There is an extra-fact path that consumes proofs.
+These give a concrete starting point for an adapter.\footnote{Lean 4.34.0,
+\code{Lean/Meta/Tactic/Grind/Main.lean} \cite{grindmain}.}
+
+The internal state includes proof-bearing new facts, equality information,
+generations, and saved metaprogramming state. It is substantial reusable
+infrastructure, but it is not evidence of a stable public plugin interface for
+all of Forge's proposed operations.\footnote{Lean 4.34.0,
+\code{Lean/Meta/Tactic/Grind/Types.lean} \cite{grindtypes}.}
+
+The safest first version operates at coarse granularity: construct local Lean
+subgoals, run selected engines on those goals, collect closed proof terms, and
+restart or re-enter \code{grind} with the proved consequences. This costs more
+than a fully incremental integration but avoids unsafely mutating undocumented
+internal structures. A later version can add narrow upstream hooks for
+certified fact insertion, demand notification, resumption, and diagnostics.
+
+\subsection{Proposed module layout}
+\begin{longtable}{p{0.27\linewidth}p{0.65\linewidth}}
+\toprule
+Module & Responsibility and first implementation choice \\
+\midrule
+\endhead
+\code{Forge.Core} & Session identities, typed facts, obligations, dependencies, budgets, and event vocabulary. \\
+\code{Forge.Check} & Exact-target checking, axiom policy, certificate replay registration, and final export. \\
+\code{Forge.Search} & AND/OR scheduler and transactional branch snapshots; borrow Aesop design patterns or integrate suitable internals behind an adapter. \\
+\code{Forge.Demand} & Conclusion index, typed backward matching, premise joins, and demand/forward coordination. \\
+\code{Forge.Induction} & Recursive-position analysis, dependency-aware generalization, recursor application, and residual extraction. \\
+\code{Forge.Lemma} & Typed grammar enumeration, safe test filters, anti-unification proposals, and the checked theorem bank. \\
+\code{Forge.Witness} & Typed candidate terms and generation of exact witness obligations. \\
+\code{Forge.Nonlinear} & Adapters for cheap arithmetic, compatible SOS engine, and the polynomial/box certificate routes. \\
+\code{Forge.Bridges} & Proved representation conversions and their guards; no global semantic erasure. \\
+\code{Forge.Backends} & Versioned Grind, Duper, Lean-SMT/QuerySMT, and optional SAT interfaces. \\
+\code{Forge.Replay} & Stable proof scripts/certificate files, dependency manifests, and deterministic replay without numerical search. \\
+\bottomrule
+\end{longtable}
+
+The separation between \code{Core}, \code{Check}, and external-search modules
+allows replay-only builds. A numerical solver can be absent on the machine
+checking a finished proof. Compatibility wrappers belong in their own modules;
+a Lean upgrade should not require editing every search algorithm.
+
+\subsection{A proposed user interface}
+The following syntax expresses intended behavior only. It is not accepted by
+the supplied files, which do not define a \code{forge} elaborator.
+\begin{Code}
+by
+  forge
+
+by
+  forge (config := {
+    induction := true
+    synthesizeLemmas := true
+    nonlinear := true
+    externalSearch := false
+    trust := .standardAxioms
+  }) [helper_theorem]
+
+by
+  forge?  -- suggest a replayable script/certificate invocation
+\end{Code}
+
+A failure report should name the smallest remaining obligations and the
+exhausted budgets. For example: ``Induction step requires a lemma about the
+changing accumulator; 128 candidate expressions rejected by tests; 3 universal
+proofs remain open.'' Another useful report is: ``SOS candidate rejected by
+exact coefficient check; no theorem added.'' Such messages help distinguish a
+missing library theorem, a poor search bound, and a genuine mathematical issue.
+
+\subsection{Implementation stages with acceptance gates}
+\textbf{Stage A: trustworthy orchestration.} Implement the state model,
+transactional goal isolation, coarse \code{grind} adapter, fact support,
+exact-goal validation, and replay export. Acceptance requires regression tests
+for sibling-branch leakage, metavariable contamination, incorrect transports,
+and denied axioms. A successful \code{grind} proof should survive orchestration
+without logical changes.
+
+\textbf{Stage B: the first major capability extension.} Port the list-fragment
+induction checker or generate ordinary Lean induction proofs, then implement
+recursive-position motive selection and changing-parameter generalization.
+Add the bounded lemma grammar. Acceptance requires solving unseen variations
+of accumulator correctness with the correctness theorem absent from the
+environment, together with false-statement and circular-lemma rejection tests.
+
+\textbf{Stage C: theory and witness integration.} Align a specific SOS/Hex/Mathlib
+manifest with the target Lean version; expose certified nonlinear consequences
+as reusable facts; connect witness enumeration and guard demands. Add a Lean
+Bernstein soundness theorem and exact covering-tree replay if benchmarks justify
+it. Acceptance requires certificates replaying without a numerical solver and
+mixed examples needing both structural and arithmetic reasoning.
+
+\textbf{Stage D: wider quantified and external search.} Add the demand index,
+semi-naive premise joins, and optional reconstruction-capable external engines.
+Add a strict SAT path only when its checker and trust policy are established.
+Acceptance requires zero unproved hints in all counted successes, explicit
+compatibility manifests, and comparisons against the strongest configured
+baseline rather than default \code{grind} alone.
+
+\textbf{Stage E: optimize from measurements.} Introduce persistent incremental
+hooks, learned scheduling, stronger lemma synthesis, and richer algebraic
+certificates only after profiling demonstrates their value. Measure replay
+cost as well as search cost. These are deliverable stages rather than promised
+calendar estimates; the difficult work lies in dependent-context handling,
+version alignment, and proof reconstruction, not in writing the tactic keyword.
+
+\section{Executed experiments and reproducibility}
+\label{sec:experiments}
+
+\subsection{Environment and measured scope}
+The recorded run uses Python 3.13.5 on Linux x86-64, NumPy 2.3.5, SciPy 1.17.0,
+SymPy 1.14.0, and pytest 9.0.2. The exact replay modules use the standard library;
+NumPy/SciPy are used by numerical search, and SymPy is used for differential
+arithmetic tests. The saved environment and run output are in
+\code{results/results.json} and \code{results/experiment\_log.txt}.
+
+The suite completed with \textbf{69 passing tests}. Thirteen persisted
+certificate bundles then replayed successfully in a separate command run with
+Python's site initialization disabled. One bundle contains an ordered bank of
+five inductively proved lemmas and a specialization proof; four contain Horn
+proofs; six contain cone certificates; one contains a box certificate; and one
+contains the two certificates for an existential witness. These are bundles,
+not 13 independent Lean theorems or 69 benchmark problems.
+
+\begin{table}[htbp]
+\centering
+\caption{Executed mechanism results. ``Checked'' means the Python fragment checker.}
+\begin{tabularx}{\linewidth}{p{0.28\linewidth}X}
+\toprule
+Mechanism & Recorded result \\
+\midrule
+Accumulator lemma discovery & Direct induction fails in the prototype; candidate 41 yields the generalized specification; induction and specialization check. \\
+Additional list obligations & Five total lemmas receive checked induction certificates in dependency order. \\
+Quartic nonnegativity & 280 LP columns, 35 equations, three exact weighted-square terms. \\
+Guarded nonnegativity & Four additional targets certified using their explicit guards. \\
+Incomplete dictionary control & Search fails on $(x+y+1)^2$; a separately supplied one-square certificate checks. \\
+Bernstein box reasoning & Initial bound inconclusive; one split yields two positive leaves and a three-node certificate. \\
+Polynomial witness & Candidate 23 gives $x^2+1$; both universal inequalities check. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Horn policy comparison; neither column is an implementation of \texttt{grind}.}
+\begin{tabular}{rrrrl}
+\toprule
+Depth & Forward facts & Backward proof nodes & Forward cap & Forward status \\
+\midrule
+4 & 16 & 5 & 5,000 & Certified \\
+8 & 256 & 9 & 5,000 & Certified \\
+12 & 4,096 & 13 & 5,000 & Certified \\
+16 & 5,000 & 17 & 5,000 & Cap reached \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Raw single-run timings are retained for reproducibility, but no speedup ratio
+is used as an article conclusion. The examples are tiny, numerical libraries
+have initialization effects, and different search policies perform different
+amounts of work. Node counts and checked certificates are the more interpretable
+observations here.
+
+\subsection{Negative tests are part of the evidence}
+The tests reject negative cone weights, absent guard indices, wrong polynomial
+dimensions, and a target changed by only $10^{-12}$. They reject an out-of-range
+box split, an incorrect leaf bound, a missing child, and a strict claim based
+on a zero lower bound. A false polynomial target produces no certificate.
+
+Horn mutation tests reject cyclic parent indices, the wrong rule, the wrong
+final goal, and a removed premise. A guarded rule cannot fire when its guard is
+missing. The backward engine's unsupported unbound-premise case is tested to
+abstain. Induction tests reject a base-case use of the induction hypothesis,
+invalid generalization metadata, external rigid-variable intrusion, a false
+equality, and a reference to an unavailable future lemma. Removing required
+accumulator generalization breaks the certificate as expected.
+
+Twelve seeded tests compare sparse arithmetic, evaluation, and substitution
+against SymPy, and twelve seeded planted-cone tests check numerical search
+followed by exact replay. These are useful robustness checks, not an exhaustive
+proof of the implementation. The shared polynomial primitives remain part of
+the Python experiment's trusted implementation base.
+
+\subsection{Reproduction commands}
+From the extracted archive root:
+\begin{Code}
+python -m pip install -r requirements.txt
+python -m pytest -q
+python scripts/run_experiments.py
+python -S scripts/verify_certificates.py
+python scripts/check_lean.py
+\end{Code}
+The last command records \code{NOT\_RUN} when Lean is absent; it must not be
+interpreted as a successful Lean test. When a suitable Lean executable is
+available, it attempts to compile the core structural reference file and records
+the actual version and output. The separate Mathlib examples need a compatible
+Mathlib project and are not compiled by that script.
+
+The article can be rebuilt with:
+\begin{Code}
+cd article
+xelatex -interaction=nonstopmode -halt-on-error forge.tex
+xelatex -interaction=nonstopmode -halt-on-error forge.tex
+xelatex -interaction=nonstopmode -halt-on-error forge.tex
+\end{Code}
+No external bibliography processor is necessary. Font programs are not included;
+the document uses fonts available in common TeX/font installations. The source
+and code are UTF-8.
+
+\section{A fair end-to-end evaluation of ``significantly more capable''}
+\label{sec:evaluation}
+
+\subsection{Why the environment and completion metric matter}
+The QuerySMT study explicitly discusses both a success metric that can leave
+individual hints unproved and contamination from benchmark environments that
+already contain target theorems accessible through attributes. Those results
+are valuable but cannot be copied directly as fully verified current-version
+success rates.\footnote{QuerySMT methodology and evaluation discussion,
+Sections 8.1--8.2 \cite{querysmt}.}
+
+Forge should count a solved problem only when the exported proof checks in the
+pre-theorem environment and passes the declared axiom policy. Adding a theorem
+alias in a file that imports the original theorem is not a sufficient
+holdout strategy. The test harness should construct the declaration environment
+before the target is introduced, or reproduce a source prefix with an
+appropriately isolated tactic import layer.
+
+\subsection{Benchmark families and baselines}
+Use separate tracks for ordinary mathematical developments and deliberately
+minimal libraries. The first measures practical utility with normal imports;
+the second measures structural and lemma-synthesis capability when the exact
+answer is absent. Include recursive list/tree/accumulator correctness,
+quantified equality and Horn chains, nonlinear inequalities, existential
+witnesses, and mixed structural/arithmetic obligations. Preserve false and
+ill-typed near-neighbors as soundness regressions, not as ordinary success-rate
+items.
+
+Compare at least: pinned default \code{grind}; \code{grind} with suggestions
+and reasonably tuned budgets; a simple Aesop/Grind portfolio; compatible Duper
+and reconstruction-based SMT routes; and a basic portfolio with the existing
+SOS tactic. Otherwise a gain attributable merely to adding a known solver may
+be mistaken for a gain from Forge's coordination.
+
+Use the same pre-theorem declarations, permissible retrieved premises, total
+wall-clock budget, memory limit, and trust profile. External solver time,
+translation, reconstruction, proof export, and replay must all be charged.
+Report cold-start and warm-cache conditions separately. Tune on development
+theorems; hold out entire modules or definition families for testing so near-duplicate
+lemmas do not dominate the results.
+
+\subsection{Metrics, ablations, and a concrete acceptance target}
+Report solved counts by family, uniquely solved cases, failures by reason,
+median and tail latency, proof bytes, certificate bytes, reconstruction time,
+and checking time. A conditional proof with one open guard belongs in a
+partial-progress category. A model of an abstraction belongs in a diagnostic
+category until it is validated against the original statement.
+
+Ablate induction planning, lemma synthesis, demand propagation, witness
+synthesis, nonlinear fact exchange, and proof-cost-aware scheduling separately.
+Most importantly, compare the full planner against the \emph{same engines run
+without feedback}. That identifies whether the architecture contributes more
+than a portfolio union.
+
+A useful engineering gate would require a predeclared improvement on at least
+two structurally different held-out families, together with a bounded regression
+rate on easy baseline successes and no trust-policy violations. The numerical
+thresholds should be set before benchmarking, for example a target of 20\%
+more fully checked solves on the selected difficult families and at most 5\%
+regression on the baseline suite. These numbers are proposed acceptance
+criteria, \emph{not achieved results or forecasts}. No such Lean evaluation has
+been run for this artifact.
+
+\section{Limits, priorities, and conclusion}
+\label{sec:conclusion}
+The largest practical risk is search explosion. Induction choices multiply
+subgoals; lemma grammars grow exponentially; higher-degree polynomial
+certificates become large; backward quantifier search can branch as badly as
+forward saturation. A planner makes these choices explicit and budgeted, but
+does not remove their underlying difficulty. Completeness claims must always
+refer to a specified fragment and a specified unbounded search policy.
+
+The second risk is integration rather than mathematics: mutable metavariable
+state, dependency transport, representation semantics, version mismatch, and
+large proof terms. The staged design prioritizes these boundaries before
+advanced heuristics. A restricted correct implementation that exports a small
+set of ordinary Lean proofs is preferable to a wide solver bridge that silently
+leaves obligations or enlarges the trust base.
+
+The most valuable first release is therefore not ``every solver behind one
+keyword.'' It is a planner that automatically discovers and proves useful
+induction strengthenings, synthesizes witnesses whose obligations can be
+certified, and coordinates those results with the already strong Grind, SOS,
+and logical engines. The Python experiments show that these mechanisms can be
+made concrete, inspectable, and certificate-driven. They do not establish that
+a finished Forge tactic outperforms current Lean automation.
+
+\textbf{Bottom line.} There is a technically credible route to substantially
+broader automation than a local \code{grind} call: let the tactic search for the
+missing proof structure, not only for more consequences of a fixed local
+state. The next decisive milestone is a Lean implementation of the scoped
+planner and structural synthesis path, followed by clean-environment,
+fully-checked comparisons against a strong multi-engine baseline.
+
+\appendix
+\section{Artifact map and status ledger}
+\begin{longtable}{p{0.41\linewidth}p{0.51\linewidth}}
+\toprule
+Path & Contents and validation status \\
+\midrule
+\endhead
+\code{article/forge.tex}, \code{forge.pdf} & This article and its rendered PDF. \\
+\code{forge\_lab/terms.py} & Typed first-order terms, fixed list equations, rewrite search and independent replay. Executed. \\
+\code{forge\_lab/induction.py} & Generalization-specific lemma enumeration and list induction certificates. Executed. \\
+\code{forge\_lab/horn.py} & Two bounded Horn search policies and a rule-instance DAG checker. Executed. \\
+\code{forge\_lab/poly.py} & Exact sparse rational arithmetic, cone checker, Bernstein transformation, and covering-tree checker. Executed. \\
+\code{forge\_lab/nonlinear.py} & Untrusted SciPy LP search and bounded exact box search. Executed. \\
+\code{forge\_lab/witness.py} & Polynomial witness enumeration with two universal certificates. Executed. \\
+\code{tests/test\_certificates.py} & 69 tests, including arithmetic differential tests and deliberate certificate corruptions. Passed. \\
+\code{results/} & Raw outputs, JSON certificates, count CSV, test/replay logs, and explicit Lean nonexecution status. \\
+\code{scripts/} & Experiment, standard-library replay, and optional Lean compilation commands. \\
+\code{lean/Structural.lean} & Ordinary core Lean proofs corresponding to the structural examples. Supplied, not compiled. \\
+\code{lean/CertificateExamples.lean} & Mathlib proof scripts illustrating the arithmetic certificates. Supplied, not compiled. \\
+\code{sources.json} & Bibliographic and source-version inventory with original URLs. \\
+\bottomrule
+\end{longtable}
+
+\section{Certificate schemas and their interpretation}
+A cone record contains the exact target polynomial, an ordered list of guards,
+and terms $(c,q,J)$. The interpretation is
+$p=\sum c q^2\prod_{j\in J}g_j$, conditional on each listed guard being
+nonnegative. All rational values are serialized as strings, never floating-point
+JSON numbers. Variable count and monomial exponent vectors are explicit.
+
+A box record contains the exact polynomial, the root box, a strictness flag,
+and a tree of leaves or interior splits. The checker reconstructs child boxes;
+there is no trusted user-supplied coverage assertion. A witness record contains
+one univariate polynomial and cone certificates for its difference from $x$
+and from $-x$.
+
+A Horn record contains the original premises, named rules, exact target, and
+proof DAG. Its validity is conditional on the listed premises and rules; those
+inputs are the problem statement, not new discoveries. A list-induction record
+contains the candidate equality, major variable, generalized variables, and
+four rewrite traces: left/right traces for the base and step cases. The theorem
+bank's order supplies the allowed previously checked lemmas.
+
+The saved records are intended to be portable explanatory artifacts for the
+prototype. They are not yet an agreed wire format for Lean. A production format
+must additionally bind every object to a versioned typed interpretation and
+context manifest, impose resource limits, and have a checked Lean decoder or
+an equally well-justified elaboration path.
+
+\section{A compact replay target for the discovered lemma}
+The following intended Lean proof explains the desired final output of
+structural synthesis. The full reference file defines the recursive operations
+and preceding concatenation lemmas. This source was not compiled here.
+\begin{Code}
+theorem revAcc_spec (xs acc : List α) :
+    revAcc xs acc = app (rev xs) acc := by
+  induction xs generalizing acc with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [revAcc, rev, ih, app_assoc, app]
+
+theorem revAcc_correct (xs : List α) :
+    revAcc xs [] = rev xs := by
+  rw [revAcc_spec, app_right_nil]
+\end{Code}
+The final theorem does not invoke the synthesizer. It reuses a separately
+proved general lemma. This is the preferred deployment pattern: potentially
+expensive search once, then a stable and understandable proof for ordinary
+recompilation.
+
+\newpage
+\renewcommand{\refname}{Sources}
+\addcontentsline{toc}{section}{Sources}
+\begin{thebibliography}{99}
+\small
+\bibitem{grind} Lean project. \emph{The grind tactic}. Lean Language Reference.
+Observed September 14, 2026. \url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/}.
+\bibitem{release} Lean project. \emph{Lean 4.34.0 release}. September 14, 2026.
+\url{https://github.com/leanprover/lean4/releases/tag/v4.34.0}.
+\bibitem{config} Lean project. \emph{Grind configuration}, tag \code{v4.34.0}.
+\url{https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Init/Grind/Config.lean}.
+\bibitem{commring} Lean project. \emph{Grind commutative-ring constraint types}, tag \code{v4.34.0}.
+\url{https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Arith/CommRing/Types.lean}.
+\bibitem{lia} Lean project. \emph{Linear Integer Arithmetic}. Lean Language Reference.
+\url{https://lean-lang.org/doc/reference/latest/The--grind--tactic/Linear-Integer-Arithmetic/}.
+\bibitem{aesop} Lean community. \emph{Aesop: White-box automation for Lean 4}. Repository documentation.
+\url{https://github.com/leanprover-community/aesop}.
+\bibitem{duper} Lean community. \emph{Duper}. Repository documentation.
+\url{https://github.com/leanprover-community/duper}.
+\bibitem{auto} Lean community. \emph{Lean-auto: Experiments on automation for Lean}. Repository documentation.
+\url{https://github.com/leanprover-community/lean-auto}.
+\bibitem{autopaper} Yicheng Qian, Joshua Clune, Clark Barrett, and Jeremy Avigad.
+\emph{Lean-auto: An Interface between Lean 4 and Automated Theorem Provers}. 2025.
+\url{https://arxiv.org/abs/2505.14929}.
+\bibitem{smt} Lean-SMT project. \emph{Lean-SMT}. Repository documentation.
+\url{https://github.com/ufmg-smite/lean-smt}.
+\bibitem{querysmt} Joshua Clune, Haniel Barbosa, and Jeremy Avigad.
+\emph{Hint-Based SMT Proof Reconstruction}. January 2026, arXiv:2601.14495v1.
+\url{https://arxiv.org/html/2601.14495v1}.
+\bibitem{sos} Lean SOS project. \emph{Harrison's sum-of-squares decision procedure for nonlinear real arithmetic in Lean 4}. Repository documentation.
+\url{https://github.com/leanprover/sos}.
+\bibitem{sosengine} Lean SOS project. \emph{SOS/Engine.lean}, observed \code{main} source, September 14, 2026.
+\url{https://raw.githubusercontent.com/leanprover/sos/main/SOS/Engine.lean}.
+\bibitem{soscore} Lean SOS project. \emph{SOS/Core.lean}, observed \code{main} source.
+\url{https://raw.githubusercontent.com/leanprover/sos/main/SOS/Core.lean}.
+\bibitem{sostoolchain} Lean SOS project. \emph{lean-toolchain}, retrieved \code{main} snapshot specifying \code{v4.32.0-rc1}; not a verified common build manifest.
+\url{https://raw.githubusercontent.com/leanprover/sos/main/lean-toolchain}.
+\bibitem{hex} Lean Hex project. \emph{hex-mv-poly: Mathlib-free executable multivariate polynomials for Lean 4}.
+\url{https://github.com/leanprover/hex-mv-poly}.
+\bibitem{linarith} Mathlib community. \emph{Mathlib.Tactic.Linarith.Frontend}. API documentation.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Linarith/Frontend.html}.
+\bibitem{positivity} Mathlib community. \emph{Mathlib.Tactic.Positivity.Basic}. API documentation.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Positivity/Basic.html}.
+\bibitem{leanegg} Marcus Rossel and contributors. \emph{lean-egg}. Repository, including current deprecation notice.
+\url{https://github.com/marcusrossel/lean-egg}.
+\bibitem{egg} E-graphs community. \emph{egg: e-graphs good}. Rust library repository.
+\url{https://github.com/egraphs-good/egg}.
+\bibitem{lemmasynthesis} Yican Sun, Ruyi Ji, Jian Fang, Xuanlin Jiang, Mingshuai Chen, and Yingfei Xiong.
+\emph{Proving Functional Program Equivalence via Directed Lemma Synthesis}. 2024.
+\url{https://arxiv.org/abs/2405.11535}.
+\bibitem{highs} SciPy developers. \emph{linprog(method='highs')}. Optimization API documentation.
+The executed artifact uses SciPy 1.17.0; the moving online documentation may differ.
+\url{https://docs.scipy.org/doc/scipy/reference/optimize.linprog-highs.html}.
+\bibitem{csdp} COIN-OR. \emph{CSDP: A solver for semidefinite programming problems}.
+\url{https://github.com/coin-or/Csdp}.
+\bibitem{sympy} SymPy developers. \emph{Polynomial Manipulation: Reference}.
+\url{https://docs.sympy.org/latest/modules/polys/reference.html}.
+\bibitem{tactics} Lean project. \emph{Tactic Reference}, especially decision procedures, native evaluation, and SAT integration.
+\url{https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Tactic-Reference/}.
+\bibitem{grindmain} Lean project. \emph{Grind main entry points}, tag \code{v4.34.0}.
+\url{https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Main.lean}.
+\bibitem{grindtypes} Lean project. \emph{Grind state and proof-bearing types}, tag \code{v4.34.0}.
+\url{https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Lean/Meta/Tactic/Grind/Types.lean}.
+\end{thebibliography}
+\end{document}

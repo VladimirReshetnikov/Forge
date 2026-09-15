@@ -1,0 +1,5341 @@
+[
+  {
+    "name": "unbounded_strip",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-1"
+        ],
+        "constant": "2"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "1"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "1"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "domain_cone",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [
+      {
+        "coefficients": [
+          "1"
+        ],
+        "constant": "0"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "2",
+          "-1"
+        ],
+        "constant": "0"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "1"
+          ],
+          "constant": "0"
+        }
+      ],
+      "multipliers": [
+        [
+          "0"
+        ],
+        [
+          "1"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "bounded_max",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [
+      {
+        "coefficients": [
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "1",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "1"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_00",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "1"
+        ],
+        "constant": "-4/3"
+      },
+      {
+        "coefficients": [
+          "5",
+          "-1"
+        ],
+        "constant": "4/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "5"
+          ],
+          "constant": "4/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_01",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "1",
+          "1",
+          "0"
+        ],
+        "constant": "-2/3"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-1",
+          "-1",
+          "0"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "-5",
+          "0",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "5",
+          "0",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "4",
+            "-1"
+          ],
+          "constant": "2/3"
+        },
+        {
+          "coefficients": [
+            "2",
+            "5"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_02",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "-3",
+          "-2",
+          "1"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "3",
+          "2",
+          "-1"
+        ],
+        "constant": "1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0",
+            "3",
+            "2"
+          ],
+          "constant": "1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_03",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "0",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "4"
+          ],
+          "constant": "1/3"
+        },
+        {
+          "coefficients": [
+            "-2"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_04",
+    "inputs": 2,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "4",
+          "1",
+          "1"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "-1",
+          "-1"
+        ],
+        "constant": "-5/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-4",
+            "-1"
+          ],
+          "constant": "-5/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_05",
+    "inputs": 3,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "-2",
+          "-5",
+          "1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "2",
+          "5",
+          "-1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-2",
+          "-3",
+          "0",
+          "1"
+        ],
+        "constant": "-2/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "2",
+          "3",
+          "0",
+          "-1"
+        ],
+        "constant": "2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0",
+            "2",
+            "5"
+          ],
+          "constant": "1/3"
+        },
+        {
+          "coefficients": [
+            "-3",
+            "2",
+            "3"
+          ],
+          "constant": "2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_06",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_07",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "5",
+          "1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "5",
+          "-5",
+          "-1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "5",
+          "1",
+          "0",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "-1",
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "5",
+            "-5"
+          ],
+          "constant": "1/3"
+        },
+        {
+          "coefficients": [
+            "-5",
+            "-1"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_08",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "2",
+          "2",
+          "5",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "-2",
+          "-5",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-2",
+            "-2",
+            "-5"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_09",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "1",
+          "0"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "4",
+          "0",
+          "1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "0",
+          "-1"
+        ],
+        "constant": "-1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3"
+          ],
+          "constant": "1"
+        },
+        {
+          "coefficients": [
+            "-4"
+          ],
+          "constant": "-1"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_10",
+    "inputs": 2,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "1",
+          "0",
+          "1"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0",
+          "-1"
+        ],
+        "constant": "1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-1",
+            "0"
+          ],
+          "constant": "1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_11",
+    "inputs": 3,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "-2",
+          "0",
+          "1",
+          "0"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "2",
+          "0",
+          "-1",
+          "0"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "-2",
+          "0",
+          "0",
+          "1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "2",
+          "0",
+          "0",
+          "-1"
+        ],
+        "constant": "-1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "2",
+            "0"
+          ],
+          "constant": "5/3"
+        },
+        {
+          "coefficients": [
+            "-2",
+            "2",
+            "0"
+          ],
+          "constant": "-1"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_12",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "4"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_13",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "4",
+          "0",
+          "1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "0",
+          "-1",
+          "0"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "1",
+          "1",
+          "0",
+          "1"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "-1",
+          "0",
+          "-1"
+        ],
+        "constant": "-2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-4",
+            "0"
+          ],
+          "constant": "-1"
+        },
+        {
+          "coefficients": [
+            "-1",
+            "-1"
+          ],
+          "constant": "-2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_14",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "3",
+          "4",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-3",
+          "-4",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "-3",
+            "-4"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_15",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "1",
+          "0"
+        ],
+        "constant": "-4/3"
+      },
+      {
+        "coefficients": [
+          "5",
+          "-1",
+          "0"
+        ],
+        "constant": "4/3"
+      },
+      {
+        "coefficients": [
+          "3",
+          "0",
+          "1"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "0",
+          "-1"
+        ],
+        "constant": "5/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "5"
+          ],
+          "constant": "4/3"
+        },
+        {
+          "coefficients": [
+            "-3"
+          ],
+          "constant": "5/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_16",
+    "inputs": 2,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "4",
+          "-2",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "2",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-4",
+            "2"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_17",
+    "inputs": 3,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "4",
+          "-3",
+          "0",
+          "1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "3",
+          "0",
+          "-1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "4",
+          "-3",
+          "0",
+          "1"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-4",
+          "3",
+          "0",
+          "-1"
+        ],
+        "constant": "-5/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-4",
+            "3",
+            "0"
+          ],
+          "constant": "1/3"
+        },
+        {
+          "coefficients": [
+            "0",
+            "-4",
+            "3"
+          ],
+          "constant": "-5/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_18",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "1",
+          "1"
+        ],
+        "constant": "-2/3"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "-1"
+        ],
+        "constant": "2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-1"
+          ],
+          "constant": "2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_19",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "3",
+          "1",
+          "0"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-3",
+          "-1",
+          "0"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-5",
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "5",
+          "0",
+          "-1"
+        ],
+        "constant": "0"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "-3"
+          ],
+          "constant": "-5/3"
+        },
+        {
+          "coefficients": [
+            "-4",
+            "5"
+          ],
+          "constant": "0"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_20",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-3",
+          "-5",
+          "2",
+          "1"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "3",
+          "5",
+          "-2",
+          "-1"
+        ],
+        "constant": "5/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "3",
+            "5",
+            "-2"
+          ],
+          "constant": "5/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_21",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "1",
+          "0"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-1",
+          "0"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "3",
+          "0",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "1"
+          ],
+          "constant": "-5/3"
+        },
+        {
+          "coefficients": [
+            "-3"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_22",
+    "inputs": 2,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "2",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-2",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "-2"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_23",
+    "inputs": 3,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "0",
+          "4",
+          "1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "0",
+          "-4",
+          "-1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "4",
+          "-5",
+          "0",
+          "1"
+        ],
+        "constant": "4/3"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "-4",
+          "5",
+          "0",
+          "-1"
+        ],
+        "constant": "-4/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "0",
+            "-4"
+          ],
+          "constant": "-1/3"
+        },
+        {
+          "coefficients": [
+            "-2",
+            "-4",
+            "5"
+          ],
+          "constant": "-4/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_24",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-3",
+          "1"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-1"
+        ],
+        "constant": "-2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "3"
+          ],
+          "constant": "-2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_25",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "-3",
+          "1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "3",
+          "-1",
+          "0"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "2",
+          "0",
+          "1"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "-2",
+          "0",
+          "-1"
+        ],
+        "constant": "-5/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0",
+            "3"
+          ],
+          "constant": "-1"
+        },
+        {
+          "coefficients": [
+            "2",
+            "-2"
+          ],
+          "constant": "-5/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_26",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "1",
+          "4",
+          "-5",
+          "1"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "-4",
+          "5",
+          "-1"
+        ],
+        "constant": "-2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-1",
+            "-4",
+            "5"
+          ],
+          "constant": "-2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_27",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-3",
+          "1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "0",
+          "1"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "0",
+          "-1"
+        ],
+        "constant": "-2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "3"
+          ],
+          "constant": "1/3"
+        },
+        {
+          "coefficients": [
+            "2"
+          ],
+          "constant": "-2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_28",
+    "inputs": 2,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "-2",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "5",
+          "2",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "5",
+            "2"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_29",
+    "inputs": 3,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "3",
+          "-1",
+          "1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "5",
+          "-3",
+          "1",
+          "-1",
+          "0"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "-5",
+          "-5",
+          "0",
+          "1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "5",
+          "5",
+          "5",
+          "0",
+          "-1"
+        ],
+        "constant": "-1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "5",
+            "-3",
+            "1"
+          ],
+          "constant": "-1"
+        },
+        {
+          "coefficients": [
+            "5",
+            "5",
+            "5"
+          ],
+          "constant": "-1"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_30",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "-2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0"
+          ],
+          "constant": "-2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_31",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-2",
+          "-2",
+          "1",
+          "0"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "2",
+          "-1",
+          "0"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1",
+          "0",
+          "1"
+        ],
+        "constant": "2/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1",
+          "0",
+          "-1"
+        ],
+        "constant": "-2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "2",
+            "2"
+          ],
+          "constant": "-5/3"
+        },
+        {
+          "coefficients": [
+            "0",
+            "-1"
+          ],
+          "constant": "-2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_32",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "-2",
+          "-5",
+          "1"
+        ],
+        "constant": "-4/3"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "2",
+          "5",
+          "-1"
+        ],
+        "constant": "4/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "2",
+            "5"
+          ],
+          "constant": "4/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_33",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "1",
+          "0"
+        ],
+        "constant": "-4/3"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1",
+          "0"
+        ],
+        "constant": "4/3"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "0",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "0",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0"
+          ],
+          "constant": "4/3"
+        },
+        {
+          "coefficients": [
+            "2"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_34",
+    "inputs": 2,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "5",
+          "3",
+          "1"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "-3",
+          "-1"
+        ],
+        "constant": "-5/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-5",
+            "-3"
+          ],
+          "constant": "-5/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_35",
+    "inputs": 3,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "-5",
+          "5",
+          "1",
+          "0"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "4",
+          "5",
+          "-5",
+          "-1",
+          "0"
+        ],
+        "constant": "-1/3"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "0",
+          "4",
+          "0",
+          "1"
+        ],
+        "constant": "-2/3"
+      },
+      {
+        "coefficients": [
+          "2",
+          "0",
+          "-4",
+          "0",
+          "-1"
+        ],
+        "constant": "2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "4",
+            "5",
+            "-5"
+          ],
+          "constant": "-1/3"
+        },
+        {
+          "coefficients": [
+            "2",
+            "0",
+            "-4"
+          ],
+          "constant": "2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_36",
+    "inputs": 1,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "2",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-2"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_37",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "1",
+          "1",
+          "0"
+        ],
+        "constant": "-5/3"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-1",
+          "-1",
+          "0"
+        ],
+        "constant": "5/3"
+      },
+      {
+        "coefficients": [
+          "5",
+          "3",
+          "0",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "-3",
+          "0",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "1",
+            "-1"
+          ],
+          "constant": "5/3"
+        },
+        {
+          "coefficients": [
+            "-5",
+            "-3"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_38",
+    "inputs": 3,
+    "outputs": 1,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "4",
+          "-2",
+          "0",
+          "1"
+        ],
+        "constant": "-2/3"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "2",
+          "0",
+          "-1"
+        ],
+        "constant": "2/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-4",
+            "2",
+            "0"
+          ],
+          "constant": "2/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "forced_affine_39",
+    "inputs": 1,
+    "outputs": 2,
+    "domain": [],
+    "goals": [
+      {
+        "coefficients": [
+          "2",
+          "1",
+          "0"
+        ],
+        "constant": "-4/3"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "-1",
+          "0"
+        ],
+        "constant": "4/3"
+      },
+      {
+        "coefficients": [
+          "1",
+          "0",
+          "1"
+        ],
+        "constant": "1/3"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0",
+          "-1"
+        ],
+        "constant": "-1/3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-2"
+          ],
+          "constant": "4/3"
+        },
+        {
+          "coefficients": [
+            "-1"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [],
+        [],
+        [],
+        []
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_00",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "0",
+          "1",
+          "0"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "13",
+          "3",
+          "-2",
+          "2"
+        ],
+        "constant": "-5"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-3",
+          "-2",
+          "-1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "-4",
+          "0",
+          "-2"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "1",
+          "2",
+          "0"
+        ],
+        "constant": "4"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "2",
+            "1/4"
+          ],
+          "constant": "-2"
+        },
+        {
+          "coefficients": [
+            "-5/2",
+            "-2"
+          ],
+          "constant": "7/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "1",
+          "3",
+          "1/4",
+          "0"
+        ],
+        [
+          "4",
+          "0",
+          "9/2",
+          "6"
+        ],
+        [
+          "5/2",
+          "0",
+          "0",
+          "3/2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "3/2",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_01",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "2",
+          "5",
+          "1",
+          "-1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-1",
+          "2",
+          "1"
+        ],
+        "constant": "3"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "1",
+          "-1",
+          "-1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-5",
+          "1",
+          "2"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "-9",
+          "-2",
+          "2"
+        ],
+        "constant": "9"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3/2",
+            "-2"
+          ],
+          "constant": "1/2"
+        },
+        {
+          "coefficients": [
+            "1/2",
+            "3"
+          ],
+          "constant": "1/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "1/2",
+          "0",
+          "5/2",
+          "9/2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "7/2",
+          "4",
+          "5"
+        ],
+        [
+          "0",
+          "0",
+          "10",
+          "9"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_02",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-2",
+          "-2",
+          "0",
+          "1"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "4",
+          "0",
+          "-1",
+          "-1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-6",
+          "2",
+          "-2",
+          "2"
+        ],
+        "constant": "9"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "0",
+          "2",
+          "0"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-3",
+          "1",
+          "1"
+        ],
+        "constant": "6"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "0",
+            "7/4"
+          ],
+          "constant": "1"
+        },
+        {
+          "coefficients": [
+            "3",
+            "3/4"
+          ],
+          "constant": "-7/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "1",
+          "0",
+          "1/4",
+          "3/2"
+        ],
+        [
+          "1",
+          "0",
+          "0",
+          "5/2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "4",
+          "7/2",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "3",
+          "7/2"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_03",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "-6",
+          "1",
+          "-2"
+        ],
+        "constant": "-5"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "-8",
+          "1",
+          "-2"
+        ],
+        "constant": "-5"
+      },
+      {
+        "coefficients": [
+          "1",
+          "5",
+          "0",
+          "2"
+        ],
+        "constant": "8"
+      },
+      {
+        "coefficients": [
+          "2",
+          "1",
+          "0",
+          "1"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "-9",
+          "2",
+          "-1"
+        ],
+        "constant": "-1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "3",
+            "13/4"
+          ],
+          "constant": "-5/4"
+        },
+        {
+          "coefficients": [
+            "-1",
+            "-5/2"
+          ],
+          "constant": "-7/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "3/4",
+          "3/4",
+          "9/4",
+          "0"
+        ],
+        [
+          "7/4",
+          "3/4",
+          "1/4",
+          "0"
+        ],
+        [
+          "0",
+          "1",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0",
+          "0",
+          "3/2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_04",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "1",
+          "2",
+          "0"
+        ],
+        "constant": "8"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "-6",
+          "-2",
+          "-2"
+        ],
+        "constant": "-4"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "6",
+          "2",
+          "1"
+        ],
+        "constant": "8"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "1",
+          "2",
+          "0"
+        ],
+        "constant": "9"
+      },
+      {
+        "coefficients": [
+          "5",
+          "4",
+          "-2",
+          "2"
+        ],
+        "constant": "-5"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "1",
+            "-1/2"
+          ],
+          "constant": "-9/4"
+        },
+        {
+          "coefficients": [
+            "-3/2",
+            "-5/2"
+          ],
+          "constant": "1/4"
+        }
+      ],
+      "multipliers": [
+        [
+          "9/2",
+          "7/2",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "1/2",
+          "23/4",
+          "13/4"
+        ],
+        [
+          "0",
+          "1",
+          "7/2",
+          "7/2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_05",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "2",
+          "2",
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "-1",
+          "-1",
+          "1"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "3",
+          "5",
+          "-1",
+          "-2"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "2",
+          "-2",
+          "2",
+          "1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-5",
+          "2",
+          "-2",
+          "0"
+        ],
+        "constant": "4"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-7/3",
+            "-5/3"
+          ],
+          "constant": "5/3"
+        },
+        {
+          "coefficients": [
+            "8/3",
+            "10/3"
+          ],
+          "constant": "-1/3"
+        }
+      ],
+      "multipliers": [
+        [
+          "4/3",
+          "5/3",
+          "1/3",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "4",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "2"
+        ],
+        [
+          "0",
+          "1/3",
+          "17/3",
+          "1/3"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_06",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-3",
+          "6",
+          "2",
+          "1"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "0",
+          "0",
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "-1",
+          "1",
+          "0"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "0",
+          "4",
+          "0",
+          "1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "6",
+          "-1",
+          "2"
+        ],
+        "constant": "1"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "1",
+            "0"
+          ],
+          "constant": "-3"
+        },
+        {
+          "coefficients": [
+            "1",
+            "-4"
+          ],
+          "constant": "-1"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "0",
+          "2",
+          "0"
+        ],
+        [
+          "0",
+          "1",
+          "3",
+          "3"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "1"
+        ],
+        [
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "2"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_07",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "7",
+          "6",
+          "0",
+          "-2"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "12",
+          "-2",
+          "-2",
+          "-2"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "1",
+          "1",
+          "1"
+        ],
+        "constant": "3"
+      },
+      {
+        "coefficients": [
+          "6",
+          "2",
+          "-1",
+          "-2"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "2",
+          "0",
+          "0",
+          "0"
+        ],
+        "constant": "3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "6",
+            "-4"
+          ],
+          "constant": "-7/2"
+        },
+        {
+          "coefficients": [
+            "0",
+            "3"
+          ],
+          "constant": "7/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "7",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "1",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "5",
+          "3",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "2",
+        "7/2",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_08",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "3",
+          "-2",
+          "-1",
+          "0"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "1",
+          "2",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "13",
+          "-4",
+          "-2",
+          "2"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "-13",
+          "4",
+          "2",
+          "-2"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "2",
+          "-1",
+          "0",
+          "1"
+        ],
+        "constant": "3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "7/2",
+            "0"
+          ],
+          "constant": "-1/2"
+        },
+        {
+          "coefficients": [
+            "-3",
+            "-1/2"
+          ],
+          "constant": "-1/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "2",
+          "5/2",
+          "0",
+          "2"
+        ],
+        [
+          "0",
+          "0",
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "5"
+        ],
+        [
+          "0",
+          "0",
+          "5",
+          "0"
+        ],
+        [
+          "0",
+          "1",
+          "0",
+          "3/2"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_09",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "0",
+          "-2",
+          "0",
+          "0"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "2",
+          "-1",
+          "-2",
+          "0"
+        ],
+        "constant": "-2"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "0",
+          "1",
+          "0"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "5",
+          "2",
+          "-2"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "2",
+          "1",
+          "-1"
+        ],
+        "constant": "2"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "2",
+            "0"
+          ],
+          "constant": "-7"
+        },
+        {
+          "coefficients": [
+            "-3/2",
+            "2"
+          ],
+          "constant": "-6"
+        }
+      ],
+      "multipliers": [
+        [
+          "3",
+          "3",
+          "0",
+          "2"
+        ],
+        [
+          "0",
+          "2",
+          "0",
+          "1"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "1",
+          "0"
+        ],
+        [
+          "3/2",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "9",
+        "0",
+        "0",
+        "1"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_10",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "-1",
+          "-1",
+          "1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "5",
+          "-3",
+          "1",
+          "-2"
+        ],
+        "constant": "6"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "-11",
+          "-2",
+          "-2"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-3",
+          "0",
+          "-1"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "6",
+          "5",
+          "2",
+          "-1"
+        ],
+        "constant": "3"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-7/3",
+            "-8/3"
+          ],
+          "constant": "1/3"
+        },
+        {
+          "coefficients": [
+            "4/3",
+            "-17/6"
+          ],
+          "constant": "19/6"
+        }
+      ],
+      "multipliers": [
+        [
+          "7/3",
+          "8/3",
+          "0",
+          "7/6"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "8/3",
+          "0",
+          "2/3",
+          "5/6"
+        ],
+        [
+          "0",
+          "0",
+          "3",
+          "1/2"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_11",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-4",
+          "1",
+          "-1",
+          "1"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "-6",
+          "-2",
+          "-1",
+          "-1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "6",
+          "1",
+          "1",
+          "1"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "6",
+          "-1",
+          "2",
+          "0"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "5",
+          "3",
+          "1",
+          "1"
+        ],
+        "constant": "6"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "1/2"
+          ],
+          "constant": "-5/2"
+        },
+        {
+          "coefficients": [
+            "0",
+            "-7/2"
+          ],
+          "constant": "-1/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "1",
+          "0",
+          "3"
+        ],
+        [
+          "0",
+          "3",
+          "1",
+          "0"
+        ],
+        [
+          "3",
+          "0",
+          "0",
+          "2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "2",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "3",
+        "0",
+        "0",
+        "0",
+        "3"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_12",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "4",
+          "0",
+          "1",
+          "-1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-2",
+          "0",
+          "-1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "5",
+          "0",
+          "2",
+          "0"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-1",
+          "0",
+          "-2"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "-1",
+          "-1",
+          "1"
+        ],
+        "constant": "5"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-5/2",
+            "-3/2"
+          ],
+          "constant": "-1/2"
+        },
+        {
+          "coefficients": [
+            "1/2",
+            "-3/2"
+          ],
+          "constant": "-1/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "1/2",
+          "0",
+          "0",
+          "1/2"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "3"
+        ],
+        [
+          "0",
+          "0",
+          "2",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "4",
+          "5"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_13",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "6",
+          "6",
+          "2",
+          "0"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-3",
+          "0",
+          "-1"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "-6",
+          "-8",
+          "-2",
+          "0"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "1",
+          "-4",
+          "0",
+          "-1"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-2",
+          "0",
+          "-1"
+        ],
+        "constant": "2"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-3",
+            "-13/2"
+          ],
+          "constant": "1"
+        },
+        {
+          "coefficients": [
+            "3",
+            "-4"
+          ],
+          "constant": "0"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "0",
+          "0",
+          "7"
+        ],
+        [
+          "0",
+          "2",
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "5",
+          "0"
+        ],
+        [
+          "0",
+          "2",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "2",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "2"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_14",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-10",
+          "-4",
+          "-2",
+          "0"
+        ],
+        "constant": "-3"
+      },
+      {
+        "coefficients": [
+          "7",
+          "2",
+          "1",
+          "1"
+        ],
+        "constant": "6"
+      },
+      {
+        "coefficients": [
+          "4",
+          "3",
+          "1",
+          "0"
+        ],
+        "constant": "6"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "0",
+          "-1",
+          "-1"
+        ],
+        "constant": "-2"
+      },
+      {
+        "coefficients": [
+          "6",
+          "2",
+          "1",
+          "1"
+        ],
+        "constant": "6"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-1/2",
+            "-2"
+          ],
+          "constant": "-6"
+        },
+        {
+          "coefficients": [
+            "-11/2",
+            "0"
+          ],
+          "constant": "0"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "9",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "7/2",
+          "0",
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "1",
+          "5",
+          "3"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_15",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-10",
+          "-3",
+          "2",
+          "-2"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "-5",
+          "1",
+          "-2"
+        ],
+        "constant": "9"
+      },
+      {
+        "coefficients": [
+          "1",
+          "1",
+          "0",
+          "2"
+        ],
+        "constant": "-3"
+      },
+      {
+        "coefficients": [
+          "9",
+          "5",
+          "-2",
+          "1"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-4",
+          "1",
+          "2",
+          "1"
+        ],
+        "constant": "-6"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "3",
+            "1/6"
+          ],
+          "constant": "11/6"
+        },
+        {
+          "coefficients": [
+            "-2",
+            "-4/3"
+          ],
+          "constant": "23/6"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "1",
+          "0",
+          "13/6"
+        ],
+        [
+          "0",
+          "3",
+          "0",
+          "5/3"
+        ],
+        [
+          "1",
+          "0",
+          "9/2",
+          "7/6"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "3/2"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_16",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "5",
+          "-14",
+          "-2",
+          "-2"
+        ],
+        "constant": "9"
+      },
+      {
+        "coefficients": [
+          "4",
+          "-9",
+          "-2",
+          "0"
+        ],
+        "constant": "7"
+      },
+      {
+        "coefficients": [
+          "-3",
+          "8",
+          "0",
+          "2"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-14",
+          "-1",
+          "-2"
+        ],
+        "constant": "9"
+      },
+      {
+        "coefficients": [
+          "3",
+          "-10",
+          "-1",
+          "-2"
+        ],
+        "constant": "7"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "2",
+            "-3"
+          ],
+          "constant": "2"
+        },
+        {
+          "coefficients": [
+            "1/2",
+            "-4"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "3"
+        ],
+        [
+          "0",
+          "2",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "3"
+        ],
+        [
+          "3",
+          "3",
+          "1",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "3",
+        "0",
+        "0",
+        "2",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_17",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-1",
+          "2",
+          "0",
+          "-1"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "4",
+          "5",
+          "-2",
+          "-2"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "5",
+          "-6",
+          "-1",
+          "1"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "-6",
+          "3",
+          "1",
+          "-1"
+        ],
+        "constant": "6"
+      },
+      {
+        "coefficients": [
+          "-9",
+          "8",
+          "1",
+          "-2"
+        ],
+        "constant": "7"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "13/3",
+            "-5/2"
+          ],
+          "constant": "-1/2"
+        },
+        {
+          "coefficients": [
+            "-7/3",
+            "7/2"
+          ],
+          "constant": "5/2"
+        }
+      ],
+      "multipliers": [
+        [
+          "4/3",
+          "0",
+          "0",
+          "3/2"
+        ],
+        [
+          "0",
+          "0",
+          "3",
+          "0"
+        ],
+        [
+          "10/3",
+          "5",
+          "0",
+          "0"
+        ],
+        [
+          "2/3",
+          "0",
+          "0",
+          "3"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "3/2"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_18",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "-5",
+          "8",
+          "-1",
+          "-2"
+        ],
+        "constant": "5"
+      },
+      {
+        "coefficients": [
+          "-7",
+          "3",
+          "-2",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "-2",
+          "4",
+          "-1",
+          "-1"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "2",
+          "1",
+          "0",
+          "0"
+        ],
+        "constant": "2"
+      },
+      {
+        "coefficients": [
+          "1",
+          "1",
+          "1",
+          "-1"
+        ],
+        "constant": "7"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-7/2",
+            "2"
+          ],
+          "constant": "0"
+        },
+        {
+          "coefficients": [
+            "3/4",
+            "3"
+          ],
+          "constant": "1"
+        }
+      ],
+      "multipliers": [
+        [
+          "0",
+          "3",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "1"
+        ],
+        [
+          "3/4",
+          "0",
+          "0",
+          "1"
+        ],
+        [
+          "4",
+          "2",
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "13/4",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "11/4"
+      ]
+    },
+    "checked": true
+  },
+  {
+    "name": "polyhedral_19",
+    "inputs": 2,
+    "outputs": 2,
+    "domain": [
+      {
+        "coefficients": [
+          "1",
+          "0"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "-1",
+          "0"
+        ],
+        "constant": "1"
+      },
+      {
+        "coefficients": [
+          "0",
+          "1"
+        ],
+        "constant": "0"
+      },
+      {
+        "coefficients": [
+          "0",
+          "-1"
+        ],
+        "constant": "1"
+      }
+    ],
+    "goals": [
+      {
+        "coefficients": [
+          "7",
+          "8",
+          "-1",
+          "-2"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "4",
+          "6",
+          "0",
+          "-1"
+        ],
+        "constant": "4"
+      },
+      {
+        "coefficients": [
+          "3",
+          "8",
+          "-2",
+          "-1"
+        ],
+        "constant": "-1"
+      },
+      {
+        "coefficients": [
+          "2",
+          "6",
+          "-2",
+          "-1"
+        ],
+        "constant": "-2"
+      },
+      {
+        "coefficients": [
+          "7",
+          "7",
+          "0",
+          "-2"
+        ],
+        "constant": "6"
+      }
+    ],
+    "certificate": {
+      "witnesses": [
+        {
+          "coefficients": [
+            "-1/4",
+            "5/4"
+          ],
+          "constant": "-3"
+        },
+        {
+          "coefficients": [
+            "7/2",
+            "7/2"
+          ],
+          "constant": "3"
+        }
+      ],
+      "multipliers": [
+        [
+          "1/4",
+          "0",
+          "0",
+          "1/4"
+        ],
+        [
+          "1/2",
+          "0",
+          "5/2",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "4",
+          "2"
+        ],
+        [
+          "0",
+          "1",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "slacks": [
+        "3/4",
+        "1",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    "checked": true
+  }
+]

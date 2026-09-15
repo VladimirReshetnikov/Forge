@@ -1,0 +1,111 @@
+{
+  "certificate": {
+    "cone": [
+      {
+        "factors": [],
+        "square": {
+          "n": 4,
+          "terms": [
+            [
+              [
+                0,
+                1,
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1,
+                0,
+                0,
+                1
+              ],
+              "2"
+            ]
+          ]
+        },
+        "weight": "1"
+      }
+    ],
+    "ideal": [
+      {
+        "hypothesis": 0,
+        "multiplier": {
+          "n": 4,
+          "terms": [
+            [
+              [
+                1,
+                0,
+                0,
+                0
+              ],
+              "-4"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "equality_assumptions": [
+    {
+      "n": 4,
+      "terms": [
+        [
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            0,
+            1,
+            0,
+            1
+          ],
+          "1"
+        ],
+        [
+          [
+            1,
+            0,
+            0,
+            2
+          ],
+          "1"
+        ]
+      ]
+    }
+  ],
+  "nonnegative_assumptions": [],
+  "origin": "manually supplied identity; checker test, not oracle discovery",
+  "target": {
+    "n": 4,
+    "terms": [
+      [
+        [
+          0,
+          2,
+          0,
+          0
+        ],
+        "1"
+      ],
+      [
+        [
+          1,
+          0,
+          1,
+          0
+        ],
+        "-4"
+      ]
+    ]
+  }
+}

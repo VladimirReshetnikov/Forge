@@ -1,0 +1,183 @@
+{
+  "certificate": {
+    "cone": [
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                0,
+                1
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1/8"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                0,
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "weight": "1/8"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "1/8"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              "1"
+            ]
+          ]
+        },
+        "weight": "1/8"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                1
+              ],
+              "1"
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "weight": "3/8"
+      },
+      {
+        "factors": [],
+        "square": {
+          "n": 2,
+          "terms": [
+            [
+              [
+                0,
+                1
+              ],
+              "1"
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              "1"
+            ]
+          ]
+        },
+        "weight": "3/8"
+      }
+    ],
+    "ideal": []
+  },
+  "diagnostics": {
+    "columns": 9,
+    "lp_status": 0,
+    "mutation_rejections": 2,
+    "name": "positive-slack",
+    "nonzero_columns": 6,
+    "rows": 6,
+    "seconds": 0.0018703470000218658,
+    "status": "certified"
+  },
+  "equality_assumptions": [],
+  "nonnegative_assumptions": [],
+  "target": {
+    "n": 2,
+    "terms": [
+      [
+        [
+          0,
+          0
+        ],
+        "1/2"
+      ],
+      [
+        [
+          0,
+          2
+        ],
+        "1"
+      ],
+      [
+        [
+          2,
+          0
+        ],
+        "1"
+      ]
+    ]
+  }
+}

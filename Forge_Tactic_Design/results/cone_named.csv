@@ -1,0 +1,13 @@
+name,degree_cap,status,generators,search_seconds,checked,terms,reason
+shifted_square,2,proved,8,0.0038358300000709278,True,1,
+two_variable_AMGM,2,proved,5,0.001789340999948763,True,1,
+box_cubic,3,proved,35,0.003655358000060005,True,1,
+box_quartic,4,proved,70,0.010007825000002413,True,1,
+box_quartic_cap2,2,unknown,0,2.955000013571407e-06,False,,target exceeds degree cap
+equality_ideal,2,proved,8,0.0016004350000002887,True,1,
+rational_margin,2,proved,7,0.0016389239999625715,True,2,
+false_near_square,2,unknown,7,0.0012633569999707106,False,,LP found no candidate
+Cauchy_Schwarz_2,4,proved,17,0.0018173130000604942,True,1,
+lower_bound_cubic,3,proved,32,0.003765934000057314,True,1,
+three_variable_variance,2,proved,16,0.0023290750000342086,True,3,
+Motzkin_true_outside_SOS,6,unknown,16,0.0014448410000795775,False,,LP found no candidate

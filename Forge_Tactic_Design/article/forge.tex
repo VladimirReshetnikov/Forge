@@ -1,0 +1,101 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{DejaVu Sans Mono}[Scale=0.80]
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype,booktabs,longtable,array,tabularx}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{ForgeBlue}{HTML}{17344C}
+\definecolor{ForgeGray}{HTML}{566573}
+\definecolor{ForgePale}{HTML}{F3F6F8}
+\usepackage{enumitem,fvextra,tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{fancyhdr,lastpage,titlesec}
+\usepackage{hyperref,xurl}
+\hypersetup{colorlinks=true,linkcolor=ForgeBlue,citecolor=ForgeBlue,urlcolor=ForgeBlue,
+ pdftitle={Forge: A Certificate-First Design Beyond Lean's grind},
+ pdfauthor={OpenAI},pdfsubject={Lean tactic architecture and tested Python research prototypes}}
+\pagestyle{fancy}
+\fancyhf{}\fancyhead[L]{\sffamily\small FORGE / PROOF AUTOMATION}
+\fancyhead[R]{\sffamily\small Design and prototype report}
+\fancyfoot[L]{\sffamily\footnotesize 14 September 2026}
+\fancyfoot[R]{\sffamily\footnotesize \thepage\ / \pageref*{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\titleformat{\section}{\Large\sffamily\bfseries\color{ForgeBlue}}{\thesection}{0.65em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries\color{ForgeBlue}}{\thesubsection}{0.65em}{}
+\titleformat{\subsubsection}{\normalsize\sffamily\bfseries}{\thesubsubsection}{0.65em}{}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5.5pt}
+\linespread{1.045}
+\setcounter{tocdepth}{2}
+\setlist{nosep,leftmargin=1.6em,topsep=5pt}
+\newcommand{\grind}{\texttt{grind}}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\R}{\mathbb{R}}\newcommand{\Q}{\mathbb{Q}}\newcommand{\N}{\mathbb{N}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{definition}[proposition]{Definition}
+\newtcolorbox{statusbox}{breakable,colback=ForgePale,colframe=ForgeBlue,boxrule=0.4pt,
+ left=8pt,right=8pt,top=6pt,bottom=6pt,arc=1pt}
+\DefineVerbatimEnvironment{Code}{Verbatim}{fontsize=\small,breaklines=true,breakanywhere=true,
+ frame=single,rulecolor=\color{ForgeGray},framesep=6pt,tabsize=2}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\begin{document}
+\begin{titlepage}
+\vspace*{14mm}
+{\sffamily\bfseries\color{ForgeBlue}\fontsize{42}{46}\selectfont FORGE\par}
+\vspace{5mm}
+{\sffamily\LARGE A Certificate-First Design\\[2mm]Beyond Lean's \texttt{grind}\par}
+\vspace{8mm}
+{\large Demand-directed proof search, nonlinear certificates,\\
+induction, witness synthesis, and checked solver cooperation\par}
+\vspace{10mm}
+\textcolor{ForgeBlue}{\rule{\textwidth}{0.7pt}}
+\vspace{3mm}
+{\sffamily\large Research design and executable prototype report\par}
+{14 September 2026 \quad / \quad Reference target: Lean 4.34.0\par}
+\vspace{7mm}
+\begin{abstract}
+\noindent
+A tactic substantially broader than \grind\ should not replace its congruence
+closure with another e-graph, nor merely run a longer list of existing tactics.
+It should retain \grind\ as a strong local engine while discovering the missing
+intermediate facts, structural arguments, witnesses, and nonlinear certificates
+that make local reasoning succeed. This report specifies \emph{Forge}, a typed,
+scope-aware, certificate-first architecture for that purpose. Four research
+prototypes are implemented and tested: demand-directed Horn inference, sparse
+polynomial-cone search, Bernstein positivity certificates, and polynomial
+recurrence invariants. They demonstrate concrete mechanisms, including their
+failure modes, but do not establish superiority over the actual Lean tactic.
+The proposed Lean integration has not been implemented or benchmarked.
+\end{abstract}
+\vspace{5mm}
+\begin{statusbox}
+\textbf{Evidence boundary.} The recorded run has 73 passing Python test cases,
+109 accepted nonlinear certificates, 43 successful Bernstein certificates out
+of 45 cases, and 49 recurrence invariants. Generated Lean replay source is
+included, but was \textbf{not compiled or kernel-checked}: no Lean/Lake runtime
+was available. This package is a detailed design plus research prototypes,
+not a released implementation of \forge.
+\end{statusbox}
+\vfill
+{\small Prepared for the requested investigation of stronger Lean automation.
+Source locations, exact dependency versions, raw measurements, tests, and
+reproduction scripts accompany the article.}
+\end{titlepage}
+\setcounter{page}{2}
+{\setlength{\parskip}{0pt}\small\tableofcontents}
+\clearpage
+\input{01-foundations.tex}
+\input{02-algebra.tex}
+\input{03-structure.tex}
+\input{04-engineering.tex}
+\input{05-experiments.tex}
+\input{06-appendices.tex}
+\clearpage
+\addcontentsline{toc}{section}{References and source provenance}
+\input{references.tex}
+\end{document}

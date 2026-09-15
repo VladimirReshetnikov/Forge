@@ -1,0 +1,258 @@
+\section{Certified solver islands and theory combination}
+
+\subsection{Export a fragment, not an untyped approximation of Lean}
+
+A \emph{solver island} is a selected subproblem whose translation and proof
+reconstruction are supported end to end. Boolean and fixed-width bit-vector
+islands can use the existing SAT-oriented facilities. A suitable first-order
+island can use Lean-SMT and its reconstruction path; a clause-based island can
+use Duper \cite{lean-grind,lean-smt,duper}. The island may prove a lemma over
+shared interface terms rather than the complete original goal.
+
+Each export has a translation ledger: Lean expressions, their solver symbols,
+their types and operations, and proof obligations connecting the encoding to
+the original proposition. Universe instantiation, monomorphization, typeclass
+resolution, and auxiliary assertions must have justified transformations.
+The Lean-SMT work illustrates why that preprocessing is a substantial part of
+an integration rather than mere serialization \cite{lean-smt}.
+
+For an island under assumptions $A_1,\ldots,A_k$, reconstruct a proof of
+$A_1\to\cdots\to A_k\to L$. Apply it to the appropriate scoped proofs to
+insert $L$ into the main graph. An external \code{unsat} answer without a
+supported proof is \code{unknown}. An external \code{sat} answer is a model
+proposal, not necessarily a counterexample to the Lean goal. Unsupported proof
+rules and unsupported theories must be detected and reported, not silently
+trusted.
+
+\subsection{Do not import unsound combination assumptions}
+
+A generic textbook theory-combination procedure is not automatically valid
+for every Lean type. Finite domains, dependent types, casts, and overlapping
+arithmetic operators complicate disjointness and cardinality assumptions.
+Forge avoids relying on a blanket combination theorem: plugins exchange
+\emph{proved interface facts}, and every final step is checked in Lean.
+This is sound even when incomplete.
+
+When a plugin wants $u=v$ to reconcile a model, it may request a case split or
+ask another plugin to prove it. It cannot simply merge those terms. Similarly,
+an arithmetic atom that abbreviates $xy$ must carry a definition or equality
+proof; treating it as an unrelated real variable gives only a relaxation, not
+a bidirectional equivalence of problems.
+
+\subsection{Two trust profiles}
+
+The default target is \textbf{kernel-checked replay}: ordinary proof terms or a
+proved certificate-checker theorem whose acceptance computation is justified
+without trusting an external search program. The intended trusted assumptions
+are Lean's ordinary accepted foundations and explicitly audited library
+axioms. Replay should not introduce \code{sorryAx}, a newly assumed theorem,
+or a hidden oracle axiom.
+
+A separate, explicitly named \textbf{native-checking profile} may run a
+certificate checker using native compilation for performance. This has a
+different trust story. The reference warns that \code{native\_decide} adds the
+Lean compiler to the trusted part, whereas \code{decide\_cbv} does not require
+trust in the code generator \cite{lean-tactics}. Do not summarize both profiles
+as ``only the kernel is trusted.'' A SAT certificate and a theorem about its
+checker are not, by themselves, a complete description of how the checker was
+actually evaluated.
+
+The precise existing implementation of a delegated tactic must be audited
+under the pinned version. In strict mode, disable a backend when its available
+replay path requires the native profile. Certificate size, kernel-replay time,
+and axiom dependencies belong in the result record alongside search time.
+
+\section{Concrete Lean integration plan}
+
+\subsection{Use the current extension interface}
+
+The inspected API has \code{Lean.Meta.Grind.SolverExtension} and
+\code{registerSolverExtension}. The latter registers an extension during
+initialization and allocates its state. Its methods include internalization,
+new equality and disequality notifications, an action, consistency-related
+checks, and a model-combination hook. State access, term marking, fact insertion,
+and proof explanations are also exposed \cite{grind-types}.
+
+The API skeleton below records actual conceptual hook names; the handler
+bodies and Forge state are \textbf{design pseudocode}, not a compiled module.
+
+\begin{Code}
+initialize polyExt := registerSolverExtension makePolyState
+initialize polyExt.setMethods
+  (internalize := collectSupportedArithmetic)
+  (newEq       := updateCanonicalAtoms)
+  (newDiseq    := wakeNonzeroGuards)
+  (action      := boundedCertificateAction)
+  (checkInv    := checkInternalBookkeeping)
+\end{Code}
+
+Make the adapter a narrow, version-specific module. It reifies supported
+expressions with a valuation map, requests a certificate, reconstructs a
+proof, and submits a proved fact through the appropriate insertion service.
+The check of internal data-structure invariants is not the mathematical
+soundness proof of a certificate. Name and test those two responsibilities
+separately.
+
+Structural induction is better implemented above the local saturation loop:
+it changes the goal shape and creates dependent subgoals. The resulting branch
+contexts can each host a \grind\ session and its plugin state. This two-level
+architecture keeps the existing theory engine local while the outer graph
+tracks recursor applications and generalized lemmas.
+
+\subsection{Module boundaries and required contracts}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}p{0.27\textwidth}YY@{}}
+\toprule
+Proposed module & Responsibility & Acceptance contract\\
+\midrule
+\code{Forge.Context} & Scoped expression, fact, and obligation graph & No unproved facts; valid dependency scopes\\
+\code{Forge.GrindAdapter} & Version-specific extension hooks & Restorable state; exact expression/proof transport\\
+\code{Forge.Demand} & Retrieval, instantiation, tabling & Every application elaborates and has acyclic proof parents\\
+\code{Forge.Poly.Reify} & Typed polynomial representation & Denotation equality for each reified term\\
+\code{Forge.Poly.Cert} & Cone and box certificate checking & Proved checker soundness or explicit proof reconstruction\\
+\code{Forge.Induct} & Recursor selection and generalization & Goal refinement through an actual induction theorem\\
+\code{Forge.Synth} & Invariants and existential candidates & Base/step or witness specification discharged\\
+\code{Forge.Islands} & SAT, SMT, and superposition adapters & Supported translation and proof rules; no raw oracle acceptance\\
+\code{Forge.Replay} & Proof minimization and audit & Exact original goal, no remaining metavariables, approved axioms\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Reification deserves particular attention. To use a rational polynomial
+certificate, store a map $\rho$ from polynomial variables to Lean expressions
+and a proof that the original term equals the polynomial's denotation at
+$\rho$. For an ordered-field inequality, every coefficient cast and operation
+must agree with that denotation. An algebraically correct certificate for the
+wrong denotation is not a proof of the original statement.
+
+\subsection{Libraries and algorithms with specific roles}
+
+The initial Lean dependency should be \textbf{core Lean plus mathlib}, with
+Aesop used through the version selected by the pinned dependency graph when
+available. Reuse \code{ring} or \code{ring\_nf} for polynomial identities,
+\code{norm\_num} for rational constants, \code{positivity} for cheap sign facts,
+and \code{linarith}/\code{nlinarith} for arithmetic leaves and selected
+certificate reconstruction \cite{ring,positivity,linarith}. Do not invoke all
+of them blindly on every node.
+
+The research implementation uses Python's \code{fractions.Fraction} and a
+small sparse-polynomial representation for checking, SciPy/HiGHS for LP
+proposals, and SymPy for exact support solving and interpolation. Exact tested
+versions are recorded with the results. NumPy constructs numerical matrices;
+its floating-point values never decide certificate acceptance.
+
+Optional integrations are Duper for superposition and Lean-SMT with its
+supported external solver for SMT proofs. Keep them out of the minimal build
+until compatibility tests pass. A numerical semidefinite solver can later
+supply Gram-matrix proposals, but an exact replay path is a prerequisite.
+An existing e-graph package is not required: \grind\ already maintains
+congruence machinery. In particular, an archived experimental Lean equality
+saturation project should not be made a critical dependency simply because
+its name sounds aligned with the design.
+
+\subsection{Resource allocation and proof-cost awareness}
+
+After the protected baseline attempt, a practical starting policy allocates
+local bounded actions rather than unbounded calls: demand expansion, a small
+cone, a shallow induction candidate, a small witness grammar, and an eligible
+solver island. Rank actions by observed recent payoff, target relevance, cost
+estimate, and age. Reserve a periodic fair slot for postponed applicable
+actions. The precise weights are tunable engineering parameters, not
+probabilistically calibrated guarantees.
+
+For an implementable non-learned initial scheduler, use an eight-slot round
+with three demand slots, two cone slots, one structural slot, one witness slot,
+and one eligible external-island slot. Empty slots are donated to the oldest
+applicable action. Within a slot, rank target-linked obligations before generic
+ones, then prefer lower estimated cost; use a deterministic identifier to break
+ties. Every fourth round give the oldest postponed action priority. This is a
+proposed starting policy, not a measured optimum or a finite-budget guarantee.
+
+Initial per-action limits can be explicit: expand at most 32 theorem instances
+per demand quantum; try cone degrees 2, 4, and 6 with at most 4,000 columns;
+try at most two induction candidates per structural quantum and induction depth
+at most two; enumerate at most 256 witness proposals per quantum with term size
+at most six. Track external jobs separately under wall-clock and output-size
+limits. Every quantum also consumes the common parent budget, so nested actions
+cannot multiply the allowed work by repeatedly resetting their local limit.
+
+Keep a monotone context epoch alongside each immutable exported problem. An
+asynchronous result is reconstructed only after checking that its expression
+mapping and hypothesis dependencies still apply. Never reuse an old mutable
+metavariable assignment merely because its printed goal matches the current
+one. If transport to the new context cannot be justified, discard the result
+or rerun the action. These rules are especially important when induction,
+backtracking, and external jobs overlap.
+
+Count the cost of \emph{reconstruction}. An apparently fast oracle that emits
+an enormous proof can lose to a slower search with a small certificate. Use
+support minimization, common subexpression sharing, and proof-DAG trimming.
+Keep unsat-core or used-premise information as a proposal for minimization,
+then replay the reduced proof to verify that no necessary dependency was
+removed. Hash-consing expressions reduces duplication but does not excuse
+missing scoping checks.
+
+All external requests require limits on time, memory, serialized input/output
+size, integer bit length, and parser depth. Do not evaluate returned text as
+code. A well-formed but gigantic certificate is a resource risk even when its
+mathematics is harmless. Permit cancellation between checker steps and return
+an unresolved result on resource exhaustion.
+
+\subsection{User-facing syntax and explanations}
+
+The following is \textbf{proposed syntax}, not syntax accepted by the delivered
+package:
+\begin{Code}
+by
+  forge (mode := conservative)
+    (inductionDepth := 2)
+    (polyDegree := 4)
+    (witnessSize := 6)
+    (external := false)
+\end{Code}
+
+A companion \code{forge?} should suggest a stable replay script or an explicit
+certificate invocation. Users should see which premises were used, which
+induction variable was selected, which parameters were generalized, and what
+witness was constructed. Failure diagnostics should distinguish a missing
+sign guard, a degree cap, unsupported reification, an unproved generalized
+lemma, an unavailable backend, and an exhausted search budget.
+
+The report's generated Lean files are a narrower first artifact: explicit
+proofs for saved certificates. They contain no search implementation of
+\forge. Hiding that distinction behind an umbrella import would misrepresent
+the state of the project.
+
+\section{Soundness obligations for the whole system}
+
+\begin{proposition}[Compositional soundness target]
+Suppose every fact node contains a Lean proof in its recorded context; every
+refinement node is justified by an accepted Lean theorem or recursor; every
+certificate adapter proves its exact translated conclusion; and every scope
+transfer is checked. Then a closed root of the acyclic proof graph supplies a
+proof of the original goal, independently of how search candidates were
+selected.
+\end{proposition}
+\begin{proof}
+Proceed in topological order through the proof graph. Base facts are valid by
+assumption. At a theorem-application node, apply its proof to the previously
+constructed premise proofs. At a refinement node, combine the checked branch
+proofs with its theorem or recursor. At a certificate node, use the adapter's
+proved conclusion. Scope transfer abstracts and instantiates only validated
+dependencies. The final node therefore inhabits the original proposition.
+\end{proof}
+
+This is a design-level argument, not a mechanized proof of the present Python
+implementation. Lean integration must instantiate each hypothesis of the
+argument. An unsound term translator is not repaired by an exact polynomial
+checker. A sound checker is not repaired by a replay path that assumes its
+result through an oracle axiom. An acyclic certificate DAG is not sufficient
+if a proof parent was imported from the wrong branch.
+
+Testing should deliberately attack those boundaries. Mutate a denominator
+condition; swap two polynomial variables; replace a strict inequality with a
+weak one; change an exponent; reverse an equality transport; remove a branch
+from a box cover; alter a typeclass instance; point a proof node to a future
+node; and replay under a different local context. The intended result is
+rejection, not a best-effort reinterpretation of the malformed evidence.

@@ -1,0 +1,81 @@
+{
+  "kind": "lattice",
+  "matrix": [
+    [
+      6,
+      10,
+      15
+    ],
+    [
+      2,
+      -4,
+      3
+    ]
+  ],
+  "rhs": [
+    7,
+    -1
+  ],
+  "certificate": {
+    "feasible": true,
+    "steps": [
+      {
+        "row": 0,
+        "transform": [
+          [
+            -14,
+            -5,
+            -30
+          ],
+          [
+            7,
+            3,
+            15
+          ],
+          [
+            1,
+            0,
+            2
+          ]
+        ],
+        "gcd": 1,
+        "residual": 7,
+        "quotient": 7,
+        "obstruction": false
+      },
+      {
+        "row": 1,
+        "transform": [
+          [
+            -26,
+            57
+          ],
+          [
+            5,
+            -11
+          ]
+        ],
+        "gcd": 2,
+        "residual": 370,
+        "quotient": 185,
+        "obstruction": false
+      }
+    ],
+    "witness": [
+      -3798,
+      -506,
+      1857
+    ],
+    "basis": [
+      [
+        45
+      ],
+      [
+        6
+      ],
+      [
+        -22
+      ]
+    ]
+  }
+}

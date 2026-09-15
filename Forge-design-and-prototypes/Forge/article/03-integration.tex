@@ -1,0 +1,374 @@
+\section{Lean integration without a second, weaker theorem prover}
+\status{Integration specification. The cited core names were inspected; the adapter
+interfaces below are proposed and have not been compiled.}
+
+\subsection{Begin at a stable boundary, then make selected paths incremental}
+
+The first Lean implementation should invoke \Grind{} on ordinary Lean goals
+and supply newly proved local facts explicitly. This is less efficient than
+an ideal native integration, but it permits the structural planner and
+certificate pipeline to be tested without depending immediately on every
+internal representation of \Grind{}.
+
+There are concrete lower-level entry points to investigate next. In the
+inspected Lean 4.34.0 source, \code{Lean.Meta.Grind.Params} includes
+\code{extraFacts}, and \code{assertExtra} infers the types of those proof
+expressions and adds them to the goal's fact machinery. The source also
+exposes \code{GrindM.run}, \code{mkGoalCore}, and a \code{Result} containing
+\code{failure?}, diagnostics, and counters.\cite{grindsource}
+These are implementation hooks, not a promise of a stable public integration
+contract.
+
+In particular, feeding \code{Params.extraFacts} into a fresh run is not the
+same as resuming an earlier saturation state. A true incremental adapter must
+preserve the goal state and all relevant solver/context state, and must use
+the normal internalization and propagation path when adding facts. Otherwise
+an equality might exist in one table while being invisible to another solver.
+
+A proposed versioned adapter has the following surface:
+\begin{lstlisting}
+GrindAdapter.open(snapshot, options) -> session
+GrindAdapter.seed(session, checked_proofs) -> session
+GrindAdapter.advance(session, work_quota) -> local_result
+GrindAdapter.exportRelevant(session, demand) -> checked_summary
+GrindAdapter.snapshot(session) -> resumable_state
+GrindAdapter.restore(resumable_state) -> session
+\end{lstlisting}
+
+Keep all version-specific internals in one module. Unit-test seeded facts,
+case-split rollback, proof extraction, metavariable changes, and equality
+propagation through every enabled local theory. Until that adapter is reliable,
+restarting a local tactic with explicit checked facts is preferable to a
+fast but incoherent shared state.
+
+\subsection{Use a typed semantic boundary for each external worker}
+
+A reifier does more than turn Lean expressions into strings. For a polynomial
+fragment, it produces a variable table, an exact polynomial, and a proof that
+the polynomial's denotation under that table is the source expression. The
+source type, operations, and their instances are part of the reification.
+Unsupported subexpressions may become opaque atoms when that abstraction is
+sound for the requested procedure.
+
+A schematic contract is
+\[
+\operatorname{reify}(e)
+  =(\text{environment }\rho,\text{ IR }t,
+    \pi: e=\operatorname{eval}_{\rho}(t)).
+\]
+For an inequality or formula, the contract is an equivalence or a suitable
+one-way implication between the source and reified statements. The direction
+must match how the solver result will be used.
+
+If congruence closure identifies two source terms, a worker can share one
+polynomial variable only after preserving the equality proof needed to
+justify that identification. It must not merge different variables because
+their printed names happen to agree. Conversely, treating equal terms as
+different opaque variables is usually a loss of proving power rather than
+an unsound strengthening; this explains why the shared-state integration
+matters.
+
+For dependent expressions, equality classes must be homogeneous up to
+justified type compatibility. Heterogeneous equality is not an excuse to
+ignore type indices. Keep \code{HEq} reasoning and transport explicit, and
+use Lean elaboration to validate casts. An initial external term language
+should remain first-order and homogeneous instead of implementing an ad hoc
+untyped approximation to all of Lean.
+
+\subsection{Three levels of proof reconstruction}
+
+The simplest backend returns ordinary Lean theorem applications and tactic
+steps. This is appropriate for synthesized witnesses, explicit induction
+motives, small nonnegative linear combinations, and recurrence identities.
+The search can be complicated while replay remains short.
+
+For larger algebraic results, return a typed certificate to a reflected Lean
+checker with a theorem of the form
+\[
+\operatorname{check}(P,C)=\texttt{true}
+\quad\Longrightarrow\quad \operatorname{Denotes}(P).
+\]
+The problem $P$ comes from the source reifier. The external solver is allowed
+to choose only $C$, not silently replace $P$. In a conservative configuration,
+reduce the checker inside the trusted proof-checking path rather than accept
+an unchecked FFI result.
+
+For general external ATP/SMT proofs, use a proof importer with explicit
+supported rules. \code{lean-smt} is a concrete candidate: its documented
+behavior includes returning proof-reconstruction holes as goals, and its
+supported theories are not equivalent to the entire capability set of cvc5.
+\cite{leansmt} Those holes enter the obligation graph. An external
+\code{unsat} response does not bypass them.
+
+\subsection{Keep the efficient existing bit-vector path}
+
+A mixed goal involving opaque functions and bit-vectors should use the
+existing shared-state \code{grind => bv_decide} route when applicable.
+\Forge{} can schedule that route after structural steps or new lemmas have
+made relevant facts available, but should not duplicate its encoding just to
+fit a uniform architecture.\cite{release434}
+
+A modular integer-to-bit-vector connection needs the correct modular
+semantics. An integer embedding into a field can be injective; a fixed-width
+bit-vector projection is not. Mixing those relationships in a generic
+``numeric cast'' cache would be a serious error. Reifiers and proof bridges
+must be indexed by the actual source and target operations.
+
+\section{Higher-order structure and external reasoning}
+
+\subsection{A focused source-term worker}
+
+Before translating a goal to a first-order backend, expose its constructive
+structure. For a function equality, attempt the relevant extensionality
+principle and introduce a fresh argument. For a universally quantified goal,
+introduce its binder. For a conjunction or constructor target, create the
+corresponding subgoals. For an existential, construct a scoped witness and
+then prove its specification.
+
+A bounded type-directed term synthesizer can handle witness goals beyond the
+affine fragment. Its grammar includes local terms, lambda abstraction,
+application of retrieved lemmas/functions, constructors, and selected
+recursor/fold schemas. Each candidate is elaborated before semantic checking.
+Higher-order pattern unification handles tractable application patterns;
+unrestricted higher-order unification is not assumed to be a cheap or complete
+subroutine.
+
+For example, to synthesize a function $h:\operatorname{List}(A)\to
+\operatorname{List}(B)$ with the equations
+\[
+h([])=[],\qquad h(x::xs)=f(x)::h(xs),
+\]
+a list-fold schema already fixes the recursion structure. Search only needs
+the empty case and the constructor step. A library index may retrieve map;
+otherwise a recursor term provides an equivalent witness whose equations are
+proved by reduction. This is a specific proposed worker, not something the
+Python first-order list module already implements.
+
+The architecture leaves room for more advanced type-inhabitation search.
+Canonical is relevant prior work on proof synthesis involving higher-order
+and dependent types.\cite{canonical} Such a worker should be integrated by
+its proof-term interface, not by flattening away the dependencies that make
+its synthesis task meaningful.
+
+\subsection{First-order ATP workers are complementary}
+
+After structural exposure, a saturation-based ATP may find useful theorem
+combinations that a local tactic misses. Duper is an in-Lean proof-producing
+option.\cite{duper} An external solver can also be used through a deliberate
+translation and reconstruction layer. \code{lean-auto} provides relevant
+translation infrastructure, including monomorphization support used by other
+Lean automation projects.\cite{leanauto,leansmt}
+
+The controller should not indiscriminately send every declaration in the
+local environment. Select the dependency-relevant facts and instantiate
+polymorphic schemas only at the types currently required by the proof demand.
+Record which source theorem and universe/type instantiation each exported
+formula came from, so reconstruction can apply the actual theorem.
+
+If an abstraction intentionally forgets structure, document its direction:
+every Lean countermodel should map to an abstract model when an unsatisfiability
+argument relies on that property. A spurious abstract model then yields no
+Lean refutation. The final protection remains proof reconstruction in the
+original context, not an informal assertion that the translation is
+``basically sound.''
+
+\subsection{Candidate generation can be untrusted without being unconstrained}
+
+An optional model, learned ranker, or language model can propose a lemma,
+induction variable, proof sketch, or term. It cannot change the accepted
+logical rules. It also cannot submit arbitrary Lean commands that introduce
+new axioms or alter the environment under the guise of a proof term.
+Restrict the import channel to a typed certificate schema or a term elaborated
+inside a fixed environment. Resource and size limits protect the checker from
+pathological proposals.
+
+The design does not require an online model service. The executed prototypes
+use deterministic enumeration, exact algebra, and local LP proposals. Their
+algorithms can be useful even in a fully offline implementation.
+
+\section{Soundness invariants and adversarial failure modes}
+
+\subsection{The trust boundary}
+
+For the proposed Lean tactic, correctness ultimately rests on the accepted
+Lean environment and kernel checking of the completed proof. External search
+code, optimization solvers, heuristics, and speculative graphs need not be
+trusted to return correct answers. The implemented Python checkers are a
+research prototype of this separation; their correctness is not established
+by Lean's kernel.
+
+An accepted source theorem must have no unresolved expression or universe
+metavariables, no \code{sorry} dependency, and no unexpected new axioms relative
+to the approved environment. Existing standard axioms and user-approved
+assumptions are not silently removed or reclassified. A replay artifact should
+make its dependencies inspectable, for example by normal Lean axiom reporting.
+
+\subsection{The invariants to assert in code}
+
+\begin{invariant}[Context validity]
+Every proved fact is accompanied by a proof whose free variables and local
+instances belong to its recorded context, or by an explicit abstraction and
+instantiation that transports it into the consuming context.
+\end{invariant}
+
+\begin{invariant}[Candidate quarantine]
+No candidate theorem, model equation, numerical conjecture, or unsolved proof
+hole is admitted to the proved-fact state. Exploratory assumptions never serve
+as proof evidence.
+\end{invariant}
+
+\begin{invariant}[Induction discipline]
+An induction hypothesis is used only with the scope and smaller-argument
+relationship supplied by its recursor. Generalized parameters may vary;
+the structural induction index may not be replaced arbitrarily.
+\end{invariant}
+
+\begin{invariant}[Certificate binding]
+A certificate is checked against the source-derived problem, with the same
+variable mapping, types, assumptions, and target. A certificate for another
+polynomial, another box, or a different quantifier scope is not interchangeable.
+\end{invariant}
+
+\begin{invariant}[Fail-closed arithmetic]
+Numerical tolerances may guide search. Accepted equalities, coefficient signs,
+partition boundaries, and proof-rule premises are checked exactly.
+\end{invariant}
+
+\subsection{An implementation review checklist}
+
+The most dangerous implementation errors are not merely weak heuristics.
+They are mistakes that accidentally turn search evidence into a stronger
+assumption. Review at least the following cases explicitly:
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.65\textwidth}@{}}
+\toprule
+Failure mode & Required defense \\
+\midrule
+\endhead
+Self-justifying lemma & Prove candidates in a separate obligation; forbid dependency cycles unless justified by an explicit joint induction principle. \\
+Induction hypothesis applied to the wrong list & Keep the tail/index rigid; let only genuinely generalized binders instantiate. \\
+Branch fact leakage & Record split assumptions and scope; combine branches with a proof, not a global cache insertion. \\
+Floating-point near-equality & Recompute exact rational identities; a small residual is a rejection, not a proof. \\
+Wrong root problem & Bind the certificate to the original reified expression and assumptions, not an oracle-provided replacement. \\
+Missing subdivision region & Derive child boxes from a full split tree and check both children. \\
+Erased dependent type or cast & Preserve typed denotation proofs and explicit transport obligations. \\
+Numerical field proof used for integer division & Use a source-semantics bridge or reject the fragment. \\
+Opaque model element used as a witness & Reify an actual source term with the correct scope; otherwise reject the proposal. \\
+Incomplete external reconstruction & Keep every hole as an unsolved obligation; no success until all are checked. \\
+Stale state after metavariable assignment & Invalidate affected caches or restore a consistent snapshot containing the old identities. \\
+\bottomrule
+\end{longtable}
+
+Only a subset of these has an executable analogue in the current miniature
+languages. The tests cover rigid induction tails, unknown/cyclic rewrite
+rules, malformed paths, sort mismatches, exact arithmetic corruption, wrong
+constraints, witness corruption, and partition corruption. They do not test
+a Lean-dependent-type reifier or a real branch-state adapter, because those
+components have not been implemented.
+
+\subsection{Proof size is a separate resource}
+
+A solver may find a mathematical argument quickly yet produce a proof too
+large to elaborate or check efficiently. Track the sizes of certificates,
+polynomial supports, rewrite traces, and final Lean proof terms separately
+from search time. Share proof subterms, and prefer a small checked reflection
+lemma to expanding an enormous algebraic identity into individual rewrites.
+
+A proof DAG can be topologically emitted as local lemmas. Minimize a replay
+script only by rerunning and rechecking the simplified version. Never delete
+a dependency because it appears unused in a heuristic trace while remaining
+inside the actual proof term.
+
+\section{A concrete implementation plan}
+
+\subsection{Module boundaries}
+
+A Lean package could use the following organization. These are proposed file
+names, not claims about files already present in this archive.
+\begin{lstlisting}
+Forge/Core/GoalSnapshot.lean
+Forge/Core/Obligation.lean
+Forge/Core/CheckedFact.lean
+Forge/Core/Replay.lean
+Forge/Search/Controller.lean
+Forge/Search/RuleIndex.lean
+Forge/Search/Structural.lean
+Forge/Induction/CallAnalysis.lean
+Forge/Induction/Generalize.lean
+Forge/Induction/LemmaFrontier.lean
+Forge/Synthesis/AffineWitness.lean
+Forge/Synthesis/Recurrence.lean
+Forge/Instantiation/ConstrainedMatch.lean
+Forge/Instantiation/ModelGuided.lean
+Forge/Reify/Polynomial.lean
+Forge/Certificate/Farkas.lean
+Forge/Certificate/Bernstein.lean
+Forge/Backend/Grind.lean
+Forge/Backend/SOS.lean
+Forge/Backend/SMT.lean
+Forge/Tactic.lean
+\end{lstlisting}
+
+The core modules depend only on Lean and a small shared representation.
+Mathlib-specific reifiers and tactics belong behind separate imports.
+External processes consume a versioned certificate/problem format and return
+only untrusted proposals. The package remains useful when those processes
+are unavailable.
+
+\subsection{Milestones with objective exit criteria}
+
+\textbf{First milestone: proof-state controller and baseline parity.}
+Implement exact-state restore, branch-scoped obligations, replay records, and
+a \Grind{} tactic adapter. Its restricted mode must reproduce a pinned baseline
+suite without introducing new axioms or losing source assumptions.
+
+\textbf{Second milestone: structural induction and accumulator generalization.}
+Port the miniature list algorithm using real Lean expressions, then extend it
+to a small set of inductive types. The decisive tests are not just successes:
+failed generalizations, dependent hypotheses, and wrong-tail induction
+hypotheses must be rejected or left unsolved.
+
+\textbf{Third milestone: exact certificates.}
+Implement the affine/Farkas certificate theorem and the recurrence certificate
+reconstruction. Integrate the existing SOS backend behind the same checked-fact
+interface. Add Bernstein checking only after the source box and polynomial
+reifiers have their soundness contracts.
+
+\textbf{Fourth milestone: missing terms and missing lemmas.}
+Add arithmetic constrained matching, typed lemma-frontier abstraction, and
+counterexample filtering. Evaluate generalization separately from helper-lemma
+discovery so the contribution of each is visible.
+
+\textbf{Fifth milestone: incremental internals and optional external workers.}
+Introduce a version-pinned \Grind{} session adapter only where measurements
+show repeated setup costs dominate. Add SMT and higher-order workers without
+expanding the trusted base or pretending every external proof rule is already
+supported.
+
+\textbf{Sixth milestone: hardening and competitive evaluation.}
+Use holdout benchmarks, per-worker ablations, failure classifications,
+certificate mutation tests, proof-size measurements, and clean-build replay.
+A release claiming significant superiority should be based on these results,
+not on the manufactured successes in this article.
+
+\subsection{User interface and explanations}
+
+A possible syntax, explicitly \emph{proposed}, is:
+\begin{lstlisting}
+-- Proposed syntax, not supplied as an executable tactic:
+forge [relevant_definitions, useful_theorems]
+forge? (induction := true) (witnesses := .affine)
+forge (external := false) (maxLemmaDepth := 2)
+\end{lstlisting}
+
+\code{forge?} should emit a stable proof script or certificate replay plus any
+local helper lemmas it actually needed. A failure report should distinguish
+``no induction motive found,'' ``candidate lemma refuted by an executable
+example,'' ``nonlinear certificate search exhausted,'' ``unsupported source
+operation,'' and ``external proof reconstruction incomplete.'' It should
+identify the unsolved obligation rather than merely advise a larger timeout.
+
+The replay should not rerun stochastic discovery or require the original
+external solver. A proof that only succeeds while a particular model service
+is available is an unsatisfactory end product when an explicit certificate
+can be retained instead.

@@ -1,0 +1,11382 @@
+[
+  {
+    "name": "power_sum_1",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "1/2"
+        ],
+        [
+          [
+            2
+          ],
+          "1/2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-1"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "power_sum_2",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "1/6"
+        ],
+        [
+          [
+            2
+          ],
+          "1/2"
+        ],
+        [
+          [
+            3
+          ],
+          "1/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-3"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-1/2"
+            ],
+            [
+              [
+                2
+              ],
+              "3/2"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "power_sum_3",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "3"
+        ],
+        [
+          [
+            2
+          ],
+          "3"
+        ],
+        [
+          [
+            3
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            2
+          ],
+          "1/4"
+        ],
+        [
+          [
+            3
+          ],
+          "1/2"
+        ],
+        [
+          [
+            4
+          ],
+          "1/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-7"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-5/2"
+            ],
+            [
+              [
+                2
+              ],
+              "7/2"
+            ]
+          ]
+        },
+        "step_residual": "-12"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "3/2"
+            ],
+            [
+              [
+                2
+              ],
+              "-5/2"
+            ],
+            [
+              [
+                3
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "-6"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "power_sum_4",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2
+          ],
+          "6"
+        ],
+        [
+          [
+            3
+          ],
+          "4"
+        ],
+        [
+          [
+            4
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "-1/30"
+        ],
+        [
+          [
+            3
+          ],
+          "1/3"
+        ],
+        [
+          [
+            4
+          ],
+          "1/2"
+        ],
+        [
+          [
+            5
+          ],
+          "1/5"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-15"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-13/2"
+            ],
+            [
+              [
+                2
+              ],
+              "15/2"
+            ]
+          ]
+        },
+        "step_residual": "-50"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "61/6"
+            ],
+            [
+              [
+                2
+              ],
+              "-35/2"
+            ],
+            [
+              [
+                3
+              ],
+              "25/3"
+            ]
+          ]
+        },
+        "step_residual": "-60"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-29/6"
+            ],
+            [
+              [
+                2
+              ],
+              "10"
+            ],
+            [
+              [
+                3
+              ],
+              "-20/3"
+            ],
+            [
+              [
+                4
+              ],
+              "5/2"
+            ]
+          ]
+        },
+        "step_residual": "-24"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "power_sum_5",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "5"
+        ],
+        [
+          [
+            2
+          ],
+          "10"
+        ],
+        [
+          [
+            3
+          ],
+          "10"
+        ],
+        [
+          [
+            4
+          ],
+          "5"
+        ],
+        [
+          [
+            5
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            2
+          ],
+          "-1/12"
+        ],
+        [
+          [
+            4
+          ],
+          "5/12"
+        ],
+        [
+          [
+            5
+          ],
+          "1/2"
+        ],
+        [
+          [
+            6
+          ],
+          "1/6"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-31"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-29/2"
+            ],
+            [
+              [
+                2
+              ],
+              "31/2"
+            ]
+          ]
+        },
+        "step_residual": "-180"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "91/2"
+            ],
+            [
+              [
+                2
+              ],
+              "-149/2"
+            ],
+            [
+              [
+                3
+              ],
+              "30"
+            ]
+          ]
+        },
+        "step_residual": "-390"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-52"
+            ],
+            [
+              [
+                2
+              ],
+              "417/4"
+            ],
+            [
+              [
+                3
+              ],
+              "-135/2"
+            ],
+            [
+              [
+                4
+              ],
+              "65/4"
+            ]
+          ]
+        },
+        "step_residual": "-360"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "20"
+            ],
+            [
+              [
+                2
+              ],
+              "-183/4"
+            ],
+            [
+              [
+                3
+              ],
+              "75/2"
+            ],
+            [
+              [
+                4
+              ],
+              "-55/4"
+            ],
+            [
+              [
+                5
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "-120"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_00",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-8/3"
+        ]
+      ]
+    },
+    "initial": "-2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-8/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ]
+          ]
+        },
+        "step_residual": "8/3"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_01",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1
+          ],
+          "-5"
+        ]
+      ]
+    },
+    "initial": "2",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "13/2"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "-4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ],
+            [
+              [
+                1
+              ],
+              "4"
+            ]
+          ]
+        },
+        "step_residual": "5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_02",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1/2"
+        ],
+        [
+          [
+            1
+          ],
+          "-8/5"
+        ],
+        [
+          [
+            2
+          ],
+          "-4/5"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "7/6"
+        ],
+        [
+          [
+            2
+          ],
+          "-2/5"
+        ],
+        [
+          [
+            3
+          ],
+          "-4/15"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-1/2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "1/2"
+            ]
+          ]
+        },
+        "step_residual": "12/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "17/10"
+            ],
+            [
+              [
+                2
+              ],
+              "-6/5"
+            ]
+          ]
+        },
+        "step_residual": "8/5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_03",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-5/3"
+        ],
+        [
+          [
+            3
+          ],
+          "-5/3"
+        ]
+      ]
+    },
+    "initial": "5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "5/2"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/4"
+        ],
+        [
+          [
+            3
+          ],
+          "5/6"
+        ],
+        [
+          [
+            4
+          ],
+          "-5/12"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ]
+          ]
+        },
+        "step_residual": "-5/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "5/3"
+            ]
+          ]
+        },
+        "step_residual": "10/3"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "10/3"
+            ],
+            [
+              [
+                2
+              ],
+              "-5/3"
+            ]
+          ]
+        },
+        "step_residual": "10"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                2
+              ],
+              "10/3"
+            ],
+            [
+              [
+                3
+              ],
+              "-5/3"
+            ]
+          ]
+        },
+        "step_residual": "10"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_04",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3/4"
+        ],
+        [
+          [
+            1
+          ],
+          "-5/2"
+        ],
+        [
+          [
+            2
+          ],
+          "7"
+        ],
+        [
+          [
+            3
+          ],
+          "4/5"
+        ],
+        [
+          [
+            4
+          ],
+          "-6/5"
+        ]
+      ]
+    },
+    "initial": "-3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3"
+        ],
+        [
+          [
+            1
+          ],
+          "128/75"
+        ],
+        [
+          [
+            2
+          ],
+          "-91/20"
+        ],
+        [
+          [
+            3
+          ],
+          "23/15"
+        ],
+        [
+          [
+            4
+          ],
+          "4/5"
+        ],
+        [
+          [
+            5
+          ],
+          "-6/25"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ]
+          ]
+        },
+        "step_residual": "3/4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "-3/4"
+            ]
+          ]
+        },
+        "step_residual": "-41/10"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "-14/5"
+            ],
+            [
+              [
+                2
+              ],
+              "41/20"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "-32/15"
+            ],
+            [
+              [
+                2
+              ],
+              "21/20"
+            ],
+            [
+              [
+                3
+              ],
+              "1/3"
+            ]
+          ]
+        },
+        "step_residual": "192/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "112/15"
+            ],
+            [
+              [
+                2
+              ],
+              "-331/20"
+            ],
+            [
+              [
+                3
+              ],
+              "149/15"
+            ],
+            [
+              [
+                4
+              ],
+              "-8/5"
+            ]
+          ]
+        },
+        "step_residual": "144/5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_05",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-8/5"
+        ],
+        [
+          [
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            3
+          ],
+          "-4/5"
+        ],
+        [
+          [
+            4
+          ],
+          "-8/3"
+        ],
+        [
+          [
+            5
+          ],
+          "-5/4"
+        ]
+      ]
+    },
+    "initial": "-10/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-10/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-56/15"
+        ],
+        [
+          [
+            2
+          ],
+          "617/240"
+        ],
+        [
+          [
+            3
+          ],
+          "-14/15"
+        ],
+        [
+          [
+            4
+          ],
+          "49/80"
+        ],
+        [
+          [
+            5
+          ],
+          "11/120"
+        ],
+        [
+          [
+            6
+          ],
+          "-5/24"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ]
+          ]
+        },
+        "step_residual": "8/5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-8/5"
+            ]
+          ]
+        },
+        "step_residual": "41/20"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-23/40"
+            ],
+            [
+              [
+                2
+              ],
+              "-41/40"
+            ]
+          ]
+        },
+        "step_residual": "823/10"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-3361/120"
+            ],
+            [
+              [
+                2
+              ],
+              "321/8"
+            ],
+            [
+              [
+                3
+              ],
+              "-823/60"
+            ]
+          ]
+        },
+        "step_residual": "2883/10"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "661/15"
+            ],
+            [
+              [
+                2
+              ],
+              "-7361/80"
+            ],
+            [
+              [
+                3
+              ],
+              "7003/120"
+            ],
+            [
+              [
+                4
+              ],
+              "-961/80"
+            ]
+          ]
+        },
+        "step_residual": "364"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-431/15"
+            ],
+            [
+              [
+                2
+              ],
+              "14317/240"
+            ],
+            [
+              [
+                3
+              ],
+              "-5737/120"
+            ],
+            [
+              [
+                4
+              ],
+              "4397/240"
+            ],
+            [
+              [
+                5
+              ],
+              "-91/30"
+            ]
+          ]
+        },
+        "step_residual": "150"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_06",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4"
+        ],
+        [
+          [
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ],
+        [
+          [
+            3
+          ],
+          "-2/5"
+        ],
+        [
+          [
+            4
+          ],
+          "5/4"
+        ],
+        [
+          [
+            5
+          ],
+          "-4"
+        ],
+        [
+          [
+            6
+          ],
+          "3/2"
+        ]
+      ]
+    },
+    "initial": "-5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-327/56"
+        ],
+        [
+          [
+            2
+          ],
+          "26/15"
+        ],
+        [
+          [
+            3
+          ],
+          "7/10"
+        ],
+        [
+          [
+            4
+          ],
+          "-287/120"
+        ],
+        [
+          [
+            5
+          ],
+          "3"
+        ],
+        [
+          [
+            6
+          ],
+          "-17/12"
+        ],
+        [
+          [
+            7
+          ],
+          "3/14"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ]
+          ]
+        },
+        "step_residual": "4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-4"
+            ]
+          ]
+        },
+        "step_residual": "-67/20"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-227/40"
+            ],
+            [
+              [
+                2
+              ],
+              "67/40"
+            ]
+          ]
+        },
+        "step_residual": "99/10"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-359/40"
+            ],
+            [
+              [
+                2
+              ],
+              "53/8"
+            ],
+            [
+              [
+                3
+              ],
+              "-33/20"
+            ]
+          ]
+        },
+        "step_residual": "-1263/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-577/8"
+            ],
+            [
+              [
+                2
+              ],
+              "612/5"
+            ],
+            [
+              [
+                3
+              ],
+              "-324/5"
+            ],
+            [
+              [
+                4
+              ],
+              "421/40"
+            ]
+          ]
+        },
+        "step_residual": "-1410"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "1679/8"
+            ],
+            [
+              [
+                2
+              ],
+              "-4651/10"
+            ],
+            [
+              [
+                3
+              ],
+              "6929/20"
+            ],
+            [
+              [
+                4
+              ],
+              "-4279/40"
+            ],
+            [
+              [
+                5
+              ],
+              "47/4"
+            ]
+          ]
+        },
+        "step_residual": "-2220"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1281/8"
+            ],
+            [
+              [
+                2
+              ],
+              "5696/15"
+            ],
+            [
+              [
+                3
+              ],
+              "-3473/10"
+            ],
+            [
+              [
+                4
+              ],
+              "18613/120"
+            ],
+            [
+              [
+                5
+              ],
+              "-69/2"
+            ],
+            [
+              [
+                6
+              ],
+              "37/12"
+            ]
+          ]
+        },
+        "step_residual": "-1080"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_07",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3/2"
+        ]
+      ]
+    },
+    "initial": "-4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "3/2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ]
+          ]
+        },
+        "step_residual": "-3/2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_08",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4"
+        ],
+        [
+          [
+            1
+          ],
+          "7/3"
+        ]
+      ]
+    },
+    "initial": "2",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "-31/6"
+        ],
+        [
+          [
+            2
+          ],
+          "7/6"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ],
+            [
+              [
+                1
+              ],
+              "-4"
+            ]
+          ]
+        },
+        "step_residual": "-7/3"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_09",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "8/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-4"
+        ],
+        [
+          [
+            2
+          ],
+          "3/2"
+        ]
+      ]
+    },
+    "initial": "5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "59/12"
+        ],
+        [
+          [
+            2
+          ],
+          "-11/4"
+        ],
+        [
+          [
+            3
+          ],
+          "1/2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ]
+          ]
+        },
+        "step_residual": "-8/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "8/3"
+            ]
+          ]
+        },
+        "step_residual": "5/2"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "47/12"
+            ],
+            [
+              [
+                2
+              ],
+              "-5/4"
+            ]
+          ]
+        },
+        "step_residual": "-3"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_10",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "2"
+        ]
+      ]
+    },
+    "initial": "3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3"
+        ],
+        [
+          [
+            1
+          ],
+          "-5/3"
+        ],
+        [
+          [
+            2
+          ],
+          "-1"
+        ],
+        [
+          [
+            3
+          ],
+          "2/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ],
+            [
+              [
+                1
+              ],
+              "-2"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ],
+            [
+              [
+                1
+              ],
+              "-3"
+            ],
+            [
+              [
+                2
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-4"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_11",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4"
+        ],
+        [
+          [
+            1
+          ],
+          "3"
+        ],
+        [
+          [
+            2
+          ],
+          "8/5"
+        ],
+        [
+          [
+            3
+          ],
+          "1"
+        ],
+        [
+          [
+            4
+          ],
+          "-7/2"
+        ]
+      ]
+    },
+    "initial": "-1",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            1
+          ],
+          "-307/60"
+        ],
+        [
+          [
+            2
+          ],
+          "19/20"
+        ],
+        [
+          [
+            3
+          ],
+          "-17/15"
+        ],
+        [
+          [
+            4
+          ],
+          "2"
+        ],
+        [
+          [
+            5
+          ],
+          "-7/10"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "step_residual": "4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "-4"
+            ]
+          ]
+        },
+        "step_residual": "-21/10"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "-101/20"
+            ],
+            [
+              [
+                2
+              ],
+              "21/20"
+            ]
+          ]
+        },
+        "step_residual": "199/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "-1099/60"
+            ],
+            [
+              [
+                2
+              ],
+              "419/20"
+            ],
+            [
+              [
+                3
+              ],
+              "-199/30"
+            ]
+          ]
+        },
+        "step_residual": "120"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "701/60"
+            ],
+            [
+              [
+                2
+              ],
+              "-681/20"
+            ],
+            [
+              [
+                3
+              ],
+              "701/30"
+            ],
+            [
+              [
+                4
+              ],
+              "-5"
+            ]
+          ]
+        },
+        "step_residual": "84"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_12",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            1
+          ],
+          "-1/5"
+        ],
+        [
+          [
+            2
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            3
+          ],
+          "-1"
+        ],
+        [
+          [
+            4
+          ],
+          "-1/4"
+        ],
+        [
+          [
+            5
+          ],
+          "5/2"
+        ]
+      ]
+    },
+    "initial": "4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-401/360"
+        ],
+        [
+          [
+            2
+          ],
+          "13/120"
+        ],
+        [
+          [
+            3
+          ],
+          "-1/36"
+        ],
+        [
+          [
+            4
+          ],
+          "11/12"
+        ],
+        [
+          [
+            5
+          ],
+          "-13/10"
+        ],
+        [
+          [
+            6
+          ],
+          "5/12"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ]
+          ]
+        },
+        "step_residual": "1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "step_residual": "17/60"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-103/120"
+            ],
+            [
+              [
+                2
+              ],
+              "-17/120"
+            ]
+          ]
+        },
+        "step_residual": "-377/6"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "7231/360"
+            ],
+            [
+              [
+                2
+              ],
+              "-3787/120"
+            ],
+            [
+              [
+                3
+              ],
+              "377/36"
+            ]
+          ]
+        },
+        "step_residual": "-360"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-25169/360"
+            ],
+            [
+              [
+                2
+              ],
+              "16013/120"
+            ],
+            [
+              [
+                3
+              ],
+              "-2863/36"
+            ],
+            [
+              [
+                4
+              ],
+              "15"
+            ]
+          ]
+        },
+        "step_residual": "-594"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "17599/360"
+            ],
+            [
+              [
+                2
+              ],
+              "-13687/120"
+            ],
+            [
+              [
+                3
+              ],
+              "1687/18"
+            ],
+            [
+              [
+                4
+              ],
+              "-69/2"
+            ],
+            [
+              [
+                5
+              ],
+              "99/20"
+            ]
+          ]
+        },
+        "step_residual": "-300"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_13",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "1"
+        ],
+        [
+          [
+            2
+          ],
+          "1/2"
+        ],
+        [
+          [
+            3
+          ],
+          "-4/5"
+        ],
+        [
+          [
+            4
+          ],
+          "4/5"
+        ],
+        [
+          [
+            5
+          ],
+          "-1/5"
+        ],
+        [
+          [
+            6
+          ],
+          "-7/4"
+        ]
+      ]
+    },
+    "initial": "5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-97/200"
+        ],
+        [
+          [
+            2
+          ],
+          "1/15"
+        ],
+        [
+          [
+            3
+          ],
+          "9/8"
+        ],
+        [
+          [
+            4
+          ],
+          "-41/60"
+        ],
+        [
+          [
+            5
+          ],
+          "-123/200"
+        ],
+        [
+          [
+            6
+          ],
+          "101/120"
+        ],
+        [
+          [
+            7
+          ],
+          "-1/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ]
+          ]
+        },
+        "step_residual": "9/20"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "9/40"
+            ],
+            [
+              [
+                2
+              ],
+              "-9/40"
+            ]
+          ]
+        },
+        "step_residual": "1071/10"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1419/40"
+            ],
+            [
+              [
+                2
+              ],
+              "2133/40"
+            ],
+            [
+              [
+                3
+              ],
+              "-357/20"
+            ]
+          ]
+        },
+        "step_residual": "951"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "8091/40"
+            ],
+            [
+              [
+                2
+              ],
+              "-7651/20"
+            ],
+            [
+              [
+                3
+              ],
+              "2199/10"
+            ],
+            [
+              [
+                4
+              ],
+              "-317/8"
+            ]
+          ]
+        },
+        "step_residual": "13794/5"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-69897/200"
+            ],
+            [
+              [
+                2
+              ],
+              "15339/20"
+            ],
+            [
+              [
+                3
+              ],
+              "-2339/4"
+            ],
+            [
+              [
+                4
+              ],
+              "7611/40"
+            ],
+            [
+              [
+                5
+              ],
+              "-2299/100"
+            ]
+          ]
+        },
+        "step_residual": "3174"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "35903/200"
+            ],
+            [
+              [
+                2
+              ],
+              "-6614/15"
+            ],
+            [
+              [
+                3
+              ],
+              "3257/8"
+            ],
+            [
+              [
+                4
+              ],
+              "-5533/30"
+            ],
+            [
+              [
+                5
+              ],
+              "8627/200"
+            ],
+            [
+              [
+                6
+              ],
+              "-529/120"
+            ]
+          ]
+        },
+        "step_residual": "1260"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_14",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "initial": "-7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "1"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_15",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "7/4"
+        ],
+        [
+          [
+            1
+          ],
+          "2"
+        ]
+      ]
+    },
+    "initial": "-2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "3/4"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ]
+          ]
+        },
+        "step_residual": "-7/4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "7/4"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_16",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            2
+          ],
+          "1/4"
+        ]
+      ]
+    },
+    "initial": "2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "1/24"
+        ],
+        [
+          [
+            2
+          ],
+          "-1/8"
+        ],
+        [
+          [
+            3
+          ],
+          "1/12"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ]
+          ]
+        },
+        "step_residual": "-1/4"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1/8"
+            ],
+            [
+              [
+                2
+              ],
+              "1/8"
+            ]
+          ]
+        },
+        "step_residual": "-1/2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_17",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-8/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-4"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/2"
+        ],
+        [
+          [
+            3
+          ],
+          "-2"
+        ]
+      ]
+    },
+    "initial": "-2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-13/12"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/4"
+        ],
+        [
+          [
+            3
+          ],
+          "1/6"
+        ],
+        [
+          [
+            4
+          ],
+          "-1/2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ]
+          ]
+        },
+        "step_residual": "8/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-8/3"
+            ]
+          ]
+        },
+        "step_residual": "17/2"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "19/12"
+            ],
+            [
+              [
+                2
+              ],
+              "-17/4"
+            ]
+          ]
+        },
+        "step_residual": "17"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-49/12"
+            ],
+            [
+              [
+                2
+              ],
+              "17/4"
+            ],
+            [
+              [
+                3
+              ],
+              "-17/6"
+            ]
+          ]
+        },
+        "step_residual": "12"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_18",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3/5"
+        ],
+        [
+          [
+            1
+          ],
+          "3/2"
+        ],
+        [
+          [
+            2
+          ],
+          "7/5"
+        ],
+        [
+          [
+            3
+          ],
+          "-5"
+        ],
+        [
+          [
+            4
+          ],
+          "-7/5"
+        ]
+      ]
+    },
+    "initial": "-2",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2"
+        ],
+        [
+          [
+            1
+          ],
+          "13/100"
+        ],
+        [
+          [
+            2
+          ],
+          "-6/5"
+        ],
+        [
+          [
+            3
+          ],
+          "5/2"
+        ],
+        [
+          [
+            4
+          ],
+          "-11/20"
+        ],
+        [
+          [
+            5
+          ],
+          "-7/25"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ]
+          ]
+        },
+        "step_residual": "-3/5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "3/5"
+            ]
+          ]
+        },
+        "step_residual": "7/2"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "47/20"
+            ],
+            [
+              [
+                2
+              ],
+              "-7/4"
+            ]
+          ]
+        },
+        "step_residual": "234/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "-53/4"
+            ],
+            [
+              [
+                2
+              ],
+              "433/20"
+            ],
+            [
+              [
+                3
+              ],
+              "-39/5"
+            ]
+          ]
+        },
+        "step_residual": "402/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "137/20"
+            ],
+            [
+              [
+                2
+              ],
+              "-76/5"
+            ],
+            [
+              [
+                3
+              ],
+              "123/10"
+            ],
+            [
+              [
+                4
+              ],
+              "-67/20"
+            ]
+          ]
+        },
+        "step_residual": "168/5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_19",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3"
+        ],
+        [
+          [
+            1
+          ],
+          "1"
+        ],
+        [
+          [
+            2
+          ],
+          "-4/5"
+        ],
+        [
+          [
+            3
+          ],
+          "-2"
+        ],
+        [
+          [
+            5
+          ],
+          "8/3"
+        ]
+      ]
+    },
+    "initial": "-2",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2"
+        ],
+        [
+          [
+            1
+          ],
+          "71/30"
+        ],
+        [
+          [
+            2
+          ],
+          "8/45"
+        ],
+        [
+          [
+            3
+          ],
+          "11/15"
+        ],
+        [
+          [
+            4
+          ],
+          "11/18"
+        ],
+        [
+          [
+            5
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            6
+          ],
+          "4/9"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ]
+          ]
+        },
+        "step_residual": "-3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "-13/15"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "77/30"
+            ],
+            [
+              [
+                2
+              ],
+              "13/30"
+            ]
+          ]
+        },
+        "step_residual": "-332/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "247/10"
+            ],
+            [
+              [
+                2
+              ],
+              "-983/30"
+            ],
+            [
+              [
+                3
+              ],
+              "166/15"
+            ]
+          ]
+        },
+        "step_residual": "-388"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "-723/10"
+            ],
+            [
+              [
+                2
+              ],
+              "2176/15"
+            ],
+            [
+              [
+                3
+              ],
+              "-1289/15"
+            ],
+            [
+              [
+                4
+              ],
+              "97/6"
+            ]
+          ]
+        },
+        "step_residual": "-640"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2"
+            ],
+            [
+              [
+                1
+              ],
+              "557/10"
+            ],
+            [
+              [
+                2
+              ],
+              "-608/5"
+            ],
+            [
+              [
+                3
+              ],
+              "1511/15"
+            ],
+            [
+              [
+                4
+              ],
+              "-223/6"
+            ],
+            [
+              [
+                5
+              ],
+              "16/3"
+            ]
+          ]
+        },
+        "step_residual": "-320"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_20",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2"
+        ],
+        [
+          [
+            1
+          ],
+          "-1"
+        ],
+        [
+          [
+            2
+          ],
+          "-1"
+        ],
+        [
+          [
+            3
+          ],
+          "6/5"
+        ],
+        [
+          [
+            4
+          ],
+          "-5/2"
+        ],
+        [
+          [
+            5
+          ],
+          "2"
+        ],
+        [
+          [
+            6
+          ],
+          "-7/5"
+        ]
+      ]
+    },
+    "initial": "-10/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-10/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-97/60"
+        ],
+        [
+          [
+            2
+          ],
+          "2/15"
+        ],
+        [
+          [
+            3
+          ],
+          "-23/15"
+        ],
+        [
+          [
+            4
+          ],
+          "143/60"
+        ],
+        [
+          [
+            5
+          ],
+          "-11/5"
+        ],
+        [
+          [
+            6
+          ],
+          "31/30"
+        ],
+        [
+          [
+            7
+          ],
+          "-1/5"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ]
+          ]
+        },
+        "step_residual": "2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-2"
+            ]
+          ]
+        },
+        "step_residual": "27/10"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-13/20"
+            ],
+            [
+              [
+                2
+              ],
+              "-27/20"
+            ]
+          ]
+        },
+        "step_residual": "283/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1171/60"
+            ],
+            [
+              [
+                2
+              ],
+              "539/20"
+            ],
+            [
+              [
+                3
+              ],
+              "-283/30"
+            ]
+          ]
+        },
+        "step_residual": "2694/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "6911/60"
+            ],
+            [
+              [
+                2
+              ],
+              "-220"
+            ],
+            [
+              [
+                3
+              ],
+              "1879/15"
+            ],
+            [
+              [
+                4
+              ],
+              "-449/20"
+            ]
+          ]
+        },
+        "step_residual": "1764"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-14257/60"
+            ],
+            [
+              [
+                2
+              ],
+              "515"
+            ],
+            [
+              [
+                3
+              ],
+              "-11677/30"
+            ],
+            [
+              [
+                4
+              ],
+              "2491/20"
+            ],
+            [
+              [
+                5
+              ],
+              "-147/10"
+            ]
+          ]
+        },
+        "step_residual": "2280"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "8543/60"
+            ],
+            [
+              [
+                2
+              ],
+              "-1058/3"
+            ],
+            [
+              [
+                3
+              ],
+              "4849/15"
+            ],
+            [
+              [
+                4
+              ],
+              "-8677/60"
+            ],
+            [
+              [
+                5
+              ],
+              "164/5"
+            ],
+            [
+              [
+                6
+              ],
+              "-19/6"
+            ]
+          ]
+        },
+        "step_residual": "1008"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_21",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/3"
+        ]
+      ]
+    },
+    "initial": "3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3"
+        ],
+        [
+          [
+            1
+          ],
+          "-1/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "1/3"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_22",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "3/5"
+        ]
+      ]
+    },
+    "initial": "2",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "17/10"
+        ],
+        [
+          [
+            2
+          ],
+          "3/10"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ],
+            [
+              [
+                1
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "-3/5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_23",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            2
+          ],
+          "-7/4"
+        ]
+      ]
+    },
+    "initial": "2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-7/24"
+        ],
+        [
+          [
+            2
+          ],
+          "7/8"
+        ],
+        [
+          [
+            3
+          ],
+          "-7/12"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ]
+          ]
+        },
+        "step_residual": "7/4"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "7/8"
+            ],
+            [
+              [
+                2
+              ],
+              "-7/8"
+            ]
+          ]
+        },
+        "step_residual": "7/2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_24",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "1"
+        ],
+        [
+          [
+            2
+          ],
+          "2/3"
+        ],
+        [
+          [
+            3
+          ],
+          "3"
+        ]
+      ]
+    },
+    "initial": "1",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "11/18"
+        ],
+        [
+          [
+            2
+          ],
+          "11/12"
+        ],
+        [
+          [
+            3
+          ],
+          "-23/18"
+        ],
+        [
+          [
+            4
+          ],
+          "3/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "-14/3"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                2
+              ],
+              "7/3"
+            ]
+          ]
+        },
+        "step_residual": "-58/3"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1
+              ],
+              "46/9"
+            ],
+            [
+              [
+                2
+              ],
+              "-22/3"
+            ],
+            [
+              [
+                3
+              ],
+              "29/9"
+            ]
+          ]
+        },
+        "step_residual": "-18"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_25",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "1"
+        ],
+        [
+          [
+            3
+          ],
+          "3/2"
+        ],
+        [
+          [
+            4
+          ],
+          "7/5"
+        ]
+      ]
+    },
+    "initial": "2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-47/25"
+        ],
+        [
+          [
+            2
+          ],
+          "7/8"
+        ],
+        [
+          [
+            3
+          ],
+          "-17/60"
+        ],
+        [
+          [
+            4
+          ],
+          "-13/40"
+        ],
+        [
+          [
+            5
+          ],
+          "7/25"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ]
+          ]
+        },
+        "step_residual": "4/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-4/3"
+            ]
+          ]
+        },
+        "step_residual": "-39/10"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-197/60"
+            ],
+            [
+              [
+                2
+              ],
+              "39/20"
+            ]
+          ]
+        },
+        "step_residual": "-143/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "25/4"
+            ],
+            [
+              [
+                2
+              ],
+              "-247/20"
+            ],
+            [
+              [
+                3
+              ],
+              "143/30"
+            ]
+          ]
+        },
+        "step_residual": "-297/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-43/5"
+            ],
+            [
+              [
+                2
+              ],
+              "119/8"
+            ],
+            [
+              [
+                3
+              ],
+              "-121/12"
+            ],
+            [
+              [
+                4
+              ],
+              "99/40"
+            ]
+          ]
+        },
+        "step_residual": "-168/5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_26",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7"
+        ],
+        [
+          [
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ],
+        [
+          [
+            3
+          ],
+          "8/3"
+        ],
+        [
+          [
+            4
+          ],
+          "-8/5"
+        ],
+        [
+          [
+            5
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "initial": "-4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-207/25"
+        ],
+        [
+          [
+            2
+          ],
+          "3/4"
+        ],
+        [
+          [
+            3
+          ],
+          "-8/15"
+        ],
+        [
+          [
+            4
+          ],
+          "21/20"
+        ],
+        [
+          [
+            5
+          ],
+          "9/50"
+        ],
+        [
+          [
+            6
+          ],
+          "-1/6"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ]
+          ]
+        },
+        "step_residual": "7"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-7"
+            ]
+          ]
+        },
+        "step_residual": "-121/15"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-331/30"
+            ],
+            [
+              [
+                2
+              ],
+              "121/30"
+            ]
+          ]
+        },
+        "step_residual": "142/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-41/2"
+            ],
+            [
+              [
+                2
+              ],
+              "547/30"
+            ],
+            [
+              [
+                3
+              ],
+              "-71/15"
+            ]
+          ]
+        },
+        "step_residual": "958/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "137/5"
+            ],
+            [
+              [
+                2
+              ],
+              "-835/12"
+            ],
+            [
+              [
+                3
+              ],
+              "259/6"
+            ],
+            [
+              [
+                4
+              ],
+              "-479/60"
+            ]
+          ]
+        },
+        "step_residual": "1392/5"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-707/25"
+            ],
+            [
+              [
+                2
+              ],
+              "557/12"
+            ],
+            [
+              [
+                3
+              ],
+              "-1141/30"
+            ],
+            [
+              [
+                4
+              ],
+              "913/60"
+            ],
+            [
+              [
+                5
+              ],
+              "-58/25"
+            ]
+          ]
+        },
+        "step_residual": "120"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_27",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-1/4"
+        ],
+        [
+          [
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            3
+          ],
+          "8"
+        ],
+        [
+          [
+            4
+          ],
+          "-1"
+        ],
+        [
+          [
+            5
+          ],
+          "-1"
+        ],
+        [
+          [
+            6
+          ],
+          "5/2"
+        ]
+      ]
+    },
+    "initial": "-5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "743/840"
+        ],
+        [
+          [
+            2
+          ],
+          "23/24"
+        ],
+        [
+          [
+            3
+          ],
+          "-49/12"
+        ],
+        [
+          [
+            4
+          ],
+          "25/12"
+        ],
+        [
+          [
+            5
+          ],
+          "31/20"
+        ],
+        [
+          [
+            6
+          ],
+          "-17/12"
+        ],
+        [
+          [
+            7
+          ],
+          "5/14"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ]
+          ]
+        },
+        "step_residual": "-1/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "1/3"
+            ]
+          ]
+        },
+        "step_residual": "-41/4"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-115/24"
+            ],
+            [
+              [
+                2
+              ],
+              "41/8"
+            ]
+          ]
+        },
+        "step_residual": "-163"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "1189/24"
+            ],
+            [
+              [
+                2
+              ],
+              "-611/8"
+            ],
+            [
+              [
+                3
+              ],
+              "163/6"
+            ]
+          ]
+        },
+        "step_residual": "-1212"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-6083/24"
+            ],
+            [
+              [
+                2
+              ],
+              "3833/8"
+            ],
+            [
+              [
+                3
+              ],
+              "-1655/6"
+            ],
+            [
+              [
+                4
+              ],
+              "101/2"
+            ]
+          ]
+        },
+        "step_residual": "-3636"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "56849/120"
+            ],
+            [
+              [
+                2
+              ],
+              "-8287/8"
+            ],
+            [
+              [
+                3
+              ],
+              "2354/3"
+            ],
+            [
+              [
+                4
+              ],
+              "-505/2"
+            ],
+            [
+              [
+                5
+              ],
+              "303/10"
+            ]
+          ]
+        },
+        "step_residual": "-4380"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-30751/120"
+            ],
+            [
+              [
+                2
+              ],
+              "15143/24"
+            ],
+            [
+              [
+                3
+              ],
+              "-7009/12"
+            ],
+            [
+              [
+                4
+              ],
+              "3175/12"
+            ],
+            [
+              [
+                5
+              ],
+              "-1219/20"
+            ],
+            [
+              [
+                6
+              ],
+              "73/12"
+            ]
+          ]
+        },
+        "step_residual": "-1800"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_28",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2"
+        ]
+      ]
+    },
+    "initial": "-1/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ]
+          ]
+        },
+        "step_residual": "2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_29",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "7/5"
+        ],
+        [
+          [
+            1
+          ],
+          "-2/3"
+        ]
+      ]
+    },
+    "initial": "4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "26/15"
+        ],
+        [
+          [
+            2
+          ],
+          "-1/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ]
+          ]
+        },
+        "step_residual": "-7/5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "7/5"
+            ]
+          ]
+        },
+        "step_residual": "2/3"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_30",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3/2"
+        ],
+        [
+          [
+            1
+          ],
+          "4/3"
+        ],
+        [
+          [
+            2
+          ],
+          "-7"
+        ]
+      ]
+    },
+    "initial": "4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            2
+          ],
+          "25/6"
+        ],
+        [
+          [
+            3
+          ],
+          "-7/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ]
+          ]
+        },
+        "step_residual": "-3/2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "3/2"
+            ]
+          ]
+        },
+        "step_residual": "17/3"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "13/3"
+            ],
+            [
+              [
+                2
+              ],
+              "-17/6"
+            ]
+          ]
+        },
+        "step_residual": "14"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_31",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-5/4"
+        ],
+        [
+          [
+            1
+          ],
+          "-5/2"
+        ],
+        [
+          [
+            2
+          ],
+          "2"
+        ],
+        [
+          [
+            3
+          ],
+          "3/2"
+        ]
+      ]
+    },
+    "initial": "-5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "1/3"
+        ],
+        [
+          [
+            2
+          ],
+          "-15/8"
+        ],
+        [
+          [
+            3
+          ],
+          "-1/12"
+        ],
+        [
+          [
+            4
+          ],
+          "3/8"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ]
+          ]
+        },
+        "step_residual": "5/4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-5/4"
+            ]
+          ]
+        },
+        "step_residual": "-1"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-7/4"
+            ],
+            [
+              [
+                2
+              ],
+              "1/2"
+            ]
+          ]
+        },
+        "step_residual": "-13"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "31/12"
+            ],
+            [
+              [
+                2
+              ],
+              "-6"
+            ],
+            [
+              [
+                3
+              ],
+              "13/6"
+            ]
+          ]
+        },
+        "step_residual": "-9"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_32",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/4"
+        ],
+        [
+          [
+            3
+          ],
+          "6/5"
+        ],
+        [
+          [
+            4
+          ],
+          "3"
+        ]
+      ]
+    },
+    "initial": "1/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-397/120"
+        ],
+        [
+          [
+            2
+          ],
+          "37/40"
+        ],
+        [
+          [
+            3
+          ],
+          "-1/60"
+        ],
+        [
+          [
+            4
+          ],
+          "-6/5"
+        ],
+        [
+          [
+            5
+          ],
+          "3/5"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1/3"
+            ]
+          ]
+        },
+        "step_residual": "3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-3"
+            ]
+          ]
+        },
+        "step_residual": "-59/20"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-179/40"
+            ],
+            [
+              [
+                2
+              ],
+              "59/40"
+            ]
+          ]
+        },
+        "step_residual": "-467/10"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "1331/120"
+            ],
+            [
+              [
+                2
+              ],
+              "-175/8"
+            ],
+            [
+              [
+                3
+              ],
+              "467/60"
+            ]
+          ]
+        },
+        "step_residual": "-576/5"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-425/24"
+            ],
+            [
+              [
+                2
+              ],
+              "1237/40"
+            ],
+            [
+              [
+                3
+              ],
+              "-1261/60"
+            ],
+            [
+              [
+                4
+              ],
+              "24/5"
+            ]
+          ]
+        },
+        "step_residual": "-72"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_33",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "6"
+        ],
+        [
+          [
+            1
+          ],
+          "1"
+        ],
+        [
+          [
+            2
+          ],
+          "2/3"
+        ],
+        [
+          [
+            3
+          ],
+          "5/4"
+        ],
+        [
+          [
+            4
+          ],
+          "8/5"
+        ],
+        [
+          [
+            5
+          ],
+          "1/2"
+        ]
+      ]
+    },
+    "initial": "10/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "10/3"
+        ],
+        [
+          [
+            1
+          ],
+          "2501/450"
+        ],
+        [
+          [
+            2
+          ],
+          "7/16"
+        ],
+        [
+          [
+            3
+          ],
+          "47/360"
+        ],
+        [
+          [
+            4
+          ],
+          "-67/240"
+        ],
+        [
+          [
+            5
+          ],
+          "7/100"
+        ],
+        [
+          [
+            6
+          ],
+          "1/12"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 7,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "10/3"
+            ]
+          ]
+        },
+        "step_residual": "-6"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "6"
+            ]
+          ]
+        },
+        "step_residual": "-301/60"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "419/120"
+            ],
+            [
+              [
+                2
+              ],
+              "301/120"
+            ]
+          ]
+        },
+        "step_residual": "-1387/30"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "1361/72"
+            ],
+            [
+              [
+                2
+              ],
+              "-2473/120"
+            ],
+            [
+              [
+                3
+              ],
+              "1387/180"
+            ]
+          ]
+        },
+        "step_residual": "-1401/10"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1451/90"
+            ],
+            [
+              [
+                2
+              ],
+              "2093/48"
+            ],
+            [
+              [
+                3
+              ],
+              "-1967/72"
+            ],
+            [
+              [
+                4
+              ],
+              "467/80"
+            ]
+          ]
+        },
+        "step_residual": "-792/5"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "10/3"
+            ],
+            [
+              [
+                1
+              ],
+              "7001/450"
+            ],
+            [
+              [
+                2
+              ],
+              "-1075/48"
+            ],
+            [
+              [
+                3
+              ],
+              "6797/360"
+            ],
+            [
+              [
+                4
+              ],
+              "-589/80"
+            ],
+            [
+              [
+                5
+              ],
+              "33/25"
+            ]
+          ]
+        },
+        "step_residual": "-60"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_34",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5"
+        ],
+        [
+          [
+            1
+          ],
+          "4/5"
+        ],
+        [
+          [
+            2
+          ],
+          "-3/2"
+        ],
+        [
+          [
+            3
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            4
+          ],
+          "5"
+        ],
+        [
+          [
+            5
+          ],
+          "-7/2"
+        ],
+        [
+          [
+            6
+          ],
+          "-5/3"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "5221/1260"
+        ],
+        [
+          [
+            2
+          ],
+          "163/120"
+        ],
+        [
+          [
+            3
+          ],
+          "29/18"
+        ],
+        [
+          [
+            4
+          ],
+          "-97/24"
+        ],
+        [
+          [
+            5
+          ],
+          "23/12"
+        ],
+        [
+          [
+            6
+          ],
+          "1/4"
+        ],
+        [
+          [
+            7
+          ],
+          "-5/21"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "5"
+            ]
+          ]
+        },
+        "step_residual": "6/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "28/5"
+            ],
+            [
+              [
+                2
+              ],
+              "-3/5"
+            ]
+          ]
+        },
+        "step_residual": "430/3"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-1898/45"
+            ],
+            [
+              [
+                2
+              ],
+              "1066/15"
+            ],
+            [
+              [
+                3
+              ],
+              "-215/9"
+            ]
+          ]
+        },
+        "step_residual": "1247"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "48523/180"
+            ],
+            [
+              [
+                2
+              ],
+              "-20019/40"
+            ],
+            [
+              [
+                3
+              ],
+              "10363/36"
+            ],
+            [
+              [
+                4
+              ],
+              "-1247/24"
+            ]
+          ]
+        },
+        "step_residual": "3320"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-70997/180"
+            ],
+            [
+              [
+                2
+              ],
+              "105943/120"
+            ],
+            [
+              [
+                3
+              ],
+              "-24497/36"
+            ],
+            [
+              [
+                4
+              ],
+              "5393/24"
+            ],
+            [
+              [
+                5
+              ],
+              "-83/3"
+            ]
+          ]
+        },
+        "step_residual": "3420"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "31603/180"
+            ],
+            [
+              [
+                2
+              ],
+              "-50237/120"
+            ],
+            [
+              [
+                3
+              ],
+              "6989/18"
+            ],
+            [
+              [
+                4
+              ],
+              "-4297/24"
+            ],
+            [
+              [
+                5
+              ],
+              "523/12"
+            ],
+            [
+              [
+                6
+              ],
+              "-19/4"
+            ]
+          ]
+        },
+        "step_residual": "1200"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_35",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "7/3"
+        ]
+      ]
+    },
+    "initial": "-8/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-8/3"
+        ],
+        [
+          [
+            1
+          ],
+          "7/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-8/3"
+            ]
+          ]
+        },
+        "step_residual": "-7/3"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_36",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-3/2"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "-19/12"
+        ],
+        [
+          [
+            2
+          ],
+          "-3/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "7/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "3/2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_37",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/4"
+        ],
+        [
+          [
+            1
+          ],
+          "-5/4"
+        ],
+        [
+          [
+            2
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "-7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "13/24"
+        ],
+        [
+          [
+            2
+          ],
+          "-9/8"
+        ],
+        [
+          [
+            3
+          ],
+          "1/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "1/4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1/4"
+            ]
+          ]
+        },
+        "step_residual": "1/4"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1/8"
+            ],
+            [
+              [
+                2
+              ],
+              "-1/8"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_38",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "6"
+        ],
+        [
+          [
+            3
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "8/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "8/3"
+        ],
+        [
+          [
+            1
+          ],
+          "4"
+        ],
+        [
+          [
+            2
+          ],
+          "-15/4"
+        ],
+        [
+          [
+            3
+          ],
+          "3/2"
+        ],
+        [
+          [
+            4
+          ],
+          "1/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ],
+            [
+              [
+                1
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "-5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1/2"
+            ],
+            [
+              [
+                2
+              ],
+              "5/2"
+            ]
+          ]
+        },
+        "step_residual": "-18"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ],
+            [
+              [
+                1
+              ],
+              "11/2"
+            ],
+            [
+              [
+                2
+              ],
+              "-13/2"
+            ],
+            [
+              [
+                3
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "-6"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_39",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5/2"
+        ],
+        [
+          [
+            1
+          ],
+          "3/2"
+        ],
+        [
+          [
+            2
+          ],
+          "8/3"
+        ],
+        [
+          [
+            3
+          ],
+          "8"
+        ],
+        [
+          [
+            4
+          ],
+          "2"
+        ]
+      ]
+    },
+    "initial": "-3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3"
+        ],
+        [
+          [
+            1
+          ],
+          "383/180"
+        ],
+        [
+          [
+            2
+          ],
+          "17/12"
+        ],
+        [
+          [
+            3
+          ],
+          "-22/9"
+        ],
+        [
+          [
+            4
+          ],
+          "1"
+        ],
+        [
+          [
+            5
+          ],
+          "2/5"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ]
+          ]
+        },
+        "step_residual": "-5/2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "5/2"
+            ]
+          ]
+        },
+        "step_residual": "-85/6"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "-55/12"
+            ],
+            [
+              [
+                2
+              ],
+              "85/12"
+            ]
+          ]
+        },
+        "step_residual": "-244/3"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "811/36"
+            ],
+            [
+              [
+                2
+              ],
+              "-403/12"
+            ],
+            [
+              [
+                3
+              ],
+              "122/9"
+            ]
+          ]
+        },
+        "step_residual": "-120"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-3"
+            ],
+            [
+              [
+                1
+              ],
+              "-269/36"
+            ],
+            [
+              [
+                2
+              ],
+              "257/12"
+            ],
+            [
+              [
+                3
+              ],
+              "-148/9"
+            ],
+            [
+              [
+                4
+              ],
+              "5"
+            ]
+          ]
+        },
+        "step_residual": "-48"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_40",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "-6/5"
+        ],
+        [
+          [
+            2
+          ],
+          "-2"
+        ],
+        [
+          [
+            3
+          ],
+          "-7"
+        ],
+        [
+          [
+            4
+          ],
+          "2/3"
+        ]
+      ]
+    },
+    "initial": "3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3"
+        ],
+        [
+          [
+            1
+          ],
+          "101/45"
+        ],
+        [
+          [
+            2
+          ],
+          "-27/20"
+        ],
+        [
+          [
+            3
+          ],
+          "55/18"
+        ],
+        [
+          [
+            4
+          ],
+          "-25/12"
+        ],
+        [
+          [
+            5
+          ],
+          "2/15"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "-2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ],
+            [
+              [
+                1
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "143/15"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ],
+            [
+              [
+                1
+              ],
+              "203/30"
+            ],
+            [
+              [
+                2
+              ],
+              "-143/30"
+            ]
+          ]
+        },
+        "step_residual": "110/3"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ],
+            [
+              [
+                1
+              ],
+              "-491/90"
+            ],
+            [
+              [
+                2
+              ],
+              "407/30"
+            ],
+            [
+              [
+                3
+              ],
+              "-55/9"
+            ]
+          ]
+        },
+        "step_residual": "18"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ],
+            [
+              [
+                1
+              ],
+              "-43/45"
+            ],
+            [
+              [
+                2
+              ],
+              "319/60"
+            ],
+            [
+              [
+                3
+              ],
+              "-29/18"
+            ],
+            [
+              [
+                4
+              ],
+              "-3/4"
+            ]
+          ]
+        },
+        "step_residual": "-16"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_41",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "4"
+        ],
+        [
+          [
+            1
+          ],
+          "7/4"
+        ],
+        [
+          [
+            2
+          ],
+          "3"
+        ],
+        [
+          [
+            3
+          ],
+          "-1"
+        ],
+        [
+          [
+            4
+          ],
+          "4"
+        ],
+        [
+          [
+            5
+          ],
+          "-2"
+        ],
+        [
+          [
+            6
+          ],
+          "2/3"
+        ]
+      ]
+    },
+    "initial": "-1",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            1
+          ],
+          "8839/2520"
+        ],
+        [
+          [
+            2
+          ],
+          "-17/24"
+        ],
+        [
+          [
+            3
+          ],
+          "49/18"
+        ],
+        [
+          [
+            4
+          ],
+          "-37/12"
+        ],
+        [
+          [
+            5
+          ],
+          "32/15"
+        ],
+        [
+          [
+            6
+          ],
+          "-2/3"
+        ],
+        [
+          [
+            7
+          ],
+          "2/21"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "step_residual": "-4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "4"
+            ]
+          ]
+        },
+        "step_residual": "-77/12"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "19/24"
+            ],
+            [
+              [
+                2
+              ],
+              "77/24"
+            ]
+          ]
+        },
+        "step_residual": "-112/3"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "953/72"
+            ],
+            [
+              [
+                2
+              ],
+              "-371/24"
+            ],
+            [
+              [
+                3
+              ],
+              "56/9"
+            ]
+          ]
+        },
+        "step_residual": "-198"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "-2611/72"
+            ],
+            [
+              [
+                2
+              ],
+              "1807/24"
+            ],
+            [
+              [
+                3
+              ],
+              "-779/18"
+            ],
+            [
+              [
+                4
+              ],
+              "33/4"
+            ]
+          ]
+        },
+        "step_residual": "-656"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "34177/360"
+            ],
+            [
+              [
+                2
+              ],
+              "-4753/24"
+            ],
+            [
+              [
+                3
+              ],
+              "2665/18"
+            ],
+            [
+              [
+                4
+              ],
+              "-557/12"
+            ],
+            [
+              [
+                5
+              ],
+              "82/15"
+            ]
+          ]
+        },
+        "step_residual": "-960"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1"
+            ],
+            [
+              [
+                1
+              ],
+              "-23423/360"
+            ],
+            [
+              [
+                2
+              ],
+              "4015/24"
+            ],
+            [
+              [
+                3
+              ],
+              "-2735/18"
+            ],
+            [
+              [
+                4
+              ],
+              "803/12"
+            ],
+            [
+              [
+                5
+              ],
+              "-218/15"
+            ],
+            [
+              [
+                6
+              ],
+              "4/3"
+            ]
+          ]
+        },
+        "step_residual": "-480"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_42",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-6"
+        ]
+      ]
+    },
+    "initial": "-7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-6"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "6"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_43",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-5/6"
+        ],
+        [
+          [
+            2
+          ],
+          "1/2"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ]
+          ]
+        },
+        "step_residual": "1/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1/3"
+            ]
+          ]
+        },
+        "step_residual": "-1"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_44",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "7/4"
+        ],
+        [
+          [
+            1
+          ],
+          "-7/2"
+        ],
+        [
+          [
+            2
+          ],
+          "-7/2"
+        ]
+      ]
+    },
+    "initial": "-4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "35/12"
+        ],
+        [
+          [
+            3
+          ],
+          "-7/6"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ]
+          ]
+        },
+        "step_residual": "-7/4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "7/4"
+            ]
+          ]
+        },
+        "step_residual": "7"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "21/4"
+            ],
+            [
+              [
+                2
+              ],
+              "-7/2"
+            ]
+          ]
+        },
+        "step_residual": "7"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_45",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2/5"
+        ],
+        [
+          [
+            1
+          ],
+          "-6/5"
+        ],
+        [
+          [
+            2
+          ],
+          "4"
+        ],
+        [
+          [
+            3
+          ],
+          "-1/4"
+        ]
+      ]
+    },
+    "initial": "2",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2"
+        ],
+        [
+          [
+            1
+          ],
+          "5/3"
+        ],
+        [
+          [
+            2
+          ],
+          "-213/80"
+        ],
+        [
+          [
+            3
+          ],
+          "35/24"
+        ],
+        [
+          [
+            4
+          ],
+          "-1/16"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ]
+          ]
+        },
+        "step_residual": "-2/5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ],
+            [
+              [
+                1
+              ],
+              "2/5"
+            ]
+          ]
+        },
+        "step_residual": "-51/20"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ],
+            [
+              [
+                1
+              ],
+              "-7/8"
+            ],
+            [
+              [
+                2
+              ],
+              "51/40"
+            ]
+          ]
+        },
+        "step_residual": "-13/2"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "2"
+            ],
+            [
+              [
+                1
+              ],
+              "31/24"
+            ],
+            [
+              [
+                2
+              ],
+              "-79/40"
+            ],
+            [
+              [
+                3
+              ],
+              "13/12"
+            ]
+          ]
+        },
+        "step_residual": "3/2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_46",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2"
+        ],
+        [
+          [
+            1
+          ],
+          "8/5"
+        ],
+        [
+          [
+            2
+          ],
+          "-1"
+        ],
+        [
+          [
+            3
+          ],
+          "-1"
+        ],
+        [
+          [
+            4
+          ],
+          "-8"
+        ]
+      ]
+    },
+    "initial": "7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-27/10"
+        ],
+        [
+          [
+            2
+          ],
+          "21/20"
+        ],
+        [
+          [
+            3
+          ],
+          "-5/2"
+        ],
+        [
+          [
+            4
+          ],
+          "15/4"
+        ],
+        [
+          [
+            5
+          ],
+          "-8/5"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "7/3"
+            ]
+          ]
+        },
+        "step_residual": "2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-2"
+            ]
+          ]
+        },
+        "step_residual": "42/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "11/5"
+            ],
+            [
+              [
+                2
+              ],
+              "-21/5"
+            ]
+          ]
+        },
+        "step_residual": "120"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-189/5"
+            ],
+            [
+              [
+                2
+              ],
+              "279/5"
+            ],
+            [
+              [
+                3
+              ],
+              "-20"
+            ]
+          ]
+        },
+        "step_residual": "294"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "357/10"
+            ],
+            [
+              [
+                2
+              ],
+              "-1579/20"
+            ],
+            [
+              [
+                3
+              ],
+              "107/2"
+            ],
+            [
+              [
+                4
+              ],
+              "-49/4"
+            ]
+          ]
+        },
+        "step_residual": "192"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_47",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            2
+          ],
+          "-7/4"
+        ],
+        [
+          [
+            3
+          ],
+          "-8"
+        ],
+        [
+          [
+            4
+          ],
+          "5/3"
+        ],
+        [
+          [
+            5
+          ],
+          "3/2"
+        ]
+      ]
+    },
+    "initial": "-1/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-25/72"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/4"
+        ],
+        [
+          [
+            3
+          ],
+          "143/36"
+        ],
+        [
+          [
+            4
+          ],
+          "-53/24"
+        ],
+        [
+          [
+            5
+          ],
+          "-5/12"
+        ],
+        [
+          [
+            6
+          ],
+          "1/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ]
+          ]
+        },
+        "step_residual": "79/12"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "79/24"
+            ],
+            [
+              [
+                2
+              ],
+              "-79/24"
+            ]
+          ]
+        },
+        "step_residual": "-101/6"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "641/72"
+            ],
+            [
+              [
+                2
+              ],
+              "-281/24"
+            ],
+            [
+              [
+                3
+              ],
+              "101/36"
+            ]
+          ]
+        },
+        "step_residual": "-237"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-3625/72"
+            ],
+            [
+              [
+                2
+              ],
+              "1163/12"
+            ],
+            [
+              [
+                3
+              ],
+              "-508/9"
+            ],
+            [
+              [
+                4
+              ],
+              "79/8"
+            ]
+          ]
+        },
+        "step_residual": "-400"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "2135/72"
+            ],
+            [
+              [
+                2
+              ],
+              "-279/4"
+            ],
+            [
+              [
+                3
+              ],
+              "542/9"
+            ],
+            [
+              [
+                4
+              ],
+              "-563/24"
+            ],
+            [
+              [
+                5
+              ],
+              "10/3"
+            ]
+          ]
+        },
+        "step_residual": "-180"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "name": "random_48",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4"
+        ],
+        [
+          [
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            2
+          ],
+          "-2"
+        ],
+        [
+          [
+            3
+          ],
+          "-2"
+        ],
+        [
+          [
+            5
+          ],
+          "3/5"
+        ],
+        [
+          [
+            6
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "initial": "-4/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-75/14"
+        ],
+        [
+          [
+            2
+          ],
+          "29/20"
+        ],
+        [
+          [
+            3
+          ],
+          "1/2"
+        ],
+        [
+          [
+            4
+          ],
+          "-1/4"
+        ],
+        [
+          [
+            5
+          ],
+          "-4/5"
+        ],
+        [
+          [
+            6
+          ],
+          "3/5"
+        ],
+        [
+          [
+            7
+          ],
+          "-1/7"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ]
+          ]
+        },
+        "step_residual": "4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-4"
+            ]
+          ]
+        },
+        "step_residual": "12/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-14/5"
+            ],
+            [
+              [
+                2
+              ],
+              "-6/5"
+            ]
+          ]
+        },
+        "step_residual": "60"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-114/5"
+            ],
+            [
+              [
+                2
+              ],
+              "144/5"
+            ],
+            [
+              [
+                3
+              ],
+              "-10"
+            ]
+          ]
+        },
+        "step_residual": "462"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "927/10"
+            ],
+            [
+              [
+                2
+              ],
+              "-3659/20"
+            ],
+            [
+              [
+                3
+              ],
+              "211/2"
+            ],
+            [
+              [
+                4
+              ],
+              "-77/4"
+            ]
+          ]
+        },
+        "step_residual": "1416"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-381/2"
+            ],
+            [
+              [
+                2
+              ],
+              "8141/20"
+            ],
+            [
+              [
+                3
+              ],
+              "-615/2"
+            ],
+            [
+              [
+                4
+              ],
+              "395/4"
+            ],
+            [
+              [
+                5
+              ],
+              "-59/5"
+            ]
+          ]
+        },
+        "step_residual": "1728"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-4/3"
+            ],
+            [
+              [
+                1
+              ],
+              "195/2"
+            ],
+            [
+              [
+                2
+              ],
+              "-5011/20"
+            ],
+            [
+              [
+                3
+              ],
+              "465/2"
+            ],
+            [
+              [
+                4
+              ],
+              "-421/4"
+            ],
+            [
+              [
+                5
+              ],
+              "121/5"
+            ],
+            [
+              [
+                6
+              ],
+              "-12/5"
+            ]
+          ]
+        },
+        "step_residual": "720"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_49",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "initial": "-7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "1"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_50",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2/5"
+        ],
+        [
+          [
+            1
+          ],
+          "-1/5"
+        ]
+      ]
+    },
+    "initial": "0",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            1
+          ],
+          "1/2"
+        ],
+        [
+          [
+            2
+          ],
+          "-1/10"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": []
+        },
+        "step_residual": "-2/5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                1
+              ],
+              "2/5"
+            ]
+          ]
+        },
+        "step_residual": "1/5"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_51",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-6"
+        ],
+        [
+          [
+            1
+          ],
+          "1/5"
+        ],
+        [
+          [
+            2
+          ],
+          "7"
+        ]
+      ]
+    },
+    "initial": "5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-74/15"
+        ],
+        [
+          [
+            2
+          ],
+          "-17/5"
+        ],
+        [
+          [
+            3
+          ],
+          "7/3"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ]
+          ]
+        },
+        "step_residual": "6"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-6"
+            ]
+          ]
+        },
+        "step_residual": "-36/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-48/5"
+            ],
+            [
+              [
+                2
+              ],
+              "18/5"
+            ]
+          ]
+        },
+        "step_residual": "-14"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_52",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1"
+        ],
+        [
+          [
+            1
+          ],
+          "-2"
+        ],
+        [
+          [
+            2
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            3
+          ],
+          "5/2"
+        ]
+      ]
+    },
+    "initial": "-5/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-5/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-2/9"
+        ],
+        [
+          [
+            2
+          ],
+          "7/24"
+        ],
+        [
+          [
+            3
+          ],
+          "-61/36"
+        ],
+        [
+          [
+            4
+          ],
+          "5/8"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ]
+          ]
+        },
+        "step_residual": "1"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1"
+            ]
+          ]
+        },
+        "step_residual": "5/6"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-7/12"
+            ],
+            [
+              [
+                2
+              ],
+              "-5/12"
+            ]
+          ]
+        },
+        "step_residual": "-37/3"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-5/3"
+            ],
+            [
+              [
+                1
+              ],
+              "127/36"
+            ],
+            [
+              [
+                2
+              ],
+              "-79/12"
+            ],
+            [
+              [
+                3
+              ],
+              "37/18"
+            ]
+          ]
+        },
+        "step_residual": "-15"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "name": "random_53",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "3"
+        ],
+        [
+          [
+            2
+          ],
+          "2/5"
+        ],
+        [
+          [
+            3
+          ],
+          "-5"
+        ],
+        [
+          [
+            4
+          ],
+          "7/4"
+        ]
+      ]
+    },
+    "initial": "-1/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-1/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-73/40"
+        ],
+        [
+          [
+            2
+          ],
+          "1/20"
+        ],
+        [
+          [
+            3
+          ],
+          "193/60"
+        ],
+        [
+          [
+            4
+          ],
+          "-17/8"
+        ],
+        [
+          [
+            5
+          ],
+          "7/20"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ]
+          ]
+        },
+        "step_residual": "1/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-1/3"
+            ]
+          ]
+        },
+        "step_residual": "-3/20"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-49/120"
+            ],
+            [
+              [
+                2
+              ],
+              "3/40"
+            ]
+          ]
+        },
+        "step_residual": "47/10"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-79/40"
+            ],
+            [
+              [
+                2
+              ],
+              "97/40"
+            ],
+            [
+              [
+                3
+              ],
+              "-47/60"
+            ]
+          ]
+        },
+        "step_residual": "-33"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-1/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-409/40"
+            ],
+            [
+              [
+                2
+              ],
+              "351/20"
+            ],
+            [
+              [
+                3
+              ],
+              "-271/30"
+            ],
+            [
+              [
+                4
+              ],
+              "11/8"
+            ]
+          ]
+        },
+        "step_residual": "-42"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_54",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3/4"
+        ],
+        [
+          [
+            1
+          ],
+          "-4"
+        ],
+        [
+          [
+            2
+          ],
+          "-7/5"
+        ],
+        [
+          [
+            3
+          ],
+          "-8"
+        ],
+        [
+          [
+            4
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "-7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "59/60"
+        ],
+        [
+          [
+            2
+          ],
+          "-33/10"
+        ],
+        [
+          [
+            3
+          ],
+          "58/15"
+        ],
+        [
+          [
+            4
+          ],
+          "-5/2"
+        ],
+        [
+          [
+            5
+          ],
+          "1/5"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 6,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "3/4"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-3/4"
+            ]
+          ]
+        },
+        "step_residual": "62/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "109/20"
+            ],
+            [
+              [
+                2
+              ],
+              "-31/5"
+            ]
+          ]
+        },
+        "step_residual": "184/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-409/60"
+            ],
+            [
+              [
+                2
+              ],
+              "61/5"
+            ],
+            [
+              [
+                3
+              ],
+              "-92/15"
+            ]
+          ]
+        },
+        "step_residual": "12"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-229/60"
+            ],
+            [
+              [
+                2
+              ],
+              "67/10"
+            ],
+            [
+              [
+                3
+              ],
+              "-47/15"
+            ],
+            [
+              [
+                4
+              ],
+              "-1/2"
+            ]
+          ]
+        },
+        "step_residual": "-24"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "name": "random_55",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "2/5"
+        ],
+        [
+          [
+            1
+          ],
+          "-1"
+        ],
+        [
+          [
+            2
+          ],
+          "-1"
+        ],
+        [
+          [
+            3
+          ],
+          "-1"
+        ],
+        [
+          [
+            4
+          ],
+          "1/4"
+        ],
+        [
+          [
+            5
+          ],
+          "-4/3"
+        ],
+        [
+          [
+            6
+          ],
+          "8"
+        ]
+      ]
+    },
+    "initial": "-2/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "769/840"
+        ],
+        [
+          [
+            2
+          ],
+          "-5/36"
+        ],
+        [
+          [
+            3
+          ],
+          "-13/12"
+        ],
+        [
+          [
+            4
+          ],
+          "-67/72"
+        ],
+        [
+          [
+            5
+          ],
+          "283/60"
+        ],
+        [
+          [
+            6
+          ],
+          "-38/9"
+        ],
+        [
+          [
+            7
+          ],
+          "8/7"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 8,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ]
+          ]
+        },
+        "step_residual": "-2/5"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "2/5"
+            ]
+          ]
+        },
+        "step_residual": "-47/12"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-187/120"
+            ],
+            [
+              [
+                2
+              ],
+              "47/24"
+            ]
+          ]
+        },
+        "step_residual": "-903/2"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "17873/120"
+            ],
+            [
+              [
+                2
+              ],
+              "-5371/24"
+            ],
+            [
+              [
+                3
+              ],
+              "301/4"
+            ]
+          ]
+        },
+        "step_residual": "-4123"
+      },
+      {
+        "degree": 4,
+        "n": 4,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-105817/120"
+            ],
+            [
+              [
+                2
+              ],
+              "19991/12"
+            ],
+            [
+              [
+                3
+              ],
+              "-1911/2"
+            ],
+            [
+              [
+                4
+              ],
+              "4123/24"
+            ]
+          ]
+        },
+        "step_residual": "-12166"
+      },
+      {
+        "degree": 5,
+        "n": 5,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "186167/120"
+            ],
+            [
+              [
+                2
+              ],
+              "-13613/4"
+            ],
+            [
+              [
+                3
+              ],
+              "31115/12"
+            ],
+            [
+              [
+                4
+              ],
+              "-20209/24"
+            ],
+            [
+              [
+                5
+              ],
+              "6083/60"
+            ]
+          ]
+        },
+        "step_residual": "-14240"
+      },
+      {
+        "degree": 6,
+        "n": 6,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-2/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-98633/120"
+            ],
+            [
+              [
+                2
+              ],
+              "72571/36"
+            ],
+            [
+              [
+                3
+              ],
+              "-22285/12"
+            ],
+            [
+              [
+                4
+              ],
+              "60413/72"
+            ],
+            [
+              [
+                5
+              ],
+              "-11717/60"
+            ],
+            [
+              [
+                6
+              ],
+              "178/9"
+            ]
+          ]
+        },
+        "step_residual": "-5760"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "name": "random_56",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3/4"
+        ]
+      ]
+    },
+    "initial": "3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "3"
+        ],
+        [
+          [
+            1
+          ],
+          "-3/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 2,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "3"
+            ]
+          ]
+        },
+        "step_residual": "3/4"
+      }
+    ],
+    "inconsistent_degrees": [
+      0
+    ]
+  },
+  {
+    "name": "random_57",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-2/3"
+        ],
+        [
+          [
+            1
+          ],
+          "5/2"
+        ]
+      ]
+    },
+    "initial": "-7/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-7/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-23/12"
+        ],
+        [
+          [
+            2
+          ],
+          "5/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 3,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ]
+          ]
+        },
+        "step_residual": "2/3"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "-7/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-2/3"
+            ]
+          ]
+        },
+        "step_residual": "-5/2"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1
+    ]
+  },
+  {
+    "name": "random_58",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-8"
+        ],
+        [
+          [
+            1
+          ],
+          "2"
+        ],
+        [
+          [
+            2
+          ],
+          "-3"
+        ]
+      ]
+    },
+    "initial": "8/3",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "8/3"
+        ],
+        [
+          [
+            1
+          ],
+          "-19/2"
+        ],
+        [
+          [
+            2
+          ],
+          "5/2"
+        ],
+        [
+          [
+            3
+          ],
+          "-1"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 4,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ]
+          ]
+        },
+        "step_residual": "8"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-8"
+            ]
+          ]
+        },
+        "step_residual": "1"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "8/3"
+            ],
+            [
+              [
+                1
+              ],
+              "-15/2"
+            ],
+            [
+              [
+                2
+              ],
+              "-1/2"
+            ]
+          ]
+        },
+        "step_residual": "6"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "random_59",
+    "increment": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "-3/2"
+        ],
+        [
+          [
+            1
+          ],
+          "-3"
+        ],
+        [
+          [
+            2
+          ],
+          "3/5"
+        ],
+        [
+          [
+            3
+          ],
+          "1"
+        ]
+      ]
+    },
+    "initial": "1",
+    "candidate": {
+      "variables": 1,
+      "terms": [
+        [
+          [
+            0
+          ],
+          "1"
+        ],
+        [
+          [
+            1
+          ],
+          "1/10"
+        ],
+        [
+          [
+            2
+          ],
+          "-31/20"
+        ],
+        [
+          [
+            3
+          ],
+          "-3/10"
+        ],
+        [
+          [
+            4
+          ],
+          "1/4"
+        ]
+      ]
+    },
+    "checked": true,
+    "candidates": 5,
+    "counterexamples": [
+      {
+        "degree": 0,
+        "n": 0,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ]
+          ]
+        },
+        "step_residual": "3/2"
+      },
+      {
+        "degree": 1,
+        "n": 1,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1
+              ],
+              "-3/2"
+            ]
+          ]
+        },
+        "step_residual": "7/5"
+      },
+      {
+        "degree": 2,
+        "n": 2,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1
+              ],
+              "-4/5"
+            ],
+            [
+              [
+                2
+              ],
+              "-7/10"
+            ]
+          ]
+        },
+        "step_residual": "-36/5"
+      },
+      {
+        "degree": 3,
+        "n": 3,
+        "candidate": {
+          "variables": 1,
+          "terms": [
+            [
+              [
+                0
+              ],
+              "1"
+            ],
+            [
+              [
+                1
+              ],
+              "8/5"
+            ],
+            [
+              [
+                2
+              ],
+              "-43/10"
+            ],
+            [
+              [
+                3
+              ],
+              "6/5"
+            ]
+          ]
+        },
+        "step_residual": "-6"
+      }
+    ],
+    "inconsistent_degrees": [
+      0,
+      1,
+      2,
+      3
+    ]
+  }
+]

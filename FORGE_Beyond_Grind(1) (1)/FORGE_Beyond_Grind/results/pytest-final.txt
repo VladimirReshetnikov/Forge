@@ -1,0 +1,14 @@
+........................................................................ [ 26%]
+........................................................................ [ 52%]
+........................................................................ [ 78%]
+...........................................................              [100%]
+============================= slowest 8 durations ==============================
+0.25s call     tests/test_forge.py::test_cone_lp[0]
+0.11s call     tests/test_forge.py::test_bernstein_motzkin_and_corruption
+0.05s call     tests/test_independent.py::test_independent_bernstein_identity[17]
+0.05s call     tests/test_independent.py::test_independent_bernstein_identity[11]
+0.04s call     tests/test_independent.py::test_independent_bernstein_identity[8]
+0.04s call     tests/test_independent.py::test_independent_bernstein_identity[2]
+0.04s call     tests/test_independent.py::test_independent_bernstein_identity[5]
+0.04s call     tests/test_independent.py::test_independent_bernstein_identity[14]
+275 passed in 1.90s

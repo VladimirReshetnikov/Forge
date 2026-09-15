@@ -1,0 +1,33 @@
+{
+  "report_date_local": "2026-09-14",
+  "timezone": "America/Los_Angeles",
+  "full_forge_tactic_implemented": false,
+  "python_components_implemented": 6,
+  "pytest_passed": 275,
+  "benchmark_instances": 198,
+  "certificates_rechecked": 198,
+  "lean_compiled": false,
+  "lean_baseline_comparison_executed": false,
+  "lean_toolchain": "leanprover/lean4:v4.34.0",
+  "mathlib_commit": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+  "mathlib_toolchain_at_pinned_commit_verified_from_source": true,
+  "generic_lean_sturm_checker_implemented": false,
+  "python_environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sympy": "1.14.0",
+    "pytest": "9.0.2",
+    "lean_executed": false
+  },
+  "limitations": [
+    "Constructed cases, no held-out theorem corpus.",
+    "Python checking is not Lean kernel verification.",
+    "Lean files are uncompiled candidate proof scripts.",
+    "Ablations do not measure grind or other Lean tactics."
+  ],
+  "article_pdf_pages": 31,
+  "pdf_rendered_and_visually_inspected": true,
+  "final_python_syntax_check_passed": true
+}

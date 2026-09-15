@@ -1,0 +1,47 @@
+{
+  "certificate": null,
+  "diagnostics": {
+    "columns": 100,
+    "lp_status": 2,
+    "mutation_rejections": 0,
+    "name": "motzkin-bounded-search",
+    "rows": 28,
+    "seconds": 0.0033733469999788213,
+    "status": "unknown: no usable LP solution in this dictionary"
+  },
+  "equality_assumptions": [],
+  "nonnegative_assumptions": [],
+  "target": {
+    "n": 2,
+    "terms": [
+      [
+        [
+          0,
+          0
+        ],
+        "1"
+      ],
+      [
+        [
+          2,
+          2
+        ],
+        "-3"
+      ],
+      [
+        [
+          2,
+          4
+        ],
+        "1"
+      ],
+      [
+        [
+          4,
+          2
+        ],
+        "1"
+      ]
+    ]
+  }
+}

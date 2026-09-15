@@ -1,0 +1,96 @@
+{
+  "invariant_coefficients": [
+    [
+      [
+        2,
+        0
+      ],
+      "1/2"
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      "1/2"
+    ],
+    [
+      [
+        0,
+        1
+      ],
+      "1"
+    ]
+  ],
+  "result": {
+    "base_residual": "0",
+    "candidates": 6,
+    "degree": 2,
+    "polynomial": "a + n**2/2 + n/2",
+    "power": 1,
+    "sample_count": 4,
+    "seconds": 0.008554137000146511,
+    "step_residual": "0"
+  },
+  "trace": {
+    "base_residual": "0",
+    "degree": 2,
+    "history": [
+      {
+        "accepted": false,
+        "candidate": "0",
+        "degree": 0,
+        "samples": 1
+      },
+      {
+        "degree": 0,
+        "event": "inconsistent samples",
+        "samples": 2
+      },
+      {
+        "accepted": false,
+        "candidate": "a",
+        "degree": 1,
+        "samples": 2
+      },
+      {
+        "accepted": false,
+        "candidate": "a + n",
+        "degree": 1,
+        "samples": 3
+      },
+      {
+        "degree": 1,
+        "event": "inconsistent samples",
+        "samples": 4
+      },
+      {
+        "accepted": true,
+        "candidate": "a + n**2/2 + n/2",
+        "degree": 2,
+        "samples": 4
+      }
+    ],
+    "power": 1,
+    "sample_count": 4,
+    "samples": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "step_residual": "0"
+  }
+}

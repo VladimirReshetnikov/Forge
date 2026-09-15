@@ -1,0 +1,2081 @@
+{
+  "notice": "Python mechanism tests on constructed instances; NO Lean/grind comparison.",
+  "repeats": 3,
+  "families": [
+    {
+      "family": "Quadratic SOS",
+      "instances": 60,
+      "solved": 60,
+      "ablation_solved": 1,
+      "search_median_ms": 0.86366,
+      "recheck_median_ms": 0.7007335
+    },
+    {
+      "family": "Finite cone LP",
+      "instances": 17,
+      "solved": 17,
+      "ablation_solved": 0,
+      "search_median_ms": 1.699458,
+      "recheck_median_ms": 0.294727
+    },
+    {
+      "family": "Bernstein box",
+      "instances": 18,
+      "solved": 18,
+      "ablation_solved": 1,
+      "search_median_ms": 0.685155,
+      "recheck_median_ms": 0.38871100000000003
+    },
+    {
+      "family": "Polynomial recurrence",
+      "instances": 33,
+      "solved": 33,
+      "ablation_solved": null,
+      "search_median_ms": 2.512954,
+      "recheck_median_ms": 0.402786
+    },
+    {
+      "family": "Integral affine witness",
+      "instances": 40,
+      "solved": 40,
+      "ablation_solved": null,
+      "search_median_ms": 0.073824,
+      "recheck_median_ms": 0.027045
+    },
+    {
+      "family": "Univariate with zeros",
+      "instances": 30,
+      "solved": 30,
+      "ablation_solved": 0,
+      "search_median_ms": 1.930175,
+      "recheck_median_ms": 0.5051384999999999
+    }
+  ],
+  "records": [
+    {
+      "id": "quadratic_00",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.090564,
+      "recheck_median_ms": 0.03382,
+      "ablation_solved": true,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 106
+    },
+    {
+      "id": "quadratic_01",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.355778,
+      "recheck_median_ms": 0.24262,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 217
+    },
+    {
+      "id": "quadratic_02",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.846615,
+      "recheck_median_ms": 0.678676,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 368
+    },
+    {
+      "id": "quadratic_03",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.971682,
+      "recheck_median_ms": 1.597387,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 595
+    },
+    {
+      "id": "quadratic_04",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 3.955171,
+      "recheck_median_ms": 3.604051,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 973
+    },
+    {
+      "id": "quadratic_05",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.134289,
+      "recheck_median_ms": 0.097254,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 194
+    },
+    {
+      "id": "quadratic_06",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.401154,
+      "recheck_median_ms": 0.287226,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 332
+    },
+    {
+      "id": "quadratic_07",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.255969,
+      "recheck_median_ms": 0.182911,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 136
+    },
+    {
+      "id": "quadratic_08",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.446764,
+      "recheck_median_ms": 1.17384,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 319
+    },
+    {
+      "id": "quadratic_09",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 3.146643,
+      "recheck_median_ms": 2.848461,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 548
+    },
+    {
+      "id": "quadratic_10",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.131425,
+      "recheck_median_ms": 0.099297,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 194
+    },
+    {
+      "id": "quadratic_11",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.387284,
+      "recheck_median_ms": 0.319994,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 315
+    },
+    {
+      "id": "quadratic_12",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.92477,
+      "recheck_median_ms": 0.745044,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 518
+    },
+    {
+      "id": "quadratic_13",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 2.114924,
+      "recheck_median_ms": 1.726648,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 766
+    },
+    {
+      "id": "quadratic_14",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.590327,
+      "recheck_median_ms": 1.674191,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 214
+    },
+    {
+      "id": "quadratic_15",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.149291,
+      "recheck_median_ms": 0.095712,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 188
+    },
+    {
+      "id": "quadratic_16",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.527932,
+      "recheck_median_ms": 0.295368,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 309
+    },
+    {
+      "id": "quadratic_17",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.949718,
+      "recheck_median_ms": 0.739146,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 488
+    },
+    {
+      "id": "quadratic_18",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 2.222503,
+      "recheck_median_ms": 1.800488,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 739
+    },
+    {
+      "id": "quadratic_19",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 4.278259,
+      "recheck_median_ms": 3.538643,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 1089
+    },
+    {
+      "id": "quadratic_20",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.162351,
+      "recheck_median_ms": 0.096954,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 199
+    },
+    {
+      "id": "quadratic_21",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.23583,
+      "recheck_median_ms": 0.163562,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 133
+    },
+    {
+      "id": "quadratic_22",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.756791,
+      "recheck_median_ms": 0.616884,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 274
+    },
+    {
+      "id": "quadratic_23",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.725827,
+      "recheck_median_ms": 1.439784,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 445
+    },
+    {
+      "id": "quadratic_24",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 3.728385,
+      "recheck_median_ms": 3.201344,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 781
+    },
+    {
+      "id": "quadratic_25",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.130303,
+      "recheck_median_ms": 0.099868,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 196
+    },
+    {
+      "id": "quadratic_26",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.376238,
+      "recheck_median_ms": 0.294116,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 345
+    },
+    {
+      "id": "quadratic_27",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.982606,
+      "recheck_median_ms": 0.844401,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 534
+    },
+    {
+      "id": "quadratic_28",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.125928,
+      "recheck_median_ms": 0.965231,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 185
+    },
+    {
+      "id": "quadratic_29",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 2.609147,
+      "recheck_median_ms": 2.390352,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 376
+    },
+    {
+      "id": "quadratic_30",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.165144,
+      "recheck_median_ms": 0.098886,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 199
+    },
+    {
+      "id": "quadratic_31",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.47242,
+      "recheck_median_ms": 0.296169,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 303
+    },
+    {
+      "id": "quadratic_32",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.913534,
+      "recheck_median_ms": 0.718184,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 492
+    },
+    {
+      "id": "quadratic_33",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 2.031881,
+      "recheck_median_ms": 1.675873,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 759
+    },
+    {
+      "id": "quadratic_34",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 4.146094,
+      "recheck_median_ms": 3.428991,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 1057
+    },
+    {
+      "id": "quadratic_35",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.103483,
+      "recheck_median_ms": 0.066478,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 117
+    },
+    {
+      "id": "quadratic_36",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.361346,
+      "recheck_median_ms": 0.250391,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 227
+    },
+    {
+      "id": "quadratic_37",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.824842,
+      "recheck_median_ms": 0.683283,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 390
+    },
+    {
+      "id": "quadratic_38",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.998843,
+      "recheck_median_ms": 1.547362,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 610
+    },
+    {
+      "id": "quadratic_39",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 3.918717,
+      "recheck_median_ms": 3.507027,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 912
+    },
+    {
+      "id": "quadratic_40",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.138285,
+      "recheck_median_ms": 0.122912,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 202
+    },
+    {
+      "id": "quadratic_41",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.373103,
+      "recheck_median_ms": 0.293294,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 325
+    },
+    {
+      "id": "quadratic_42",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.493041,
+      "recheck_median_ms": 0.360724,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 158
+    },
+    {
+      "id": "quadratic_43",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.560833,
+      "recheck_median_ms": 1.215201,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 320
+    },
+    {
+      "id": "quadratic_44",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 3.190918,
+      "recheck_median_ms": 2.765709,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 569
+    },
+    {
+      "id": "quadratic_45",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.129893,
+      "recheck_median_ms": 0.096162,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 202
+    },
+    {
+      "id": "quadratic_46",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.393904,
+      "recheck_median_ms": 0.301887,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 341
+    },
+    {
+      "id": "quadratic_47",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.898171,
+      "recheck_median_ms": 0.751924,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 519
+    },
+    {
+      "id": "quadratic_48",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 2.054424,
+      "recheck_median_ms": 1.684436,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 797
+    },
+    {
+      "id": "quadratic_49",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.986111,
+      "recheck_median_ms": 0.767337,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 194
+    },
+    {
+      "id": "quadratic_50",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.127409,
+      "recheck_median_ms": 0.096193,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 185
+    },
+    {
+      "id": "quadratic_51",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.375226,
+      "recheck_median_ms": 0.287566,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 299
+    },
+    {
+      "id": "quadratic_52",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.880705,
+      "recheck_median_ms": 0.726466,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 483
+    },
+    {
+      "id": "quadratic_53",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.927256,
+      "recheck_median_ms": 1.751816,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 742
+    },
+    {
+      "id": "quadratic_54",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 4.361493,
+      "recheck_median_ms": 3.527357,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 1050
+    },
+    {
+      "id": "quadratic_55",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.133497,
+      "recheck_median_ms": 0.096843,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 194
+    },
+    {
+      "id": "quadratic_56",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.232174,
+      "recheck_median_ms": 0.165705,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 132
+    },
+    {
+      "id": "quadratic_57",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 0.720768,
+      "recheck_median_ms": 0.592648,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 257
+    },
+    {
+      "id": "quadratic_58",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 1.729823,
+      "recheck_median_ms": 1.4912,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 470
+    },
+    {
+      "id": "quadratic_59",
+      "family": "Quadratic SOS",
+      "solved": true,
+      "search_median_ms": 3.591142,
+      "recheck_median_ms": 3.27283,
+      "ablation_solved": false,
+      "ablation": "expanded monomial squares only",
+      "certificate_json_bytes": 769
+    },
+    {
+      "id": "cone_00",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.930971,
+      "recheck_median_ms": 0.313745,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 476
+    },
+    {
+      "id": "cone_01",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.609244,
+      "recheck_median_ms": 0.323379,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 475
+    },
+    {
+      "id": "cone_02",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 2.120292,
+      "recheck_median_ms": 0.269509,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 409
+    },
+    {
+      "id": "cone_03",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.724526,
+      "recheck_median_ms": 0.27056,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 411
+    },
+    {
+      "id": "cone_04",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.832235,
+      "recheck_median_ms": 0.295618,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 475
+    },
+    {
+      "id": "cone_05",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.601784,
+      "recheck_median_ms": 0.293766,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 410
+    },
+    {
+      "id": "cone_06",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.689944,
+      "recheck_median_ms": 0.292503,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 475
+    },
+    {
+      "id": "cone_07",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.760398,
+      "recheck_median_ms": 0.294536,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 471
+    },
+    {
+      "id": "cone_08",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.9232,
+      "recheck_median_ms": 0.3172,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 475
+    },
+    {
+      "id": "cone_09",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.649334,
+      "recheck_median_ms": 0.313144,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 475
+    },
+    {
+      "id": "cone_10",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.589015,
+      "recheck_median_ms": 0.317721,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 476
+    },
+    {
+      "id": "cone_11",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.687891,
+      "recheck_median_ms": 0.321987,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 471
+    },
+    {
+      "id": "cone_12",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.726649,
+      "recheck_median_ms": 0.368896,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 476
+    },
+    {
+      "id": "cone_13",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.699458,
+      "recheck_median_ms": 0.293155,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 471
+    },
+    {
+      "id": "cone_14",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.630386,
+      "recheck_median_ms": 0.266736,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 411
+    },
+    {
+      "id": "cone_15",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 1.668142,
+      "recheck_median_ms": 0.294155,
+      "ablation_solved": false,
+      "ablation": "monomial square candidates only",
+      "certificate_json_bytes": 475
+    },
+    {
+      "id": "cone_box_products",
+      "family": "Finite cone LP",
+      "solved": true,
+      "search_median_ms": 2.443731,
+      "recheck_median_ms": 0.294727,
+      "ablation_solved": false,
+      "ablation": "without hypothesis products",
+      "certificate_json_bytes": 331
+    },
+    {
+      "id": "box_-2/3_1/4",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.432011,
+      "recheck_median_ms": 0.238624,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "box_-2/3_1/16",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.729451,
+      "recheck_median_ms": 0.398671,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 3,
+      "depth": 2,
+      "certificate_json_bytes": 131
+    },
+    {
+      "id": "box_-2/3_1/64",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 1.028384,
+      "recheck_median_ms": 0.544137,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 4,
+      "depth": 3,
+      "certificate_json_bytes": 191
+    },
+    {
+      "id": "box_-1/3_1/4",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.408195,
+      "recheck_median_ms": 0.245203,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "box_-1/3_1/16",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.703863,
+      "recheck_median_ms": 0.379112,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 3,
+      "depth": 2,
+      "certificate_json_bytes": 131
+    },
+    {
+      "id": "box_-1/3_1/64",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 1.173399,
+      "recheck_median_ms": 0.558718,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 4,
+      "depth": 3,
+      "certificate_json_bytes": 190
+    },
+    {
+      "id": "box_0_1/4",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.293274,
+      "recheck_median_ms": 0.176822,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 67
+    },
+    {
+      "id": "box_0_1/16",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.33768,
+      "recheck_median_ms": 0.174098,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 69
+    },
+    {
+      "id": "box_0_1/64",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.307826,
+      "recheck_median_ms": 0.170493,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 69
+    },
+    {
+      "id": "box_1/3_1/4",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.406733,
+      "recheck_median_ms": 0.233617,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "box_1/3_1/16",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.666447,
+      "recheck_median_ms": 0.379572,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 3,
+      "depth": 2,
+      "certificate_json_bytes": 130
+    },
+    {
+      "id": "box_1/3_1/64",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.900705,
+      "recheck_median_ms": 0.544006,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 4,
+      "depth": 3,
+      "certificate_json_bytes": 188
+    },
+    {
+      "id": "box_2/3_1/4",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.495184,
+      "recheck_median_ms": 0.240917,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 2,
+      "depth": 1,
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "box_2/3_1/16",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.63418,
+      "recheck_median_ms": 0.39785,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 3,
+      "depth": 2,
+      "certificate_json_bytes": 130
+    },
+    {
+      "id": "box_2/3_1/64",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 0.961685,
+      "recheck_median_ms": 0.531086,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 4,
+      "depth": 3,
+      "certificate_json_bytes": 189
+    },
+    {
+      "id": "motzkin_box_1",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 1.260658,
+      "recheck_median_ms": 1.237093,
+      "ablation_solved": true,
+      "ablation": "no subdivision",
+      "leaves": 1,
+      "depth": 0,
+      "certificate_json_bytes": 15
+    },
+    {
+      "id": "motzkin_box_2",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 70.415543,
+      "recheck_median_ms": 38.092717,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 32,
+      "depth": 6,
+      "certificate_json_bytes": 1735
+    },
+    {
+      "id": "motzkin_box_3",
+      "family": "Bernstein box",
+      "solved": true,
+      "search_median_ms": 141.011442,
+      "recheck_median_ms": 73.083636,
+      "ablation_solved": false,
+      "ablation": "no subdivision",
+      "leaves": 56,
+      "depth": 9,
+      "certificate_json_bytes": 3411
+    },
+    {
+      "id": "power_sum_0",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.262729,
+      "recheck_median_ms": 0.068862,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 27
+    },
+    {
+      "id": "power_sum_1",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.557717,
+      "recheck_median_ms": 0.140889,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 42
+    },
+    {
+      "id": "power_sum_2",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.98528,
+      "recheck_median_ms": 0.234037,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 54
+    },
+    {
+      "id": "power_sum_3",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 1.61288,
+      "recheck_median_ms": 0.330029,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 54
+    },
+    {
+      "id": "power_sum_4",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.512954,
+      "recheck_median_ms": 0.49258,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 68
+    },
+    {
+      "id": "power_sum_5",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 3.704058,
+      "recheck_median_ms": 0.62119,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 69
+    },
+    {
+      "id": "power_sum_6",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 8.389471,
+      "recheck_median_ms": 1.800268,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 80
+    },
+    {
+      "id": "power_sum_7",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 7.668704,
+      "recheck_median_ms": 1.082274,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 82
+    },
+    {
+      "id": "power_sum_8",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 9.712442,
+      "recheck_median_ms": 1.317372,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 94
+    },
+    {
+      "id": "parametric_recurrence_00",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.544256,
+      "recheck_median_ms": 0.145526,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 41
+    },
+    {
+      "id": "parametric_recurrence_01",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.622195,
+      "recheck_median_ms": 0.426432,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 85
+    },
+    {
+      "id": "parametric_recurrence_02",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.946767,
+      "recheck_median_ms": 0.64109,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 115
+    },
+    {
+      "id": "parametric_recurrence_03",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 8.605161,
+      "recheck_median_ms": 0.974524,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 142
+    },
+    {
+      "id": "parametric_recurrence_04",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.531388,
+      "recheck_median_ms": 0.191284,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 56
+    },
+    {
+      "id": "parametric_recurrence_05",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.40969,
+      "recheck_median_ms": 0.346313,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "parametric_recurrence_06",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.40278,
+      "recheck_median_ms": 0.402786,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 84
+    },
+    {
+      "id": "parametric_recurrence_07",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 8.265198,
+      "recheck_median_ms": 0.969436,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 136
+    },
+    {
+      "id": "parametric_recurrence_08",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.529535,
+      "recheck_median_ms": 0.185615,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 56
+    },
+    {
+      "id": "parametric_recurrence_09",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.388189,
+      "recheck_median_ms": 0.388385,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 82
+    },
+    {
+      "id": "parametric_recurrence_10",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.700532,
+      "recheck_median_ms": 0.618186,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 113
+    },
+    {
+      "id": "parametric_recurrence_11",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 8.37442,
+      "recheck_median_ms": 0.966813,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 144
+    },
+    {
+      "id": "parametric_recurrence_12",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.631125,
+      "recheck_median_ms": 0.192485,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 56
+    },
+    {
+      "id": "parametric_recurrence_13",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.411824,
+      "recheck_median_ms": 0.31711,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 71
+    },
+    {
+      "id": "parametric_recurrence_14",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.42276,
+      "recheck_median_ms": 0.381495,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 80
+    },
+    {
+      "id": "parametric_recurrence_15",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 8.371506,
+      "recheck_median_ms": 0.956227,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 143
+    },
+    {
+      "id": "parametric_recurrence_16",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.544046,
+      "recheck_median_ms": 0.187719,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 56
+    },
+    {
+      "id": "parametric_recurrence_17",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.521533,
+      "recheck_median_ms": 0.185034,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 54
+    },
+    {
+      "id": "parametric_recurrence_18",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.63827,
+      "recheck_median_ms": 0.630394,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 116
+    },
+    {
+      "id": "parametric_recurrence_19",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 8.153913,
+      "recheck_median_ms": 0.9513,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 148
+    },
+    {
+      "id": "parametric_recurrence_20",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 0.527071,
+      "recheck_median_ms": 0.187958,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 55
+    },
+    {
+      "id": "parametric_recurrence_21",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.570509,
+      "recheck_median_ms": 0.397399,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 84
+    },
+    {
+      "id": "parametric_recurrence_22",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 2.710917,
+      "recheck_median_ms": 0.678145,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 113
+    },
+    {
+      "id": "parametric_recurrence_23",
+      "family": "Polynomial recurrence",
+      "solved": true,
+      "search_median_ms": 7.924333,
+      "recheck_median_ms": 0.642011,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 100
+    },
+    {
+      "id": "affine_00",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.022533,
+      "recheck_median_ms": 0.00706,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 33
+    },
+    {
+      "id": "affine_01",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.055943,
+      "recheck_median_ms": 0.020961,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 54
+    },
+    {
+      "id": "affine_02",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.156402,
+      "recheck_median_ms": 0.052918,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 84
+    },
+    {
+      "id": "affine_03",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.137674,
+      "recheck_median_ms": 0.045388,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 66
+    },
+    {
+      "id": "affine_04",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.023876,
+      "recheck_median_ms": 0.008462,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 40
+    },
+    {
+      "id": "affine_05",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.070084,
+      "recheck_median_ms": 0.02702,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 62
+    },
+    {
+      "id": "affine_06",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.095322,
+      "recheck_median_ms": 0.02742,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 58
+    },
+    {
+      "id": "affine_07",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.275979,
+      "recheck_median_ms": 0.090555,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 85
+    },
+    {
+      "id": "affine_08",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.02682,
+      "recheck_median_ms": 0.010426,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 43
+    },
+    {
+      "id": "affine_09",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.032398,
+      "recheck_median_ms": 0.014913,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 45
+    },
+    {
+      "id": "affine_10",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.143082,
+      "recheck_median_ms": 0.068872,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 69
+    },
+    {
+      "id": "affine_11",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.264883,
+      "recheck_median_ms": 0.084926,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 102
+    },
+    {
+      "id": "affine_12",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.015192,
+      "recheck_median_ms": 0.006039,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 34
+    },
+    {
+      "id": "affine_13",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.055152,
+      "recheck_median_ms": 0.021111,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 54
+    },
+    {
+      "id": "affine_14",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.146517,
+      "recheck_median_ms": 0.052137,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 83
+    },
+    {
+      "id": "affine_15",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.137553,
+      "recheck_median_ms": 0.043284,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 69
+    },
+    {
+      "id": "affine_16",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.023095,
+      "recheck_median_ms": 0.008643,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 37
+    },
+    {
+      "id": "affine_17",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.070614,
+      "recheck_median_ms": 0.02707,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 63
+    },
+    {
+      "id": "affine_18",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.078487,
+      "recheck_median_ms": 0.02675,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 55
+    },
+    {
+      "id": "affine_19",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.197332,
+      "recheck_median_ms": 0.063765,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 85
+    },
+    {
+      "id": "affine_20",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.025618,
+      "recheck_median_ms": 0.010406,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 43
+    },
+    {
+      "id": "affine_21",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.035753,
+      "recheck_median_ms": 0.014411,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 44
+    },
+    {
+      "id": "affine_22",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.111755,
+      "recheck_median_ms": 0.038867,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "affine_23",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.246405,
+      "recheck_median_ms": 0.084706,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 104
+    },
+    {
+      "id": "affine_24",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.015302,
+      "recheck_median_ms": 0.005989,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 33
+    },
+    {
+      "id": "affine_25",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.045497,
+      "recheck_median_ms": 0.020571,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 55
+    },
+    {
+      "id": "affine_26",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.145646,
+      "recheck_median_ms": 0.051737,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 82
+    },
+    {
+      "id": "affine_27",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.139576,
+      "recheck_median_ms": 0.043033,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 67
+    },
+    {
+      "id": "affine_28",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.02044,
+      "recheck_median_ms": 0.008102,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 39
+    },
+    {
+      "id": "affine_29",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.070544,
+      "recheck_median_ms": 0.02744,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 62
+    },
+    {
+      "id": "affine_30",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.077034,
+      "recheck_median_ms": 0.02699,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 56
+    },
+    {
+      "id": "affine_31",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.200978,
+      "recheck_median_ms": 0.065037,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 88
+    },
+    {
+      "id": "affine_32",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.025678,
+      "recheck_median_ms": 0.010125,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 45
+    },
+    {
+      "id": "affine_33",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.036745,
+      "recheck_median_ms": 0.014661,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 46
+    },
+    {
+      "id": "affine_34",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.109693,
+      "recheck_median_ms": 0.038878,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 70
+    },
+    {
+      "id": "affine_35",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.247907,
+      "recheck_median_ms": 0.084165,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 103
+    },
+    {
+      "id": "affine_36",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.015503,
+      "recheck_median_ms": 0.006089,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 34
+    },
+    {
+      "id": "affine_37",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.052938,
+      "recheck_median_ms": 0.020631,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 52
+    },
+    {
+      "id": "affine_38",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.118926,
+      "recheck_median_ms": 0.051396,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 81
+    },
+    {
+      "id": "affine_39",
+      "family": "Integral affine witness",
+      "solved": true,
+      "search_median_ms": 0.136913,
+      "recheck_median_ms": 0.043344,
+      "ablation_solved": null,
+      "ablation": "not run",
+      "certificate_json_bytes": 66
+    },
+    {
+      "id": "univariate_zero_00",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.534925,
+      "recheck_median_ms": 0.351031,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 356
+    },
+    {
+      "id": "univariate_zero_01",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.337133,
+      "recheck_median_ms": 0.604466,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 390
+    },
+    {
+      "id": "univariate_zero_02",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.908588,
+      "recheck_median_ms": 0.540741,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 464
+    },
+    {
+      "id": "univariate_zero_03",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.197686,
+      "recheck_median_ms": 0.508073,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 382
+    },
+    {
+      "id": "univariate_zero_04",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.951762,
+      "recheck_median_ms": 0.418951,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 422
+    },
+    {
+      "id": "univariate_zero_05",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.648604,
+      "recheck_median_ms": 0.760267,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 494
+    },
+    {
+      "id": "univariate_zero_06",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.43729,
+      "recheck_median_ms": 0.306824,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 341
+    },
+    {
+      "id": "univariate_zero_07",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.594325,
+      "recheck_median_ms": 0.612628,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 445
+    },
+    {
+      "id": "univariate_zero_08",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.82898,
+      "recheck_median_ms": 0.484388,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 387
+    },
+    {
+      "id": "univariate_zero_09",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.082746,
+      "recheck_median_ms": 0.515464,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 382
+    },
+    {
+      "id": "univariate_zero_10",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.76158,
+      "recheck_median_ms": 0.428785,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 421
+    },
+    {
+      "id": "univariate_zero_11",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.677478,
+      "recheck_median_ms": 0.74174,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 492
+    },
+    {
+      "id": "univariate_zero_12",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.625719,
+      "recheck_median_ms": 0.420513,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 360
+    },
+    {
+      "id": "univariate_zero_13",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.230385,
+      "recheck_median_ms": 0.606839,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 426
+    },
+    {
+      "id": "univariate_zero_14",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.825276,
+      "recheck_median_ms": 0.571918,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 460
+    },
+    {
+      "id": "univariate_zero_15",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.667971,
+      "recheck_median_ms": 0.288257,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 332
+    },
+    {
+      "id": "univariate_zero_16",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.628553,
+      "recheck_median_ms": 0.398951,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 418
+    },
+    {
+      "id": "univariate_zero_17",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.963522,
+      "recheck_median_ms": 0.776791,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 482
+    },
+    {
+      "id": "univariate_zero_18",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.446804,
+      "recheck_median_ms": 0.312693,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 358
+    },
+    {
+      "id": "univariate_zero_19",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.582016,
+      "recheck_median_ms": 0.64779,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 443
+    },
+    {
+      "id": "univariate_zero_20",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.82189,
+      "recheck_median_ms": 0.483677,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 444
+    },
+    {
+      "id": "univariate_zero_21",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.288451,
+      "recheck_median_ms": 0.502204,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 380
+    },
+    {
+      "id": "univariate_zero_22",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.716583,
+      "recheck_median_ms": 0.410479,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 367
+    },
+    {
+      "id": "univariate_zero_23",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.959835,
+      "recheck_median_ms": 0.764743,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 491
+    },
+    {
+      "id": "univariate_zero_24",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.466233,
+      "recheck_median_ms": 0.332663,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 361
+    },
+    {
+      "id": "univariate_zero_25",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 3.322804,
+      "recheck_median_ms": 0.679998,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 446
+    },
+    {
+      "id": "univariate_zero_26",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.905494,
+      "recheck_median_ms": 0.514262,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 455
+    },
+    {
+      "id": "univariate_zero_27",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.754069,
+      "recheck_median_ms": 0.355056,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 249
+    },
+    {
+      "id": "univariate_zero_28",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 1.811104,
+      "recheck_median_ms": 0.459031,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 423
+    },
+    {
+      "id": "univariate_zero_29",
+      "family": "Univariate with zeros",
+      "solved": true,
+      "search_median_ms": 2.591951,
+      "recheck_median_ms": 0.77591,
+      "ablation_solved": false,
+      "ablation": "dyadic Bernstein depth 12, without factorization",
+      "certificate_json_bytes": 418
+    }
+  ],
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "sympy": "1.14.0",
+    "pytest": "9.0.2",
+    "lean_executed": false
+  }
+}
