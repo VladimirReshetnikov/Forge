@@ -1,0 +1,118 @@
+{
+  "note": "Machine-readable twin of docs/STATUS.md. Merged from the nine proposals' status files, which used seven filenames in two formats.",
+  "baseline": {
+    "lean": "v4.34.0",
+    "lean_released": "2026-09-14",
+    "mathlib_revision": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+    "mathlib_toolchain_at_that_revision_specifies_lean": "v4.34.0"
+  },
+
+  "forge_tactic_implemented": false,
+  "lean_formalisation_of_any_checker": false,
+  "certificate_checked_by_lean_kernel": false,
+  "grind_comparison_performed": false,
+  "any_tactic_comparison_performed": false,
+  "speedup_or_success_rate_claimed": false,
+  "python_checkers_formally_verified": false,
+  "checkers_hardened_against_hostile_input": false,
+
+  "python_prototypes_executed": true,
+  "certificates_replay_without_search_libraries": true,
+  "mutation_and_corruption_tests_rejected": true,
+
+  "lean_compilation": {
+    "all_nine_original_runs": "NOT_RUN",
+    "all_nine_reason": "no lean/lake executable in the authoring environment",
+    "this_merge": {
+      "performed": true,
+      "toolchain": "leanprover/lean4:v4.34.0",
+      "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+      "files_elaborated": 3,
+      "files_total_in_merged_tree": 17,
+      "scope": "core-Lean-only files; the other fourteen import Mathlib",
+      "record": "results/lean-core-elaboration.json",
+      "is_axiom_audit": false,
+      "is_tactic_comparison": false,
+      "establishes_checker_correctness": false
+    }
+  },
+
+  "runs": {
+    "count": 9,
+    "date": "2026-09-14",
+    "environment": {
+      "python": "3.13.5",
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "sympy": "1.14.0",
+      "platform": "Linux x86-64"
+    },
+    "counts_are_poolable": false,
+    "counts_are_poolable_reason": "different seeds, generators, case sets and units; five runs share the seed value 20260914 but it drives different generators in each",
+    "index": "results/manifest.json"
+  },
+
+  "certificate_corpus": {
+    "floats_in_mathematical_values": 0,
+    "floats_found_total": 1,
+    "floats_found_note": "a single timing diagnostic field",
+    "rational_encodings_observed": ["n/d strings (8 runs)", "{numerator, denominator} integers (1 run)"],
+    "canonical_schema": "article appendix A"
+  },
+
+  "implemented_algorithm_families": [
+    "exact sparse rational polynomial arithmetic",
+    "exact quadratic decomposition (symmetric pivot / Schur complement)",
+    "finite polynomial-cone search with exact rational repair",
+    "equality-ideal multipliers with unrestricted sign",
+    "Bernstein box subdivision with checked coverage",
+    "square-factor and Sturm univariate certificates",
+    "polynomial recurrence synthesis (direct and CEGIS)",
+    "accumulator-invariant synthesis",
+    "affine witness synthesis with Farkas multipliers",
+    "integer-lattice witness extraction with divisibility obstructions",
+    "finite-residue witness synthesis",
+    "polynomial witness synthesis certified by cone certificates",
+    "demand-directed ground Horn reasoning",
+    "structural induction with generalisation and trace replay",
+    "proof-logging CDCL(T) over integer difference logic",
+    "standard-library-only certificate replay",
+    "Lean source emission"
+  ],
+
+  "unique_to_one_run": [
+    "square-factor and Sturm univariate certificates",
+    "integer-lattice elimination with a certificate of infeasibility",
+    "finite-residue witnesses",
+    "polynomial witnesses discharged by two cone certificates",
+    "Farkas affine witnesses as one joint feasibility problem",
+    "proof-logging CDCL(T) with independent RUP re-derivation",
+    "theory-constrained quantifier instantiation",
+    "certificate cost as a term in the scheduling benefit"
+  ],
+
+  "designed_not_implemented": [
+    "the forge tactic and its syntax",
+    "obligation graph and scheduler against real Lean snapshots",
+    "the grind adapter",
+    "dependent-type-aware reification and its correspondence proof",
+    "reflected Lean checkers and their soundness theorems",
+    "a Lean formalisation of the Sturm root-count theorem",
+    "general quantifier instantiation and E-matching",
+    "higher-order and dependent-type witness synthesis",
+    "external SMT/ATP proof reconstruction",
+    "a semidefinite backend with exact rational recovery",
+    "certified product envelopes",
+    "bounded equality saturation over Lean expressions",
+    "the axiom-policy audit",
+    "a Lean corpus evaluation"
+  ],
+
+  "interpretation_rules": [
+    "A bounded search returning nothing means UNKNOWN, never that a statement is false.",
+    "A Python check is not a Lean-kernel proof.",
+    "Search-free replay means the search libraries are not loaded; it is not an independently implemented verification.",
+    "Manufactured examples favour the grammar that generated them.",
+    "Successful elaboration is not an axiom audit."
+  ]
+}
