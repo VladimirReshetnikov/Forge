@@ -106,6 +106,34 @@ search tree is finite and could be reified into a checkable refutation object.
 Nobody has built this. It would give Forge a second *certificate-producing*
 infeasibility worker.
 
+> **Update: the extension round built it, by a different route.** `e4` supplies
+> finite Kripke countermodels for IPC — a rooted finite partial order with a
+> persistent valuation — and the checker *recomputes forcing* from scratch
+> rather than trusting any solver-supplied table of formula truth values. That
+> is the checkable refutation object this section asked for, and it is now the
+> only one in the collection. It is not a reified LJT search tree; it is the
+> semantic dual, and it arrives with the same discipline this section demands.
+>
+> Two things about its scope are worth copying rather than quietly widening.
+> First, an accepted certificate means *there is no derivation of G from Gamma
+> in the named IPC calculus* — not that Lean can prove `¬G`, not that no Lean
+> term of `G` exists, and nothing about hypotheses omitted from the object
+> sequent. Second, the enforcement tests are classical tautologies: excluded
+> middle, double-negation elimination, Peirce's formula, propositional
+> linearity. Each is classically valid, so an interface that turned any of their
+> countermodels into a proof of the negated Lean formula would be visibly
+> unsound. Those examples are not ornamental — they are how the worker's
+> semantic ceiling is enforced in the test suite.
+>
+> A world bound is still a bound. When it is exhausted the answer is
+> **unknown**: IPC having the finite model property does not turn a three-world
+> cap into a decision procedure, and a valid schema that survives the search is
+> a positive control against an invalid refuter, not a theorem.
+>
+> The worker is merged into `prototype/forge/closure/kripke.py`, and the
+> correction above stands unchanged: the countermodel is the artefact, and the
+> enumeration tag never was one.
+
 ### 6. The negative-evidence gate, as three conjuncts
 
 ```
@@ -251,6 +279,7 @@ impossible.
 | Verification boundary implementation | §4 |
 | Neighbouring tactics (`exact?`, `itauto`, `decide`, `omega`) | §2 |
 | Negative verdicts; LJT; Glivenko; completeness ledger | §5 |
+| Kripke countermodels — the refutation object §5 asked for, built by `e4` | §5, §6 |
 | Instance obligations during synthesis | §7 |
 | Tactic-as-interface / worker-as-executor | §8 |
 | Three levels of identity; generation tokens | §8 |

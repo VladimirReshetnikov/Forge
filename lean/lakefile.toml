@@ -7,18 +7,20 @@ defaultTargets = ["ForgeCore", "Forge"]
 # three pinned this same revision, whose lean-toolchain specifies
 # leanprover/lean4:v4.34.0 -- the version in lean-toolchain here.
 #
-# No proposal ever built this. `ForgeCore` has been elaborated against
-# Lean v4.34.0 (results/lean-core-elaboration.json); `Forge` has not, because it
-# needs Mathlib.
+# No proposal ever built this. Every file in `ForgeCore` has been elaborated
+# against Lean v4.34.0 (results/lean-core-elaboration.json and
+# results/lean-closure-elaboration.json); `Forge` has not, because it needs
+# Mathlib. There is still no lake-manifest.json here, deliberately: nothing has
+# been built, and a manifest asserting otherwise would be a fiction.
 # ---------------------------------------------------------------------------
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
 rev = "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa"
 
-# Core Lean only: the two design contracts and the Mathlib-free structural
-# proofs. Builds without Mathlib, and is the only part of this project with
-# recorded compilation evidence.
+# Core Lean only: the two design contracts, the Mathlib-free structural proofs,
+# and the three closure-principle files. Builds without Mathlib, and is the part
+# of this project with recorded compilation evidence.
 [[lean_lib]]
 name = "ForgeCore"
 

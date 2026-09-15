@@ -13,6 +13,10 @@
 import Forge.Design.Runtime
 import Forge.Design.Contracts
 
+import Forge.Closure.Principles
+import Forge.Closure.Covers
+import Forge.Closure.Indexing
+
 import Forge.Generated.SOS
 import Forge.Generated.SOSExtra
 import Forge.Generated.Bernstein
