@@ -75,6 +75,32 @@ nobody.
 - The axiom-policy audit
 - A real Lean corpus evaluation, or any head-to-head comparison against `grind`
 
+## How to read the three buckets
+
+The buckets above are three-valued on purpose, and the third value is the one
+that usually goes missing. Borrowed from the capability ledgers in Leant and
+Djex:
+
+| Marker | Means |
+| --- | --- |
+| **Executed** | ran, with a recorded result |
+| **Generated but not compiled** | produced, never checked by a compiler |
+| **Designed, not implemented** | specified; nobody built it |
+
+An item in the third bucket is **not** a claim that it was tried and failed.
+"Not attempted" and "attempted without success" are different facts with
+different consequences for anyone deciding where to invest, and conflating them
+is how a roadmap quietly turns into an apology.
+
+Two practices go with this, and neither is in place yet:
+
+- **Acceptance criteria pinned to exact parameters.** A row should say what
+  would close it, in the original terms, with an anti-substitution clause where
+  a near-miss exists — *"a bounded variant does not close this"*.
+- **Failed runs preserved as linked artefacts.** A diagnostic failure is not an
+  acceptance receipt, and deleting it is how a later reader mistakes silence
+  for success.
+
 ## What is explicitly not claimed
 
 - No Lean tactic named `forge` exists.
