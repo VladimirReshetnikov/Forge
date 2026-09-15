@@ -178,6 +178,62 @@ theory, and it should be integrated through its proof-term interface rather than
 by flattening away the dependencies that make its task
 meaningful~\cite{canonical,canonical-min}.
 
+\subsubsection*{Instance obligations during synthesis}
+
+\S\ref{sec:integration} takes the position that instance arguments should be
+left implicit and resolved by the elaborator during verification, and for a
+first implementation that is right: the elaborator is a better evidence
+resolver than anything one would port. But a synthesiser that defers
+\emph{everything} prunes nothing, and one that prunes on instances needs its
+own account of them. Four disciplines make that account safe, and they
+generalise well beyond typeclasses.
+
+\paragraph{One function, two policies.} The routine that prunes a branch during
+search and the routine that validates the final term must be the \emph{same}
+code, parameterised by what to do with an obligation that is not yet ground.
+During search, a constraint containing free variables means \emph{defer, keep
+going}; during final checking it means \emph{reject}. Writing these as two
+functions is the classic way a prover admits something its own checker would
+refuse.
+
+\paragraph{Do the termination work at admission, not at query time.} Seal the
+inventory of instances \emph{once}, and at that point reject superclass cycles,
+reject overlapping heads, materialise superclass closures into each instance's
+prerequisites, and enforce a structural decrease condition on prerequisites ---
+a prerequisite is admissible if it mentions a variable absent from the head, or
+if it is no larger than the head and no variable occurs more often. Then
+query-time resolution needs only a path-local cycle cut and a node budget, and
+termination is a property of the admitted environment rather than a hope about
+the search. \forge{} can impose such a gate over the subset of instances it
+admits into a synthesis inventory without touching the ambient environment.
+
+\paragraph{Budget exhausted is not ``no instance''.} The result type should be
+an error-or-optional, not a plain optional: malformed input and exhausted
+budget on one side, genuine absence of evidence on the other. Collapsing them
+means an instance obligation that timed out looks like a refutation of the
+candidate --- the same category error as \S\ref{sec:negative}'s
+\code{exhausted} versus \code{truncated}, one level down.
+
+\paragraph{A resolution receipt, bound to its environment.} Where a receipt is
+wanted, the natural object is the derivation tree: goal, the instance head
+selected, and one sub-proof per discharged prerequisite. The discipline that
+makes it safe is that the receipt carries the sealed environment it was derived
+against, and authority comes from \emph{replaying} it against that environment
+and that goal --- environment identity checked before the goal is even
+inspected --- rather than from possessing the tree. This matters precisely
+because a synthesised term's instance arguments must ultimately be re-elaborated
+in the user's local context, not the synthesiser's snapshot.
+
+One further idea is worth stealing outright, because it is a single line with
+real consequences: make a class obligation a proposition that is
+\emph{structurally disjoint} from every ordinary proposition in the search
+language. A dictionary requirement is then not confusable with a value whose
+type happens to print the same way, an inhabitant of $C\,a \Rightarrow \mathrm{Unit}$
+cannot discharge $C\,a$, and the incompleteness of the dictionary-free fragment
+becomes mechanically detectable rather than a matter of care.
+
+\subsubsection*{External provers}
+
 After structural exposure, a saturation-based prover may find theorem
 combinations a local tactic misses. Duper is an in-Lean proof-producing
 option~\cite{duper}; \code{lean-auto} supplies translation and monomorphization

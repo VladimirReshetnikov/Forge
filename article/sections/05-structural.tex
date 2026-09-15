@@ -591,6 +591,45 @@ which obligation is missing. It is not a Boolean. Any entry in it weakens a
 no-solution result to \unknown{}, and because its constructors are named, the
 diagnostic can say \emph{why} the negative verdict was withheld.
 
+Two implementation properties make this work, and both are cheap.
+
+First, the ledger is computed by the \emph{encoder}, at translation time,
+before any search runs. It is a property of the rendering, not of the outcome,
+so it cannot be influenced by how the search went. A reference implementation
+carries it as one bit per translated goal, set at each site that loses
+information: a quantifier in negative position sealed as an opaque atom, a
+recursive datatype unfolded only to a bounded depth, a class context accepted
+without its dictionary premises.
+
+Second, the bit is carried \emph{per node}, not only per problem. Every atom in
+the reified goal records whether it is safe for refutation. An atom built
+purely from universally quantified variables keeps a negative verdict sound; an
+atom mentioning a concrete constant, whose structure the engine cannot see,
+poisons it. So does an erased typeclass dictionary --- because the dictionary
+can carry data, and a term inhabiting the goal may exist by way of a method the
+search never modelled.
+
+The payoff is a diagnostic that names the obstruction. Rather than ``no term
+found within bounds'', the user can be told \emph{which symbols} blocked the
+stronger claim --- which is the difference between an unhelpful timeout and an
+actionable one.
+
+The combined predicate is then a conjunction, checked in a fixed order:
+\[
+\text{search completed} \;\wedge\;
+\text{translation lossless} \;\wedge\;
+\text{no self-reference available} .
+\]
+The third conjunct is worth keeping. If the goal's own name was excluded from
+the premises during search --- as it must be, to prevent a circular proof ---
+then a negative result can be sharpened by one extra bounded search that
+reintroduces it, paid for out of the first search's unused budget. Succeeding
+there yields the genuinely useful message \emph{``no non-recursive inhabitant
+exists; one exists if the definition may call itself''}. The discipline that
+makes this safe is monotonicity: the sharper claim may degrade to the weaker
+claim, but exhausting the budget during the diagnostic pass must never degrade
+an already-decided result to \unknown{}.
+
 \begin{invariant}[Negative evidence requires an intact chain]
 \label{inv:negative}
 A ``provably no solution'' verdict requires \emph{both} that the search
@@ -651,11 +690,29 @@ remains a \code{Candidate}.
 
 \emph{Intuitionistic propositional inhabitation} (not implemented; the largest
 available addition). A terminating decision procedure for the implicational
-propositional fragment --- Dyckhoff's \textsf{LJT} being the standard choice ---
-decides inhabitation rather than merely searching for it. Within its fragment,
-exhaustion \emph{is} a proof of non-inhabitation, so it satisfies
-Invariant~\ref{inv:negative} by construction, provided the translation into the
-fragment records its own gaps in the ledger.
+propositional fragment --- Dyckhoff's contraction-free \textsf{LJT} being the
+standard choice --- decides inhabitation rather than merely searching for it.
+Within its fragment, exhaustion \emph{is} non-inhabitation.
+
+It is worth being exact about the \emph{strength} of that, because it is not
+the same as the lattice worker's. A reference implementation of this design
+exists and produces, for a negative answer, a single enumeration tag and no
+artefact: there is no closed-branch tree, no refutation object, nothing a
+second program can re-check. Its soundness rests on the decision procedure
+being correctly implemented, plus the translation gate below. So it belongs in
+a \emph{weaker} slot than lattice elimination, which hands back a certificate
+whose checker verifies $\det U=\pm1$ without calling the elimination that
+produced $U$.
+
+\begin{remark}[An available contribution]
+That gap is a genuine opportunity rather than a fact of nature. \textsf{LJT} is
+contraction-free and terminating, so a failed search tree is \emph{finite} and
+could be reified into a checkable refutation object. Nobody appears to have
+built that. Doing so would give this design a second
+\emph{certificate-producing} infeasibility worker, in a fragment --- arrows,
+products, constructor-tagged sums, empty types, over opaque atoms --- where
+users regularly believe something is impossible and get no confirmation.
+\end{remark}
 
 Two properties make this unusually good value here. First, it operates on the
 \emph{propositional skeleton} of a goal, so dependent subformulas that only

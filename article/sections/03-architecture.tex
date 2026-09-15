@@ -241,6 +241,23 @@ solve(goal, mode, budgets):
   return Unknown(with_structured_diagnostics)
 \end{lstlisting}
 
+Two accounting rules protect the integrity of what those budgets report, and
+both are easy to violate by accident.
+
+\emph{Deduplication never refunds.} A raw proposal consumes its allowance
+\emph{before} alpha-equivalence deduplication, not after. Otherwise a search
+that generated a million alpha-variants of one term reports having done twelve
+units of work, and every downstream resource claim is fiction. Deduplication is
+a presentation improvement; it is not a discount.
+
+\emph{A dropped branch stays visible.} When a branch is discarded for a
+\emph{resource} reason --- a queue bound, a depth cap, an exhausted identifier
+supply --- that fact must remain structurally distinguishable from a branch
+that genuinely closed, all the way up to the top-level result. A search whose
+truncations are silently absorbed by its own combinators cannot tell
+\code{exhausted} from \code{truncated} (\S\ref{sec:negative}), and therefore
+cannot support a negative verdict at all.
+
 Heartbeats alone are insufficient for external numerical code. Maintain
 separate limits on wall time, memory, instantiated theorems, polynomial
 monomials, rational bit lengths, certificate size, induction depth, and replay
