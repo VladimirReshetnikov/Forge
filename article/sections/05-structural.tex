@@ -1019,6 +1019,151 @@ that parameter tuple rather than failing silently. The implementation is
 exercised at inputs such as $10^{20}+7$ to confirm that the finite table really
 does instantiate at arbitrary integers.
 
+\subsubsection*{A straight-line witness program instead of a residue table}
+\status{Implemented and tested in Python \src{e8}; no Lean discharge.}
+
+The finite-residue worker above pays a cost proportional to the modulus. A
+modulus with a short binary representation can therefore be unaffordable: a
+period of $10^{18}$ is eighteen digits to write down and $10^{18}$ table rows to
+enumerate. The extension round replaces the table with an exact
+\emph{projection}. For the one-output conjunctive fragment
+\[
+ \bigwedge_p a_p\,y\le\beta_p(x),
+ \qquad
+ \bigwedge_c c_c\,y\equiv\delta_c(x)\ (\mathrm{mod}\ m_c),
+\]
+with integer coefficients and affine parameter right sides $\beta,\delta$, the
+worker returns a pair: a quantifier-free \emph{guard} $C(x)$ and a
+straight-line \emph{witness program} $w(x)$, such that
+\[
+ \exists y\in\Z,\ \Phi(x,y)
+ \quad\Longleftrightarrow\quad
+ C(x),
+ \qquad\text{and } C(x)\Rightarrow\Phi(x,w(x)).
+\]
+
+Three steps produce it. First, each congruence coefficient is normalised: with
+$g=\gcd(c,m)>0$ and $uc+vm=g$, a solution exists exactly when $g\mid\delta$, and
+then $y\equiv u(\delta/g)\pmod{m/g}$. The quotient is an exact integer quotient
+\emph{under the guard}; the program computes it by floor division but never
+discards the guard, so the residue expression stays defined even when the guard
+is false. Second, the normalised congruences are merged pairwise. This is where
+a textbook Chinese remainder step is not enough, because the moduli are neither
+prime nor pairwise coprime.
+
+\begin{lemma}[Guarded merge]\label{lem:crt}
+Let $h=\gcd(M,N)$ with $pM+qN=h$, let
+$k=\bigl(p\,(s-r)/h\bigr)\bmod (N/h)$, let $M'=\operatorname{lcm}(M,N)$ and
+$r'=(r+Mk)\bmod M'$. Then
+\[
+ \bigl(y\equiv r\ (\mathrm{mod}\ M)\ \wedge\ y\equiv s\ (\mathrm{mod}\ N)\bigr)
+ \iff
+ \bigl(h\mid (s-r)\ \wedge\ y\equiv r'\ (\mathrm{mod}\ M')\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+If both congruences hold, write $y-r=M\ell$ and $y-s=Nj$; then
+$s-r=M\ell-Nj$, so $h\mid(s-r)$. Divide by $h$: the equation for $\ell$ modulo
+$N/h$ has inverse $p$ for $M/h$, because $p(M/h)+q(N/h)=1$. Hence
+$\ell\equiv k\pmod{N/h}$, which is exactly $y\equiv r+Mk\pmod{M'}$. Conversely
+compatibility with that congruence gives the first congruence directly and the
+second by substituting the definition of $k$. Reducing $r+Mk$ modulo $M'$ does
+not change its class.
+\end{proof}
+
+Third, the inequalities become an interval. With $a>0$ the bound is
+$y\le\lfloor\beta/a\rfloor$; with $a=-c<0$ it is $y\ge-\lfloor\beta/c\rfloor$,
+using $\lceil-\beta/c\rceil=-\lfloor\beta/c\rfloor$ for $c>0$; with $a=0$ the
+row degenerates to a parameter guard $0\le\beta$. The negative case is the one
+that is easy to get wrong, and truncation toward zero gives wrong answers at
+negative parameters. There are no sentinel values for a missing endpoint: the
+problem is over unbounded integers, not a machine range. Finally, intersect the
+arithmetic progression with the interval. With a lower endpoint,
+\[
+ w=L+\bigl((r-L)\bmod M\bigr)
+\]
+is the least congruent integer at least $L$, so an upper endpoint is satisfiable
+exactly when $w\le U$; with only an upper endpoint,
+$w=U-((U-r)\bmod M)$ always works and needs no extra guard; with neither, $r$
+itself suffices.
+
+\begin{theorem}[Constructive projection]\label{thm:projection}
+The conjunction of the normalisation guards, the merge guards of
+Lemma~\ref{lem:crt}, the zero-coefficient inequality guards, and the optional
+$w\le U$ guard is equivalent to $\exists y\,\Phi(x,y)$, and $w$ is a witness
+whenever it holds.
+\end{theorem}
+
+\begin{proof}
+Normalisation and Lemma~\ref{lem:crt} give an equivalence between the original
+congruences and their guards together with a single $y\equiv r\pmod M$. The
+inequality transformations are equivalences over $\Z$, including the
+zero-coefficient rows. What remains is to intersect one arithmetic progression
+with one possibly unbounded interval. With a lower endpoint, $w$ is congruent to
+$r$ and lies in $[L,L+M)$, and every other congruent integer at least $L$
+differs from it by a nonnegative multiple of $M$; so an upper endpoint is
+satisfiable precisely when $w\le U$. The other two endpoint cases are immediate.
+These arguments establish both the feasibility equivalence and the witness, for
+every parameter valuation.
+\end{proof}
+
+\paragraph{The checker runs the opposite algorithm --- except where it does not.}
+Each $\gcd$ arrives as a \emph{B\'ezout receipt} $(g,u,v)$, and the checker does
+not run the extended Euclidean algorithm. It verifies $g>0$, $g\mid c$,
+$g\mid m$, and $uc+vm=g$; those four conditions already force $g$ to be the
+positive gcd, since every common divisor divides the displayed combination while
+$g$ is itself a common divisor. That much is a genuine asymmetry. The rest is
+not, and the source proposal says so rather than claiming otherwise: the
+replayer reconstructs the witness program deterministically from the input with
+\emph{the same assembler the search used} and compares. Replay therefore detects
+a modified receipt or a modified program, but cannot by itself detect an
+arithmetic mistake common to both uses of the assembler. The risk is addressed
+by a different route --- a direct constraint evaluator and an exhaustive
+concrete oracle --- not by pretending the checker is independent. This is the
+weakest producer/checker separation anywhere in the eighteen proposals. It is
+disclosed as such by the proposal that built it, which is the behaviour
+Section~\ref{sec:trust} asks for.
+
+\paragraph{The program is a DAG, not a term.} Nodes are
+\code{const}, \code{var}, \code{scale}, \code{add}, \code{div}, \code{mod}
+(positive divisor only), \code{max} and \code{min}; guards are divisibility
+tests or comparisons of node values. There is no floating-point operation, no
+variable denominator, and no implicit conversion to machine integers. Shared
+affine expressions and intermediate residues are hash-consed rather than copied,
+so for fixed parameter arity the node count grows linearly in the number of
+constraints: assembling affine right sides costs $O((p+q)(n+1))$ nodes for $p$
+inequalities, $q$ congruences and $n$ parameters. The final period may be a
+product of many moduli, but its bit length is at most the sum of theirs; no loop
+runs once per residue class.
+
+The recorded instance makes the contrast concrete. With
+$m_1=1\,000\,000\,007$, $m_2=1\,000\,000\,009$, and constraints
+$x\le y\le x+M-1$, $y\equiv 2x+1\pmod{m_1}$, $y\equiv 5x-3\pmod{m_2}$, the
+period is $M=m_1m_2=1\,000\,000\,016\,000\,000\,063$ and the generated program
+has \emph{42 nodes}. The interval contains exactly one representative of every
+residue class, so the theorem gives feasibility for all $x$; at $x=0$ the
+witness is $2\,000\,000\,015$. The program was also evaluated at
+$x=\pm10^{100}$. Those large evaluations are implementation tests: the universal
+claim comes from Theorem~\ref{thm:projection}, not from their size or number.
+And a residue table for this period is not a sensible representation --- which
+is a statement about representation size, not a measured speed comparison
+against the residue worker above.
+
+\paragraph{What it does not cover.} Variable coefficients such as $xy\le z$,
+variable moduli, nonlinear parameter right sides, general Boolean combinations,
+and several mutually constrained existential outputs are all outside the
+implemented fragment. Disequalities would need explicit branching in a later
+layer; they are not silently dropped. A one-output completeness theorem must not
+be advertised as complete Presburger synthesis. For a natural-number output,
+add $0\le y$ and prove that the selected integer transports to \code{Nat}; for
+rational or real parameters this integer theorem is simply not the right
+semantics. Quantifier order matters too: a witness may depend only on the
+parameters bound before it. In the negative direction, a parameter valuation
+violating $C$ is evidence only after the domain hypothesis has been checked and
+the projection equivalence replayed --- a raw solver model for an unrelated
+abstraction refutes nothing about the original goal.
+
 \subsubsection*{Polynomial witnesses certified by nonnegativity}
 \status{Implemented and tested in Python.}
 
@@ -1044,3 +1189,340 @@ A production implementation should also try simpler witnesses --- an available
 absolute-value or maximum expression --- when the local library makes those
 cheap. Restricting a prototype to polynomials is an experiment design, not a
 recommended restriction on all \forge{} witnesses.
+
+\subsection{Synthesising into a hole, not into a whole term}
+\label{sec:holes}
+
+The witness synthesis above builds first-order objects. The harder case is a
+\emph{function}, and the extension round arrives at it from a specific
+diagnostic rather than from a wish list. In the neighbouring Leant project, a
+bounded type-directed query for list indexing produced 256 checked candidates
+and falsified all of them. Separate probes then found, easily, both the
+function-valued fold the answer needs and the integer case analysis the answer
+needs: the step appeared at candidate 5 in an isolated context and at candidate
+219 in a larger one. Neither number is that step's ordinal inside the original
+whole-term search, and the reports say so.
+
+The conclusion is not ``add function types to the carrier grammar''. They were
+already there. The conclusion is that the pieces are cheap and the
+\emph{composition} is not, because a whole-term enumerator pays the product of
+the hole grammars while a contract-directed one pays their sum.
+
+\subsubsection*{The proof rule chooses the holes}
+
+Fix a carrier $B$ and a relation
+$\mathcal R:\operatorname{List}(A)\to B\to\mathrm{Prop}$. The two obligations
+\begin{align}
+ &\mathcal R([],b_0),\label{eq:fold-base}\\
+ &\forall a,\ell,b,\quad \mathcal R(\ell,b)\Longrightarrow
+   \mathcal R(a::\ell,\operatorname{step}(a,b))\label{eq:fold-step}
+\end{align}
+imply, by structural induction,
+\begin{equation}\label{eq:fold-rule}
+ \forall\ell,\quad
+ \mathcal R\bigl(\ell,\operatorname{foldr}(\operatorname{step},b_0,\ell)\bigr).
+\end{equation}
+Register \eqref{eq:fold-rule} once as an ordinary theorem. The synthesis task is
+then to build $b_0$ and $\operatorname{step}$ meeting
+\eqref{eq:fold-base}--\eqref{eq:fold-step} --- not to build a recursive program
+from a bare outer type.
+
+The relation is the load-bearing part. Choosing the combinator and leaving its
+holes constrained only by \emph{types} reproduces the original ambiguity
+exactly; asking a solver to discover an arbitrary expressive relation is not yet
+an algorithm. A first implementation should carry an explicit inventory of
+specification templates: equality against a reference fold, a size equation, a
+pointwise relation for function carriers, a predicate preserved by the
+constructors, or a packet of arithmetic invariants handed over from
+Section~\ref{sec:closure}.
+
+\subsubsection*{Carrier recovery, and the contracts it forces}
+
+Indexing is the worked case. The reference operation is
+\[
+ \operatorname{at}(d,[],i)=d,\qquad
+ \operatorname{at}(d,a::\ell,i)=
+ \begin{cases}
+  d,&i<0,\\
+  a,&i=0,\\
+  \operatorname{at}(d,\ell,i-1),&i>0.
+ \end{cases}
+\]
+The non-structural argument $i$ changes along the recursion, so it moves
+\emph{inside} the carrier: with default $d:A$, last application to $i:\Z$ and
+result $A$, the carrier is $B=\Z\to A$, and a right fold needs
+$b_0:\Z\to A$ and $\operatorname{step}:A\to(\Z\to A)\to(\Z\to A)$. This is the
+functional counterpart of generalising an accumulator before induction, except
+that the search object is a local algebra rather than a strengthened theorem.
+
+With $\mathcal R(\ell,k)\equiv\forall i,\ k(i)=\operatorname{at}(d,\ell,i)$, the
+two obligations become exact local contracts:
+\begin{align}
+ b_0(i)&=d,\label{eq:base-contract}\\
+ \operatorname{step}(h,k)(i)&=
+ \begin{cases}
+  d,&i<0,\\
+  h,&i=0,\\
+  k(i-1),&i>0,
+ \end{cases}\label{eq:step-contract}
+\end{align}
+where $k$ is \emph{arbitrary}. Treating $k$ as arbitrary is the decisive
+choice. A candidate step is not permitted to exploit the behaviour of one
+guessed tail function that happens to fit a handful of examples.
+
+The carrier heuristic generalises but does not become a theorem: when a
+non-structural argument changes in a recursive specification and the result type
+is $R$, try $I\to R$; for several changing arguments, try a curried or product
+carrier in the original dependency order. That is an alternative to enqueue, not
+a claim that every such function is a fold.
+
+\subsubsection*{Ghost variables: the proof context is larger than the code context}
+
+Write $\Gamma_{\mathrm{code}}=(d,a,k,i)$ and
+$\Gamma_{\mathrm{proof}}=\Gamma_{\mathrm{code}},\ \ell,\ h:\mathcal R(\ell,k)$.
+The tail $\ell$ occurs in the specification but must not be available as a
+program component. Erase it from the proof context and the induction hypothesis
+is gone; expose it to the synthesiser and the candidate can bypass the intended
+fold by calling a reference function on the tail. So context projection operates
+on the \emph{executable} inventory and closes under type dependencies: if a
+retained variable's type mentions another local, that dependency is retained or
+explicitly abstracted. The full source context stays available to the checker.
+
+Restricting the executable context is a completeness-affecting choice, and the
+document treats it as one. The small interface is the \emph{preferred} search
+branch; a budgeted branch with the original context stays queued.
+
+\subsubsection*{Keep compatibility constraints; do not multiply projections}
+
+Holes are not independent in general. Residual constraints should be stored as
+finite or symbolic relations indexed by \emph{shared hole identifiers}. For
+finite relations use natural joins: if $R_1$ mentions holes $(u,v)$ and $R_2$
+mentions $(v,w)$, index both by the full identity of $v$, join matching rows,
+and retain witnesses for every constraint. For symbolic relations, keep shared
+metavariables owned by the same synthesis region and discharge the conjoined
+residual before accepting an assembled term.
+
+The indexing fragment happens to factor once the constructor contract is fixed
+--- base, negative, zero and positive results have separate conditions --- and
+its one-survivor-per-hole outcome must not be generalised into a claim that all
+higher-order synthesis decomposes into a product.
+
+The search object is an \emph{algebra region}: the exact fold occurrence, the
+selected source polytype, the instantiated carrier, source universes, available
+lexical binders, local instance evidence, the hole dependency relation, and the
+residual contract. Every field is a reference into the existing typed-source
+inventory, not a fresh spelling that will later have to be guessed back into the
+original context. Search continuations are memoised by algebra region and hole,
+not by pretty-printed type; a useful memo entry holds the next candidate cursor,
+the local terms already considered, the remaining shared budget, and the
+residual compatibility relation. Sibling holes may reuse a function head even
+when an ancestor-path rule forbids repeating it along one application path ---
+a distinction Djex's construction policies already make. None of this resets the
+existing limits: local checks, joins, whole-term construction and verification
+must all be charged. No SMT solver is required for a first version.
+
+\begin{lstlisting}
+completeFold(demand, specification):
+  for spine in compatibleEliminationSpines(demand):
+    R       := carrierEquation(spine)
+    sketch  := instantiateFoldAt(R)
+    contracts := deriveBaseAndStepContracts(specification, sketch)
+    for tuple in join(localSearch(contracts)):
+      term := assemble(sketch, tuple)
+      if sourceTypeCheck(term) and proveAlgebraContracts(term):
+        return applyCheckedFoldTheorem(term)
+  return Unknown
+\end{lstlisting}
+
+The implemented fragment has one fold schema, one carrier spine, and a fixed
+three-way integer case split. Automatic discovery of arbitrary recursive
+schemas, branch predicates and source-level contracts is proposed, not built.
+
+\subsubsection*{What the measured family does and does not show}
+
+A controlled experiment compares two policies over the \emph{same} four finite
+hole grammars in the \emph{same} within-hole order: a flat policy that
+enumerates tuples and type-checks whole terms, and a local policy that first
+filters each hole against its own contract, using distinct symbolic-looking
+values for element binders and a continuation observation $k(j)=(\mathtt{tail},j)$.
+With $n$ distractors the grammar sizes are $n+1$, $n+2$, $n+2$, $n+8$, and the
+valid choices are placed deliberately late, so the successful flat ordinal is
+\[
+ (n+1)(n+2)^2(n+8)-(n+8),
+\]
+which is $50\,940$ at $n=12$, against $4n+13=61$ local component checks. Both
+policies return the same term. The contrast is quartic against linear
+\emph{in this deliberately unfavourable family}: fixed sketch, independent exact
+local contracts, finite grammars, distinct distractors, and that stated order.
+It is not a measured $50\,940$-fold speedup, not a complexity theorem for
+unrestricted synthesis, and not evidence that the original Leant query has been
+fixed.
+
+\subsubsection*{The Church-encoding boundary, stated three times}
+
+The diagnostic that motivates all of this uses a Church-encoded list, not Lean's
+inductive \code{List}. With
+$\operatorname{encode}(xs)(R,a,b)=\operatorname{foldr}(a,b,xs)$, a theorem about
+$\operatorname{encode}(xs)$ is exactly that: a theorem about encoded finite
+lists. It does not establish that every Lean value of a Church-style type
+behaves as the encoding of a finite list. Transferring the sketch requires an
+explicit representation law
+\[
+ \operatorname{Rep}(c,\ell)\Longrightarrow
+ c\ B\ \operatorname{step}\ b_0=\operatorname{foldr}(\operatorname{step},b_0,\ell)
+\]
+at the exact carrier and universe selection in use. For an explicit encoding of
+an ordinary list this is a routine fold law; for an arbitrary polymorphic value
+it must not be inferred from the displayed type. Parametricity,
+representability, totality and the available eliminations are substantive
+assumptions, and they are especially substantive across a Haskell/Lean
+boundary: the source \code{Int} is not automatically Lean's unbounded
+\code{Int}, and the actual branch primitive, binder order, polymorphic
+selections and dictionary payloads all have to be retained.
+
+Three of the extension proposals reach this conclusion independently, in
+different words and from different starting points, and none of them claims the
+original query is solved. Two hand-written Lean specimens exist and are marked
+uncompiled. A source type is not an automatic relational-parametricity theorem.
+
+\subsubsection*{What to measure before claiming anything here}
+
+Record the number of schema alternatives, candidate holes, full contract checks,
+reusable hole theorems, and reconstructed whole programs. Compare on the same
+outer query, source inventory, budgets and acceptance predicate. An isolated
+hole success is diagnostic evidence, not a solved benchmark; keep a negative
+control that actually reaches predicate checking rather than calling a
+zero-candidate timeout a successful rejection. The composition hypothesis is
+plausible from the inspected diagnostic and remains unmeasured on the real
+search --- which is a reason to test it before changing any global search
+penalty, not a reason to announce a Church-encoding milestone.
+
+\subsection{Recursive obligations: cyclic candidates, checked descent}
+\label{sec:cycles}
+
+Tabling in Section~\ref{sec:architecture} forbids closing an active goal with
+itself, and that rule stays. What the extension round changes is what happens
+\emph{after} a recursive pattern has been found: the cyclic dependency may be
+recorded as an unaccepted proof-program candidate whose recursive edges must
+then be justified by well-founded descent. There is no need to trust an
+arbitrary cyclic proof graph, and no need to implement a general cyclic-proof
+kernel.
+
+\subsubsection*{The rank lives on the tagged state}
+
+Consider $P(n)\to Q(n)$ and $Q(n)\to P(n-1)$ for $n\ge1$. The first edge does
+not decrease $n$ at all, and rejecting it in isolation would discard a perfectly
+good mutual induction. Ranking the \emph{tagged} state resolves it:
+\[
+ \rho(P,n)=2n+1,\qquad \rho(Q,n)=2n,
+\]
+and now every edge drops by exactly one. The phase is not a tie-break in search
+order; it is part of the termination measure. An acyclic run of zero-progress
+edges suggests phases cheaply --- assign reverse topological heights in a
+candidate phase graph, then scale the primary measure enough to dominate phase
+resets --- but a cycle consisting purely of zero-progress edges cannot be
+repaired by phases at all.
+
+Two more shapes matter. For $(x,y)\mapsto(y,x-1)$ under $x\ge1$, neither ``the
+first argument always decreases'' nor ``both arguments shrink'' is the right
+test; $x+y$ drops by one, which also covers the subtractive Euclidean branches
+when their positive-subtraction guards are kept. And where a lexicographic
+measure is needed, the compiler must use lexicographic well-foundedness rather
+than encoding $(x,y)$ as $ax+by$ with a guessed multiplier: such an encoding is
+valid only when a bound on the lower-priority component is available \emph{and
+proved}.
+
+\subsubsection*{Size-change closure is a filter, not a proof}
+
+Annotate each argument comparison with $0$ (unknown), $1$ (non-increase) or $2$
+(strict decrease). Along a composable path an unknown annihilates that path;
+otherwise the result is strict if either constituent is. Writing $\otimes$ for
+path composition and $\oplus$ for maximum strength,
+\[
+ (G\circ H)_{ij}=\bigoplus_k G_{ik}\otimes H_{kj},
+\]
+compute the closure over \emph{non-empty} paths, keeping source and target node
+tags. The standard size-change test asks for a strict diagonal entry in every
+idempotent self-graph of that closure.
+
+In this design the closure is diagnostic. It guides the ranking search and it is
+never handed to Lean as a termination proof; the first compiler accepts only an
+explicit checked ranking. A failed test means this abstraction did not certify
+descent, and a passing test relies on every recorded local comparison being
+semantically valid.
+
+\subsubsection*{Synthesising the rank, and not trusting the solver that found it}
+
+For a single affine rank $\rho_v(x)=b_v+\sum_i w_{vi}x_i$, introduce nonnegative
+Farkas multipliers $\lambda_{ej}$ per edge and equate coefficients in
+\[
+ \rho_v(x)-\rho_w(F_e(x))-1=\sum_j\lambda_{ej}g_{ej}(x),
+\]
+where $g_{ej}$ are the edge's guards. Update and guard coefficients are fixed,
+so this is linear feasibility in the rank parameters and multipliers. Solve over
+$\Q$, scale to integral coefficients if needed, then regenerate and check every
+exact identity: the solver's feasibility verdict is not the certificate. For a
+lexicographic rank, choose a pivot per edge and enforce prefix equality; pivots
+can be enumerated for small components or selected by an SMT/MILP proposer, but
+the backend must export the chosen pivots and exact coefficient witnesses rather
+than a rounded floating-point tuple.
+
+The delivered prototype does bounded enumeration instead --- common weights
+across nodes, small individual phases, then permutations of the original
+coordinates as a lexicographic fallback, with cone membership solved by
+enumerating linearly independent supports of size at most the affine coefficient
+dimension. That suits its one- and two-variable fixtures and is not proposed as
+a scalable substitute for an exact LP backend. All its coefficients and phases
+are nonnegative integers, so every rank maps natural states to naturals; signed
+coefficients are more expressive but then carry an additional obligation, namely
+nonnegativity over each node's invariant region. They must not be admitted just
+because they decrease along the sampled calls.
+
+\subsubsection*{Lowering: ordinary well-founded recursion, no new proof rule}
+
+A component is closed as follows. Package its node goals into a tagged family
+$P$. Build a well-founded relation from the accepted rank. Construct one local
+proof constructor per node from ordinary case splits and already-checked
+non-recursive facts. Recursive edges become accesses to the well-founded
+induction hypothesis, instantiated at the typed callee state and supplied with
+the corresponding descent proof. Project the theorem for the entry node and the
+original arguments.
+
+\begin{invariant}[No self-authorised node]\label{inv:scc}
+No node theorem is inserted into the environment as an assumed theorem while its
+strongly connected component is being checked. The only recursive authority is
+the induction hypothesis supplied by the well-founded recursor.
+\end{invariant}
+
+Lean already supports structural and well-founded recursive definitions through
+ordinary kernel-checked terms; \code{termination\_by} and \code{decreasing\_by}
+are possible elaboration interfaces, not a new trusted rule. Stage the work:
+explicit tagged states and \emph{given} local constructors first, then graph
+extraction. Discovering dependent back-edge substitutions, generating branches,
+inferring ranks and lowering proofs all at once makes failures impossible to
+localise.
+
+\subsubsection*{An edge carries a telescope, not an argument list}
+
+A cyclic edge must map the callee's entire dependent telescope. If a node
+contains $n:\N$, $xs:\operatorname{Vector}(A,n)$ and a hypothesis about $xs$,
+an edge that changes $n$ cannot keep the old vector or the old hypothesis by
+identity: it must supply a vector at the new index and transport or reconstruct
+the dependent premise. Equally, a proof established under a hypothesis $H(n_0)$
+about one fixed current value cannot be silently generalised to $H(n)$ for all
+$n$. Printed variable names do not identify a telescope, and an
+alpha-normalised goal body alone does not determine which hypotheses may travel
+to a recursive call.
+
+\subsubsection*{The recorded outcomes}
+
+On six supplied call graphs the prototype finds four rankings, all of which pass
+an exact independent descent replay: $2n+1$/$2n$ for the two-phase graph after
+eight attempts, $x+y$ for swapped arguments and for subtractive Euclid after
+four each, and a lexicographic $(x,y)$ after sixteen. The identity cycle and an
+alternating-decrease cycle return \unknown{}, with the size-change criterion
+failing. Those two fixtures contain explicit bad cycles for independent reasons;
+in general a failed size-change test or an exhausted ranking grammar remains
+inconclusive. These are call-graph results. They are not completed Lean proofs
+of recursive theorems.
+
