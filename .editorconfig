@@ -7,3 +7,30 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
+
+# Lean convention is two spaces.
+[*.lean]
+indent_size = 2
+
+[*.{toml,yml,yaml,json}]
+indent_size = 2
+
+# LaTeX sources here are hand-wrapped at 79 columns; two spaces are not
+# meaningful, so trimming is fine, but the indent unit is two.
+[*.tex]
+indent_size = 2
+
+# Two trailing spaces are a hard line break in Markdown. Do not trim them.
+[*.md]
+trim_trailing_whitespace = false
+
+# Recorded evidence. Do not reformat any of it -- these files are the record of
+# what nine runs actually produced, and several deliberately carry a format
+# quirk (a JSON payload under a .log extension, byte-identical duplicate pairs)
+# that is part of what was recorded.
+[proposals/**]
+insert_final_newline = false
+trim_trailing_whitespace = false
+
+[lean-toolchain]
+insert_final_newline = true
