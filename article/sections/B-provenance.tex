@@ -1,14 +1,24 @@
 \section{Provenance: what came from where}
 \label{app:provenance}
 
-This document is a merge of nine independently prepared proposals for the same
-system. All nine are retained verbatim under \code{proposals/} so that every
-claim here can be audited against its source. Almost nothing in this article is
-new mathematics: each statement is carried over from at least one of the nine,
+This document is a merge of eighteen independently prepared proposals for the
+same system, in two rounds. The \emph{design round} \src{p1}--\src{p9} was
+merged first. The \emph{extension round} \src{e1}--\src{e9} was then prepared
+against that merged draft, at commit
+\texttt{674521027d968d59f7b83220ed52304a85cb55e2}, and merged in turn. All
+eighteen are retained verbatim under \code{proposals/} so that every claim here
+can be audited against its source. Almost nothing in this article is new
+mathematics: each statement is carried over from at least one of the eighteen,
 or from the two external sources named in \S\ref{sec:external-sources}, and
 this appendix records which.
 
-\subsection{The nine sources}
+The second round is not a second opinion on the first. Its proposals read the
+merged draft, took its capabilities as prerequisites rather than contributions,
+and several of them say so in their opening pages. Where this appendix records
+an extension-round item, it is normally an addition to a section the design
+round had already written, and occasionally a correction to it.
+
+\subsection{The nine design-round sources}
 
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\textwidth}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}p{0.46\textwidth}@{}}
 \toprule
@@ -54,6 +64,52 @@ program with an obligation; the rank-one dictionary-gap argument. \\
 \bottomrule
 \end{longtable}
 
+\subsection{The nine extension-round sources}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\textwidth}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.54\textwidth}@{}}
+\toprule
+Label & Directory & Distinguishing emphasis \\
+\midrule
+\endhead
+\src{e1} & \code{e1-relational-closure} &
+The span/ideal ablation run as two lanes over one problem set --- the cleanest
+demonstration in the collection that a linear span is not merely underpowered
+but unreachable; a resumable runner that keeps its failed-run record. \\
+\src{e2} & \code{e2-algorithmic-extensions} &
+Inductive subspaces rather than conserved quantities, with the conservation-only
+ablation on the same features; Gosper antidifference and order-one creative
+telescoping; 188 rejected mutations. \\
+\src{e3} & \code{e3-closure-extensions} &
+The largest extension corpus, in four lanes; finite-state all-words contracts
+checked against an independent oracle on every case; shortest distinguishing
+words; boundary-safe moment recurrences. \\
+\src{e4} & \code{e4-delta-countermodels} &
+Finite Kripke countermodels for \textsf{IPC} --- the checkable refutation object
+the merged draft had flagged as unbuilt; the polynomial-machine reachability
+lane; 222 generated local Lean obligations. \\
+\src{e5} & \code{e5-finite-certificates} &
+Observable-space closure with the sharp $D-1$ separating bound and its
+delayed-error witnesses; the rule that a coefficient matrix is not an input
+symbol; 818 generated mutations, none accepted. \\
+\src{e6} & \code{e6-finite-certificates-b} &
+Three lanes reported by \emph{outcome kind} rather than success rate;
+degree-bounded descending-space inductive ideals; standard-library-only replay
+of every stored certificate. \\
+\src{e7} & \code{e7-capability-extensions} &
+Continuation-local synthesis; cyclic obligations compiled to checked
+well-founded descent; traced Buchberger multipliers; the composition-count
+family. \\
+\src{e8} & \code{e8-invariant-ideals} &
+Bounded-polynomial-multiplier invariant fixed points; finite-algebra covers with
+concrete counterexample trees; exact one-output integer projection with
+B\'ezout receipts; the ghost/executable context split. \\
+\src{e9} & \code{e9-finite-summaries} &
+Weighted-word closure; boundary-safe telescoping with shifted support; Ore
+common-left-multiple certificates with complete singularity covers; the only
+package that ships its failed runs as evidence. \\
+\bottomrule
+\end{longtable}
+
 \subsection{Where each section's material came from}
 
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
@@ -85,7 +141,7 @@ axiom auditing against the pinned version from \src{p4}; the two trust profiles
 from \src{p5}; \code{nativeEqTrue} and the insufficiency of a single-name
 blacklist from \src{p6}; the four-step acceptance procedure from \src{p9}. \\
 \S5 Structural search &
-Conclusion indexing and \code{matchDemand} from \src{p7}; constrained matching
+\emph{Design round:} conclusion indexing and \code{matchDemand} from \src{p7}; constrained matching
 from \src{p2}; tabling and the relative-completeness proposition from \src{p5};
 the slicing propositions from \src{p3} and \src{p7}; the accumulator obstruction
 from \src{p2} and \src{p3}; the flexible-variable IH discipline from \src{p4};
@@ -93,8 +149,26 @@ the CEGIS loop and the overfitting trap from \src{p2}; fragment completeness
 from \src{p2} and \src{p7}; the tag-variable trick from \src{p7}; the
 state-machine invariant format from \src{p5}; Farkas witnesses from \src{p2};
 lattice elimination from \src{p7}; residue witnesses from \src{p4}; polynomial
-witnesses from \src{p9}; \code{energyAcc} from \src{p3}. \\
-\S6 Nonlinear &
+witnesses from \src{p9}; \code{energyAcc} from \src{p3}.
+\emph{Extension round:} the straight-line witness program, the guarded CRT
+merge and the B\'ezout receipt from \src{e8}; continuation-local synthesis,
+the algebra region, the composition-count family and cyclic compilation with
+Farkas rank synthesis from \src{e7}; the fold proof rule, the ghost/executable
+context split and the Church representation law from \src{e8} and \src{e7}
+independently, with \src{e9} agreeing on the last. \\
+
+\S6 Finite certificates &
+Entirely extension round. Observable-space closure and the $D-1$ bound from
+\src{e5}, \src{e6} and \src{e9}; the span-is-not-enough argument and the
+target-generated ideal from \src{e1} and \src{e7}; descending closure from
+\src{e7}; the decision result from \src{e3}; the interpolation-grid trap from
+\src{e9}; tracked Buchberger multipliers from \src{e7}; weighted observations
+and Kronecker lifting from \src{e9}; summation with moving support from
+\src{e2}, \src{e3}, \src{e6} and \src{e9}; the boundary-rows-before-nullspace
+correction and the signed-lower-index trap from \src{e9}; Ore transport,
+singularity seeds and the Cauchy cover from \src{e9}; finite-algebra covers
+from \src{e8}; the Kripke scope conditions from \src{e4}. \\
+\S7 Nonlinear &
 The cone language and its soundness from all nine; the quadratic theorem from
 \src{p1} and \src{p3}; repair-not-rounding from \src{p1}; target-driven squares
 from \src{p5}; the four dictionary-gap arguments from \src{p2}, \src{p5},
@@ -103,21 +177,22 @@ theorem from \src{p1}, with \src{p3}'s quantitative form; the completeness
 sketch from \src{p2} and \src{p3}; square-factor and Sturm certificates from
 \src{p1} alone; product envelopes from \src{p1}; the reuse-the-existing-backend
 argument from \src{p9} and \src{p5}. \\
-\S7 Boolean and external &
+\S8 Boolean and external &
 The SAT/theory loop from \src{p7}; CDCL(T), RUP replay and the negation trap
 from \src{p6}; the resolution-DAG format, \code{verify\_sat} and the exhaustive
 oracle from \src{p4}; extraction cost vectors from \src{p7}; solver islands and
 translation ledgers from \src{p5}; the reconstruction preference order from
 \src{p7}; the no-blanket-combination warning from \src{p5} and \src{p9}. \\
-\S8 Integration &
+\S9 Integration &
 \code{Params}/\code{assertExtra}/\code{mkGoalCore} from \src{p2} and \src{p9};
 the solver-extension callbacks from \src{p4}; the rollback-is-not-enough point
 from \src{p6}; three reconstruction levels from \src{p2}; the module layout
 merged from \src{p1}, \src{p2}, \src{p3}, \src{p5} and \src{p9}; the acceptance
 contract table from \src{p5}; the deployment pattern from \src{p9}; the gates
 merged from all nine. \\
-\S9 Experiments & Each run reports itself. \\
-\S10 Evaluation &
+\S10 Experiments & Each run reports itself. The re-run table and the Lean
+elaboration tables are the merge's own work, not any proposal's. \\
+\S11 Evaluation &
 Leakage control from \src{p1}, \src{p5} and \src{p9}; the three input conditions
 from \src{p2}; the two tracks from \src{p4}; the non-communicating portfolio
 from \src{p1} and \src{p6}; metric discipline from \src{p4} and \src{p9}; the
@@ -160,6 +235,43 @@ precisely the material that distinguishes one submission from the rest.
 \item \textbf{The Lean design contracts} --- the runtime and scheduler contract
   (\src{p3}) and the \code{CertificateSpec} soundness contract (\src{p6}); these
   complement rather than duplicate each other, and both now elaborate.
+\end{itemize}
+
+From the extension round:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{Finite Kripke countermodels for \textsf{IPC}} (\src{e4}) --- the
+  only mechanism in the collection that turns a failed intuitionistic search
+  into an object a second program can re-check, and the direct answer to the
+  gap \S\ref{sec:external-sources} identifies below.
+\item \textbf{Cyclic proof compilation through checked descent} (\src{e7}) ---
+  the only treatment of recursive obligations that neither trusts a cyclic graph
+  nor abandons the pattern; with the tagged-state rank, the phase measure, and
+  size-change closure demoted to a filter.
+\item \textbf{Continuation-local synthesis} (\src{e7}), with the algebra
+  region and the natural join over shared hole identifiers.
+\item \textbf{Exact one-output integer projection} (\src{e8}) --- the only
+  worker that replaces a modulus-sized table with a hash-consed straight-line
+  program, and the only one that discloses a \emph{shared} search/check
+  assembler rather than claiming independence.
+\item \textbf{Finite-algebra covers with concrete counterexample trees}
+  (\src{e8}) --- the cheapest checker anywhere here: a bare list of state
+  identifiers.
+\item \textbf{Ore common-left-multiple certificates with a complete natural-root
+  cover} (\src{e9}) --- the only treatment of recurrence transport that makes
+  the checker find the singularities itself, via an explicit Cauchy bound.
+\item \textbf{The $D-1$ separating-word bound with attaining fixtures}
+  (\src{e5}, \src{e9}) --- delayed-error families that are correct on every
+  input shorter than the bound.
+\item \textbf{The interpolation-grid counterexample} (\src{e9}) ---
+  $x'=x+\prod_{i=0}^{6}(u-i)$, zero on every small input set and nonzero at
+  $u=7$; the regression control against mistaking a grid for a sample.
+\item \textbf{The retained failed-run history} (\src{e9}) --- three recorded
+  failures with their tracebacks, including one whose diagnosis the package
+  explicitly declines to claim it proved.
+\item \textbf{The span/ideal two-lane ablation} (\src{e1}) --- the same
+  problems through two certificate languages, sixteen unknown against sixteen
+  proved.
 \end{itemize}
 
 \subsection{Disagreements, and how they were resolved}
@@ -213,6 +325,34 @@ are never mixed inside one chain of equalities. \\
 Pigeonhole encodings &
 \src{p4} and \src{p6} use different clause sets and report different columns.
 Both tables are kept, explicitly labelled as non-comparable. \\
+What ``greatest stable space'' means &
+Three extension proposals prove a greatest-fixed-point theorem and they are
+\emph{not} the same theorem. \src{e7} iterates simultaneously from a single
+map with constant multipliers; \src{e8} does a round-robin pass from a union of
+images, once with constant multipliers and once with polynomial multipliers of
+degree at most $e$; \src{e7} instead removes the constant restriction by
+target-seeded ideal completion with traced Gr\"obner bases. \src{e8}'s
+truncated multiple space is explicitly \emph{not} an ideal --- it need not be
+closed under further multiplication --- so the two objects both called
+``ideal'' in prose are different. All three are kept, distinguished, and given
+different names in \S\ref{sec:closure}. \\
+Certificate tag namespaces &
+\src{e7} uses \code{pullback-space-v1}, \src{e8} uses
+\code{forge.pullback-space/1}, \src{e9} uses \code{check.linear}; their
+rational encodings differ too (nested numerator/denominator pairs, flat
+exponent/numerator/denominator triples, and a bivariate four-tuple). These were
+\emph{not} silently unified: a shared tag would assert a compatibility that has
+not been checked. \S\ref{app:schemas} records the divergence instead. \\
+Two documents, one filename &
+\src{e7} and \src{e8} both ship a PDF named \code{forge-extensions.pdf}, and
+their delta tables share a row label. They are different documents by different
+authors, and are kept under their proposal directories rather than merged by
+name. \\
+What the checker's independence is worth &
+\src{e7} and \src{e9} claim an algorithmically opposite checker; \src{e8}
+claims replacement of search entry points for two lanes and \emph{discloses} a
+shared assembler for the third. The strongest available claim was not applied
+uniformly: \S\ref{sec:experiments} states the three levels separately. \\
 \bottomrule
 \end{longtable}
 
@@ -294,19 +434,35 @@ procedure decides non-inhabitation, but the reference implementation emits for
 a negative answer a single enumeration tag and no artefact --- no closed-branch
 tree, nothing a second program can re-check. It is therefore \emph{weaker} than
 lattice elimination, not equivalent to it, and \S\ref{sec:negative} says so.
-The opportunity that follows --- reifying a finite failed search tree into a
-checkable refutation object --- appears to be unbuilt anywhere, and would be a
-genuine contribution rather than a port.
+The opportunity that follows --- reifying a finite failed search into a
+checkable refutation object --- was described here as unbuilt anywhere. The
+extension round built it. \src{e4}'s finite Kripke countermodels are exactly
+that object: a rooted finite partial order with a persistent valuation, which a
+checker re-evaluates from scratch without trusting any solver-supplied table of
+formula truth values, and whose soundness theorem
+(Theorem~\ref{thm:kripke}) rules out a derivation. The gap identified in this
+appendix is therefore closed by a later proposal rather than by the merge, and
+the \textsf{LJT} correction above stands unchanged: the countermodel is the
+artefact, and the enumeration tag never was one.
+
+The extension round read the same two neighbouring projects, at the same pinned
+revisions, and adds two facts worth recording. Leant's own Djex dependency is
+revision \texttt{e237e866}, which is \emph{not} the standalone Djex head
+\texttt{e8778f4ebd63}; substituting one for the other when reproducing Leant's
+reports would not reproduce them. And no extension proposal modified either
+repository or ran a live synthesis against them; their integration sections are
+designs, and \src{e8}'s says so in its own status box.
 
 \subsection{What the merge changed}
 
 Four things in this document are not simply inherited.
 
-First, the nine experiment sections are reported as nine, with the non-pooling
-rule stated explicitly and the four Horn setups tabulated against each other.
-Several of the source articles warned against pooling their \emph{own} numbers;
-none could warn against pooling across articles, because none knew about the
-others.
+First, the eighteen experiment sections are reported as eighteen, with the
+non-pooling rule stated explicitly and the four Horn setups tabulated against
+each other. Several of the source articles warned against pooling their
+\emph{own} numbers, and the extension round warned against pooling with the
+design round's totals as well; none could warn against pooling across articles
+within its own round, because none knew about its siblings.
 
 Second, the bibliography is deduplicated: roughly 215 \code{bibitem} entries
 under about 100 keys became 56 entries under descriptive keys, keeping the
@@ -319,15 +475,27 @@ Third, the build is plain pdf\LaTeX{} with stock packages. The nine used four
 engines and nine font families between them, and every one of their READMEs had
 to explain what to do when a font was missing.
 
-Fourth, and the only new evidence: three Lean files were compiled
-(Table~\ref{tab:lean}). Every source recorded \code{NOT\_RUN}. That is now
-narrower --- three of sixteen files elaborate under Lean v4.34.0 --- and the
-limits of what it shows are stated where the result appears.
+Fourth, and the only new evidence: thirteen Lean files were compiled
+(Tables~\ref{tab:lean} and~\ref{tab:lean-extensions}), and all nine extension
+suites were re-run and reproduced their recorded counts
+(Table~\ref{tab:extension-rerun}). Every one of the eighteen sources recorded
+\code{NOT\_RUN} for Lean. That is now narrower --- three of the eighteen files
+in the merged tree and ten of the twenty extension-round source files elaborate
+under Lean v4.34.0, seven of the latter with no axiom dependencies at all ---
+and the limits of what it shows are stated where the result appears.
+
+Fifth, and specific to the second round: the extension proposals were prepared
+independently and overlap heavily, so the merge had to decide in each case
+whether two similar-looking results are the same result. Several are not. Three
+different greatest-fixed-point theorems, three different certificate namespaces,
+two identically named PDFs, and three different strengths of producer/checker
+separation are all recorded above as distinctions rather than flattened into
+agreement.
 
 \subsection{Conventions used in this document}
 
 \code{\textbackslash status\{...\}} banners, inherited from several of the
 sources, mark whether a mechanism was implemented and executed, specified only,
-or proposed for production. \src{pN} labels attribute a result to the run that
-produced it. \unknown{} always means a bounded search found nothing; it never
+or proposed for production. \src{pN} and \src{eN} labels attribute a result to
+the design-round or extension-round run that produced it. \unknown{} always means a bounded search found nothing; it never
 means a statement is false.
