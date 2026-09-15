@@ -78,6 +78,29 @@ any checker is correct, and it is not a comparison against any tactic.
 
 See [`../docs/LEAN-STATUS.md`](../docs/LEAN-STATUS.md).
 
+## The merged package is a tenth run, not a tenth of a total
+
+`prototype/` is a single package assembled from the nine codebases. It has its
+own test suite and its own certificate corpus, and those numbers belong to it
+alone:
+
+| | |
+| --- | --- |
+| `python -m pytest -q` | 682 passed |
+| `python -S bin/verify.py` | 22 certificates rechecked, 30 mutations rejected |
+| Environment | Python 3.14.4, NumPy 2.4.4, SciPy 1.17.1, SymPy 1.14.0 |
+
+That environment differs from the nine runs' (Python 3.13.5, NumPy 2.3.5,
+SciPy 1.17.0), so even the families it inherits unchanged are a fresh
+observation rather than a reproduction. The 682 is a merged suite: it is not
+the sum of the nine suites, and several source assertions did not survive the
+merge because they pinned counts that depended on one proposal's own search
+grammar.
+
+The 22 certificates are a deliberately small regression corpus covering every
+family once, not a re-run of any proposal's benchmark. Nothing here supersedes
+the recorded runs, and nothing here should be compared against them.
+
 ## Re-running
 
 Experiments write to `reproduced-results/`, which `.gitignore` excludes, so a
