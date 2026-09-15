@@ -55,13 +55,14 @@ The largest soundness risk is mistranslation at the Lean/certificate boundary
 --- local assumptions, casts, dependent binders, and strict inequalities. The
 largest performance risk is generating candidates whose proofs are expensive to
 reconstruct. The largest evaluation risk is comparing against an artificially
-weak premise set or leaking target theorems into retrieval.
+weak premise set, or leaking target theorems into retrieval.
 
-None of these is mathematical. The numerical search is comparatively easy to
-sandbox, precisely because an exact certificate can reject a bad proposal. A
-restricted, correct implementation that exports a small set of ordinary Lean
-proofs is preferable to a wide solver bridge that silently leaves obligations or
-enlarges the trusted base.
+None of these is mathematical, and that is the useful observation. The hard
+parts of this project are not the algorithms; \S\ref{sec:integration} lists them
+and they are all engineering. It is worth noticing which way that cuts: a
+project whose remaining risk is concentrated in state management and proof
+transport is a project whose mathematics is done, and one that should be judged
+on whether it ships a narrow correct thing rather than a wide leaky one.
 
 \subsection{What this document has established, and what it has not}
 
