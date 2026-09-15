@@ -20,7 +20,8 @@ results/
   manifest.json                 one row per run: environment, seed, counts,
                                 Lean status, where the raw files are
   certificate-counts.csv        per run, per family — never a bare total
-  lean-core-elaboration.json    NEW: 3 merged-tree files elaborated
+  lean-core-elaboration.json    NEW: 3 merged-tree design files elaborated
+  lean-closure-elaboration.json NEW: 3 merged closure files elaborated
   lean-extensions-elaboration.json  NEW: 10 extension files elaborated
   extension-suites-rerun.json   NEW: all nine extension suites re-run here
 ```
@@ -101,17 +102,18 @@ three they mean.
 
 ## The Lean result
 
-Two files are new. All eighteen proposals recorded their Lean status as
+Three files are new. All eighteen proposals recorded their Lean status as
 `NOT_RUN` — no toolchain in any authoring environment — under a dozen different
 filenames and several formats. This merge installed the pinned
 `leanprover/lean4:v4.34.0` and elaborated every file that imports nothing beyond
-Lean core: three in the merged tree
-(`lean-core-elaboration.json`) and ten across the extension proposals
-(`lean-extensions-elaboration.json`).
+Lean core: three design files in the merged tree (`lean-core-elaboration.json`),
+ten across the extension proposals (`lean-extensions-elaboration.json`), and
+three that this merge wrote by deduplicating those ten
+(`lean-closure-elaboration.json` — the ten contained six spellings of one
+reachability theorem and five of one word-fold theorem).
 
-All thirteen elaborate, and seven of the ten extension files print
-`does not depend on any axioms` for every theorem they expose. That is the whole
-claim. It is not an axiom audit, it says nothing about the twenty-one
+All sixteen elaborate, and ten of them print `does not depend on any axioms` for
+every theorem they expose. That is the whole claim. It is not an axiom audit, it says nothing about the twenty-one
 Mathlib-dependent files, it does not establish that any checker is correct, it
 is not a comparison against any tactic, and it does not change what any of those
 files says.

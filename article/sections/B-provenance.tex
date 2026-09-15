@@ -475,14 +475,17 @@ Third, the build is plain pdf\LaTeX{} with stock packages. The nine used four
 engines and nine font families between them, and every one of their READMEs had
 to explain what to do when a font was missing.
 
-Fourth, and the only new evidence: thirteen Lean files were compiled
-(Tables~\ref{tab:lean} and~\ref{tab:lean-extensions}), and all nine extension
-suites were re-run and reproduced their recorded counts
+Fourth, and the only new evidence: sixteen Lean files were compiled
+(Tables~\ref{tab:lean}, \ref{tab:lean-extensions} and~\ref{tab:lean-closure}),
+and all nine extension suites were re-run and reproduced their recorded counts
 (Table~\ref{tab:extension-rerun}). Every one of the eighteen sources recorded
-\code{NOT\_RUN} for Lean. That is now narrower --- three of the eighteen files
+\code{NOT\_RUN} for Lean. That is now narrower --- six of the twenty-one files
 in the merged tree and ten of the twenty extension-round source files elaborate
-under Lean v4.34.0, seven of the latter with no axiom dependencies at all ---
-and the limits of what it shows are stated where the result appears.
+under Lean v4.34.0, ten of the sixteen with no axiom dependencies at all --- and
+the limits of what it shows are stated where the result appears. Three of those
+six are the merge's own: the ten extension specimens contained six spellings of
+one reachability theorem and five of one word-fold theorem, so deduplicating
+them was itself a merge decision rather than a transcription.
 
 Fifth, and specific to the second round: the extension proposals were prepared
 independently and overlap heavily, so the merge had to decide in each case

@@ -72,12 +72,13 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exceptions.** Thirteen files import nothing beyond Lean core and now
-elaborate against `leanprover/lean4:v4.34.0`: three in the merged tree (the
-runtime contract, the certificate-soundness contract, and the Mathlib-free
-structural proofs) and ten across the extension proposals. Seven of the ten
-print `does not depend on any axioms` for every theorem they expose. See
-[`LEAN-STATUS.md`](LEAN-STATUS.md).
+**The exceptions.** Sixteen files import nothing beyond Lean core and now
+elaborate against `leanprover/lean4:v4.34.0`: six in the merged tree (the
+runtime contract, the certificate-soundness contract, the Mathlib-free
+structural proofs, and three new `Forge/Closure` files holding the induction
+principles the closure workers lower to) and ten across the extension
+proposals. Ten of the sixteen print `does not depend on any axioms` for every
+theorem they expose. See [`LEAN-STATUS.md`](LEAN-STATUS.md).
 
 Elaboration does not change what a file says. `e8/lean/IndexingSketch.lean`
 type-checks and still proves an equation between two ordinary-list definitions;

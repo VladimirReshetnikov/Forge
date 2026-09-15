@@ -183,9 +183,10 @@ Three more from the extension round belong in the same list:
 
 | Check | Result |
 | --- | --- |
-| Merged article builds | pdfLaTeX, 110 pages, no errors, no undefined references |
-| Core Lean elaboration, merged tree | 3 of 18 files, Lean v4.34.0, no errors |
-| Core Lean elaboration, extension round | 10 of 20 source files, no errors; 7 print no axiom dependencies |
+| Merged article builds | pdfLaTeX, no errors, no undefined references or citations |
+| Core Lean elaboration, merged tree | 6 of 21 files, Lean v4.34.0, no errors |
+| Core Lean elaboration, extension round | 10 of 20 source files, no errors |
+| Theorems printing no axiom dependencies | 10 of the 16 elaborated files |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine design-round runs; it is a timing field |

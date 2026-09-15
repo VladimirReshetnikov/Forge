@@ -44,7 +44,7 @@ Baseline: Lean **v4.34.0** (released 14 September 2026), Mathlib
 ```
 article/        the merged draft — start at forge.pdf
 prototype/      merged Python package: exact arithmetic, search, checkers
-lean/           merged Lean sources: design contracts, generated replays, specimens
+lean/           merged Lean sources: design contracts, closure principles, replays
 results/        derived cross-run index, and the new measurements
 docs/           status, sources, validation, and the Lean ledger
 tools/          check_lean.py, build_results_index.py
@@ -91,9 +91,9 @@ relative to a dictionary.
 
 All eighteen proposals recorded their Lean status as `NOT_RUN`. This environment
 had `elan`, which installed the pinned `leanprover/lean4:v4.34.0`, so every file
-importing nothing beyond Lean core could be elaborated. **Thirteen files
-elaborate**: three in the merged tree and ten across the extension proposals.
-Seven of the ten print `does not depend on any axioms` for every theorem they
+importing nothing beyond Lean core could be elaborated. **Sixteen files
+elaborate**: six in the merged tree and ten across the extension proposals. Ten
+of the sixteen print `does not depend on any axioms` for every theorem they
 expose.
 
 | File | Result |
@@ -101,13 +101,21 @@ expose.
 | `lean/Forge/Design/Runtime.lean` | elaborated |
 | `lean/Forge/Design/Contracts.lean` | elaborated |
 | `lean/Forge/Examples/Structural.lean` | elaborated; two theorems use `propext` |
+| `lean/Forge/Closure/Principles.lean` | elaborated; 8 theorems, no axiom dependencies |
+| `lean/Forge/Closure/Covers.lean` | elaborated; 2 theorems, no axiom dependencies |
+| `lean/Forge/Closure/Indexing.lean` | elaborated; 2 theorems, no axiom dependencies |
 | `e1`…`e9` core specimens (10 files) | elaborated; 7 with no axiom dependencies |
 
-Recorded in
-[`results/lean-core-elaboration.json`](results/lean-core-elaboration.json) and
-[`results/lean-extensions-elaboration.json`](results/lean-extensions-elaboration.json).
+The three `Closure` files are the merge's own work: the ten core-only extension
+specimens contained six spellings of one reachability theorem and five of one
+word-fold theorem, so those are proved once here and the genuinely distinct
+lemmas are kept and attributed. Recorded in
+[`results/lean-core-elaboration.json`](results/lean-core-elaboration.json),
+[`results/lean-extensions-elaboration.json`](results/lean-extensions-elaboration.json)
+and
+[`results/lean-closure-elaboration.json`](results/lean-closure-elaboration.json).
 
-That is thirteen files of thirty-eight. It is not an axiom audit, it does not
+That is sixteen files of forty-one. It is not an axiom audit, it does not
 cover the twenty-one Mathlib-dependent files, it does not establish that any
 checker is correct, and it is not a comparison against any tactic. **It also
 does not change what any of those files says** — `e8`'s indexing sketch
@@ -181,7 +189,7 @@ so a fresh run cannot overwrite a recorded one.
 Core only, no Mathlib needed:
 
 ```bash
-python tools/check_lean.py --mode elaborate lean/Forge/Design lean/Forge/Examples/Structural.lean
+python tools/check_lean.py --mode elaborate lean/Forge/Design lean/Forge/Closure lean/Forge/Examples/Structural.lean
 ```
 
 Everything, against a project with Mathlib already built:

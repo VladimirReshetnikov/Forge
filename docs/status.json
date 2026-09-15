@@ -24,13 +24,18 @@
       "performed": true,
       "toolchain": "leanprover/lean4:v4.34.0",
       "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
-      "files_elaborated_total": 13,
+      "files_elaborated_total": 16,
       "merged_tree": {
-        "files_total": 18,
-        "files_elaborated": 3,
+        "files_total": 21,
+        "files_elaborated": 6,
         "mathlib_dependent": 13,
         "aggregators": 2,
-        "record": "results/lean-core-elaboration.json"
+        "records": [
+          "results/lean-core-elaboration.json",
+          "results/lean-closure-elaboration.json"
+        ],
+        "closure_files_are_the_merges_own_work": true,
+        "closure_files_note": "the ten core-only extension specimens contained six spellings of one reachability theorem and five of one word-fold theorem; those are proved once in lean/Forge/Closure/Principles.lean"
       },
       "extension_proposals": {
         "source_files_total": 20,
@@ -43,7 +48,8 @@
       "is_axiom_audit": false,
       "is_tactic_comparison": false,
       "establishes_checker_correctness": false,
-      "elaboration_changes_what_a_file_says": false
+      "elaboration_changes_what_a_file_says": false,
+      "files_printing_no_axiom_dependencies": 10
     }
   },
   "runs": {

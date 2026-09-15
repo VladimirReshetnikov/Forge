@@ -723,8 +723,8 @@ write.
 
 The merge environment has \code{elan}, and installing the pinned
 \code{leanprover/lean4:v4.34.0} made a first, narrow compilation check possible.
-Three of the eighteen files in the merged tree import nothing beyond Lean core
-and can therefore be elaborated without a built Mathlib:
+Three of the design-round files in the merged tree import nothing beyond Lean
+core and can therefore be elaborated without a built Mathlib:
 
 \begin{table}[htbp]
 \centering\small
@@ -747,8 +747,8 @@ This confirms that the proposed runtime and scheduler contract, the
 proofs are well-typed Lean 4.34.0 rather than merely plausible-looking source.
 
 It confirms nothing else. It is not a transitive axiom audit. It says nothing
-about the other thirteen files in the merged tree, which import Mathlib and
-need a built project, or about the two that merely import their siblings. It does not establish that any certificate checker is correct.
+about the thirteen files in the merged tree that import Mathlib and need a
+built project, or about the two that merely import their siblings. It does not establish that any certificate checker is correct.
 And it is not a comparison against any Lean tactic --- successful elaboration of
 a hand-written example proves that the example type-checks, not that automation
 found it.
@@ -798,6 +798,43 @@ equation between two ordinary-list definitions rather than anything about
 Church-encoded inputs. Elaborating a specimen does not upgrade what the specimen
 says.
 
+\subsubsection*{Three more, written by the merge}
+
+Those ten files overlap heavily. Between them they contain six spellings of one
+reachability-invariant theorem and five of one word-fold preservation theorem,
+differing in constructor names, argument order, and whether the initial state is
+a predicate or a point. Merging them means proving each once and keeping what is
+actually distinct, so the merged tree gains three files:
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+\toprule
+File & Merged from & Elapsed (s) \\
+\midrule
+\code{Forge/Closure/Principles.lean} &
+all nine, for the reachability and word-fold theorems; \src{e3} and \src{e4}
+for the two-machine relation; \src{e3}, \src{e6} and \src{e9} for the
+commuting step map; \src{e1} for the left fold; \src{e7} for well-founded
+descent & 6.6 \\
+\code{Forge/Closure/Covers.lean} & \src{e8}, the tree half of its soundness
+specimen & 244.4 \\
+\code{Forge/Closure/Indexing.lean} & \src{e7}'s Church half and \src{e8}'s
+\code{List}/\code{Int} sketch, which proved the same equation under different
+names & 3.8 \\
+\bottomrule
+\end{tabularx}
+\caption{Recorded in
+\texttt{results/lean-closure-elaboration.json}. All three elaborate, and all
+twelve of their theorems print \emph{does not depend on any axioms}.}
+\label{tab:lean-closure}
+\end{table}
+
+Sixteen files therefore elaborate in total: six in the merged tree and ten in
+the extension proposals, with ten of the sixteen reporting no axiom
+dependencies. The merged \code{Indexing.lean} inherits \src{e8}'s scope note
+verbatim rather than quietly widening it.
+
 \subsection{What the evidence establishes}
 
 It establishes that the implementations actually synthesise certificates in the
@@ -806,9 +843,10 @@ symbolic search libraries; that the specified mutation and corruption tests are
 rejected; that several mechanisms solve problems their own restricted precursors
 cannot; that all nine extension suites re-run and reproduce their recorded
 counts on a different interpreter and different library versions; and that
-thirteen Lean artefacts --- three from the design round, ten from the extension
-round --- type-check under the pinned toolchain, seven of them printing
-\emph{does not depend on any axioms} for every theorem they expose.
+sixteen Lean artefacts --- three from the design round, ten from the extension
+round, and three the merge wrote by deduplicating those ten --- type-check under
+the pinned toolchain, ten of them printing \emph{does not depend on any axioms}
+for every theorem they expose.
 
 It does not establish that \forge{} is implemented as a Lean tactic, that the
 Mathlib-dependent candidate scripts compile, that any certificate is checked by

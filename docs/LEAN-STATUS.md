@@ -11,11 +11,11 @@ reason: no `lean` or `lake` executable in the authoring environment.
 Consequently none performed a kernel check, an axiom audit, or any comparison
 against a Lean tactic.
 
-**This merge compiled thirteen files.** The merge environment has `elan`, which
-installed the pinned `leanprover/lean4:v4.34.0`. Three of the eighteen files in
+**This merge compiled sixteen files.** The merge environment has `elan`, which
+installed the pinned `leanprover/lean4:v4.34.0`. Six of the twenty-one files in
 the merged tree and ten of the twenty extension-round source files import
-nothing beyond Lean core, and all thirteen elaborate with no errors. Seven of
-the ten print `does not depend on any axioms` for every theorem they expose.
+nothing beyond Lean core, and all sixteen elaborate with no errors. Ten of the
+sixteen print `does not depend on any axioms` for every theorem they expose.
 
 ## What each run recorded
 
@@ -67,6 +67,22 @@ Recorded in
 | `lean/Forge/Design/Contracts.lean` | p6 `Contracts.lean` | elaborated, no errors |
 | `lean/Forge/Examples/Structural.lean` | p9 `Structural.lean` | elaborated; two theorems depend on `propext` |
 
+### The merged closure principles
+
+Recorded in
+[`../results/lean-closure-elaboration.json`](../results/lean-closure-elaboration.json).
+These three files are the merge's own work rather than any one proposal's: the
+ten core-only extension specimens between them contained six spellings of one
+reachability theorem and five of one word-fold theorem. Those are proved once
+here; the genuinely distinct lemmas are kept and attributed in each file's
+header.
+
+| File | Merged from | Result |
+| --- | --- | --- |
+| `lean/Forge/Closure/Principles.lean` | e1, e2, e3, e4, e5, e6, e7, e8, e9 | elaborated; 8 theorems, none with axiom dependencies |
+| `lean/Forge/Closure/Covers.lean` | e8 `CoreSoundness.lean`, tree half | elaborated; 2 theorems, none with axiom dependencies |
+| `lean/Forge/Closure/Indexing.lean` | e7 `Specimens.lean`, e8 `IndexingSketch.lean` | elaborated; 2 theorems, none with axiom dependencies |
+
 ### The extension proposals
 
 Recorded in
@@ -92,11 +108,12 @@ whose declarations are admitted.
 ## What this does and does not show
 
 **It shows** that the proposed runtime and scheduler contract, the
-`CertificateSpec` soundness contract, the Mathlib-free list proofs, and ten
-extension-round specimens — reachability invariants, tree covers, fold indexing,
-ranked calls, word simulation — are well-typed Lean 4.34.0 rather than merely
-plausible-looking source. Thirteen artefacts that had never met a compiler now
-have, and for seven of them the axiom inventory is empty.
+`CertificateSpec` soundness contract, the Mathlib-free list proofs, the merged
+closure principles, and ten extension-round specimens — reachability invariants,
+tree covers, fold indexing, ranked calls, word simulation — are well-typed Lean
+4.34.0 rather than merely plausible-looking source. Sixteen artefacts that had
+never met a compiler now have, and for ten of them the axiom inventory is
+empty.
 
 **It does not show** any of the following, and the distinctions matter:
 
@@ -114,9 +131,10 @@ have, and for seven of them the axiom inventory is empty.
 - **It does not change what a file says.** `e8/lean/IndexingSketch.lean`
   elaborates, and its author marked it uncompiled *and* not a substitute for the
   original Church-encoded query. Both remain true: it type-checks, and it proves
-  an equation between two ordinary-list definitions. Likewise `e7`'s
-  `churchIndex_encode` is a theorem about `encode xs` for an actual finite list,
-  not about every inhabitant of a Church-style type.
+  an equation between two ordinary-list definitions. The merged
+  `Forge/Closure/Indexing.lean` inherits exactly that scope, and says so at the
+  top of the file: `churchIndex_encode` is a theorem about `encode xs` for an
+  actual finite list, not about every inhabitant of a Church-style type.
 
 ## The remaining Mathlib-dependent files
 

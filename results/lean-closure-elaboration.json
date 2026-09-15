@@ -1,0 +1,56 @@
+{
+  "status": "RUN",
+  "scope": "Merged-tree closure files (lean/Forge/Closure), deduplicated from the ten core-only extension-round Lean sources.",
+  "mode": "elaborate",
+  "lean_version": "Lean (version 4.34.0, x86_64-w64-windows-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+  "platform": "Windows-11-10.0.26340-SP0",
+  "project": null,
+  "counts": {
+    "elaborated": 3
+  },
+  "files": [
+    {
+      "file": "lean/Forge/Closure/Covers.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 244.433,
+      "stdout": "'ForgeClosure.tree_cover' does not depend on any axioms\n'ForgeClosure.tree_property' does not depend on any axioms"
+    },
+    {
+      "file": "lean/Forge/Closure/Indexing.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 3.794,
+      "stdout": "'ForgeClosure.foldIndex_eq_recursiveIndex' does not depend on any axioms\n'ForgeClosure.churchIndex_encode' does not depend on any axioms"
+    },
+    {
+      "file": "lean/Forge/Closure/Principles.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 6.601,
+      "stdout": "'ForgeClosure.reachable_invariant' does not depend on any axioms\n'ForgeClosure.run_invariant' does not depend on any axioms\n'ForgeClosure.run_relation' does not depend on any axioms\n'ForgeClosure.run_observation' does not depend on any axioms\n'ForgeClosure.run_map' does not depend on any axioms\n'ForgeClosure.observation_constant' does not depend on any axioms\n'ForgeClosure.foldl_preserves' does not depend on any axioms\n'ForgeClosure.close_ranked_calls' does not depend on any axioms"
+    }
+  ],
+  "note": "Successful elaboration is not a full transitive-axiom audit and is not a comparison against any Lean tactic. Elaborating a specimen does not change what the specimen says: Indexing.lean proves an equation about encodings of finite lists, not about arbitrary inhabitants of a Church-style type.",
+  "merged_from": {
+    "Principles.lean": [
+      "e1/lean/Core.lean",
+      "e2/lean/ForgeExtensions/Reachability.lean",
+      "e3/lean/BridgeSpec.lean",
+      "e4/lean/Reachability.lean",
+      "e5/lean/ForgeExtension/Core.lean",
+      "e6/lean/ProofPrinciples.lean",
+      "e7/lean/Specimens.lean (close_ranked_calls, reachability)",
+      "e8/lean/CoreSoundness.lean (Reach)",
+      "e9/lean/WordSimulation.lean"
+    ],
+    "Covers.lean": [
+      "e8/lean/CoreSoundness.lean (tree half)"
+    ],
+    "Indexing.lean": [
+      "e7/lean/Specimens.lean (Church half)",
+      "e8/lean/IndexingSketch.lean"
+    ]
+  },
+  "theorems_with_no_axiom_dependencies": 12
+}
