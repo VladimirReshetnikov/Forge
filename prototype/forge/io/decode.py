@@ -37,11 +37,16 @@ from .. import terms as terms_module
 from .. import induction as induction_module
 from .. import horn as horn_module
 from .. import sat as sat_module
+from ..closure import certificates as closure_checkers
+from ..closure import kripke as kripke_module
+from ..closure import words as words_module
 
 RATIONAL = re.compile(r'-?[0-9]+(?:/[1-9][0-9]*)?')
 
 REQUIRED_FAMILIES = ('Quadratic SOS', 'Bernstein box', 'List induction',
-                     'CDCL(T) refutation')
+                     'CDCL(T) refutation', 'Observable closure',
+                     'Finite cover', 'Integer projection',
+                     'Kripke countermodel', 'Ore common multiple')
 
 
 class DecodeError(ValueError):
@@ -303,6 +308,24 @@ def verify(record) -> bool:
     if family == 'CDCL(T) refutation':
         atoms = {int(k): sat_module.DiffAtom(**v) for k, v in inp['atoms'].items()}
         return sat_module.replay(inp['n'], inp['clauses'], atoms, c)
+    # --- extension round: closure families ---------------------------------
+    if family in ('Observable closure', 'Separating word'):
+        model = words_module.Model.build(
+            integer(inp['dimension'], 1, 256), inp['initial'], inp['output'],
+            inp['actions'])
+        if family == 'Observable closure':
+            return closure_checkers.check_observable(model, c)
+        return closure_checkers.check_separating_word(model, c['word'], c['value'])
+    if family in ('Finite cover', 'Constructor counterexample'):
+        return closure_checkers.check_cover(inp, c)
+    if family == 'Integer projection':
+        return closure_checkers.check_projection(inp, c)
+    if family == 'Kripke countermodel':
+        return kripke_module.verify(inp, c)
+    if family == 'Ore common multiple':
+        return closure_checkers.check_ore(inp, c)
+    if family == 'Singularity plan':
+        return closure_checkers.check_singularity_plan(inp, c)
     if family == 'CDCL(T) resolution refutation':
         atoms = {int(k): sat_module.DiffAtom(**v) for k, v in inp['atoms'].items()}
         return sat_module.verify_resolution(inp['clauses'], atoms, inp.get('nodes'), c)
@@ -410,6 +433,69 @@ def mutations(record) -> list:
         bad = copy.deepcopy(record)
         bad['certificate']['offsets'][0] += 1
         out.append(bad)
+    # --- extension round -----------------------------------------------------
+    # Each mutation changes one specific checked quantity, following e9's
+    # design rather than flipping random bytes. Note that the converse is NOT
+    # claimed: scaling a whole valid certificate can produce another valid one.
+    elif family == 'Observable closure':
+        bad = copy.deepcopy(record)
+        bad['certificate']['target_coordinates'] = [
+            [0, 1] for _ in bad['certificate']['target_coordinates']]
+        out.append(bad)                      # target no longer spanned
+        bad = copy.deepcopy(record)
+        first = bad['certificate']['basis'][0][0]
+        bad['certificate']['basis'][0][0] = [first[0] + first[1], first[1]]
+        out.append(bad)                      # invariant row no longer invariant
+    elif family == 'Separating word':
+        bad = copy.deepcopy(record)
+        bad['certificate']['value'] = [0, 1]
+        out.append(bad)                      # a zero observation refutes nothing
+        bad = copy.deepcopy(record)
+        bad['certificate']['word'] = bad['certificate']['word'][:-1]
+        out.append(bad)                      # a shorter word observes zero
+    elif family == 'Finite cover':
+        bad = copy.deepcopy(record)
+        bad['certificate']['cover'] = sorted(
+            set(bad['certificate']['cover']) | {bad['input']['states'] - 1})
+        out.append(bad)
+        bad = copy.deepcopy(record)
+        if len(bad['certificate']['cover']) > 1:
+            del bad['certificate']['cover'][0]
+            out.append(bad)                  # no longer constructor-closed
+    elif family == 'Constructor counterexample':
+        bad = copy.deepcopy(record)
+        bad['certificate']['nodes'][-1]['children'] = [len(bad['certificate']['nodes']) - 1]
+        out.append(bad)                      # self-reference, not a finite tree
+    elif family == 'Integer projection':
+        bad = copy.deepcopy(record)
+        bad['certificate']['bezout'][0][1] += 1
+        out.append(bad)                      # the Bezout combination no longer holds
+        bad = copy.deepcopy(record)
+        bad['certificate']['program']['guards'] = []
+        out.append(bad)                      # a deleted guard is not a stronger result
+    elif family == 'Kripke countermodel':
+        bad = copy.deepcopy(record)
+        n = bad['certificate']['worlds']
+        bad['certificate']['relation'] = [[i == j for j in range(n)] for i in range(n)]
+        out.append(bad)                      # discrete order: the root is not least
+        for name in bad['certificate']['valuation']:
+            bad = copy.deepcopy(record)
+            values = bad['certificate']['valuation'][name]
+            bad['certificate']['valuation'][name] = [not v for v in values]
+            out.append(bad)                  # persistence or the goal now fails
+            break
+    elif family == 'Ore common multiple':
+        bad = copy.deepcopy(record)
+        bad['certificate']['common'][-1] = [[1, 1], [1, 1]]
+        out.append(bad)                      # U A no longer equals the claimed L
+    elif family == 'Singularity plan':
+        bad = copy.deepcopy(record)
+        if bad['certificate']['seed_indices']:
+            del bad['certificate']['seed_indices'][0]
+            out.append(bad)                  # a removed seed is an unproved pivot
+        bad = copy.deepcopy(record)
+        bad['certificate']['bound'] = 0
+        out.append(bad)                      # an understated root bound
     return out
 
 

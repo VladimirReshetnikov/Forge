@@ -178,10 +178,10 @@
   ],
   "merged_prototype": {
     "path": "prototype/",
-    "note": "One package assembled from the nine codebases. Its numbers are its own and are not comparable with, or a reproduction of, any recorded run.",
-    "tests_passed": 682,
-    "certificates_in_regression_corpus": 22,
-    "mutations_rejected": 30,
+    "note": "One package assembled from the eighteen codebases: the design round's algorithm families, plus the five extension-round closure lanes that are standard library only. Its numbers are its own and are not comparable with, or a reproduction of, any recorded run.",
+    "tests_passed": 748,
+    "certificates_in_regression_corpus": 33,
+    "mutations_rejected": 50,
     "replay_is_stdlib_only": true,
     "replay_verified_with_site_packages_disabled": true,
     "replay_survives_dash_O": true,
@@ -191,6 +191,18 @@
       "scipy": "1.17.1",
       "sympy": "1.14.0"
     },
-    "lean_emitted_files_compiled": false
+    "lean_emitted_files_compiled": false,
+    "closure_lanes_merged": [
+      "observable words",
+      "finite covers",
+      "integer projection",
+      "Kripke countermodels",
+      "Ore transport"
+    ],
+    "closure_lanes_not_merged": [
+      "target-generated ideal closure",
+      "telescoping"
+    ],
+    "closure_lanes_not_merged_reason": "their searches need a Groebner engine and exact bivariate nullspaces, so they cannot be standard library only; run them from proposals/e1, e3, e6, e7 and e9"
   }
 }

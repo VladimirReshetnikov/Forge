@@ -1,4 +1,4 @@
-"""Forge: one merged prototype assembled from nine independent proposals.
+"""Forge: one merged prototype assembled from eighteen independent proposals.
 
 Each module names the proposal it was based on and what was folded into it.
 Nothing in the import path of this package pulls in NumPy, SciPy or SymPy: those
@@ -20,11 +20,27 @@ CHECKER can run under `python -S` with the standard library alone.
   witness.*    p2/p1, p7, p4, p9     affine, lattice, modular, polynomial
   io.decode    p1 + p3 + p9 + p6     hardened stdlib-only decoding
   io.lean      p5 + p1 + p7 + p3     Lean source emission
+
+The extension round added a family of workers that compute a CLOSURE -- the
+smallest invariant object that settles a target -- rather than searching for a
+certificate in a fixed language. Five of its lanes are merged here, and all
+five are standard library only with their searches included:
+
+  closure.words        e5 + e6 + e9   observable-space closure, separating words
+  closure.cover        e8             finite-algebra covers, counterexample trees
+  closure.projection   e8             exact one-output integer projection
+  closure.kripke       e4             finite Kripke countermodels for IPC
+  closure.ore          e9             common left multiples, singularity plans
+
+The ideal-closure and telescoping lanes are not merged: their searches need a
+Groebner engine and exact bivariate nullspaces respectively, so they cannot be
+standard library only. Run those from proposals/e1, e3, e6, e7 and e9.
 """
 from . import (poly, linalg, certificates, cone, quadratic, bernstein, univariate,
-               recurrence, terms, induction, horn, sat, witness, io)  # noqa: F401
+               recurrence, terms, induction, horn, sat, witness, io,
+               closure)  # noqa: F401
 
 __all__ = ['poly', 'linalg', 'certificates', 'cone', 'quadratic', 'bernstein',
            'univariate', 'recurrence', 'terms', 'induction', 'horn', 'sat',
-           'witness', 'io']
+           'witness', 'io', 'closure']
 __version__ = '0.1.0'

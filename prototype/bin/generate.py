@@ -218,7 +218,113 @@ def build() -> list[dict]:
                     'input': {'clauses': holes, 'atoms': {}, 'nodes': None},
                     'certificate': {'status': res['status'], 'proof': res['proof'],
                                     'root': res['root']}})
+
+    records += closure_records()
     return records
+
+
+def closure_records() -> list[dict]:
+    """The extension round's five merged lanes, as replayable records.
+
+    Every rational is serialised as a [numerator, denominator] pair, so a float
+    or a bool cannot survive a round trip through the decoder.
+    """
+    from forge.closure import cover, kripke, ore, projection, words
+
+    def enc(value):
+        if isinstance(value, Q):
+            return [value.numerator, value.denominator]
+        if isinstance(value, (list, tuple)):
+            return [enc(v) for v in value]
+        return value
+
+    out: list[dict] = []
+
+    # e5 / e6 / e9 -- a closure and a separating word are two results, not one
+    # success and one failure.
+    def model_input(model):
+        return {'dimension': model.dimension, 'initial': enc(model.initial),
+                'output': enc(model.output), 'actions': enc(model.actions)}
+
+    model = words.conservation_gap_model()
+    result = words.search(model)
+    if result['status'] != 'closure':
+        raise RuntimeError('observable closure regression')
+    out.append({'id': 'conservation_gap', 'family': 'Observable closure',
+                'input': model_input(model),
+                'certificate': {'kind': 'observable-closure',
+                                'basis': enc(result['certificate']['basis']),
+                                'target_coordinates':
+                                    enc(result['certificate']['target_coordinates']),
+                                'actions': enc(result['certificate']['actions'])}})
+
+    for dimension in (4, 9):
+        shift = words.shift_model(dimension)
+        found = words.search(shift)
+        if found['status'] != 'separating' or len(found['word']) != dimension-1:
+            raise RuntimeError('separating bound regression at D=%d' % dimension)
+        out.append({'id': 'delayed_error_%d' % dimension, 'family': 'Separating word',
+                    'input': model_input(shift),
+                    'certificate': {'word': found['word'], 'value': enc(found['value'])}})
+
+    # e8 -- covers and concrete counterexample trees.
+    counts = cover.binary_tree_counts(12)
+    certificate, stats = cover.synthesize(counts)
+    if certificate['kind'] != 'cover' or stats['states_reached'] != 12:
+        raise RuntimeError('finite cover regression')
+    out.append({'id': 'leaf_node_counts_mod_12', 'family': 'Finite cover',
+                'input': counts, 'certificate': certificate})
+
+    mirror = cover.mirror_problem([[0, 0], [1, 1]])
+    certificate, _ = cover.synthesize(mirror)
+    if certificate['kind'] != 'counterexample':
+        raise RuntimeError('mirror counterexample regression')
+    out.append({'id': 'mirror_noncommutative', 'family': 'Constructor counterexample',
+                'input': mirror, 'certificate': certificate})
+
+    # e8 -- a 60-bit period in 42 nodes.
+    problem = projection.large_period_example()
+    certificate = projection.synthesize(problem)
+    if len(certificate['program']['nodes']) != 42:
+        raise RuntimeError('projection program size regression')
+    feasible, witness = projection.evaluate(certificate['program'], [0])
+    if not feasible or witness != 2_000_000_015:
+        raise RuntimeError('projection witness regression')
+    out.append({'id': 'large_period_projection', 'family': 'Integer projection',
+                'input': problem, 'certificate': certificate})
+
+    # e4 -- the enforcement tests. Each is CLASSICALLY VALID, so an interface
+    # turning any of these into a proof of the negated Lean formula would be
+    # visibly unsound.
+    for name, sequent in (('excluded_middle', kripke.EXCLUDED_MIDDLE),
+                          ('peirce', kripke.PEIRCE),
+                          ('propositional_linearity', kripke.LINEARITY)):
+        found = kripke.find_countermodel(sequent, max_worlds=3)
+        if found['status'] != 'countermodel':
+            raise RuntimeError('Kripke regression on %s' % name)
+        out.append({'id': name, 'family': 'Kripke countermodel',
+                    'input': sequent, 'certificate': found['certificate']})
+
+    # e9 -- operator transport and its seed plan.
+    a = [ore.poly(-1, -1), ore.poly(1)]
+    b = [ore.poly(-2, -2), ore.poly(1)]
+    certificate, _ = ore.common_left_multiple(a, b, 1, 1)
+    if certificate is None:
+        raise RuntimeError('common left multiple regression')
+    out.append({'id': 'factorial_vs_doubled', 'family': 'Ore common multiple',
+                'input': {'left': enc(a), 'right': enc(b)},
+                'certificate': {'kind': 'ore-multiple',
+                                'common': enc(certificate['common']),
+                                'left_multiplier': enc(certificate['left_multiplier']),
+                                'right_multiplier': enc(certificate['right_multiplier'])}})
+
+    operator = ore.missed_singularity_example()
+    plan = ore.singularity_cover(operator)
+    if plan['seed_indices'] != [0, 6]:
+        raise RuntimeError('singularity plan regression')
+    out.append({'id': 'missed_singularity', 'family': 'Singularity plan',
+                'input': {'operator': enc(operator)}, 'certificate': plan})
+    return out
 
 
 def emit_lean(out: Path) -> int:

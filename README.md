@@ -154,9 +154,21 @@ python -S bin/verify.py
 useful evidence that checking is separable from search — and it is still Python
 verification, not a Lean proof.
 
-The extension prototypes are **not** folded into that package. They stay under
-`proposals/e*/prototype/` and run from there; each proposal's README gives its
-own command, and [`results/extension-suites-rerun.json`](results/extension-suites-rerun.json)
+Five extension lanes are merged into that package, under `forge/closure/`:
+observable-space closure with separating words, finite-algebra covers with
+counterexample trees, exact integer projection, Kripke countermodels, and Ore
+transport with singularity seed plans. All five are standard library only with
+their *searches* included, so the whole subpackage runs under `python -S`.
+
+Two lanes are deliberately **not** merged. Target-generated ideal closure needs
+a Gröbner engine and boundary-safe telescoping needs exact bivariate
+nullspaces, so neither search can be standard-library-only, and folding them in
+would cost the merged package the property that makes its replay evidence worth
+anything.
+
+The nine extension packages remain under `proposals/e*/prototype/` and run from
+there; each proposal's README gives its own command, and
+[`results/extension-suites-rerun.json`](results/extension-suites-rerun.json)
 records all nine as re-run here. Two conventions are worth knowing: `e8` runs
 under `python -S`, which is how it demonstrates its standard-library-only
 claim, and `e9`'s suite must be invoked from its own `prototype/` directory.
