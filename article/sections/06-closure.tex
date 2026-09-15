@@ -177,7 +177,10 @@ cost $O(D^2)$ field operations per candidate, so an $O(|\Sigma|D^3)$
 implementation exists. Bit complexity additionally depends on exact coefficient
 growth, and the prototypes recompute ranks symbolically rather than maintaining
 the incremental representation, so the cubic figure is a production target and
-not a measured property of the delivered code.
+not a measured property of the delivered code. The bound and the refinements
+are standard in the weighted-automata literature~\cite{kiefer}; an exact
+rational matrix backend such as \code{fmpq\_mat} is the obvious production
+substrate, and none of the prototypes installed one~\cite{flint-q}.
 
 \subsubsection*{Beyond a finite alphabet, carefully}
 
@@ -379,7 +382,10 @@ search does not make the computation cheap --- it makes it well defined.
 \status{Implemented and tested in Python by one effort.}
 
 One contributing effort computes the closure from the opposite end, and the
-contrast is instructive enough to keep.
+contrast is instructive enough to keep. The descending computation is Karr's
+affine-invariant fixed point generalised to polynomial features~\cite{karr},
+and the boundary of what is decidable for affine programs is
+known~\cite{affine-invariants}; neither is claimed here as new.
 
 Fix a finite-dimensional feature space $E=\Span_\Q\{m_1,\ldots,m_N\}$ ---
 in practice all monomials up to some degree --- and descend:
@@ -771,6 +777,15 @@ substitute. The example is an operator-composition test; it is emphatically not
 a claim that the factorial and doubled-factorial solutions of those two
 first-order operators are equal. That still needs the initial-value proofs.
 
+The prototype finds $U$ and $V$ by solving the linear equations for
+$UA-VB=0$ at bounded order and coefficient degree; any nonzero solution yields
+an acceptable $L$. A production system would delegate that search to a
+dedicated Ore-algebra implementation~\cite{ore-algebra}, or to a broader
+creative-telescoping package~\cite{holonomic}, and whatever either returns must
+still pass the identity check above. Rational-function operator coefficients
+would need a denominator policy and a validity-domain ledger; the implemented
+format excludes them.
+
 \subsubsection*{A nonvanishing leading coefficient is a hypothesis, not a formality}
 
 Given $\sum_{i=0}^r p_i(n)f(n+i)=0$ with $p_r\not\equiv0$ and $r\ge1$, the usual
@@ -992,8 +1007,9 @@ homomorphisms; mutual recursion, dependent indices, quotient representations,
 coinductive streams and general well-founded recursion each need additional
 semantics and must not be flattened silently into this signature.
 
-As a worker this needs no automata library: a worklist, a state table, and the
-small cover checker suffice, with budgets in state discoveries, tuple
+As a worker this needs no automata library --- there is a formalised one, and
+this deliberately implements far less~\cite{afp-tree}. A worklist, a state
+table, and the small cover checker suffice, with budgets in state discoveries, tuple
 evaluations, table size and certificate size. State-product blow-up is the real
 structural limit, and the prototype's transition-evaluation cutoff is a research
 safeguard, not hardening against hostile table sizes.

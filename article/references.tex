@@ -1,10 +1,10 @@
 % ---------------------------------------------------------------------------
 % Unified bibliography.
 %
-% Merged from the bibliographies of the nine independent proposals. Where
+% Merged from the bibliographies of the eighteen independent proposals. Where
 % several proposals cited the same work under different keys, the entry was
-% kept once under the canonical key below and the richest of the nine
-% descriptions was retained. Dates of inspection are those recorded by the
+% kept once under the canonical key below and the richest description was
+% retained. The extension round's additions are grouped at the end. Dates of inspection are those recorded by the
 % original authors; nothing here was re-fetched, and no URL was verified in
 % the merge environment.
 % ---------------------------------------------------------------------------
@@ -437,5 +437,79 @@ prototype here.
 COIN-OR. \emph{CSDP: A solver for semidefinite programming problems}.
 Proposed optional backend; not used in any executed experiment.
 \url{https://github.com/coin-or/Csdp}.
+
+% --- Added by the extension round ------------------------------------------
+% These were cited by the nine extension proposals and not by the nine design
+% proposals. Where two extension proposals cited the same work under different
+% identifiers, both identifiers are kept in one entry.
+
+\bibitem{kiefer}
+Stefan Kiefer. \emph{Notes on Equivalence and Minimization of Weighted
+Automata}. arXiv:2009.01217, 2020. The standard account of the finite
+distinguishing bound and the algorithmic refinements behind
+Theorem~\ref{thm:linear-complete}.
+\url{https://arxiv.org/abs/2009.01217}.
+
+\bibitem{karr}
+Michael Karr. \emph{Affine relationships among variables of a program}. Acta
+Informatica 6, 133--151, 1976. DOI 10.1007/BF00268497. The origin of the
+linear-invariant fixed-point computation that the closure workers generalise.
+
+\bibitem{affine-invariants}
+Ehud Hrushovski, Jo\"el Ouaknine, Amaury Pouly, and James Worrell.
+\emph{Polynomial Invariants for Affine Programs}. LICS 2018, arXiv:1802.01810.
+\url{https://arxiv.org/abs/1802.01810}.
+
+\bibitem{ore-algebra}
+Manuel Kauers, Maximilian Jaroschek, and Fredrik Johansson.
+\emph{\code{ore\_algebra}}, RISC software description, and \emph{Ore
+Polynomials in Sage}, arXiv:1306.4263, 2013. Proposed backend for common left
+multiples, operator arithmetic and desingularisation; documentation inspected,
+never installed or benchmarked here.
+\url{https://risc.jku.at/sw/ore_algebra/}; \url{https://arxiv.org/abs/1306.4263}.
+
+\bibitem{holonomic}
+Christoph Koutschan. \emph{HolonomicFunctions}. RISC software description.
+Proposed optional backend for broader multivariate creative telescoping; no
+Wolfram execution was performed in any run here.
+
+\bibitem{afp-tree}
+Peter Lammich. \emph{Tree Automata}. Archive of Formal Proofs, 25 November
+2009, entry accessed 15 September 2026. Prior art for the finite-algebra cover
+worker, which deliberately implements far less.
+\url{https://www.isa-afp.org/entries/Tree-Automata.html}.
+
+\bibitem{synquid}
+Nadia Polikarpova, Ivan Kuraj, and Armando Solar-Lezama. \emph{Program
+Synthesis from Polymorphic Refinement Types}. PLDI 2016,
+DOI 10.1145/2908080.2908093, arXiv:1510.08419. Cited by two extension
+proposals under different identifiers; merged here.
+\url{https://arxiv.org/abs/1510.08419}.
+
+\bibitem{tygar}
+Zheng Guo, Michael James, David Justo, Jiaxiao Zhou, Ziteng Wang, Ranjit
+Jhala, and Nadia Polikarpova. \emph{Program Synthesis by Type-Guided
+Abstraction Refinement}. arXiv:1911.04091, 2019.
+\url{https://arxiv.org/abs/1911.04091}.
+
+\bibitem{cvc5-sygus}
+cvc5 developers. \emph{SyGuS: Invariants}. API examples, accessed 15 September
+2026. Proposed proposal-side backend for first-order arithmetic holes; no
+adapter was implemented or executed.
+\url{https://cvc5.github.io/docs/latest/examples/sygus-inv.html}.
+
+\bibitem{pysat}
+PySAT developers. \emph{PySAT: A Python toolkit for prototyping with SAT
+oracles}. Proposed as a replaceable model \emph{proposer} for the Kripke
+worker: its satisfying assignment is decoded into the existing certificate and
+independently checked, and an UNSAT answer at a fixed world bound carries no
+unbounded non-inhabitance authority.
+\url{https://pysathq.github.io/}.
+
+\bibitem{flint-q}
+python-flint contributors. \emph{\code{fmpq\_mat} --- matrices over rational
+numbers}. Accessed 15 September 2026. Cited by three extension proposals as an
+optional fast exact-matrix backend; no adapter was implemented.
+\url{https://python-flint.readthedocs.io/}.
 
 \end{thebibliography}

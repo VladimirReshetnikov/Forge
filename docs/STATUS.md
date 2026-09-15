@@ -1,15 +1,15 @@
 # Implementation status
 
-Merged from the nine proposals' status files, which appeared under seven
-different names in two formats. The three-bucket model below is taken from the
-clearest of them.
+Merged from the eighteen proposals' status files, which appeared under a dozen
+different names in several formats. The three-bucket model below is taken from
+the clearest of them.
 
 Machine-readable twin: [`status.json`](status.json).
 
 ## Executed
 
-Implemented in Python and actually run, in at least one of the nine runs.
-Section 9 of the article says which run, with what result, and under what
+Implemented in Python and actually run, in at least one of the eighteen runs.
+Section 10 of the article says which run, with what result, and under what
 caveat.
 
 - Exact sparse rational polynomial arithmetic, with canonical-form enforcement
@@ -36,6 +36,31 @@ caveat.
 - Lean source emission for cone, Bernstein, induction and witness certificates
 - Mutation, corruption, differential and negative-control test suites
 
+From the extension round:
+
+- Target-directed observable-space closure over a finite alphabet, with the
+  sharp `D-1` separating-word bound and delayed-error fixtures that attain it
+- Target-generated polynomial-ideal closure with reconstructed multipliers, and
+  tracked Buchberger multiplier extraction
+- Descending (greatest-fixed-point) space iteration, with constant multipliers
+  and with bounded-degree polynomial multipliers
+- Finite-state all-words contracts checked against an independent oracle, and
+  shortest distinguishing words
+- Finite-algebra covers for inductive datatypes, with concrete counterexample
+  trees under an earlier-child-index discipline
+- Boundary-safe binomial-power telescoping with shifted-support flux, including
+  the geometric weight and the parametric order-two family
+- Ore common-left-multiple certificates, singularity-aware seed plans, and a
+  complete natural-root cover from an explicit Cauchy bound
+- Exact one-output integer projection: guard, hash-consed straight-line witness
+  program, and Bezout receipts
+- Finite Kripke countermodels for intuitionistic propositional logic, with a
+  bounded rooted-tree proposer and an independent forcing replay
+- Continuation-local synthesis over derived local algebra contracts
+- Ranking synthesis for supplied cyclic call graphs, with exact descent replay
+- Re-run of all nine extension suites in a second environment, reproducing
+  every recorded count
+
 ## Generated but not compiled
 
 Produced as Lean source, never checked by a compiler — with one exception.
@@ -47,10 +72,17 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exception.** Three files import nothing beyond Lean core and now
-elaborate against `leanprover/lean4:v4.34.0`: the runtime contract, the
-certificate-soundness contract, and the Mathlib-free structural proofs. See
+**The exceptions.** Thirteen files import nothing beyond Lean core and now
+elaborate against `leanprover/lean4:v4.34.0`: three in the merged tree (the
+runtime contract, the certificate-soundness contract, and the Mathlib-free
+structural proofs) and ten across the extension proposals. Seven of the ten
+print `does not depend on any axioms` for every theorem they expose. See
 [`LEAN-STATUS.md`](LEAN-STATUS.md).
+
+Elaboration does not change what a file says. `e8/lean/IndexingSketch.lean`
+type-checks and still proves an equation between two ordinary-list definitions;
+it does not close the Church-encoded query its author declined to claim it
+closed.
 
 ## Designed, not implemented
 
@@ -65,7 +97,17 @@ nobody.
 - Reflected Lean checkers for any certificate family, and their soundness
   theorems
 - A Lean formalisation of the Sturm root-count theorem — without which the
-  univariate worker cannot be trusted in Lean
+  univariate worker cannot be trusted in Lean, and which the extension round's
+  root-cover worker would also rather reuse than reimplement
+- A source reifier for any closure fragment: affine folds, summary
+  homomorphisms with proved constructor compatibility, or signed-lower-index
+  binomials
+- The cyclic-obligation compiler: tagged proposition families, well-founded
+  relations from accepted ranks, and per-node local constructors
+- A representation law connecting Church-encoded inputs to `List.foldr` at a
+  fixed carrier and universe selection
+- An exact LP or MILP backend for lexicographic rank synthesis with exported
+  pivots and coefficient witnesses
 - General quantifier instantiation, E-matching, and model-guided instantiation
 - Higher-order and dependent-type witness synthesis
 - External SMT / ATP proof reconstruction with residual-obligation handling
@@ -92,14 +134,18 @@ An item in the third bucket is **not** a claim that it was tried and failed.
 different consequences for anyone deciding where to invest, and conflating them
 is how a roadmap quietly turns into an apology.
 
-Two practices go with this, and neither is in place yet:
+Two practices go with this. The first is not in place yet; the second now
+partly is.
 
 - **Acceptance criteria pinned to exact parameters.** A row should say what
   would close it, in the original terms, with an anti-substitution clause where
   a near-miss exists — *"a bounded variant does not close this"*.
 - **Failed runs preserved as linked artefacts.** A diagnostic failure is not an
   acceptance receipt, and deleting it is how a later reader mistakes silence
-  for success.
+  for success. Four extension proposals do this: `e9` ships a `RUN_HISTORY.md`
+  with three failures and their tracebacks — including one whose diagnosis it
+  explicitly declines to claim it proved — and `e1`, `e3` and `e5` retain
+  failed-run directories and diagnostic logs beside their accepted results.
 
 ## What is explicitly not claimed
 
@@ -111,6 +157,16 @@ Two practices go with this, and neither is in place yet:
 - The Python checkers are not formally verified, and several share
   representation code with the searches they audit.
 - Neither the checkers nor the decoders are hardened against hostile input.
-- The nine runs' counts are not comparable and were never pooled.
+- The eighteen runs' counts are not comparable and were never pooled — not
+  within a round, and not across the two rounds, which attack overlapping
+  problems and would double-count.
+- The extension suites' re-run reproduces recorded counts on different
+  interpreter and library versions. It is not a bit-identical replay, no
+  timings were compared, and it establishes nothing about checker correctness.
+- Three different producer/checker separations are reported in this repository
+  and they are not equivalent: a genuinely opposite computation, a replacement
+  of search entry points during replay, and — in `e8`'s integer projection —
+  a reconstruction using the same assembler as the search, disclosed by its own
+  author.
 - A bounded search returning nothing means **unknown**, never that a statement
   is false.

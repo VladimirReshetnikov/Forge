@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 """Regenerate the derived cross-run views under results/.
 
-Reads the nine recorded runs under proposals/<slug>/results/ and writes:
+Reads the eighteen recorded runs under proposals/<slug>/results/ -- the design
+round p1..p9 and the extension round e1..e9 -- and writes:
 
     results/manifest.json          one row per run
     results/certificate-counts.csv per run, per family
 
-Nothing here edits a recorded run. The derived files always carry a `run`
-column, and certificate-counts.csv deliberately emits no grand total: the nine
-runs used different seeds, generators and case sets, and their counts are not
-commensurable. See results/README.md.
+Nothing here edits a recorded run. The derived files always carry `run` and
+`round` columns, and certificate-counts.csv deliberately emits no grand total:
+the eighteen runs used different seeds, generators, case sets and units, their
+counts are not commensurable within a round, and the two rounds attack
+overlapping problems so a cross-round total would double-count. See
+results/README.md.
+
+The `outcome` column matters as much as the counts. A row whose expected
+outcome is `refuted` and whose `achieved` equals its `cases` is a fully
+successful row: a worker that returns a counterexample has answered the
+question. Reading such a row as a failure -- or omitting it to improve an
+apparent success rate -- is the specific mistake this file exists to prevent.
 """
 
 from __future__ import annotations
@@ -210,6 +219,194 @@ RUNS: list[dict] = [
     },
 ]
 
+EXTENSION_RUNS: list[dict] = [
+    {
+        "run": "e1",
+        "slug": "e1-relational-closure",
+        "emphasis": "span and ideal lanes over one problem set",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 40,
+        "test_unit": "tests",
+        "certificates": 108,
+        "certificate_layout": "one experiment directory with per-group summaries",
+        "replay": "108/108 under python -S, search and SymPy unimported",
+        "pdf_pages": 27,
+        "families": [
+            # (family, outcome, cases, achieved, ablation_achieved)
+            # Ablation column is the LINEAR-span lane; the main column is the
+            # ideal lane. The two families with 0 are the point of the run.
+            ("scaled_graph", "certified", 8, 8, 8),
+            ("coupled_nonlinear", "certified", 8, 8, 0),
+            ("nonlinear_equivalence", "certified", 8, 8, 0),
+            ("nonlinear_mutant", "refuted", 8, 8, 8),
+            ("affine_equivalence", "certified", 12, 12, 12),
+            ("affine_mutant", "refuted", 6, 6, 6),
+            ("control_flow", "certified", 4, 4, 4),
+            ("boundary_controls", "mixed", 8, 8, 8),
+        ],
+    },
+    {
+        "run": "e2",
+        "slug": "e2-algorithmic-extensions",
+        "emphasis": "inductive subspaces, Gosper and creative telescoping",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 13,
+        "test_unit": "test methods (69 subtests)",
+        "certificates": 65,
+        "certificate_layout": "one certificates.json, four families",
+        "replay": "stdlib replay, return code 0",
+        "pdf_pages": 30,
+        "families": [
+            ("two_sided", "certified", 25, 25, None),
+            # ablation column: conservation-only lane on the same features
+            ("invariant", "certified", 24, 24, 3),
+            ("gosper", "certified", 15, 15, None),
+            ("telescoper", "certified", 1, 1, None),
+        ],
+    },
+    {
+        "run": "e3",
+        "slug": "e3-closure-extensions",
+        "emphasis": "four lanes; an independent oracle on every finite-state case",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 12,
+        "test_unit": "test methods (313 subtests)",
+        "certificates": 313,
+        "certificate_layout": "per-case bundles under results/certificates/",
+        "replay": "stdlib replay of every bundle",
+        "pdf_pages": 35,
+        "families": [
+            ("finite_state", "mixed", 240, 240, None),
+            ("finite_state_ablation", "refuted", 1, 1, None),
+            ("finite_state_budget", "unknown", 1, 0, None),
+            ("ideal_generated", "certified", 16, 16, None),
+            ("ideal_named", "certified", 2, 2, None),
+            ("ideal_negative", "refuted", 1, 1, None),
+            ("telescoping", "certified", 10, 10, None),
+            ("telescoping_budget", "unknown", 2, 0, None),
+            ("vector_generated", "certified", 24, 24, None),
+            ("vector_named", "certified", 2, 2, None),
+            ("vector_negative", "refuted", 17, 17, None),
+            ("vector_ablation", "unknown", 1, 0, None),
+        ],
+    },
+    {
+        "run": "e4",
+        "slug": "e4-delta-countermodels",
+        "emphasis": "finite Kripke countermodels; polynomial-machine reachability",
+        "seed": 20260915,
+        "test_framework": "pytest",
+        "test_count": 151,
+        "test_unit": "tests",
+        "certificates": 73,
+        "certificate_layout": "one corpus.json plus per-trial records",
+        "replay": "replay.py over the stored corpus",
+        "pdf_pages": 32,
+        "families": [
+            ("machine", "mixed", 66, 65, None),
+            ("ipc_countermodel", "refuted", 16, 8, None),
+        ],
+    },
+    {
+        "run": "e5",
+        "slug": "e5-finite-certificates",
+        "emphasis": "observable-space closure with the sharp D-1 bound",
+        "seed": 2026091507,
+        "test_framework": "pytest",
+        "test_count": 117,
+        "test_unit": "test items",
+        "certificates": 55,
+        "certificate_layout": "certificates/ and counterexamples/ directories",
+        "replay": "stdlib replay; 818 mutations generated, 0 accepted",
+        "pdf_pages": 29,
+        "families": [
+            ("linear", "mixed", 36, 36, None),
+            ("ideal", "mixed", 13, 12, None),
+            ("binomial_sum", "certified", 10, 7, None),
+        ],
+    },
+    {
+        "run": "e6",
+        "slug": "e6-finite-certificates-b",
+        "emphasis": "three lanes reported by outcome kind, not success rate",
+        "seed": 20260915,
+        "test_framework": "pytest",
+        "test_count": 318,
+        "test_unit": "tests",
+        "certificates": 78,
+        "certificate_layout": "one certificates.json",
+        "replay": "78 accepted under python -S",
+        "pdf_pages": 34,
+        "families": [
+            ("ideal", "certified", 29, 27, None),
+            ("weighted", "mixed", 48, 48, None),
+            ("telescoping", "certified", 5, 3, None),
+        ],
+    },
+    {
+        "run": "e7",
+        "slug": "e7-capability-extensions",
+        "emphasis": "continuation-local synthesis; cyclic descent; ideal completion",
+        "seed": "fixed per experiment; SymPy validation seeded separately",
+        "test_framework": "unittest",
+        "test_count": 29,
+        "test_unit": "test methods (140 subtests)",
+        "certificates": 135,
+        "certificate_layout": "one certificates.json, five record kinds",
+        "replay": "135 accepted by the standalone replayer; 31 corruptions rejected",
+        "pdf_pages": 30,
+        "families": [
+            ("constant_action_invariant", "certified", 113, 113, None),
+            ("ideal_preservation", "certified", 14, 14, None),
+            ("ranking", "certified", 4, 4, None),
+            ("indexing_algebra", "certified", 1, 1, None),
+            ("orbit_counterexample", "refuted", 3, 3, None),
+        ],
+    },
+    {
+        "run": "e8",
+        "slug": "e8-invariant-ideals",
+        "emphasis": "bounded-multiplier invariants, finite covers, integer projection",
+        "seed": "fixed per lane",
+        "test_framework": "unittest",
+        "test_count": 21,
+        "test_unit": "test methods (19 mutation cases)",
+        "certificates": 422,
+        "certificate_layout": "one certificates.json, four lanes",
+        "replay": "422/422 with search entry points replaced by exceptions",
+        "pdf_pages": 31,
+        "families": [
+            ("constant_multipliers", "certified", 51, 51, None),
+            ("polynomial_multipliers", "certified", 14, 14, None),
+            ("finite_algebra", "mixed", 136, 136, None),
+            ("integer_projection", "certified", 221, 221, None),
+        ],
+    },
+    {
+        "run": "e9",
+        "slug": "e9-finite-summaries",
+        "emphasis": "weighted words, boundary-safe telescoping, Ore transport",
+        "seed": 681437,
+        "test_framework": "unittest",
+        "test_count": 41,
+        "test_unit": "tests",
+        "certificates": 245,
+        "certificate_layout": "results/run-4/certificates.json",
+        "replay": "245/245 under python -S with SymPy absent; 245 mutations rejected",
+        "pdf_pages": 30,
+        "families": [
+            ("matrix_closure", "certified", 54, 54, None),
+            ("separating_word", "refuted", 115, 115, None),
+            ("telescoper", "certified", 23, 23, None),
+            ("ore_identity", "certified", 6, 6, None),
+            ("singularity_seed_plan", "certified", 47, 47, None),
+        ],
+    },
+]
+
 COMMON_ENVIRONMENT = {
     "date": "2026-09-14",
     "python": "3.13.5",
@@ -225,32 +422,96 @@ COMMON_ENVIRONMENT = {
 }
 
 
+EXTENSION_ENVIRONMENT = {
+    "date": "2026-09-15",
+    "python": "3.13.5",
+    "sympy": "1.14.0",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "prepared_against_forge_revision": (
+        "674521027d968d59f7b83220ed52304a85cb55e2"
+    ),
+    "note": (
+        "Five of these nine recorded the seed value 20260915, one day after the "
+        "design round's shared 20260914. The coincidence means as little as it "
+        "did the first time: the same seed drives different generators over "
+        "different case sets."
+    ),
+    "rerun_in_merge_environment": "results/extension-suites-rerun.json",
+}
+
+
 def lean_status(slug: str) -> dict:
     """Find whatever that run recorded about Lean, under any of its filenames."""
     directory = PROPOSALS / slug / "results"
+    # p6 keeps its artefact status at the proposal root, e8 beside its Lean
+    # sources. Look in all three places rather than reporting "prose only".
+    search_roots = (
+        directory,
+        PROPOSALS / slug,
+        PROPOSALS / slug / "lean",
+    )
     for name in (
         "lean_status.json",
         "lean-status.json",
         "lean_comparisons.json",
+        "lean-generation.json",
         "status.json",
+        "summary.json",
+        "run.json",
         "artifact_validation.json",
+        "artifact-validation.json",
+        "artifact-qa.json",
         "ARTIFACT_STATUS.json",
+        "results.json",
     ):
-        path = directory / name
-        if not path.exists():
+        for root in search_roots:
+            path = root / name
+            if path.exists():
+                break
+        else:
             continue
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (ValueError, OSError):
             continue
+        name = path.relative_to(PROPOSALS / slug).as_posix()
+        # Lean-specific keys first: several files carry a generic "status"
+        # describing the whole run, which is not what this function reports.
         for key in (
-            "status",
+            "lean_status",
             "lean_compilation",
             "lean_compiled",
             "lean_examples_compiled",
+            "lean_core_specimens",
+            "lean_executed",
+            "status",
         ):
             if key in data:
                 return {"file": name, "field": key, "value": data[key]}
+        nested = data.get("environment")
+        if isinstance(nested, dict) and "lean_status" in nested:
+            return {
+                "file": name,
+                "field": "environment.lean_status",
+                "value": nested["lean_status"],
+            }
+        meta = data.get("metadata")
+        if isinstance(meta, dict) and "lean_available" in meta:
+            return {
+                "file": name,
+                "field": "metadata.lean_available",
+                "value": meta["lean_available"],
+            }
+        # e1 records one row per file rather than a single status field.
+        rows = data.get("results")
+        if isinstance(rows, list) and rows and isinstance(rows[0], dict):
+            statuses = {r.get("status") for r in rows if "status" in r}
+            if statuses:
+                return {
+                    "file": name,
+                    "field": "results[].status",
+                    "value": sorted(x for x in statuses if x is not None),
+                }
     return {"file": None, "field": None, "value": "recorded in prose only"}
 
 
@@ -259,24 +520,29 @@ def main() -> int:
 
     manifest = {
         "note": (
-            "Derived index over the nine recorded runs. The runs themselves are "
-            "under proposals/<slug>/results/ and are never modified. Counts are "
-            "per run and are not commensurable across runs."
+            "Derived index over the eighteen recorded runs. The runs themselves "
+            "are under proposals/<slug>/results/ and are never modified. Counts "
+            "are per run and are not commensurable across runs, nor across the "
+            "two rounds."
         ),
-        "common_environment": COMMON_ENVIRONMENT,
+        "design_round_environment": COMMON_ENVIRONMENT,
+        "extension_round_environment": EXTENSION_ENVIRONMENT,
         "lean": {
-            "all_nine_runs": "NOT_RUN -- no lean/lake executable available",
-            "this_merge": "results/lean-core-elaboration.json",
+            "all_eighteen_runs": "NOT_RUN -- no lean/lake executable available",
+            "this_merge_merged_tree": "results/lean-core-elaboration.json",
+            "this_merge_extensions": "results/lean-extensions-elaboration.json",
         },
         "runs": [],
     }
 
-    for entry in RUNS:
-        record = {k: v for k, v in entry.items() if k != "families"}
-        record["results_path"] = f"proposals/{entry['slug']}/results"
-        record["lean_status_recorded"] = lean_status(entry["slug"])
-        record["family_count"] = len(entry["families"])
-        manifest["runs"].append(record)
+    for round_name, entries in (("design", RUNS), ("extension", EXTENSION_RUNS)):
+        for entry in entries:
+            record = {"round": round_name}
+            record.update({k: v for k, v in entry.items() if k != "families"})
+            record["results_path"] = f"proposals/{entry['slug']}/results"
+            record["lean_status_recorded"] = lean_status(entry["slug"])
+            record["family_count"] = len(entry["families"])
+            manifest["runs"].append(record)
 
     (RESULTS / "manifest.json").write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
@@ -287,15 +553,40 @@ def main() -> int:
     ) as handle:
         writer = csv.writer(handle)
         writer.writerow(
-            ["run", "slug", "family", "cases", "succeeded", "ablation_succeeded"]
+            [
+                "run",
+                "round",
+                "slug",
+                "family",
+                "outcome",
+                "cases",
+                "achieved",
+                "ablation_achieved",
+            ]
         )
         for entry in RUNS:
             for family, cases, ok, ablation in entry["families"]:
                 writer.writerow(
                     [
                         entry["run"],
+                        "design",
                         entry["slug"],
                         family,
+                        "certified",
+                        cases,
+                        ok,
+                        "" if ablation is None else ablation,
+                    ]
+                )
+        for entry in EXTENSION_RUNS:
+            for family, outcome, cases, ok, ablation in entry["families"]:
+                writer.writerow(
+                    [
+                        entry["run"],
+                        "extension",
+                        entry["slug"],
+                        family,
+                        outcome,
                         cases,
                         ok,
                         "" if ablation is None else ablation,

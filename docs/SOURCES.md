@@ -1,7 +1,7 @@
 # Sources and version policy
 
-Merged from the five proposals that kept a source ledger — two in Markdown, two
-in JSON, one embedded in a status file. The bibliography proper is
+Merged from the proposals that kept a source ledger, in Markdown, in JSON, and
+in one case embedded in a status file. The bibliography proper is
 [`../article/references.tex`](../article/references.tex), which deduplicated
 roughly 215 entries under about 100 keys down to 56.
 
@@ -60,10 +60,58 @@ is preserved here.
 > blob rather than a repository commit. Both are opaque hex strings; only one
 > identifies a tree state.
 
+## The extension round's own pins
+
+The nine extension proposals were prepared against this repository at
+`674521027d968d59f7b83220ed52304a85cb55e2` and cite it as a source. They also
+pinned the two neighbouring projects, and recorded one fact the earlier review
+had not:
+
+| Repository | Revision | Note |
+| --- | --- | --- |
+| Forge | `674521027d968d59f7b83220ed52304a85cb55e2` | the merged draft they extend |
+| Leant | `6bf05ad78c467989e68290f2d08bbed40802d485` | README and the dated indexing-composition diagnostic |
+| Djex (standalone) | `e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5` | README opening and branch identity |
+| Djex (as Leant depends on it) | `e237e866` | **a different revision** |
+
+That last row is the new fact, and two proposals record it independently:
+Leant's own Djex dependency is not the standalone head, so substituting one for
+the other when reproducing Leant's reports would not reproduce them. No
+extension proposal modified either repository, and none ran a live synthesis
+against them. One of them also notes that it cited Djex's evidence-graph
+document from `main` without an immutable pin — the only unpinned citation
+across the three articles that use these sources, and it says so rather than
+implying otherwise.
+
+## Backends designed but never installed
+
+The extension round cites several libraries as intended production backends and
+is explicit that none was executed or benchmarked. The distinction matters here
+more than usual, because a designed backend can look like a dependency:
+
+| Library | Intended use | Status recorded |
+| --- | --- | --- |
+| `ore_algebra` (Sage) | least common left multiples, operator arithmetic, desingularisation | documentation inspected; not installed |
+| HolonomicFunctions | broader multivariate creative telescoping | package description inspected; no Wolfram execution |
+| `python-flint` | fast dense rational matrices, inversion, characteristic polynomials | `fmpq_mat` documentation consulted; adapter not implemented |
+| cvc5 SyGuS | proposal problems for first-order arithmetic holes | API examples inspected; no adapter executed |
+| PySAT | a replaceable Kripke-model proposer | interface described; the SAT encoding is specified, not run |
+
+Whatever these would return is a *proposal* in this architecture: an
+`ore_algebra` common left multiple still has to pass the simpler polynomial
+identity check, and a SAT solver's satisfying assignment is decoded into the
+existing certificate and re-checked. An UNSAT answer for a fixed world bound
+carries no unbounded non-inhabitance authority even if the solver is correct.
+
+The pinning discipline is the same as above and is stated by the round itself:
+these are not automatically build-compatible with the repository's pinned Lean
+and Mathlib, the resolved project environment governs, and **no fabricated Lake
+manifest is supplied**.
+
 ## What was observed, not tested
 
 Everything above is a **source observation**. No proposal ran a Lean
-executable; this merge elaborated three core-only files and nothing more. In
+executable; this merge elaborated thirteen core-only files and nothing more. In
 particular:
 
 - Statements about what `grind` does come from reading its documentation and
@@ -103,12 +151,32 @@ introduces a fresh axiom asserting it equals true. A blacklist naming only
 be audited against the pinned implementation rather than inherited from a design
 thread.
 
+## Non-duplication, and its limits
+
+Several extension proposals ran repository searches to check that they were not
+re-proposing something already present, and one of them recorded the right
+caveat. A search for terms visibly present in the sources returned no matches,
+so **negative search results were not used to establish absence**. Reading the
+README, status ledger, transfer guide, and the relevant article sections is not
+the same as having read every line of every frozen proposal, and the packages
+that say so are more trustworthy for saying it, not less.
+
+The underlying mathematics is likewise not claimed as new. Field-weighted
+automaton equivalence, invariant-space algorithms, creative telescoping, Ore
+operator computation, tree automata, Presburger arithmetic and abstract
+interpretation are all established. What the extension round claims is the
+selection of fragments, the proof-object interfaces, the boundary-aware
+implementation, and the automatic reduction to a finite closure calculation with
+a completeness theorem for an explicitly stated fragment.
+
 ## Provenance of prior art
 
 The design reuses established ideas and says so. Sum-of-squares certificate
 reconstruction, equality saturation, e-graph-guided inductive lemma discovery,
 rippling, counterexample-guided inductive synthesis, DPLL(T), SMT proof
-reconstruction, and AND/OR tactic search are all prior art, cited in the
-article's bibliography. The claimed contribution is the integration: a shared,
+reconstruction, AND/OR tactic search, affine relationships among program
+variables, polynomial invariants for affine programs, type-directed program
+synthesis from refinement types, and weighted-automaton minimisation are all
+prior art, cited in the article's bibliography. The claimed contribution is the integration: a shared,
 scope-aware proof-obligation planner that makes structural synthesis, witness
 search, theorem instantiation, and existing nonlinear reasoning cooperate.

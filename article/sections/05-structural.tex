@@ -788,8 +788,11 @@ And the bound is a bound. When the world budget is exhausted the result is
 invalid refuter}, not theorems proved by the absence of a small countermodel:
 that intuitionistic propositional logic has the finite model property does not
 turn a three-world cap into a decision procedure. The same applies to a SAT
-backend for the model search --- a solver's \code{unsat} at fixed $n$ carries no
-unbounded authority, and that remains true even if the solver is correct.
+backend for the model search~\cite{pysat}: such a solver is a replaceable
+\emph{proposer}, its satisfying assignment is decoded into the ordinary
+certificate and independently checked, and its \code{unsat} at fixed $n$
+carries no unbounded authority --- which remains true even if the solver is
+correct.
 
 \begin{remark}[Composition with the classical fallback]
 Theorem~\ref{thm:kripke} and Glivenko's theorem answer complementary halves of
@@ -1227,9 +1230,10 @@ then to build $b_0$ and $\operatorname{step}$ meeting
 \eqref{eq:fold-base}--\eqref{eq:fold-step} --- not to build a recursive program
 from a bare outer type.
 
-The relation is the load-bearing part. Choosing the combinator and leaving its
-holes constrained only by \emph{types} reproduces the original ambiguity
-exactly; asking a solver to discover an arbitrary expressive relation is not yet
+The relation is the load-bearing part, and it is what distinguishes this from
+type-directed synthesis with a richer type language~\cite{synquid,tygar}.
+Choosing the combinator and leaving its holes constrained only by \emph{types}
+reproduces the original ambiguity exactly; asking a solver to discover an arbitrary expressive relation is not yet
 an algorithm. A first implementation should carry an explicit inventory of
 specification templates: equality against a reference fold, a size equation, a
 pointwise relation for function carriers, a predicate preserved by the
@@ -1290,7 +1294,11 @@ explicitly abstracted. The full source context stays available to the checker.
 
 Restricting the executable context is a completeness-affecting choice, and the
 document treats it as one. The small interface is the \emph{preferred} search
-branch; a budgeted branch with the original context stays queued.
+branch; a budgeted branch with the original context stays queued. For a purely
+first-order arithmetic hole, the constructive projection worker above can
+replace enumeration outright, and a syntax-guided synthesis interface is an
+available proposer for the rest~\cite{cvc5-sygus} --- as a proposer, whose
+output is checked like any other.
 
 \subsubsection*{Keep compatibility constraints; do not multiply projections}
 

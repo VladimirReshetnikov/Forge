@@ -1,5 +1,5 @@
 {
-  "note": "Machine-readable twin of docs/STATUS.md. Merged from the nine proposals' status files, which used seven filenames in two formats.",
+  "note": "Machine-readable twin of docs/STATUS.md. Merged from the eighteen proposals' status files, which used a dozen filenames in several formats.",
   "baseline": {
     "lean": "v4.34.0",
     "lean_released": "2026-09-14",
@@ -18,33 +18,69 @@
   "certificates_replay_without_search_libraries": true,
   "mutation_and_corruption_tests_rejected": true,
   "lean_compilation": {
-    "all_nine_original_runs": "NOT_RUN",
-    "all_nine_reason": "no lean/lake executable in the authoring environment",
+    "all_eighteen_original_runs": "NOT_RUN",
+    "all_eighteen_reason": "no lean/lake executable in any authoring environment",
     "this_merge": {
       "performed": true,
       "toolchain": "leanprover/lean4:v4.34.0",
       "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
-      "files_elaborated": 3,
-      "files_total_in_merged_tree": 16,
-      "scope": "core-Lean-only files; the other thirteen import Mathlib",
-      "record": "results/lean-core-elaboration.json",
+      "files_elaborated_total": 13,
+      "merged_tree": {
+        "files_total": 18,
+        "files_elaborated": 3,
+        "mathlib_dependent": 13,
+        "aggregators": 2,
+        "record": "results/lean-core-elaboration.json"
+      },
+      "extension_proposals": {
+        "source_files_total": 20,
+        "files_elaborated": 10,
+        "mathlib_dependent": 8,
+        "aggregators": 2,
+        "files_printing_no_axiom_dependencies": 7,
+        "record": "results/lean-extensions-elaboration.json"
+      },
       "is_axiom_audit": false,
       "is_tactic_comparison": false,
-      "establishes_checker_correctness": false
+      "establishes_checker_correctness": false,
+      "elaboration_changes_what_a_file_says": false
     }
   },
   "runs": {
-    "count": 9,
-    "date": "2026-09-14",
-    "environment": {
-      "python": "3.13.5",
-      "numpy": "2.3.5",
-      "scipy": "1.17.0",
-      "sympy": "1.14.0",
-      "platform": "Linux x86-64"
+    "count": 18,
+    "rounds": 2,
+    "design_round": {
+      "labels": "p1..p9",
+      "date": "2026-09-14",
+      "environment": {
+        "python": "3.13.5",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0",
+        "sympy": "1.14.0",
+        "platform": "Linux x86-64"
+      },
+      "shared_seed_value": 20260914,
+      "runs_sharing_it": 5,
+      "runs_with_no_seed": 3
+    },
+    "extension_round": {
+      "labels": "e1..e9",
+      "date": "2026-09-15",
+      "prepared_against": "674521027d968d59f7b83220ed52304a85cb55e2",
+      "environment": {
+        "python": "3.13.5",
+        "sympy": "1.14.0",
+        "platform": "Linux-6.18.44-x86_64-with-glibc2.41"
+      },
+      "shared_seed_value": 20260915,
+      "runs_sharing_it": 5,
+      "suites_rerun_in_merge_environment": 9,
+      "recorded_counts_reproduced": 9,
+      "rerun_record": "results/extension-suites-rerun.json",
+      "rerun_is_bit_identical_replay": false
     },
     "counts_are_poolable": false,
-    "counts_are_poolable_reason": "different seeds, generators, case sets and units; five runs share the seed value 20260914 but it drives different generators in each",
+    "counts_are_poolable_reason": "different seeds, generators, case sets and units; five runs in each round share a seed value that drives different generators in each; and the two rounds attack overlapping problems, so a cross-round total would double-count",
     "index": "results/manifest.json"
   },
   "certificate_corpus": {
@@ -52,10 +88,15 @@
     "floats_found_total": 1,
     "floats_found_note": "a single timing diagnostic field",
     "rational_encodings_observed": [
-      "n/d strings (8 runs)",
-      "{numerator, denominator} integers (1 run)"
+      "n/d strings (8 design-round runs)",
+      "{numerator, denominator} integers (1 design-round run)",
+      "[numerator, denominator] nested in [exponentVector, rational] (e7)",
+      "[exponentVector, numerator, positiveDenominator] (e8)",
+      "[nExponent, kExponent, numerator, denominator] (e9)"
     ],
-    "canonical_schema": "article appendix A"
+    "canonical_schema": "article appendix A",
+    "certificate_tag_namespaces_unified": false,
+    "certificate_tag_namespaces_note": "e7, e8 and e9 name closure certificates differently because their checkers accept different objects; a shared tag would assert an unchecked compatibility"
   },
   "implemented_algorithm_families": [
     "exact sparse rational polynomial arithmetic",
@@ -74,7 +115,18 @@
     "structural induction with generalisation and trace replay",
     "proof-logging CDCL(T) over integer difference logic",
     "standard-library-only certificate replay",
-    "Lean source emission"
+    "Lean source emission",
+    "target-directed observable-space closure with a sharp D-1 separating bound",
+    "target-generated polynomial-ideal closure with reconstructed multipliers",
+    "descending greatest-fixed-point space iteration (constant and bounded-degree multipliers)",
+    "finite-state all-words contracts with shortest distinguishing words",
+    "finite-algebra covers with concrete counterexample trees",
+    "boundary-safe binomial-power telescoping with shifted-support flux",
+    "Ore common-left-multiple certificates with complete natural-root covers",
+    "exact one-output integer projection with a straight-line witness program",
+    "finite Kripke countermodels for intuitionistic propositional logic",
+    "continuation-local synthesis over derived algebra contracts",
+    "ranking synthesis for supplied cyclic call graphs with exact descent replay"
   ],
   "unique_to_one_run": [
     "square-factor and Sturm univariate certificates",
@@ -84,7 +136,14 @@
     "Farkas affine witnesses as one joint feasibility problem",
     "proof-logging CDCL(T) with independent RUP re-derivation",
     "theory-constrained quantifier instantiation",
-    "certificate cost as a term in the scheduling benefit"
+    "certificate cost as a term in the scheduling benefit",
+    "finite Kripke countermodels -- the only checkable refutation object here (e4)",
+    "cyclic proof compilation through checked well-founded descent (e7)",
+    "continuation-local synthesis with a natural join over shared hole identifiers (e7)",
+    "exact one-output integer projection replacing a modulus-sized table (e8)",
+    "finite-algebra covers whose positive certificate is a bare state list (e8)",
+    "Ore transport with a checker-verified Cauchy root bound (e9)",
+    "the retained failed-run history shipped as evidence (e9)"
   ],
   "designed_not_implemented": [
     "the forge tactic and its syntax",
@@ -100,14 +159,22 @@
     "certified product envelopes",
     "bounded equality saturation over Lean expressions",
     "the axiom-policy audit",
-    "a Lean corpus evaluation"
+    "a Lean corpus evaluation",
+    "a source reifier for any closure fragment",
+    "the cyclic-obligation compiler and its tagged proposition families",
+    "a representation law connecting Church-encoded inputs to List.foldr",
+    "an exact LP/MILP backend for lexicographic rank synthesis"
   ],
   "interpretation_rules": [
     "A bounded search returning nothing means UNKNOWN, never that a statement is false.",
     "A Python check is not a Lean-kernel proof.",
     "Search-free replay means the search libraries are not loaded; it is not an independently implemented verification.",
     "Manufactured examples favour the grammar that generated them.",
-    "Successful elaboration is not an axiom audit."
+    "Successful elaboration is not an axiom audit.",
+    "Producer/checker separation has three different strengths here and they are not equivalent: an opposite computation, replaced search entry points, and a shared assembler disclosed by its own author.",
+    "Elaborating a Lean specimen does not change what the specimen says.",
+    "An empty invariant packet is a vacuously valid preservation certificate, not evidence that no invariant exists.",
+    "A cover establishes the congruence it encodes, not the integer equality that motivated the choice of states."
   ],
   "merged_prototype": {
     "path": "prototype/",
