@@ -1,0 +1,28 @@
+{
+  "format": "forge-ordered-trace-v1",
+  "initial": {
+    "q": 0,
+    "v": [
+      "ba"
+    ]
+  },
+  "steps": [
+    {
+      "after": {
+        "q": 1,
+        "v": [
+          ""
+        ]
+      },
+      "before": [
+        "a"
+      ],
+      "middle": [
+        ""
+      ],
+      "transition": 0
+    }
+  ],
+  "subject": "{\"alphabet\":[\"a\",\"b\"],\"bad\":[{\"q\":1,\"v\":[\"\"]}],\"channels\":1,\"controls\":2,\"kind\":\"lossy\",\"transitions\":[{\"channel\":0,\"op\":\"recv\",\"source\":0,\"symbol\":\"a\",\"target\":1}]}",
+  "target": 0
+}

@@ -1,0 +1,76 @@
+{
+  "certificate": {
+    "interval": [
+      [
+        41,
+        29
+      ],
+      [
+        58,
+        41
+      ]
+    ],
+    "schema": "algebraic-witness-v1"
+  },
+  "expected_signs": [
+    1
+  ],
+  "kind": "witness",
+  "name": "repeated_witness",
+  "problem": {
+    "atoms": [
+      [
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "degrees": [
+      4
+    ],
+    "equations": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            -4,
+            1
+          ]
+        ],
+        [
+          [
+            4
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "formula": [
+      "atom",
+      0,
+      "gt"
+    ],
+    "parameters": 0,
+    "schema": "forge-real-fiber-v1"
+  }
+}

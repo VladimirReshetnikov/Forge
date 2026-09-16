@@ -1,0 +1,100 @@
+\section{An exact arithmetic fragment and its digit semantics}\label{sec:semantics}
+
+\subsection{Syntax and scoping}
+A context is an ordered list of distinct variable names \(\Gamma=(x_0,\ldots,x_{k-1})\). Variables denote natural numbers, while coefficients and linear expressions are interpreted in the integers. Atomic formulas are
+\[
+ \sum_i a_i x_i=b,\qquad
+ \sum_i a_i x_i\le b,\qquad
+ \sum_i a_i x_i\equiv b\pmod m,
+\]
+with \(a_i,b\in\Z\) and \(m\in\N_{>0}\), together with digit parity, powers of two, and the ternary graphs of bitwise AND and XOR. Formulas are closed under Boolean operations and existential quantification. Universal quantification is the syntax expansion \(\forall x\,\phi:=\neg\exists x\,\neg\phi\).
+
+A binder appends a fresh variable to the context. This gives a precise projection convention: the eliminated variable is always the last track. Shadowing an active name is rejected; independent sibling scopes may reuse a name. The prototype uses explicit named syntax, not a parser for Lean text. A production reifier should use scoped indices or actual Lean local-expression identities, rather than trusting names.
+
+Multiplication by an integer constant is supported. Multiplication of two variables, exponentiation with a variable exponent as a binary relation, arbitrary recursive predicates, and unrestricted integer quantifiers are not implemented. Recognizing whether one number is a power of two does \emph{not} amount to recognizing the two-variable graph \(y=2^x\). Likewise, a signed linear coefficient is not Lean's truncated natural subtraction. A goal containing \code{Nat.sub} needs a proved case split or an exact normalization theorem before entering this fragment.
+
+\subsection{Words are representations, not bounded vectors}
+Let \(\Sigma_k=\bits^k\). A word \(w=d_0\cdots d_{n-1}\) is read from least significant to most significant digit. Its value on track \(i\) is
+\begin{equation}\label{eq:decode}
+ \val_i(w)=\sum_{j=0}^{n-1}2^j d_j[i].
+\end{equation}
+The empty word represents the all-zero tuple. Appending any number of all-zero letters does not change the tuple:
+\[
+ \val(w0_k^t)=\val(w).
+\]
+Every natural tuple has at least one encoding. The integer used for a letter in JSON is \(\sum_i 2^i d[i]\); this is distinct from the place value \(2^j\) of its position in the word.
+
+\begin{definition}[Correct representation]
+A deterministic automaton \(A_\phi\) represents \(\phi\) in context \(\Gamma\) when, for \emph{every} finite word,
+\begin{equation}\label{eq:semantics}
+ \Acc(A_\phi,w)\iff\Sem(\phi,\val(w)).
+\end{equation}
+Consequently its accepted language is invariant under appending zero letters.
+\end{definition}
+
+The quantifier ``every word'' is deliberate. Correctness only on canonical encodings is insufficient for unrestricted complementation and projection. The implementation avoids a separate canonical-language side condition by representing a tuple on all of its zero-padded encodings.
+
+\subsection{Linear equalities by exact carries}
+For \(\sum_i a_i x_i=b\), start with carry \(c_0=-b\). Given a letter \(d\), put \(s(d)=\sum_i a_i d[i]\). The transition is
+\begin{equation}\label{eq:eq-step}
+ c\longmapsto
+ \begin{cases}(c+s(d))/2,&c+s(d)\text{ is even},\\
+ \bot,&c+s(d)\text{ is odd},
+ \end{cases}
+ \qquad \bot\longmapsto\bot.
+\end{equation}
+The accepting condition is \(c=0\). No floating-point operations occur.
+
+\begin{lemma}[Equality carry invariant]
+Before the dead state is entered, after \(j\) digits,
+\[
+ 2^j c_j=-b+\sum_i a_i\,\val_i(d_0\cdots d_{j-1}).
+\]
+The automaton satisfies \eqref{eq:semantics} for the equality atom.
+\end{lemma}
+\begin{proof}
+The initial equation is immediate. Multiplying the transition equation by \(2^{j+1}\) adds exactly the contribution \(2^j s(d_j)\). An odd residual at a step cannot be repaired by later digits: all their contributions are divisible by the next power of two. If no such obstruction occurs, after the complete word the displayed invariant says that the target equality holds exactly when the final carry is zero.
+\end{proof}
+
+A finite bound follows without imposing a numeral width. Set \(M=\max(1,|b|,\sum_i|a_i|)\). The initial carry lies in \([-M,M]\); every nondead successor does too. Thus the possible carries plus \(\bot\) form a finite universe. The producer explores only reachable carries, rather than allocating this entire interval.
+
+\subsection{Inequalities require floor division}
+For \(\sum_i a_i x_i\le b\), start at \(c_0=-b-1\), update
+\begin{equation}\label{eq:le-step}
+ c' = \left\lfloor\frac{c+s(d)}2\right\rfloor,
+ \qquad\text{accept precisely when }c<0.
+\end{equation}
+The extra \(-1\) changes the non-strict integer inequality into a strict negativity test. It is not optional.
+
+\begin{lemma}[Inequality carry invariant]
+After \(j\) digits the carry is
+\[
+ c_j=\left\lfloor\frac{-b-1+\sum_i a_i\val_i(d_0\cdots d_{j-1})}{2^j}\right\rfloor.
+\]
+Hence the automaton represents the inequality atom.
+\end{lemma}
+\begin{proof}
+For integral \(s\), the identity
+\(\lfloor(\lfloor u/2^j\rfloor+s)/2\rfloor
+=\lfloor(u+2^j s)/2^{j+1}\rfloor\)
+proves the invariant by induction. At the end, division by a positive integer has a negative floor exactly when its integer numerator is negative. That numerator is \(\sum_i a_i x_i-b-1\), which is negative exactly when \(\sum_i a_i x_i\le b\).
+\end{proof}
+
+Python's \code{//} with positive denominator has the required floor semantics, including negative carries. A port must prove that its integer-division operator has this behavior; truncation toward zero changes the accepted language. The interval bound now uses \(M=\max(1,|b+1|,\sum_i|a_i|)\). Since \(-M\le(c+s)/2\le M\), flooring preserves the same integral bounds.
+
+For example, \(x\le0\) begins at \(-1\). Reading a zero leaves the carry \(-1\), accepting the zero tuple under arbitrarily much padding. Reading a one gives zero and rejects. This one-step boundary case detects both a missing \(-1\) and the wrong division convention.
+
+\subsection{Congruences and digit predicates}
+For \(\sum_i a_i x_i\equiv b\pmod m\), use a pair \((r,t)\in(\Z/m\Z)^2\):
+\[
+ (r_0,t_0)=(-b\bmod m,1\bmod m),\qquad
+ (r,t)\xrightarrow{d}(r+t s(d)\bmod m,2t\bmod m).
+\]
+After \(j\) digits, \(r\) is the current residual modulo \(m\), and \(t=2^j\bmod m\). Accept when \(r=0\). At most \(m^2\) states exist, often far fewer are reachable, and \(m=1\) is handled without a special mathematical exception. Negative coefficients use exact modular arithmetic.
+
+Digit parity needs two states, toggling for each set bit on the relevant track. Powers of two need three states recording zero, one, or at least two set bits. The bitwise graphs use a persistent failure flag: each letter must satisfy \(d_z=d_x\land d_y\) or \(d_z=d_x\mathbin{\mathrm{xor}}d_y\). These tests are preserved by zero padding. Boolean constants use one state.
+
+The prototype hard-codes this small atom inventory and independently checks every label transition. A future registry of user-defined automata must require an actual theorem identifying the accepted language with the requested Lean predicate. A name such as ``prime'' attached to an automaton is not such a theorem. Nor should the finite truth table of a few values be admitted as an atomic semantic bridge.
+
+\subsection{The source of finiteness}
+The number domain is infinite, but an atom stores only a carry, residue, or bounded digit observation. A compound formula stores finite combinations of these observations. Input length remains unrestricted throughout. There is no operation that replaces \(\forall x:\N\) by \(\forall x<2^W\), and no inference that a theorem holds because a sufficiently large-looking set of integers was tested.

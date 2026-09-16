@@ -1,0 +1,32 @@
+{
+  "context": [],
+  "formula": {
+    "op": "not",
+    "arg": {
+      "op": "exists",
+      "var": "x",
+      "arg": {
+        "op": "not",
+        "arg": {
+          "op": "exists",
+          "var": "y",
+          "arg": {
+            "op": "and",
+            "left": {
+              "op": "pow2",
+              "var": "y"
+            },
+            "right": {
+              "op": "le",
+              "coeff": {
+                "x": 1,
+                "y": -1
+              },
+              "rhs": -1
+            }
+          }
+        }
+      }
+    }
+  }
+}

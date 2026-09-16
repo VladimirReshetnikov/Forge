@@ -1,0 +1,132 @@
+\section{From sign tables to witnesses, counterstrategies, and formulas}
+\label{sec:strategies}
+\subsection{Quantifiers are a finite game on the atlas}
+For base cell $C_i$, let $T_{ij}\in\{\bot,\top\}$ be the truth of $F$ on its $j$th fibre cell. Define
+\[
+ E_i=\bigvee_jT_{ij},\qquad U_i=\bigwedge_jT_{ij}.
+\]
+An inner existential uses $E_i$; an inner universal uses $U_i$. An outer existential takes a disjunction over $i$; an outer universal takes a conjunction. A free outer variable returns the union of the cells with the appropriate true value.
+
+These Boolean operations are easy. The hard facts behind them are nonemptiness, complete coverage, and truth constancy for every real point in each cell. They must not be replaced by a statement that the samples passed.
+
+The strategy obligation changes with polarity. For a true $\forall x\exists y$ sentence, every base cell needs a witness selector. For a false $\exists x\forall y$ sentence, every base cell needs a selector producing a falsifying $y$. For a false $\forall x\exists y$ sentence, one selected $x$ cell with an entirely false fibre is enough to locate a counterexample parameter. For a true $\exists x\forall y$ sentence, one selected base cell with an entirely true fibre supplies an existential parameter witness.
+
+The prototype records these choices explicitly. For an inner existential, a choice is required exactly when that fibre is true and it must point to a true cell. For an inner universal, a choice is required exactly when that fibre is false and it must point to a false cell. Unnecessary selections are rejected as a format error rather than silently given a second interpretation.
+
+\subsection{Why the sample is not the witness function}
+Suppose a sample fibre at $x=0$ admits $y=1$ for the equation $y^2=x^2+1$. The stored number $1$ is not a witness for every other $x$. The transported object is the selected root's \emph{ordinal position}, with respect to the union of all root boundaries in that base cell.
+
+Let $\rho_1<\cdots<\rho_n$ be those root functions. The strategy language is
+\begin{align*}
+ \operatorname{Root}(j)(x)&=\rho_j(x),\\
+ \operatorname{Below}(1)(x)&=\rho_1(x)-1,\\
+ \operatorname{Above}(n)(x)&=\rho_n(x)+1,\\
+ \operatorname{Between}(j,j+1)(x)&=\tfrac12(\rho_j(x)+\rho_{j+1}(x)).
+\end{align*}
+If there are no roots, the constant zero is a selector for the unique sector. A point base cell uses the corresponding fixed algebraic root values. In JSON, root indices are zero-based; the equations above use the more natural one-based mathematical numbering.
+
+Every one of these functions stays in its designated fibre cell. In particular, a midpoint stays strictly between two distinct ordered roots, which matters for strict inequalities and disequalities. A rational sector sample is used only to determine that cell's sign row. The implementation emits the root-index strategy descriptor; it does not emit a runnable exact-real Lean function implementing all these root operations.
+
+\begin{theorem}[Strategy extraction]\label{thm:strategy}
+For each base cell whose existential fibre is true, selecting a true root section or sector and applying the corresponding selector gives a semialgebraic witness on that entire base cell. Combining the finitely many selectors by base-cell membership gives a total piecewise semialgebraic witness whenever $\forall x\exists y\,F(x,y)$ is true. Dually, false universal fibres yield piecewise counterstrategies.
+\end{theorem}
+\begin{proof}
+Each selector lies in its chosen cell by the strict order of the root functions. Theorem~\ref{thm:semantics} makes $F$ constant with the desired truth there. Each root function is semialgebraic: its graph is first-order definable over the reals by a polynomial equation and the finite ordered-root condition on a semialgebraic parameter cell; real quantifier elimination makes this graph semialgebraic. This use of the classical real-QE theorem is separate from the sign-atlas soundness proof, which does not require a quantifier-free root-graph renderer. Sums, differences, rational scaling, and finite piecewise combinations preserve semialgebraicity. The base cells partition the line, so the combined choice is total on exactly the claimed domain.
+\end{proof}
+
+The abstract assertion of semialgebraicity does not mean the prototype has simplified the output into a quantifier-free polynomial formula. It returns root-index objects and algebraic cells. A production renderer can retain these as a small root language or convert them to a more conventional formula with additional verified transformations.
+
+\subsection{Worked example: a strict band of admissible squares}
+Consider
+\[
+ \forall x\in\R\quad x\geq0\Longrightarrow
+ \exists y\in\R\quad x<y^2<x+1.
+\]
+For $x>0$, the positive roots $\sqrt x$ and $\sqrt{x+1}$ bound a true sector. The midpoint selector is
+\[
+ y(x)=\frac{\sqrt x+\sqrt{x+1}}2.
+\]
+Because both endpoints are nonnegative and distinct, squaring preserves their strict order and gives the desired inequalities. At $x=0$, fresh specialization gives the sector $(0,1)$, whose midpoint is $1/2$. For $x<0$, the antecedent is false, so the Boolean formula imposes no witness constraint.
+
+The example demonstrates three features simultaneously: the witness need not lie on an equation's root section; strictness requires an open sector; and the exceptional parameter $x=0$ is checked explicitly rather than included by continuity of a strict inequality.
+
+\subsection{Worked example: an exact disconnected parameter region}
+\label{sec:shifted}
+Ask for the set of real $x$ satisfying
+\[
+ \exists y\in\R\quad y^2=2\ \wedge\ (y-x)^2=2.
+\]
+The answer is
+\begin{equation}\label{eq:shifted-answer}
+ x=0\quad\vee\quad x^2=8.
+\end{equation}
+Indeed, $y$ and $y-x$ independently take values in $\{\sqrt2,-\sqrt2\}$, so their difference $x$ is $0$ or $\pm2\sqrt2$. Conversely, these three values admit witnesses: $y=\sqrt2$ at $x=0$ or $x=2\sqrt2$, and $y=-\sqrt2$ at $x=-2\sqrt2$.
+
+The emitted projection polynomial is exactly $P(X)=X^3-8X$. Its three real roots give seven base cells, with truth vector
+\[
+ (\bot,\top,\bot,\top,\bot,\top,\bot).
+\]
+All true cells are points, two of them irrational. This is not a problem that can be settled by treating open parameter intervals as the only interesting regions.
+
+The prototype's algebraic cuts for the outer irrational roots need not display radicals. The checker validates the roots of $X^3-8X$ and their fibre equations directly. The concise expression \eqref{eq:shifted-answer} is an independently checked description used in the differential suite; the atlas producer itself returns the seven-cell truth structure rather than claiming to discover that simplification syntactically.
+
+\subsection{Worked example: a degree drop that is not a failure}
+For
+\[
+ \exists y\in\R\quad xy^2+y-1=0,
+\]
+the exact feasible parameter region is $x\geq-1/4$. If $x\ne0$, the discriminant is $1+4x$. If $x=0$, the equation is linear and has the solution $y=1$.
+
+The certificate contains the particularly simple identity
+\begin{equation}\label{eq:quadratic-bezout}
+ (-4x)(xy^2+y-1)+(2xy+1)(2xy+1)=4x+1.
+\end{equation}
+The leading coefficient contributes the guard $x$, so the projection is the monic polynomial $X(X+1/4)$. Its point cells are $x=-1/4$ and $x=0$. The first has the double root $y=2$; the second has the linear root $y=1$. The truth vector is
+\[
+ (\bot,\top,\top,\top,\top).
+\]
+Dropping the $x$ guard because the discriminant is already present would be a mistake in the generic continuation proof. Conversely, declaring the $x=0$ branch unsupported would unnecessarily lose a correct positive answer. Fresh specialization handles both exceptional mechanisms with the same root-checking code.
+
+\subsection{Worked example: cubic and quintic inverse relations}
+The cubic relation
+\[
+ y^3-y=x
+\]
+is surjective, but its number of real inverse branches changes. The emitted projection is $X^2-4/27$. The two irrational parameter values $\pm2/(3\sqrt3)$ become point cells; the three open intervals between and around them have different root configurations. All five base cells have a nonempty fibre, as the stored certificate verifies.
+
+This example is a useful stress test because the exceptional fibres are not rational-coefficient univariate problems after specialization. They require exact arithmetic at a selected irrational base point. A representation that only knows how to handle rational projection roots cannot claim to cover it.
+
+The quintic relation
+\[
+ y^5+y=x
+\]
+has exactly one real root for every $x$, since its derivative is $5y^4+1>0$ and its values tend to opposite infinities. The general producer does not use that specialized argument. It emits a derivative guard proportional to $3125X^4+256$, which has no real root, and a single base cell suffices. This is a useful example of a nonconstant projection polynomial that does not require any real split.
+
+For practical Forge use, a recognized odd-degree surjectivity theorem or monotonicity argument may be cheaper than the atlas. The point of these tests is not to assert that CAD is the best proof of every example, but to exercise a uniform certificate language that can express root witnesses without a radical template.
+
+\subsection{Worked example: discontinuity is allowed when the specification allows it}
+Consider
+\[
+ \begin{aligned}
+ \forall x\;\exists y\quad & y^2=x^2+1,\\
+ & (x\geq0\Longrightarrow y\geq1),\\
+ & (x<0\Longrightarrow y\leq-1).
+ \end{aligned}
+\]
+A witness is $-\sqrt{x^2+1}$ on $x<0$ and $+\sqrt{x^2+1}$ on $x\geq0$. The jump at zero is forced by the two sign conditions: left-hand values are at most $-1$, whereas the value at zero must be at least $1$.
+
+A synthesis method that searches only globally continuous templates is solving a stronger problem than the user asked. The atlas partitions at the pure-$X$ guard $x=0$, chooses the appropriate branch in each cell, and handles the point separately. It does not promise continuity, differentiability, or any other regularity not present in the input.
+
+A later regularity-aware synthesis mode would need additional boundary-compatibility constraints on the selected branches. Selecting any locally valid cell is complete for plain existence but not for existence of a continuous global selector.
+
+\subsection{Worked example: quantifier order and dual evidence}
+The sentence $\forall x\exists y\;y>x$ is true. The upper sector above the root $y=x$ gives the selector $y=x+1$. The reversed sentence $\exists x\forall y\;y>x$ is false. In every base cell, the root section $y=x$ or the lower sector yields a counterstrategy.
+
+The difference is not resolved by searching for a particularly good constant. In the first sentence, the witness may depend on the universally chosen $x$; in the second, one $x$ must survive every $y$. The atlas retains the quantifier prefix and extracts evidence with the correct dependency order.
+
+Similarly, a refutation of $\forall x\exists y\;xy=1$ selects $x=0$ and certifies that its entire fibre is false. A refutation of $\exists x\forall y\;xy=1$ would require a falsifying $y$ for every possible $x$. Those are different certificate shapes even though both closed sentences are false.
+
+\subsection{Free-variable output and reuse by Forge}
+For a free parameter, the result is an exact one-dimensional semialgebraic set represented by a union of root cells and sectors. The same output can serve three different tasks: a proved guard sufficient for a desired witness, a necessary-and-sufficient parameter condition, or a counterexample region for a candidate assertion.
+
+The worker should expose these distinct consequences through the existing obligation graph. A proved guard may help a surrounding case split; an exact equivalence may simplify a quantified assertion; a witness must be elaborated at its exact requested type. None of these operations should implicitly turn a fragment-specific negative result into a statement about arbitrary Lean terms inhabiting an unrelated type.

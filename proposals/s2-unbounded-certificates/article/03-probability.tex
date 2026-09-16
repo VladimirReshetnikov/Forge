@@ -1,0 +1,80 @@
+\section{Recursive probabilities as least fixed points}
+\label{sec:pps}
+\status{Exact rational polynomial-system input, enclosure producers, finite checkers, and special-case certificates are executed. A probability semantics in Lean and the source compiler are not implemented by this package.}
+
+\subsection{The polynomial-system fragment}
+\begin{definition}[Probabilistic polynomial system]
+A probabilistic polynomial system (PPS) is a map $P:[0,1]^n\to[0,1]^n$, with $n\ge1$, whose coordinates have finite presentations
+\begin{equation}
+ \label{eq:pps}
+ P_i(x)=\sum_{\alpha\in E_i}p_{i,\alpha}x^\alpha,
+ \qquad x^\alpha=\prod_{j=1}^{n}x_j^{\alpha_j},
+ \qquad p_{i,\alpha}\in\Q_{\ge0},\quad
+ \sum_\alpha p_{i,\alpha}\le1.
+\end{equation}
+Exponents are nonnegative integers. The semantic quantity of interest is the least fixed point $q=\lfp(P)$ in the unit cube.
+\end{definition}
+
+The coefficient restrictions are not incidental validation rules. They imply nonnegativity, monotonicity, and $P(\one)\le\one$. The executable input parser merges duplicate monomials, removes zero terms, and rejects negative coefficients, negative exponents, inconsistent dimensions, and coefficient sums above one. Direct construction of a Python data object is revalidated at the public checker boundary; bypassing the JSON parser does not bypass these mathematical hypotheses.
+
+\subsection{A source semantics that really yields a product}
+Consider a finite collection of nonterminal or procedure types. An object of type $i$ independently chooses one of finitely many rules. A rule of probability $p_{i,\alpha}$ creates $\alpha_j$ recursive children of type $j$ for each $j$. A constant monomial describes immediate successful termination. Any missing probability mass is an explicit nonreturning outcome, not a normalization error to be repaired by dividing the coefficients.
+
+For independent children, the probability that all children terminate is the product of their termination probabilities, giving \eqref{eq:pps}. This covers multitype branching and appropriate stochastic grammars or single-exit state-free recursive models. General recursive Markov chains and stochastic grammars motivate these equations, including their irrational solutions~\cite{etessami-yannakakis}. This package does not implement a reduction from every probabilistic pushdown system.
+
+A type signature does not establish the product law. Two child computations that consult the same random variable are correlated. Two procedures that communicate through mutable state may not have context-independent termination probabilities. A recursive call with an unbounded data parameter may require infinitely many unknowns rather than one variable per function name. Each of these must be rejected by the first adapter unless a separate sufficient semantic theorem is supplied.
+
+Lean also cannot be given a possibly nonterminating recursive function and then be expected to treat its operational termination behavior as ordinary definitional reduction. The source-facing proposition should refer to an inductively defined finite derivation relation, an explicit probabilistic operational semantics, or a certified branching DSL. Its denotation is then connected to the polynomial system by a theorem. The algorithm does not make a nonterminating function into a total Lean definition.
+
+\subsection{Why the least solution is the relevant one}
+Set $q^{(0)}=\zero$ and $q^{(k+1)}=P(q^{(k)})$. In the branching interpretation, $q^{(k)}_i$ is the probability mass of successful derivation trees whose height is at most $k$, with the precise convention that height zero has no successful root. Independence and finite alternatives prove the recurrence by induction.
+
+The sequence is increasing and bounded above by $\one$. Its coordinatewise supremum exists, and polynomial continuity gives
+\[
+ P\!\left(\sup_k q^{(k)}\right)=\sup_k q^{(k+1)}.
+\]
+Any fixed point $z\in[0,1]^n$ bounds every $q^{(k)}$ by induction, so the supremum is the least fixed point. In a probability-space presentation, successful termination is the increasing union of these finite-height events, and continuity of probability from below identifies its probability with the same supremum.
+
+The distinction between this least point and an arbitrary fixed point is fundamental. In
+\begin{equation}
+ \label{eq:cubic}
+ P(x)=\frac14+\frac34x^3,
+\end{equation}
+$1$ is a fixed point. But the least fixed point is
+\begin{equation}
+ \label{eq:cubic-root}
+ q=\frac{\sqrt{21}-3}{6}\approx0.2637626158.
+\end{equation}
+Returning $1$ merely because it satisfies $P(x)=x$ would report an incorrect termination probability. Similarly, a lower candidate satisfying $\ell\le P(\ell)$ is not automatically below the least fixed point: $\ell=1$ is an immediate counterexample.
+
+This is precisely why the lower certificates below retain a justified path from zero. Solving a polynomial equation, even exactly, does not select the semantic branch.
+
+\subsection{Upper bounds are easy; lower bounds need a history}
+\begin{lemma}[Prefixed upper bound]
+\label{lem:upper}
+If $u\in[0,1]^n$ satisfies $P(u)\le u$, then $q\le u$.
+\end{lemma}
+\begin{proof}
+The base approximation $q^{(0)}=\zero$ is below $u$. If $q^{(k)}\le u$, monotonicity gives $q^{(k+1)}=P(q^{(k)})\le P(u)\le u$. Take the supremum.
+\end{proof}
+
+Only an exact rational evaluation of $P(u)$ is needed for this upper certificate. An upper candidate obtained numerically, or from a linearized model, is harmless as a proposal provided that the original nonlinear inequality is checked afterwards.
+
+A basic lower certificate is a finite ledger starting at zero, with steps
+\[
+ \ell\le\ell'\le P(\ell).
+\]
+If $\ell\le q$, then $\ell'\le P(\ell)\le P(q)=q$. Thus a finite Kleene ledger is sound. The monotonicity restriction $\ell\le\ell'$ is convenient bookkeeping; the essential lower-bound inequality is the second one.
+
+The problem is the number of steps, not the logic. At a critical branching point the error can decay slowly, while a Newton step can give much more information per certificate record. The next section proves exactly the stronger step we use, including the rounding direction and the matrix sign conditions.
+
+\subsection{A rational answer about an irrational quantity}
+An enclosure $[\ell,u]$ is an exact mathematical object even when it contains an irrational value. The user can ask for a threshold proof, an error bound, or a root identity. These are different queries.
+
+For instance, $q<1/3$ for \eqref{eq:cubic} can be closed by a strict upper bound below $1/3$, without displaying any radical. A request for $|q-r|\le2^{-b}$ can be answered using a sufficiently narrow enclosure and a rational midpoint. A request for equality to \eqref{eq:cubic-root} needs an additional algebraic identification. No approximate decimal is promoted to exact equality.
+
+The prototype records \code{requested_bits} and recomputes the Boolean \code{target_met} from
+\[
+ \max_i(u_i-\ell_i)\le2^{-b}.
+\]
+A valid interval $[0,1]$ with an unmet precision request is still valid information; it is not a completed approximation request. An intentionally false \code{target_met} flag is rejected by the checker. This gives a simple, mechanical distinction between valid partial progress and a finished quantitative task.

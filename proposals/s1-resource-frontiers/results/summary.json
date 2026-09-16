@@ -1,0 +1,68 @@
+{
+  "authority": "Python checks, not Lean-kernel proofs",
+  "comparison_with_lean_tactics": "NOT_RUN",
+  "compressed_run": {
+    "check_ns": 43476,
+    "dag_nodes": 3,
+    "meaning": "exact symbolically summarized run, not an expanded run",
+    "represented_steps": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "steps_executed": 0
+  },
+  "corpora": {
+    "frontiers": 67,
+    "lassos": 2,
+    "parameters": 69,
+    "runs": 1,
+    "thresholds": 136
+  },
+  "elapsed_seconds": 0.289686276,
+  "forward_oracle": {
+    "disagreements": 0,
+    "max_initial_total": 6,
+    "nets": 60,
+    "oracle_cutoffs": 0,
+    "queries": 3920,
+    "safe": 2043,
+    "state_visits_sum": 16649,
+    "unsafe": 1877
+  },
+  "frontier_costs": {
+    "maximum_basis": 36,
+    "maximum_candidates": 180,
+    "median_check_ms": 0.060932,
+    "median_search_ms": 0.044336,
+    "total_dominance_deletions": 39
+  },
+  "lassos_and_refusals": {
+    "explicit_unknown_controls": 4,
+    "positive_certificates": 2
+  },
+  "lean_status": "NOT_RUN: no Lean executable available",
+  "mutations": {
+    "deliberately_invalid_records": 8,
+    "rejected": 8
+  },
+  "parameters": {
+    "certified_grid_cells": 617,
+    "disagreements": 0,
+    "large_parameter_spot_queries": 6700,
+    "pareto_certificates": 67,
+    "scalar_certificates": 134,
+    "scalar_spot_queries": 2278
+  },
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "predecessor_identity": {
+    "coordinate_checks": 2808,
+    "disagreements": 0
+  },
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "run_id": "resource-frontiers-20260915-v1",
+  "seed": 20260915,
+  "word_algebra": {
+    "concrete_word_queries": 7000,
+    "disagreements": 0,
+    "dual_summary_agreements": 1000,
+    "expanded_small_power_queries": 2000,
+    "random_words": 1000
+  }
+}

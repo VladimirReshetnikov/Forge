@@ -1,0 +1,26 @@
+{
+  "alphabet": [
+    "a",
+    "b"
+  ],
+  "bad": [
+    {
+      "q": 1,
+      "v": [
+        ""
+      ]
+    }
+  ],
+  "channels": 1,
+  "controls": 2,
+  "kind": "lossy",
+  "transitions": [
+    {
+      "channel": 0,
+      "op": "recv",
+      "source": 0,
+      "symbol": "a",
+      "target": 1
+    }
+  ]
+}

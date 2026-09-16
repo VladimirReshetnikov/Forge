@@ -1,0 +1,65 @@
+{
+  "named_examples": [
+    {
+      "name": "mutex",
+      "engine": "vass",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "mutex_bug",
+      "engine": "vass",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "axes",
+      "engine": "vass",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "delayed_101",
+      "engine": "vass",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "enabling",
+      "engine": "vass",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "lru_register_swap",
+      "engine": "nominal",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "lru_fifo",
+      "engine": "nominal",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "eviction_register_swap",
+      "engine": "nominal",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "owner_pool",
+      "engine": "mixed",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    },
+    {
+      "name": "owner_pool_bug",
+      "engine": "mixed",
+      "search_matches_stored_certificate": true,
+      "check_accepted": true
+    }
+  ],
+  "unknown_exit_2_verified": true
+}

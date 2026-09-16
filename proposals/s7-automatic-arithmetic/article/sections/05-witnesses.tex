@@ -1,0 +1,96 @@
+\section{Canonical witness synthesis from regular graphs}\label{sec:witnesses}
+
+\subsection{Compile the specification, not an ansatz}
+Suppose \(R(\vec x,y)\) is any formula in the supported fragment, including formulas with internal quantifiers. Introduce a genuinely fresh variable \(z\), rename the free output occurrences capture-avoidantly, and form
+\begin{equation}\label{eq:least}
+ G_R(\vec x,y)=R(\vec x,y)\land
+ \neg\exists z\bigl(z<y\land R(\vec x,z)\bigr).
+\end{equation}
+The ordering atom is linear: \(z-y\le-1\). The automatic compiler therefore constructs a DFA for \(G_R\).
+
+\begin{theorem}[Regular least choice]\label{thm:least}
+For every \(\vec x\), the relation \(G_R(\vec x,-)\) is either empty or contains exactly one natural number. It is nonempty exactly when \(R(\vec x,-)\) is nonempty. If \(\forall\vec x\,\exists y\,R(\vec x,y)\), its automaton represents the graph of a total function selecting the least witness.
+\end{theorem}
+\begin{proof}
+Every nonempty subset of \(\N\) has a least element. Equation~\eqref{eq:least} accepts that element and excludes every greater satisfying element. Two accepted values cannot be distinct, because the lesser would contradict the exclusion condition for the greater. Regularity follows by the already established Boolean and existential compiler operations.
+\end{proof}
+
+This is a useful synthesis theorem rather than merely an existence argument: the graph has an effective finite representation, and the next subsection gives an executable evaluator. No claim is made that every resulting function has a small graph or a simple closed form.
+
+The public helper rejects a proposed fresh name already free in the relation and rejects renaming that would capture it under an inner binder. A caller must also keep the fresh name distinct from the surrounding input context. The compiler checks active-context shadowing independently. A Lean implementation should make freshness structural through binder indices rather than treating it as a naming convention.
+
+\subsection{An evaluator with a concrete termination bound}
+Let \(B\) represent a witness relation with the output on its last track. Fix a visible input tuple, and let \(w\) be its minimal common-length binary encoding. The producer's evaluator works as follows.
+\begin{lstlisting}
+compute zero-visible tail ranks for B
+reachable := {B.start}
+for each visible letter d of w:
+    next := empty set
+    for each q in reachable and b in {0,1}:
+        t := B.transition(q, (d,b))
+        if t not yet in next:
+            remember predecessor (q,b) for this position and t
+        insert t in next
+    reachable := next
+choose q in reachable having a finite tail rank
+if there is no such q: return no witness
+backtrack remembered predecessors to recover prefix output bits
+follow decreasing tail ranks to recover extra output bits
+return the decoded output, joint word, and complete state trace
+\end{lstlisting}
+Only one predecessor is needed per state and input position. Any discarded history reaches the same state and therefore has exactly the same possible continuations. With an arbitrary relation the evaluator returns some witness; with \(G_R\), every accepting history decodes to the unique least one.
+
+\begin{proposition}[Evaluator correctness and bound]\label{prop:evaluator}
+For a \(Q\)-state source graph and an input encoding of length \(n\), the evaluator returns a witness exactly when one exists. Its returned joint word has length at most \(n+Q-1\). Its graph-operation cost is \(O((n+1)Q)\), with \(O(nQ+Q)\) predecessor and rank storage.
+\end{proposition}
+\begin{proof}
+Induction over the visible positions establishes the exact reachable-state set for all hidden prefixes. The tail set is exact by Lemma~\ref{lem:tail}, so its intersection with the final prefix set is nonempty exactly when the visible input has a witness. Backtracking reconstructs a valid prefix run, and decreasing ranks reconstruct an accepting tail of length at most \(Q-1\). Each visible position considers at most \(2Q\) transitions; the tail graph also has \(2Q\) edges.
+\end{proof}
+
+The bound counts graph operations, not the bit complexity of repeatedly constructing large Python integers or parsing their decimal representations. Nor is it the cost of compiling the graph in the first place. Graph compilation may be expensive; evaluation on a fixed verified graph is the comparatively cheap operation.
+
+The concrete witness checker follows the supplied state trace and decodes the tuple independently. It requires an \emph{already verified} source automaton. A valid run on an unbound or wrongly labeled automaton proves nothing about the original witness specification.
+
+\begin{corollary}[A growth obstruction for synchronized witnesses]
+Let a binary automatic relation have a \(Q\)-state representing DFA and let \(X\) be the maximum visible input value (zero for an empty tuple). If any witness exists, there is one smaller than \(2^Q(X+1)\). In particular, a single-valued automatic graph cannot define a function with superlinear growth in \(X\).
+\end{corollary}
+\begin{proof}
+A minimal visible encoding has length \(n\) with \(2^n\le2(X+1)\). Proposition~\ref{prop:evaluator} provides a joint word of length at most \(n+Q-1\), so its hidden value is smaller than \(2^{n+Q-1}\le2^Q(X+1)\). If the relation is single-valued, that witness is its only output.
+\end{proof}
+
+This gives a precise limitation rather than merely a list of unsupported syntax. Neither the graph \(y=x^2\) nor the graph \(y=2^x\) over all naturals can have a fixed finite synchronized binary DFA: either growth eventually exceeds every constant multiple of \(x+1\). In contrast, the unary set of powers of two is automatic, and its least member above \(x\) grows only linearly. Raising the state budget does not convert the former relations into supported atomic graphs. A different certificate lane is required.
+
+\subsection{A regular graph is not automatically a streaming program}
+Do not advertise the evaluator as a one-pass digit transducer. It first collects reachable states and predecessor information, chooses a successful terminal continuation, and backtracks. Earlier output digits can depend on information arriving later in the input. Regularity of a relation does not, by itself, establish the existence of a deterministic online transducer producing output without lookahead.
+
+For a Lean function, the conservative port is this finite dynamic program, together with its correctness proof and bounded tail traversal. An optional later pass may recognize relations admitting a simpler online or closed-form implementation. Such an optimization must prove equivalence to the checked graph; it is not required for witness existence or for executing the synthesized selector.
+
+\subsection{Five executed selector families}
+\paragraph{A witness longer than its input.}
+For \(R(x,y)\equiv y=2x+1\), the least-witness graph has three states after minimization. The evaluator returns \(2x+1\), including at the empty encoding of zero. This family is also the diagnostic test for missing zero-tail closure.
+
+\paragraph{A quotient represented relationally.}
+Use \(R(x,y)\equiv\exists r\,(x=7y+r\land r<7)\). Its least graph has nineteen states. The evaluator returns \(\lfloor x/7\rfloor\), although neither division nor this closed-form implementation is programmed into the graph compiler. The inner remainder quantifier is eliminated before witness extraction.
+
+\paragraph{The next power of two.}
+Use \(R(x,y)\equiv x<y\land\Pow(y)\). The least graph has four states. Its mathematical output is \(2^{\operatorname{bitlength}(x)}\), with \(\operatorname{bitlength}(0)=0\). This selector is obtained from a non-Presburger digit predicate and illustrates why a finite collection of affine witness templates is the wrong abstraction for this lane.
+
+\paragraph{The next same-parity integer.}
+Use \(R(x,y)\equiv x<y\land(\Even(x)\iff\Even(y))\). Its least graph has five states. The result depends on binary digit structure, not just a single residue modulo a fixed small modulus. No explicit formula for the selector is needed by the evaluator.
+
+\paragraph{A partial Diophantine selector.}
+Use \(R(x,y)\equiv\exists b\,(x=5y+7b)\). The least graph has twenty-four states. Some small inputs have no witness; the evaluator returns \code{None} on those inputs rather than inventing a default. An independent arithmetic oracle uses the least possible coefficient \(y=(3x)\bmod7\) and tests \(5y\le x\). The last inequality is essential: a residue condition alone would admit negative values of the other coefficient.
+
+The last source's largest intermediate DFA has 1,102 states. Reporting only its twenty-four-state output would hide much of the cost. The complete construction certificate contains 8,644 transition cells. The next-power and next-parity examples have small final machines, but that observation is specific to these fixtures, not a general compression theorem.
+
+\subsection{Towards alternating witness strategies}
+The same construction suggests a concrete further integration for a prenex goal
+\[
+ \forall x\;\exists y\;\forall z\;\exists u\;\psi(x,y,z,u).
+\]
+Compile \(R_1(x,y):=\forall z\,\exists u\,\psi(x,y,z,u)\), then its least graph to obtain \(y=f(x)\). Separately compile the least graph for \(R_2(x,y,z,u):=\psi(x,y,z,u)\) in output \(u\). Evaluate the latter only at \((x,f(x),z)\); the first selector's specification proves those calls lie in its domain. The resulting strategy is \(u=g(x,f(x),z)\).
+
+For longer finite prefixes, process the existential positions against their remaining suffix formulas, retaining the already selected parameters. The proof is induction on the quantifier prefix. This avoids the unsound shortcut of finding one tuple of witnesses and treating it as a strategy valid against every later universal choice.
+
+\status{The component operations needed for this construction are implemented. A public prenex-strategy compiler, its composition receipts, and Lean strategy extraction are not implemented or separately tested in this bundle.}
+This is a specific next algorithm, not part of the 643 executed witness traces. Its main engineering challenge is controlling the repeated suffix compilations and making the domain proofs explicit at each selector call.

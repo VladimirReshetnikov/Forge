@@ -1,0 +1,48 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "vanishing_content_affine_1",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        1,
+        0,
+        "-2"
+      ],
+      [
+        1,
+        1,
+        "-4"
+      ],
+      [
+        1,
+        2,
+        "-1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "2"
+      ],
+      [
+        0,
+        1,
+        "1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "eq",
+      0
+    ],
+    [
+      "gt",
+      1
+    ]
+  ]
+}

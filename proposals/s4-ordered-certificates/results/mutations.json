@@ -1,0 +1,162 @@
+[
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "missing_closure",
+    "rejected": true
+  },
+  {
+    "diagnostic": "duplicate or irrelevant closure row",
+    "name": "duplicate_closure",
+    "rejected": true
+  },
+  {
+    "diagnostic": "array: wrong dimension",
+    "name": "missing_target_coverage",
+    "rejected": true
+  },
+  {
+    "diagnostic": "earlier child: out of range",
+    "name": "cyclic_DAG",
+    "rejected": true
+  },
+  {
+    "diagnostic": "invalid one-step lower-inclusion witness",
+    "name": "false_lower_inclusion",
+    "rejected": true
+  },
+  {
+    "diagnostic": "certificate is bound to a different problem",
+    "name": "wrong_subject",
+    "rejected": true
+  },
+  {
+    "diagnostic": "noncanonical basis order",
+    "name": "duplicate_basis",
+    "rejected": true
+  },
+  {
+    "diagnostic": "array: wrong dimension",
+    "name": "missing_predecessor_cover",
+    "rejected": true
+  },
+  {
+    "diagnostic": "invalid clipping bound",
+    "name": "invalid_clipping_bound",
+    "rejected": true
+  },
+  {
+    "diagnostic": "box not covered by claimed minimum",
+    "name": "false_covered_leaf",
+    "rejected": true
+  },
+  {
+    "diagnostic": "box incorrectly declared impossible",
+    "name": "false_impossible_leaf",
+    "rejected": true
+  },
+  {
+    "diagnostic": "invalid partition split",
+    "name": "invalid_partition",
+    "rejected": true
+  },
+  {
+    "diagnostic": "diagonal rule applied to nondiagonal matrix",
+    "name": "false_diagonal_dispatch",
+    "rejected": true
+  },
+  {
+    "diagnostic": "infeasible predecessor minimum",
+    "name": "infeasible_minimum",
+    "rejected": true
+  },
+  {
+    "diagnostic": "natural: expected natural integer, not float/bool",
+    "name": "boolean_is_not_nat",
+    "rejected": true
+  },
+  {
+    "diagnostic": "natural: expected natural integer, not float/bool",
+    "name": "negative_coefficient",
+    "rejected": true
+  },
+  {
+    "diagnostic": "natural: expected natural integer, not float/bool",
+    "name": "float_coefficient",
+    "rejected": true
+  },
+  {
+    "diagnostic": "box incorrectly declared impossible",
+    "name": "semantic_change_rebound_subject",
+    "rejected": true
+  },
+  {
+    "diagnostic": "resource transition: wrong fields",
+    "name": "zero_test_not_silently_erased",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_0",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_1",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_2",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_3",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_4",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_5",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_6",
+    "rejected": true
+  },
+  {
+    "diagnostic": "missing transition/basis closure obligations",
+    "name": "all_closure_removed_7",
+    "rejected": true
+  },
+  {
+    "diagnostic": "pre-action loss invented messages",
+    "name": "invented_pre_loss",
+    "rejected": true
+  },
+  {
+    "diagnostic": "post-action loss invented messages",
+    "name": "invented_post_loss",
+    "rejected": true
+  },
+  {
+    "diagnostic": "duplicate JSON object key",
+    "name": "json_0",
+    "rejected": true
+  },
+  {
+    "diagnostic": "floating-point/nonfinite JSON token",
+    "name": "json_1",
+    "rejected": true
+  },
+  {
+    "diagnostic": "floating-point/nonfinite JSON token",
+    "name": "json_2",
+    "rejected": true
+  }
+]

@@ -1,0 +1,144 @@
+{
+  "schema": "forge.atlas.certificate/1",
+  "factors": [
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        1,
+        1,
+        "1"
+      ]
+    ]
+  ],
+  "factorizations": [
+    {
+      "scalar": "1",
+      "powers": [
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "derivative_guards": [
+    {
+      "a": [],
+      "b": [
+        [
+          0,
+          0,
+          "1"
+        ]
+      ],
+      "guard": [
+        "0",
+        "1"
+      ],
+      "factor": 0
+    }
+  ],
+  "pair_guards": [],
+  "projection": [
+    "0",
+    "1"
+  ],
+  "base_roots": [
+    [
+      "0",
+      "0"
+    ]
+  ],
+  "stacks": [
+    {
+      "sample": "-1",
+      "y_roots": [
+        [
+          "-3/2",
+          "-3/4"
+        ]
+      ],
+      "y_samples": [
+        "-5/2",
+        "1/4"
+      ],
+      "signs": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          -1
+        ]
+      ],
+      "truths": [
+        false,
+        true,
+        false
+      ],
+      "value": true,
+      "selection": 1
+    },
+    {
+      "sample": null,
+      "y_roots": [],
+      "y_samples": [
+        "0"
+      ],
+      "signs": [
+        [
+          -1
+        ]
+      ],
+      "truths": [
+        false
+      ],
+      "value": false,
+      "selection": null
+    },
+    {
+      "sample": "1",
+      "y_roots": [
+        [
+          "3/4",
+          "3/2"
+        ]
+      ],
+      "y_samples": [
+        "-1/4",
+        "5/2"
+      ],
+      "signs": [
+        [
+          -1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        true,
+        false
+      ],
+      "value": true,
+      "selection": 1
+    }
+  ],
+  "truth_by_x": [
+    true,
+    false,
+    true
+  ],
+  "closed_value": false,
+  "selected_x": 1
+}

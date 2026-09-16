@@ -1,0 +1,46 @@
+{
+  "context": [],
+  "formula": {
+    "op": "not",
+    "arg": {
+      "op": "exists",
+      "var": "x",
+      "arg": {
+        "op": "not",
+        "arg": {
+          "op": "exists",
+          "var": "y",
+          "arg": {
+            "op": "not",
+            "arg": {
+              "op": "exists",
+              "var": "z",
+              "arg": {
+                "op": "not",
+                "arg": {
+                  "op": "iff",
+                  "left": {
+                    "op": "le",
+                    "coeff": {
+                      "z": 2,
+                      "x": -1
+                    },
+                    "rhs": 0
+                  },
+                  "right": {
+                    "op": "le",
+                    "coeff": {
+                      "z": 1,
+                      "y": -1
+                    },
+                    "rhs": -1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

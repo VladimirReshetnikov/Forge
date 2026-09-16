@@ -1,0 +1,122 @@
+\section{Exact algebraic points without a false field assumption}
+\label{sec:arithmetic}
+\subsection{The representation that the checker actually needs}
+A complete sign atlas requires more than rational arithmetic, even when all source coefficients are rational. A projection root may be irrational, and the fibre over that root may have further algebraic roots. The prototype supports precisely this two-level situation, using a small exact representation rather than importing SymPy's algebraic-number machinery into replay.
+
+At the base level, a real algebraic point is represented by
+\[
+ \alpha=(P,a,b),\qquad P\in\Q[X]\text{ square-free},\quad a,b\in\Q,
+\]
+where either $a<b$ and $(a,b)$ contains exactly one root of $P$, with neither endpoint a root, or $a=b$ and $P(a)=0$. The global projection polynomial is convenient because it is already bound to the certificate. It is usually reducible.
+
+That last fact is not a cosmetic issue. The quotient $\Q[X]/(P)$ need not be a field, so a routine that uses an arbitrary residue class as an invertible coefficient can silently invalidate the calculation. Factoring $P$ and selecting the irreducible factor containing $\alpha$ is one possible solution. The implementation instead works with fractions whose denominators are checked at the selected root.
+
+\subsection{Localized rational-function coefficients}
+A coefficient in a fibre polynomial is represented as
+\begin{equation}\label{eq:local-coeff}
+ [n,d]_\alpha=\frac{n(\alpha)}{d(\alpha)},\qquad n,d\in\Q[X],\quad d(\alpha)\ne0.
+\end{equation}
+The numerator and denominator may each be reduced modulo $P$, because $P(\alpha)=0$. They may share a rational-polynomial factor that is canceled, provided the denominator condition is preserved. The prototype also normalizes the denominator's leading coefficient. It does not claim these representations are unique.
+
+Addition and multiplication use the ordinary fraction rules. Division by $[u,v]_\alpha$ uses $[nv,du]_\alpha$ and checks $u(\alpha)\ne0$. Equality is decided by testing
+\[
+ (nv-ud)(\alpha)=0.
+\]
+Thus polynomial long division in $\Q(\alpha)[Y]$ operates on genuine nonzero real coefficients, not on formally nonzero residue classes that might vanish at the chosen root.
+
+\begin{proposition}[Localized arithmetic is semantically sound]
+Provided every denominator is nonzero at $\alpha$, reduction modulo $P$, the fraction operations above, and cancellation of a common polynomial factor preserve the denoted real number.
+\end{proposition}
+\begin{proof}
+Evaluation at $\alpha$ sends multiples of $P$ to zero. The ordinary field identities hold after evaluation because all denominators are nonzero. If $h$ divides a nonvanishing denominator, then $h(\alpha)\ne0$, so cancellation is valid. Equality reduces to cross multiplication for the same reason.
+\end{proof}
+
+For a concrete control, take
+\[
+ P(X)=(X^2-2)(X^2-3),\qquad \alpha=\sqrt2.
+\]
+The polynomial $X^2-3$ is a zero divisor modulo $P$, but its value at $\alpha$ is $-1$. Consequently
+\[
+ \frac1{\alpha^2-3}=-1
+\]
+is perfectly valid. By contrast, a denominator $X^2-2$ must be rejected at this root. Both behaviors are exercised by the tests. This avoids asking the producer for an irreducibility proof merely to justify each division in an exceptional fibre.
+
+The name \code{AField} in the code denotes this evaluation field representation. It does not assert that the quotient by the supplied defining polynomial is a field. Elements associated with different root objects are not silently mixed, even when their printed polynomials happen to match; a production implementation would add an explicit checked transport operation when two representations denote the same selected root.
+
+\subsection{Exact zero first, interval sign second}
+An interval method alone cannot distinguish a true zero from a tiny nonzero value by refinement in finite time. The checker first decides equality algebraically.
+
+\begin{lemma}[Zero test at an isolated root]\label{lem:gcd-zero}
+Let $P$ be square-free, and let $(a,b)$ isolate one real root $\alpha$ of $P$. For $q\in\Q[X]$, put $h=\gcd(P,q)$. Then $q(\alpha)=0$ if and only if $h$ has a root in $(a,b)$.
+\end{lemma}
+\begin{proof}
+The forward direction follows because the irreducible minimal polynomial of $\alpha$ divides both $P$ and $q$, hence their gcd. Conversely, a root of $h$ in the interval is a root of $P$ there, so it must be $\alpha$, and $h\mid q$. Equivalently, one may use the standard common-root property of a polynomial gcd over a characteristic-zero field.
+\end{proof}
+
+Since $h\mid P$, the isolating interval's endpoints are not roots of $h$. Its root count is either zero or one. Exact rational points use direct evaluation instead.
+
+Once zero is excluded, rational interval evaluation and bisection determine the sign. Evaluating a polynomial on an interval containing $\alpha$ gives a rigorous enclosing interval. If it lies strictly above or below zero, the sign is known; otherwise refine the isolating interval. For a localized fraction, refine until the denominator enclosure excludes zero, divide the intervals with the correct order, and continue as needed.
+
+\begin{proposition}[Termination of uncapped sign refinement]
+For a fixed nonzero $q(\alpha)$, interval evaluation of $q$ on nested rational isolating intervals shrinking to $\alpha$ eventually excludes zero. The same holds for a localized fraction with nonzero numerator and denominator.
+\end{proposition}
+\begin{proof}
+Polynomial evaluation is continuous and the interval Horner operations converge to point evaluation as the input width tends to zero. The limiting value is separated from zero. For a fraction, first use the nonzero denominator to obtain a zero-free denominator enclosure; division is continuous there. No numerical tolerance is used.
+\end{proof}
+
+The code uses a refinement budget. Failure to separate within that budget raises \code{LimitExceeded}; it is not evidence of equality or of a false assertion. This matters especially near multiple roots or when numerator and denominator expressions have large cancellation.
+
+\subsection{Sturm chains and endpoint discipline}
+For a nonconstant square-free polynomial $q$ over an ordered subfield of $\R$, form the signed remainder sequence
+\[
+ q_0=q,\quad q_1=q',\quad
+ q_{i+1}=-\operatorname{rem}(q_{i-1},q_i)
+\]
+until the next remainder is zero. Let $V(t)$ count sign changes after zero entries are removed. If neither $a$ nor $b$ is a root of $q$, then
+\[
+ \#\{z\in(a,b):q(z)=0\}=V(a)-V(b).
+\]
+At infinity, signs are determined by the leading coefficient and the degree parity. A constant nonzero polynomial has no roots and a one-element chain. The zero polynomial is never sent to a Sturm-chain routine as though it had finitely many roots.
+
+This is the standard Sturm mechanism, and formal developments of the more general Sturm--Tarski theorem provide useful models for a future Lean proof~\cite{sturm-tarski}. The current checker computes the chain rather than trusting a serialized root count. It has not proved the Sturm theorem internally. A Lean port must discharge that theorem or use a suitable verified implementation; wrapping the Python return value is insufficient.
+
+The wire format takes a deliberately restrictive position on endpoints. A non-point cut is open and must have nonroot endpoints. An exactly rational root uses a point descriptor $[a,a]$. Adjacent cuts must be strictly disjoint. This sidesteps several one-sided variation conventions at the certificate boundary. A producer with touching intervals can refine them before serialization.
+
+The restriction does not lose mathematical completeness. Every distinct real algebraic root has an isolating rational interval with nonroot endpoints; rational roots may also be represented that way if the producer does not recognize them as rational. Point descriptors are an optimization, not a separate notion of algebraic number.
+
+\subsection{Complete coverage, not a plausible list of roots}
+A list of individually valid cuts is not necessarily complete. The checker verifies three independent properties: every cut denotes exactly one root, the cuts are in strictly increasing disjoint order, and their number equals the total distinct real-root count obtained from the Sturm sequence at $-\infty$ and $+\infty$. Together these establish a complete root cover.
+
+\begin{lemma}[Root-cover sufficiency]
+If a square-free polynomial has $N$ real roots, and $N$ disjoint cuts each isolate one of its real roots, then every real root belongs to exactly one cut.
+\end{lemma}
+\begin{proof}
+The cuts identify $N$ distinct roots; there are only $N$ roots. Disjointness supplies uniqueness.
+\end{proof}
+
+The implicit sectors before the first root, between consecutive roots, and after the last root then cover the complement. A claimed rational sector sample is checked against the actual root values using exact sign tests; being between the current numeric cut endpoints is sufficient but not required. This allows the root objects to refine their cuts during later arithmetic without invalidating an already correct sample.
+
+\subsection{Lifting over an algebraic base point}
+At $x=\alpha$, specialize each bivariate polynomial coefficient by coefficient:
+\[
+ f(X,Y)=\sum_j f_j(X)Y^j
+ \quad\longmapsto\quad
+ f(\alpha,Y)=\sum_j[f_j,1]_\alpha Y^j.
+\]
+Trailing zero coefficients are removed using algebraic equality, so a degree drop is detected exactly. The product of all nonconstant specialized factors is made square-free using polynomial gcd arithmetic over the localized coefficient field. Its roots are isolated by rational cuts in the $Y$-line.
+
+A fibre root $\beta$ is therefore represented by a polynomial $q(Y)\in\Q(\alpha)[Y]$ and a rational isolating cut. To test the sign of another specialized polynomial $g$ at $\beta$, compute $\gcd(q,g)$ over $\Q(\alpha)$ to decide zero. For nonzero values, refine the $\beta$ cut and, when necessary, the base cut for $\alpha$. All coefficient enclosures remain exact rational intervals.
+
+This is enough for two-variable lifting. It is not a general tower-of-algebraic-extensions API. The \code{AField} constructor in the prototype requires a rational defining polynomial at the base; adding a third quantified coordinate would require a more general representation and a new projection theorem, not simply another recursive call to the existing producer.
+
+\subsection{Producer/checker independence, stated precisely}
+Several computations are genuinely different across the boundary. SymPy proposes multivariate factors; the checker expands sparse rational identities. SymPy proposes B\'ezout multipliers; the checker expands their identities. SymPy proposes base isolating intervals; the checker validates complete coverage using its own rational Sturm implementation.
+
+Other computations are shared. The producer's exceptional-fibre root isolation, sign evaluation, and the checker use the same exact arithmetic module. Some formula and fibre-product helpers are shared as well. Disabling site packages demonstrates that replay has no SymPy dependency; it does not demonstrate independent correctness of the shared arithmetic. The differential tests use SymPy as a second implementation on specified problems, and the mutation tests exercise rejection conditions. Neither replaces a formal soundness proof.
+
+A particularly small implementation trap concerns Python equality and hashing. Two different fraction representations may denote the same algebraic coefficient, and a coefficient may equal an ordinary rational. A representation-based hash would violate that semantic equality contract. Algebraic elements are therefore unhashable; caches use explicit representation keys that are only memoization keys, never equality proofs. Cache misses cost time but do not change the mathematical answer.
+
+\subsection{Cost centers and useful limits}
+If there are $s$ positive-$Y$ factors, the basic projection asks for $s$ derivative receipts and $\binom{s}{2}$ pair receipts. If the projection has $r$ real roots, there are $2r+1$ base cells. A fibre with $n$ distinct roots contributes $2n+1$ plane cells. For fixed degree and factor count these quantities are manageable, but coefficient bit growth, rational-function cancellation, and algebraic root separation can dominate even small-dimensional examples.
+
+General CAD has severe worst-case complexity as the number of variables grows~\cite{england}. No polynomial-time claim is made here, and the prototype's favorable timings concern very small inputs. More informative budgets than a single wall-clock timeout include coefficient bit length, expanded monomial count, total B\'ezout receipt size, projection degree, live algebraic elements, and total refinement work. The current code has only part of that resource discipline and is not hardened against hostile certificates.

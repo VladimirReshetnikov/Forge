@@ -1,0 +1,174 @@
+\section{Experiments, controls, and what the numbers mean}\label{sec:experiments}
+
+The final recorded corpus is \path{results/run-02}. It was generated with Python 3.13.5, SymPy 1.14.0, and seed \code{20260915}. The implementation is small enough that every stored valid bundle and every stored mutation can be replayed without the symbolic producer. These are component-level experiments, not results from the Forge repository's own suites.
+
+\subsection{Evidence categories}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\textwidth}{@{}l r X@{}}
+\toprule
+Category & Number & Acceptance criterion\\
+\midrule
+Boolean formulas & 160 & Recursive indicators equal independently interpolated indicators.\\
+Sign-cube assignments & 4,800 & Indicator value equals the source formula's truth value at every enumerated assignment.\\
+Symmetric matrices & 90 & Characteristic-sign signature agrees with the known inertia of a unimodular congruence of a diagonal matrix.\\
+Universal parameter problems & 17 & Complete covers give the expected verdict; 15 true and 2 false.\\
+Existential parameter problems & 2 & One impossible count and one algebraic-section-only witness give the expected opposite verdicts.\\
+Total parameter cells & 113 & All sections and sectors are reconstructed, including unbounded tails.\\
+Two-parameter families & 2 & Uniform identities replay; 98 rational parameter pairs agree with an exact root oracle.\\
+Random univariate sources & 48 & Counts agree with exact SymPy root isolation/counting.\\
+Random triangular sources & 24 & Counts agree with independently enumerated rational solution tuples.\\
+Algebraic witnesses & 6 & Source isolation and every atom sign replay exactly.\\
+Invalid mutations & 973 & Each altered source/certificate pair is rejected.\\
+Unit tests & 25 & Standard-library suite passes, including unsupported-input and API-contract controls.\\
+\bottomrule
+\end{tabularx}
+\caption{Distinct evidence categories. They are not added into a single ``proof count''.}
+\end{table}
+
+There are 99 valid stored bundles. The 17 universal families contribute 578 rational parameter specializations; the two two-parameter families contribute 98; the concrete random sources contribute 72. Thus standalone replay repeats 748 exact count comparisons. The symbolic identity checks are also rerun: the specialization tests are not being substituted for them.
+
+The final outer verdict distribution is sixteen true and three false across nineteen quantified problems. A false verdict is an expected, checked outcome, not a test failure. The complete cover supplies the exact region or section responsible for it.
+
+\subsection{Exact oracle design and common-mode risks}
+
+For random univariate sources, the oracle isolates the roots of the squarefree union of the equation and atom polynomials, using SymPy's root routines rather than matrix signatures. For generated triangular systems, the equations are built from rational linear factors and the expected solution tuples are enumerated directly, with duplicates removed. The matrix-signature fixtures have the form $T^{\mathsf T}\operatorname{diag}(d_i)T$, where $T$ is unit lower triangular; their expected signature is $\sum_i\sgn d_i$.
+
+These checks probe different mathematics, but there are shared components. The root oracle and producer both depend on SymPy. The producer and checker share the canonical sparse-polynomial representation and source admission code. The outer producer uses the same cover-product construction and verdict evaluator as replay, although isolation and replay root counting are separate. The tests therefore do not justify a claim of completely independent implementations of every layer.
+
+\subsection{Representative symbolic certificates}
+
+Table~\ref{tab:measured} reports selected artifacts. ``Bytes'' is the compact JSON size of the certificate only, not of the source problem or pretty-printed evidence bundle. ``Queries'' counts the nonzero sign-indicator support, not the producer's truth-table construction work.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}Xrrrrr@{}}
+\toprule
+Family & $D$ & Queries & $\deg P$ & Cells & Bytes\\
+\midrule
+Nonnegative square root & 2 & 3 & 2 & 5 & 617\\
+Positive shifted square root & 2 & 2 & 5 & 11 & 758\\
+Coupled $x^2=t,\ y^2=x$, $y>0$ & 4 & 2 & 3 & 7 & 689\\
+Positive quadrant, $x^2=y^2=t$ & 4 & 4 & 6 & 5 & 1,174\\
+Correlated contradictory signs & 2 & 4 & 0 & 1 & 686\\
+Repeated root $(x-t)^4$ & 4 & 2 & 7 & 3 & 885\\
+Algebraic-boundary false claim & 2 & 2 & 4 & 9 & 647\\
+Positive quintic root for $t\geq0$ & 5 & 2 & 25 & 15 & 1,187\\
+\bottomrule
+\end{tabularx}
+\caption{Measured artifacts from the final run. The cover need not be minimal.}\label{tab:measured}
+\end{table}
+
+The quintic certificate establishes~\eqref{eq:opening} through the complete parameter cover. Its larger cover polynomial contains twenty-five complex roots counted by degree, but only seven distinct real roots, hence fifteen real cells. This is one example where degree, real boundary count, quotient dimension, and admissible fiber count are four different quantities.
+
+The two-parameter cases are the depressed cubic $x^3+tx+u=0$ with the condition $x>0$, and the collision family $x^2=(t-u)^2$ with the same condition. The uniform certificate construction works without choosing a parameter cell first. Only rational specialization checks, not a complete two-dimensional parameter closure, were run for these examples.
+
+\subsection{Ablations that demonstrate a capability distinction}
+
+\textbf{Remove section checks.} Both universal boundary-only false claims have true conditions on every open sector. An open-sector-only test would accept them. The full replay rejects their claimed universal truth and records the exact sections that fail. This ablation is evaluated on the same cover, so it isolates the missing boundary reasoning rather than changing the problem.
+
+\textbf{Remove mixed sign queries.} The correlation fixture has one root satisfying each positive marginal and zero satisfying their conjunction. The four mixed queries reconstruct zero. A procedure using only the two marginal counts cannot distinguish this behavior from a different joint sign distribution with a common positive point. This is an information loss, not a low timeout.
+
+\textbf{Restrict witnesses to rational arithmetic.} The $\sqrt2$ descriptor succeeds while a rational-valued witness grammar cannot represent the answer. This is a mathematical expressivity comparison, not a benchmark run of Forge's existing witness search. No timing or solve-rate result is attributed to that existing implementation.
+
+\textbf{Replace distinct-root counting by dimension.} The empty-real-fiber and repeated-root controls reject that interpretation immediately. A quotient dimension of two can mean zero, one, or two distinct real points. These fixtures exercise the nonreduced and complex contributions of the Hermite theorem.
+
+\subsection{Mutation coverage}
+
+Mutations change a Hermite-matrix entry, a characteristic coefficient, or a formula weight; omit a required query or a root interval; collapse an isolator; flip a quantified verdict; change the source equation or inequality strictness; or violate the rational/schema format. The final run retains all 973 altered input pairs and their rejection reasons.
+
+A mutation count is not a count of independent vulnerabilities. Many are generated instances of the same corruption family. Nor does rejection of these cases prove hostile-input safety. The implementation has useful size and arithmetic caps but is not a hardened parser, a resource-isolated service, or a formally verified Python interpreter. Uncaught malformed-input errors would need to be treated as failure by a production wrapper, never as a theorem result.
+
+\subsection{Standalone replay and retained corrections}
+
+The standalone command runs with \code{python -S}, which disables site-package initialization. Its import guard forbids SymPy, NumPy, FLINT, and the producer. It rechecks all 99 valid bundles, all 973 mutations, the Boolean fixtures, and the matrix fixtures. The recorded replay passed with 748 count comparisons, 4,800 truth assignments, and 90 signature matrices.
+
+The final experiment generation and checks took about 35.595 seconds in this environment; standalone corpus replay took about 26.395 seconds. These are whole-script wall times, including many repeated checks and mutation replays. They are not Lean elaboration times, not a fair solver comparison, and not a general performance promise. The producer timings in the raw per-family records include internal acceptance checks performed by the outer producer.
+
+An earlier successful run covered sixteen universal families before the quintic and the two existential cases were added. Its corpus and logs are retained as \path{results/run-01}; no counts from that run are added to the final totals. A separate first unit-test attempt had two errors because the tests passed raw coefficients containing $\pm2$ to an API that requires coefficient \emph{signs}. The checker correctly rejected those inputs. The tests were corrected, a misuse-rejection regression was added, and the initial log remains available. No checker acceptance condition was weakened.
+
+\section{Reproducing and extending the package}\label{sec:reproduce}
+
+From the archive root, the following commands replay the final corpus and run the small unit suite without third-party packages:
+\begin{lstlisting}
+python -S prototype/bin/replay.py results/run-02
+cd prototype
+python -S -m unittest discover -s tests -v
+\end{lstlisting}
+Generation requires SymPy 1.14.0. From the archive root:
+\begin{lstlisting}
+python -m pip install -r prototype/requirements.txt
+python prototype/bin/run_experiments.py --output reproduced-results
+\end{lstlisting}
+The generator refuses to overwrite a nonempty output directory. There is no network operation in the producer or replay code. Installing the declared dependency is separate from running them.
+
+A small API example, run with \path{prototype} on the Python import path, is:
+\begin{lstlisting}[language=Python]
+import sympy as s
+from real_fibers.producer import make_problem, produce
+from real_fibers.checker import verify
+
+x, t = s.symbols("x t")
+source = make_problem(
+    [t], [x], [x*x - t], [x], ["atom", 0, "ge"]
+)
+certificate = produce(source)
+checked = verify(source, certificate)
+assert checked.count([-1]) == 0
+assert checked.count([0]) == 1
+assert checked.count([2]) == 1
+\end{lstlisting}
+For a complete one-parameter theorem, the outer source also records its parameter atoms, a Boolean condition combining their signs with count comparisons, and its outer quantifier. The artifact \path{results/run-02/certificates/quintic_positive.json} is a worked template. The source and certificate are separate fields; a service integrating the code must continue to take the source from its own trusted request rather than trust an attacker-supplied replacement source alongside a receipt.
+
+The LaTeX article builds independently of the Python dependency:
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-real-fibers.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-real-fibers.tex
+\end{lstlisting}
+All article section sources are included. External papers, repository code, and fonts are not redistributed.
+
+\section{Conclusion}
+
+The strongest proposed addition is not another general search controller. It is a source-bound, specialization-safe algebraic service with an exact meaning: count the distinct real points in a finite nonlinear fiber that satisfy the requested Boolean condition. Goal-directed sign indicators reduce the requested Tarski queries; a monic tower makes the quotient basis valid everywhere; Hermite signatures retain multiplicities correctly without counting them as separate points; and characteristic-polynomial signs remove the need to pretend that symbolic pivots never vanish.
+
+One-parameter closure then turns this local algebraic service into a genuine quantifier-alternation capability, with exact boundary counterexamples and witnesses. Concrete algebraic descriptors extend synthesis beyond rational-expression grammars. The delivered prototypes exercise these paths, but the remaining Lean trace-form theorem, source bridge, and end-to-end tactic integration are substantial work and are explicitly separated from the tested artifacts.
+
+The next useful merge into Forge is therefore a small formal sign-count library and a precise source IR, followed by the monic-tower and trace-form bridges. Those components would give the existing controller and the related synthesis projects a materially new kind of result to use, while preserving their current evidence discipline.
+
+\appendix
+\section{Certificate schema and implementation map}\label{app:schema}
+
+A polynomial in $v$ variables is serialized as a lexicographically increasing list of pairs $(\bm e,[a,b])$, where $\bm e\in\N^v$, $a/b\in\Q$, $b>0$, and $\gcd(|a|,b)=1$. Zero coefficients are omitted. Duplicate or out-of-order monomials are rejected. Variables are ordered as all parameters followed by all fiber variables. Matrix rows and columns use the rectangular basis in the same fixed product order.
+
+The main source schema is \code{forge-real-fiber-v1}. It records the parameter count, leading degrees, source equations, atom polynomials, and Boolean formula. The receipt schema \code{hermite-charpoly-v1} has one row per required indicator monomial. A row contains its exponent vector, rational weight, Hermite matrix, and characteristic coefficient list in descending degree order, including the leading one. Missing, reordered, or extra rows are rejected.
+
+The outer source schema is \code{outer-one-parameter-v1}; its receipt is \code{outer-sign-cover-v1}. It contains the fiber receipt, ordered open rational root isolators, and a Boolean claim. The quantifier and condition are owned by the outer source. The witness receipt is \code{algebraic-witness-v1}, containing only its rational interval; the polynomial and property remain in the source.
+
+\begin{longtable}{@{}p{.30\textwidth}p{.64\textwidth}@{}}
+\toprule
+Implementation file & Responsibility\\
+\midrule\endhead
+\path{real_fibers/exact.py} & Canonical rational sparse polynomials, matrix operations, sign variations, schema exceptions and caps.\\
+\path{real_fibers/logic.py} & Boolean AST validation, evaluation, and recursive sign-indicator compilation.\\
+\path{real_fibers/checker.py} & Source admission, triangular reduction, trace matrices, Newton replay and count-circuit evaluation.\\
+\path{real_fibers/sturm.py} & Rational univariate arithmetic, gcd, squarefree root union and distinct-root counts.\\
+\path{real_fibers/outer.py} & Source-owned quantified conditions, complete boundary coverage and section/sector reconstruction.\\
+\path{real_fibers/witness.py} & Concrete univariate source-root isolation and gcd-based atom signs.\\
+\path{real_fibers/producer.py} & Untrusted SymPy interpolation, quotient computations, characteristic polynomials and root-isolation proposals.\\
+\path{bin/run_experiments.py} & Reproducible source generation, exact oracles, artifact emission and structured mutations.\\
+\path{bin/replay.py} & Standalone no-producer replay, strict duplicate-key JSON reading, fixture checks and outcome summary.\\
+\path{tests/test_core.py} & Twenty-five focused standard-library unit tests.\\
+\bottomrule
+\end{longtable}
+
+\section{Research extensions kept separate from current acceptance}
+
+A useful next research direction is a \emph{stratified finite presentation}: cover parameter space by proved guards, attach a basis valid on each guard, and prove complete guard coverage, including loci where the quotient dimension changes. This can widen the source language substantially, but it is more than replacing one normal-form call. Both source equivalence and specialization validity must be certified on every stratum.
+
+A second direction is shared count compilation for several formulas on the same fiber. Their indicator supports can share trace queries and characteristic coefficients, producing a vector of counts for one matrix workload. The current API checks one formula per certificate; this sharing requires a new explicit multi-output schema, not reassociation of existing receipts by a presentation-only key.
+
+A third direction is finite-fiber counting as an inverse-function provider. An equation $p(t,x)=0$ with a checked unique-root region defines an implicit branch without demanding a closed-form expression. The count theorem supplies the branch's uniqueness region; regularity, derivatives, and numerical evaluation require additional theorems and algorithms. Those analytic claims should not be inferred from existence and uniqueness alone.
+
+These extensions are deliberately not included in the implementation totals. They identify concrete ways to grow the new capability after its current mathematical and source bridges are kernel-checked.

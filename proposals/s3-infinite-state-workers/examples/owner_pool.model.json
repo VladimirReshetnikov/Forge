@@ -1,0 +1,107 @@
+{
+  "bad": [
+    {
+      "control": 0,
+      "guard": true,
+      "vector": [
+        0,
+        2,
+        0
+      ]
+    }
+  ],
+  "constants": 0,
+  "controls": 1,
+  "dimension": 3,
+  "initial_control": 0,
+  "initial_registers": [
+    null
+  ],
+  "initials": [
+    {
+      "base": [
+        1,
+        0,
+        0
+      ],
+      "control": 0,
+      "rays": [
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "registers": 1,
+  "rules": [
+    {
+      "consume": [
+        1,
+        0,
+        1
+      ],
+      "dst": 0,
+      "guard": [
+        "not",
+        [
+          "eq",
+          [
+            "input"
+          ],
+          [
+            "reg",
+            0
+          ]
+        ]
+      ],
+      "produce": [
+        0,
+        1,
+        0
+      ],
+      "src": 0,
+      "tag": "acquire",
+      "update": [
+        [
+          "input"
+        ]
+      ]
+    },
+    {
+      "consume": [
+        0,
+        1,
+        0
+      ],
+      "dst": 0,
+      "guard": [
+        "eq",
+        [
+          "input"
+        ],
+        [
+          "reg",
+          0
+        ]
+      ],
+      "produce": [
+        1,
+        0,
+        1
+      ],
+      "src": 0,
+      "tag": "release",
+      "update": [
+        [
+          "null"
+        ]
+      ]
+    }
+  ],
+  "tags": [
+    "acquire",
+    "release"
+  ]
+}

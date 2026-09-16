@@ -1,0 +1,96 @@
+{
+  "dense_preimage_fixtures": [
+    {
+      "certificate_bytes": 776,
+      "dimension": 4,
+      "eager_reason": "local predecessor grid exceeds 100000 points",
+      "eager_status": "unknown",
+      "local_clipping_grid": 194481,
+      "local_minimal_predecessors": 1771,
+      "separation_stats": {
+        "basis": 2,
+        "box_nodes": 2,
+        "expansions": 2,
+        "grid_points": 0,
+        "nodes": 2,
+        "pred_calls": 4
+      },
+      "separation_status": "complete",
+      "threshold": 20
+    },
+    {
+      "certificate_bytes": 898,
+      "dimension": 6,
+      "eager_reason": "local predecessor grid exceeds 100000 points",
+      "eager_status": "unknown",
+      "local_clipping_grid": 51520374361,
+      "local_minimal_predecessors": 8259888,
+      "separation_stats": {
+        "basis": 2,
+        "box_nodes": 2,
+        "expansions": 2,
+        "grid_points": 0,
+        "nodes": 2,
+        "pred_calls": 4
+      },
+      "separation_status": "complete",
+      "threshold": 60
+    },
+    {
+      "certificate_bytes": 1063,
+      "dimension": 8,
+      "eager_reason": "local predecessor grid exceeds 100000 points",
+      "eager_status": "unknown",
+      "local_clipping_grid": 10828567056280801,
+      "local_minimal_predecessors": 26075972546,
+      "separation_stats": {
+        "basis": 2,
+        "box_nodes": 2,
+        "expansions": 2,
+        "grid_points": 0,
+        "nodes": 2,
+        "pred_calls": 4
+      },
+      "separation_status": "complete",
+      "threshold": 100
+    }
+  ],
+  "identical_bases": 190,
+  "independent_replay": {
+    "certificates": 193,
+    "returncode": 0,
+    "search_import_forbidden": true,
+    "site_packages_disabled": true,
+    "stdout": "SEPARATION_REPLAY_OK\n"
+  },
+  "interpretation": "An ablation of two delivered Python producers on identical models, not a Lean tactic comparison.",
+  "mismatches": 0,
+  "mutations": [
+    {
+      "diagnostic": "basis coverage index: out of range",
+      "name": "invalid_global_cover",
+      "rejected": true
+    },
+    {
+      "diagnostic": "direct cover does not carry local-minimum indices",
+      "name": "wrong_empty_local_cover",
+      "rejected": true
+    },
+    {
+      "diagnostic": "bad direct split",
+      "name": "bad_direct_split",
+      "rejected": true
+    },
+    {
+      "diagnostic": "false direct infeasibility leaf",
+      "name": "false_direct_infeasible",
+      "rejected": true
+    },
+    {
+      "diagnostic": "missing transition/basis closure obligations",
+      "name": "missing_direct_row",
+      "rejected": true
+    }
+  ],
+  "same_models": 190
+}

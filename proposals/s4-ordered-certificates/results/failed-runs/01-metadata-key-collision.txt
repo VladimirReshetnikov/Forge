@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/data/forge_ordered_certificates/prototype/run_tests.py", line 333, in main
+    try:execute(args.output.resolve())
+        ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/forge_ordered_certificates/prototype/run_tests.py", line 159, in execute
+    assert examples['semaphore']['basis']==[S(0,0,2,0),S(0,1,1,1),S(0,2,0,2)]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

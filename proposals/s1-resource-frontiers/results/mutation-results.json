@@ -1,0 +1,42 @@
+[
+  {
+    "diagnostic": "basis witness does not cover its claimed original target",
+    "name": "deleted_positive_witness_1",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "basis witness does not cover its claimed original target",
+    "name": "deleted_positive_witness_2",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "missing predecessor obligations",
+    "name": "missing_transition_obligations",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "target coverage is incomplete",
+    "name": "missing_bad_target_obligation",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "certificate is not bound to the exact supplied problem",
+    "name": "changed_net_binding",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "claimed run is not enabled at its supplied starting marking",
+    "name": "nonnegative_endpoint_but_disabled_run",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "empty loop is not an infinite execution",
+    "name": "empty_infinite_loop",
+    "result": "REJECTED"
+  },
+  {
+    "diagnostic": "parameter minimum is not unsafe",
+    "name": "false_parameter_minimum",
+    "result": "REJECTED"
+  }
+]

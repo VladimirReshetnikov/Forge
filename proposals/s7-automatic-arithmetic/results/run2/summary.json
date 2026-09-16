@@ -1,0 +1,54 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "lean_status": "NOT_RUN: no Lean executable was available",
+  "comparison_with_lean_tactics": "NOT_RUN",
+  "named_queries": {
+    "count": 25,
+    "valid": 20,
+    "counterexamples": 5
+  },
+  "quantifier_free_differential": {
+    "automata": 180,
+    "valuations": 46080,
+    "additional_padding_evaluations": 92160
+  },
+  "guarded_alternation": {
+    "formulas": 60,
+    "complete_oracle_leaf_evaluations": 6480,
+    "true": 27,
+    "false": 33
+  },
+  "witnesses": {
+    "graphs": 5,
+    "accepted_records": 643,
+    "absence_results": 12,
+    "large_input_records": 15,
+    "smaller_value_oracle_checks": 37124
+  },
+  "padding_regression": {
+    "failing_naive_cases": 8,
+    "corrected_cases": 8
+  },
+  "budget_controls": {
+    "unknown_outcomes": 4
+  },
+  "mutation_rejections": {
+    "flip_acceptance": 215,
+    "change_transition": 159,
+    "out_of_range_tail_rank": 21,
+    "bad_root": 25,
+    "wrong_query": 25,
+    "witness_value": 643,
+    "boolean_for_integer": 1,
+    "float_for_integer": 1,
+    "incomplete_dfa": 1,
+    "negative_index": 1,
+    "cyclic_dependency": 1,
+    "unknown_as_proof": 1,
+    "missing_tail": 1,
+    "spurious_tail": 1,
+    "total": 1096
+  }
+}

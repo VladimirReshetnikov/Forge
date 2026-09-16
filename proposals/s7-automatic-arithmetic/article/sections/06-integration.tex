@@ -1,0 +1,87 @@
+\section{Libraries and a concrete Lean integration plan}\label{sec:lean}
+
+\subsection{Use established mathematics without inheriting unsupported trust}
+The first implementation should keep external automata search untrusted and build a small Lean replay layer. It should not port the Python producer wholesale into the kernel, and should not treat a successful Walnut query as a Lean proof.
+
+\paragraph{Mathlib: the semantic substrate.}
+Use \code{Mathlib.Computability.DFA} and \code{Mathlib.Computability.NFA} for the language-level semantics. The documented interfaces include \code{DFA.evalFrom}, Boolean language identities, and \code{NFA.toDFA_correct}. These provide the vocabulary and established closure results for the port~\cite{mathlib-dfa,mathlib-nfa}. Their general state types and set-valued transitions still need a proved bridge to efficient finite tables; they are not a ready-made implementation of this certificate format.
+
+The proposed finite representation is a structure with an explicit state count, a state in \code{Fin Q}, a total transition function on \code{Fin Q} and binary letters, and a finite accepting bitmap. A decoder must establish array lengths and index bounds before constructing these objects. A table-to-Mathlib interpretation can then be defined once.
+
+\paragraph{Sheng/Aeacu2: projection and encoding proofs.}
+The inspected \code{Automata/Projection.lean} contains \code{correct_project}, \code{project_correct}, and \code{project_iff}, relating zero-corrected projection to existential quantification~\cite{aeacu-projection}. The inspected project pins Lean v4.23.0, whereas Forge's baseline records v4.34.0~\cite{aeacu-toolchain,forge-readme}. Its addition file defines an automaton but contains no semantic correctness theorem in that file~\cite{aeacu-addition}. Reuse should therefore begin with a source and build audit, not with a claim that the entire arithmetic bridge is already available.
+
+Most importantly, its leading-zero conventions do not match this prototype's least-significant-first zero tails. Either retain that project's encoding and adapt the producer, or prove an explicit reversal/encoding transport theorem. Mixing the two libraries by matching similarly named functions would invalidate the quantifier bridge. The source was inspected here but not compiled in this environment.
+
+\paragraph{Walnut: proposer and differential reference.}
+Walnut is a concrete candidate for a future search backend or independently implemented comparison oracle; its scope includes first-order arithmetic with automatic predicates~\cite{walnut,mousavi}. An adapter would have to fix the numeral system and digit ordering, export the complete atomic/Boolean/projection derivation or independently certify its resulting automata, and bind that derivation to the original query. The present experiment suite does not run Walnut. Its name is not an acceptance receipt.
+
+\paragraph{Lean core arithmetic and finite data.}
+The carry checker needs exact integers, division by positive two, finite lists, finite sets or bitmaps, and Boolean computation. Prove the generic carry and projection theorems once; use ordinary finite evaluation to establish particular table equations. No floating-point rank or numerical optimization library is needed for this worker. A first port can avoid extra native dependencies entirely.
+
+\subsection{The minimal theorem stack}
+A practical port can be organized into the following modules. These are proposed module names, not files already present in Forge.
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.34\linewidth}X@{}}
+\toprule
+Proposed module & Required result\\
+\midrule
+\code{Forge/Automatic/Encoding} & Digit evaluation, appending zeros, and existence of an encoding for every natural tuple\\
+\code{Forge/Automatic/Table} & Interpretation of bounded tables as complete DFAs\\
+\code{Forge/Automatic/Atoms} & Label-check soundness for the three arithmetic and four digit atoms\\
+\code{Forge/Automatic/Receipts} & Product, complement, quotient and exact-tail local soundness\\
+\code{Forge/Automatic/Quantifiers} & Subset semantics and existential correctness on all encodings\\
+\code{Forge/Automatic/Check} & Well-typed backward graph replay and root verdict soundness\\
+\code{Forge/Automatic/Witness} & Prefix dynamic program, bounded tail traversal, and least-choice specification\\
+\code{Forge/Automatic/Reify} & A proof connecting the accepted Lean expression to the arithmetic syntax\\
+\code{Forge/Automatic/Tactic} & Worker invocation, replay, and insertion of the resulting proof term\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The essential theorem interface is schematically
+\[
+ \operatorname{check}(q,c)=\mathrm{true}\Longrightarrow
+ \begin{cases}
+ \forall\rho,\ \Sem(q,\rho),&c\text{ claims validity},\\
+ \neg\Sem(q,\rho_c),&c\text{ supplies a counterexample}.
+ \end{cases}
+\]
+It should be expressed with separate typed result constructors rather than a string tag determining the theorem's conclusion. A witness theorem has the additional premise that its source automaton has already been proved to represent the intended relation. A theorem about a DFA run alone must not be exported as a theorem about an unrelated Lean predicate.
+
+The manuscript proof structure gives a dependency order. Encoding and atom invariants precede graph replay. Exact tail closure precedes existential compilation. Root verdict soundness uses representation surjectivity. Least-choice correctness uses the order on naturals. This order avoids a large mutually recursive correctness proof spanning reification, search, and execution.
+
+\subsection{Reification must preserve the actual goal}
+A reifier should recognize elaborated Lean expressions, not parse pretty-printed terms. For a supported arithmetic atom it returns both a syntax object and a theorem equating its semantics to the source proposition. For a Boolean operation or binder it constructs the corresponding theorem compositionally. Context tracks are tied to actual bound variables and local constants; a displayed variable name is insufficient evidence of identity.
+
+Constant multiplication may be normalized into coefficients using ring identities over integers. A natural inequality can be transported into the integer interpretation using proved coercion lemmas. Truncated subtraction, modulus conventions, coercions in the opposite direction, and dependent arguments require explicit treatment. Unsupported syntax remains a native Lean residual obligation or causes this lane to decline; it must never be silently approximated and later reported as an equivalence.
+
+Leant and Djex already emphasize retaining source selections and checking actual reconstructed candidates rather than trusting erasures or renderings~\cite{leant,djex}. Forge has already absorbed much of that discipline. The specific application here is narrow: preserve the source predicate, the ordered numeric context, and each automatic-atom bridge all the way to the checked root. The Python expected-query comparison is only a prototype analogue of that requirement; it is not a dependent-type-aware Lean reifier.
+
+\subsection{Proof evaluation and axiom policy}
+There are two plausible early replay implementations. One builds explicit proof terms for the local table equations and applies the generic soundness lemmas. The other defines a reflected Boolean checker and proves its soundness, then evaluates it on certificate data using the project's accepted evaluation mechanism. Both need actual compilation and an audit of the generated theorem's dependencies.
+
+A fast native evaluator must not be substituted silently for a requested kernel-only trust profile. The integration should record how evaluation is justified and inspect \code{#print axioms} on the final theorem, not merely on helper lemmas. The code delivered here makes no claim about that audit: it contains neither a compiled checker nor a compiled \code{forge} extension.
+
+The initial acceptance milestone should be \emph{small but end to end}: a single Lean theorem with an existential witness longer than its input, reified from its original statement, replayed through the corrected projection certificate, with no \code{sorry}, new axiom, or unproved external conclusion. An abstract word theorem without the original natural-number bridge does not close that milestone.
+
+\subsection{Routing within Forge}
+This lane should not replace efficient native arithmetic on routine goals. A proposed selection policy is:
+\begin{lstlisting}
+if the goal is ordinary quantifier-free linear arithmetic:
+    prefer the native arithmetic worker
+else if all atoms have exact automatic bridges
+        and active-track / predicted-table budgets are acceptable:
+    invoke the automatic-arithmetic worker
+else:
+    leave this worker inactive
+
+on a candidate certificate:
+    replay it against the original typed query
+    insert the resulting theorem only after successful replay
+on unsupported syntax, search exhaustion, or replay refusal:
+    preserve the original obligation and the diagnostic status
+\end{lstlisting}
+The distinguishing trigger is an unbounded number quantifier, a digit-automatic predicate, or a request for a regular witness graph. Pure Boolean size is not sufficient reason to translate a goal here. Conversely, a fixed-width bit-vector reduction is not an equivalent substitute for the unbounded natural-number query unless a separately proved bound makes it so.
+
+A worker result can be a proved relational lemma rather than closure of the entire goal. For example, a source theorem that an automatic predicate has a later occurrence can feed a higher-level construction in Forge. This preserves the existing repository architecture; it does not require a new global solver-combination theorem.

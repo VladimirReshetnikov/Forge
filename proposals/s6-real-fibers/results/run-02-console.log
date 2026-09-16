@@ -1,0 +1,43 @@
+Boolean formulas: 160 truth assignments: 4800
+Signature matrices: 90
+Outer: sqrt_nonnegative = True cells 5
+Outer: sqrt_positive = True cells 5
+Outer: shifted_positive = True cells 11
+Outer: cubic_total = True cells 3
+Outer: cubic_positive = True cells 3
+Outer: nested_positive = True cells 7
+Outer: quadrant = True cells 5
+Outer: correlation = True cells 1
+Outer: repeated_root = True cells 3
+Outer: empty_real_fiber = True cells 1
+Outer: nonzero_roots = True cells 5
+Outer: fourth_root = True cells 7
+Outer: boundary_only_false = False cells 5
+Outer: algebraic_boundary_false = False cells 9
+Outer: algebraic_boundary_true = True cells 9
+Outer: quintic_positive = True cells 15
+Outer: all_fiber_points_nonnegative = True cells 5
+Existential: existential_impossible = False
+Existential: existential_algebraic_section = True
+Two-parameter specializations: 98
+Random univariate: 48
+Random triangular: 24
+Witnesses: 6
+{
+  "boolean_formulas": 160,
+  "boolean_truth_assignments": 4800,
+  "signature_matrices": 90,
+  "named_outer_problems": 17,
+  "named_parameter_specializations": 578,
+  "outer_cells": 113,
+  "outer_true": 16,
+  "outer_false": 3,
+  "existential_outer_problems": 2,
+  "two_parameter_families": 2,
+  "two_parameter_specializations": 98,
+  "random_univariate_problems": 48,
+  "random_triangular_problems": 24,
+  "algebraic_witnesses": 6,
+  "invalid_mutations_rejected": 973,
+  "stored_valid_bundles": 99
+}

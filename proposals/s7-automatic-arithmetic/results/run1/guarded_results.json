@@ -1,0 +1,542 @@
+[
+  {
+    "case": 0,
+    "bound": 2,
+    "expected": true,
+    "nodes": 23,
+    "transition_cells": 1160,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 1,
+    "bound": 3,
+    "expected": true,
+    "nodes": 22,
+    "transition_cells": 538,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 2,
+    "bound": 4,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 1156,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 3,
+    "bound": 5,
+    "expected": false,
+    "nodes": 23,
+    "transition_cells": 1288,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 4,
+    "bound": 2,
+    "expected": true,
+    "nodes": 20,
+    "transition_cells": 270,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 5,
+    "bound": 3,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 350,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 6,
+    "bound": 4,
+    "expected": true,
+    "nodes": 23,
+    "transition_cells": 930,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 7,
+    "bound": 5,
+    "expected": false,
+    "nodes": 23,
+    "transition_cells": 496,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 8,
+    "bound": 2,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 287,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 9,
+    "bound": 3,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 454,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 10,
+    "bound": 4,
+    "expected": false,
+    "nodes": 22,
+    "transition_cells": 949,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 11,
+    "bound": 5,
+    "expected": true,
+    "nodes": 22,
+    "transition_cells": 598,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 12,
+    "bound": 2,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 432,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 13,
+    "bound": 3,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 724,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 14,
+    "bound": 4,
+    "expected": true,
+    "nodes": 20,
+    "transition_cells": 286,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 15,
+    "bound": 5,
+    "expected": false,
+    "nodes": 23,
+    "transition_cells": 500,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 16,
+    "bound": 2,
+    "expected": true,
+    "nodes": 20,
+    "transition_cells": 230,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 17,
+    "bound": 3,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 384,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 18,
+    "bound": 4,
+    "expected": false,
+    "nodes": 24,
+    "transition_cells": 1387,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 19,
+    "bound": 5,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 340,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 20,
+    "bound": 2,
+    "expected": false,
+    "nodes": 22,
+    "transition_cells": 455,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 21,
+    "bound": 3,
+    "expected": false,
+    "nodes": 23,
+    "transition_cells": 640,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 22,
+    "bound": 4,
+    "expected": true,
+    "nodes": 20,
+    "transition_cells": 270,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 23,
+    "bound": 5,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 860,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 24,
+    "bound": 2,
+    "expected": true,
+    "nodes": 22,
+    "transition_cells": 1524,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 25,
+    "bound": 3,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 304,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 26,
+    "bound": 4,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 404,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 27,
+    "bound": 5,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 510,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 28,
+    "bound": 2,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 863,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 29,
+    "bound": 3,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 292,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 30,
+    "bound": 4,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 836,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 31,
+    "bound": 5,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 564,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 32,
+    "bound": 2,
+    "expected": false,
+    "nodes": 22,
+    "transition_cells": 662,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 33,
+    "bound": 3,
+    "expected": false,
+    "nodes": 25,
+    "transition_cells": 1329,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 34,
+    "bound": 4,
+    "expected": true,
+    "nodes": 22,
+    "transition_cells": 430,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 35,
+    "bound": 5,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 372,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 36,
+    "bound": 2,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 424,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 37,
+    "bound": 3,
+    "expected": true,
+    "nodes": 22,
+    "transition_cells": 506,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 38,
+    "bound": 4,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 484,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 39,
+    "bound": 5,
+    "expected": false,
+    "nodes": 23,
+    "transition_cells": 1096,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 40,
+    "bound": 2,
+    "expected": false,
+    "nodes": 22,
+    "transition_cells": 608,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 41,
+    "bound": 3,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 452,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 42,
+    "bound": 4,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 1000,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 43,
+    "bound": 5,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 864,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 44,
+    "bound": 2,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 526,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 45,
+    "bound": 3,
+    "expected": false,
+    "nodes": 23,
+    "transition_cells": 420,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 46,
+    "bound": 4,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 734,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 47,
+    "bound": 5,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 508,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 48,
+    "bound": 2,
+    "expected": true,
+    "nodes": 23,
+    "transition_cells": 972,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 49,
+    "bound": 3,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 568,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 50,
+    "bound": 4,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 364,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 51,
+    "bound": 5,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 826,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 52,
+    "bound": 2,
+    "expected": false,
+    "nodes": 20,
+    "transition_cells": 779,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 53,
+    "bound": 3,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 700,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 54,
+    "bound": 4,
+    "expected": true,
+    "nodes": 24,
+    "transition_cells": 668,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 55,
+    "bound": 5,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 422,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 56,
+    "bound": 2,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 638,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 57,
+    "bound": 3,
+    "expected": false,
+    "nodes": 26,
+    "transition_cells": 713,
+    "root_states": 1,
+    "verdict": "counterexample"
+  },
+  {
+    "case": 58,
+    "bound": 4,
+    "expected": true,
+    "nodes": 21,
+    "transition_cells": 992,
+    "root_states": 1,
+    "verdict": "valid"
+  },
+  {
+    "case": 59,
+    "bound": 5,
+    "expected": false,
+    "nodes": 21,
+    "transition_cells": 568,
+    "root_states": 1,
+    "verdict": "counterexample"
+  }
+]

@@ -1,0 +1,59 @@
+\section{Executable certificate protocol}
+\subsection{Problem objects}
+Integers are JSON integers, not Booleans. A rational is a pair \code{[numerator, denominator]} with a strictly positive denominator. The parser canonicalizes rational values and polynomial terms. Vector lengths must agree with the problem dimension.
+
+A Petri input has exactly the following top-level fields:
+\begin{lstlisting}
+{
+  "kind": "petri",
+  "initial": [1, 0, 0],
+  "transitions": [
+    {"pre": [1, 0, 0], "post": [0, 1, 0]},
+    {"pre": [0, 1, 0], "post": [1, 0, 0]},
+    {"pre": [0, 0, 0], "post": [0, 0, 1]}
+  ],
+  "targets": [[0, 2, 0]]
+}
+\end{lstlisting}
+The cubic branching input is:
+\begin{lstlisting}
+{
+  "kind": "pps",
+  "polynomials": [[
+    {"coefficient": [1, 4], "powers": [0]},
+    {"coefficient": [3, 4], "powers": [3]}
+  ]]
+}
+\end{lstlisting}
+The \code{subject} field in a receipt is the complete canonical JSON encoding of the normalized problem, not a hash or a pretty-printed summary. The checker receives the problem independently and compares the exact encoding. This binds Python acceptance to the finite mathematical input; a future source bridge must additionally bind that input to the original Lean expression and context.
+
+\subsection{Accepted receipt kinds}
+\begin{longtable}{P{0.22\textwidth}P{0.68\textwidth}}
+\toprule
+Kind & Mathematical payload \\
+\midrule
+\code{safe} & \code{basis}, \code{target_cover}, and \code{predecessor_cover}; indices certify the inclusions in Theorem~\ref{thm:safety}.\\[4pt]
+\code{coverable} & \code{word}, a finite list of transition indices; replayed from the original initial marking.\\[4pt]
+\code{enclosure} & \code{ledger}, final \code{lower} and \code{upper}, \code{requested_bits}, and a rechecked \code{target_met}. An optional \code{contraction} contains \code{weight} and \code{rho}.\\[4pt]
+\code{extinction_one} & A positive rational \code{weight}; normalization, graph connectivity, mean inequality, and nondegeneracy are recomputed.\\[4pt]
+\code{algebraic_lfp} & A nested accepted scalar \code{enclosure}, a nonconstant \code{factor}, and a nonzero \code{cofactor}, each polynomial listed in ascending degree.\\
+\bottomrule
+\end{longtable}
+
+Ledger steps are one of three forms. A \code{kleene} step supplies \code{next}. A \code{newton} step supplies \code{inverse} and \code{next}. A \code{weighted_newton} step supplies \code{weight}, \code{direction}, and \code{next}. All final endpoints are decoded and compared with the endpoints actually obtained from the ledger.
+
+The \code{unknown} kind is a search outcome and is never accepted as a certificate. Statistics such as expansion counts are not mathematical proof payload. The checker does not trust them, and changing them is not expected to invalidate a correct theorem.
+
+\subsection{Input rejection and resource control}
+The parser and checker validate dimensions, signs, indices, and the exact inequalities stated in the report. They are research code, not a hardened public service. Extremely large integers, exponents, matrices, nested JSON, or ledgers can consume excessive memory or time. Duplicate-key rejection, byte limits, aggregate term-degree limits, and process-level resource isolation belong in a production ingestion layer.
+
+The producer's work budgets do not replace parser/checker budgets. An externally supplied receipt might be much larger than anything the local producer would emit. In Lean, totality of a recursive checker does not imply that reducing it is affordable. Admission limits therefore need to be specified independently of mathematical validity.
+
+\section{Checker-oriented proof dependency graph}
+The Petri lane depends on just three mathematical facts: componentwise predecessor equivalence, complement invariance under a backward-closed set, and induction on finite executions. Dickson's lemma belongs only to the later search-completeness proof.
+
+The enclosure lane depends on valid polynomial monotonicity, existence of the least fixed point, the prefixed upper lemma, and a ledger induction. The weighted variant additionally uses the directional remainder and finite maximum principle. It does not require formalizing exact Gaussian elimination or proving the supplied matrix is an inverse.
+
+The critical lane uses normalization, the finite product-deficit inequality, graph propagation of a maximizing ratio, and a strictly positive deficit supplied either by a strict mean row or by actual branching. The algebraic decoder adds a scalar factor identity, interval evaluation soundness, and strict monotonicity from the derivative sign.
+
+This graph is an implementation aid: a failed probability-source bridge should not prevent proving the finite weighted-step theorem, and a missing WQO library lemma should not block an individual Petri safety theorem.

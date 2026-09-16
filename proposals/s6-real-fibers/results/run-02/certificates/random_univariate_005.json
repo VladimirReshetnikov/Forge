@@ -1,0 +1,186 @@
+{
+  "certificate": {
+    "queries": [
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              [],
+              [
+                2,
+                1
+              ]
+            ]
+          ]
+        ],
+        "coefficient": [
+          1,
+          2
+        ],
+        "exponents": [
+          1,
+          0
+        ],
+        "hermite": [
+          [
+            [
+              [
+                [],
+                [
+                  -2,
+                  1
+                ]
+              ]
+            ]
+          ]
+        ]
+      },
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              [],
+              [
+                -4,
+                1
+              ]
+            ]
+          ]
+        ],
+        "coefficient": [
+          1,
+          2
+        ],
+        "exponents": [
+          2,
+          0
+        ],
+        "hermite": [
+          [
+            [
+              [
+                [],
+                [
+                  4,
+                  1
+                ]
+              ]
+            ]
+          ]
+        ]
+      }
+    ],
+    "schema": "hermite-charpoly-v1"
+  },
+  "kind": "fiber",
+  "name": "random_univariate_005",
+  "problem": {
+    "atoms": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            0
+          ],
+          [
+            -1,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            -1,
+            1
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "degrees": [
+      1
+    ],
+    "equations": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "formula": [
+      "atom",
+      0,
+      "gt"
+    ],
+    "parameters": 0,
+    "schema": "forge-real-fiber-v1"
+  },
+  "specializations": [
+    {
+      "count": 0,
+      "parameters": []
+    }
+  ]
+}

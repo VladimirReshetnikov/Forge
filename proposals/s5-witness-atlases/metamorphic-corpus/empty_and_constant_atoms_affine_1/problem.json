@@ -1,0 +1,38 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "empty_and_constant_atoms_affine_1",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [],
+    [
+      [
+        0,
+        0,
+        "1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "eq",
+      0
+    ],
+    [
+      "gt",
+      1
+    ],
+    [
+      "lt",
+      2
+    ]
+  ]
+}

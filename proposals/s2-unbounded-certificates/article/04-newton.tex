@@ -1,0 +1,166 @@
+\section{Checked Newton ledgers and an inverse-free refinement}
+\label{sec:newton}
+\subsection{The inequality that licenses the step}
+Let $J(\ell)$ be the Jacobian of the polynomial map at a rational vector $\ell$. Its entries are nonnegative when $\ell\ge0$. The key inequality is directional, not an assertion that a multivariate polynomial is convex.
+
+\begin{lemma}[Nonnegative directional remainder]
+\label{lem:remainder}
+For $\zero\le x\le y$,
+\begin{equation}
+ \label{eq:remainder}
+ P(y)\ge P(x)+J(x)(y-x).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Write $y=x+h$ with $h\ge0$. Expand each monomial in the coordinates of $x+h$. Its terms of total degree zero in $h$ give the original monomial at $x$; those of total degree one give its derivative applied to $h$. Every remaining term has a nonnegative coefficient and nonnegative factors. Discarding those terms proves the inequality monomial by monomial. Multiply by the nonnegative input coefficients and sum.
+\end{proof}
+
+The polynomial $xy$ is not globally convex on the positive quadrant: its Hessian has a negative eigenvalue. It nevertheless satisfies \eqref{eq:remainder} on comparable nonnegative vectors. The proof above is what a Lean port should formalize. Invoking a nonexistent global convexity fact would be both unnecessarily difficult and wrong.
+
+\subsection{The original exact-inverse certificate}
+Assume $\ell\le q$. Put
+\[
+ A=I-J(\ell),\qquad r=P(\ell)-\ell.
+\]
+A producer supplies a rational matrix $R$, checks $R\ge0$ and $RA=I$, and forms $\delta=Rr$. It proposes a rational next lower bound satisfying
+\begin{equation}
+ \label{eq:newton-conditions}
+ \delta\ge0,\qquad \ell\le\ell'\le\ell+\delta.
+\end{equation}
+The receipt contains $R$ and $\ell'$; the checker recomputes $J(\ell)$, $r$, and $\delta$.
+
+\begin{theorem}[Rounded Newton lower step]
+\label{thm:newton}
+If $R\ge0$, $R(I-J(\ell))=I$, and \eqref{eq:newton-conditions} hold, then $\ell'\le q$.
+\end{theorem}
+\begin{proof}
+Apply Lemma~\ref{lem:remainder} to $\ell\le q$ and use $P(q)=q$:
+\[
+ q\ge P(\ell)+J(\ell)(q-\ell),
+ \qquad
+ (I-J(\ell))(q-\ell)\ge P(\ell)-\ell=r.
+\]
+Left multiplication by the entrywise nonnegative matrix $R$ preserves componentwise inequalities. The checked identity then gives $q-\ell\ge Rr=\delta$. Therefore $\ell'\le\ell+\delta\le q$.
+\end{proof}
+
+This proof does not trust an inversion routine, floating-point conditioning test, or iteration count. The checker multiplies matrices and compares rationals. It does not need to prove that the producer followed any particular Newton implementation.
+
+The nonnegative-inverse condition is essential. An arbitrary algebraic inverse does not preserve the inequality used in the proof. The nonnegative-direction condition also has an operational role: it lets the ledger remain monotone under downward rounding. The search rejects a Newton proposal that fails these checks and may use a justified Kleene step instead.
+
+\subsection{Exact dyadic rounding and upper proposals}
+The implemented search uses exact Gauss--Jordan elimination to propose $R$. To keep the lower coordinates small, it rounds $\ell+\delta$ \emph{down} to multiples of $2^{-h}$. Because the old $\ell$ already lies on that grid and $\delta\ge0$, the rounded point stays above $\ell$. Rounding upwards would require a new proof and is not permitted by this step rule.
+
+After a lower update the producer tries upper candidates of the form
+\[
+ u=\ell+2^{-k}w,\qquad
+ w=(I-J(\ell))^{-1}\one,
+\]
+when that direction is positive, and otherwise tries $w=\one$. It keeps only candidates inside the unit cube that satisfy the original test $P(u)\le u$. The set of tested $k$ is finite. Failure to find a close prefixed point says that this search has not found one, not that none exists.
+
+Previously accepted upper bounds can be combined by coordinatewise minimum. If $u$ and $v$ are prefixed, monotonicity gives $P(u\wedge v)\le P(u)\wedge P(v)\le u\wedge v$. Thus this refinement is sound even if the two upper vectors were proposed by different heuristics.
+
+The dyadic lower grid does not imply all certificate numbers are small dyadics. Inverse directions and prefixed upper candidates can acquire large rational denominators. The stored cubic example illustrates this: its lower endpoint is a modest dyadic rational, while the upper endpoint and contraction coefficient have much larger numerators and denominators. Exact arithmetic removes rounding ambiguity; it does not remove coefficient growth.
+
+\subsection{Removing inverse matrices from the certificate}
+The full inverse is often unnecessary proof data. A weighted maximum principle gives a smaller certificate and a simpler local checker.
+
+\begin{lemma}[Finite weighted maximum principle]
+\label{lem:maximum}
+Let $J\in\R_{\ge0}^{n\times n}$ and let $w\in\R_{>0}^n$ satisfy $Jw<w$ in every coordinate. If $(I-J)z\ge0$, then $z\ge0$.
+\end{lemma}
+\begin{proof}
+Suppose some coordinate of $z$ is negative. Choose $i$ minimizing $z_i/w_i$, and call that minimum $c<0$. Then $z_j\ge cw_j$ for every $j$. Nonnegativity of $J$ gives $(Jz)_i\ge c(Jw)_i$, so
+\[
+ ((I-J)z)_i
+ =cw_i-(Jz)_i
+ \le c\bigl(w_i-(Jw)_i\bigr)<0.
+\]
+This contradicts $(I-J)z\ge0$.
+\end{proof}
+
+The proof only uses a finite minimum, sums, products, and inequalities. It does not require spectral-radius theory, matrix inversion, normed spaces, or an analytic convergence theorem.
+
+\begin{theorem}[Inverse-free Newton certificate]
+\label{thm:weighted-newton}
+Suppose $\zero\le\ell\le q$. A certificate supplies rational vectors $w>0$ and $d\ge0$ satisfying
+\begin{equation}
+ \label{eq:weighted-step}
+ J(\ell)w<w,
+ \qquad (I-J(\ell))d\le P(\ell)-\ell.
+\end{equation}
+Then every $\ell'$ with $\ell\le\ell'\le\ell+d$ satisfies $\ell'\le q$.
+\end{theorem}
+\begin{proof}
+The remainder inequality gives
+\[
+ (I-J(\ell))(q-\ell)\ge P(\ell)-\ell
+ \ge (I-J(\ell))d.
+\]
+Apply Lemma~\ref{lem:maximum} to $z=q-\ell-d$ to obtain $q-\ell-d\ge0$. The desired upper bound on $\ell'$ follows.
+\end{proof}
+
+For an ordinary accepted exact Newton step, take $d=Rr$ and $w=R\one$. Since the matrix is square, the verified left inverse is its two-sided inverse; thus $(I-J)w=\one$, giving strictness, and $(I-J)d=r$. Each row of the invertible nonnegative matrix $R$ is nonzero, so $w>0$. This proves that the new format can represent the existing accepted inverse steps. The converter does not rely on that argument for acceptance: it emits the vectors and the finite checker rechecks \eqref{eq:weighted-step} directly.
+
+\paragraph{Do not round the residual equation in the wrong direction.}
+If $d$ solves $(I-J)d=r$, rounding $d$ down componentwise does \emph{not} necessarily preserve $(I-J)d\le r$, because $I-J$ has negative off-diagonal entries. The delivered converter keeps the exact direction $d$ and rounds only the proposed endpoint $\ell'$. The checker verifies $\ell'\le\ell+d$ separately. This small distinction is important for a sparse or numerical future producer.
+
+\paragraph{Strictness is not optional.}
+The weak condition $Jw\le w$ is insufficient for this lower-step rule. For $P(x)=x$, take $\ell=0$, $w=1$, and $d=1$. The residual inequality is $0\le0$, and a weak weight test would accept $\ell'=1$ even though the least fixed point is zero. A stored rejection control exercises exactly this forgery. Critical equality belongs to the different theorem in Section~\ref{sec:critical}, where nondegeneracy supplies the missing argument.
+
+\subsection{Cost and measured certificate size}
+For a dense $n\times n$ Jacobian, checking $R(I-J)=I$ takes $O(n^3)$ rational arithmetic operations and stores $n^2$ inverse entries. The weighted step uses two matrix--vector products, taking $O(n^2)$ operations and storing two length-$n$ vectors, besides the next endpoint. Polynomial evaluation and Jacobian construction are additional costs common to both forms.
+
+A sparse checker should never materialize the full Jacobian merely to compute $Jw$ and $Jd$. For each input monomial, differentiate each variable with a positive exponent and accumulate its weighted contribution. Prefix/suffix products of factors avoid repeated full products and avoid division by a possibly zero coordinate. This is a concrete production optimization; the prototype uses straightforward exact loops instead.
+
+The executed converter translated 100 accepted enclosure receipts containing 471 Newton steps. All converted receipts passed, as did 201 rejection controls. With compact JSON serialization, total receipt bytes fell from 297,913 to 228,676, about 23.2\%. This is not a universal size reduction: dimension-one receipts grew from 41,410 to 55,387 bytes, whereas dimension-four receipts shrank from 162,855 to 97,871 bytes. A production exporter should compare actual serialized sizes and choose the cheaper admissible form. These measurements concern the same source problems in two proof formats; they are not 100 additional solved problems.
+
+\subsection{Optional local contraction and residual error}
+A checked enclosure can optionally carry $w>0$ and a rational $0\le\rho<1$ with
+\begin{equation}
+ \label{eq:contraction}
+ J(u)w\le\rho w.
+\end{equation}
+Since polynomial derivatives have nonnegative coefficients, $J(x)\le J(u)$ throughout $[0,u]$. In the weighted sup norm
+\[
+ \|z\|_w=\max_i |z_i|/w_i,
+\]
+this bounds the Lipschitz constant of $P$ on $[0,u]$ by $\rho$. Hence there is at most one fixed point in that box, and for $x\in[0,u]$,
+\[
+ \|q-x\|_w\le\frac{\|P(x)-x\|_w}{1-\rho}.
+\]
+The last inequality follows by adding and subtracting $P(x)$ in $q-x=P(q)-x$, using the Lipschitz bound, and rearranging.
+
+This is an optional strengthening, not the foundation of every enclosure. In \eqref{eq:cubic}, the derivative at $1$ is $9/4$, so the global interval $[0,1]$ has no scalar strict contraction witness. But on $[0,1/3]$ the derivative is at most $1/4$. The local upper certificate opens a contractive region that a global contraction test would miss. The delivered cubic ablation obtains a checked local contraction after three Newton lower steps.
+
+Literature on rounded and decomposed Newton methods establishes much stronger complexity and approximation results under carefully specified hypotheses~\cite{esparza-kiefer-luttenberger,etessami-stewart-yannakakis,stewart-etessami-yannakakis}. The prototype here is a small exact certificate producer, not an implementation of all those algorithms and not a proof of their polynomial-time bounds. Its fixed precision, finite upper-candidate family, dense elimination, and step budget can all cause it to return an enclosure that misses the requested width.
+
+\subsection{Exact algebraic identification without an algebraic-number oracle}
+\label{sec:algebraic}
+For a scalar system, suppose an accepted enclosure puts $q$ in a rational interval $[\ell,u]$. A producer supplies rational polynomials $g,h$ and the checker verifies
+\begin{equation}
+ \label{eq:factor}
+ P(X)-X=g(X)h(X).
+\end{equation}
+It then evaluates $h$ by rational interval arithmetic on $[\ell,u]$ and checks that zero is excluded. It also interval-evaluates $g'$ and checks that its sign is strictly positive everywhere or strictly negative everywhere on the interval.
+
+\begin{theorem}[Isolated least-root certificate]
+\label{thm:algebraic}
+Under these checks, $q$ is the unique zero of $g$ in $[\ell,u]$.
+\end{theorem}
+\begin{proof}
+The enclosure and least-fixed-point semantics give $q\in[\ell,u]$ and $P(q)-q=0$. The factor identity and $h(q)\ne0$ imply $g(q)=0$. The derivative sign makes $g$ strictly monotone on the interval, so it has at most one zero there. Existence came from the least fixed point, not from a numerical root finder.
+\end{proof}
+
+The derivative argument is a small scalar analysis theorem to prove once in Lean. The interval calculations themselves are rational Horner evaluations with exact endpoint bounds. The factor need not be irreducible or a minimal polynomial. This format identifies a real number; it does not claim a canonical algebraic-number representation.
+
+For \eqref{eq:cubic},
+\[
+ P(X)-X=\frac14(X-1)(3X^2+3X-1).
+\]
+Take $[\ell,u]=[1/4,1/3]$. The lower bound $1/4$ is one Kleene step, and the upper bound satisfies
+\[
+ P(1/3)=\frac14+\frac1{36}=\frac5{18}<\frac13.
+\]
+The cofactor $X-1$ stays negative, and $(3X^2+3X-1)'=6X+3$ stays positive. Thus the least probability is the root displayed in \eqref{eq:cubic-root}. This entire identification is certified with rational arithmetic plus generic soundness lemmas; no decimal root is trusted.
+
+The prototype's decoder is intentionally narrower than a complete real-root isolation package. Repeated roots, a cofactor interval crossing zero because of dependency overestimation, or an interval derivative containing zero can cause rejection even when the desired identity is true. Reusing Forge's existing scalar sign or Sturm machinery is the natural next adapter, rather than proposing that machinery again as a new contribution.

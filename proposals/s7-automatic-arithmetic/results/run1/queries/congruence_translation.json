@@ -1,0 +1,39 @@
+{
+  "context": [
+    "x",
+    "y"
+  ],
+  "formula": {
+    "op": "or",
+    "left": {
+      "op": "not",
+      "arg": {
+        "op": "eq",
+        "coeff": {
+          "y": 1,
+          "x": -1
+        },
+        "rhs": 21
+      }
+    },
+    "right": {
+      "op": "iff",
+      "left": {
+        "op": "cong",
+        "coeff": {
+          "x": 1
+        },
+        "rhs": 2,
+        "modulus": 7
+      },
+      "right": {
+        "op": "cong",
+        "coeff": {
+          "y": 1
+        },
+        "rhs": 2,
+        "modulus": 7
+      }
+    }
+  }
+}

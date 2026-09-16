@@ -1,0 +1,23 @@
+{
+  "kind": "pt-net-coverability",
+  "dimension": 2,
+  "transitions": [
+    {
+      "name": "grow_output",
+      "consume": [
+        1,
+        0
+      ],
+      "produce": [
+        1,
+        1
+      ]
+    }
+  ],
+  "targets": [
+    [
+      2,
+      0
+    ]
+  ]
+}

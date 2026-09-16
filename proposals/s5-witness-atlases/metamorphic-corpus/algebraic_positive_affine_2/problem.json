@@ -1,0 +1,58 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "algebraic_positive_affine_2",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        0,
+        1,
+        "-2"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "4"
+      ],
+      [
+        2,
+        0,
+        "-4"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "1"
+      ],
+      [
+        0,
+        1,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "eq",
+      0
+    ],
+    [
+      "ge",
+      1
+    ]
+  ]
+}

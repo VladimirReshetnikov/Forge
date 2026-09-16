@@ -1,0 +1,62 @@
+\section{Files, commands, and status ledger}
+\subsection{Package contents}
+\begin{lstlisting}
+article/       LaTeX sources and compiled report
+prototype/     standard-library-only Python implementations
+results/       main runs, replay records, ablations, conversion data
+lean/          implementation obligations; no claimed compiled port
+tools/         build and full-validation helpers
+README.md      entry points and evidence limits
+SOURCE-AUDIT.md  inspected sources and pinned revisions
+\end{lstlisting}
+The package includes its own code and generated data, not copies of Forge's prior proposals or downloaded research papers.
+
+\subsection{Replaying without search}
+From \code{prototype/}:
+\begin{lstlisting}
+python -S replay.py ../results/run-01
+python -S replay.py ../results/ablations-01
+python -S replay.py ../results/compact-01
+\end{lstlisting}
+The output reports the accepted and rejected record counts separately. Do not run the experimental scripts with Python optimization enabled: their internal tests use assertions. The shipped validation helper invokes the ordinary interpreter without \code{-O}.
+
+\subsection{Fresh production and comparison}
+Each output directory must be new. For example:
+\begin{lstlisting}
+python -S run_experiments.py --out ../reproduced/main
+python -S replay.py ../reproduced/main
+python -S ablations.py --out ../reproduced/ablations
+python -S compact_experiment.py ../reproduced/main \
+  --out ../reproduced/compact
+python -S replay.py ../reproduced/compact
+\end{lstlisting}
+Main-run failure handling writes a failed summary and traceback to the new run directory before propagating the exception. Recorded results are not overwritten. The original two main runs have byte-identical accepted and rejected corpora; timing fields in their summaries naturally differ.
+
+\subsection{Building the article}
+From \code{article/}, run:
+\begin{lstlisting}
+pdflatex -interaction=nonstopmode -halt-on-error forge-unbounded.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-unbounded.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-unbounded.tex
+\end{lstlisting}
+The source uses ordinary pdfLaTeX packages and an inline bibliography. It does not require external fonts, shell escape, or a bibliography processor.
+
+\subsection{Evidence status}
+\begin{longtable}{P{0.43\textwidth}P{0.47\textwidth}}
+\toprule
+Item & Status \\
+\midrule
+Backward antichain producer and finite checker & Executed; exact arithmetic.\\
+Rounded Newton enclosure producer and checker & Executed; exact arithmetic.\\
+Inverse-free weighted-step format & Executed; 100 conversions and 201 controls.\\
+Critical extinction and scalar root decoder & Executed in their stated fragments.\\
+Search-disabled corpus replay & Executed.\\
+Same-environment deterministic reproduction & Executed; corpora byte-identical.\\
+Mathematical soundness arguments & Presented in this article; not formalized here.\\
+Lean checker port and theorem compilation & Not run.\\
+Source-to-model compiler correctness & Designed only.\\
+Leant/Djex synthesis integration & Designed only.\\
+Comparison with existing Lean tactics & Not run.\\
+Large-scale or adversarial evaluation & Not run.\\
+\bottomrule
+\end{longtable}

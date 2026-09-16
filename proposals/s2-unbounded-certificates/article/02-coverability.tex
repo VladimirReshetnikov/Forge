@@ -1,0 +1,139 @@
+\section{Unbounded multiset-state safety by backward antichains}
+\label{sec:petri}
+\status{Search, finite safety checker, execution checker, and differential experiments implemented and executed in Python. Lean source extraction and formal checker soundness are proposed, not executed.}
+
+\subsection{The exact fragment}
+\begin{definition}[Finite-place multiset transition system]
+Fix a dimension $d\ge0$, an initial marking $m_0\in\N^d$, a finite transition set $T$, and a finite set $B\subseteq\N^d$ of bad thresholds. Each $t\in T$ has input and output vectors $c_t,o_t\in\N^d$. The relation $m\xrightarrow{t}m'$ means
+\[
+ m\ge c_t,\qquad m'=m-c_t+o_t.
+\]
+For any $A\subseteq\N^d$, write
+\[
+ \up A=\{m\in\N^d:\exists a\in A,\ a\le m\}.
+\]
+The question is whether a finite execution from $m_0$ reaches $\up B$.
+\end{definition}
+
+This is a Petri-net coverability question, not exact-state reachability. For example, a threshold $(0,2,0)$ means ``at least two tokens in the second place,'' not that the first and third places are empty. The dimensionality is fixed in each problem, but the number of tokens is not bounded. A model with $N$ arbitrary participants can sometimes be represented through token counts; a model needing one distinct coordinate per participant does not automatically fit one fixed-dimensional instance.
+
+Transitions with arbitrary zero tests, inhibitor arcs, upper guards, or resets do not satisfy this exact interface merely because their syntax mentions counters. The crucial law is monotonicity: if $m\xrightarrow{t}m'$ and $r\ge0$, then $m+r\xrightarrow{t}m'+r$. The adapter must prove that law for the extracted source model or use an explicitly one-sided abstraction.
+
+\subsection{An exact predecessor formula}
+For a threshold $b$, a transition $t$ can reach $\up{\{b\}}$ exactly from markings above
+\begin{equation}
+ \label{eq:pb}
+ \operatorname{pb}_t(b)=c_t+\max(\zero,b-o_t),
+\end{equation}
+where the maximum is componentwise and the expression is interpreted in integers before returning a nonnegative vector. Equivalently, coordinate $i$ is $\max(c_{t,i},c_{t,i}+b_i-o_{t,i})$.
+
+\begin{lemma}[Minimal predecessor]
+\label{lem:pred}
+For every $m,b\in\N^d$,
+\[
+ \operatorname{pb}_t(b)\le m
+ \quad\Longleftrightarrow\quad
+ m\ge c_t\ \text{and}\ m-c_t+o_t\ge b.
+\]
+\end{lemma}
+\begin{proof}
+In each coordinate the right side is exactly the pair of inequalities
+$m_i\ge c_{t,i}$ and $m_i\ge c_{t,i}+b_i-o_{t,i}$. Their conjunction is the comparison against the maximum above. Coordinates are independent, so the equivalence holds for vectors.
+\end{proof}
+
+This formula is the whole arithmetic content of the search. It also gives a useful independent test: compare it against operational enabling and firing, rather than implementing the same backward expression twice. The main corpus performs 3,350 such comparisons. The safety checker uses the maximum formulation while the producer uses the nonnegative-difference formulation; this is some implementation diversity, not formal independence.
+
+\subsection{The search and its retained history}
+Maintain an active antichain $A$: no two distinct active vectors are comparable. A new vector $v$ is redundant when some active $a\le v$. Otherwise admit $v$ and remove every active $a$ with $v\le a$. A worklist expands each admitted active vector by all transitions.
+
+\begin{lstlisting}
+A := empty active antichain
+history := empty append-only array
+for b in bad_thresholds:
+    admit(b, terminal)
+while an unprocessed active node remains:
+    if a resource bound is exceeded: return unknown
+    b := next active node
+    for each transition t:
+        v := pre[t] + max(0, b - post[t])
+        if no a in A satisfies a <= v:
+            admit(v, edge(t, historical_node_of(b)))
+            if v <= initial: return its transition word
+return the active basis with finite closure witnesses
+\end{lstlisting}
+
+Here \code{admit} removes dominated \emph{active} entries but never deletes their history nodes. A new predecessor node points to the older node whose bad-reaching execution it extends. Following those pointers produces a finite word because every pointer goes to an older history node. The word is checked forward from the original initial marking, so no provenance claim is trusted by the positive checker.
+
+Deleting history together with a dominated basis element would be an ordinary engineering bug: the basis could remain mathematically correct while a witness path became inaccessible or was accidentally reassociated with a different suffix. The active antichain and the append-only provenance DAG have different responsibilities and different lifetimes.
+
+One other subtlety concerns worklist pruning. If $b$ is replaced by a smaller active vector $a$, then $\operatorname{pb}_t(a)\le\operatorname{pb}_t(b)$ for every transition. Expanding $a$ therefore subsumes the predecessors that would have been produced from $b$. A stale worklist entry can be skipped, but only because the active set still represents a superset of its upward closure.
+
+\subsection{A safety certificate with no search trace}
+The negative answer is a basis $A=(a_0,\ldots,a_{k-1})$ together with two small tables of indices. The checker verifies:
+\begin{align}
+ &\forall b\in B,\quad a_{\tau(b)}\le b,
+ &&\text{bad-set coverage}, \label{eq:badcover}\\
+ &\forall i<k,\ \forall t\in T,\quad
+ a_{\pi(i,t)}\le\operatorname{pb}_t(a_i),
+ &&\text{backward closure}, \label{eq:backclose}\\
+ &\forall i<k,\quad a_i\nleq m_0,
+ &&\text{initial exclusion}. \label{eq:exclude}
+\end{align}
+The indices must be in range. No rank, minimality, antichain property, search order, or claimed number of iterations is needed for soundness. A redundant basis is perfectly acceptable.
+
+\begin{theorem}[Finite safety certificate]
+\label{thm:safety}
+If \eqref{eq:badcover}--\eqref{eq:exclude} hold, no finite execution from $m_0$ reaches $\up B$.
+\end{theorem}
+\begin{proof}
+Equation~\eqref{eq:badcover} implies $\up B\subseteq\up A$. Suppose $m\xrightarrow{t}m'$ and $m'\in\up A$. Choose $i$ with $a_i\le m'$. Lemma~\ref{lem:pred} gives $\operatorname{pb}_t(a_i)\le m$, and \eqref{eq:backclose} gives $a_{\pi(i,t)}\le m$. Thus $m\in\up A$. Consequently the complement of $\up A$ is forward invariant. It contains $m_0$ by \eqref{eq:exclude}, and is disjoint from $\up B$, proving the claim by induction on the execution length.
+\end{proof}
+
+There is a reusable theorem hiding in this certificate. Once \eqref{eq:badcover} and \eqref{eq:backclose} are checked, the same $A$ proves safety for \emph{every} initial marking outside $\up A$. The prototype binds each receipt to one initial marking, but a Lean port should expose the stronger invariant lemma and then specialize it. This is not a proposal to weaken subject identity: it changes the proposition proved by the generic checker theorem.
+
+With supplied coverage indices, verification takes $O(d(k|T|+|B|+k))$ integer comparisons and elementary arithmetic operations. These are arithmetic-operation counts; large token thresholds still have a bit cost. Searching for the indices by linear scan belongs in the producer, not the checker.
+
+\subsection{Why the unbounded search terminates}
+\begin{theorem}[Unbounded-budget coverability decision]
+\label{thm:petri-complete}
+For the finite-place fragment above, backward antichain search with no resource cutoffs terminates. It returns either a valid safety basis or a finite execution covering a bad threshold.
+\end{theorem}
+\begin{proof}
+Each genuinely new admitted vector strictly enlarges the upward-closed set represented by the active basis. Removing dominated active vectors does not remove any marking from that set. Suppose infinitely many distinct admissions occurred, and list the admitted vectors in time order. If an earlier vector were below a later one, the later vector would already be covered by the current basis and could not be admitted. The sequence would therefore have no earlier element below a later element. Dickson's lemma, the well-quasi-order property of componentwise comparison on $\N^d$, forbids such a sequence. Thus only finitely many vectors are admitted, and each contributes finitely many work items.
+
+Each admitted threshold is a genuine backward predecessor of a bad threshold, with a finite transition suffix in its history. If an admitted threshold is below $m_0$, Lemma~\ref{lem:pred} inductively makes that suffix executable from $m_0$ and bad-covering. If the search finishes without finding one, all predecessor thresholds are covered by the final basis, all bad thresholds remain covered, and $m_0$ is excluded. Theorem~\ref{thm:safety} applies.
+\end{proof}
+
+The well-quasi-order argument is standard in backward coverability~\cite{finkel-schnoebelen}. It is required to establish completeness of the \emph{search}, not soundness of an individual accepted finite certificate. This separation is attractive for the first Lean milestone: the safety checker can be proved correct without formalizing Dickson's lemma or the termination of an optimized search.
+
+The theorem is not a practical small-time guarantee. Antichain sizes, threshold magnitudes, and witness lengths can be very large. The delivered implementation uses simple scans, explicit words, and fixed resource caps; hitting a cap produces \code{unknown}. A theorem saying an unbounded algorithm terminates does not entitle a bounded implementation to reinterpret exhaustion as safety.
+
+\subsection{An infinite-state worked example}
+Let the three places be available lock, active owner, and queued jobs. Use
+\[
+ m_0=(1,0,0),\qquad B=\{(0,2,0)\},
+\]
+and the transitions
+\[
+ (1,0,0)\to(0,1,0),\qquad
+ (0,1,0)\to(1,0,0),\qquad
+ (0,0,0)\to(0,0,1).
+\]
+The final transition can execute arbitrarily often, so the reachable set is infinite. A complete forward state enumeration does not finish. The backward worker returns
+\[
+ A=\{(0,2,0),(1,1,0),(2,0,0)\}.
+\]
+For the acquire transition, the predecessors of these three thresholds are respectively $(1,1,0),(2,0,0),(3,0,0)$, all covered by $A$. For release they are $(0,3,0),(0,2,0),(1,1,0)$, again covered. Adding a queued job leaves the relevant predecessor thresholds unchanged. No element of $A$ lies below $(1,0,0)$.
+
+The resulting invariant says that the sum of available and held lock tokens is less than two. An existing linear-invariant worker could prove this example too; it is a transparent walkthrough, not evidence that every earlier Forge lane fails. The added capability is the complete backward coverability fragment and its finite certificate language, not a claim that this small invariant was previously inaccessible.
+
+For a positive contrast, the one-place transition $0\to1$ from initial marking $0$ covers the threshold $25$. The producer returns a 25-step word; the checker executes those 25 steps. Setting the expansion budget to two returns \code{unknown}, not a nonreachability verdict. Both outcomes occur in the stored tests.
+
+\subsection{Extraction, abstraction, and future optimizations}
+A first source adapter should target a small explicit resource DSL rather than arbitrary Lean functions. A primitive consumes a statically known vector and produces a statically known vector. Sequential control can be encoded by extra control places. Alternatives become distinct transitions. Constant local tests whose enabling condition is exactly a lower threshold fit directly; zero tests do not.
+
+For an abstraction $\alpha:S\to\N^d$, a safety transport proof needs three facts: the initial source state maps to the checked initial region, every concrete step is simulated by an abstract execution, and every concrete bad state maps into $\up B$. This is sufficient for safety even when the net has extra abstract executions. It is not sufficient to turn an abstract bad-reaching word into a source counterexample. That direction needs a lifting proof or concrete replay against the source semantics.
+
+The producer can later use dominance tries, coordinate indexing, partial-order reductions, or a specialized Petri solver. The checker remains unchanged if the result is the same basis and coverage table. This is preferable to trusting a complicated acceleration or pruning history. Research on Karp--Miller pruning contains concrete examples of plausible pruning procedures losing completeness~\cite{reynier-servais}; the lesson here is not to reject acceleration, but to keep its output subject to a simple final invariant check.
+
+Exact-state reachability, fairness, recurring visits, and deadlock-freedom under a scheduler require different predicates or semantics. They are not silently imported into a coverability result. A finite bad antichain is the input contract, and the report's implementation stays inside it.

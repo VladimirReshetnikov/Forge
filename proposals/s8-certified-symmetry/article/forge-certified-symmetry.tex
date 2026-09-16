@@ -1,0 +1,78 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=0.91in,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{enumitem,listings,xcolor,fancyhdr}
+\usepackage[hyphens]{url}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black,breaklinks=true]{hyperref}
+\hypersetup{pdftitle={Forge with Certified Symmetry},pdfauthor={OpenAI},pdfsubject={Concrete permutation-group certificate algorithms and tested prototypes for Forge}}
+\setlength{\parskip}{0.38em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2.5em}
+\linespread{1.035}
+\setlist{nosep,leftmargin=1.6em}
+\lstset{basicstyle=\ttfamily\footnotesize,columns=fullflexible,keepspaces=true,breaklines=true,showstringspaces=false,frame=single,rulecolor=\color{black!18},backgroundcolor=\color{black!2},xleftmargin=0.2em,xrightmargin=0.2em,aboveskip=0.8em,belowskip=0.8em}
+\pagestyle{fancy}
+\fancyhf{}\fancyhead[L]{\small Forge with Certified Symmetry}\fancyhead[R]{\small Research extension}\fancyfoot[C]{\thepage}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\Sym}{\mathfrak S}
+\newcommand{\Alt}{\mathfrak A}
+\newcommand{\Orb}{\operatorname{Orb}}
+\newcommand{\Stab}{\operatorname{Stab}}
+\newcommand{\can}{\operatorname{can}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\QQ}{\mathbb Q}
+\newcommand{\NN}{\mathbb N}
+\newcommand{\RR}{\mathbb R}
+\newcommand{\Ryn}{\mathcal R}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.5in}
+{\large\scshape A concrete extension to the Forge research program\par}
+\vspace{0.55in}
+{\Huge\bfseries Forge with\par Certified Symmetry\par}
+\vspace{0.25in}
+{\Large Stabilizer chains, canonical images,\par symbolic orbit counting, and algebraic reduction\par}
+\vspace{0.5in}
+{\large Prepared for Vladimir Reshetnikov\par}
+{\large September 15, 2026\par}
+\vspace{0.5in}
+\begin{abstract}
+Forge already proposes a wide range of certificate-producing mathematical workers. This article adds a coherent new capability: reasoning with a finite permutation group through a small, exact certificate, then reusing that certificate to canonicalize configurations, count orbits, and reduce symmetric algebraic searches. The principal object is a complete stabilizer chain whose strong generators retain straight-line provenance in the original generators. Its checker proves enough local facts to justify both positive and negative membership answers, an exact order, and a unique coset normal form. A separate coset-cover certificate establishes canonical images; recognized symmetric and alternating groups admit substantially cheaper image and counting certificates. A sparse Reynolds-projection certificate connects the same machinery to polynomial reasoning without enumerating the group.
+
+The accompanying standard-library Python implementation was executed, with independent oracle comparisons, malformed-input controls, and search-free replay. It checked a certificate for $\Sym_{40}$ using 820 transversal entries, not $40!$ explicit permutations. These are Python experiments and mathematical soundness arguments, not Lean-kernel proofs. The article identifies the exact reification and formalization obligations needed to make the extension part of a real \code{forge} tactic.
+\end{abstract}
+\vfill
+\begin{tabularx}{\textwidth}{@{}lY@{}}
+\toprule
+Inspected Forge revision & \code{58ea206bd7ad501b930add568151217bcc7f82a2}\\
+Delivered & LaTeX and PDF; executable producers and separate checkers; recorded certificates; replay scripts; tests; integration specifications.\\
+Not claimed & An implemented Lean tactic, a verified Python checker, or a speedup over \code{grind}.\\
+\bottomrule
+\end{tabularx}
+\end{titlepage}
+\tableofcontents
+\clearpage
+\input{sections/01-scope}
+\input{sections/02-chain}
+\input{sections/03-images}
+\input{sections/04-counting}
+\input{sections/05-algebra}
+\input{sections/06-integration}
+\input{sections/07-evidence}
+\input{sections/08-roadmap}
+\appendix
+\input{sections/09-artifacts}
+\input{references}
+\end{document}

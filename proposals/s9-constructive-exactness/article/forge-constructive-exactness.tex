@@ -1,0 +1,1642 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=1in,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor,listings,enumitem,fancyhdr,hyperref,xurl}
+\definecolor{ink}{HTML}{17324D}
+\definecolor{muted}{HTML}{566573}
+\definecolor{light}{HTML}{F4F6F8}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,
+ pdftitle={Forge: Constructive Exactness},pdfauthor={OpenAI},
+ pdfsubject={Integral homology, certified reductions, and chain-homotopy synthesis}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\textsf{FORGE / CONSTRUCTIVE EXACTNESS}}
+\fancyhead[R]{\small\textsf{Research prototype}}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parskip}{0.38em}\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\setlist{nosep,leftmargin=1.5em}
+\lstset{basicstyle=\small\ttfamily,breaklines=true,columns=fullflexible,
+ keepspaces=true,showstringspaces=false,backgroundcolor=\color{light},
+ frame=single,rulecolor=\color{light},xleftmargin=0.4em,xrightmargin=0.4em,
+ aboveskip=0.8em,belowskip=0.8em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Z}{\mathbb Z}\newcommand{\Q}{\mathbb Q}
+\newcommand{\im}{\operatorname{im}}\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\coker}{\operatorname{coker}}\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\id}{\operatorname{id}}\newcommand{\SNF}{\operatorname{SNF}}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\pair}[2]{\langle #1,#2\rangle}
+\newcommand{\status}[1]{\par\smallskip\textsf{\textbf{Status:} #1}\par\smallskip}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.5in}
+{\large\sffamily\color{muted} A CAPABILITY DELTA FOR THE FORGE PROJECT\par}
+\vspace{0.5in}
+{\Huge\bfseries\color{ink} Forge:\\[0.15em]Constructive Exactness\par}
+\vspace{0.35in}
+{\Large Integral homology, certified reductions,\\and obstruction-aware homotopy synthesis\par}
+\vspace{0.5in}
+{\large Prepared for Vladimir Reshetnikov\par}
+{\large September 15, 2026\par}
+\vfill
+\begin{minipage}{\textwidth}
+\textbf{What is delivered.} A self-contained algorithmic proposal, proofs of its
+certificate principles, a runnable exact-integer Python prototype, an
+independent arithmetic replayer, 656 recorded certificate cases, and adversarial
+and differential tests. The companion archive contains all source and evidence.
+
+\textbf{What is not delivered.} An installed Lean tactic or a verified Lean
+checker. No Lean compiler was available in this authoring environment. The
+integration is specified, not presented as compiled code; no comparison against
+\code{grind} or another Lean tactic was run.
+
+\textbf{Audited Forge snapshot.}\quad
+\path{58ea206bd7ad501b930add568151217bcc7f82a2}.
+The contribution is relative to the reviewed capability register and merged
+architecture at this revision, not a claim of mathematical priority.
+\end{minipage}
+\end{titlepage}
+
+\begin{abstract}
+Forge already has integer-lattice witnesses, invariant closures, finite
+quotients, noncommutative certificates, analytic workers, and quantitative
+reasoning. Another generic solver wrapper would largely duplicate that work.
+This article develops a different source fragment: finite free integral chain
+complexes, with \emph{constructive exactness} as the common interface.
+The worker does not merely compute ranks. It constructs coordinates for every
+cycle modulo boundaries, produces explicit fillers or separating functionals,
+transports maps through quotient presentations, reduces complexes while keeping
+chain homotopies, and solves the coupled equations for a homotopy between two
+chain maps. A negative answer carries a dual matrix functional, including
+modular obstructions that cannot be seen by rational linear algebra.
+
+The most revealing example consists of two maps that induce the same maps on
+all homology groups but are not integrally chain-homotopic: the obstruction is
+$2a+2b=1$. The key architectural improvement is to combine certified reduction
+with whole-diagram synthesis, then transport the resulting witness back to the
+original source objects. In a controlled family, this changes a 288-equation,
+144-variable problem rejected by the prototype's equation cap into an empty
+reduced problem whose lifted homotopy passes direct replay.
+
+The supplied search uses SymPy 1.14.0. Its checker uses only Python's standard
+library and does not run Smith reduction or reconstruct the homotopy equation
+assembler. All 656 stored certificates replay with site packages disabled;
+489 invalid controls are rejected. Separate checks comprise 64 all-minors
+normal-form comparisons, 24 coordinate-composition identities, 184 tiny modular
+enumerations, and 12 dependency-free unit tests. These are different units,
+not a combined success rate. Classical mathematics is reused explicitly;
+the new contribution is a concrete Forge worker, its source obligations,
+certificate language, transport laws, and executable evidence.
+\end{abstract}
+\begingroup
+\small
+\setlength{\parskip}{0pt}
+\tableofcontents
+\endgroup
+\newpage
+
+\section{The extension, and the boundary of the audit}
+\label{sec:delta}
+
+\subsection{Do not build another version of the existing proposal}
+The current Forge repository is no longer the initial proposal for a larger
+\code{grind}. Its merged status register includes three rounds of contributions.
+In particular, integer-lattice extraction and divisibility obstructions,
+observable quotients, several kinds of closure, and exact quantitative workers
+are already part of the baseline \cite{forge-status,forge-conclusion}.
+This article therefore does \emph{not} claim a new integer equation solver,
+a new certificate-first architecture, or a new policy for interpreting bounded
+search failure.
+
+The missing package of capabilities in the reviewed register is more specific:
+\emph{coordinates and witnesses for cycles modulo boundaries, together with
+homotopies that preserve those constructions under reduction}. A chain-complex
+worker is useful because its outputs are related objects. A cycle filler, an
+induced quotient map, a reduction, and a homotopy are not interchangeable
+certificates, but each can be used to construct the others under precise
+hypotheses. The central engineering task is to preserve these relationships
+through one source-bound interface.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.29\textwidth}XX@{}}
+\toprule
+Existing prerequisite & Contribution here & Explicitly not claimed\\
+\midrule
+Integer lattice solving & Compatible cycle/boundary coordinates and universal
+filling recipes & Smith normal form as a new algorithm\\
+Finite observable quotients & Integral quotient maps retaining torsion relations
+and representatives & Commuting diagrams as a new abstraction\\
+Certified simplification & Explicit chain reductions $(f,g,h)$ and witness
+transport & New algebraic Morse theory\\
+Typed witness search & Coupled, degree-correct homotopy synthesis and an adjoint
+obstruction checker & Solving Leant's open Church-encoding queries\\
+Certificate admission & Source-specific bases, grading, and coefficient-ring
+obligations & A new general trust policy\\
+\bottomrule
+\end{tabularx}
+\caption{The proposed delta; the left column is reused, not resubmitted.}
+\end{table}
+
+The mathematics of Smith reduction and algebraic cancellation is established.
+Algebraic Morse theory already treats chain complexes over rings
+\cite{skoldberg}. What is proposed for Forge is a tightly scoped, testable
+compilation target using these methods, not a new branch of homological algebra.
+
+\subsection{What was inspected}
+The audit used the Forge README, the implementation-status register, the
+Leant/Djex integration review, the opening structural-search development,
+the complete conclusion, and the recursive repository inventory. The register
+and conclusion provide the merged account of all 27 submissions. The neighboring
+projects' READMEs and current revision metadata were also read
+\cite{forge-readme,forge-status,forge-neighbors,forge-structural,
+forge-conclusion,leant,djex}.
+
+This is a targeted audit of the merged design, not a claim to have read every
+line of every frozen original submission. Repository searches for the proposed
+subject did not return matches, but that is not treated as a proof of absence:
+index coverage can be incomplete. The defensible novelty claim is that the
+\emph{combined worker specified here is not listed in the reviewed merged
+capability account}. The source inventory and exact revision identifiers are
+recorded in \code{docs/AUDIT.md}.
+
+Forge's own merge has compiled some core Lean specimens. It would be incorrect
+to say that no Forge source has ever compiled. It remains equally important that
+this article's Python checker is not a Lean checker and that the present
+experiments do not close Forge's end-to-end implementation gap.
+
+\subsection{A source fragment, not a competing foundation}
+The first accepted inputs should be bounded chain complexes of explicitly
+based, finite free $\Z$-modules. All matrices are integral and concrete; vectors
+may remain universally quantified in the source theorem. This already admits
+statements such as
+\[
+  \forall z\in\Z^n,\quad Bz=0\ \Longrightarrow\
+  \exists w\in\Z^p,\quad Aw=z,
+\]
+or a request to construct a chain homotopy between specified maps.
+The worker is not intended to search arbitrary topological spaces, infer an
+unknown finite model of an infinite object, or decide chain-map equivalence over
+an arbitrary ring.
+
+A general Lean module can be admitted only when a finite basis and the
+coordinate compatibility proofs are available. Those proofs are obligations,
+not properties inferred from a type's printed name. Section~\ref{sec:lean}
+gives the proposed source compiler and the existing libraries it should use.
+
+\section{A running example: a cycle whose double can be filled}
+\label{sec:example}
+
+Consider the matrices
+\[
+ B=\begin{pmatrix}-1&-1&0\\1&0&-1\\0&1&1\end{pmatrix},\qquad
+ z=\begin{pmatrix}1\\-1\\1\end{pmatrix},\qquad A=2z.
+\]
+The three columns of $B$ are the boundaries of oriented edges $01,02,12$.
+The vector $z$ goes once around the triangle. Since $Bz=0$, the map $A$ followed
+by $B$ is zero. We have a chain segment
+\[
+  \Z\xrightarrow{A}\Z^3\xrightarrow{B}\Z^3.
+\]
+Here the single generator in the left-hand group has boundary \emph{twice} the
+cycle. This is an algebraic doubled-face complex, not the boundary matrix of an
+ordinary single simplicial triangle.
+
+Every cycle is an integer multiple of $z$: the first two equations of $Bx=0$
+give $x_2=-x_1$ and $x_3=x_1$. The boundaries are precisely the even multiples.
+Consequently,
+\[
+  \ker B/\im A\cong\Z/2\Z.
+\]
+A useful proof worker should produce more than this group name. For the query
+$Aw=z$, it can return the row vector
+\[
+ \phi=(0,0,1),\qquad \phi A=2\equiv0\pmod2,\qquad
+ \phi z=1\not\equiv0\pmod2.
+\]
+This is a finite certificate that no integer filler exists. For the query
+$Aw=2z$, the worker returns $w=1$. The two outcomes fit together: the class of
+$z$ has order exactly two.
+
+There are three useful controls. Replacing $A$ by $z$ makes every cycle a
+boundary. Removing $A$ leaves a free infinite-order cycle. Replacing $\Z$ by
+$\Q$ makes the original cycle fillable by $w=1/2$. Thus a certificate cannot be
+rebound to another coefficient ring or to another differential merely because
+the problem looks similar.
+
+All the claims above have direct scalar proofs. Their purpose is to state what
+the automated interface must preserve when there are hundreds of generators,
+unhelpful bases, and maps between several complexes. The delivered
+\code{demo.py} runs the doubled-face example and the homotopy obstruction of
+Section~\ref{sec:secondary}.
+
+\section{Integral coordinate certificates}
+\label{sec:coordinates}
+\status{Implemented in Python; certificate principles proved below. Lean
+reflection and quotient construction are proposed, not compiled.}
+
+\subsection{The exact input and the normal-form receipt}
+Fix
+\[
+ A\in\Z^{n\times p},\qquad B\in\Z^{m\times n},\qquad BA=0.
+\]
+Vectors are columns, and a product $BA$ means first apply $A$, then $B$.
+Every normal-form receipt for a matrix $M$ contains
+\[
+ (S,U,U^{-1},V,V^{-1})
+\]
+with exact integer entries. The checker verifies both inverse identities for
+each square change of basis, then verifies
+\begin{equation}\label{eq:smith-receipt}
+ UMV=S.
+\end{equation}
+It also checks that $S$ is rectangular diagonal, its nonzero diagonal entries
+are positive and precede all zeros, and consecutive nonzero entries divide one
+another. This makes integral invertibility a multiplication check, not an
+unverified determinant claim. Both $0\times q$ and $q\times0$ matrices retain
+their dimensions in the serialized representation.
+
+The search calls SymPy's lower-level
+\code{sympy.polys.matrices.normalforms.smith_normal_decomp}; its version-1.14.0
+source returns the diagonal matrix and both transformation matrices
+\cite{sympy-source}. A diagonal-only API is inadequate for the witness-producing
+interface. The search computes the inverse matrices and exports them; the
+checker neither trusts those inverses nor repeats normal-form search.
+
+\subsection{First transformation: the entire integral kernel}
+Take a receipt
+\[
+ UBV=D,
+\]
+where $r$ diagonal entries of $D$ are nonzero. Put $k=n-r$ and define
+\begin{equation}\label{eq:kernel-basis}
+ K=V_{[:,r:n]}\in\Z^{n\times k},\qquad
+ L=(V^{-1})_{[r:n,:]}\in\Z^{k\times n}.
+\end{equation}
+The slice notation uses zero-based half-open indices, as does the implementation.
+
+\begin{lemma}[Integral kernel coordinates]\label{lem:kernel}
+The maps $K:\Z^k\to\Z^n$ and $L:\Z^n\to\Z^k$ satisfy
+$BK=0$, $LK=I_k$, and
+\[
+ Bz=0\quad\Longrightarrow\quad KLz=z.
+\]
+In particular, the columns of $K$ are a basis of the \emph{whole} integral
+kernel, not a finite-index sublattice of it.
+\end{lemma}
+\begin{proof}
+Write $t=V^{-1}z$. Since $U$ is invertible, $Bz=0$ is equivalent to $Dt=0$.
+For $i<r$, the $i$th equation is $D_{ii}t_i=0$. Its nonzero integer coefficient
+forces $t_i=0$. All remaining coordinates are free. Thus every cycle is
+$K(t_r,\ldots,t_{n-1})^T$, with coordinates $Lz$. The identities $BK=0$ and
+$LK=I_k$ follow by multiplying the indicated columns and rows of the checked
+change-of-basis matrices.
+\end{proof}
+
+This is where integrality matters. A rational nullspace basis whose denominators
+are cleared columnwise need not automatically generate the entire integer
+kernel. The checked unimodular transformation avoids a separate saturation
+assumption.
+
+\subsection{Second transformation: boundaries inside the kernel}
+Because $BA=0$, define the coordinate boundary matrix
+\[
+ C=LA\in\Z^{k\times p}.
+\]
+The checker additionally verifies $KC=A$. This identity is logically implied
+by the kernel argument but is cheap and useful as an implementation guard.
+Take a second receipt
+\[
+ PCQ=S,
+\]
+where the positive diagonal entries are $d_0,\ldots,d_{s-1}$ and
+$d_i\mid d_{i+1}$. Define
+\begin{equation}\label{eq:XR}
+ X=PL:\Z^n\to\Z^k,\qquad R=KP^{-1}:\Z^k\to\Z^n.
+\end{equation}
+These are the cycle-coordinate map and the representative map. The checker
+verifies
+\begin{equation}\label{eq:coordinate-identities}
+ XR=I_k,\qquad BR=0,\qquad AQ=RS.
+\end{equation}
+For every cycle $z$, Lemma~\ref{lem:kernel} also gives $RXz=z$.
+The stored matrices therefore carry a reusable finite description of all cycles
+and all their relations.
+
+\begin{theorem}[Constructive homology classification]\label{thm:classification}
+A valid pair of receipts above induces an isomorphism
+\[
+ \ker B/\im A\ \cong\
+ \left(\bigoplus_{i=0}^{s-1}\Z/d_i\Z\right)\oplus\Z^{k-s}.
+\]
+It sends a cycle $z$ to the first $s$ coordinates of $Xz$ modulo $d_i$, followed
+by its remaining integer coordinates. The inverse sends the class of a
+coordinate vector $y$ to the class of $Ry$.
+\end{theorem}
+\begin{proof}
+First, $R$ produces cycles because $BR=0$. If $z=Aw$, then
+$Xz=PLA w=PCw=SQ^{-1}w$. Thus $X$ maps boundaries into the diagonal relation
+subgroup $S\Z^p$. Conversely, if $Xz=St$ and $Bz=0$, then
+\[
+ z=RXz=RSt=AQt,
+\]
+so $z$ is a boundary. The maps consequently descend to the quotient and are
+inverse there: $XR=I$ on all coordinate vectors, while $RX=I$ on cycles. The
+quotient of $\Z^k$ by $S\Z^p$ is the displayed product of cyclic and free groups,
+coordinate by coordinate. Factors with $d_i=1$ are trivial.
+\end{proof}
+
+\begin{remark}[Why use two compatible normal forms?]
+For this free integral setting, the abstract torsion factors can also be
+recovered from $A$ alone, together with the rank information from $B$.
+Indeed, $\ker B$ is a direct summand of $\Z^n$, so a suitable ambient basis
+makes $A$ a kernel-coordinate matrix with additional zero rows. The two-stage
+construction is not needed to invent new numerical invariants. It is needed
+here to keep \emph{specified representatives, inverse coordinates, fillers,
+and induced maps} compatible in one certificate.
+\end{remark}
+
+\subsection{A complete filler-or-obstruction algorithm}
+Given a cycle $z$, compute $y=Xz$. A filler exists precisely when
+\begin{equation}\label{eq:filling-test}
+ d_i\mid y_i\ (i<s),\qquad y_i=0\ (s\leq i<k).
+\end{equation}
+If these conditions hold, let $t\in\Z^p$ have first $s$ entries $y_i/d_i$ and
+all other entries zero, and return
+\begin{equation}\label{eq:filler}
+ w=Qt.
+\end{equation}
+Replay of an individual filler requires only $Aw=z$, not either normal form.
+The classifier can therefore do expensive work once and emit very small
+per-query receipts.
+
+When a condition fails, choose a failing coordinate $i$ and let $\phi$ be row
+$i$ of $X$. For $i<s$, return modulus $d_i$; for $i\geq s$, return modulus zero,
+which the protocol uses to mean exact equality in $\Z$.
+
+\begin{theorem}[Direct obstruction certificate]\label{thm:obstruction}
+Suppose either $\phi A=0$ and $\phi z\ne0$, or for an integer $q\geq2$,
+\[
+ \phi A\equiv0\pmod q,\qquad \phi z\not\equiv0\pmod q.
+\]
+Then no $w\in\Z^p$ satisfies $Aw=z$.
+For a cycle in the admitted finite free integral fragment, the coordinate
+algorithm returns either a valid filler or such an obstruction, provided its
+normal-form computation completes without a resource cutoff.
+\end{theorem}
+\begin{proof}
+If $Aw=z$, multiplication by $\phi$ contradicts the indicated separation,
+either exactly or modulo $q$. For completeness, the successful divisibility
+case was proved in Theorem~\ref{thm:classification}. Otherwise a failing row of
+$X$ annihilates boundaries in the required sense because $XA=SQ^{-1}$.
+That row separates $z$ by the failed condition. A failed modulus cannot be one,
+since every integer is divisible by one.
+\end{proof}
+
+A modular witness proves nonexistence over $\Z$. It does not license the same
+negative answer over $\Q$, nor a claim that the cycle itself is nonzero as an
+ordinary vector modulo every prime.
+
+\subsection{Universal exactness, class orders, and useful asymmetries}
+The same receipt settles more than individual queries.
+
+\begin{corollary}[A universal filling map]\label{cor:universal}
+Every cycle is a boundary if and only if $s=k$ and $d_i=1$ for every $i<k$.
+When this holds, let $J:\Z^k\to\Z^p$ include the first $k$ coordinates. Then
+$H=QJX$ is an integral linear map such that
+\[
+ Bz=0\quad\Longrightarrow\quad AHz=z.
+\]
+\end{corollary}
+\begin{proof}
+The classification is zero exactly under the stated conditions. In that case
+$SJ=I_k$, so $AH=RSJX=RX$, which acts as the identity on cycles.
+\end{proof}
+
+This is the right compiled result for the universally quantified exactness
+statement in Section~\ref{sec:delta}. It does not enumerate values of $z$.
+The prototype exports the coordinates from which this map is obtained; a
+separate Lean theorem constructor for universal exactness is not implemented.
+
+There is a subtle trap. Exactness at the middle object does \emph{not} in general
+imply an ambient identity $AH+EB=I_n$ with integral matrices $H,E$. Take $A$ to
+have no columns and take $B=(2)$. Its kernel is zero, so middle exactness holds,
+but $2E=1$ has no integer solution. An integration that silently replaces the
+cycle-restricted condition with this stronger identity would reject valid
+exactness problems or rationalize away an obstruction.
+
+For a cycle with coordinates $y$, its class has infinite order exactly when a
+free coordinate is nonzero. Otherwise its order is
+\[
+ \operatorname{lcm}_{0\leq i<s}
+ \frac{d_i}{\gcd(d_i,y_i)},
+\]
+with the empty least common multiple equal to one. This follows because an
+integer $t$ kills the class exactly when every $d_i$ divides $ty_i$.
+This is a derived use of the proved coordinate certificate, not a separately
+implemented certificate tag in the supplied package.
+
+\subsection{Complexity and certificate size}
+The prototype's two normal-form searches operate on $B$ and $C$, with shapes
+$m\times n$ and $(n-r)\times p$. They are exact integer computations, not
+floating-point rank tests. The search may experience coefficient growth;
+this article makes no polynomial bit-complexity claim for SymPy's implementation.
+
+For dimensions bounded by $N$, each receipt has $O(N^2)$ integer entries and
+naive replay uses $O(N^3)$ integer arithmetic operations, with a constant number
+of matrix products. These are arithmetic-operation bounds: operand bit lengths
+also matter. Individual fillers and obstructions are smaller, requiring
+matrix--vector or row--matrix products. For many queries on the same segment,
+caching the source-bound coordinate certificate is therefore more useful than
+repeating Smith reduction.
+
+\section{Maps on homology: preserve relations, not just group names}
+\label{sec:induced}
+\status{Implemented and tested, including changes of basis and coordinate
+composition. The Lean quotient-map adapter remains proposed.}
+
+Suppose a second segment is $\Z^{p'}\xrightarrow{A'}\Z^{n'}
+\xrightarrow{B'}\Z^{m'}$, and a proposed map of segments contains
+\[
+ F:\Z^n\to\Z^{n'},\quad E:\Z^m\to\Z^{m'},\quad
+ G:\Z^p\to\Z^{p'}.
+\]
+The checker requires both squares:
+\begin{equation}\label{eq:map-squares}
+ B'F=EB,\qquad FA=A'G.
+\end{equation}
+The first ensures cycles map to cycles; the second ensures boundaries map to
+boundaries. The distinction matters: checking only one square is insufficient.
+
+Let $(X,R,S,Q)$ and $(X',R',S',Q')$ be the two accepted coordinate systems.
+The matrix of the induced map in the presented quotient coordinates is
+\begin{equation}\label{eq:induced}
+ M=X'FR.
+\end{equation}
+It is accompanied by a relation-transport matrix
+\[
+ T=(Q')^{-1}GQ.
+\]
+These matrices satisfy
+\begin{equation}\label{eq:relation-map}
+ MS=S'T.
+\end{equation}
+Indeed, $RS=AQ$, so $MS=X'FAQ=X'A'GQ=S'(Q')^{-1}GQ$.
+Equation~\eqref{eq:relation-map} states exactly that changing a source
+representative by a boundary changes its image by a target boundary.
+
+\begin{proposition}[Functorial coordinate transport]
+The matrices in \eqref{eq:induced} define the intended homology maps. For
+composable maps $F_1,F_2$ and a fixed coordinate system on their common object,
+\[
+ M(F_2F_1)=M(F_2)M(F_1).
+\]
+The identity map induces $I$ in the full coordinate presentation.
+\end{proposition}
+\begin{proof}
+Well-definedness follows from \eqref{eq:relation-map}; representatives are sent
+to the correct cycles by construction. The columns of $F_1R_0$ are cycles in
+the middle complex, so $R_1X_1F_1R_0=F_1R_0$. Thus
+\[
+ X_2F_2R_1X_1F_1R_0=X_2F_2F_1R_0.
+\]
+For identities, use $XR=I$.
+\end{proof}
+
+The word ``full'' is important. The implementation retains coordinates whose
+relation is $1$, even though they represent trivial cyclic factors. Removing
+those coordinates changes matrix dimensions and requires another explicitly
+checked presentation map. The displayed group summary omits trivial factors;
+the algebraic transport does not silently omit their coordinates.
+
+A later equality worker can check whether two induced maps agree in the
+quotient without demanding literal equality of their coordinate matrices.
+If their difference is $N$, equality means each column of $N$ lies in
+$S'\Z^{p'}$: divisibility in torsion rows and exact zero in free rows.
+This criterion is proved by the same coordinate argument. It is a proposed
+frontend operation, not an extra experimental outcome counted in this article.
+
+\section{Reduction with retained chain homotopies}
+\label{sec:reduction}
+\status{Greedy unit cancellation, composite reduction receipts, and direct
+replay are implemented. Matrices in this prototype are dense, not a sparse
+production representation.}
+
+\subsection{Why an invariant alone is not a sufficient reduction result}
+A preprocessing routine that returns a smaller complex with the same homology
+has not necessarily returned enough information to reconstruct a proof about
+the original source. For a filler, a homotopy, or an induced map, the controller
+needs actual maps between the two representations.
+
+Represent a bounded complex by its total finite free module
+$C=\bigoplus_j C_j$, an ordered integer degree for every basis vector, and a
+matrix $d$ of degree $-1$ with $d^2=0$. The degree list is part of the source
+problem. A reduction to $(\bar C,\bar d)$ consists of maps
+\[
+ f:C\to\bar C,\qquad g:\bar C\to C,\qquad h:C\to C
+\]
+of degrees $0,0,+1$ satisfying
+\begin{align}
+ fd&=\bar d f,& dg&=g\bar d,\label{eq:chain-laws}\\
+ fg&=I_{\bar C},& gf&=I_C-dh-hd.\label{eq:retract-laws}
+\end{align}
+These are the exact equations checked by the prototype. Additional side
+conditions such as $h^2=0$, $fh=0$, or $hg=0$ are \emph{not} required by the
+receipt language. Nothing in the following transport arguments needs them.
+Thus the article does not silently use a stronger normalized-contraction
+contract than the checker actually enforces.
+
+\begin{proposition}[Reduction preserves homology constructively]
+A receipt satisfying \eqref{eq:chain-laws}--\eqref{eq:retract-laws} induces
+inverse isomorphisms on homology. If $z$ is a cycle and
+$\bar d\bar w=fz$, then
+\begin{equation}\label{eq:lift-filler}
+ w=g\bar w+hz
+\end{equation}
+is a filler of $z$ in the original complex.
+\end{proposition}
+\begin{proof}
+Chain-map laws preserve cycles and boundaries. On a cycle,
+$z-gfz=dhz$ is a boundary, while $fg=I$ holds literally. This gives inverse
+maps on homology. For the explicit filler,
+\[
+ dw=dg\bar w+dhz=g\bar d\bar w+dhz=gfz+dhz=z,
+\]
+where the final equality uses $dz=0$ in \eqref{eq:retract-laws}.
+\end{proof}
+
+This small formula is a major practical reason to retain $h$. A rank comparison
+alone cannot construct its correction term.
+
+\subsection{Single-pair cancellation over the integers}
+Suppose a differential entry $d_{\tau\sigma}=u$ is a unit, hence $u=1$ or
+$u=-1$. Necessarily $\deg\sigma=\deg\tau+1$. Define $h$ to have one nonzero
+entry $h_{\sigma\tau}=u^{-1}=u$. Remove the two basis vectors, and let $E$ be
+the inclusion of the surviving coordinate vectors and $P_0=E^T$ their
+projection. Set
+\begin{align}
+ \bar d&=P_0(d-dhd)E,\label{eq:cancel-d}\\
+ f&=P_0(I-dh),& g&=(I-hd)E.\label{eq:cancel-maps}
+\end{align}
+The formulas use no nonintegral division. Cancelling an entry $2$ as though it
+were a unit would destroy the doubled-face obstruction; the search explicitly
+refuses such a pivot.
+
+\begin{theorem}[Unit-cancellation certificate]\label{thm:cancel}
+The matrices in \eqref{eq:cancel-d}--\eqref{eq:cancel-maps}, together with the
+single-entry $h$, satisfy the reduction equations, and $\bar d^2=0$.
+\end{theorem}
+\begin{proof}
+Reorder the basis as $\tau,\sigma,$ survivors. By grading, the differential has
+block form
+\[
+ d=\begin{pmatrix}0&u&\alpha\\0&0&\beta\\
+ \gamma&\delta&\epsilon\end{pmatrix}.
+\]
+The equations $d^2=0$ include
+\[
+ \alpha\delta=0,\quad u\beta+\alpha\epsilon=0,\quad
+ \gamma u+\epsilon\delta=0,\quad
+ \gamma\alpha+\delta\beta+\epsilon^2=0.
+\]
+Direct substitution into the proposed formulas gives
+\[
+ \bar d=\epsilon-\delta u^{-1}\alpha,\quad
+ f=\begin{pmatrix}-\delta u^{-1}&0&I\end{pmatrix},\quad
+ g=\begin{pmatrix}0\\-u^{-1}\alpha\\I\end{pmatrix}.
+\]
+Now $fg=I$. Multiplying the displayed blocks gives
+$gf=I-dh-hd$, using $\alpha\delta=0$. The second and third square-zero
+identities above give $fd=\bar d f$ and $dg=g\bar d$.
+Finally,
+\begin{align*}
+ \bar d^2
+ &=\epsilon^2-\epsilon\delta u^{-1}\alpha
+   -\delta u^{-1}\alpha\epsilon
+   +\delta u^{-1}\alpha\delta u^{-1}\alpha\\
+ &=(-\gamma\alpha-\delta\beta)+\gamma\alpha+\delta\beta+0=0.
+\end{align*}
+The inherited degree list verifies all grading conditions.
+\end{proof}
+
+This is a local algebraic cancellation, related to the established algebraic
+Morse framework \cite{skoldberg}. The prototype's contribution is not the
+formula's novelty; it is the complete reduction receipt and its use as an
+input to other Forge workers.
+
+\subsection{Composition without retaining the search history}
+If $(f_1,g_1,h_1)$ reduces $C$ to $C_1$ and $(f_2,g_2,h_2)$ reduces $C_1$ to
+$C_2$, compose them as
+\begin{equation}\label{eq:compose-reduction}
+ f=f_2f_1,\qquad g=g_1g_2,\qquad h=h_1+g_1h_2f_1.
+\end{equation}
+The chain-map laws and $fg=I$ are immediate. For the homotopy law,
+\[
+ g_1g_2f_2f_1
+ =g_1(I-d_1h_2-h_2d_1)f_1
+ =I-d(h_1+g_1h_2f_1)-(h_1+g_1h_2f_1)d.
+\]
+Thus the final checker can verify only the final maps, without trusting the
+sequence of pivots or retaining an enormous proof trace. Intermediate receipts
+remain useful for diagnostics, but are not necessary for the final mathematical
+claim.
+
+A production implementation should compare this dense composite receipt with a
+factorized sequence of elementary reductions. The former is simple to check;
+the latter may avoid coefficient and storage growth. A factorized checker would
+need to verify every local step and compose its semantics, rather than assume
+that a compressed history expands correctly. Only the dense final form is
+implemented here.
+
+\subsection{Pivot policy, stopping, and a deliberate failure of the heuristic}
+The producer scans entries of absolute value one and chooses a pivot minimizing
+\[
+  (\text{nonzeros in its row}-1)
+  (\text{nonzeros in its column}-1),
+\]
+with deterministic index tie-breaking. This is a fill-in heuristic, not a
+minimality theorem. Each cancellation removes two basis vectors, so absent a
+step cap there are at most $\lfloor N/2\rfloor$ cancellations for $N$ total
+basis vectors. The supplied implementation is dense and recomputes products;
+its asymptotic efficiency should not be inferred from the heuristic's name.
+
+When the step cap is reached, the producer returns a \emph{valid partial
+reduction}. It does not claim that the surviving complex is minimal, that its
+differential has no units, or that any requested homotopy is impossible.
+A one-step-capped augmented tetrahedron is included in the tests.
+
+A stronger boundary test uses the two-term differential
+\[
+ M=\begin{pmatrix}2&3\\3&5\end{pmatrix}.
+\]
+It has no unit entry, so the greedy cancellation worker performs no reduction.
+Nevertheless $\det M=1$ and
+\[
+ M^{-1}=\begin{pmatrix}5&-3\\-3&2\end{pmatrix}
+\]
+is integral. The associated two-term complex is contractible. The whole-diagram
+homotopy worker finds a contraction even though the local pivot heuristic
+stagnates. Both observations are recorded, rather than scoring the stalled
+reduction as a mathematical failure.
+
+A natural next optimization is a checked unimodular row/column preconditioner
+that exposes unit factors before cancellation. It would update adjacent
+differentials by the corresponding inverse basis changes and emit those
+changes explicitly. This optimization is not implemented or benchmarked here.
+
+\subsection{What reduction does not establish}
+A chain contraction is an algebraic statement about the supplied differential.
+It is not, by itself, a certificate of topological contractibility of a space.
+Acyclicity, a chain-homotopy equivalence, a simple-homotopy equivalence, and a
+topological homotopy equivalence are different claims. The prototype accepts
+only the first two kinds of algebraic data through its stated matrix equations.
+It does not infer a topological theorem from a matching homology summary.
+
+\section{Whole-diagram homotopy synthesis and dual obstruction}
+\label{sec:homotopy}
+\status{Both constructive and negative searches are implemented. Negative
+replay uses an adjoint matrix identity, not the search-side equation assembler.}
+
+\subsection{The synthesis problem}
+Let $(C,d_C)$ and $(D,d_D)$ be bounded finite free integral complexes, and let
+$F,G:C\to D$ be degree-zero chain maps. The checker first requires
+\[
+ d_DF=Fd_C,\qquad d_DG=Gd_C.
+\]
+The task is to construct an integral map $H$ of degree $+1$ such that
+\begin{equation}\label{eq:homotopy}
+ F-G=d_DH+Hd_C.
+\end{equation}
+This is the chain-homotopy equation in column-vector convention. Mathlib
+already has the mathematical object \code{Homotopy}, its composition
+operations, and the theorem that homotopic maps induce equal homology maps
+\cite{mathlib-homotopy}. The proposed worker supplies the missing constructive
+matrix search and its source-bound reconstruction.
+
+A degreewise greedy approach can make incompatible choices. A component $H_j$
+appears both in $d_{D,j+1}H_j$ and in the neighboring equation
+$H_jd_{C,j+1}$. The whole system must therefore be assembled with shared unknowns.
+This is exactly the kind of correlated witness selection that a proof planner
+must preserve rather than split into unrelated local synthesis requests.
+
+\subsection{A concrete integer system}
+Enumerate the allowed entries of $H$:
+\[
+ \mathcal V=\{(a,b):\deg_D(a)=\deg_C(b)+1\}.
+\]
+Enumerate the degree-zero equation entries
+\[
+ \mathcal E=\{(i,j):\deg_D(i)=\deg_C(j)\}.
+\]
+For a variable $H_{ab}$, its coefficient in equation $(i,j)$ is
+\begin{equation}\label{eq:assembly}
+ L_{(i,j),(a,b)}
+ =(d_D)_{ia}[j=b]+[i=a](d_C)_{bj},
+\end{equation}
+where brackets denote indicators. Set $b=\operatorname{vec}_{\mathcal E}(F-G)$
+and solve $Lx=b$ over $\Z$ using an ordinary Smith/lattice solver.
+This inner solver is reused infrastructure; the contribution is the
+whole-diagram compiler and the distinct reconstruction/obstruction contracts.
+
+The number of variables is
+\[
+ v=\sum_j\rank C_j\,\rank D_{j+1},
+\]
+and the number of scalar equations is
+\[
+ e=\sum_j\rank C_j\,\rank D_j.
+\]
+The prototype checks its equation and variable caps \emph{before} constructing
+a large system. An empty equation set and an empty variable set are distinct
+shapes, both of which occur in the tests.
+
+A successful integer solution is reshaped into $H$ and returned. Its final
+checker does not inspect the Smith certificate or the assembled system:
+it verifies the grading and the original matrix equation
+\eqref{eq:homotopy} directly.
+
+\subsection{Negative answers that can be checked without the assembler}
+Suppose the lattice solver reports a separating row functional $\lambda$ for
+$Lx=b$, either exactly or modulo $q\geq2$. Rather than serialize $L$ and ask a
+second routine to build it in the same way, reshape $\lambda$ into a degree-zero
+matrix $W$ of the same shape as $F$ and $G$.
+Define the integer Frobenius pairing
+\[
+ \pair{W}{T}=\sum_{i,j}W_{ij}T_{ij}.
+\]
+The checker evaluates the \emph{adjoint} matrix
+\begin{equation}\label{eq:adjoint}
+ d_D^T W+Wd_C^T.
+\end{equation}
+
+\begin{theorem}[Adjoint homotopy obstruction]\label{thm:dual}
+Assume $W$ has degree zero. If
+\[
+ d_D^TW+Wd_C^T=0,\qquad \pair{W}{F-G}\ne0,
+\]
+then no integral $H$ satisfies \eqref{eq:homotopy}. The same conclusion holds
+when the first identity and the nonzero test are interpreted modulo a fixed
+integer $q\geq2$.
+\end{theorem}
+\begin{proof}
+For every matrix $H$ of the required shape,
+\begin{align*}
+ \pair{W}{d_DH+Hd_C}
+ &=\pair{d_D^TW}{H}+\pair{Wd_C^T}{H}\\
+ &=\pair{d_D^TW+Wd_C^T}{H}.
+\end{align*}
+The first equality follows by expanding finite sums and exchanging their
+indices. Under either the exact or the modular hypothesis the final pairing
+vanishes, whereas $\pair{W}{F-G}$ does not. This contradicts
+\eqref{eq:homotopy}. The grading ensures that the adjoint occupies exactly the
+allowed degree-$+1$ positions; requiring its entire matrix to vanish therefore
+does not lose a legitimate dual witness.
+\end{proof}
+
+This is a deliberately different computation from the search. The producer
+loops over equation/variable index pairs and performs Smith reduction.
+The checker multiplies the original differential matrices and evaluates a
+pairing. A mistaken index convention in the assembler need not be replicated
+by the checker. The two components still share the mathematical specification
+and JSON schema, so this engineering separation is not a formal proof of either
+implementation's correctness.
+
+\begin{theorem}[Completeness of the uncapped finite integral fragment]
+For fixed finite free integral complexes and fixed chain maps, the homotopy
+procedure without resource caps returns either a valid $H$ or a valid exact or
+modular adjoint obstruction $W$.
+\end{theorem}
+\begin{proof}
+The allowed entries of $H$ form $\Z^v$, and equation~\eqref{eq:assembly}
+represents \eqref{eq:homotopy} exactly. Let $ULV=S$ be a Smith decomposition and
+$y=Ub$. If all nonzero diagonal entries of $S$ divide their corresponding
+entries of $y$, and all trailing entries of $y$ vanish, the usual transformed
+solution gives $x$ and hence $H$.
+Otherwise a row of $U$ gives a functional annihilating $L$ exactly or modulo a
+failed diagonal divisor, but not annihilating $b$. Reshaping that row gives $W$.
+The coefficient of each allowed entry of $H$ in its pairing with the right side
+of \eqref{eq:homotopy} is the corresponding entry of
+\eqref{eq:adjoint}. Thus the dual conditions hold. Smith reduction of a finite
+integer matrix terminates; no enumeration of unbounded candidate homotopies is
+needed.
+\end{proof}
+
+The implemented caps weaken this to a three-way computational outcome:
+a witness, an obstruction, or \code{UNKNOWN}. An exception, exhausted memory,
+unsupported coefficient type, or cap refusal is not a fourth kind of proof.
+
+\subsection{Equal homology maps are not enough}
+\label{sec:secondary}
+The following example is both a mathematical separator and an acceptance test
+for the intended integration. Let $C$ be concentrated in degrees $1,0$, with
+$d_C:C_1\to C_0$ multiplication by $p\geq2$. Let $D$ be concentrated in degrees
+$2,1$, with $d_D:D_2\to D_1$ multiplication by $p$. Define $F:C\to D$ by
+$F_1=t$ and all other components zero; let $G=0$.
+
+The only nonzero homology of $C$ is $H_0(C)=\Z/p\Z$. The only nonzero homology
+of $D$ is $H_1(D)=\Z/p\Z$. Therefore $F$ and $G$ induce the same, zero maps on
+\emph{every} homology group, for every $t$.
+
+A chain homotopy has two potentially nonzero components:
+\[
+ H_0:C_0\to D_1,\quad H_1:C_1\to D_2.
+\]
+Writing them as integers $a,b$, equation~\eqref{eq:homotopy} reduces to
+\begin{equation}\label{eq:secondary}
+ p a+p b=t.
+\end{equation}
+Hence $F$ is null-homotopic if and only if $p\mid t$.
+For $p=2,t=1$, the desired homotopy does not exist even though every induced
+homology map agrees with zero.
+
+In total-module coordinates, with source degrees $(0,1)$ and target degrees
+$(1,2)$, the certificate is particularly small:
+\[
+ d_C=d_D=\begin{pmatrix}0&p\\0&0\end{pmatrix},\quad
+ F=\begin{pmatrix}0&t\\0&0\end{pmatrix},\quad
+ W=\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+\]
+Then $d_D^TW+Wd_C^T=pI_2$ and $\pair{W}{F}=t$.
+Modulo $p$, these are precisely the conditions of Theorem~\ref{thm:dual}.
+
+This example rules out two tempting but invalid shortcuts: treating equality
+of homology maps as a sufficient criterion for homotopy, and using a rational
+homotopy to answer an integral existence question. The delivered tests cover
+$p=2,\ldots,9$ and $t=-2p,\ldots,2p$, retaining both positive and negative
+outcomes. The routine is not merely being tested on cases where a homotopy
+was constructed in advance.
+
+\section{Reduction-first synthesis with certified lifting}
+\label{sec:transport}
+
+\subsection{The transport formula}
+Suppose source and target reductions have been checked:
+\[
+ (f_C,g_C,h_C):C\rightleftarrows\bar C,\qquad
+ (f_D,g_D,h_D):D\rightleftarrows\bar D.
+\]
+Set $T=F-G$ and
+\[
+ \bar T=f_DTg_C.
+\]
+Rather than solve on the original complexes, ask for $\bar H$ such that
+\[
+ \bar T=\bar d_D\bar H+\bar H\bar d_C.
+\]
+The original homotopy is reconstructed by the explicit formula
+\begin{equation}\label{eq:transport}
+ H=h_DT+g_D\bar Hf_C+g_Df_DT h_C.
+\end{equation}
+All three terms matter. Dropping the two correction terms generally proves only
+something about a reduced surrogate of the requested map.
+
+\begin{theorem}[Homotopy lifting]\label{thm:lift}
+Under the checked reduction equations, the matrix in
+\eqref{eq:transport} satisfies $d_DH+Hd_C=T$.
+\end{theorem}
+\begin{proof}
+Since $T$ is a chain map,
+\[
+ T-g_Df_DT=(d_Dh_D+h_Dd_D)T
+          =d_D(h_DT)+(h_DT)d_C.
+\]
+Because $g_Df_DT$ is also a chain map,
+\[
+ g_Df_DT-g_Df_DTg_Cf_C
+ =d_D(g_Df_DT h_C)+(g_Df_DT h_C)d_C.
+\]
+Finally, applying the chain-map laws to the reduced homotopy gives
+\[
+ g_Df_DTg_Cf_C=g_D\bar T f_C
+ =d_D(g_D\bar Hf_C)+(g_D\bar Hf_C)d_C.
+\]
+Adding the three identities proves the result. Grading is preserved in every
+term.
+\end{proof}
+
+There is also an exact two-way criterion: $T$ is null-homotopic if and only if
+$\bar T$ is. The forward direction sends $H$ to $f_DHg_C$; the reverse direction
+is Theorem~\ref{thm:lift}. Thus reduction changes the computational problem
+without weakening it, provided the receipts and transport are retained.
+
+\subsection{Lifting a negative result}
+The implemented transport helper lifts positive homotopies. A negative reduced
+obstruction can also be transported on paper. If $\bar W$ separates $\bar T$,
+set
+\begin{equation}\label{eq:dual-transport}
+ W=f_D^T\bar Wg_C^T.
+\end{equation}
+For any candidate $H$, the pairing with its homotopy boundary equals the pairing
+of $\bar W$ with the reduced homotopy boundary of $f_DHg_C$, by the chain-map
+identities. Moreover $\pair{W}{T}=\pair{\bar W}{f_DTg_C}$. Hence the exact or
+modular separator transports too.
+
+This formula is a specified extension, not part of the recorded transport
+helper's executed test claim. A first implementation should replay the lifted
+$W$ against the original matrices using the same adjoint checker, rather than
+rely on a special exception for transported certificates.
+
+\subsection{A controlled dimension experiment}
+Take $C=D$ to be a direct sum of $q$ two-term complexes whose differentials are
+units. Use nontrivial degree-preserving changes of basis, and generate a
+null-homotopic map from a chosen degree-$+1$ matrix. The original homotopy system
+has $2q^2$ scalar equations and $q^2$ variables. Unit cancellation reduces both
+complexes to zero; the reduced problem consequently has no equations or
+variables. Formula~\eqref{eq:transport} still produces a concrete original
+homotopy, which is checked directly.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}rrrrll@{}}
+\toprule
+$q$ & Cells per complex & Original equations & Variables & Direct search & Lifted result\\
+\midrule
+1 & 2 & 2 & 1 & homotopy & checked\\
+2 & 4 & 8 & 4 & homotopy & checked\\
+4 & 8 & 32 & 16 & homotopy & checked\\
+6 & 12 & 72 & 36 & homotopy & checked\\
+8 & 16 & 128 & 64 & homotopy & checked\\
+10 & 20 & 200 & 100 & homotopy & checked\\
+12 & 24 & 288 & 144 & cap: unknown & checked\\
+\bottomrule
+\end{tabular}
+\caption{All reduced systems have zero equations and variables. The direct
+search cap is 256 equations. These are controlled Python cases, not Lean tactic
+benchmarks.}
+\end{table}
+
+This result is a capability observation under a stated cap, not a general
+speedup. The family was chosen to contain cancellable summands; it does not
+measure how often such summands occur in user developments. The original,
+reduced, and transported computations have different costs, and a fair latency
+comparison would include reduction and replay, not just the small solve.
+Raw direct-search timings are retained in \code{ablations.json} for
+reproducibility but are not advertised as a tactic performance result.
+
+A further fixture leaves a nonzero torsion differential after cancellation and
+uses a nonzero reduced homotopy. It verifies that the middle term
+$g_D\bar Hf_C$ is exercised, rather than testing only the degenerate case in
+which it vanishes.
+
+\section{A concrete Lean integration plan}
+\label{sec:lean}
+\status{Design only. The named Mathlib APIs were inspected in official
+reference documentation; no compatibility claim is based on a compiler run.}
+
+\subsection{The object-level interface}
+The first implementation should separate a small integer-matrix language from
+the source-level mathematical objects. A proposed internal record has an ordered
+finite basis, its degree vector, and a concrete differential. Its validity
+predicate asserts the degree-$-1$ condition and $d^2=0$. A matrix homotopy record
+contains $H$, a degree-$+1$ proof, and the original equation
+$F-G=d_DH+Hd_C$.
+
+The core soundness interfaces should have the following mathematical shape;
+these are proposed signatures, not declarations already present in Forge:
+\begin{lstlisting}
+checkCoordinates(problem, receipt) = true
+  -> IntegralCoordinates(problem, receipt)
+
+checkReduction(problem, receipt) = true
+  -> ReductionWitness(problem, receipt)
+
+checkHomotopy(problem, receipt) = true
+  -> Nonempty (IntegralHomotopy problem.F problem.G)
+
+checkNoHomotopy(problem, receipt) = true
+  -> Not (Nonempty (IntegralHomotopy problem.F problem.G))
+\end{lstlisting}
+A Lean \code{Homotopy F G} is data, not itself a proposition to which one
+should blindly apply logical negation. Its non-inhabitation is expressed using
+\code{Not (Nonempty ...)}. A positive data-synthesis goal can instead request
+that structure directly and use the returned matrix entries as its fields.
+
+For homology, \code{IntegralCoordinates} should first expose the cycle and
+relation identities of Section~\ref{sec:coordinates}. The categorical quotient
+isomorphism can then be constructed by a separate adapter. This keeps the
+small arithmetic checker from depending on the entire homology library and
+makes it useful even for users who stated their problem as a matrix exactness
+condition rather than as a categorical homology object.
+
+\subsection{Source admission and reification}
+The admission procedure should be an explicit sequence:
+\begin{enumerate}
+\item Recognize an exactness, cycle-filling, induced-map, or homotopy goal.
+Retain the original expressions, coefficient ring, local context, maps, and
+selected bases.
+\item Obtain a finite ordered coordinate equivalence for every source module.
+For a module already presented as \code{Fin n -> Int}, this is direct. For an
+abstract module, require a supplied finite basis and its actual representation
+map; do not infer one from a dimension annotation.
+\item Translate linear maps into matrices using those bases. Normalize entries
+only when Lean can prove the resulting equalities. The numeric solver accepts
+concrete integers, not arbitrary symbolic coefficients evaluated at a guessed
+model.
+\item Prove the source-to-matrix compatibility squares, grading, and chain-map
+conditions. Unresolved obligations remain visible to Forge's existing planner.
+\item Request a certificate, run the reflected matrix checker, apply its
+soundness theorem, and transport the result through the checked coordinate
+maps to the original source goal.
+\end{enumerate}
+The planner may try an abstract library theorem before entering the finite
+fragment. Failure to obtain a finite basis means the worker is inapplicable,
+not that the original theorem is false.
+
+The crucial bridge for a source linear map $a:M\to N$ and coordinate
+isomorphisms $e_M,e_N$ is
+\[
+ e_N(a(x))=A\,e_M(x).
+\]
+A source proof can use a computed filler only after this bridge is established.
+Similarly, transporting a matrix homotopy requires the bridge for both
+differentials and both chain maps, not just a proof that the matrices have the
+right dimensions.
+
+Universally quantified vectors do not have to be enumerated. Once $A,B$ and
+an exactness receipt are fixed, Corollary~\ref{cor:universal} supplies the
+function $z\mapsto Hz$ for every cycle. A checked contraction can likewise be
+used by universal transport lemmas on symbolic chain maps. These uses are
+mathematical consequences of the receipts; their automatic source-level
+construction remains part of the proposed adapter.
+
+\subsection{Reuse specific libraries rather than reimplement their objects}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.32\textwidth}>{\raggedright\arraybackslash}p{0.60\textwidth}@{}}
+\toprule
+Library or module & Concrete role and scope\\
+\midrule\endhead
+SymPy 1.14.0, \path{polys.matrices.normalforms} & Executed search backend:
+\code{smith_normal_decomp} produces $S,U,V$ over \code{ZZ}. Its output and
+integer inverses are checked independently. No floating rank computation is
+used.\\[0.5em]
+Python standard library & Executed replayer: exact Python integers, a separate
+matrix implementation, strict JSON parsing, and schema validation. No SymPy
+import is needed for replay.\\[0.5em]
+SageMath integer matrices & An untested alternative search adapter can use
+\code{smith_form()} and export $D,U,V$ and inverse matrices to the same schema.
+It should not bypass the checker.\\[0.5em]
+\code{Mathlib.LinearAlgebra.}\newline\code{Matrix.ToLin} & Existing coordinate infrastructure,
+including matrix/linear-map conversions such as \code{LinearMap.toMatrix}
+and \code{Matrix.toLin}. Use it for basis-aware transport, not ad hoc textual
+rewriting.\\[0.5em]
+\code{Mathlib.Algebra.Homology.}\newline\code{Homotopy} & Existing homotopy structures and
+composition operations. Reconstruct their \code{hom}, \code{zero}, and
+\code{comm} fields from checked matrix data; then use
+\code{Homotopy.homologyMap_eq} or
+\code{HomotopyEquiv.toHomologyIso} for downstream consequences.\\
+\bottomrule
+\end{longtable}
+The library descriptions are based on the inspected official references
+\cite{sympy-source,sympy-domainmatrix,sage-smith,mathlib-matrix,mathlib-homotopy}.
+The Sage path and the Lean path are not executed components of this delivery.
+The matrix convention is $F-G=dH+Hd$; Mathlib's documented homotopy
+\code{comm} field is arranged as $F=dH+Hd+G$. The adapter must prove that
+rearrangement and respect categorical composition order rather than paste a
+matrix product into a field with a different convention.
+
+For the first reflected checker, dense matrices indexed by \code{Fin} are
+adequate. Prove multiplication evaluation and the finite-sum pairing identity,
+then use closed exact arithmetic to check the matrices. A later sparse format
+should canonicalize duplicate entries and explicitly prove that omitted
+entries mean zero. The current prototype has no sparse serializer, and no
+performance claim in this report assumes one.
+
+\subsection{The narrow influence of Leant and Djex}
+Leant and Djex already emphasize source-owned candidates, exact type and
+provider selections, and replay before admission \cite{leant,djex}.
+Forge's own neighbor review already incorporates these lessons
+\cite{forge-neighbors}; repeating them as a new architecture would be redundant.
+The extension-specific consequence is that a candidate $H$ is owned by the
+\emph{exact} source/target complexes, selected bases, grading, and coefficient
+ring used to derive it.
+
+A candidate ranker may prefer smaller matrices, smaller coefficient heights, or
+shorter source terms. It must not exchange a receipt between two presentations
+merely because their homology summaries agree. A basis transport is accepted
+only through explicit compatibility maps. Changing the domain from $\Z$ to
+$\Q$ is not a cosmetic type adjustment: it can reverse a negative result.
+
+The numeric worker does not run Djex and does not claim to extend its higher-rank
+search. In a combined system, type-directed synthesis can assemble the existing
+coordinate and homotopy constructors after the arithmetic worker has supplied
+their coefficient data. That is a division of labor, not a claim that the
+original Church-encoding or universe-selection acceptance tests have passed.
+
+\subsection{Proposed files and acceptance obligations}
+A focused Lean implementation can be organized as follows:
+\begin{lstlisting}
+Forge/IntegralComplex/MatrixData.lean
+Forge/IntegralComplex/MatrixCheck.lean
+Forge/IntegralComplex/Coordinates.lean
+Forge/IntegralComplex/Reduction.lean
+Forge/IntegralComplex/HomotopyDual.lean
+Forge/IntegralComplex/Reify.lean
+Forge/IntegralComplex/MathlibAdapter.lean
+\end{lstlisting}
+These are \emph{proposed paths}, not files claimed to exist in the supplied
+archive. Their responsibilities are deliberately separable. The first two
+establish executable matrix semantics. The next three prove the certificate
+principles. Reification binds certificates to source objects. The final adapter
+uses the existing homology library rather than replacing it.
+
+An initial acceptance test should ask Lean to prove, at the original source
+type, the nonexistence of a homotopy in the $p=2,t=1$ example. The test must also
+accept a homotopy for $t=2$, and must not turn the negative answer into a
+statement over $\Q$. This tests a genuinely distinguishing capability with
+small proof objects. It is more informative than compiling a record definition
+whose soundness fields have merely been assumed.
+
+\section{What was actually tested}
+\label{sec:tests}
+
+\subsection{Execution and units}
+The recorded run used Python 3.13.5, SymPy 1.14.0, and Linux. The generator seed
+is \code{20260915}. This is a new generator with its own inputs; sharing a seed
+value with any previous Forge run does not make the case sets comparable.
+The case manifest includes family and outcome labels so that a successful
+negative certificate is not mistaken for a failed proof attempt.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+Stored certificate outcome & Cases\\
+\midrule
+Integral homology coordinates & 97\\
+Explicit cycle filler & 129\\
+Cycle obstruction & 65\\
+Induced quotient map & 48\\
+Reduction witness & 72\\
+Chain homotopy & 100\\
+No-homotopy obstruction & 145\\
+\midrule
+Total stored certificate cases & 656\\
+\bottomrule
+\end{tabular}
+\caption{One internally consistent corpus, not a pooling of earlier Forge
+runs. Each row is a checked certificate outcome.}
+\end{table}
+
+Every one of these stored objects also replays under
+\code{python -S replay.py}. The \code{-S} flag disables site-package setup;
+the replayer additionally checks that SymPy is absent from the imported-module
+table. The result is recorded in \code{results/replay.log}. The generated-case
+suite and the dependency-free unit suite are separate commands and have separate
+logs.
+
+The per-case CSV times the proposal-call wrapper and the checker separately.
+For precomputed fixtures and transported witnesses, prerequisites are prepared
+outside that wrapper. Its column is therefore named
+\code{proposal_call_seconds}, not end-to-end search time; it is diagnostic
+instrumentation rather than a performance comparison.
+
+The largest source or receipt matrix dimension in the stored corpus is 24; the
+largest coefficient magnitude uses 13 bits. The largest compact JSON certificate
+is 2,024 bytes. These are small exact tests, not evidence about industrial-sized
+complexes or the input caps. The entire indented corpus occupies 1,586,739 bytes,
+including source problems and test metadata.
+
+\subsection{Families and independent checks}
+The 96 generated chain segments start from explicitly controlled kernel and
+boundary coordinates, then apply independent unimodular changes of basis in the
+three modules. Shapes range from zero to five in each segment dimension.
+Their prescribed diagonal relations provide an expected homology classification
+that does not depend on the producer's chosen Smith basis. The suite includes
+an explicit boundary for each segment and a separately sampled cycle whose
+expected status is determined in the original prescribed coordinates.
+
+Normal-form arithmetic is also checked on 64 small matrices through
+\emph{determinantal divisors}: compute the greatest common divisor of every
+$k\times k$ minor, and divide consecutive nonzero gcds to obtain the invariant
+factors. The determinant oracle uses a direct signed-permutation sum, not
+SymPy, elimination, or the checker's matrix arithmetic. The matrices comprise
+32 scrambled $B$ matrices and 32 prescribed kernel-coordinate boundary matrices
+after a domain basis change. This is a small-dimensional differential test,
+not a scalable normal-form implementation.
+
+The induced-map cases include scalar maps and changes of basis. Twenty-four
+additional coordinate-composition checks verify that a change and its inverse
+compose to the actual identity matrix in the retained presentation, not merely
+to matching ranks or group names. These composition checks reuse the
+coordinate machinery and should not be described as an independent arithmetic
+oracle.
+
+The homotopy corpus includes 184 members of the $pa+pb=t$ family, 48 maps
+constructed from independently chosen degree-$+1$ matrices, a free obstruction,
+and empty-complex cases. For each of the 184 tiny family members, an additional
+oracle enumerates the two homotopy variables modulo $p$. In this particular
+family, modular existence agrees with integral existence by
+\eqref{eq:secondary}. That equivalence is \emph{not} asserted for arbitrary
+integer systems that happen to have a solution modulo one modulus.
+
+The reduction tests use small simplicial boundary matrices, with and without
+augmentation, and with degree-preserving basis changes; they also use sums of
+unit, zero, and torsion two-term differentials. The tests retain the valid
+partial reduction, the nonunit-stagnation fixture, both prerequisite reductions
+for each transport experiment, and the lifted original homotopies.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}Xrl@{}}
+\toprule
+Additional test category & Count & Unit\\
+\midrule
+Deliberately invalid inputs/certificates rejected & 489 & rejection controls\\
+All-minors normal-form comparisons & 64 & matrix comparisons\\
+Coordinate inverse/composition checks & 24 & identities\\
+Tiny homotopy-family modular oracles & 184 & enumerations\\
+Dependency-free unit tests & 12 & test methods\\
+Reduction-first dimension experiments & 7 & experiment rows\\
+\bottomrule
+\end{tabularx}
+\caption{These counts must not be added to the certificate total to create a
+larger headline success count.}
+\end{table}
+
+\subsection{Adversarial controls}
+The invalid controls are deliberately constructed to invalidate a required
+property, not arbitrary perturbations that might still describe a valid
+certificate. They include wrong claimed free ranks; corrupted inverse matrices;
+zeroed separating rows; zeroed homotopies for nonzero targets; omitted reduction
+homotopy corrections; wrong induced-map entries; and violations of either source
+square.
+
+Boundary controls reject a noncycle, modulus one, a wrong coefficient domain,
+boolean and floating-point coefficients, duplicate JSON keys, non-finite JSON
+numbers, malformed shapes, and unexpected fields. A receipt that separates the
+doubled-face cycle is also rebound to the zero cycle and correctly rejected.
+This is a concrete source-rebinding test, not a general proof that every source
+translation is safe.
+
+The JSON parser and checker are research code. They reject many malformed
+inputs and impose dimension and input bit-length limits, but have not undergone
+a security audit. Multiplication can increase intermediate bit lengths, and
+input caps alone are not a CPU or memory sandbox. The production worker should
+have an external execution budget and a reflected checker with an explicit
+cost discipline.
+
+\subsection{What the evidence does and does not establish}
+The tests establish that this implementation generated the recorded objects,
+that the separate checker accepted them, that the listed invalid controls were
+rejected, and that the independent checks agreed on their small admitted
+fragments. Search and replay use different arithmetic implementations; the
+negative homotopy checker also uses a different algebraic computation.
+
+They do not establish the correctness of Python, the checker, SymPy, or the
+source compiler by formal proof. They do not establish a solved-goal gain over
+\code{grind}, Aesop, or Forge's earlier workers. The cases are synthetic and
+purpose-built rather than a representative Lean benchmark corpus. No Lean
+checker, tactic adapter, or generated source theorem was compiled here.
+
+The theorem proofs in this article justify the \emph{mathematical certificate
+language}. Implementing those proofs in Lean and binding them to an admitted
+source problem are separate tasks. This distinction is the acceptance boundary,
+not a reason to discard useful prototype evidence.
+
+\section{Applications beyond a homology calculator}
+\label{sec:applications}
+
+\subsection{Exact discrete integration}
+Let $A$ be the vertex-to-edge difference map of the triangle graph:
+\[
+ A=\begin{pmatrix}-1&1&0\\-1&0&1\\0&-1&1\end{pmatrix}.
+\]
+For edge data $u$, finding a potential $v$ means solving $Av=u$.
+The row $\phi=(1,-1,1)$ satisfies $\phi A=0$, so $\phi u$ is a period
+obstruction. For $u=(0,0,1)^T$, no potential exists. For data satisfying
+$u_1-u_2+u_3=0$, one can choose $v=(0,u_1,u_2)^T$.
+
+This is the same cycle/boundary interface, now read as discrete integration.
+With faces present, a second matrix expresses local compatibility, and the
+quotient distinguishes locally compatible data from globally integrable data.
+The source compiler must prove that its supplied difference and compatibility
+operators have the stated matrices. It must not infer global integrability
+merely from local consistency.
+
+The example is a direct mathematical application of the certificate principles;
+a graph-to-Lean source compiler is not part of the prototype. The test suite's
+simplicial boundary generator operates on Python fixtures, not user Lean graph
+definitions.
+
+\subsection{Finite linear gluing problems}
+Suppose local values, overlap differences, and compatibility constraints are
+represented by finite free integral modules and specified linear maps
+$A,B$ with $BA=0$. A compatible overlap datum is $z\in\ker B$. A global
+correction exists exactly when $z\in\im A$. The same worker returns a
+correction or an exact/modular obstruction, together with reusable coordinates
+for subsequent data on the same diagram.
+
+This suggests an adapter for finite linear gluing problems and explicit
+cochain presentations. It is not a claim to solve arbitrary sheaf cohomology:
+the finiteness, freeness, matrices, and representation laws are input
+requirements. Nonfree modules and unbounded resolutions require a different
+admission theorem and possibly a different certificate language.
+
+\subsection{Verification of chain-level algorithms}
+When two algorithms produce chain maps, equality of their output homology
+summaries is often weaker than the desired chain-level relationship. The
+homotopy worker can synthesize the actual comparison data. The integral
+obstruction example shows that it can also refute an overstrong comparison
+claim rather than silently substitute an easier one.
+
+A certified reduction can act as a reusable preprocessing result for many maps.
+For example, once $(f,g,h)$ is checked, a new null-homotopy problem can be reduced
+without recomputing its source complex's entire invariant presentation. The
+controller should retain that exact reduction receipt and use the transport
+formula, not retain only a statement that the homology groups are isomorphic.
+
+\subsection{Mapping cones as a later compiler target}
+For a chain map $F:C\to D$, a mapping-cone differential can be assembled in
+blocks with a shifted copy of $C$ and an explicit sign on its differential.
+This makes questions about quasi-isomorphisms and comparison maps accessible to
+exactness workers. However, the signs, shifts, boundedness assumptions, and
+bridge from cone exactness to the requested source theorem must all be proved.
+The present package contains neither a cone compiler nor a quasi-isomorphism
+acceptance result. It is a concrete next use of the same infrastructure, not an
+additional delivered lane.
+
+\section{Implementation priorities and falsifiable milestones}
+\label{sec:roadmap}
+
+\subsection{First: a new source theorem, not another contract record}
+The highest-value first step is the reflected adjoint obstruction checker and
+its pairing theorem. It has a small arithmetic core and a distinguishing
+source theorem: the $p=2,t=1$ pair is not homotopic over $\Z$, despite equality
+of every induced homology map. A passing milestone requires the exact original
+Lean source statement, a fully checked proof term, and a recorded axiom
+inventory. Compiling a structure that assumes its own correctness does not
+close this milestone.
+
+Pair the negative case with the positive $t=2$ homotopy. Add domain-switch and
+basis-switch rejection tests at the source boundary, not just inside JSON.
+Only after this narrow path is accepted should the frontend advertise support
+for general admitted integral homotopy requests.
+
+\subsection{Second: reusable coordinates and quotient transport}
+Formalize Lemma~\ref{lem:kernel} and Theorem~\ref{thm:classification}, then
+construct the universally quantified filler of
+Corollary~\ref{cor:universal}. The acceptance set should include free homology,
+torsion, trivial homology, empty dimensions, and a nonprimitive image of $B$.
+The $B=(2)$ example must establish the cycle-restricted theorem without demanding
+the stronger ambient splitting identity.
+
+Next construct induced maps and prove relation descent. A source-level
+change-of-basis test must retain the selected basis data and commute with
+composition. Matching the reported invariant factors is not a sufficient test
+of this layer.
+
+\subsection{Third: reduction and end-to-end transport}
+Formalize unit cancellation and composition of reductions. Then make the
+controller call the homotopy worker on the reduced diagrams and reconstruct the
+original proof using Theorem~\ref{thm:lift}. The acceptance corpus must include a
+nonzero reduced homotopy, not only contractible complexes that reduce to zero.
+
+Only this stage earns a claim about the reduction-first planner. A command
+that prints a smaller matrix without producing the original source proof has
+not implemented the transport layer. The nonunit-stagnation fixture should
+remain in the suite as an explicit test that heuristic stalling triggers
+another worker or \code{UNKNOWN}, never a negative conclusion.
+
+\subsection{Evaluation against real tactics}
+After the Lean paths exist, build a small published corpus of actual goals in
+this source fragment and evaluate fixed versions of \forge{}, \code{grind},
+and relevant specialized tactics under the same premise set. Record whole-goal
+success, elaboration time, checking time, proof size, and axiom policy.
+Include both original and basis-scrambled statements, and publish the source
+statements so that near-miss substitutions can be detected.
+
+The meaningful ablations are: no reduction versus checked reduction; homology
+summary comparison versus whole-diagram homotopy synthesis; rationalized search
+versus integral certificates; and coordinate receipts versus repeated individual
+lattice queries. Some ablations are intentionally weaker methods, not fair
+competitors. Label them as mechanism tests rather than attributing their limits
+to \code{grind}. No such Lean evaluation is reported in this article.
+
+\subsection{Scope that should remain outside the first release}
+The finite free integral fragment has a clean source theorem and a complete
+uncapped algebraic decision path for its homotopy problem. Extending it at once
+to symbolic coefficient rings, nonfree modules, unbounded complexes,
+topological realizations, or arbitrary dependent structures would obscure that
+advantage. Such extensions need new representation theorems and may have very
+different algorithmic limits.
+
+Within the chosen fragment, practical improvements are already substantial:
+sparse exact multiplication, factorized transformation certificates,
+preconditioning that exposes unit factors, dual transport, and caching of
+proved coordinate systems. Each is independently testable without weakening
+the acceptance rule.
+
+\section{Conclusion}
+Forge can gain a coherent constructive-exactness worker rather than another
+unrelated solver. Its distinctive output is not just a verdict or a list of
+invariants: it is a network of explicit coordinates, representatives,
+relations, reductions, homotopies, and obstructions that can be transported
+back to the source theorem.
+
+The integral setting gives the proposal a sharp test. Rational linear algebra
+loses torsion, equality on homology need not imply a chain homotopy, and greedy
+unit cancellation need not find every contraction. The supplied algorithms
+handle these distinctions explicitly. Their receipts are small enough to check
+by matrix identities, while their searches may use heavier normal-form
+machinery. The prototype demonstrates that separation on 656 recorded objects
+and retains failures of stronger assumptions as regression controls.
+
+The next contribution to the repository should be a reflected Lean checker and
+one exact source acceptance result, not another expansion of the same design
+prose. The mathematics, executable reference implementation, and test fixtures
+here make that step concrete. They do not claim it has already been taken.
+
+\appendix
+\section{Receipt schemas and program entry points}
+\label{sec:schemas}
+
+All serialized matrices use exact integer entries and explicit rectangular
+shape:
+\begin{lstlisting}
+{"rows": 2, "cols": 3, "data": [1, 0, -2, 0, 3, 1]}
+\end{lstlisting}
+Storage is flat row-major. Booleans are not accepted as integers. Unknown keys
+are rejected. A certificate does not carry authority to choose its source
+problem: \code{check(problem, certificate)} receives the two separately.
+The stored corpus bundles both for reproducibility, which is not the same as
+proving correspondence to a Lean source term.
+
+\begin{longtable}{@{}p{0.20\textwidth}p{0.70\textwidth}@{}}
+\toprule
+Kind & Certificate payload\\
+\midrule\endhead
+\code{homology} & Two normal-form receipts, expected free rank, and nontrivial
+torsion factors. Coordinates $X,R$ are derived and checked.\\[0.4em]
+\code{fill} & An integer column $w$; check $Aw=z$.\\[0.4em]
+\code{obstruction} & An integer row $\phi$ and modulus zero or at least two;
+check annihilation of $A$ and separation of $z$.\\[0.4em]
+\code{reduction} & Reduced degree list and differential, plus $f,g,h$;
+check square-zero, grading, chain-map laws, and retraction/homotopy laws.\\[0.4em]
+\code{homotopy} & A degree-$+1$ matrix $H$; check the original equation.\\[0.4em]
+\code{no_homotopy} & A degree-zero matrix $W$ and modulus; check the adjoint and
+pairing against the original maps.\\[0.4em]
+\code{induced} & Source and target homology receipts and $M$; check both source
+squares, coordinate transport, and quotient relation descent.\\
+\bottomrule
+\end{longtable}
+
+The Python producer exposes the following entry points:
+\begin{lstlisting}
+homology(A, B)
+cycle(A, B, z)
+reduction(degrees, d)
+homotopy(source_degrees, dC, target_degrees, dD, F, G)
+induced(A, B, At, Bt, F)
+transport_homotopy(Cred, Dred, T, Hbar)
+\end{lstlisting}
+The \code{induced} producer proposes coordinates; the caller's $E,G$ square
+witnesses are checked in the separately supplied source problem. The transport
+helper assumes prerequisite reductions have already been checked; its output
+is then checked on the original homotopy problem.
+
+The search dimension cap is 256. Homotopy assembly separately caps equations
+and variables at 256 by default; the equation cap is fixed in this prototype.
+The checker also caps matrix dimensions at 256 and input coefficients at
+16,384 bits. These are implementation limits, not mathematical bounds or
+scalability results. A \code{SearchLimit} exception means unknown.
+
+\section{Reproducing the evidence and reading the archive}
+The archive root is \code{Forge_Constructive_Exactness}. It contains the article
+source and PDF, the producer and checker, the complete recorded corpus,
+per-case timing and size data, rejection and oracle results, the replay log,
+small worked receipts, and audit/integration notes.
+
+Search and complete regeneration:
+\begin{lstlisting}
+cd Forge_Constructive_Exactness/prototype
+python -m pip install -r requirements.txt
+python run_suite.py --output ../reproduced-results
+python -S replay.py ../reproduced-results/corpus.json
+\end{lstlisting}
+The default regeneration directory differs from \code{results/recorded}, so
+ordinary reruns do not overwrite the supplied evidence. Exact timing values
+will vary. Deterministic certificate content and case counts should match with
+the pinned search dependency; different normal-form implementations may choose
+different valid bases.
+
+Replay without search dependencies and small unit tests:
+\begin{lstlisting}
+python -S replay.py ../results/recorded/corpus.json
+python -S -m unittest discover -s tests -v
+python demo.py
+\end{lstlisting}
+The final command uses SymPy for the demonstration search; the first two do not.
+
+Build the article with ordinary pdfLaTeX:
+\begin{lstlisting}
+cd ../article
+pdflatex -interaction=nonstopmode -halt-on-error \
+  forge-constructive-exactness.tex
+pdflatex -interaction=nonstopmode -halt-on-error \
+  forge-constructive-exactness.tex
+\end{lstlisting}
+A third pass may be used after changing the table of contents. No system font
+files, bibliography processor, or shell escape are required.
+
+\section{Status ledger}
+\begin{longtable}{@{}p{0.63\textwidth}p{0.27\textwidth}@{}}
+\toprule
+Item & Delivered status\\
+\midrule\endhead
+Integral homology coordinates and scalar filler/obstruction search & Python executed\\
+Induced maps and relation descent & Python executed\\
+Greedy unit cancellation and composed $f,g,h$ receipts & Python executed\\
+Whole-diagram integral homotopy and adjoint obstruction search & Python executed\\
+Positive homotopy lifting, including nonzero reduced homotopy & Python executed\\
+Search-free standard-library replay & Python executed\\
+Certificate-language soundness and completeness arguments & Proofs in this article\\
+Class-order and universal-filling corollaries & Proved; no separate receipt tag\\
+Negative homotopy transport & Formula specified; not tested here\\
+Sparse/factorized receipts and unimodular pivot preconditioning & Proposed only\\
+Sage alternative search backend & API inspected; not run\\
+Lean reflected checker and mathematical adapters & Proposed only\\
+Lean source reification, original-goal replay, axiom inventory & Not run\\
+Real Lean tactic comparison & Not run\\
+\bottomrule
+\end{longtable}
+
+\begin{thebibliography}{20}
+\bibitem{forge-readme}
+V. Reshetnikov, \emph{Forge repository README}, revision
+\path{58ea206bd7ad501b930add568151217bcc7f82a2}, inspected September 15, 2026.
+\href{https://github.com/VladimirReshetnikov/Forge/blob/58ea206bd7ad501b930add568151217bcc7f82a2/README.md}{Pinned source}.
+
+\bibitem{forge-status}
+V. Reshetnikov, \emph{Forge implementation status}, same revision,
+\path{docs/STATUS.md}.
+\href{https://github.com/VladimirReshetnikov/Forge/blob/58ea206bd7ad501b930add568151217bcc7f82a2/docs/STATUS.md}{Pinned capability register}.
+
+\bibitem{forge-conclusion}
+V. Reshetnikov, \emph{Forge merged article: conclusion}, same
+revision, \path{article/sections/15-conclusion.tex}.
+\href{https://github.com/VladimirReshetnikov/Forge/blob/58ea206bd7ad501b930add568151217bcc7f82a2/article/sections/15-conclusion.tex}{Pinned conclusion}.
+
+\bibitem{forge-structural}
+V. Reshetnikov, \emph{Forge: Structural search}, same revision,
+\path{article/sections/05-structural.tex}; opening source section inspected.
+\href{https://github.com/VladimirReshetnikov/Forge/blob/58ea206bd7ad501b930add568151217bcc7f82a2/article/sections/05-structural.tex}{Pinned source}.
+
+\bibitem{forge-neighbors}
+V. Reshetnikov, \emph{Ideas from Leant and Djex}, same revision,
+\path{docs/IDEAS-FROM-LEANT-DJEX.md}.
+\href{https://github.com/VladimirReshetnikov/Forge/blob/58ea206bd7ad501b930add568151217bcc7f82a2/docs/IDEAS-FROM-LEANT-DJEX.md}{Pinned review}.
+
+\bibitem{leant}
+V. Reshetnikov, \emph{Leant README}, revision
+\path{6bf05ad78c467989e68290f2d08bbed40802d485}, inspected September 15, 2026.
+\href{https://github.com/VladimirReshetnikov/Leant/blob/6bf05ad78c467989e68290f2d08bbed40802d485/README.md}{Pinned source}.
+
+\bibitem{djex}
+V. Reshetnikov, \emph{Djex README}, revision
+\path{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}, inspected September 15, 2026.
+\href{https://github.com/VladimirReshetnikov/Djex/blob/e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5/README.md}{Pinned source}.
+
+\bibitem{sympy-source}
+SymPy developers, \emph{Normal forms of polynomial-domain matrices}, SymPy
+1.14.0, \path{sympy/polys/matrices/normalforms.py}, especially
+\code{smith_normal_decomp}.
+\href{https://github.com/sympy/sympy/blob/sympy-1.14.0/sympy/polys/matrices/normalforms.py}{Version-pinned implementation}.
+
+\bibitem{sympy-domainmatrix}
+SymPy developers, \emph{Introducing the DomainMatrix of the polys module},
+official SymPy 1.14.0 documentation, inspected September 15, 2026.
+\url{https://docs.sympy.org/latest/modules/polys/domainmatrix.html}.
+
+\bibitem{sage-smith}
+SageMath developers, \emph{Dense matrices over the integer ring}, official
+reference manual, \code{smith_form} documentation, inspected September 15, 2026.
+\url{https://doc.sagemath.org/html/en/reference/matrices/sage/matrix/matrix_integer_dense.html}.
+
+\bibitem{mathlib-matrix}
+Mathlib contributors, \emph{Mathlib.LinearAlgebra.Matrix.ToLin}, official API
+documentation, inspected September 15, 2026. Documentation inspection only;
+not a compiled integration test.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/LinearAlgebra/Matrix/ToLin.html}.
+
+\bibitem{mathlib-homotopy}
+Mathlib contributors, \emph{Mathlib.Algebra.Homology.Homotopy}, official API
+documentation, inspected September 15, 2026. Includes \code{Homotopy},
+\code{Homotopy.homologyMap_eq}, and \code{HomotopyEquiv.toHomologyIso}.
+\url{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Homology/Homotopy.html}.
+
+\bibitem{skoldberg}
+E. Sk\"oldberg, ``Morse theory from an algebraic viewpoint,''
+\emph{Transactions of the American Mathematical Society} \textbf{358}(1)
+(2006), 115--129. DOI: \href{https://doi.org/10.1090/S0002-9947-05-04079-1}{10.1090/S0002-9947-05-04079-1}.
+\href{https://research.universityofgalway.ie/en/publications/morse-theory-from-an-algebraic-viewpoint-6/}{Institutional publication record}.
+\end{thebibliography}
+\end{document}

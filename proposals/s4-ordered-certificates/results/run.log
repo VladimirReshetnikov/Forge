@@ -1,0 +1,119 @@
+Named examples: 10 accepted
+Local resource comparisons: 63504
+Local FIFO comparisons: 2325
+Finite resource oracle: 100 7000
+Finite FIFO oracles complete
+{
+  "seed": 941572603,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "lean": {
+    "available": false,
+    "compiled_files": 0,
+    "note": "No Lean executable found in this run."
+  },
+  "units": "Counts are grouped by distinct experiment units; there is no grand total.",
+  "local_resource": {
+    "predecessor_problems": 1296,
+    "point_comparisons": 63504,
+    "mismatches": 0
+  },
+  "local_fifo": {
+    "action_rules": 5,
+    "word_pair_comparisons": 2325,
+    "mismatches": 0
+  },
+  "finite_resource_oracle": {
+    "systems": 100,
+    "initial_state_queries": 7000,
+    "unsafe_queries": 910,
+    "safe_queries": 6090,
+    "largest_visited_set": 27,
+    "mismatches": 0,
+    "finiteness_reason": "Total resource never increases; initial total <=4."
+  },
+  "finite_fifo_acyclic_oracle": {
+    "systems": 40,
+    "initial_state_queries": 2040,
+    "unsafe_queries": 124,
+    "safe_queries": 1916,
+    "largest_visited_set": 29,
+    "mismatches": 0,
+    "finiteness_reason": "Acyclic controls bound sends."
+  },
+  "finite_fifo_decreasing_oracle": {
+    "systems": 40,
+    "initial_state_queries": 2480,
+    "unsafe_queries": 1319,
+    "safe_queries": 1161,
+    "largest_visited_set": 24,
+    "mismatches": 0,
+    "finiteness_reason": "No sends; lengths never increase."
+  },
+  "mutations": {
+    "attempts": 32,
+    "rejected": 32,
+    "accepted_invalid": 0
+  },
+  "cutoff_controls": [
+    {
+      "cutoff": "nodes",
+      "status": "unknown",
+      "reason": "derivation node budget exhausted",
+      "stats": {
+        "expansions": 0,
+        "grid_points": 0,
+        "box_nodes": 0,
+        "pred_calls": 0,
+        "nodes": 0,
+        "basis": 0
+      }
+    },
+    {
+      "cutoff": "expansions",
+      "status": "unknown",
+      "reason": "backward expansion budget exhausted",
+      "stats": {
+        "expansions": 1,
+        "grid_points": 0,
+        "box_nodes": 0,
+        "pred_calls": 0,
+        "nodes": 1,
+        "basis": 1
+      }
+    },
+    {
+      "cutoff": "grid",
+      "status": "unknown",
+      "reason": "local predecessor grid exceeds 1 points",
+      "stats": {
+        "expansions": 1,
+        "grid_points": 0,
+        "box_nodes": 0,
+        "pred_calls": 1,
+        "nodes": 1,
+        "basis": 1
+      }
+    },
+    {
+      "cutoff": "box",
+      "status": "unknown",
+      "reason": "box-certificate node budget exhausted",
+      "stats": {
+        "expansions": 6,
+        "grid_points": 50,
+        "box_nodes": 1,
+        "pred_calls": 2,
+        "nodes": 6,
+        "basis": 6
+      }
+    }
+  ],
+  "independent_replay": {
+    "certificates": 190,
+    "returncode": 0,
+    "stdout": "REPLAY_OK\n",
+    "search_import_forbidden": true,
+    "site_packages_disabled": true
+  }
+}

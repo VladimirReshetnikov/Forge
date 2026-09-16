@@ -1,0 +1,44 @@
+{
+  "status": "ALL_ASSERTIONS_PASSED",
+  "sympy": "1.14.0",
+  "composition_adapter": "our mul(a,b) = SymPy b*a (noncommuting fixture checked)",
+  "order_comparisons": 7,
+  "membership_comparisons": 140,
+  "rows": [
+    {
+      "case": "S15",
+      "order": 1307674368000,
+      "membership_queries": 20
+    },
+    {
+      "case": "S30",
+      "order": 265252859812191058636308480000000,
+      "membership_queries": 20
+    },
+    {
+      "case": "S40",
+      "order": 815915283247897734345611269596115894272000000000,
+      "membership_queries": 20
+    },
+    {
+      "case": "A12",
+      "order": 239500800,
+      "membership_queries": 20
+    },
+    {
+      "case": "A20",
+      "order": 1216451004088320000,
+      "membership_queries": 20
+    },
+    {
+      "case": "D50",
+      "order": 100,
+      "membership_queries": 20
+    },
+    {
+      "case": "C97",
+      "order": 97,
+      "membership_queries": 20
+    }
+  ]
+}

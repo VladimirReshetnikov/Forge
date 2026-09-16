@@ -1,0 +1,90 @@
+\section{Using the delivered package}
+\label{app:artifacts}
+The executable core requires only Python's standard library. It was tested on Python 3.13.5. No installation or network connection is required for the core commands. Run them from the \code{prototype/} directory:
+\begin{lstlisting}
+python -S demo.py
+python -S -m unittest discover -s tests -v
+python -S verify_corpus.py ../results/recorded
+python -S verify_reynolds.py ../results/reynolds/bundles.json
+\end{lstlisting}
+The first command prints the $D_{10}$ bracelet counts, the alternating canonical-image example, and a four-variable Reynolds projection. The replay commands consume recorded certificates without importing search code.
+
+To regenerate independent experiment outputs without overwriting the recorded run:
+\begin{lstlisting}
+python -S run_experiments.py --output ../reproduced-main
+python -S reynolds_experiments.py --output ../reproduced-reynolds
+\end{lstlisting}
+The destination must not already exist. The optional \code{--skip-large} flag shortens the main construction suite but does not remove its fixed $\Sym_{15}$ resource-refusal control. It is not the same experiment as the recorded full run. Do not use \code{-O}: the scripts refuse to disable their assertions.
+
+The optional external corroboration command is
+\begin{lstlisting}
+python optional_sympy_oracle.py
+\end{lstlisting}
+It requires SymPy; the supplied result was obtained with version 1.14.0. It is deliberately separate from all \code{-S} commands and from the package requirements of the actual certificate checker.
+
+\subsection{A direct API example}
+\begin{lstlisting}[language=Python]
+from forge_symmetry.producer import named_problem, build_chain
+from forge_symmetry.checker import verify_chain, CheckLimit
+
+problem = named_problem("S", 7)
+certificate = build_chain(problem).export()
+checked = verify_chain(problem, certificate)
+print(checked.order)                 # 5040
+print(checked.contains([1,0,2,3,4,5,6]))  # True
+
+# A resource cap is not a negative mathematical answer.
+try:
+    verify_chain(problem, certificate, max_checks=0)
+except CheckLimit:
+    print("unknown: checking budget exhausted")
+\end{lstlisting}
+A production caller must retain the original problem independently of the returned certificate. The test bundles store both for reproducibility, but that co-location is not a source-reification proof.
+
+\subsection{Source and result inventory}
+\begin{tabularx}{\textwidth}{@{}p{0.34\textwidth}Y@{}}
+\toprule
+Path & Purpose\\
+\midrule
+\code{article/} & Complete editable LaTeX source, compiled PDF, and build script.\\
+\code{prototype/forge_symmetry/} & Group/image/counting producer and checker; separate Reynolds producer and checker.\\
+\code{prototype/tests/} & Small regression suite.\\
+\code{results/recorded/} & Main manifest, 160 corpus bundles, metrics, rejection controls, resource refusals.\\
+\code{results/reynolds/} & Separate 26-case projection corpus and result summary.\\
+\code{results/replay.json} & Standalone main replay receipt.\\
+\code{results/reynolds_replay.json} & Standalone projection replay receipt.\\
+\code{results/sympy_oracle.json} & Optional external order and membership corroboration.\\
+{\footnotesize\code{results/development_history.json}} & Preserved limitations and corrected implementation/test issues.\\
+\code{docs/} & Scoped novelty audit, status ledger, protocol notes, and source inventory.\\
+\code{lean/IMPLEMENTATION.md} & Formalization worklist; explicitly no implemented Lean tactic or checker.\\
+\bottomrule
+\end{tabularx}
+
+\subsection{Building the article}
+From \code{article/}, run \code{sh build.sh}, or invoke pdfLaTeX three times:
+\begin{lstlisting}
+pdflatex -interaction=nonstopmode -halt-on-error forge-certified-symmetry.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-certified-symmetry.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-certified-symmetry.tex
+\end{lstlisting}
+The document uses ordinary TeX Live packages and needs neither shell escape nor a bibliography program. No third-party source tree or font file is redistributed in the archive.
+
+\section{Status at a glance}
+\begin{tabularx}{\textwidth}{@{}p{0.59\textwidth}Y@{}}
+\toprule
+Capability & Status in this artifact\\
+\midrule
+Exact chain construction and separate checking & Implemented and executed in Python.\\
+Membership and nonmembership queries & Implemented; independent small-oracle tests.\\
+Generic canonical-image covers & Implemented; bounded and sometimes refused.\\
+Symmetric/alternating image shortcuts & Implemented; exact recognition gates and tests.\\
+General small-group cycle inventories & Implemented; full normal-form replay under a cap.\\
+Symbolic family counting rules & Implemented as exact evaluators; mathematical universal formulas proved in the article.\\
+Sparse Reynolds projection & Implemented; separate local checker, differential tests, replay.\\
+Concrete CNF/objective symmetry gate & Implemented for unsigned variable permutations.\\
+Orbit-reduced cone adapter & Designed; not integrated into Forge.\\
+Automatic graph-based source discovery & Designed; not implemented.\\
+Reflected Lean checkers and source reifier & Not implemented; no Lean compilation performed.\\
+Lean tactic evaluation or measured solved-goal gain & Not performed.\\
+\bottomrule
+\end{tabularx}

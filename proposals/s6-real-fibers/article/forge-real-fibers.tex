@@ -1,0 +1,76 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{graphicx,xcolor,listings,enumitem,fancyhdr}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!40!black,citecolor=blue!40!black,urlcolor=blue!40!black]{hyperref}
+\hypersetup{pdftitle={Forge Real Fibers: Uniform Algebraic Counting and Quantifier Elimination},pdfauthor={Research proposal prepared for Vladimir Reshetnikov}}
+\definecolor{ink}{HTML}{182F46}
+\definecolor{papergray}{HTML}{F4F6F8}
+\definecolor{muted}{HTML}{536270}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\sig}{\operatorname{sig}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\TaQ}{\operatorname{TaQ}}
+\newcommand{\NF}{\operatorname{NF}}
+\newcommand{\RootCount}{\operatorname{Count}}
+\newcommand{\Unknown}{\textsc{unknown}}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\B}{\mathcal B}
+\newcommand{\calA}{\mathcal A}
+\newcommand{\calZ}{\mathcal Z}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\linespread{1.045}
+\setlist{itemsep=2pt,topsep=4pt,leftmargin=1.4em}
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{papergray},frame=single,rulecolor=\color{black!15},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,tabsize=2,xleftmargin=5pt,xrightmargin=5pt,aboveskip=9pt,belowskip=9pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\color{muted}FORGE / REAL FIBERS}\fancyhead[R]{\small\color{muted}A capability extension}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+{\Large\sffamily\bfseries\color{ink}FORGE / RESEARCH EXTENSION}\par
+\vspace{24mm}
+{\Huge\bfseries\color{ink}Uniform Real-Fiber\par Certificates}\par
+\vspace{8mm}
+{\Large Goal-directed Hermite forms for algebraic witnesses,\par exact solution counts, and parametric quantifier elimination\par}
+\vspace{14mm}
+\rule{\textwidth}{0.6pt}\par
+\vspace{5mm}
+\textbf{The proposed capability.} Turn a nonlinear algebraic existence or uniqueness goal into a finite circuit of polynomial signs. Keep the circuit valid when roots collide, eigenvalues vanish, or the real solution set becomes empty. Close one remaining real parameter by a complete sign-cell cover, and return exact algebraic witnesses when the supported concrete fragment permits it.\par
+\vspace{7mm}
+\textbf{Delivered evidence.} An executable SymPy producer; a separate, standard-library-only Python replay implementation; retained certificates, negative controls and test logs; proofs of the mathematical rules; and a concrete Lean integration plan.\par
+\vspace{5mm}
+\textbf{Trust boundary.} This is not an installed Lean tactic. The new checker is not formally verified. No new certificate in this package was checked by Lean's kernel, and no comparison with \code{grind} or another Lean tactic was run.\par
+\vfill
+Prepared for Vladimir Reshetnikov\par
+Repository audit: 15 September 2026\par
+Forge snapshot: \code{58ea206bd7ad501b930add568151217bcc7f82a2}\par
+\small Mathematical foundations are classical; the contribution is the capability design, specialization-safe fragment, exact replay organization, and tested implementation.
+\end{titlepage}
+\setcounter{page}{2}
+\tableofcontents
+\newpage
+\input{sections/01-scope}
+\input{sections/02-theory}
+\input{sections/03-algorithms}
+\input{sections/04-integration}
+\input{sections/05-evidence}
+\input{sections/06-references}
+\end{document}

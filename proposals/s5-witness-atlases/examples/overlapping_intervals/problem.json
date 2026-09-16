@@ -1,0 +1,53 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "overlapping_intervals",
+  "outer": "free",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "4"
+      ],
+      [
+        0,
+        1,
+        "-4"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "le",
+      0
+    ],
+    [
+      "le",
+      1
+    ]
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema": "forge.atlas.certificate/1",
+  "factors": [
+    [
+      [
+        0,
+        0,
+        "2"
+      ],
+      [
+        0,
+        1,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "1"
+      ]
+    ]
+  ],
+  "factorizations": [
+    {
+      "scalar": "1",
+      "powers": [
+        [
+          0,
+          2
+        ]
+      ]
+    }
+  ],
+  "derivative_guards": [
+    {
+      "a": [],
+      "b": [
+        [
+          0,
+          0,
+          "1"
+        ]
+      ],
+      "guard": [
+        "1"
+      ],
+      "factor": 0
+    }
+  ],
+  "pair_guards": [],
+  "projection": [
+    "1"
+  ],
+  "base_roots": [],
+  "stacks": [
+    {
+      "sample": "0",
+      "y_roots": [
+        [
+          "-2",
+          "-2"
+        ]
+      ],
+      "y_samples": [
+        "-3",
+        "-1"
+      ],
+      "signs": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "truths": [
+        true,
+        false,
+        true
+      ],
+      "value": false,
+      "selection": 1
+    }
+  ],
+  "truth_by_x": [
+    false
+  ],
+  "closed_value": false,
+  "selected_x": 0
+}

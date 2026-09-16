@@ -1,0 +1,36 @@
+{
+  "context": [
+    "x",
+    "y"
+  ],
+  "formula": {
+    "op": "or",
+    "left": {
+      "op": "not",
+      "arg": {
+        "op": "eq",
+        "coeff": {
+          "y": 1,
+          "x": -1
+        },
+        "rhs": 1
+      }
+    },
+    "right": {
+      "op": "iff",
+      "left": {
+        "op": "parity",
+        "var": "y",
+        "value": 0
+      },
+      "right": {
+        "op": "not",
+        "arg": {
+          "op": "parity",
+          "var": "x",
+          "value": 0
+        }
+      }
+    }
+  }
+}

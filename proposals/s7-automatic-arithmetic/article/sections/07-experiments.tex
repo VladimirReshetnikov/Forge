@@ -1,0 +1,101 @@
+\section{Executed experiments and what they establish}\label{sec:experiments}
+
+\subsection{Environment and reproduction}
+The suite ran under Python 3.13.5 on Linux x86-64 with glibc 2.41. All producer and replay code uses the standard library, and the complete experiment command also runs under \code{python -S}. The random seed is 20260915. The bundle retains two successful run directories; their summary counts agree exactly. They are repeated executions of the same cases, not two independent corpora and not results to add together.
+
+The first successful run supplies the tables below. Its machine-readable evidence is in \code{results/run1/}; \code{results/run2/} retains the post-interface-guard rerun. Search-free replay in a fresh process accepted all 90 stored certificates and all 643 stored witness traces, with both \code{producer} and \code{formula} absent from the imported-module set. This confirms executable separation from search, not correctness of the checker implementation.
+
+No Lean, Mathlib, Walnut or other prover was executed for this experiment. The recorded small Python timings exclude operating-system startup and external integration. They are single-run measurements, not a reliable performance ranking or a projected Lean runtime.
+
+\subsection{Twenty-five named queries}
+The named suite has 20 expected true universal closures and 5 expected false ones. All results match those expectations. The fixtures include the alternating cuts in \eqref{eq:cut}, quotient/remainder existence for three divisors, the representability threshold for coins of values 5 and 7, digit-parity identities, unbounded automatic sets, and mixed arithmetic/bitwise relations.
+
+\input{named-table}
+
+The four nonempty counterexample tuples are \(23\) for the incorrect coin threshold, \(0\) for ``every number is a power of two,'' \((1,2)\) for the incorrect assertion that popcount parity flips at every increment, and \((1,1,2)\) for the incorrect unrestricted addition-parity identity. The remaining false query is the closed assertion that a greatest natural exists, so its free-variable tuple is empty.
+
+The coin controls are particularly useful. The query with threshold 24 is accepted, while weakening it to 23 returns the actual obstructing integer 23. The test therefore exercises a quantified Diophantine relation and its implication guard rather than merely recognizing a hard-coded positive theorem.
+
+The root of a closed sentence often minimizes to one state. That does not mean its proof took one state of work. Certificate nodes and transition cells record the intermediate construction. The byte counts in the table are compact JSON payload sizes, excluding the trailing newline on disk.
+
+\subsection{Independent numerical and quantified oracles}
+A separate family generates 180 quantifier-free automata. Each is compared with ordinary integer arithmetic or bit counting on all \(16^2\) assignments to two visible variables: 46,080 comparisons. Each assignment is also checked after appending one and three all-zero letters, giving 92,160 \emph{additional} padding evaluations. These are finite differential tests of the implementation, not a finite substitute for Theorem~\ref{thm:decision}.
+
+Sixty more formulas have explicitly guarded alternation
+\[
+ \forall x\le B\;\exists y\le B\;\forall z\le B\quad\theta(x,y,z),
+ \qquad B\in\{2,3,4,5\}.
+\]
+Their internal atoms combine signed linear inequalities, congruences and digit parity. An independently evaluated complete truth table supplies the expected result. The experiment visits 6,480 oracle leaves and obtains 27 true and 33 false formulas, all matching the automata compiler. Because the bounds are part of the formulas, the oracle completely decides these particular tests; it is not pretending to decide unbounded formulas by truncation.
+
+The arithmetic oracle does not invoke the automata transition code. The certificate replay does not invoke the producer's exploration or minimization. These are two different kinds of independence, and neither eliminates the need for a formal semantic proof in Lean.
+
+\subsection{Witnesses and minimality observations}
+The five least-witness graphs were each evaluated on inputs 0 through 127 and three much larger numbers:
+\[
+ 2^{64}-1,\qquad 2^{128}+3,\qquad 10^{100}+37.
+\]
+There were 643 accepted witness records and 12 expected absence results. All fifteen large-input cases produced the expected witness. For small inputs, 37,124 direct checks of smaller candidate values found no smaller satisfying value. The large cases were compared with separate exact arithmetic or simple digit-parity oracles rather than enumerating huge intervals.
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Least-witness relation & Root states & Peak states & Nodes & Cells\\
+\midrule
+\(y=2x+1\) & 3 & 6 & 10 & 216\\
+Quotient by 7 & 19 & 34 & 18 & 2,700\\
+Next power of two & 4 & 9 & 16 & 368\\
+Next same popcount parity & 5 & 19 & 21 & 476\\
+Least coefficient of 5 & 24 & 1,102 & 13 & 8,644\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The stored graph certificates prove the graphs' complete formula semantics according to the receipt rules. A concrete accepted run therefore has both satisfaction and leastness as part of that graph's meaning. The finite smaller-value checks are additional testing evidence. The twelve absence outcomes were compared with the arithmetic oracle; separate per-input absence certificates are not stored.
+
+A graph such as \(y=2x+1\) is not true for \emph{every} pair \((x,y)\). Its bundle may consequently carry a counterexample to its universal closure while still supplying a perfectly correct compiled relation. Graph-construction certificates and named theorem verdicts are distinct uses of the same format and must not be pooled into one success percentage.
+
+\subsection{An intentionally broken projection}
+The suite constructs a deliberately incorrect same-length-only projection for \(\exists y\,(y=2x+1)\), then compares it with the corrected algorithm. The eight visible inputs are
+\[
+ 0,1,3,7,15,31,1023,2^{128}-1.
+\]
+On each minimal encoding, the broken projection rejects despite the obvious witness. Appending one zero makes its answer change. The corrected projection accepts both representations in all eight cases. The regression thus tests the semantic reason for the correction, not only an incidental implementation detail.
+
+A correct implementation should retain these fixtures permanently. A future optimization that drops tail saturation because ``all tests used enough bits'' can otherwise reintroduce the error while continuing to pass ordinary fixed-width tests.
+
+\subsection{Mutation and resource controls}
+The checker rejected 1,096 intentionally corrupted objects. The distinct mutation categories are recorded rather than hidden behind a single headline.
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
+\toprule
+Mutation class & Rejections\\
+\midrule
+Changed an acceptance flag & 215\\
+Changed a nontrivial transition & 159\\
+Out-of-range tail rank & 21\\
+Invalid root index & 25\\
+Certificate supplied against a different expected query & 25\\
+Changed a concrete witness value & 643\\
+Integer/Boolean confusion; floating coefficient; incomplete table; negative index; cyclic dependency; unknown-as-proof; omitted tail; spurious tail & 8\\
+\midrule
+Total corrupted objects tested & 1,096\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+This is not exhaustive adversarial validation. The ordinary transition mutations are selected modifications, not all possible graph perturbations. A nonsemantic metadata change need not be rejected, and a different but valid certificate should be accepted. The tests are designed to invalidate an enforced semantic or structural obligation.
+
+Four separate budget controls exercised limits and raised \code{BudgetExceeded}, the exception the producer CLI maps to \code{unknown}. A separate CLI smoke test confirmed that mapping and the checker's rejection of the resulting non-proof bundle. Seven additional interface tests cover fresh-variable admission, capture avoidance, free-name computation, the zero-input hidden-tail case, a 201-bit-scale witness calculation, and binding to the original query. These seven tests are separate from the 1,096 mutation objects and are not added to that count.
+
+\subsection{The minimization ablation is modest, not a speedup claim}
+For the first nine named queries, the suite runs both with and without minimization. All verdicts agree. Across this exact nine-case slice, the complete certificate graphs contain 3,440 transition cells without minimization and 3,221 with it, while node counts increase from 67 to 82 because quotient receipts themselves are stored. The reduction in cells is about 6.4\%, not an order of magnitude.
+
+The corresponding measured aggregate production times were about 3.54 ms without minimization and 3.67 ms with it. Such tiny single-run times are noisy, but they certainly do not support claiming a speedup. This is useful negative engineering evidence: minimizing after every node can spend more work than it saves on small formulas. The conditional policy proposed in \S\ref{sec:next} should be evaluated rather than assumed beneficial.
+
+\subsection{Failed runs and remaining blind spots}
+The preserved first failed run ends in an assertion that a configured budget should have triggered. Investigation found a bad test fixture: a single atomic formula legitimately fit a one-node budget. The fixture was changed to a negated atom requiring more than one node. This was a test-contract correction, not a discovered soundness flaw in the arithmetic algorithm. The traceback remains in \code{results/history/attempt1.log}.
+
+A later source review strengthened the least-graph helper to reject a supposedly fresh variable already free in its relation. The seven interface tests and the full second run validate that change on their stated cases. No broad claim of hostile-input hardening is inferred from it.
+
+The main remaining blind spots are formal correctness of the checker, original Lean-expression reification, tactic integration, large-alphabet scalability, deep-alternation blowups, malformed-input resource exhaustion, and a diverse independently curated theorem corpus. These are concrete next tasks. The current evidence is stronger than unexecuted pseudocode, but substantially weaker than a verified Lean automation system.

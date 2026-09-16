@@ -1,0 +1,40 @@
+{
+  "context": [],
+  "formula": {
+    "op": "not",
+    "arg": {
+      "op": "exists",
+      "var": "n",
+      "arg": {
+        "op": "not",
+        "arg": {
+          "op": "exists",
+          "var": "q",
+          "arg": {
+            "op": "exists",
+            "var": "r",
+            "arg": {
+              "op": "and",
+              "left": {
+                "op": "eq",
+                "coeff": {
+                  "n": 1,
+                  "q": -3,
+                  "r": -1
+                },
+                "rhs": 0
+              },
+              "right": {
+                "op": "le",
+                "coeff": {
+                  "r": 1
+                },
+                "rhs": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

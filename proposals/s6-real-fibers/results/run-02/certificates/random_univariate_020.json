@@ -1,0 +1,134 @@
+{
+  "certificate": {
+    "queries": [
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              [],
+              [
+                -1,
+                1
+              ]
+            ]
+          ]
+        ],
+        "coefficient": [
+          1,
+          1
+        ],
+        "exponents": [
+          0,
+          2
+        ],
+        "hermite": [
+          [
+            [
+              [
+                [],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ]
+          ]
+        ]
+      }
+    ],
+    "schema": "hermite-charpoly-v1"
+  },
+  "kind": "fiber",
+  "name": "random_univariate_020",
+  "problem": {
+    "atoms": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "degrees": [
+      1
+    ],
+    "equations": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "formula": [
+      "atom",
+      1,
+      "ne"
+    ],
+    "parameters": 0,
+    "schema": "forge-real-fiber-v1"
+  },
+  "specializations": [
+    {
+      "count": 1,
+      "parameters": []
+    }
+  ]
+}

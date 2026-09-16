@@ -1,0 +1,131 @@
+\section{Projection by checkable identities}
+\label{sec:projection}
+\subsection{What can change as the parameter moves?}
+Fix a polynomial $f(X,Y)$ and imagine moving $x$ continuously along the real line. The real roots in $Y$ can change their qualitative arrangement when a leading coefficient vanishes, when a root becomes multiple, or when roots belonging to different input factors meet. Purely $X$-dependent factors can independently change an atom's sign. The certificate records a finite set of parameter polynomials whose nonvanishing excludes these events.
+
+The producer is allowed to find these polynomials with sophisticated algebra. The checker does not trust that a returned ``resultant'' or ``discriminant'' was computed correctly. It verifies ordinary identities in $\Q[X,Y]$. This is the principal simplification of the trust boundary.
+
+\subsection{Source-preserving factorization receipts}
+The producer proposes nonconstant, nonzero factors $f_1,\ldots,f_s$ and identities
+\begin{equation}\label{eq:factor}
+ p_k=c_k\prod_{i=1}^{s}f_i^{e_{ki}},\qquad
+ c_k\in\Q,\quad e_{ki}\in\mathbb N.
+\end{equation}
+The zero polynomial is represented by scalar zero with no factor powers. Nonzero constants need no factors. The checker expands every identity in its own sparse rational arithmetic and compares it with the independently supplied source polynomial. It rejects duplicate factors, unused factors, invalid indices, zero coefficients in canonical sparse rows, and noncanonical rational encodings.
+
+Irreducibility is \emph{not} a checker premise. The producer uses rational factorization to obtain a convenient basis, but the necessary square-freeness and pairwise separation are established by the subsequent B\'ezout receipts. This removes one large algebraic algorithm from the reflected-checker obligation.
+
+Let $S$ denote the factors of positive $Y$-degree. A factor depending only on $X$ contributes directly to the projection guard set. For $i\in S$, put $\ell_i(X)=\lc_Y(f_i)$ and require a derivative receipt
+\begin{equation}\label{eq:derivative-bezout}
+ A_i(X,Y)f_i(X,Y)+B_i(X,Y)\partial_Yf_i(X,Y)=d_i(X),
+ \qquad d_i\ne0.
+\end{equation}
+For every unordered pair $i<j$ in $S$, require
+\begin{equation}\label{eq:pair-bezout}
+ A_{ij}(X,Y)f_i(X,Y)+B_{ij}(X,Y)f_j(X,Y)=d_{ij}(X),
+ \qquad d_{ij}\ne0.
+\end{equation}
+All coefficients and all identities are exact. An identity is stronger evidence than a solver's declaration that a gcd equals one, while still being cheap to check by multiplication and addition.
+
+\begin{lemma}[The guards have the required meaning]\label{lem:guards}
+If $\ell_i(x)d_i(x)\ne0$, then $f_i(x,Y)$ has its declared degree and no multiple complex root. If $d_{ij}(x)\ne0$, then $f_i(x,Y)$ and $f_j(x,Y)$ have no common complex root.
+\end{lemma}
+\begin{proof}
+The leading coefficient proves the degree assertion. A multiple root would annihilate both $f_i(x,Y)$ and its derivative, contradicting \eqref{eq:derivative-bezout} evaluated at that root. A common root contradicts \eqref{eq:pair-bezout} in the same way. These arguments work in $\mathbb C$ and hence also for real roots.
+\end{proof}
+
+A checker must itself enumerate all required derivative indices and unordered pairs. Merely checking each supplied identity permits the producer to omit the one pair whose roots cross. In the prototype, exact coverage and order are enforced before any identity is used.
+
+\subsection{How the producer finds the receipts}
+Run the extended Euclidean algorithm in the univariate ring $\Q(X)[Y]$. For a coprime pair $f,g$, it returns $a,b,h$ with $af+bg=h$, where $h$ is a nonzero element of $\Q(X)$. Divide by $h$, collect the denominators of the resulting coefficient rational functions, and clear them with a polynomial common multiple $d(X)$. The result is $Af+Bg=d(X)$ with $A,B\in\Q[X,Y]$.
+
+The prototype uses SymPy's \code{gcdex} over \code{QQ.frac_field(x)} and checks the emitted result by an unrelated sparse-identity computation. It uses \code{factor_list} and square-free/lcm operations only in the producer~\cite{sympy}. Nothing requires $d$ to be the minimal resultant. Multiplying a valid guard and both multipliers by another nonzero parameter polynomial is sound but introduces unnecessary exceptional cells. Minimizing that redundancy is a search concern, not an acceptance condition.
+
+\begin{lstlisting}
+produce_guards(factors):
+    guards := all factors with y_degree = 0
+    for each factor f with y_degree > 0:
+        guards += leading_y_coefficient(f)
+        (A, B, d) := bezout_over_Qx_then_clear(f, derivative_y(f))
+        emit DerivativeGuard(f, A, B, d)
+        guards += d
+    for every unordered pair (f, g) of positive-y-degree factors:
+        (A, B, d) := bezout_over_Qx_then_clear(f, g)
+        emit PairGuard(f, g, A, B, d)
+        guards += d
+    return monic_squarefree_lcm(guards)
+\end{lstlisting}
+
+Over characteristic zero, distinct irreducible $Y$-positive factors in $\Q[X,Y]$ become coprime in $\Q(X)[Y]$, and each is coprime to its $Y$-derivative. Content depending only on $X$ has already been separated. Thus the required nonzero receipts exist for the factor basis used by the unbounded algorithm.
+
+\subsection{The base decomposition}
+Let $\mathcal G$ contain every nonzero guard: pure-$X$ factors, leading coefficients, derivative guards, and pair guards. Define
+\begin{equation}\label{eq:projection}
+ P(X)=\operatorname{monic}\operatorname{lcm}_{g\in\mathcal G}\sfpart(g).
+\end{equation}
+The empty lcm is $1$. The checker computes this itself, so neither an omitted guard root nor an incorrect claim of square-freeness can alter the base cover.
+
+Let $\alpha_1<\cdots<\alpha_r$ be all real roots of $P$. The base cells are
+\[
+ (-\infty,\alpha_1),\ \{\alpha_1\},\
+ (\alpha_1,\alpha_2),\ldots,\{\alpha_r\},\
+ (\alpha_r,\infty).
+\]
+For $P=1$, or for a nonconstant $P$ with no real root, the base consists of the whole line. Every open cell receives a rational sample. Every point cell is the actual isolated algebraic root, not a nearby rational approximation.
+
+Each root is encoded by $P$ together with rational bounds isolating it, or by an exact rational point. Its numerical cut is not the semantic boundary of a base cell: the boundary is the unique root denoted by that cut. Two different valid cuts can denote the same boundary and must produce the same truth result.
+
+\subsection{Why an open base cell is safe to sample}
+The following proof makes the geometric obligation explicit. It is not currently a theorem in the supplied Lean files.
+
+\begin{lemma}[Persistence and ordering of the roots]\label{lem:persistence}
+Let $I\subseteq\R$ be a nonempty open interval containing no real root of $P$. For each $i\in S$, the real roots of $f_i(x,Y)$ form a fixed finite number of continuous functions on $I$. Across all such factors, these functions can be strictly ordered
+\[
+ \rho_1(x)<\rho_2(x)<\cdots<\rho_n(x),\qquad x\in I,
+\]
+without intersections.
+\end{lemma}
+\begin{proof}
+All guards are nonzero on $I$. At a real root $(x_0,y_0)$, the derivative in $Y$ is nonzero by Lemma~\ref{lem:guards}. The real implicit function theorem therefore continues this root uniquely in a neighborhood of $x_0$.
+
+No additional real roots can appear arbitrarily close to $x_0$ without approaching one of the roots at $x_0$. To see this directly, divide by the nonvanishing leading coefficient on a small closed neighborhood of $x_0$. The remaining coefficients are uniformly bounded there, so a Cauchy root bound confines every root to a common compact interval. Any sequence of purported extra roots with parameters approaching $x_0$ has a subsequence converging to a root at $x_0$. Simplicity and local uniqueness then contradict the extra-root assumption. The number of real roots is consequently locally constant, hence constant on the connected interval $I$.
+
+At each parameter, order the roots. Local uniqueness makes each ordered root a continuous function. Roots from one factor cannot meet because they remain simple; roots from different factors cannot meet because their pair guard is nonzero. The total ordering therefore persists throughout $I$.
+\end{proof}
+
+The local boundedness argument is important. Merely saying that roots cannot collide does not exclude a root escaping to infinity when the degree drops. The leading-coefficient guards are exactly what prevents that failure inside an open base cell.
+
+\begin{theorem}[Sign invariance of the open-cell stack]\label{thm:sign-atlas}
+Over $I$, take the root sections $Y=\rho_j(X)$ and the sectors below, between, and above them. Every original polynomial $p_k$ has constant sign on each of these cells.
+\end{theorem}
+\begin{proof}
+Every pure-$X$ factor is nonzero and has constant sign on $I$. Consider a $Y$-positive factor. On a sector it has no zero, and the sector is connected: using its continuous boundary functions, it is homeomorphic to a product of $I$ with an interval. A continuous nonzero real-valued function has constant sign on a connected set.
+
+On a root section, exactly one factor supplies that root. Its identity cannot change along $I$, because such a change would require a crossing. That factor vanishes throughout the section; every other $Y$-positive factor is nonzero there and has constant sign by connectedness. The factorization identities \eqref{eq:factor} transfer these conclusions, including the original multiplicities and scalar signs, to all $p_k$.
+\end{proof}
+
+This argument also explains why sign rows belong to a \emph{common} ordered union of fibre roots, rather than to several unrelated factor-specific root lists. A formula comparing two factors needs a stable alignment of their sign regions.
+
+\subsection{Exceptional points are fresh problems}
+At $x=\alpha_j$, any of the guards may vanish. The degree of a factor may fall; two factors may acquire a common root; an entire factor may become zero. No generic open-cell continuation argument is applied there.
+
+Instead, specialize every factor exactly at $\alpha_j$. Form the product of those specializations with positive $Y$-degree, omit constants and zero polynomials from that product, and take its square-free part. Isolate its complete real-root set. Evaluate the original specialized polynomials, including any zeros or constants, on every resulting section and sector. This is an exact univariate calculation over the ordered algebraic field $\Q(\alpha_j)$.
+
+Omitting a zero specialization from the \emph{root-boundary product} does not discard its contribution to the formula. The original polynomial is still evaluated in every sign row and yields sign zero. This difference is essential for a case such as $x(y^2-2)=0$: at $x=0$ the equation holds for every $y$, rather than having two distinguished solutions only.
+
+\subsection{The finite result and completeness statement}
+\begin{theorem}[Atlas semantics]\label{thm:semantics}
+Suppose the source identities and guard identities are valid, the base and fibre root covers are complete, and all sample sign rows are exact. Then the Boolean formula is constant on every plane cell. On each base cell, $\exists y\,F(x,y)$ is the disjunction of its fibre-cell truth values, and $\forall y\,F(x,y)$ is their conjunction. The resulting truth is constant on that base cell.
+\end{theorem}
+\begin{proof}
+For open base cells use Theorem~\ref{thm:sign-atlas}; for point cells use the univariate root decomposition. Boolean connectives preserve constancy. Every fibre cell is nonempty over every parameter in its base cell, and the cells cover the whole fibre. Existential and universal quantification therefore reduce respectively to disjunction and conjunction.
+\end{proof}
+
+\begin{corollary}[Completeness of the uncapped mathematical algorithm]
+For every input in Section~\ref{sec:fragment}, exact rational factorization, the guard construction above, complete real-root isolation, and exact algebraic sign determination produce a finite atlas deciding the closed sentence or its free-parameter truth set.
+\end{corollary}
+\begin{proof}
+Rational factorization is finite and supplies factors for which the required receipts exist. The projection is a nonzero univariate polynomial with finitely many real roots. Every specialized fibre also has finitely many distinct roots unless it is zero, which the construction handles explicitly. Rational and real-algebraic arithmetic decide the finitely many required equalities and signs. Theorem~\ref{thm:semantics} then applies.
+\end{proof}
+
+This is a completeness statement about the specified mathematical procedure, not a formal verification of the Python program. The delivered implementation imposes explicit factor, cell, degree, refinement, and isolation-node limits; exceeding them must not be interpreted as refutation. Its tests cover a modest family, and completeness does not imply that large instances are computationally practical.

@@ -1,0 +1,313 @@
+[
+  {
+    "name": "successor_total",
+    "expected_universal_truth": true,
+    "nodes": 6,
+    "transition_cells": 24,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0002102270000250428,
+    "replay_seconds": 0.0002816950000124052,
+    "certificate_bytes": 1665,
+    "counterexample": null
+  },
+  {
+    "name": "no_greatest_natural",
+    "expected_universal_truth": true,
+    "nodes": 7,
+    "transition_cells": 26,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00020574000006945425,
+    "replay_seconds": 0.0001838870000483439,
+    "certificate_bytes": 1917,
+    "counterexample": null
+  },
+  {
+    "name": "uniform_upper_bound_false",
+    "expected_universal_truth": false,
+    "nodes": 6,
+    "transition_cells": 25,
+    "root_states": 1,
+    "verdict": "counterexample",
+    "produce_seconds": 0.00011985100002220861,
+    "replay_seconds": 0.0001611339999953998,
+    "certificate_bytes": 1652,
+    "counterexample": []
+  },
+  {
+    "name": "successor_cut",
+    "expected_universal_truth": true,
+    "nodes": 12,
+    "transition_cells": 156,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0003351059999658901,
+    "replay_seconds": 0.0005739560000392885,
+    "certificate_bytes": 4529,
+    "counterexample": null
+  },
+  {
+    "name": "half_cut",
+    "expected_universal_truth": true,
+    "nodes": 12,
+    "transition_cells": 234,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0004134939999858034,
+    "replay_seconds": 0.000594808000073499,
+    "certificate_bytes": 4922,
+    "counterexample": null
+  },
+  {
+    "name": "division_3",
+    "expected_universal_truth": true,
+    "nodes": 10,
+    "transition_cells": 274,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.000345491999951264,
+    "replay_seconds": 0.0005960400000049049,
+    "certificate_bytes": 4232,
+    "counterexample": null
+  },
+  {
+    "name": "division_7",
+    "expected_universal_truth": true,
+    "nodes": 10,
+    "transition_cells": 618,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.000642920000018421,
+    "replay_seconds": 0.0008973039999773391,
+    "certificate_bytes": 6167,
+    "counterexample": null
+  },
+  {
+    "name": "division_17",
+    "expected_universal_truth": true,
+    "nodes": 10,
+    "transition_cells": 1634,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.004258729000071071,
+    "replay_seconds": 0.0020269500000722473,
+    "certificate_bytes": 12923,
+    "counterexample": null
+  },
+  {
+    "name": "residue_unbounded",
+    "expected_universal_truth": true,
+    "nodes": 9,
+    "transition_cells": 230,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.000450701000090703,
+    "replay_seconds": 0.0009365639999714404,
+    "certificate_bytes": 4591,
+    "counterexample": null
+  },
+  {
+    "name": "negative_coefficients",
+    "expected_universal_truth": true,
+    "nodes": 5,
+    "transition_cells": 148,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00020661200005633873,
+    "replay_seconds": 0.00038182699995559233,
+    "certificate_bytes": 1884,
+    "counterexample": null
+  },
+  {
+    "name": "congruence_translation",
+    "expected_universal_truth": true,
+    "nodes": 9,
+    "transition_cells": 828,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0007099319999497311,
+    "replay_seconds": 0.0014429589999735981,
+    "certificate_bytes": 7255,
+    "counterexample": null
+  },
+  {
+    "name": "coin_5_7_threshold_24",
+    "expected_universal_truth": true,
+    "nodes": 9,
+    "transition_cells": 352,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0005081569998992563,
+    "replay_seconds": 0.0008799189999990631,
+    "certificate_bytes": 4983,
+    "counterexample": null
+  },
+  {
+    "name": "coin_5_7_threshold_23_false",
+    "expected_universal_truth": false,
+    "nodes": 9,
+    "transition_cells": 376,
+    "root_states": 7,
+    "verdict": "counterexample",
+    "produce_seconds": 0.0005844020000722594,
+    "replay_seconds": 0.0008631729999706295,
+    "certificate_bytes": 5171,
+    "counterexample": [
+      23
+    ]
+  },
+  {
+    "name": "powers_two_unbounded",
+    "expected_universal_truth": true,
+    "nodes": 9,
+    "transition_cells": 66,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00021186999993005884,
+    "replay_seconds": 0.00029696900003273186,
+    "certificate_bytes": 2746,
+    "counterexample": null
+  },
+  {
+    "name": "all_naturals_powers_false",
+    "expected_universal_truth": false,
+    "nodes": 1,
+    "transition_cells": 6,
+    "root_states": 3,
+    "verdict": "counterexample",
+    "produce_seconds": 3.373099991677009e-05,
+    "replay_seconds": 5.271999998512911e-05,
+    "certificate_bytes": 321,
+    "counterexample": [
+      0
+    ]
+  },
+  {
+    "name": "odd_power_is_one",
+    "expected_universal_truth": true,
+    "nodes": 8,
+    "transition_cells": 50,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.000157338000008167,
+    "replay_seconds": 0.00022484900000563357,
+    "certificate_bytes": 2319,
+    "counterexample": null
+  },
+  {
+    "name": "thue_morse_even",
+    "expected_universal_truth": true,
+    "nodes": 8,
+    "transition_cells": 84,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00018238500001643843,
+    "replay_seconds": 0.0002562669999406353,
+    "certificate_bytes": 2322,
+    "counterexample": null
+  },
+  {
+    "name": "thue_morse_odd",
+    "expected_universal_truth": true,
+    "nodes": 9,
+    "transition_cells": 92,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00016784399997504806,
+    "replay_seconds": 0.0003667339999537944,
+    "certificate_bytes": 2598,
+    "counterexample": null
+  },
+  {
+    "name": "thue_morse_alternating_false",
+    "expected_universal_truth": false,
+    "nodes": 9,
+    "transition_cells": 112,
+    "root_states": 4,
+    "verdict": "counterexample",
+    "produce_seconds": 0.0001808530000744213,
+    "replay_seconds": 0.00027215099999011727,
+    "certificate_bytes": 2712,
+    "counterexample": [
+      1,
+      2
+    ]
+  },
+  {
+    "name": "even_popcount_unbounded",
+    "expected_universal_truth": true,
+    "nodes": 8,
+    "transition_cells": 52,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00025986200000716053,
+    "replay_seconds": 0.00025868000000173197,
+    "certificate_bytes": 2600,
+    "counterexample": null
+  },
+  {
+    "name": "same_popcount_parity_later",
+    "expected_universal_truth": true,
+    "nodes": 12,
+    "transition_cells": 88,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.00030870600005528104,
+    "replay_seconds": 0.0003551560000687459,
+    "certificate_bytes": 4024,
+    "counterexample": null
+  },
+  {
+    "name": "bitand_commutes",
+    "expected_universal_truth": true,
+    "nodes": 4,
+    "transition_cells": 56,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0001040570000441221,
+    "replay_seconds": 0.0001985500000500906,
+    "certificate_bytes": 1138,
+    "counterexample": null
+  },
+  {
+    "name": "xor_recovery",
+    "expected_universal_truth": true,
+    "nodes": 5,
+    "transition_cells": 72,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0001113079999868205,
+    "replay_seconds": 0.00021769900001800124,
+    "certificate_bytes": 1394,
+    "counterexample": null
+  },
+  {
+    "name": "carry_free_parity_addition",
+    "expected_universal_truth": true,
+    "nodes": 17,
+    "transition_cells": 704,
+    "root_states": 1,
+    "verdict": "valid",
+    "produce_seconds": 0.0006783140000834464,
+    "replay_seconds": 0.0011724700000286248,
+    "certificate_bytes": 6713,
+    "counterexample": null
+  },
+  {
+    "name": "unrestricted_parity_addition_false",
+    "expected_universal_truth": false,
+    "nodes": 11,
+    "transition_cells": 280,
+    "root_states": 5,
+    "verdict": "counterexample",
+    "produce_seconds": 0.0002547750000303495,
+    "replay_seconds": 0.0005008860000543791,
+    "certificate_bytes": 3854,
+    "counterexample": [
+      1,
+      1,
+      2
+    ]
+  }
+]

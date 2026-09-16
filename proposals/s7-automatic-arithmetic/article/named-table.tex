@@ -1,0 +1,37 @@
+\begingroup\small
+\renewcommand{\arraystretch}{0.98}
+\begin{longtable}{@{}p{0.36\linewidth}crrr@{}}
+\toprule
+Query & Verdict & Nodes & Cells & Bytes\\
+\midrule\endfirsthead
+\toprule
+Query (continued) & Verdict & Nodes & Cells & Bytes\\
+\midrule\endhead
+Double successor total & T & 6 & 24 & 1,665\\
+No greatest natural & T & 7 & 26 & 1,917\\
+Greatest natural (false) & F & 6 & 25 & 1,652\\
+Successor cut & T & 12 & 156 & 4,529\\
+Half cut & T & 12 & 234 & 4,922\\
+Division by 3 & T & 10 & 274 & 4,232\\
+Division by 7 & T & 10 & 618 & 6,167\\
+Division by 17 & T & 10 & 1,634 & 12,923\\
+Residue above any bound & T & 9 & 230 & 4,591\\
+Signed inequality identity & T & 5 & 148 & 1,884\\
+Congruence translation & T & 9 & 828 & 7,255\\
+Coin threshold 24 & T & 9 & 352 & 4,983\\
+Coin threshold 23 (false) & F & 9 & 376 & 5,171\\
+Powers of two unbounded & T & 9 & 66 & 2,746\\
+Every natural a power (false) & F & 1 & 6 & 321\\
+Odd power is one & T & 8 & 50 & 2,319\\
+Thue--Morse even index & T & 8 & 84 & 2,322\\
+Thue--Morse odd index & T & 9 & 92 & 2,598\\
+Parity alternates (false) & F & 9 & 112 & 2,712\\
+Even popcount unbounded & T & 8 & 52 & 2,600\\
+Same parity later & T & 12 & 88 & 4,024\\
+Bitwise AND commutes & T & 4 & 56 & 1,138\\
+XOR recovery & T & 5 & 72 & 1,394\\
+Carry-free addition parity & T & 17 & 704 & 6,713\\
+All addition parity (false) & F & 11 & 280 & 3,854\\
+\bottomrule
+\end{longtable}
+\endgroup

@@ -1,0 +1,67 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "square_root_conditional_affine_0",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "1"
+      ]
+    ],
+    [
+      [
+        0,
+        1,
+        "-2"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        0,
+        1,
+        "1"
+      ]
+    ]
+  ],
+  "formula": [
+    "implies",
+    [
+      "ge",
+      0
+    ],
+    [
+      "and",
+      [
+        "eq",
+        1
+      ],
+      [
+        "ge",
+        2
+      ]
+    ]
+  ]
+}

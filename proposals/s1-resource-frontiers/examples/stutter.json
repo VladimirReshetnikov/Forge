@@ -1,0 +1,20 @@
+{
+  "kind": "pt-net-coverability",
+  "dimension": 1,
+  "transitions": [
+    {
+      "name": "idle",
+      "consume": [
+        1
+      ],
+      "produce": [
+        1
+      ]
+    }
+  ],
+  "targets": [
+    [
+      2
+    ]
+  ]
+}

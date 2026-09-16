@@ -1,0 +1,37 @@
+{
+  "format": "forge-ordered-trace-v1",
+  "initial": {
+    "q": 0,
+    "v": [
+      2,
+      0,
+      1
+    ]
+  },
+  "steps": [
+    {
+      "after": {
+        "q": 0,
+        "v": [
+          1,
+          1,
+          1
+        ]
+      },
+      "transition": 0
+    },
+    {
+      "after": {
+        "q": 0,
+        "v": [
+          0,
+          2,
+          1
+        ]
+      },
+      "transition": 0
+    }
+  ],
+  "subject": "{\"bad\":[{\"q\":0,\"v\":[0,2,0]}],\"controls\":1,\"dimension\":3,\"kind\":\"resource\",\"transitions\":[{\"consume\":[1,0,1],\"matrix\":[[1,0,0],[0,1,0],[0,0,1]],\"produce\":[0,1,1],\"source\":0,\"target\":0},{\"consume\":[0,1,0],\"matrix\":[[1,0,0],[0,1,0],[0,0,1]],\"produce\":[1,0,1],\"source\":0,\"target\":0}]}",
+  "target": 0
+}

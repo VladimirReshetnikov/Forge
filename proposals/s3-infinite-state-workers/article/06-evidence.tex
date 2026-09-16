@@ -1,0 +1,165 @@
+\section{Executed evidence and its limits}
+\label{sec:evidence}
+
+\subsection{What was run}
+The delivered implementation uses only the Python standard library and was run
+under Python 3.13.5 on Linux. The test command uses \code{python -S}, disabling
+site-package initialization. No SMT solver, numerical library, or external
+model checker was installed or used. The original corpus and its exact models,
+receipts, oracle outcomes, and recorded timings are in \code{results/}.
+The generator seed is \code{20260915}.
+
+There are three different units of evidence. The unit suite has 27 test methods,
+some containing many assertions. The randomized suite contains 640 model or
+model-pair instances. The stored replay corpus has those 640 instances plus ten
+handcrafted examples, for 650 certificate objects. The mutation suite makes two
+invalid edits to each of those 650 objects, for 1,300 rejection checks. Those
+numbers should not be added into a single success count.
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Randomized family & Cases & Positive & Negative & Oracle agreement \\
+\midrule
+Finite-control counters & 300 & 222 & 78 & 300/300 \\
+Equality-machine pairs & 160 & 123 & 37 & 160/160 \\
+Mixed register/counter systems & 180 & 116 & 64 & 180/180 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+``Positive'' means safe for the counter and mixed workers, and equivalent for
+the equality worker. ``Negative'' means unsafe or inequivalent, with an
+executable witness. No randomized case returned unknown at the configured
+limits. That is a property of these small generated corpora, not a general
+success-rate prediction.
+
+For all 37 inequivalent randomized equality pairs, the returned word length
+also agreed with the exhaustive oracle's shortest mismatch length. The other
+workers do not claim shortest witnesses. In particular, the common-parameter
+construction may choose a larger initial population than necessary.
+
+\subsection{What the differential oracles actually do}
+The random counter generator conserves total token mass and uses a fixed initial
+marking. The oracle exhausts the finite reachable concrete graph; it does not
+truncate counters at an arbitrary chosen value. Because the state space is
+finite for these inputs, its negative search result is a complete result for
+the generated model, not a depth-bounded observation.
+
+The equality oracle performs concrete paired-state BFS over an atom carrier
+of size $k_A+k_B+c+1$. Corollary~\ref{cor:cutoff} justifies that carrier for the
+admitted machines. It does not build a quotient or use the producer's canonical
+forms. The random mixed oracle similarly combines conservation of token mass
+with a derived atom carrier of size $k+c+1$.
+
+These are algorithmically different oracles, but not wholly independent
+implementations of every layer: they reuse the checker's concrete evaluator.
+The certificate checker itself does not import the producers and independently
+implements arithmetic predecessor checks and nominal interpretation. Thus the
+evidence detects many producer mistakes, including quotient and worklist
+mistakes, but a semantic bug shared by the checker and oracle can survive their
+agreement. The paper proofs and targeted tests reduce that risk; only a
+formalized soundness theorem would close the logical gap.
+
+\subsection{Workload size and construction bias}
+Across the randomized counter corpus the oracle visits 537 states; across the
+nominal corpus it visits 1,097, compared with 440 producer-reported orbit visits;
+across the mixed corpus it visits 479. These are intentionally tiny systems,
+often settled at or near the initial state. They are suitable regression and
+differential tests, not scalability evidence. The aggregate orbit/concrete
+counts also do not justify a speedup ratio: exploration can stop at different
+points, and the operations have different costs.
+
+Nominal pairs are built from a random source machine and a register permutation.
+On alternating cases one output expression is changed. Some changes are on
+unreachable or observationally irrelevant branches, which is why the count of
+inequivalent pairs is less than half the corpus. This construction supplies
+both semantic positives and negatives, but is biased toward closely related
+machines. It is not an unbiased sample of program equivalence obligations.
+
+Recorded single-run times for the randomized loops, including their oracle
+comparisons, are approximately 0.068 seconds, 0.159 seconds, and 0.076 seconds
+for the counter, nominal, and mixed families respectively. These values merely
+show that the experiments executed; there is no timing distribution, warm-up
+control, Lean elaboration cost, or comparison with a tactic. Reproduction on
+another interpreter may change the timings without changing any certificate.
+
+\subsection{Handcrafted results}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.29\textwidth}>{\raggedright\arraybackslash}p{.22\textwidth}>{\raggedright\arraybackslash}p{.43\textwidth}@{}}
+\toprule
+Fixture & Result & Useful distinguishing evidence \\
+\midrule\endhead
+\code{axes} & Safe & One backward vector for two nonconvex, unbounded initial
+families. \\
+\code{mutex} & Safe & Six vectors; all two-parameter waiting populations;
+24 predecessor operations. \\
+\code{mutex\_bug} & Unsafe & Two steps at parameters $(1,1)$; every consumption
+guard replayed. \\
+\code{enabling} & Safe & A zero-net-change edge still requires one token;
+initial zero cannot fire. \\
+\code{delayed\_101} & Unsafe & 101-step trace; 102 historical nodes despite
+active antichain size one. \\
+\code{lru\_register\_swap} & Equivalent & Three paired orbits; six representative
+edges; joint equality preserved. \\
+\code{lru\_fifo} & Different & Five requests using three atoms. Two-atom exhaustive
+exploration is a deliberate inadequate-alphabet control. \\
+\code{eviction\_register\_swap} & Equivalent & Same three orbits, but optional-atom
+outputs rather than only Booleans. \\
+\code{owner\_pool} & Safe & Two name orbits, six total counter vectors,
+unbounded initial waiting count. \\
+\code{owner\_pool\_bug} & Unsafe & Two acquisitions with distinct names at initial
+waiting count two. \\
+\bottomrule
+\end{longtable}
+
+The finite two-key LRU/FIFO oracle result is stored alongside the examples but
+is not a separate certificate object. It records seven concrete pair states,
+no mismatch, and alphabet size two. Keeping its scope visible is the point of
+the control.
+
+\subsection{Mutations and positive robustness controls}
+The 1,300 corpus mutations are primarily \emph{structural or required-content}
+checks: an invalid schema version, followed by a missing mandatory state/basis,
+an out-of-range initial-family index, or an empty mismatch word. Their complete
+rejection does not establish resistance to every semantic forgery or hostile
+input. The count should not be marketed as 1,300 deep independent attacks.
+
+The unit suite adds targeted semantic controls. It exhausts 625 small scalar
+instances of the exact predecessor identity and checks 64 scalar initial-family
+separation instances. It tests enabling versus net change, a backward-closure
+failure even when target inclusion and initial separation pass, insufficient
+fresh-name alphabets, fixed constants, empty versus atom zero, source-model
+mutation, lost orbit states, truncated witnesses, and unknown budget outcomes.
+It also rejects malformed numeric values, wrong vector dimensions, unsupported
+atom operations, duplicate JSON keys, and nonfinite JSON constants.
+
+Positive robustness controls matter too. A safe basis extended with redundant
+or dominated vectors is accepted when it still satisfies the obligations.
+Renaming every nonconstant atom label in an equivalence certificate to sparse,
+noncanonical integers is also accepted. A checker that rejects every edited
+receipt may simply be checking agreement with its producer, not the intended
+mathematical property.
+
+\subsection{Replay separation and remaining risks}
+The standalone replay command imports only the checker and standard-library
+modules; it asserts that the producer and oracle modules are absent from
+\code{sys.modules}. It accepts all 650 stored objects, distributed as 305
+counter, 163 nominal, and 182 mixed objects. The checker's fresh representative
+is chosen differently from the producer's, and its equality pattern is a matrix
+rather than the producer's scan-normal form.
+
+These facts establish operational separation, not a trusted computing base.
+Python, the parser, the arithmetic implementation, the evaluator, and the
+checker remain unverified. The JSON loader limits total text size and rejects
+some malformed encodings, but it is not hardened against every adversarial
+resource-exhaustion pattern. In particular, large lists, huge integers,
+pathological expression trees, and expensive receipts need additional
+allocation, node-count, and bit-length budgets before use as an unattended
+service.
+
+No source reifier, Lean checker, or all-input Lean theorem was executed here.
+The small Lean specimen has status \code{NOT\_RUN}. The baseline repository's
+previous Lean elaborations remain its own evidence and are not attributed to
+these new workers. The delivered results justify implementing and evaluating
+the formal workers; they do not establish that Forge has already gained any
+end-to-end theorem-solving capability.

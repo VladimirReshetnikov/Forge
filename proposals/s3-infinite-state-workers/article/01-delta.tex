@@ -1,0 +1,107 @@
+\section{The extension, not another architecture}
+\label{sec:delta}
+
+\subsection{What the repository already supplies}
+The baseline for this article is the inspected Forge revision
+\code{58ea206bd7ad} (full identifier in Appendix~\ref{app:status}), not the
+initial proposal to improve \code{grind}. Its README and provenance ledger describe a merge of
+27 proposals across three rounds. The merged design already includes structural
+proof planning, generalization, synthesized witnesses and invariants,
+observable-space and ideal closure, finite-algebra covers, tree summaries and
+observable quotients, summation and Ore transport, noncommutative algebra,
+analytic enclosures, quantitative probabilistic workers, games, and unbounded
+pushdown summaries~\cite{forge}. A generic instruction to add induction, a CAS,
+an e-graph, or a certificate boundary would therefore be a repetition.
+
+Nor should a new report claim that none of Forge's Lean has ever compiled. The
+README records 18 core-only files elaborated by the merge, even though the
+contributing proposal environments did not run Lean. Those elaborations do not
+establish an implemented \code{forge} tactic or a verified family of certificate
+checkers. The present environment likewise has no Lean executable; that is a
+limitation of this delivery, not a revision of the repository's own evidence.
+
+The audit used the merged article's closure section and provenance inventory,
+the README, and the concrete runtime, logical-contract, and finite-cover Lean
+files. The Leant/Djex comparison used their current revision information and
+indexing-composition diagnostics. It was not a line-by-line review of every
+archived proposal. In particular, the empty results returned by the repository
+code-search endpoint were not treated as evidence of absence: even a known
+baseline term returned no match. The delta claims below are relative to the
+inspected merged design, with the nearest existing capability named explicitly.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.22\textwidth}>{\raggedright\arraybackslash}p{.32\textwidth}>{\raggedright\arraybackslash}p{.40\textwidth}@{}}
+\toprule
+Addition & Nearest existing Forge mechanism & Actual additional work \\
+\midrule\endhead
+Counter antichains & Numeric invariants, ideal closure, and finite covers &
+Compute exact backward coverability in $Q\times\N^d$; retain consuming guards;
+certify all members of nonnegative affine initial families. \\
+Equality orbits & Finite-algebra covers and observable quotients &
+Construct the finite quotient for equality-only data over infinitely many atoms;
+prove joint support and fresh-case coverage; recover concrete witnesses. \\
+Orbit--counter product & Separate infinite-state workers &
+Compile finite name orbits to controls while retaining unbounded counters, and
+check directly against the original mixed-rule semantics. \\
+Candidate discharge & Existing typed synthesis and behavioral filtering &
+Use these exact semantic summaries after candidate reconstruction, with a
+proved source bridge, rather than promote finite observations to a theorem. \\
+\bottomrule
+\end{longtable}
+
+\subsection{What makes the new workers useful}
+A finite set of \emph{concrete states} cannot cover an arbitrarily large pool of
+waiting clients. A finite set of \emph{minimal bad configurations} can describe
+all markings from which a violation is possible. Similarly, finitely many
+concrete keys do not represent every name a program might receive, but finitely
+many equality patterns relative to its live registers do.
+
+These are different reasons for finiteness. For counters, finiteness comes from
+a well quasi-order on natural vectors. For names, it comes from quotienting by
+renamings that preserve everything the program can observe. Combining them
+requires a precise intermediate language; it is not justified merely by saying
+that both components separately have decidable fragments.
+
+The intended Forge results are ordinary mathematical theorems, for example
+\[
+ \forall n\in\N,\ \forall\text{ finite executions from }s_0(n),
+ \qquad \mathrm{active}\le1,
+\]
+or
+\[
+ \forall w\in(\mathrm{Tag}\times\Atoms)^*,
+ \qquad \mathrm{outputs}_A(w)=\mathrm{outputs}_B(w).
+\]
+The quantifiers range over all initial resource sizes and all finite input
+lengths. Neither is replaced by a test bound. The finite object returned by a
+worker explains why those quantifiers can be discharged.
+
+\subsection{Historical versus project novelty}
+The mathematical foundations are established: monotone systems and
+well-quasi-order methods for coverability~\cite{abdulla,finkel}, and automata
+over nominal sets for data alphabets with symmetries~\cite{nominal}. We do not
+rename these results and claim to have invented them. The contribution here is
+a specific fragment choice, exact certificate formats, an initial-family
+interface, an independently computed replay path, a mixed-rule frontend, and
+an integration plan tied to Forge's actual types.
+
+This distinction also prevents an exaggerated expressiveness claim. A hand-made
+induction invariant may prove the mutual-exclusion example, and the repository's
+polynomial machinery could express some of the same properties. A complete
+specialized worker is still useful when it discovers the finite invariant
+without choosing a template, emits a counterexample when the property is false,
+and explains exactly when its answer is exhaustive. No delivered experiment
+compares it with existing Lean tactics.
+
+\subsection{Three deliberately narrow interfaces}
+The executable workers accept mathematical intermediate representations, not
+arbitrary Python or Lean programs. Their admission conditions are part of their
+meaning. A counter system has nonnegative integer consumption and production,
+upward-closed bad sets, and no hidden tests. An equality machine has only finite
+control, fixed constants, equality tests, and copying registers. A mixed system
+has both components, but counter updates do not depend on the numerical identity
+of an atom and do not allocate an unbounded map of counters indexed by names.
+
+The source program remains outside this small language until a proved bridge
+connects its execution to the representation. That bridge is where most Lean
+implementation effort belongs. Another search heuristic cannot make an
+unjustified translation sound.

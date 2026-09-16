@@ -1,0 +1,46 @@
+{
+  "basis": [
+    1,
+    0
+  ],
+  "closure": [
+    {
+      "basis": 1,
+      "cover": [
+        0
+      ],
+      "predecessor": {
+        "kind": "lossy-word"
+      },
+      "transition": 0
+    }
+  ],
+  "format": "forge-ordered-v1",
+  "nodes": [
+    {
+      "kind": "bad",
+      "state": {
+        "q": 1,
+        "v": [
+          ""
+        ]
+      },
+      "target": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          "a"
+        ]
+      },
+      "transition": 0
+    }
+  ],
+  "subject": "{\"alphabet\":[\"a\",\"b\"],\"bad\":[{\"q\":1,\"v\":[\"\"]}],\"channels\":1,\"controls\":2,\"kind\":\"lossy\",\"transitions\":[{\"channel\":0,\"op\":\"recv\",\"source\":0,\"symbol\":\"a\",\"target\":1}]}",
+  "target_cover": [
+    1
+  ]
+}

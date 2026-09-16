@@ -1,0 +1,48 @@
+START algebraic_positive
+OK {'name': 'algebraic_positive', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True], 'base_cells': 1, 'plane_cells': 7, 'projection_degree': 2, 'selected_x': None, 'search_seconds': 0.017915514000037547, 'replay_seconds': 0.0015147410000508899}
+START square_root_conditional
+OK {'name': 'square_root_conditional', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True], 'base_cells': 3, 'plane_cells': 13, 'projection_degree': 1, 'selected_x': None, 'search_seconds': 0.009898572999986754, 'replay_seconds': 0.0022203690000424103}
+START square_root_unconditional
+OK {'name': 'square_root_unconditional', 'expected': False, 'accepted': True, 'closed_value': False, 'truth_by_x': [False, True, True], 'base_cells': 3, 'plane_cells': 9, 'projection_degree': 1, 'selected_x': 0, 'search_seconds': 0.004401810000103978, 'replay_seconds': 0.0012180159999388707}
+START strict_square_band
+OK {'name': 'strict_square_band', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True, True, True], 'base_cells': 5, 'plane_cells': 25, 'projection_degree': 2, 'selected_x': None, 'search_seconds': 0.01742382700001599, 'replay_seconds': 0.004425825999987865}
+START inverse_hole
+OK {'name': 'inverse_hole', 'expected': False, 'accepted': True, 'closed_value': False, 'truth_by_x': [True, False, True], 'base_cells': 3, 'plane_cells': 7, 'projection_degree': 1, 'selected_x': 1, 'search_seconds': 0.003813617999981034, 'replay_seconds': 0.0007565050000266638}
+START inverse_guarded
+OK {'name': 'inverse_guarded', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True], 'base_cells': 3, 'plane_cells': 7, 'projection_degree': 1, 'selected_x': None, 'search_seconds': 0.003358757000000878, 'replay_seconds': 0.0011403099999824917}
+START vanishing_content
+OK {'name': 'vanishing_content', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True], 'base_cells': 3, 'plane_cells': 21, 'projection_degree': 1, 'selected_x': None, 'search_seconds': 0.00933413699999619, 'replay_seconds': 0.0028281200000037643}
+START two_shifted_squares
+OK {'name': 'two_shifted_squares', 'expected': None, 'accepted': True, 'closed_value': None, 'truth_by_x': [False, True, False, True, False, True, False], 'base_cells': 7, 'plane_cells': 55, 'projection_degree': 3, 'selected_x': None, 'search_seconds': 0.1807190649999484, 'replay_seconds': 0.12606456100002106}
+START overlapping_intervals
+OK {'name': 'overlapping_intervals', 'expected': None, 'accepted': True, 'closed_value': None, 'truth_by_x': [False, False, False, True, True], 'base_cells': 5, 'plane_cells': 31, 'projection_degree': 2, 'selected_x': None, 'search_seconds': 0.03102983899998435, 'replay_seconds': 0.0062959109999383145}
+START uniform_positive_quadratic
+OK {'name': 'uniform_positive_quadratic', 'expected': None, 'accepted': True, 'closed_value': None, 'truth_by_x': [False, False, True, False, False], 'base_cells': 5, 'plane_cells': 17, 'projection_degree': 2, 'selected_x': None, 'search_seconds': 0.01186352899992471, 'replay_seconds': 0.002097735000006651}
+START choose_positive_quadratic
+OK {'name': 'choose_positive_quadratic', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [False, False, True, False, False], 'base_cells': 5, 'plane_cells': 17, 'projection_degree': 2, 'selected_x': 2, 'search_seconds': 0.008744872999955078, 'replay_seconds': 0.0021601990000590376}
+START surjective_cubic
+OK {'name': 'surjective_cubic', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True, True, True], 'base_cells': 5, 'plane_cells': 23, 'projection_degree': 2, 'selected_x': None, 'search_seconds': 0.057964237000078356, 'replay_seconds': 0.03472853399989617}
+START surjective_quintic
+OK {'name': 'surjective_quintic', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True], 'base_cells': 1, 'plane_cells': 3, 'projection_degree': 4, 'selected_x': None, 'search_seconds': 0.03175507599996763, 'replay_seconds': 0.0006740510000327049}
+START repeated_zero_curve
+OK {'name': 'repeated_zero_curve', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True], 'base_cells': 3, 'plane_cells': 9, 'projection_degree': 1, 'selected_x': None, 'search_seconds': 0.005593728000008014, 'replay_seconds': 0.0010438749999366337}
+START strict_repeated_zero_curve
+OK {'name': 'strict_repeated_zero_curve', 'expected': False, 'accepted': True, 'closed_value': False, 'truth_by_x': [False], 'base_cells': 1, 'plane_cells': 3, 'projection_degree': 0, 'selected_x': 0, 'search_seconds': 0.0031830829999535126, 'replay_seconds': 0.00032352499999888096}
+START negative_algebraic_obstruction
+OK {'name': 'negative_algebraic_obstruction', 'expected': False, 'accepted': True, 'closed_value': False, 'truth_by_x': [True, False, True, True, True, True, True], 'base_cells': 7, 'plane_cells': 33, 'projection_degree': 3, 'selected_x': 1, 'search_seconds': 0.042261300000063784, 'replay_seconds': 0.029688527999951475}
+START quantifier_order_forall_exists
+OK {'name': 'quantifier_order_forall_exists', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True], 'base_cells': 1, 'plane_cells': 3, 'projection_degree': 0, 'selected_x': None, 'search_seconds': 0.0027478499999915584, 'replay_seconds': 0.0002646869999125556}
+START quantifier_order_exists_forall
+OK {'name': 'quantifier_order_exists_forall', 'expected': False, 'accepted': True, 'closed_value': False, 'truth_by_x': [False], 'base_cells': 1, 'plane_cells': 3, 'projection_degree': 0, 'selected_x': None, 'search_seconds': 0.002229353000075207, 'replay_seconds': 0.00032971399991765793}
+START discontinuous_choice
+OK {'name': 'discontinuous_choice', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True, True, True], 'base_cells': 3, 'plane_cells': 23, 'projection_degree': 3, 'selected_x': None, 'search_seconds': 0.02485037300004933, 'replay_seconds': 0.005064954999966176}
+START empty_and_constant_atoms
+OK {'name': 'empty_and_constant_atoms', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [True], 'base_cells': 1, 'plane_cells': 1, 'projection_degree': 0, 'selected_x': None, 'search_seconds': 0.0005298039999388493, 'replay_seconds': 8.528800003659853e-05}
+START constant_false
+OK {'name': 'constant_false', 'expected': False, 'accepted': True, 'closed_value': False, 'truth_by_x': [False], 'base_cells': 1, 'plane_cells': 1, 'projection_degree': 0, 'selected_x': None, 'search_seconds': 0.00012642899991988088, 'replay_seconds': 7.442200001150923e-05}
+START degree_drop_at_zero
+OK {'name': 'degree_drop_at_zero', 'expected': None, 'accepted': True, 'closed_value': None, 'truth_by_x': [False, True, True, True, True], 'base_cells': 5, 'plane_cells': 17, 'projection_degree': 2, 'selected_x': None, 'search_seconds': 0.012491060000002108, 'replay_seconds': 0.002303704000041762}
+START strict_and_disequality
+OK {'name': 'strict_and_disequality', 'expected': None, 'accepted': True, 'closed_value': None, 'truth_by_x': [False, False, True], 'base_cells': 3, 'plane_cells': 13, 'projection_degree': 1, 'selected_x': None, 'search_seconds': 0.008730811999953403, 'replay_seconds': 0.0018477500000244618}
+START algebraic_section_only
+OK {'name': 'algebraic_section_only', 'expected': True, 'accepted': True, 'closed_value': True, 'truth_by_x': [False, True, False, True, False], 'base_cells': 5, 'plane_cells': 15, 'projection_degree': 2, 'selected_x': 1, 'search_seconds': 0.015556876000005104, 'replay_seconds': 0.01205121100008455}

@@ -1,0 +1,298 @@
+{
+  "basis": [
+    1,
+    9,
+    0
+  ],
+  "closure": [
+    {
+      "basis": 0,
+      "cover": [
+        0
+      ],
+      "predecessor": {
+        "kind": "diagonal"
+      },
+      "transition": 1
+    },
+    {
+      "basis": 1,
+      "cover": [
+        1
+      ],
+      "predecessor": {
+        "kind": "diagonal"
+      },
+      "transition": 1
+    },
+    {
+      "basis": 2,
+      "cover": [
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "predecessor": {
+        "caps": [
+          4,
+          4
+        ],
+        "kind": "box",
+        "minima": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            0
+          ]
+        ],
+        "tree": [
+          "split",
+          0,
+          2,
+          [
+            "split",
+            1,
+            2,
+            [
+              "split",
+              0,
+              1,
+              [
+                "impossible",
+                0
+              ],
+              [
+                "split",
+                1,
+                1,
+                [
+                  "impossible",
+                  0
+                ],
+                [
+                  "covered",
+                  2
+                ]
+              ]
+            ],
+            [
+              "split",
+              0,
+              1,
+              [
+                "split",
+                0,
+                0,
+                [
+                  "split",
+                  1,
+                  3,
+                  [
+                    "impossible",
+                    0
+                  ],
+                  [
+                    "covered",
+                    0
+                  ]
+                ],
+                [
+                  "covered",
+                  1
+                ]
+              ],
+              [
+                "covered",
+                1
+              ]
+            ]
+          ],
+          [
+            "split",
+            1,
+            2,
+            [
+              "split",
+              1,
+              1,
+              [
+                "split",
+                0,
+                3,
+                [
+                  "split",
+                  1,
+                  0,
+                  [
+                    "impossible",
+                    0
+                  ],
+                  [
+                    "covered",
+                    3
+                  ]
+                ],
+                [
+                  "covered",
+                  4
+                ]
+              ],
+              [
+                "covered",
+                2
+              ]
+            ],
+            [
+              "covered",
+              1
+            ]
+          ]
+        ]
+      },
+      "transition": 0
+    }
+  ],
+  "format": "forge-ordered-v1",
+  "nodes": [
+    {
+      "kind": "bad",
+      "state": {
+        "q": 1,
+        "v": [
+          4,
+          0
+        ]
+      },
+      "target": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          0,
+          4
+        ]
+      },
+      "transition": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          1,
+          3
+        ]
+      },
+      "transition": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          2,
+          2
+        ]
+      },
+      "transition": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          3,
+          1
+        ]
+      },
+      "transition": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          4,
+          0
+        ]
+      },
+      "transition": 0
+    },
+    {
+      "child": 3,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          1,
+          2
+        ]
+      },
+      "transition": 1
+    },
+    {
+      "child": 4,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          2,
+          1
+        ]
+      },
+      "transition": 1
+    },
+    {
+      "child": 5,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          2,
+          0
+        ]
+      },
+      "transition": 1
+    },
+    {
+      "child": 8,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          1,
+          0
+        ]
+      },
+      "transition": 1
+    }
+  ],
+  "subject": "{\"bad\":[{\"q\":1,\"v\":[4,0]}],\"controls\":2,\"dimension\":2,\"kind\":\"resource\",\"transitions\":[{\"consume\":[0,0],\"matrix\":[[1,1],[0,0]],\"produce\":[0,0],\"source\":0,\"target\":1},{\"consume\":[1,0],\"matrix\":[[2,0],[0,1]],\"produce\":[2,0],\"source\":0,\"target\":0}]}",
+  "target_cover": [
+    2
+  ]
+}

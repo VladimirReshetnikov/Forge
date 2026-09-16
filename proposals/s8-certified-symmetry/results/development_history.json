@@ -1,0 +1,54 @@
+{
+  "events": [
+    {
+      "stage": "initial_smoke",
+      "accepted_chains": [
+        "S3",
+        "S7",
+        "A7",
+        "D10",
+        "S15"
+      ],
+      "accepted_generic_canonical_cases": [
+        "S3",
+        "S7",
+        "A7",
+        "D10"
+      ],
+      "resource_refusal": {
+        "group": "S15",
+        "colors": [
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2
+        ],
+        "limit": 20000,
+        "outcome": "unknown",
+        "exception": "SearchLimit: canonical-image search budget exhausted"
+      },
+      "response": "Retain the generic bound and add a separate S_n/A_n family recognition and canonical-image certificate. No claim that the generic search now scales."
+    },
+    {
+      "stage": "manual_decoder_review",
+      "finding": "Python equality admitted False as zero in an orbit-root structural comparison.",
+      "response": "Replace root equality with explicit exact-integer and null checks; add a Boolean-root rejection control."
+    },
+    {
+      "stage": "Reynolds mutation test setup",
+      "finding": "The bad-edge control indexed the second node of a singleton orbit and raised IndexError before submitting a certificate.",
+      "response": "Select an actually nontrivial orbit. Re-run the complete supplementary suite; this was a test harness failure, not an accepted malformed certificate."
+    }
+  ]
+}

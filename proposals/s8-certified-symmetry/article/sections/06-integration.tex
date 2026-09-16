@@ -1,0 +1,119 @@
+\section{The source-level symmetry gate}
+\label{sec:gate}
+A correct permutation calculation can still justify an incorrect proof transformation. The missing ingredient is a proof that the permutations act on the \emph{right source problem}. Leant and Djex already emphasize candidate-owned source evidence, exact type selections, and independent reconstruction; Forge has already adopted much of that boundary discipline \cite{leant,djex,forge-neighbors}. It is inherited infrastructure, not a new contribution of this article. The new task is to specialize it to symmetry.
+
+\subsection{A sufficient semantic interface}
+For a source domain $X$, action $G\curvearrowright X$, and predicate $P$, the basic authorization is
+\begin{equation}
+ \forall g\in G\;\forall x\in X,\qquad P(g\cdot x)\leftrightarrow P(x).
+ \label{eq:source-invariance}
+\end{equation}
+It is sufficient to provide this equivalence for the original generators: it extends to inverses by substituting $g^{-1}\cdot x$, and to products by composition. If the task involves minimization, provide additionally an objective $f$ with $f(g\cdot x)=f(x)$. A domain predicate is included in $P$, rather than silently assumed to be invariant.
+
+Suppose a checked canonical selector $r$ satisfies $r(x)\in G\cdot x$ and $r(r(x))=r(x)$. Then
+\begin{align}
+ \exists x\,P(x)
+ &\iff \exists x\,[P(x)\land r(x)=x],\label{eq:existential-reduction}\\
+ \forall x\,P(x)
+ &\iff \forall x\,[r(x)=x\Rightarrow P(x)].\label{eq:universal-reduction}
+\end{align}
+For the forward direction of \eqref{eq:existential-reduction}, replace a witness by its representative and use invariance. For the reverse direction of \eqref{eq:universal-reduction}, apply the representative-only theorem to $r(x)$ and transport the conclusion back. The other directions are immediate.
+
+These formulas explain exactly what a symmetry tactic may do. In general it may \emph{not} prove $x=r(x)$, replace every occurrence of $x$ by $r(x)$ inside an arbitrary expression, or conjoin a lex-leader constraint to the original theorem as though that constraint followed pointwise. Symmetry breaking preserves existence or a properly transported universal claim; it need not preserve the set of individual solutions.
+
+\subsection{A tested narrow gate: unsigned variable permutations of CNF}
+The delivered gate accepts a concrete conjunctive normal form with one-based signed literals and optional exact integer objective weights. For each original generator it renames variable indices, preserves literal polarity, normalizes each clause as a set of literals, normalizes the clause collection as a set of clauses, and requires exact equality with the original normalized formula. For an objective $\sum_i w_i x_i$, it additionally requires $w_{g(i)}=w_i$.
+
+This is a sufficient syntactic automorphism test, not a complete semantic equivalence procedure. It correctly ignores duplicate clauses and duplicate literals, but it does not discover every symmetry hidden by logical equivalences. Signed variable flips, pseudo-Boolean constraints, arbitrary arithmetic atoms, and dependent Lean terms are not part of this implemented gate.
+
+The test corpus uses ring clauses $(x_i\lor x_{i+1})$ with uniform weights. Dihedral generators preserve them. Appending a distinguished unit clause $x_0$, or changing only the first objective coefficient, invalidates that authorization. Five positive cases and ten such negative cases are recorded. No SAT-solving performance experiment is implied by these gate tests.
+
+Certified dominance and symmetry-breaking systems show that solver-side pruning can be proof logged, including transformations not justified by ordinary clause implication \cite{cert-symmetry,aux-orders}. A future Forge Boolean adapter can use those logs as proposals. It still needs a reconstruction or verified-checker bridge into Lean; merely running VeriPB externally is not Lean-kernel acceptance.
+
+\subsection{How to propose source symmetries without trusting discovery}
+For finite formulas or polynomial dictionaries, construct a colored incidence graph. Variable vertices carry sorts and admissible coordinate roles; operator vertices carry operator identity and arity; hypothesis vertices carry their exact class and any fixed source dependencies. Ordinary argument positions are ordered, so their edges have position colors. Only operators with a proved commutative or unordered interpretation may omit those position distinctions.
+
+An automorphism finder such as nauty or Traces can propose generator permutations of the selected coordinate vertices \cite{nauty}. The adapter then decodes each permutation and independently proves the corresponding source invariance equation. A graph automorphism is a search hint, not the source proof. Missing automorphisms only weaken the reduction; falsely authorized automorphisms can make it unsound.
+
+When the user explicitly supplies a permutation action, discovery is unnecessary. The highest-value first frontend is therefore explicit: accept a finite coordinate map and a small list of generator-equivariance lemmas. Automatic graph-based discovery can be added after this source-preserving route is tested.
+
+\subsection{Dependent types, nominal identities, and context changes}
+Two local variables having the same printed type does not automatically make their exchange a symmetry. A later hypothesis may distinguish them. A dictionary may carry computational data. A selected universe may constrain which polymorphic instantiation is legal. Leant and Djex preserve these distinctions in their supported synthesis fragments \cite{leant,djex}.
+
+A production source inventory should make every local constant rigid by default. Only explicitly reified coordinates are eligible for permutation. The authorization must retain the exact declaration identity, universe instantiation, binder dependencies, selected typeclass instances, and local-hypothesis proofs. A source graph with different nominal dictionaries must not become the same graph merely because both dictionaries have the same type.
+
+There is also a state-transition rule. If search adds a new hypothesis $H$, the previous group may cease to preserve the obligation. The controller may keep the old group-theoretic certificate, but it must either prove generator-wise preservation of $H$ or switch to a subgroup that preserves it. Keeping only generators that individually preserve $H$ is safe, although it can miss useful products of rejected generators. A more complete stabilizer search is a separate optimization and must export its own original-generator membership evidence.
+
+Cache keys therefore have two layers. A group cache uses the degree and exact original permutation arrays. An authorization cache uses the source obligation and the exact invariance proofs. Equality of the first key does not imply reusability of the second. Transporter and orbit caches also include the action and source object, not just its display string.
+
+\section{Concrete Lean and library integration}
+\label{sec:integration}
+\subsection{A small set of worker requests}
+The following is a proposed protocol, not existing \code{forge} syntax:
+\begin{lstlisting}
+checkGroup(degree, originalGenerators, chainCertificate)
+member(checkedGroup, candidatePermutation)
+canonicalImage(checkedAction, sourceColors, imageCertificate)
+countOrbits(checkedAction, cycleInventory | familyCertificate)
+projectInvariant(checkedGenerators, sourcePolynomial, orbitCertificate)
+reduceCone(checkedDictionaryAction, invariantTarget)
+\end{lstlisting}
+The returned evidence should identify its mathematical conclusion. For example, an image packet carries both a transporter statement and a least-image statement. A counting packet identifies the exact quotient relation. An invariant-projection packet states an equality with the Reynolds operator, not nonnegativity of the original polynomial.
+
+The controller initially tries the inexpensive recognition branches: an already cached chain, an exact symmetric/alternating family gate, or a bounded orbit computation. It chooses a generic coset cover only when its budget permits. It never interprets an external timeout as a negative mathematical result.
+
+\subsection{Proposed module decomposition}
+These paths are proposed additions, not files claimed to exist in the inspected repository.
+\begin{longtable}{@{}p{0.31\textwidth}p{0.64\textwidth}@{}}
+\toprule
+Module & Implementation and proof obligation\\
+\midrule\endhead
+{\footnotesize\code{Forge/Symmetry/PermArray.lean}} & Decode bounded arrays into \code{Equiv.Perm (Fin n)}; prove executable composition, inverse, and action agree with their semantic counterparts.\\
+{\footnotesize\code{Forge/Symmetry/WordDAG.lean}} & Total, fuel-bounded DAG evaluator; prove that every evaluated node lies in the closure of the original generators.\\
+{\footnotesize\code{Forge/Symmetry/Chain.lean}} & Decode orbit trees; compute all residue checks; prove Theorem~\ref{thm:chain}, including the bijection of transversal digits and the negative-membership implication.\\
+{\footnotesize\code{Forge/Symmetry/Image.lean}} & Compute point-orbit minima; check the complete coset cover; prove Theorem~\ref{thm:canonical}; expose the explicit transporter.\\
+{\footnotesize\code{Forge/Symmetry/Families.lean}} & Exact order/parity recognition; prove the two canonical-image formulas and the symbolic coloring counts.\\
+{\footnotesize\code{Forge/Symmetry/Counting.lean}} & Enumerate normal forms only below a cap; validate full cycle partitions; combine the fixed-coloring bijection with Mathlib's Burnside theorem.\\
+{\footnotesize\code{Forge/Symmetry/Reynolds.lean}} & Check connected closed monomial components; prove the orbit-average formula; expose sparse polynomial identities and the cone-reduction theorem.\\
+{\footnotesize\code{Forge/Symmetry/Reify.lean}} & Preserve exact source coordinates and semantic generator lemmas; bind returned mathematical theorems to the original goal.\\
+\bottomrule
+\end{longtable}
+
+Do not begin by formalizing the optimized external search. Begin with the deterministic, bounded decoders and the mathematical acceptance theorems. A search program may then be replaced by GAP, SymPy, or a custom heuristic without changing the theorem it must satisfy.
+
+The decoded certificate should be finite data, and its checker should be a total Lean function. One-time soundness theorems turn checked Boolean facts into propositions. Reflection still requires the source adapter to prove the reified statement is the intended source statement. A theorem about arrays of natural numbers is not automatically a theorem about the user's matrices, local variables, or finite subtype.
+
+The trust controls already described in Forge's neighboring-project review---including completed checking rather than mere declaration visibility---remain prerequisites \cite{forge-neighbors}. This proposal neither replaces that policy nor claims that a Python \code{VerifiedChain} object enforces it. That class is an ordinary mutable Python result object, not an unforgeable proof authority.
+
+\subsection{Reusable libraries and exact boundaries}
+\paragraph{Mathlib.}
+Use \code{Equiv.Perm}, subgroup closure, stabilizers, finite group actions, cosets, and finite cardinalities. Inspected families under \code{Mathlib.GroupTheory} include \code{Perm}, \code{GroupAction}, and \code{SpecificGroups}. The Burnside theorem and cycle-type facts named in Section~\ref{sec:counting} were verified in the public generated documentation \cite{mathlib-burnside,mathlib-cycles}. The generated documentation is a rolling snapshot; these API names must be rechecked against the exact Mathlib revision selected for implementation. These are concrete mathematical building blocks; no claim is made that a ready-to-use reflected Schreier--Sims checker was found.
+
+For the polynomial branch, use the source polynomial representation already selected by Forge and prove compatibility with the finite-variable renaming action. A direct Mathlib implementation can use multivariate polynomials over $\QQ$, but introducing a second incompatible sparse format solely for this extension would be a poor integration choice. The prototype format is deliberately small, not a demand to replace Forge's existing format.
+
+\paragraph{GAP.}
+GAP's permutation-group facilities are a natural high-performance proposal backend \cite{gap}. Export transversals, strong generators, and original-generator provenance into the certificate schema. GAP's internal chain format is not the interchange format: the adapter must prove nothing on GAP's word alone. In particular, a purported derived generator with no original-generator word must not be accepted simply because the external system labels it ``strong.''
+
+\paragraph{SymPy.}
+Use \code{schreier_sims} for chain construction. Transversals are available through \code{basic_transversals}. Original-generator words can be requested with \code{generator_product} using \code{original=True} \cite{sympy}. Generator-product ordering and multiplication conventions require explicit tests. In the installed SymPy 1.14.0, the supplementary test confirmed
+\[
+  \text{our }\operatorname{mul}(a,b)
+  =\text{SymPy }\operatorname{Permutation}(b)*\operatorname{Permutation}(a)
+\]
+for a noncommuting fixture. A future adapter must also expand any returned inverse factor through its original provenance rather than confuse inverse generators with unrelated source inputs.
+
+The optional external-oracle script compares seven large group orders and 140 membership answers with SymPy. This is corroboration by another implementation, not a formally verified oracle and not a performance comparison. SymPy is not imported by the delivered core producer, core checker, or standalone replay.
+
+\paragraph{nauty/Traces and certified Boolean solvers.}
+Use nauty/Traces for candidate automorphisms of a carefully colored graph; use generator-wise semantic replay to authorize them \cite{nauty}. For Boolean search, certified dominance or symmetry-breaking logs can provide additional proof structure \cite{cert-symmetry,aux-orders}. Neither a canonical-labeling answer nor an external proof checker exit code is a Lean theorem without a bridge. These backends were researched but not installed or tested as part of this artifact.
+
+\subsection{The reification proof obligations are finite and explicit}
+For a first concrete frontend, the adapter must supply:
+\begin{enumerate}
+\item A bijection between the source coordinate type and \code{Fin n}, or an explicit statement that only the represented image action is being analyzed.
+\item Exact interpretations of the original generator arrays as source permutations.
+\item Generator-wise action compatibility with source colorings, monomials, or dictionary columns.
+\item The source-preservation lemmas needed for the requested consequence: invariance, objective preservation, or quotient identification.
+\item A kernel-checked application of the certificate soundness theorem to the original obligation, under the repository's axiom and verification policy.
+\end{enumerate}
+Failure at any item produces an unsupported-fragment or remaining-obligation result. The remaining obligations should be available to Forge's existing local reasoning and synthesis workers. They are not to be deleted because the group computation succeeded.

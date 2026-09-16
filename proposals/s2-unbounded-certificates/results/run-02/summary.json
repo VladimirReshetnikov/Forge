@@ -1,0 +1,106 @@
+{
+  "status": "PASSED",
+  "seed": 6071504,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "groups": [
+    {
+      "group": "predecessor_equivalence",
+      "cases": 3350,
+      "unit": "operational comparisons",
+      "passed": 3350
+    },
+    {
+      "group": "petri_exhaustive",
+      "cases": 2100,
+      "unit": "net/start/target queries",
+      "oracle": "complete forward BFS",
+      "seconds": 0.07821312600003694,
+      "safe": 1536,
+      "coverable": 564
+    },
+    {
+      "group": "petri_random",
+      "cases": 120,
+      "unit": "net/start/target queries",
+      "oracle": "complete forward BFS",
+      "seconds": 0.016944853000040894,
+      "safe": 79,
+      "coverable": 41
+    },
+    {
+      "group": "petri_infinite_and_edges",
+      "cases": 6,
+      "unit": "hand-designed cases",
+      "safe_or_coverable": 5,
+      "budget_unknown": 1,
+      "mutex_basis": 3,
+      "pump_trace_length": 25
+    },
+    {
+      "group": "pps_scalar_quadratic",
+      "cases": 45,
+      "unit": "polynomial systems",
+      "oracle": "exact q=min(1,a/b)",
+      "all_widths_met": true,
+      "max_newton_steps": 20,
+      "seconds": 0.11193925300005958
+    },
+    {
+      "group": "pps_coupled_contractive",
+      "cases": 30,
+      "unit": "polynomial systems",
+      "oracle": "80-digit Decimal iteration (diagnostic)",
+      "all_widths_met": true,
+      "max_newton_steps": 4,
+      "seconds": 0.34397050799998397
+    },
+    {
+      "group": "pps_coupled_supercritical",
+      "cases": 24,
+      "unit": "polynomial systems",
+      "oracle": "symmetric scalar algebraic solution (80-digit diagnostic)",
+      "all_widths_met": true,
+      "seconds": 0.18212867399995503
+    },
+    {
+      "group": "spectral_extinction",
+      "cases": 26,
+      "unit": "polynomial systems",
+      "exact_value": "all coordinates equal 1",
+      "seconds": 0.010573007000061807
+    },
+    {
+      "group": "algebraic_decoder",
+      "cases": 8,
+      "unit": "isolated scalar least roots",
+      "accepted": 8
+    },
+    {
+      "group": "quantitative_boundary_controls",
+      "cases": 6,
+      "unit": "hand-designed cases",
+      "singular_rejected": 4,
+      "critical_noncontractive": 1,
+      "wide_enclosure": 1
+    },
+    {
+      "group": "rejection_controls",
+      "cases": 275,
+      "unit": "deliberately invalid or non-authoritative receipts",
+      "rejected": 275
+    },
+    {
+      "group": "input_validation",
+      "cases": 5,
+      "unit": "malformed inputs",
+      "rejected": 5
+    }
+  ],
+  "accepted_receipts": 2360,
+  "rejected_receipts": 275,
+  "elapsed_seconds": 0.8123918790000744,
+  "lean_status": "NOT_RUN",
+  "head_to_head_lean_benchmark": "NOT_RUN",
+  "exception": null
+}

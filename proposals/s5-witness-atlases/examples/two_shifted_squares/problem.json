@@ -1,0 +1,53 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "two_shifted_squares",
+  "outer": "free",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "-2"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "-2"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        1,
+        "-2"
+      ],
+      [
+        2,
+        0,
+        "1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "eq",
+      0
+    ],
+    [
+      "eq",
+      1
+    ]
+  ]
+}

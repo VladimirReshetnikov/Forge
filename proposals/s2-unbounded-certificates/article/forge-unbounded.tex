@@ -1,0 +1,91 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{microtype,amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,enumitem,listings,xcolor}
+\usepackage{fancyhdr,hyperref,xurl}
+\definecolor{ink}{HTML}{243842}
+\definecolor{rulegray}{HTML}{D4DADC}
+\definecolor{codegray}{HTML}{F4F5F5}
+\hypersetup{colorlinks=true,linkcolor=ink,urlcolor=ink,citecolor=ink,pdftitle={Beyond Finite Closure: Certified Coverability and Nonlinear Recursive Probability for Forge},pdfauthor={Technical report prepared for Vladimir Reshetnikov}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\sffamily Forge: unbounded-state certificates}
+\fancyhead[R]{\small\sffamily Design delta and executed prototypes}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parskip}{4pt}\setlength{\parindent}{1em}
+\setlength{\emergencystretch}{3em}
+\setlist{nosep,leftmargin=1.5em}
+\lstset{basicstyle=\small\ttfamily,backgroundcolor=\color{codegray},frame=single,rulecolor=\color{rulegray},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,aboveskip=8pt,belowskip=8pt}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb N}\newcommand{\Q}{\mathbb Q}\newcommand{\R}{\mathbb R}
+\newcommand{\one}{\mathbf 1}\newcommand{\zero}{\mathbf 0}
+\newcommand{\up}[1]{\mathord{\uparrow}#1}
+\newcommand{\pre}{\operatorname{pre}}\newcommand{\post}{\operatorname{post}}
+\newcommand{\lfp}{\operatorname{lfp}}\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\Forge}{\texttt{forge}}
+\newcommand{\status}[1]{\noindent\textbf{Evidence status.} #1\par}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{17mm}
+{\sffamily\color{ink}\Large FORGE / TECHNICAL EXTENSIONS\par}
+\vspace{10mm}
+{\sffamily\bfseries\color{ink}\fontsize{29}{34}\selectfont Beyond Finite Closure\par}
+\vspace{7mm}
+{\sffamily\Large Certified Coverability and\par Nonlinear Recursive Probability\par}
+\vspace{12mm}
+{\large A design delta against Forge commit\par
+\small\ttfamily 58ea206bd7ad501b930add568151217bcc7f82a2\par}
+\vspace{10mm}
+\noindent\rule{\textwidth}{0.5pt}
+\vspace{5mm}
+\noindent This report adds unbounded multiset-state safety, exact enclosures of irrational recursive probabilities, an inverse-free Newton certificate, and a critical-extinction certificate. It includes executable, standard-library-only searches and independently structured finite checkers.
+\vspace{7mm}
+\noindent\textbf{Delivered evidence:} 2,220 coverability queries checked against complete finite forward exploration; 2,360 accepted receipts and 275 rejection controls in the main corpus; a separate 100-certificate compression experiment; deterministic reproduction and search-disabled replay.
+\vspace{5mm}
+\noindent\textbf{Implementation boundary:} the algorithms and checkers were executed in Python. No Lean compilation, source-to-model adapter, integrated \Forge{} tactic, or head-to-head Lean benchmark was executed for this report.
+\vfill
+\noindent Prepared for Vladimir Reshetnikov\\
+15 September 2026
+\end{titlepage}
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\begin{abstract}
+Forge's merged design already contains structural proof planning, nonlinear arithmetic, finite-dimensional and ideal closures, finite-state quantitative reasoning, and nonprobabilistic pushdown summaries. Repeating those proposals would add little. This report crosses two of their remaining semantic boundaries: an unbounded natural-number state space and a nonlinear least fixed point whose value need not be rational.
+
+The first extension computes a finite antichain describing the backward coverability set of a Petri net. A negative result is checked by finite predecessor-closure inequalities; a positive result is checked by an ordinary execution. The second computes rational lower and upper bounds for a probabilistic polynomial system. Lower bounds carry a rounded Newton ledger, not merely a fixed-point equation. A weighted maximum principle replaces full inverse matrices by two vectors per Newton step. A third certificate proves exact extinction probability one in a strongly connected critical or subcritical branching system, while rejecting the deterministic one-child exception. Finally, a factorization and rational isolating interval can identify an irrational least fixed point exactly.
+
+The mathematics is based on established coverability and probabilistic-polynomial-system methods. The contribution is the concrete extension of Forge's certificate language, the soundness decomposition, executable producers and checkers, and a narrowly specified Lean port. Search success, finite-checker acceptance, numerical diagnostics, source-level proofs, and compilation remain distinct throughout.
+\end{abstract}
+\begingroup
+\small
+\setlength{\parskip}{0pt}
+\tableofcontents
+\endgroup
+\newpage
+\pagenumbering{arabic}
+\input{01-delta}
+\input{02-coverability}
+\input{03-probability}
+\input{04-newton}
+\input{05-critical}
+\input{06-integration}
+\input{07-evidence}
+\input{08-roadmap}
+\appendix
+\input{A-protocol}
+\input{B-reproducibility}
+\input{references}
+\end{document}

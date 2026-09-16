@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Group & DAG & Tables & Checks & Bytes & Search (s) & Check (s)\\
+\midrule
+$\Sym_{15}$ & 62 & 120 & 2,136 & 2,220 & 0.065 & 0.022\\
+$\Sym_{30}$ & 137 & 465 & 17,546 & 7,215 & 1.270 & 0.477\\
+$\Sym_{40}$ & 187 & 820 & 41,861 & 11,975 & 4.656 & 1.811\\
+$\Alt_{12}$ & 118 & 77 & 2,806 & 2,512 & 0.159 & 0.023\\
+$\Alt_{20}$ & 358 & 209 & 20,942 & 7,666 & 5.423 & 0.329\\
+$D_{50}$ & 3 & 100 & 152 & 1,457 & 0.042 & 0.016\\
+$C_{97}$ & 2 & 193 & 194 & 2,728 & 0.124 & 0.055\\
+\bottomrule
+\end{tabular}
+\caption{Single-run measurements for the large chain fixtures. DAG counts retained word nodes; Tables counts transversal entries; Checks counts verified Schreier edges. Bytes is compact JSON for the chain alone, excluding the input and other certificates. Timings are descriptive, not comparisons against other systems.}
+\end{table}

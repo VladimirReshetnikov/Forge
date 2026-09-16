@@ -1,0 +1,31 @@
+{
+  "status": "ALL_ASSERTIONS_PASSED",
+  "seed": 20260915,
+  "small_full_group_average_comparisons": 25,
+  "idempotence_checks": 25,
+  "large_projection_instances": 1,
+  "large_monomial_orbit_size": 1560,
+  "malformed_rejections": [
+    {
+      "case": "missing-support",
+      "result": "rejected",
+      "reason": "source support not fully covered"
+    },
+    {
+      "case": "wrong-average",
+      "result": "rejected",
+      "reason": "incorrect Reynolds coefficients"
+    },
+    {
+      "case": "bad-edge",
+      "result": "rejected",
+      "reason": "integer out of bounds"
+    },
+    {
+      "case": "Boolean-exponent",
+      "result": "rejected",
+      "reason": "integer required (Booleans and floats are forbidden)"
+    }
+  ],
+  "lean_status": "NOT_RUN"
+}

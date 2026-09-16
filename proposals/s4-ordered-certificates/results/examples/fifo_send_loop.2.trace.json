@@ -1,0 +1,58 @@
+{
+  "format": "forge-ordered-trace-v1",
+  "initial": {
+    "q": 0,
+    "v": [
+      "ab"
+    ]
+  },
+  "steps": [
+    {
+      "after": {
+        "q": 0,
+        "v": [
+          "ab"
+        ]
+      },
+      "before": [
+        "ab"
+      ],
+      "middle": [
+        "abb"
+      ],
+      "transition": 0
+    },
+    {
+      "after": {
+        "q": 1,
+        "v": [
+          "b"
+        ]
+      },
+      "before": [
+        "ab"
+      ],
+      "middle": [
+        "b"
+      ],
+      "transition": 1
+    },
+    {
+      "after": {
+        "q": 2,
+        "v": [
+          ""
+        ]
+      },
+      "before": [
+        "b"
+      ],
+      "middle": [
+        ""
+      ],
+      "transition": 2
+    }
+  ],
+  "subject": "{\"alphabet\":[\"a\",\"b\"],\"bad\":[{\"q\":2,\"v\":[\"\"]}],\"channels\":1,\"controls\":3,\"kind\":\"lossy\",\"transitions\":[{\"channel\":0,\"op\":\"send\",\"source\":0,\"symbol\":\"b\",\"target\":0},{\"channel\":0,\"op\":\"recv\",\"source\":0,\"symbol\":\"a\",\"target\":1},{\"channel\":0,\"op\":\"recv\",\"source\":1,\"symbol\":\"b\",\"target\":2}]}",
+  "target": 0
+}

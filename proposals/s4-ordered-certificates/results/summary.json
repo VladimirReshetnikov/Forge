@@ -1,0 +1,914 @@
+{
+  "cutoff_controls": [
+    {
+      "cutoff": "nodes",
+      "reason": "derivation node budget exhausted",
+      "stats": {
+        "basis": 0,
+        "box_nodes": 0,
+        "expansions": 0,
+        "grid_points": 0,
+        "nodes": 0,
+        "pred_calls": 0
+      },
+      "status": "unknown"
+    },
+    {
+      "cutoff": "expansions",
+      "reason": "backward expansion budget exhausted",
+      "stats": {
+        "basis": 1,
+        "box_nodes": 0,
+        "expansions": 1,
+        "grid_points": 0,
+        "nodes": 1,
+        "pred_calls": 0
+      },
+      "status": "unknown"
+    },
+    {
+      "cutoff": "grid",
+      "reason": "local predecessor grid exceeds 1 points",
+      "stats": {
+        "basis": 1,
+        "box_nodes": 0,
+        "expansions": 1,
+        "grid_points": 0,
+        "nodes": 1,
+        "pred_calls": 1
+      },
+      "status": "unknown"
+    },
+    {
+      "cutoff": "box",
+      "reason": "box-certificate node budget exhausted",
+      "stats": {
+        "basis": 6,
+        "box_nodes": 1,
+        "expansions": 6,
+        "grid_points": 50,
+        "nodes": 6,
+        "pred_calls": 2
+      },
+      "status": "unknown"
+    }
+  ],
+  "finite_fifo_acyclic_oracle": {
+    "finiteness_reason": "Acyclic controls bound sends.",
+    "initial_state_queries": 2040,
+    "largest_visited_set": 29,
+    "mismatches": 0,
+    "safe_queries": 1916,
+    "systems": 40,
+    "unsafe_queries": 124
+  },
+  "finite_fifo_decreasing_oracle": {
+    "finiteness_reason": "No sends; lengths never increase.",
+    "initial_state_queries": 2480,
+    "largest_visited_set": 24,
+    "mismatches": 0,
+    "safe_queries": 1161,
+    "systems": 40,
+    "unsafe_queries": 1319
+  },
+  "finite_resource_oracle": {
+    "finiteness_reason": "Total resource never increases; initial total <=4.",
+    "initial_state_queries": 7000,
+    "largest_visited_set": 27,
+    "mismatches": 0,
+    "safe_queries": 6090,
+    "systems": 100,
+    "unsafe_queries": 910
+  },
+  "independent_replay": {
+    "certificates": 190,
+    "returncode": 0,
+    "search_import_forbidden": true,
+    "site_packages_disabled": true,
+    "stdout": "REPLAY_OK\n"
+  },
+  "lean": {
+    "available": false,
+    "compiled_files": 0,
+    "note": "No Lean executable found in this run."
+  },
+  "local_fifo": {
+    "action_rules": 5,
+    "mismatches": 0,
+    "word_pair_comparisons": 2325
+  },
+  "local_resource": {
+    "mismatches": 0,
+    "point_comparisons": 63504,
+    "predecessor_problems": 1296
+  },
+  "mutations": {
+    "accepted_invalid": 0,
+    "attempts": 32,
+    "rejected": 32
+  },
+  "named_examples": {
+    "blocked_reset": {
+      "basis": [
+        {
+          "q": 1,
+          "v": [
+            1,
+            0
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              100,
+              100
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 1,
+            "v": [
+              1,
+              0
+            ]
+          },
+          "trace_steps": 0,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 1,
+        "box_nodes": 0,
+        "expansions": 1,
+        "grid_points": 0,
+        "nodes": 1,
+        "pred_calls": 2
+      }
+    },
+    "empty_bad": {
+      "basis": [],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              100
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        }
+      ],
+      "search_stats": {
+        "basis": 0,
+        "box_nodes": 0,
+        "expansions": 0,
+        "grid_points": 0,
+        "nodes": 0,
+        "pred_calls": 0
+      }
+    },
+    "faulty_semaphore": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            0,
+            2,
+            0
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            2,
+            0,
+            1
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              1,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              2,
+              0,
+              1
+            ]
+          },
+          "trace_steps": 2,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              7,
+              0,
+              1
+            ]
+          },
+          "trace_steps": 2,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 3,
+        "box_nodes": 0,
+        "expansions": 4,
+        "grid_points": 0,
+        "nodes": 4,
+        "pred_calls": 14
+      }
+    },
+    "fifo_send_loop": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            "a"
+          ]
+        },
+        {
+          "q": 1,
+          "v": [
+            "b"
+          ]
+        },
+        {
+          "q": 2,
+          "v": [
+            ""
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "a"
+            ]
+          },
+          "trace_steps": 3,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "b"
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "ab"
+            ]
+          },
+          "trace_steps": 3,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "ba"
+            ]
+          },
+          "trace_steps": 3,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 3,
+        "box_nodes": 0,
+        "expansions": 4,
+        "grid_points": 0,
+        "nodes": 4,
+        "pred_calls": 7
+      }
+    },
+    "guarded_doubling_merger": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            0,
+            4
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            1,
+            0
+          ]
+        },
+        {
+          "q": 1,
+          "v": [
+            4,
+            0
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              1,
+              0
+            ]
+          },
+          "trace_steps": 3,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0,
+              3
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0,
+              4
+            ]
+          },
+          "trace_steps": 1,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 3,
+        "box_nodes": 23,
+        "expansions": 9,
+        "grid_points": 50,
+        "nodes": 10,
+        "pred_calls": 12
+      }
+    },
+    "huge_threshold": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            1
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              1
+            ]
+          },
+          "trace_steps": 333,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              2
+            ]
+          },
+          "trace_steps": 333,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 1,
+        "box_nodes": 0,
+        "expansions": 334,
+        "grid_points": 0,
+        "nodes": 334,
+        "pred_calls": 335
+      }
+    },
+    "lossy_not_reliable": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            "a"
+          ]
+        },
+        {
+          "q": 1,
+          "v": [
+            ""
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "ba"
+            ]
+          },
+          "trace_steps": 1,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "bb"
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "a"
+            ]
+          },
+          "trace_steps": 1,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 2,
+        "box_nodes": 0,
+        "expansions": 2,
+        "grid_points": 0,
+        "nodes": 2,
+        "pred_calls": 2
+      }
+    },
+    "merger": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            0,
+            4
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            1,
+            3
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            2,
+            2
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            3,
+            1
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            4,
+            0
+          ]
+        },
+        {
+          "q": 1,
+          "v": [
+            4,
+            0
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0,
+              4
+            ]
+          },
+          "trace_steps": 1,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              2,
+              2
+            ]
+          },
+          "trace_steps": 1,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              1,
+              2
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 1,
+            "v": [
+              4,
+              0
+            ]
+          },
+          "trace_steps": 0,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 6,
+        "box_nodes": 23,
+        "expansions": 6,
+        "grid_points": 50,
+        "nodes": 6,
+        "pred_calls": 2
+      }
+    },
+    "semaphore": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            0,
+            2,
+            0
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "q": 0,
+          "v": [
+            2,
+            0,
+            2
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              0,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              1,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              2,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              100,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              1000000000000000000000000000000,
+              0,
+              1
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              2,
+              0,
+              2
+            ]
+          },
+          "trace_steps": 2,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 3,
+        "box_nodes": 0,
+        "expansions": 3,
+        "grid_points": 0,
+        "nodes": 3,
+        "pred_calls": 12
+      }
+    },
+    "two_channels": {
+      "basis": [
+        {
+          "q": 0,
+          "v": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "q": 1,
+          "v": [
+            "",
+            "b"
+          ]
+        },
+        {
+          "q": 2,
+          "v": [
+            "",
+            ""
+          ]
+        }
+      ],
+      "queries": [
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "a",
+              "b"
+            ]
+          },
+          "trace_steps": 2,
+          "verdict": "unsafe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "a",
+              "a"
+            ]
+          },
+          "trace_steps": null,
+          "verdict": "safe"
+        },
+        {
+          "initial": {
+            "q": 0,
+            "v": [
+              "baa",
+              "bab"
+            ]
+          },
+          "trace_steps": 2,
+          "verdict": "unsafe"
+        }
+      ],
+      "search_stats": {
+        "basis": 3,
+        "box_nodes": 0,
+        "expansions": 3,
+        "grid_points": 0,
+        "nodes": 3,
+        "pred_calls": 6
+      }
+    }
+  },
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "seed": 941572603,
+  "timings": [
+    {
+      "basis": 3,
+      "certificate_bytes": 1045,
+      "closure_rows": 6,
+      "direct_closure_rows": 0,
+      "name": "semaphore",
+      "nodes": 3,
+      "predecessors": 6,
+      "replay_seconds": 0.0002714450000667057,
+      "search_seconds": 0.0003849320000881562
+    },
+    {
+      "basis": 3,
+      "certificate_bytes": 1114,
+      "closure_rows": 6,
+      "direct_closure_rows": 0,
+      "name": "faulty_semaphore",
+      "nodes": 4,
+      "predecessors": 6,
+      "replay_seconds": 0.00018665200002487836,
+      "search_seconds": 0.00022271199998158409
+    },
+    {
+      "basis": 6,
+      "certificate_bytes": 1156,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "name": "merger",
+      "nodes": 6,
+      "predecessors": 5,
+      "replay_seconds": 0.00027172099999006605,
+      "search_seconds": 0.0006061400000589856
+    },
+    {
+      "basis": 3,
+      "certificate_bytes": 1653,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "name": "guarded_doubling_merger",
+      "nodes": 10,
+      "predecessors": 7,
+      "replay_seconds": 0.00027210200005356455,
+      "search_seconds": 0.0006009960000028514
+    },
+    {
+      "basis": 1,
+      "certificate_bytes": 39194,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "name": "huge_threshold",
+      "nodes": 334,
+      "predecessors": 1,
+      "replay_seconds": 0.003966922000017803,
+      "search_seconds": 0.0034279350001042985
+    },
+    {
+      "basis": 1,
+      "certificate_bytes": 412,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "name": "blocked_reset",
+      "nodes": 1,
+      "predecessors": 0,
+      "replay_seconds": 5.584900009125704e-05,
+      "search_seconds": 6.133599993063399e-05
+    },
+    {
+      "basis": 2,
+      "certificate_bytes": 493,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "name": "lossy_not_reliable",
+      "nodes": 2,
+      "predecessors": 1,
+      "replay_seconds": 8.86619999391769e-05,
+      "search_seconds": 6.961399992633233e-05
+    },
+    {
+      "basis": 3,
+      "certificate_bytes": 930,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "name": "fifo_send_loop",
+      "nodes": 4,
+      "predecessors": 3,
+      "replay_seconds": 0.00015959600000314822,
+      "search_seconds": 0.00011492099997667538
+    },
+    {
+      "basis": 3,
+      "certificate_bytes": 877,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "name": "two_channels",
+      "nodes": 3,
+      "predecessors": 3,
+      "replay_seconds": 0.00013824499990278127,
+      "search_seconds": 0.0001365100000612074
+    },
+    {
+      "basis": 0,
+      "certificate_bytes": 255,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "name": "empty_bad",
+      "nodes": 0,
+      "predecessors": 0,
+      "replay_seconds": 2.5652999966041534e-05,
+      "search_seconds": 2.3134000002755783e-05
+    }
+  ],
+  "units": "Counts are grouped by distinct experiment units; there is no grand total."
+}

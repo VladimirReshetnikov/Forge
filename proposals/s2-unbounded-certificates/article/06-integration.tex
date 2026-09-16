@@ -1,0 +1,95 @@
+\section{A concrete Lean implementation boundary}
+\label{sec:integration}
+\subsection{Do not start by porting the search}
+The first Lean implementation should port the finite checker and its soundness theorem, leaving search in Python or an external exact backend. None of the proposed final theorems should depend on the searcher's termination, its antichain minimality, its elimination algorithm, or its numerical heuristics.
+
+This is a specific implementation choice rather than another restatement of Forge's trust architecture. For the antichain lane, the proof kernel needs finite coordinate comparisons plus a generic induction on executions. For weighted Newton, it needs finite sums, the polynomial remainder lemma, and the weighted maximum principle. The matrix-inverse algorithm can disappear entirely from the Lean code for that format.
+
+No Lean executable or Lake installation was available in this execution environment, and attempted network acquisition of a toolchain failed. Therefore this package contains no uncompiled theorem file presented as an implementation. It instead includes \code{lean/IMPLEMENTATION.md} with the exact proof obligations and module plan. The status is \code{NOT_RUN}; this says nothing negative about the core specimens already compiled in the baseline repository.
+
+\subsection{Finite data and semantic data should have different jobs}
+For Petri certificates, use a finite dimension and vectors of natural numbers. An array representation is convenient for evaluation, while the semantic vector type can be a function \code{Fin d -> Nat}. Prove once that the checked array projection has the stated dimension and that each coordinate comparison agrees with the semantic relation.
+
+For probabilities, keep the checker representation as sparse rational monomials. A term contains a nonnegative coefficient and an exponent vector. The semantic interpretation maps it to a real polynomial on the unit cube. There is no need to ask the kernel to execute a general symbolic differentiation package: the Jacobian entries are explicit finite sums over monomials, and their agreement with the directional linear term can be proved algebraically.
+
+The central semantic interface can be expressed mathematically as
+\[
+ \operatorname{ValidPPS}(P),\quad
+ q=\lfp(P),\quad
+ \operatorname{checkEnclosure}(P,c)=\mathrm{true}
+ \quad\Longrightarrow\quad
+ \forall i,\ \ell_i\le q_i\le u_i.
+\]
+The checker should return a decoded structure, or its caller should retain the exact decoded input, so that the $P$, $\ell$, and $u$ in the theorem are those actually checked. Forge already has subject-identity requirements; this port should reuse them rather than introduce a second authority-bearing pretty-print layer.
+
+\subsection{Suggested modules and their acceptance criteria}
+All module names in this table are relative to the proposed \code{Forge/Unbounded/} directory.
+\begin{longtable}{P{0.25\textwidth}P{0.64\textwidth}}
+\toprule
+Proposed module & Required theorem or executable boundary \\
+\midrule
+\code{PetriModel} & Operational step relation, upward closure, and Lemma~\ref{lem:pred}. Natural subtraction must remain guarded by enabling.\\[4pt]
+\code{PetriCheck} & Total finite checker for \eqref{eq:badcover}--\eqref{eq:exclude}; theorem \ref{thm:safety}; separate forward word checker.\\[4pt]
+\code{PPSModel} & Valid sparse polynomial data, nonnegative evaluation, monotonicity, mapping of the unit cube into itself.\\[4pt]
+\code{PPSLfp} & Least fixed point on the cube and agreement with finite-height approximants. Keep the latter separate from purely order-theoretic fixed-point facts.\\[4pt]
+\code{WeightedStep} & Directional remainder lemma, weighted maximum principle, and Theorem~\ref{thm:weighted-newton}.\\[4pt]
+\code{EnclosureCheck} & Ledger induction, prefixed upper check, exact requested-width comparison.\\[4pt]
+\code{ExtinctionCheck} & Normalization, graph connectivity, positive weights, nondegeneracy, and Theorem~\ref{thm:critical}.\\[4pt]
+\code{RootDecode} & Polynomial factor identity, interval Horner correctness, strict derivative sign, and Theorem~\ref{thm:algebraic}.\\[4pt]
+\code{SourceBridge} & Source-specific simulations or branching probability equations. This is a required proof layer, not just serialization.\\
+\bottomrule
+\end{longtable}
+
+A first accepted milestone is one source-level resource theorem whose proof term applies \code{PetriCheck} soundness to a checked certificate and a proved source simulation. A second is a theorem about a declared PPS least fixed point. A third connects that PPS theorem to a source stochastic program. These are intentionally separate milestones; compiling the finite arithmetic layer alone does not close the source theorem.
+
+\subsection{Libraries and exact roles}
+The recommended dependencies have different authority and execution roles. The Python prototype requires none beyond the standard library. The external libraries below are implementation candidates, not dependencies that were installed or benchmarked here.
+
+\paragraph{Mathlib fixed points.}
+The current generated documentation for \code{Mathlib.Order.FixedPoints} exposes \code{OrderHom.lfp}, \code{OrderHom.lfp_le}, \code{OrderHom.map_lfp}, and \code{fixedPoints.lfp_eq_sSup_iterate}~\cite{mathlib-fixed}. Use the order-homomorphism least fixed point on a complete-lattice presentation of the unit cube, not on all of $\R^n$, which is not a complete lattice. The iteration theorem requires its continuity hypothesis; monotonicity alone does not establish that countably many iterations reach an arbitrary lattice least fixed point.
+
+\paragraph{Mathlib well-quasi-orders.}
+The documentation for \code{Mathlib.Order.WellFoundedSet} provides \code{Set.PartiallyWellOrderedOn}, finite-product support, and finite-antichain results; it imports \code{Mathlib.Order.WellQuasiOrder}~\cite{mathlib-wqo}. These are appropriate for a later formal completeness theorem for the antichain search. They are not prerequisites for checking an individual invariant basis.
+
+\paragraph{Rational matrix and polynomial search.}
+FLINT's \code{fmpq_mat} is an exact rational-matrix substrate and internally supports integer-based work after clearing denominators~\cite{flint-matrix}. Its \code{fmpq_mpoly} module represents sparse rational multivariate polynomials~\cite{flint-mpoly}. A production producer can use these for Jacobian construction and exact solves, export rational vectors or matrices, and leave checking to Lean. The present prototype instead implements dense rational elimination directly, making its behavior and limitations easy to inspect.
+
+\paragraph{Scalar algebraic proposals.}
+After clearing denominators in $P(X)-X$, FLINT's documented \code{fmpz_poly_factor} function supplies integer polynomial factors. Its \code{qqbar} subsystem represents algebraic numbers with minimal polynomials and isolating intervals, and offers \code{qqbar_roots_fmpz_poly}~\cite{flint-factor,flint-qqbar}. These are useful producer-side tools for choosing a factor and interval. Their output is not a Lean proof. The small decoder here checks a rational factor identity and interval signs and does not import an entire algebraic-number implementation into the trusted path.
+
+\paragraph{Petri model checking.}
+SMPT is an existing SMT-based Petri-net model checker and is a concrete candidate for independent benchmarks or source-model interchange~\cite{smpt}. Its availability is not evidence that it already exports this report's certificate schema. An adapter would have to extract or synthesize the final basis, or translate an invariant into another Forge certificate form. Solver verdict strings are not interchangeable with the supplied finite checks.
+
+\paragraph{Version discipline.}
+Forge's reviewed README pins Lean 4.34.0 and a specific Mathlib revision. The API names above were checked against current generated documentation, not compiled against that pin. Before implementation, inspect the same modules at the chosen Mathlib revision and run the actual build. The report does not silently equate a current documentation page with a compiler-verified dependency lock.
+
+\subsection{Source extraction algorithms}
+\paragraph{Multiset programs.}
+Start from normalized operations \code{consume v}, \code{produce v}, finite choice, and finite control-state transitions. Symbolically accumulate fixed resource effects between control points. A basic block becomes one Petri transition when its exact enabling requirement is a componentwise lower bound. A branch whose condition is not preserved by adding resources must either remain outside the fragment or be weakened under an explicit simulation theorem.
+
+Each emitted transition carries its source block identifier and a proof obligation: executing that block from any source state satisfying the block precondition produces the abstract marking described by the transition. For source paths represented by several net steps, use a reflexive-transitive simulation rather than pretending every abstract step has the same source duration.
+
+\paragraph{Independent recursive branching.}
+Use a finite typed grammar of rules. A normalized rule has an exact rational probability and a finite list of child nonterminal identifiers. Count identifiers to obtain its exponent vector and merge rules yielding the same monomial. The source law for a rule states that all children succeed independently and that the selected alternative has the given probability. A rule's missing probability mass is represented as explicit failure/nonreturn, not silently discarded.
+
+The resulting polynomial compiler is straightforward once these laws exist. Its hard theorem is agreement between source finite-height derivations and iterates of the compiled map. Prove the base case, prove the one-generation product/sum step, and only then pass to the increasing limit. This isolates the independence assumption where it belongs.
+
+\subsection{Tactic behavior and returned proof objects}
+The proposed user-facing syntax is schematic, not installed syntax:
+\begin{lstlisting}
+by forge (lane := coverability)       -- resource safety goal
+by forge (lane := probability) (bits := 40)
+by forge (lane := extinction)         -- probability equals one
+\end{lstlisting}
+The implementation should recognize the corresponding semantic heads or an explicitly registered bridge theorem, construct the finite problem, request a certificate, check it, and apply the lane's soundness theorem. Ordinary \code{grind} can discharge local side conditions or use the resulting inequalities; it is not asked to reproduce the unbounded search.
+
+For a threshold query $q_i<r$, the returned proof should use a checked $u_i<r$. For a nonstrict query $q_i\le r$, an equality upper endpoint may suffice. If the interval straddles $r$, increasing precision is a search choice, not a theorem. If exact equality is requested, use the extinction or algebraic route rather than fabricating equality from a narrow interval.
+
+The final stored proof should contain the finite certificate, a checked decoding result, the generic soundness theorem, and the source bridge. Recompilation then avoids the synthesizer. The existing Forge architecture already calls for this separation; the contribution here is specifying the actual mathematical objects that can occupy those slots.
+
+\subsection{Using the workers during term synthesis}
+For a Leant/Djex candidate assembled from certified providers, the adapter can derive a behavioral model from the candidate's retained source-owned graph. A resource candidate receives a safety query; a recursive probabilistic candidate receives a least-fixed-point threshold query. A concrete source replay can refute a bad resource candidate, while a checked enclosure can establish a quantitative contract for another.
+
+Do not prune a candidate merely because an \emph{overapproximating} Petri abstraction is coverable. Do not reject a probabilistic candidate merely because an interval is too wide. Do not assume a graph's typed equivalence entails behavioral equivalence for stateful or probabilistic providers. These are not new global trust rules; they are the concrete approximation polarities of the proposed adapters.
+
+An attractive first synthesis experiment is a small inventory of resource protocols with known semantic providers: synthesize the control composition, compile its net, and compare the accepted source theorem or concrete counterexample against the candidate's original contract. This is future integration work. None of the present Python cases is reported as a Leant or Djex behavioral acceptance.

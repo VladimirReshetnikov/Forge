@@ -1,0 +1,116 @@
+\section{A concrete Lean integration plan}\label{sec:lean}
+
+The mathematical contribution should enter Forge as a new worker and a small proof library, not as a replacement for its controller. The existing \code{grind} infrastructure is useful for congruence, propagation, and arithmetic around a derived count guard~\cite{grind}. No modification of its internals is necessary for the first integration.
+
+\subsection{The proof obligations are modular}
+
+The implementation should separate the following proof modules. These are proposed paths and responsibilities, not files claimed to exist in this package.
+
+\begin{longtable}{@{}p{.29\textwidth}p{.65\textwidth}@{}}
+\toprule
+Proposed module & Required theorem, stated by its mathematical content\\
+\midrule\endhead
+\path{Forge/RealFiber/Signs.lean} & The Boolean compiler agrees with the truth indicator on the finite sign cube; its weighted sum agrees with a filtered finite cardinality.\\
+\path{Forge/RealFiber/Triangular.lean} & Monic-tower normal forms are unique; the rectangular monomials form a basis; normalization and matrix entries commute with parameter evaluation.\\
+\path{Forge/RealFiber/Hermite.lean} & The weighted trace-form signature equals the Tarski query on distinct real zeros, including nonreduced algebras.\\
+\path{Forge/RealFiber/CharpolySign.lean} & Newton replay identifies the characteristic polynomial; a symmetric matrix has real-rooted characteristic polynomial; zero-deleting variations give its inertia difference.\\
+\path{Forge/RealFiber/LineCover.lean} & The checked rational isolators contain every root of the cover polynomial; reconstructed signs are correct on all point and open cells.\\
+\path{Forge/RealFiber/RootSelection.lean} & A concrete isolator denotes one real root, and checked gcd/root-count facts establish all source atom signs there.\\
+\path{Forge/RealFiber/Bridge.lean} & The reified equations and Boolean formula denote the exact original Lean relation under the recorded parameter map.\\
+\bottomrule
+\end{longtable}
+
+The hardest missing theorem is the full nonreduced Hermite-signature bridge. A theorem only for separable field extensions does not suffice: the quotient of $x^2$ is not a field and its trace form is degenerate. This limitation must be visible in the milestone acceptance tests. The initial formalization may instead target a smaller, explicitly labeled squarefree univariate lane, but that would not establish the advertised collision-safe full fragment.
+
+\subsection{Verified library footholds, not invented APIs}
+
+Current Mathlib documentation supplies several concrete starting points. These were checked in the rolling documentation; their availability and signatures must still be compiled against Forge's chosen pinned Mathlib revision.
+
+\textbf{Monic quotients.} \code{AdjoinRoot.powerBasis'} takes a monic polynomial over a commutative ring and supplies its power basis. The same module contains \code{Polynomial.Monic.free_adjoinRoot} and \code{Polynomial.Monic.finite_adjoinRoot}. These are the appropriate entry points for an iterated monic tower, rather than an irreducible-field-only construction~\cite{mathlib-adjoinroot}.
+
+\textbf{Trace matrices.} The trace library defines the algebra trace and trace form and relates a basis trace matrix to the matrix of that bilinear form. It also records trace behavior for nilpotent elements. These are useful components, but their existence does not mean that the weighted Artinian-algebra signature theorem has already been assembled~\cite{mathlib-trace}.
+
+\textbf{Characteristic polynomials and specialization.} \code{Matrix.charpoly_map} gives the natural map behavior of the characteristic polynomial. The characteristic-coefficient files contain monicity and coefficient facts. They are suitable for identifying the reflected polynomial with the mathematical determinant after parameter evaluation; the complete Newton-recursion replay theorem still requires an explicit implementation or a proved equivalent checker~\cite{mathlib-charpoly}.
+
+\textbf{Real spectrum.} \code{Matrix.IsHermitian.charpoly_eq} expresses the characteristic polynomial as a product over the real eigenvalues, and the same spectrum module relates roots to those eigenvalues. This directly supports the real-rootedness premise that makes the variation formula exact~\cite{mathlib-spectrum}.
+
+\textbf{Root signs and quantified closure.} The Isabelle developments provide useful formalization precedents for algebraic root certificates and full real quantifier elimination~\cite{li-passmore-paulson,kosaian-tan-platzer}. They are research references, not Lean libraries that can be imported. Forge's own ledger explicitly identifies its generic Lean Sturm bridge as unfinished at the audited snapshot. A port or a new proof must be compiled and tested rather than assumed from the presence of a Python Sturm routine~\cite{forge}.
+
+\subsection{The new source bridge must prove equivalence}
+
+A reifier should return the original relation, a parameter map, a finite-fiber IR, and a proof of
+\begin{equation}\label{eq:bridge}
+\operatorname{OriginalRelation}(\rho,\bm x)
+\quad\Longleftrightarrow\quad
+\bigl(\bm f(\operatorname{params}(\rho),\bm x)=0
+\ \wedge\ F(\operatorname{params}(\rho),\bm x)\bigr).
+\end{equation}
+It must preserve real-variable identity, binder order, powers, rational coefficients, strictness, and every relevant source hypothesis. An unproved syntactic extraction is not sufficient for either positive or negative conclusions.
+
+There is an important asymmetry when a parameter is an opaque expression. Suppose the reifier replaces $u^2$ by a new real parameter $t$. A theorem valid for \emph{all} $t$ can safely be specialized to $u^2$. But a counterexample at $t=-1$ is not a counterexample to the original source. The source parameter map needs a realizability witness before an outer counterparameter may be exported as a source counterexample. Retaining the known guard $t\geq0$ helps, but an arbitrary collection of guards need not characterize the map's exact image.
+
+This is not a reason to give up opaque parameters. It is a reason for the worker's positive transport rule and negative transport rule to have different premises. The new module should fit these premises into Forge's existing source-owned evidence discipline, not invent a competing authority system.
+
+\subsection{What successful replay should return}
+
+The desired theorem has the following shape, written as design notation rather than executable Lean:
+\begin{lstlisting}
+replay_count_sound(source, certificate, accepted):
+  for every real parameter assignment tau,
+    interpreted_count_circuit(certificate, tau)
+      = cardinality(source_real_fiber_filtered_by_formula(tau))
+\end{lstlisting}
+The cardinality side must carry the proved finiteness supplied by the monic tower. A cardinality convention that returns zero for an infinite set is not a substitute for that proof.
+
+The tactic uses this equality and the source bridge to rewrite the original existential or unique-existential goal. When a whole one-parameter statement is present, the line-cover theorem closes the remaining condition. With several free parameters, the worker can return the exact count guard as a residual goal or a proved consequence; existing arithmetic workers may then discharge it. A failed guard proof is not a failure of the count identity.
+
+The first production acceptance must produce an ordinary Lean proof term under the project's existing verification gate. It must not add an axiom named after a successful external run, infer success from an elaborator message alone, or trust a Python Boolean. The Python class called \code{CheckedFiber} is an ordinary mutable research object, not an unforgeable proof handle.
+
+\subsection{Admission and scheduling algorithms}
+
+A practical admission pass can enumerate candidate leading variables in each polynomial. A candidate is allowed when its leading coefficient is a nonzero rational constant and its lower coefficients use only parameters and earlier fiber variables. Normalize that constant with an equality proof. For a small number of eliminated variables, search assignments of equations to leading variables and topological orders of their dependency graph. Reject a cyclic or unresolved order unless the certified normalization frontend supplies a valid triangular presentation.
+
+After admission, compute $D$ and an upper bound on indicator support before spawning an expensive producer. Route a goal to this worker when it asks for algebraic existence, uniqueness, a finite-fiber universal property, or a count-dependent consequence. A rational-polynomial witness search that has exhausted its small grammar is another useful trigger; the square-root obstruction explains why repeating that search with larger coefficients may be pointless.
+
+The result can cooperate with other workers in both directions. From a proof that $x^2=t$ has a real witness, the exact existence guard yields $t\geq0$. Conversely, a proved parameter sign can settle several characteristic coefficients without branching. The first integration can use ordinary proved lemmas for these transfers. It need not attach a new mutable real-algebraic state to \code{grind}.
+
+\section{A specific Leant/Djex extension}\label{sec:synthesis}
+
+Leant and Djex already devote substantial machinery to source selections, bounded synthesis, and checked candidates. Forge's dedicated review has already incorporated many of those lessons~\cite{forge,leant,djex}. The additional proposal here is concrete: register an \emph{algebraic refinement provider} whose precondition is a checked count guard and whose output is the exact refined witness requested by the source.
+
+\subsection{A provider that supplies mathematical data with its property}
+
+A user may ask for a value of the mathematical type
+\[
+\{x:\R\mid x>0\wedge x^5-x=t\}
+\]
+in a context containing $t\geq0$. A type-directed search need not enumerate real-valued rational expressions indefinitely. It can submit the polynomial relation and the local parameter guard to Real Fibers. The count theorem proves the subtype nonempty; a selected witness is then returned through either a proof-only choice provider or an executable algebraic-descriptor provider.
+
+A proposed provider response should carry four logically separate items: the exact source relation, the checked count theorem, a selection construction when one is available, and a proof that the selected value has the original refinement. The selection construction is absent when only an existence proof is available. This avoids presenting a root count as a synthesized implementation.
+
+At a higher-order boundary, the provider can synthesize a function such as
+\[
+(t:\R)\longmapsto\{x:\R\mid x>0\wedge x^5-x=t\}
+\quad\text{under the argument refinement }t\geq0.
+\]
+With \code{Classical.choose}, this is a proof-backed noncomputable function. With a future algebraic-input API, it can be a computational function on that narrower domain. The mode should be part of provider selection, not inferred from whether an emitted term happens to elaborate.
+
+\subsection{What this does not solve in the related projects}
+
+The audited related READMEs distinguish accepted fragments from outstanding original indexing and simultaneous-universe composition goals. This worker does not resolve those tasks. Its carrier is the specific mathematical domain $\R$, with a polynomial source bridge. It neither erases universe constraints nor substitutes an easier ordinary-list implementation for a Church-encoded target.
+
+The useful transfer is narrower: a type-directed synthesizer gains a new class of \emph{verified providers} instead of more unstructured term enumeration. The count-based provider must preserve the exact requested source refinement, just as the existing synthesis boundary preserves the candidate's selected types and dictionaries. A provider for a nearby but different equation is not a successful answer.
+
+\section{Implementation milestones with acceptance gates}\label{sec:roadmap}
+
+\textbf{Milestone 1: formal sign-count compilation.} Implement the sign-cube algebra and its finite-cardinality theorem. Replay every Boolean fixture in the package, including strict and non-strict atoms and correlated constraints. Acceptance is a generic theorem plus tests against the original formula AST, not 160 unrelated hand-proved examples.
+
+\textbf{Milestone 2: monic normal forms and matrix identities.} Formalize the tower basis and the specialization theorem. Verify the emitted matrices and Newton identities in Lean. Acceptance must include a repeated-root source and a two-variable triangular source; proving only a matrix identity for a manually supplied matrix does not establish the source bridge.
+
+\textbf{Milestone 3: the signature-to-root-count theorem.} Connect the weighted trace matrix to distinct real roots, including nilpotents and complex factors. Required controls are $x^2$, $x^2+1$, $(x-t)^4$, and the coupled tower $x^2=t,\ y^2=x$. A radical-only theorem is an explicitly smaller milestone, not completion of this one.
+
+\textbf{Milestone 4: root covers and selectors.} Formalize complete one-dimensional covers and the gcd-based witness signs. The gate includes the two boundary-only false claims and the algebraic-section-only existential claim. A proof valid only on open sectors does not pass.
+
+\textbf{Milestone 5: end-to-end Forge and synthesis integration.} Add the source reifier, count-guard lowering, and mode-labeled provider. Run a pinned Lean corpus with matched resource budgets against the existing tactics. Report solved goals, proof sizes, elaboration cost, and failures separately. Until this gate is met, there is no supported claim that Real Fibers improves \code{grind}'s measured solve rate.
+
+This ordering isolates the substantial formal-algebra work rather than hiding it behind a large tactic prototype. The tested Python implementation supplies concrete IRs and counterexamples for each gate, while the article's proofs explain exactly what must be kernelized.

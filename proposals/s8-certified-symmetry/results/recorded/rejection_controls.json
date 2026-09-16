@@ -1,0 +1,167 @@
+[
+  {
+    "name": "wrong-order",
+    "exception": "InvalidCertificate",
+    "reason": "wrong order product"
+  },
+  {
+    "name": "Boolean-order",
+    "exception": "InvalidCertificate",
+    "reason": "integer required (Booleans and floats are forbidden)"
+  },
+  {
+    "name": "float-order",
+    "exception": "InvalidCertificate",
+    "reason": "integer required (Booleans and floats are forbidden)"
+  },
+  {
+    "name": "unknown-field",
+    "exception": "InvalidCertificate",
+    "reason": "unexpected object schema"
+  },
+  {
+    "name": "wrong-format",
+    "exception": "InvalidCertificate",
+    "reason": "unsupported certificate format"
+  },
+  {
+    "name": "missing-base-level",
+    "exception": "InvalidCertificate",
+    "reason": "the complete base is required"
+  },
+  {
+    "name": "missing-original-generator",
+    "exception": "InvalidCertificate",
+    "reason": "an original generator is missing from the strong list"
+  },
+  {
+    "name": "duplicate-strong-generator",
+    "exception": "InvalidCertificate",
+    "reason": "strong generators must be distinct and nonidentity"
+  },
+  {
+    "name": "identity-strong-generator",
+    "exception": "InvalidCertificate",
+    "reason": "strong generators must be distinct and nonidentity"
+  },
+  {
+    "name": "Boolean-root",
+    "exception": "InvalidCertificate",
+    "reason": "integer required (Booleans and floats are forbidden)"
+  },
+  {
+    "name": "wrong-root",
+    "exception": "InvalidCertificate",
+    "reason": "orbit root must be the base point"
+  },
+  {
+    "name": "forward-orbit-parent",
+    "exception": "InvalidCertificate",
+    "reason": "integer out of bounds"
+  },
+  {
+    "name": "zero-generator-label",
+    "exception": "InvalidCertificate",
+    "reason": "zero signed-generator label"
+  },
+  {
+    "name": "duplicate-orbit-image",
+    "exception": "InvalidCertificate",
+    "reason": "duplicate orbit point"
+  },
+  {
+    "name": "omitted-orbit-leaf",
+    "exception": "InvalidCertificate",
+    "reason": "wrong order product"
+  },
+  {
+    "name": "forward-DAG-reference",
+    "exception": "InvalidCertificate",
+    "reason": "integer out of bounds"
+  },
+  {
+    "name": "negative-DAG-reference",
+    "exception": "InvalidCertificate",
+    "reason": "integer out of bounds"
+  },
+  {
+    "name": "unknown-DAG-operator",
+    "exception": "InvalidCertificate",
+    "reason": "unknown DAG operator"
+  },
+  {
+    "name": "nonexistent-input-generator",
+    "exception": "InvalidCertificate",
+    "reason": "integer out of bounds"
+  },
+  {
+    "name": "problem-substitution",
+    "exception": "InvalidCertificate",
+    "reason": "strong generators must be distinct and nonidentity"
+  },
+  {
+    "name": "nonbijective-input",
+    "exception": "InvalidCertificate",
+    "reason": "duplicate permutation image"
+  },
+  {
+    "name": "Boolean-degree",
+    "exception": "InvalidCertificate",
+    "reason": "integer required (Booleans and floats are forbidden)"
+  },
+  {
+    "name": "unsound-root-prune",
+    "exception": "InvalidCertificate",
+    "reason": "unsound coset pruning bound"
+  },
+  {
+    "name": "omitted-coset-child",
+    "exception": "InvalidCertificate",
+    "reason": "incomplete coset cover"
+  },
+  {
+    "name": "false-minimum",
+    "exception": "InvalidCertificate",
+    "reason": "transporter does not produce the claimed image"
+  },
+  {
+    "name": "wrong-transporter",
+    "exception": "InvalidCertificate",
+    "reason": "transporter does not produce the claimed image"
+  },
+  {
+    "name": "wrong-cycle-multiplicity",
+    "exception": "InvalidCertificate",
+    "reason": "incomplete cycle inventory"
+  },
+  {
+    "name": "omitted-cycle-class",
+    "exception": "InvalidCertificate",
+    "reason": "incomplete cycle inventory"
+  },
+  {
+    "name": "unproved-symmetric-family",
+    "exception": "InvalidCertificate",
+    "reason": "group is not the full symmetric group"
+  },
+  {
+    "name": "unproved-alternating-family",
+    "exception": "InvalidCertificate",
+    "reason": "wrong alternating group order"
+  },
+  {
+    "name": "duplicate-JSON-key",
+    "exception": "InvalidCertificate",
+    "reason": "duplicate JSON object key"
+  },
+  {
+    "name": "floating-JSON",
+    "exception": "InvalidCertificate",
+    "reason": "non-integer JSON number"
+  },
+  {
+    "name": "nonfinite-JSON",
+    "exception": "InvalidCertificate",
+    "reason": "non-integer JSON number"
+  }
+]

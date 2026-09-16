@@ -1,0 +1,77 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "negative_algebraic_obstruction_affine_2",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        1,
+        0,
+        "-4"
+      ],
+      [
+        2,
+        0,
+        "4"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "2"
+      ],
+      [
+        0,
+        1,
+        "-2"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-2"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "1"
+      ],
+      [
+        0,
+        1,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "implies",
+    [
+      "eq",
+      0
+    ],
+    [
+      "and",
+      [
+        "eq",
+        1
+      ],
+      [
+        "gt",
+        2
+      ]
+    ]
+  ]
+}

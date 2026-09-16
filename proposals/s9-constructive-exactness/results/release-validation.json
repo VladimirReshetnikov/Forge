@@ -1,0 +1,64 @@
+{
+  "validation": "Ran from an extracted copy of the delivery ZIP",
+  "result": "PASS",
+  "compared_summary_keys": [
+    "seed",
+    "certificate_cases",
+    "outcomes",
+    "families",
+    "rejection_controls",
+    "oracle_checks",
+    "ablation_rows"
+  ],
+  "commands": [
+    {
+      "command": [
+        "python",
+        "-S",
+        "replay.py",
+        "../results/recorded/corpus.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"accepted\": 656,\n  \"outcomes\": {\n    \"homology\": 97,\n    \"fill\": 129,\n    \"obstruction\": 65,\n    \"induced\": 48,\n    \"reduction\": 72,\n    \"homotopy\": 100,\n    \"no_homotopy\": 145\n  },\n  \"search_imported\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "-S",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_bool (test_checker.CheckerTests.test_bool) ... ok\ntest_duplicate_keys (test_checker.CheckerTests.test_duplicate_keys) ... ok\ntest_empty_shapes (test_checker.CheckerTests.test_empty_shapes) ... ok\ntest_float (test_checker.CheckerTests.test_float) ... ok\ntest_graded_map (test_checker.CheckerTests.test_graded_map) ... ok\ntest_input_bit_cap (test_checker.CheckerTests.test_input_bit_cap) ... ok\ntest_nonfinite_json (test_checker.CheckerTests.test_nonfinite_json) ... ok\ntest_noninteger_domain (test_checker.CheckerTests.test_noninteger_domain) ... ok\ntest_rectangular_multiply (test_checker.CheckerTests.test_rectangular_multiply) ... ok\ntest_shape (test_checker.CheckerTests.test_shape) ... ok\ntest_transpose (test_checker.CheckerTests.test_transpose) ... ok\ntest_unexpected_key (test_checker.CheckerTests.test_unexpected_key) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.001s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python",
+        "run_suite.py",
+        "--output",
+        "../reproduced-results"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"seed\": 20260915,\n  \"python\": \"3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]\",\n  \"sympy\": \"1.14.0\",\n  \"platform\": \"Linux-6.18.44-x86_64-with-glibc2.41\",\n  \"certificate_cases\": 656,\n  \"outcomes\": {\n    \"homology\": 97,\n    \"fill\": 129,\n    \"obstruction\": 65,\n    \"induced\": 48,\n    \"reduction\": 72,\n    \"homotopy\": 100,\n    \"no_homotopy\": 145\n  },\n  \"families\": {\n    \"integral_coordinates\": 96,\n    \"cycle_filling\": 96,\n    \"cycle_classification\": 96,\n    \"induced_maps\": 48,\n    \"unit_reduction\": 56,\n    \"partial_reduction\": 1,\n    \"heuristic_boundary\": 2,\n    \"secondary_homotopy\": 184,\n    \"constructed_homotopies\": 48,\n    \"free_obstruction\": 1,\n    \"empty_shapes\": 3,\n    \"transport_prerequisite\": 14,\n    \"transported_homotopies\": 8,\n    \"worked_example\": 3\n  },\n  \"rejection_controls\": 489,\n  \"oracle_checks\": {\n    \"determinantal_divisors\": 64,\n    \"coordinate_composition\": 24,\n    \"finite_modular_enumeration\": 184\n  },\n  \"ablation_rows\": 7,\n  \"elapsed_seconds\": 9.561126164000143,\n  \"lean_status\": \"NOT_RUN: no Lean executable available\",\n  \"limits\": {\n    \"matrix_dimension\": 256,\n    \"input_coefficient_bits\": 16384,\n    \"homotopy_equations\": 256,\n    \"homotopy_variables\": 256\n  },\n  \"note\": \"Counts are different units. No Forge/grind tactic comparison. No kernel proof.\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "-S",
+        "replay.py",
+        "../reproduced-results/corpus.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"accepted\": 656,\n  \"outcomes\": {\n    \"homology\": 97,\n    \"fill\": 129,\n    \"obstruction\": 65,\n    \"induced\": 48,\n    \"reduction\": 72,\n    \"homotopy\": 100,\n    \"no_homotopy\": 145\n  },\n  \"search_imported\": false\n}\n",
+      "stderr": ""
+    }
+  ],
+  "note": "No Lean compilation; this validates package execution and reproducible test counts."
+}

@@ -1,0 +1,178 @@
+{
+  "schema": "forge.atlas.certificate/1",
+  "factors": [
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        0,
+        1,
+        "1"
+      ],
+      [
+        0,
+        2,
+        "-1/2"
+      ],
+      [
+        1,
+        0,
+        "1"
+      ]
+    ]
+  ],
+  "factorizations": [
+    {
+      "scalar": "4",
+      "powers": [
+        [
+          0,
+          2
+        ]
+      ]
+    }
+  ],
+  "derivative_guards": [
+    {
+      "a": [
+        [
+          0,
+          0,
+          "2"
+        ]
+      ],
+      "b": [
+        [
+          0,
+          0,
+          "1"
+        ],
+        [
+          0,
+          1,
+          "-1"
+        ]
+      ],
+      "guard": [
+        "-1",
+        "2"
+      ],
+      "factor": 0
+    }
+  ],
+  "pair_guards": [],
+  "projection": [
+    "-1/2",
+    "1"
+  ],
+  "base_roots": [
+    [
+      "1/2",
+      "1/2"
+    ]
+  ],
+  "stacks": [
+    {
+      "sample": "-1/2",
+      "y_roots": [],
+      "y_samples": [
+        "0"
+      ],
+      "signs": [
+        [
+          1
+        ]
+      ],
+      "truths": [
+        true
+      ],
+      "value": true,
+      "selection": null
+    },
+    {
+      "sample": null,
+      "y_roots": [
+        [
+          "3/4",
+          "3/2"
+        ]
+      ],
+      "y_samples": [
+        "-1/4",
+        "5/2"
+      ],
+      "signs": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "truths": [
+        true,
+        true,
+        true
+      ],
+      "value": true,
+      "selection": null
+    },
+    {
+      "sample": "3/2",
+      "y_roots": [
+        [
+          "-1/2",
+          "0"
+        ],
+        [
+          "2",
+          "5/2"
+        ]
+      ],
+      "y_samples": [
+        "-3/2",
+        "1",
+        "7/2"
+      ],
+      "signs": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "truths": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "value": true,
+      "selection": null
+    }
+  ],
+  "truth_by_x": [
+    true,
+    true,
+    true
+  ],
+  "closed_value": true,
+  "selected_x": null
+}

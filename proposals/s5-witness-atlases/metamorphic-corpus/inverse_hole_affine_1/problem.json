@@ -1,0 +1,29 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "inverse_hole_affine_1",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        1,
+        0,
+        "-2"
+      ],
+      [
+        1,
+        1,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "eq",
+    0
+  ]
+}

@@ -1,0 +1,137 @@
+\section{A complete stabilizer-chain certificate}
+\label{sec:chain}
+A stabilizer chain replaces a large set of group elements with a sequence of small orbit tables. The difficulty for a proof-producing tactic is not obtaining a plausible chain; it is checking that the chain is complete. An incomplete chain may reject an actual group member. Our acceptance condition therefore checks every required Schreier residue, not a random sample and not a producer-selected subset.
+
+\subsection{Certificate representation}
+The certificate has five fields:
+\begin{lstlisting}
+{
+  "format": "forge.symmetry.chain.v1",
+  "word_dag": [ ... ],
+  "strong": [ ... ],
+  "levels": [ ... ],
+  "order":  ...
+}
+\end{lstlisting}
+The degree and original generator arrays are not fields of this object. They are supplied independently by the caller.
+
+The word DAG has operations \code{id}, \code{gen k}, \code{inv a}, and \code{mul a b}. Every child index must precede its parent. A \code{gen k} node refers to original generator $g_k$. Evaluating the DAG therefore proves that every evaluated node belongs to $G$. The strong-generator list contains references to these nodes. The checker requires distinct, nonidentity permutations and requires every nonidentity original generator to occur in the strong list. Thus the strong list generates exactly $G$, rather than merely some subgroup or overgroup.
+
+The prototype uses the full base $0,1,\ldots,n-1$. This sacrifices an optimization but eliminates an additional proof obligation: there is no unverified assertion that a shorter base is faithful. A future partial-base format must certify that its final pointwise stabilizer is trivial.
+
+Let $S$ be the set of evaluated strong generators, and define
+\[
+ S_i=\{s\in S:s(0)=0,\ldots,s(i-1)=i-1\},\qquad K_i=\langle S_i\rangle.
+\]
+At level $i$, the certificate supplies an orbit tree. Its root is $i$, with identity transversal. A nonroot record has the form
+\[
+  (x,\text{earlier parent index},\text{signed strong-generator index}).
+\]
+The checker reconstructs $t_x=s\,t_{\mathrm{parent}}$, requires $s\in S_i^{\pm1}$, and checks $t_x(i)=x$. The points must be distinct. This establishes that every listed point lies in the actual $K_i$-orbit of $i$, and every $t_x$ belongs to $K_i$.
+
+Denote the listed point set by $\Omega_i$ and its transversal set by $T_i$. The remaining checks are:
+\begin{enumerate}
+\item For every $s\in S_i^{\pm1}$ and $x\in\Omega_i$, require $s(x)\in\Omega_i$.
+\item Form the Schreier residue
+\begin{equation}
+ r_{i,s,x}=t_{s(x)}^{-1}s\,t_x.\label{eq:schreier}
+\end{equation}
+Require that it sifts to the identity through levels $i+1,\ldots,n-1$.
+\item Require that the claimed order is exactly $\prod_i|\Omega_i|$.
+\end{enumerate}
+The last check alone has almost no force: a malformed collection of tables also has a product. The closure and residue checks are what make that product a group order.
+
+\subsection{Sifting}
+Given a permutation $h$ fixing the first $i$ base points, sifting at level $i$ computes $x=h(i)$. If $x\notin\Omega_i$, it fails. Otherwise it replaces $h$ by $t_x^{-1}h$, which fixes the first $i+1$ points. After the full base, success requires the identity permutation. The code also validates query permutations before using them.
+
+A successful sift yields a factorization
+\begin{equation}
+ h=t_{x_i}t_{x_{i+1}}\cdots t_{x_{n-1}}.
+ \label{eq:sift-factorization}
+\end{equation}
+This factorization is already a positive membership witness. A failed sift becomes a \emph{negative} membership witness only after the chain's completeness has been established.
+
+\subsection{Soundness, without trusting the chain constructor}
+\begin{lemma}[The listed orbit is exact]
+For an accepted level $i$, $\Omega_i=K_i\cdot i$.
+\end{lemma}
+\begin{proof}
+The reconstructed tree gives $\Omega_i\subseteq K_i\cdot i$. The root belongs to $\Omega_i$, and closure under every generator and inverse gives the opposite inclusion by induction on word length.
+\end{proof}
+
+\begin{lemma}[Stabilizer equality]
+For every accepted level $i<n$,
+\[
+  \Stab_{K_i}(i)=K_{i+1}.
+\]
+\end{lemma}
+\begin{proof}
+Every generator of $K_{i+1}$ lies in $K_i$ and fixes $i$, so one inclusion is immediate. For the other inclusion, first observe that a successful sift of a residue in \eqref{eq:schreier} expresses it as a product of transversals from levels $j\geq i+1$. Each such transversal belongs to $K_j\subseteq K_{i+1}$. Thus every residue lies in $K_{i+1}$.
+
+For completeness, the usual Schreier argument can be written directly. If $s\in S_i^{\pm1}$ and $x\in\Omega_i$, equation \eqref{eq:schreier} rearranges to
+\[
+ s\,t_x=t_{s(x)}r_{i,s,x}.
+\]
+Beginning with the identity transversal, repeatedly use this equation while reading a word in $S_i^{\pm1}$. Induction on word length writes every $h\in K_i$ as $t_{h(i)}k$ with $k\in K_{i+1}$. If $h(i)=i$, the root transversal is the identity, hence $h\in K_{i+1}$.
+\end{proof}
+
+\begin{theorem}[Complete-chain theorem]
+\label{thm:chain}
+An accepted certificate yields a bijection
+\[
+ T_0\times T_1\times\cdots\times T_{n-1}\longrightarrow G,
+ \qquad (t_0,\ldots,t_{n-1})\longmapsto t_0\cdots t_{n-1}.
+\]
+Consequently its order product is $|G|$, and sifting decides membership in $G$.
+\end{theorem}
+\begin{proof}
+The strong list generates $G$, so $K_0=G$. The preceding lemma identifies each next group with the corresponding stabilizer. The full-base bottom group $K_n$ is trivial because every permutation fixing every point is the identity. Repeated coset decomposition gives surjectivity.
+
+For uniqueness, compare two products. Their values at $0$ select the same point of $\Omega_0$, hence the same stored transversal $t_0$. Cancel it. Their residual values at $1$ select the same next transversal. Continue to the full base. All digits agree. The bijection proves the order formula. If a member failed sifting, its unique coset digit would be absent from an exact orbit, a contradiction. Conversely, successful sifting is the explicit product \eqref{eq:sift-factorization} of known group elements.
+\end{proof}
+
+The mathematical theorem does not certify the Python implementation. It specifies the theorem a reflected Lean checker must eventually prove. The standalone checker is intentionally small enough for this proof effort to be bounded and inspectable.
+
+\subsection{A rejected partial-chain example}
+Take $G=\langle(0\ 1\ 2),(0\ 1)\rangle=\Sym_3$. Supply all three orbit points at level $0$, but only the roots at levels $1$ and $2$. Both original generators are present, every level's listed orbit is closed under its listed stabilizer generators, and the table-size product is $3$. Nevertheless the point stabilizer contains a nontrivial transposition that the lower tables cannot represent. A Schreier residue fails sifting, so the checker rejects the certificate.
+
+This exact case is in the regression suite. It tests the essential logical gate after superficial order-product checks have already passed. Another control removes a point from a cyclic orbit and recomputes the claimed product; it is rejected for lack of orbit closure, not merely for a stale order field.
+
+\section{A deterministic certificate producer}
+\label{sec:producer}
+The producer is an incremental Schreier--Sims construction, chosen for a simple termination argument rather than competitive performance with established computer algebra systems \cite{gap,sympy}. It starts with the original nonidentity generators. For each level it builds the orbit tree under the currently available prefix-fixing generators and their inverses. It scans Schreier residues, beginning at the deepest level, and sifts each residue through the lower tables.
+
+If a residue fails, the producer adds the remaining nonidentity permutation as a new strong generator, together with its original-generator word DAG. It then rebuilds the tables. If all residues succeed, the tables are exported.
+
+\begin{lstlisting}
+strong := nonidentity original generators
+repeat:
+    tables := orbit_trees(strong, full_base)
+    for level from n-1 down to 0:
+        for signed generator s fixing earlier base points:
+            for x in tables[level]:
+                r := inverse(t[s(x)]) * s * t[x]
+                residual := sift_from(r, level+1, tables)
+                if residual != identity:
+                    append residual and its word to strong
+                    restart
+    return complete chain certificate
+\end{lstlisting}
+
+\begin{proposition}[Finite insertion bound]
+Without resource caps, the producer inserts at most $n(n-1)/2$ additional strong generators.
+\end{proposition}
+\begin{proof}
+A nonidentity residual after sifting fixes all points before the level where its image is missing. Adding it therefore strictly enlarges the orbit of that level's base point. Strong-generator sets only grow, so none of the level orbits shrinks. At level $i$, at most $n-i$ points can occur because earlier points are fixed. Starting from at least one point per level, the total possible strict orbit growth is at most
+$\sum_{i=0}^{n-1}(n-i-1)=n(n-1)/2$.
+\end{proof}
+
+The producer interns evaluated permutations and keeps one word for each value. This extensional merging is an optimization in untrusted code: the checker reevaluates the retained words. A final backward traversal trims dead word nodes and preserves only ancestors of the strong-generator roots. Orbit transversals need not be stored as separate long words because their local tree edges reconstruct them.
+
+Let $s=|S|$, $W$ be the retained word-DAG size, and
+\[
+ E=\sum_i |S_i^{\pm1}|\,|\Omega_i|
+\]
+be an upper bound on checked Schreier edges. Evaluating words costs $O(Wn)$ elementary array operations. Reconstructing orbit trees costs $O(n\sum_i|\Omega_i|)$. Each residue check uses at most $n$ permutation compositions, each $O(n)$, giving $O(En^2)$ overall. Since $E=O(sn^2)$, $O(Wn+sn^4)$ is a safe coarse bound for the mathematical array operations of the checker. Python validation, hashing, allocation, and integer bit costs add overhead; this is not a measured runtime model.
+
+At most $n(n+1)/2$ transversal entries are needed for the full base. The claimed order has at most $\lceil\log_2(n!)\rceil$ bits. These bounds concern the representation, not a promise that every supported degree fits a particular execution budget. The implementation separately caps degree, word nodes, Schreier checks, and enumeration. Reaching a cap raises a resource-refusal result.

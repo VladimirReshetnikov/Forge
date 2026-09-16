@@ -1,0 +1,67 @@
+{
+  "bad": [
+    {
+      "control": 0,
+      "vector": [
+        1,
+        1
+      ]
+    }
+  ],
+  "controls": 1,
+  "dimension": 2,
+  "initials": [
+    {
+      "base": [
+        1,
+        0
+      ],
+      "control": 0,
+      "rays": [
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "base": [
+        0,
+        1
+      ],
+      "control": 0,
+      "rays": [
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "transitions": [
+    {
+      "consume": [
+        1,
+        0
+      ],
+      "dst": 0,
+      "produce": [
+        2,
+        0
+      ],
+      "src": 0
+    },
+    {
+      "consume": [
+        0,
+        1
+      ],
+      "dst": 0,
+      "produce": [
+        0,
+        2
+      ],
+      "src": 0
+    }
+  ]
+}

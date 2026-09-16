@@ -1,0 +1,48 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "sympy": "1.14.0",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "certificate_cases": 656,
+  "outcomes": {
+    "homology": 97,
+    "fill": 129,
+    "obstruction": 65,
+    "induced": 48,
+    "reduction": 72,
+    "homotopy": 100,
+    "no_homotopy": 145
+  },
+  "families": {
+    "integral_coordinates": 96,
+    "cycle_filling": 96,
+    "cycle_classification": 96,
+    "induced_maps": 48,
+    "unit_reduction": 56,
+    "partial_reduction": 1,
+    "heuristic_boundary": 2,
+    "secondary_homotopy": 184,
+    "constructed_homotopies": 48,
+    "free_obstruction": 1,
+    "empty_shapes": 3,
+    "transport_prerequisite": 14,
+    "transported_homotopies": 8,
+    "worked_example": 3
+  },
+  "rejection_controls": 489,
+  "oracle_checks": {
+    "determinantal_divisors": 64,
+    "coordinate_composition": 24,
+    "finite_modular_enumeration": 184
+  },
+  "ablation_rows": 7,
+  "elapsed_seconds": 9.643703638000034,
+  "lean_status": "NOT_RUN: no Lean executable available",
+  "limits": {
+    "matrix_dimension": 256,
+    "input_coefficient_bits": 16384,
+    "homotopy_equations": 256,
+    "homotopy_variables": 256
+  },
+  "note": "Counts are different units. No Forge/grind tactic comparison. No kernel proof."
+}

@@ -1,0 +1,82 @@
+\section{Exact orbit counting from cycle inventories}
+\label{sec:counting}
+Let $a_G(\lambda)$ count the elements of $G$ whose cycle-length multiset is $\lambda$. Here \emph{fixed points are cycles of length one}. Define the cycle-index polynomial
+\[
+  Z_G(z_1,\ldots,z_n)=\frac1{|G|}
+  \sum_{\lambda} a_G(\lambda)\prod_{\ell\in\lambda}z_\ell.
+\]
+The certificate stores the integer inventory $a_G$ and denominator $|G|$, not approximate rational coefficients. Its cycle partitions are sorted, multiplicities are positive integers, duplicate partitions are forbidden, and the multiplicities must sum to the independently checked group order.
+
+Those syntactic checks are necessary but insufficient. The producer constructs the inventory by a Cayley-graph breadth-first enumeration from the original generators. The checker uses a genuinely different representation: it enumerates every unique transversal normal form from Theorem~\ref{thm:chain}, recomputes its cycles, and compares the entire inventory. It never calls the producer's group enumeration.
+
+\subsection{A formula valid for every number of colors}
+Burnside's lemma gives
+\begin{equation}
+  N_G(q)=\#([q]^{[n]}/G)
+  =\frac1{|G|}\sum_{\lambda}a_G(\lambda)q^{|\lambda|}.
+  \label{eq:burnside}
+\end{equation}
+An assignment fixed by a permutation is constant on each of its cycles, so a permutation with $k$ cycles has exactly $q^k$ fixed assignments. The averaging theorem is already available in Mathlib as
+\begin{lstlisting}
+MulAction.sum_card_fixedBy_eq_card_orbits_mul_card_group
+\end{lstlisting}
+in \code{Mathlib.GroupTheory.GroupAction.Quotient} \cite{mathlib-burnside}. This is a concrete library reuse point, not a request to refound finite group actions.
+
+A future Lean implementation should prove the integer form
+\[
+ |G|\,N_G(q)=\sum_{\lambda}a_G(\lambda)q^{|\lambda|},
+\]
+then discharge exact division using $|G|>0$. The Python checker verifies divisibility for each evaluated $q$. The mathematical derivation establishes why one verified inventory supports a theorem quantified over $q$; executing finitely many values of $q$ alone would not establish that universal theorem.
+
+\begin{example}[Ten positions on a circle]
+Let $C_{10}$ act by rotation and $D_{10}$ by rotations and reflections of ten positions. The actions are explicit permutations; $|C_{10}|=10$ and $|D_{10}|=20$. Their orbit-count formulas are
+\begin{align*}
+ N_{C_{10}}(q)&=\frac{q^{10}+q^5+4q^2+4q}{10},\\
+ N_{D_{10}}(q)&=\frac{q^{10}+5q^6+6q^5+4q^2+4q}{20}.
+\end{align*}
+For two colors these give 108 necklaces and 78 bracelets. For three colors the bracelet count is 3,210. The $D_{10}$ numerator is checked by the regression suite, rather than inserted as an unexplained formula.
+\end{example}
+
+\subsection{Fixed-weight counting}
+For binary colorings with exactly $k$ ones, a fixed assignment selects whole cycles. Therefore
+\begin{equation}
+ N_{G,k}=\frac1{|G|}\sum_{\lambda}a_G(\lambda)
+ [t^k]\prod_{\ell\in\lambda}(1+t^\ell).
+ \label{eq:weight}
+\end{equation}
+The checker computes each truncated product by an integer dynamic program, updating coefficients in descending order so that a cycle is selected at most once. This detail matters: an ascending in-place update would accidentally permit multiple selections of the same cycle.
+
+For $D_{10}$ and $k=5$, the result is 16. The main experiment compares all tested weights with an independent coloring-orbit oracle; weights above $n$ return zero. The empty action at $n=0$ has one empty coloring even when $q=0$, so the implementation treats $0^0=1$ in precisely that combinatorial context.
+
+\subsection{Counting huge recognized groups without enumerating them}
+For $n>0$,
+\begin{equation}
+ N_{\Sym_n}(q)=\binom{q+n-1}{n},
+ \label{eq:symmetric-count}
+\end{equation}
+with value zero when $q=0$. Each orbit is a multiset of $n$ colors. The $n=0$ value is one.
+
+For $n\geq2$,
+\begin{equation}
+ N_{\Alt_n}(q)=\binom{q+n-1}{n}+\binom qn.
+ \label{eq:alternating-count}
+\end{equation}
+Here $\binom qn=0$ when $q<n$. To prove the additional term, examine a symmetric-group orbit. If a color repeats, its stabilizer contains an odd transposition, and the orbit remains one alternating-group orbit. If every color is distinct, its stabilizer is trivial and its symmetric-group orbit splits into two alternating-group orbits. There are $\binom qn$ such all-distinct color sets. This also explains the parity distinction in Theorem~\ref{thm:alternating-image}.
+
+Thus a recognized $\Sym_{40}$ certificate immediately supports 41 binary-color orbits and 861 three-color orbits. No cycle inventory of $40!$ elements is constructed. The general inventory worker remains bounded by explicit group enumeration; the family formulas are a distinct certified route around that limitation.
+
+\subsection{The singleton-cycle adapter hazard}
+Mathlib's \code{Equiv.Perm.cycleType} omits fixed points: its entries are at least two and its sum is the support cardinality. This is visible in the documented theorems \code{two_le_of_mem_cycleType} and \code{sum_cycleType} \cite{mathlib-cycles}. Our cycle inventory includes fixed points. Consequently a direct translation using only the cardinality of \code{cycleType} would undercount cycles, including giving zero cycles for the identity.
+
+The adapter must reconstruct the full multiset by adjoining $n-|\supp(g)|$ copies of one. Equivalently, the exponent in \eqref{eq:burnside} is
+\[
+  \#\operatorname{cycleType}(g)+n-|\supp(g)|.
+\]
+This is an example of a small representation mismatch that can invalidate every otherwise correct counting certificate.
+
+\subsection{Constraints require a different fixed-point calculation}
+Equation~\eqref{eq:burnside} counts all colorings, not satisfying assignments of an arbitrary CNF and not proper graph colorings. For a $G$-invariant constraint $P$, the correct numerator is
+\[
+  \sum_{g\in G}\#\{c:P(c)\ \text{and}\ g\cdot c=c\}.
+\]
+A proposed extension substitutes one variable per permutation cycle into $P$ and invokes a separate exact finite counting worker. The substitution's equivalence and each fixed-point count need certificates. This constrained-counting compiler is designed only; the delivered counting implementation covers unrestricted colors and fixed binary weight.

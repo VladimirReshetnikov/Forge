@@ -1,0 +1,645 @@
+{
+  "cells": [
+    {
+      "condition": true,
+      "count": 0,
+      "kind": "sector",
+      "parameter_atom_signs": [
+        -1
+      ],
+      "sample": [
+        -2049,
+        1024
+      ]
+    },
+    {
+      "condition": true,
+      "count": 0,
+      "isolator": [
+        [
+          -1025,
+          1024
+        ],
+        [
+          -1023,
+          1024
+        ]
+      ],
+      "kind": "section",
+      "parameter_atom_signs": [
+        -1
+      ]
+    },
+    {
+      "condition": true,
+      "count": 0,
+      "kind": "sector",
+      "parameter_atom_signs": [
+        -1
+      ],
+      "sample": [
+        -1,
+        2
+      ]
+    },
+    {
+      "condition": false,
+      "count": 0,
+      "isolator": [
+        [
+          -1,
+          1024
+        ],
+        [
+          1,
+          1024
+        ]
+      ],
+      "kind": "section",
+      "parameter_atom_signs": [
+        0
+      ]
+    },
+    {
+      "condition": true,
+      "count": 1,
+      "kind": "sector",
+      "parameter_atom_signs": [
+        1
+      ],
+      "sample": [
+        1025,
+        1024
+      ]
+    }
+  ],
+  "certificate": {
+    "claim": false,
+    "fiber_certificate": {
+      "queries": [
+        {
+          "charpoly": [
+            [
+              [
+                [
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            [],
+            [
+              [
+                [
+                  2
+                ],
+                [
+                  -4,
+                  1
+                ]
+              ]
+            ]
+          ],
+          "coefficient": [
+            1,
+            2
+          ],
+          "exponents": [
+            1
+          ],
+          "hermite": [
+            [
+              [],
+              [
+                [
+                  [
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  [
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ],
+              []
+            ]
+          ]
+        },
+        {
+          "charpoly": [
+            [
+              [
+                [
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  1
+                ],
+                [
+                  -2,
+                  1
+                ]
+              ],
+              [
+                [
+                  2
+                ],
+                [
+                  -2,
+                  1
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  3
+                ],
+                [
+                  4,
+                  1
+                ]
+              ]
+            ]
+          ],
+          "coefficient": [
+            1,
+            2
+          ],
+          "exponents": [
+            2
+          ],
+          "hermite": [
+            [
+              [
+                [
+                  [
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ],
+              []
+            ],
+            [
+              [],
+              [
+                [
+                  [
+                    2
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ]
+            ]
+          ]
+        }
+      ],
+      "schema": "hermite-charpoly-v1"
+    },
+    "roots": [
+      [
+        [
+          -1025,
+          1024
+        ],
+        [
+          -1023,
+          1024
+        ]
+      ],
+      [
+        [
+          -1,
+          1024
+        ],
+        [
+          1,
+          1024
+        ]
+      ]
+    ],
+    "schema": "outer-sign-cover-v1"
+  },
+  "expected": false,
+  "kind": "outer",
+  "name": "boundary_only_false",
+  "problem": {
+    "condition": [
+      "implies",
+      [
+        "atom",
+        0,
+        "ge"
+      ],
+      [
+        "count",
+        "eq",
+        1
+      ]
+    ],
+    "fiber": {
+      "atoms": [
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "degrees": [
+        2
+      ],
+      "equations": [
+        [
+          [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              -1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "formula": [
+        "atom",
+        0,
+        "gt"
+      ],
+      "parameters": 1,
+      "schema": "forge-real-fiber-v1"
+    },
+    "parameter_atoms": [
+      [
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "quantifier": "forall",
+    "schema": "outer-one-parameter-v1"
+  },
+  "specializations": [
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -5,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -14,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -13,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -4,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -11,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -10,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -3,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -8,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -7,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -2,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -5,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -4,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -1,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -2,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          -1,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 0,
+      "parameters": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          4,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          5,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          7,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          8,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          10,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          11,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          13,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          14,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          16,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          17,
+          3
+        ]
+      ]
+    },
+    {
+      "count": 1,
+      "parameters": [
+        [
+          6,
+          1
+        ]
+      ]
+    }
+  ]
+}

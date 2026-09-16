@@ -1,0 +1,59 @@
+test_bool_refused (test_core.CoreTests.test_bool_refused) ... ok
+test_correlated_boolean_algebra (test_core.CoreTests.test_correlated_boolean_algebra) ... ok
+test_dimension_cap_is_not_refutation (test_core.CoreTests.test_dimension_cap_is_not_refutation) ... ok
+test_duplicate_monomial_refused (test_core.CoreTests.test_duplicate_monomial_refused) ... ok
+test_empty_signature (test_core.CoreTests.test_empty_signature) ... ok
+test_endpoint_root_refused (test_core.CoreTests.test_endpoint_root_refused) ... ok
+test_finite_isolator (test_core.CoreTests.test_finite_isolator) ... ok
+test_float_refused (test_core.CoreTests.test_float_refused) ... ok
+test_fraction_is_exact (test_core.CoreTests.test_fraction_is_exact) ... ok
+test_indefinite_signature (test_core.CoreTests.test_indefinite_signature) ... ok
+test_negative_signature (test_core.CoreTests.test_negative_signature) ... ERROR
+test_no_real_root (test_core.CoreTests.test_no_real_root) ... ok
+test_nonlinear_triangular_reduction (test_core.CoreTests.test_nonlinear_triangular_reduction) ... ok
+test_nonmonic_refused (test_core.CoreTests.test_nonmonic_refused) ... ok
+test_polynomial_identity (test_core.CoreTests.test_polynomial_identity) ... ok
+test_positive_signature (test_core.CoreTests.test_positive_signature) ... ERROR
+test_repeated_root (test_core.CoreTests.test_repeated_root) ... ok
+test_single_zero_eigenvalue (test_core.CoreTests.test_single_zero_eigenvalue) ... ok
+test_squarefree_union (test_core.CoreTests.test_squarefree_union) ... ok
+test_strict_atom_indicator (test_core.CoreTests.test_strict_atom_indicator) ... ok
+test_two_real_roots (test_core.CoreTests.test_two_real_roots) ... ok
+test_unreduced_rational_refused (test_core.CoreTests.test_unreduced_rational_refused) ... ok
+test_witness_is_algebraic (test_core.CoreTests.test_witness_is_algebraic) ... ok
+test_zero_atom_indicator (test_core.CoreTests.test_zero_atom_indicator) ... ok
+
+======================================================================
+ERROR: test_negative_signature (test_core.CoreTests.test_negative_signature)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/forge-real-fibers/prototype/tests/test_core.py", line 25, in test_negative_signature
+    def test_negative_signature(self):self.assertEqual(signature_from_signs([1,2,1]),-2)
+                                                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/mnt/data/forge-real-fibers/prototype/real_fibers/exact.py", line 169, in signature_from_signs
+    return variations(signs)-variations([s*((-1)**(d-i)) for i,s in enumerate(signs)])
+           ~~~~~~~~~~^^^^^^^
+  File "/mnt/data/forge-real-fibers/prototype/real_fibers/exact.py", line 162, in variations
+    if any(s not in (-1,1) for s in nonzero): raise Reject('invalid sign')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+real_fibers.exact.Reject: invalid sign
+
+======================================================================
+ERROR: test_positive_signature (test_core.CoreTests.test_positive_signature)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/forge-real-fibers/prototype/tests/test_core.py", line 24, in test_positive_signature
+    def test_positive_signature(self):self.assertEqual(signature_from_signs([1,-2,1]),2)
+                                                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/mnt/data/forge-real-fibers/prototype/real_fibers/exact.py", line 169, in signature_from_signs
+    return variations(signs)-variations([s*((-1)**(d-i)) for i,s in enumerate(signs)])
+           ~~~~~~~~~~^^^^^^^
+  File "/mnt/data/forge-real-fibers/prototype/real_fibers/exact.py", line 162, in variations
+    if any(s not in (-1,1) for s in nonzero): raise Reject('invalid sign')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+real_fibers.exact.Reject: invalid sign
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.005s
+
+FAILED (errors=2)

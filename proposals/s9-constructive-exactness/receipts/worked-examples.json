@@ -1,0 +1,647 @@
+[
+  {
+    "name": "reduce-triangle-False-False",
+    "family": "unit_reduction",
+    "problem": {
+      "kind": "reduction",
+      "domain": "Z",
+      "source": {
+        "degrees": [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          2
+        ],
+        "d": {
+          "rows": 7,
+          "cols": 7,
+          "data": [
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "certificate": {
+      "kind": "reduction",
+      "reduced": {
+        "degrees": [
+          0
+        ],
+        "d": {
+          "rows": 1,
+          "cols": 1,
+          "data": [
+            0
+          ]
+        }
+      },
+      "f": {
+        "rows": 1,
+        "cols": 7,
+        "data": [
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "g": {
+        "rows": 7,
+        "cols": 1,
+        "data": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "h": {
+        "rows": 7,
+        "cols": 7,
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "expected": "reduction"
+  },
+  {
+    "name": "stagnation-rescued-by-homotopy",
+    "family": "heuristic_boundary",
+    "problem": {
+      "kind": "homotopy",
+      "domain": "Z",
+      "source": {
+        "degrees": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "d": {
+          "rows": 4,
+          "cols": 4,
+          "data": [
+            0,
+            0,
+            2,
+            3,
+            0,
+            0,
+            3,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "target": {
+        "degrees": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "d": {
+          "rows": 4,
+          "cols": 4,
+          "data": [
+            0,
+            0,
+            2,
+            3,
+            0,
+            0,
+            3,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "F": {
+        "rows": 4,
+        "cols": 4,
+        "data": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "G": {
+        "rows": 4,
+        "cols": 4,
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "certificate": {
+      "kind": "homotopy",
+      "H": {
+        "rows": 4,
+        "cols": 4,
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          -3,
+          0,
+          0,
+          -3,
+          2,
+          0,
+          0
+        ]
+      }
+    },
+    "expected": "homotopy"
+  },
+  {
+    "name": "ext-p2-t1",
+    "family": "secondary_homotopy",
+    "problem": {
+      "kind": "homotopy",
+      "domain": "Z",
+      "source": {
+        "degrees": [
+          0,
+          1
+        ],
+        "d": {
+          "rows": 2,
+          "cols": 2,
+          "data": [
+            0,
+            2,
+            0,
+            0
+          ]
+        }
+      },
+      "target": {
+        "degrees": [
+          1,
+          2
+        ],
+        "d": {
+          "rows": 2,
+          "cols": 2,
+          "data": [
+            0,
+            2,
+            0,
+            0
+          ]
+        }
+      },
+      "F": {
+        "rows": 2,
+        "cols": 2,
+        "data": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "G": {
+        "rows": 2,
+        "cols": 2,
+        "data": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "certificate": {
+      "kind": "no_homotopy",
+      "W": {
+        "rows": 2,
+        "cols": 2,
+        "data": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "modulus": 2
+    },
+    "expected": "no_homotopy"
+  },
+  {
+    "name": "doubled-face-cycle-1",
+    "family": "worked_example",
+    "problem": {
+      "kind": "cycle",
+      "domain": "Z",
+      "A": {
+        "rows": 3,
+        "cols": 1,
+        "data": [
+          2,
+          -2,
+          2
+        ]
+      },
+      "B": {
+        "rows": 3,
+        "cols": 3,
+        "data": [
+          -1,
+          -1,
+          0,
+          1,
+          0,
+          -1,
+          0,
+          1,
+          1
+        ]
+      },
+      "z": {
+        "rows": 3,
+        "cols": 1,
+        "data": [
+          1,
+          -1,
+          1
+        ]
+      }
+    },
+    "certificate": {
+      "kind": "obstruction",
+      "phi": {
+        "rows": 1,
+        "cols": 3,
+        "data": [
+          0,
+          0,
+          1
+        ]
+      },
+      "modulus": 2
+    },
+    "expected": "obstruction"
+  },
+  {
+    "name": "doubled-face-cycle-2",
+    "family": "worked_example",
+    "problem": {
+      "kind": "cycle",
+      "domain": "Z",
+      "A": {
+        "rows": 3,
+        "cols": 1,
+        "data": [
+          2,
+          -2,
+          2
+        ]
+      },
+      "B": {
+        "rows": 3,
+        "cols": 3,
+        "data": [
+          -1,
+          -1,
+          0,
+          1,
+          0,
+          -1,
+          0,
+          1,
+          1
+        ]
+      },
+      "z": {
+        "rows": 3,
+        "cols": 1,
+        "data": [
+          2,
+          -2,
+          2
+        ]
+      }
+    },
+    "certificate": {
+      "kind": "fill",
+      "w": {
+        "rows": 1,
+        "cols": 1,
+        "data": [
+          1
+        ]
+      }
+    },
+    "expected": "fill"
+  },
+  {
+    "name": "doubled-face-homology",
+    "family": "worked_example",
+    "problem": {
+      "kind": "homology",
+      "domain": "Z",
+      "A": {
+        "rows": 3,
+        "cols": 1,
+        "data": [
+          2,
+          -2,
+          2
+        ]
+      },
+      "B": {
+        "rows": 3,
+        "cols": 3,
+        "data": [
+          -1,
+          -1,
+          0,
+          1,
+          0,
+          -1,
+          0,
+          1,
+          1
+        ]
+      }
+    },
+    "certificate": {
+      "kind": "homology",
+      "normalB": {
+        "S": {
+          "rows": 3,
+          "cols": 3,
+          "data": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "U": {
+          "rows": 3,
+          "cols": 3,
+          "data": [
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Uinv": {
+          "rows": 3,
+          "cols": 3,
+          "data": [
+            -1,
+            0,
+            0,
+            1,
+            -1,
+            0,
+            0,
+            1,
+            1
+          ]
+        },
+        "V": {
+          "rows": 3,
+          "cols": 3,
+          "data": [
+            1,
+            -1,
+            1,
+            0,
+            1,
+            -1,
+            0,
+            0,
+            1
+          ]
+        },
+        "Vinv": {
+          "rows": 3,
+          "cols": 3,
+          "data": [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "normalC": {
+        "S": {
+          "rows": 1,
+          "cols": 1,
+          "data": [
+            2
+          ]
+        },
+        "U": {
+          "rows": 1,
+          "cols": 1,
+          "data": [
+            1
+          ]
+        },
+        "Uinv": {
+          "rows": 1,
+          "cols": 1,
+          "data": [
+            1
+          ]
+        },
+        "V": {
+          "rows": 1,
+          "cols": 1,
+          "data": [
+            1
+          ]
+        },
+        "Vinv": {
+          "rows": 1,
+          "cols": 1,
+          "data": [
+            1
+          ]
+        }
+      },
+      "free_rank": 0,
+      "torsion": [
+        2
+      ]
+    },
+    "expected": "homology"
+  }
+]

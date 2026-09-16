@@ -1,0 +1,378 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "site_disabled": true,
+  "sympy_loaded": false,
+  "accepted": 24,
+  "records": 24,
+  "results": [
+    {
+      "name": "algebraic_positive",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 7,
+      "projection_degree": 2,
+      "selected_x": null,
+      "seconds": 0.0018193490000157908
+    },
+    {
+      "name": "algebraic_section_only",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 15,
+      "projection_degree": 2,
+      "selected_x": 1,
+      "seconds": 0.01330329300003541
+    },
+    {
+      "name": "choose_positive_quadratic",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": 2,
+      "seconds": 0.002243724999971164
+    },
+    {
+      "name": "constant_false",
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "seconds": 0.00014172300006976002
+    },
+    {
+      "name": "degree_drop_at_zero",
+      "accepted": true,
+      "closed_value": null,
+      "truth_by_x": [
+        false,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": null,
+      "seconds": 0.002119487999834746
+    },
+    {
+      "name": "discontinuous_choice",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 23,
+      "projection_degree": 3,
+      "selected_x": null,
+      "seconds": 0.005415291999952387
+    },
+    {
+      "name": "empty_and_constant_atoms",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "seconds": 0.00019010500000149477
+    },
+    {
+      "name": "inverse_guarded",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": null,
+      "seconds": 0.0011622130000432662
+    },
+    {
+      "name": "inverse_hole",
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": 1,
+      "seconds": 0.0008644160000130796
+    },
+    {
+      "name": "negative_algebraic_obstruction",
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 7,
+      "plane_cells": 33,
+      "projection_degree": 3,
+      "selected_x": 1,
+      "seconds": 0.030276238999931593
+    },
+    {
+      "name": "overlapping_intervals",
+      "accepted": true,
+      "closed_value": null,
+      "truth_by_x": [
+        false,
+        false,
+        false,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 31,
+      "projection_degree": 2,
+      "selected_x": null,
+      "seconds": 0.005877046000023256
+    },
+    {
+      "name": "quantifier_order_exists_forall",
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "seconds": 0.0003966550000313873
+    },
+    {
+      "name": "quantifier_order_forall_exists",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "seconds": 0.00031719599996904435
+    },
+    {
+      "name": "repeated_zero_curve",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": null,
+      "seconds": 0.0010885429999234475
+    },
+    {
+      "name": "square_root_conditional",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 13,
+      "projection_degree": 1,
+      "selected_x": null,
+      "seconds": 0.002030085000114923
+    },
+    {
+      "name": "square_root_unconditional",
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": 0,
+      "seconds": 0.0010255980000692944
+    },
+    {
+      "name": "strict_and_disequality",
+      "accepted": true,
+      "closed_value": null,
+      "truth_by_x": [
+        false,
+        false,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 13,
+      "projection_degree": 1,
+      "selected_x": null,
+      "seconds": 0.001870185000143465
+    },
+    {
+      "name": "strict_repeated_zero_curve",
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": 0,
+      "seconds": 0.0003635260000010021
+    },
+    {
+      "name": "strict_square_band",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 25,
+      "projection_degree": 2,
+      "selected_x": null,
+      "seconds": 0.004580149999810601
+    },
+    {
+      "name": "surjective_cubic",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 23,
+      "projection_degree": 2,
+      "selected_x": null,
+      "seconds": 0.039079061999927944
+    },
+    {
+      "name": "surjective_quintic",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 4,
+      "selected_x": null,
+      "seconds": 0.000858568000012383
+    },
+    {
+      "name": "two_shifted_squares",
+      "accepted": true,
+      "closed_value": null,
+      "truth_by_x": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "base_cells": 7,
+      "plane_cells": 55,
+      "projection_degree": 3,
+      "selected_x": null,
+      "seconds": 0.12560149199998705
+    },
+    {
+      "name": "uniform_positive_quadratic",
+      "accepted": true,
+      "closed_value": null,
+      "truth_by_x": [
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": null,
+      "seconds": 0.0022987179997926432
+    },
+    {
+      "name": "vanishing_content",
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 21,
+      "projection_degree": 1,
+      "selected_x": null,
+      "seconds": 0.0026699039999584784
+    }
+  ]
+}

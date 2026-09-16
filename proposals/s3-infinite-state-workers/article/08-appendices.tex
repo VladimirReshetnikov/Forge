@@ -1,0 +1,163 @@
+\section{Reproducing and using the artifacts}
+\label{app:reproduce}
+The package contains the article sources and compiled PDF, the three producers,
+a search-independent checker, exhaustive finite oracles, unit tests, recorded
+inputs and receipts, example JSON files, a small uncompiled Lean lemma specimen,
+and build/replay instructions. No third-party source tree or font file is
+included. The Python tools require Python 3.10 or newer; only 3.13.5 was used
+for the recorded run.
+
+From the package root:
+\begin{lstlisting}
+python -S tests/test_core.py
+python -S prototype/replay.py
+python -S prototype/run_experiments.py --output reproduced-results
+
+python -S prototype/forge_worker.py search vass \
+  examples/mutex.model.json --output candidate.json
+python -S prototype/forge_worker.py check vass \
+  examples/mutex.model.json --certificate candidate.json
+
+python -S prototype/forge_worker.py search nominal \
+  examples/lru_fifo.model.json
+python -S prototype/forge_worker.py search mixed \
+  examples/owner_pool.model.json
+\end{lstlisting}
+The search CLI validates inputs, runs the producer, and checks any non-unknown
+result before printing it. Exit code zero means an accepted model result,
+including a valid negative witness; exit code two means unknown; exit code one
+means an input/checking error. An accepted result is still a Python-model
+result, not a Lean proof. The check-only path does not import producers.
+
+The default experiment output directory is \code{reproduced-results}; it does
+not overwrite the retained evidence unless explicitly directed to do so.
+The recorded seed determines the generated corpus, but timings depend on the
+runtime and host. Article compilation uses pdfLaTeX with standard packages and
+no shell escape:
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-infinite-state.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-infinite-state.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-infinite-state.tex
+\end{lstlisting}
+
+\section{Model and certificate schema notes}
+\label{app:schema}
+\paragraph{Counter model.}
+The fields are \code{dimension}, \code{controls}, \code{initials},
+\code{transitions}, and \code{bad}. An initial family contains \code{control},
+\code{base}, and a list of \code{rays}. A transition contains \code{src},
+\code{dst}, \code{consume}, and \code{produce}; a bad threshold contains
+\code{control} and \code{vector}. All entries have validated dimensions;
+negative integers and Python Booleans are not accepted as natural numbers.
+
+\paragraph{Counter receipts.}
+A positive object has \code{schema: 1}, \code{kind: "safe"}, and one
+\code{basis} list per control. A negative object has \code{kind: "unsafe"},
+an \code{initial} family index, \code{parameters}, and original
+\code{transitions} indices. Debug \code{stats} are not evidence. The axes
+receipt's mathematical payload is:
+\begin{lstlisting}
+{"schema": 1, "kind": "safe", "basis": [[[1, 1]]]}
+\end{lstlisting}
+
+\paragraph{Equality models.}
+A nominal input file is a pair of machine objects. Each supplies register,
+constant, and control counts; tags; initial control and anchored register values;
+and ordered rules. Selectors are \code{["input"]}, \code{["null"]},
+\code{["reg", i]}, and \code{["const", j]}. Guards are Boolean values or
+\code{eq}, \code{not}, \code{and}, and \code{or} syntax. Updates list one
+selector per register. Outputs carry a \code{bool} or \code{atom} tag and the
+appropriate expression. Fixed constants use labels $0,\ldots,c-1$.
+
+\paragraph{Equality receipts.}
+A positive object has \code{kind: "equivalent"} and a \code{states} list of
+\code{[leftControl, rightControl, jointRegisters]}. The checker requires distinct
+orbits, not necessarily canonical labels. A negative object has
+\code{kind: "different"} and a concrete \code{word} of \code{[tag, atom]}
+entries. It need not stop at the first mismatch to be valid; shortestness is a
+producer property tested separately, not part of receipt soundness.
+
+\paragraph{Mixed models and receipts.}
+A mixed model combines a single register-machine header with counter initial
+families and nondeterministic rules carrying \code{consume}/\code{produce}.
+Bad clauses carry input-independent register guards. A safe receipt has
+\code{states} entries \code{[control, registers]} and one counter basis per
+entry. An unsafe receipt has initial-family parameters and concrete
+\code{steps} triples \code{[ruleId, tag, atom]}. The receipt does not include
+a trusted compiled edge table.
+
+\paragraph{Unknown.}
+Search may return \code{kind: "unknown"} with a reason and statistics.
+The certificate checkers intentionally do not accept it as a proof. The JSON
+schema is a prototype interchange format; extra diagnostic fields are ignored,
+while the mathematical fields and model dimensions are checked. It is not a
+versioned public Forge protocol yet.
+
+\section{Source audit and implementation status}
+\label{app:status}
+Full baseline identifiers are:
+\begin{lstlisting}
+Forge  58ea206bd7ad501b930add568151217bcc7f82a2
+Leant  6bf05ad78c467989e68290f2d08bbed40802d485
+Djex   e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5
+\end{lstlisting}
+The inspected Forge README gives a Lean v4.34.0 baseline and Mathlib
+\code{1cf325a0cf67}; the full Mathlib identifier is
+\begin{lstlisting}
+1cf325a0cf67aca2b04d76b5380ff6a9e410aefa
+\end{lstlisting} Leant's reported native
+Djex dependency is \code{e237e866}; that dependency identifier must not be
+silently replaced by the separate Djex repository-head identifier above.
+
+The main Forge audit paths were:
+\begin{lstlisting}
+README.md
+article/sections/06-closure.tex
+article/sections/15-conclusion.tex
+article/sections/B-provenance.tex
+lean/Forge/Design/Contracts.lean
+lean/Forge/Design/Runtime.lean
+lean/Forge/Closure/Covers.lean
+\end{lstlisting}
+The Leant current commit response included
+the complete indexing-composition diagnostic report; Djex's README supplied its
+checked synthesis scope and embedding entry points. Their archived materials
+are not reproduced in this package.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.38\textwidth}>{\raggedright\arraybackslash}p{.20\textwidth}>{\raggedright\arraybackslash}p{.36\textwidth}@{}}
+\toprule
+Artifact or assertion & Status & Evidence \\
+\midrule\endhead
+Counter, nominal, mixed producers & Executed & Stored corpus and generator. \\
+Independent Python receipt replay & Executed & 650 accepted objects; no producer
+imports in replay. \\
+Differential finite-oracle checks & Executed & 640 agreements, subject to described
+generator and evaluator sharing. \\
+Exact fragment soundness and completeness & Mathematical arguments & Proofs in
+Sections~\ref{sec:antichain}--\ref{sec:product}; not formalized here. \\
+Scalar/vector Lean specimen & Uncompiled & Source included, no \code{sorry};
+\code{NOT\_RUN}, no claimed axiom output. \\
+Lean certificate checker and source frontend & Proposed & Module boundaries,
+proof obligations, and acceptance gates only. \\
+Leant/Djex semantic-summary integration & Proposed & Candidate-flow design; original
+indexing and universe queries remain untouched. \\
+Performance versus Lean tactics & Not measured & No end-to-end tactic comparison
+or claimed solved-goal gain. \\
+\bottomrule
+\end{longtable}
+
+\section{Concluding assessment}
+The meaningful extension is a change in what Forge can finitely represent:
+upward regions of unbounded natural states, equality orbits of states containing
+arbitrary names, and the exact product of these representations under an
+explicitly restricted syntax. The proofs identify both the reason for finite
+certificates and the cases where those certificates cease to be complete.
+
+The prototypes do more than demonstrate plausible examples. They discover
+positive receipts, produce executable failures, preserve explanations under
+subsumption and renaming, compare against exhaustive finite oracles on suitable
+fragments, and replay stored evidence without importing searches. They also
+leave the important boundary visible: a model theorem becomes a Lean source
+theorem only through a verified checker and a proved translation. Building that
+narrow path is the recommended next contribution to Forge.

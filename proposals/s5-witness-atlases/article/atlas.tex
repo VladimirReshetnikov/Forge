@@ -1,0 +1,88 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=25mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,stmaryrd}
+\usepackage{booktabs,longtable,array,enumitem}
+\usepackage{xcolor,listings,fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage[unicode,breaklinks]{hyperref}
+\usepackage{xurl}
+\definecolor{ink}{HTML}{203B50}
+\definecolor{muted}{HTML}{52616B}
+\definecolor{pale}{HTML}{F3F5F6}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,pdftitle={Algebraic Witness Atlases for Forge},pdfauthor={OpenAI, prepared for Vladimir Reshetnikov}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\textsc{Forge / Algebraic Witness Atlases}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancyfoot[L]{\footnotesize Research extension \textbullet\ 15 September 2026}
+\fancyfoot[R]{\footnotesize Exact Python prototype; Lean integration specified}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5.5pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{2em}
+\setcounter{tocdepth}{2}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{pale},frame=single,rulecolor=\color{black!15},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,tabsize=2,xleftmargin=4pt,xrightmargin=4pt,aboveskip=9pt,belowskip=9pt}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb Q}\newcommand{\R}{\mathbb R}\newcommand{\Z}{\mathbb Z}
+\newcommand{\sgn}{\operatorname{sgn}}\newcommand{\sfpart}{\operatorname{sf}}
+\newcommand{\lc}{\operatorname{lc}}\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\unknown}{\textsc{unknown}}
+\newcommand{\status}[1]{\par\smallskip\textbf{Status.} #1\par\smallskip}
+\newcommand{\repo}{\texttt{58ea206bd7ad}}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\vspace*{16mm}
+{\Large\color{muted}\textsc{A concrete extension to Forge}}\par
+\vspace{12mm}
+{\Huge\bfseries\color{ink}Algebraic Witness\\[3mm]Atlases for Forge}\par
+\vspace{8mm}
+{\LARGE Checked nonlinear quantifiers, piecewise strategies,\\[2mm]and exact exceptional fibres}\par
+\vspace{12mm}
+{\large Prepared for Vladimir Reshetnikov}\par
+{\large 15 September 2026}\par
+\vfill
+\begin{minipage}{0.93\textwidth}
+\textbf{The extension in one sentence.} Replace a fixed polynomial-witness dictionary with a finite, exactly checked decomposition of the parameter line and its algebraic fibres, from which Forge can derive quantified truth, exact feasible parameter regions, and root-index witnesses or counterstrategies.
+
+\textbf{Delivered.} A working two-variable Python producer and replay checker; 24 primary examples; 76 affine-transformed cases; independent oracle and mutation tests; complete JSON certificates; mathematical soundness and completeness arguments; and a specific Lean implementation plan.
+
+\textbf{Boundary.} This is a new research worker for the reviewed Forge design, not an installed Lean tactic. The Python checker and geometric soundness theorem have not been formalized or checked by Lean. Classical cylindrical algebraic decomposition is the mathematical foundation, not a claimed new invention.
+\end{minipage}
+\vfill
+{\small Reviewed Forge snapshot: \texttt{58ea206bd7ad501b930add568151217bcc7f82a2}.\\
+Companion archive contains all source, certificate, test, and build files.}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+\begin{abstract}
+Forge already contains a broad collection of certificate languages and proof-planning ideas. Adding another scheduler, a generic sum-of-squares recommendation, or ordinary affine witness synthesis would mostly duplicate that work. This article develops a narrower but substantial missing lane: exact bivariate real quantification with algebraic, potentially discontinuous witnesses.
+
+For a Boolean combination $F(x,y)$ of rational polynomial sign tests, the worker handles one quantifier for $y$ and optionally one for $x$. It constructs a finite sign atlas, including every exceptional parameter at which degrees drop or roots meet. Projection is justified by explicit B\'ezout identities rather than a trusted resultant routine. Algebraic exceptional fibres are checked with localized rational-function arithmetic at an isolated root; no irreducibility of the global projection polynomial is assumed. Complete root covers and sign tables determine existential and universal truth and provide root-index strategies.
+
+The accompanying implementation passes 24 primary examples, 76 invertible affine reparameterizations, 540 corruption controls, and 42 unit/regression tests. Independent SymPy checks agree on 250 rational-polynomial root problems, 194 defined algebraic expressions with six zero-denominator rejections, 336 complete rational fibres, and all 25 base cells of five exact parameter-region examples. These are separate evidence units, not a pooled success rate. The checker replays saved certificates with Python site packages disabled. The remaining Lean work is identified explicitly: exact arithmetic and Sturm correctness, root continuation, the source-expression bridge, reflected checking, and strategy elaboration.
+\end{abstract}
+\begingroup
+\setlength{\parskip}{0pt}
+\small
+\tableofcontents
+\endgroup
+\clearpage
+\pagenumbering{arabic}
+\input{sections/01-delta}
+\input{sections/02-projection}
+\input{sections/03-arithmetic}
+\input{sections/04-strategies}
+\input{sections/05-integration}
+\input{sections/06-experiments}
+\appendix
+\input{sections/A-specification}
+\input{references}
+\end{document}

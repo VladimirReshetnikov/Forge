@@ -1,0 +1,39 @@
+{
+  "kind": "pt-net-coverability",
+  "dimension": 3,
+  "transitions": [
+    {
+      "name": "enter_without_permit",
+      "consume": [
+        1,
+        0,
+        0
+      ],
+      "produce": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "leave",
+      "consume": [
+        0,
+        0,
+        1
+      ],
+      "produce": [
+        1,
+        1,
+        0
+      ]
+    }
+  ],
+  "targets": [
+    [
+      0,
+      0,
+      2
+    ]
+  ]
+}

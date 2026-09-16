@@ -1,0 +1,43 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "inverse_guarded_affine_1",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "-1"
+      ],
+      [
+        1,
+        0,
+        "-2"
+      ],
+      [
+        1,
+        1,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "implies",
+    [
+      "ne",
+      0
+    ],
+    [
+      "eq",
+      1
+    ]
+  ]
+}

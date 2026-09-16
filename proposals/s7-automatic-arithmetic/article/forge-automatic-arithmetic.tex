@@ -1,0 +1,69 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=26mm,headheight=14pt]{geometry}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor,listings,fancyhdr,enumitem}
+\usepackage[hyphens,obeyspaces]{url}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{bookmark}
+\definecolor{codebg}{gray}{0.965}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{codebg},frame=single,rulecolor=\color{black!20},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,aboveskip=9pt,belowskip=9pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small Forge Automatic Arithmetic}\fancyhead[R]{\small Research extension}\fancyfoot[C]{\thepage}
+\setlength{\emergencystretch}{2em}
+\setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=*}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb N}\newcommand{\Z}{\mathbb Z}
+\newcommand{\bits}{\{0,1\}}
+\newcommand{\val}{\operatorname{val}}
+\newcommand{\Acc}{\operatorname{Acc}}
+\newcommand{\Sem}{\operatorname{Sem}}
+\newcommand{\Pow}{\operatorname{PowTwo}}
+\newcommand{\Even}{\operatorname{EvenPop}}
+\newcommand{\code}[1]{\expandafter\nolinkurl\expandafter{\detokenize{#1}}}
+\newcommand{\status}[1]{\par\smallskip\noindent\textbf{Evidence status:} #1\par\smallskip}
+\hypersetup{pdftitle={Forge Automatic Arithmetic: Certificate-Producing Quantifier Elimination and Canonical Witness Synthesis},pdfauthor={Research proposal prepared for Vladimir Reshetnikov},pdfsubject={Unbounded natural-number arithmetic, digit automata, certificates, Lean integration}}
+\begin{document}
+\begin{titlepage}
+\vspace*{12mm}
+{\large A concrete extension to the Forge research program\par}
+\vspace{11mm}
+{\Huge\bfseries Forge Automatic Arithmetic\par}
+\vspace{7mm}
+{\LARGE Certificate-Producing Quantifier Elimination\\[2mm]and Canonical Witness Synthesis\\[2mm]over Unbounded Naturals\par}
+\vspace{12mm}
+{\large Prepared for Vladimir Reshetnikov\par}
+{\large September 2026\par}
+\vspace{12mm}
+\begin{abstract}
+Forge already proposes an unusually broad collection of proof-producing workers. This article adds a different capability: a compositional decision procedure for first-order formulas over natural numbers with linear arithmetic and selected binary-automatic predicates. Quantifiers range over all natural numbers, not a guessed bit width. The same compiler constructs regular graphs of least witnesses, including the next power of two and the next integer with a prescribed digit-parity relation. Its central engineering object is an exact certificate for existential projection: a locally checkable zero-tail closure combined with a subset-construction receipt. This prevents a subtle but fundamental error in which witnesses longer than their visible inputs disappear.
+
+A standard-library-only Python producer, separately implemented checker, reproducible experiment suite, 90 stored construction certificates, and 643 concrete witness traces accompany the article. The mathematical foundations are classical; the contribution is a focused, executable extension to Forge with explicit semantics and a concrete Lean port plan. Neither the Python checker nor the compiler-to-semantics theorems have been verified in Lean. No new Lean tactic is delivered, and no performance comparison with existing Lean tactics is claimed.
+\end{abstract}
+\vfill
+\rule{\linewidth}{0.5pt}
+\small Repository baseline: Forge commit \code{58ea206bd7ad501b930add568151217bcc7f82a2}.\\
+Read \S\ref{sec:delta} for the nonduplication boundary, \S\ref{sec:experiments} for executed evidence, and \S\ref{sec:lean} for the remaining proof obligations.
+\end{titlepage}
+\tableofcontents
+\newpage
+\input{sections/01-scope}
+\input{sections/02-semantics}
+\input{sections/03-quantifiers}
+\input{sections/04-certificates}
+\input{sections/05-witnesses}
+\input{sections/06-integration}
+\input{sections/07-experiments}
+\input{sections/08-next}
+\input{sections/09-appendix}
+\clearpage
+\input{references}
+\end{document}

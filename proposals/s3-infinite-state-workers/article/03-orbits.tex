@@ -1,0 +1,301 @@
+\section{Equality orbits instead of a finite test alphabet}
+\label{sec:orbits}
+
+\subsection{The distinction that finite tests miss}
+A cache can have only two storage slots and still process arbitrarily many
+different keys. Its finite memory does not imply a finite concrete state space:
+the slots may contain any two atoms. Testing all request sequences over two
+chosen keys also does not represent all behaviors. It removes the possibility
+of receiving a third key while both slots are occupied.
+
+The appropriate finite state is an \emph{equality pattern}, including the
+relationships between both implementations being compared. Renamings of atom
+identities preserve execution because the allowed operations cannot inspect
+anything except equality. The general perspective belongs to nominal automata
+and permutation symmetries~\cite{nominal}. This section gives a direct,
+restricted construction whose entire search and replay are included.
+
+\subsection{A small, typed machine language}
+Fix an infinite set $\Atoms$ of atoms, a finite tag set $T$, and distinct fixed
+constants $c_0,\ldots,c_{c-1}\in\Atoms$. A machine has a finite control $q$ and
+$k$ optional registers, each containing either an atom or $\bot$ (empty).
+An input is $(t,u)\in T\times\Atoms$; $\bot$ is \emph{not} an input atom.
+
+A selector is one of: current input, a specified old register, a specified
+fixed constant, or empty. Guards are Boolean combinations of equality between
+selectors. Register updates simultaneously assign one selector to each register.
+An output is either a Boolean guard value or an optional atom selected from the
+same old-state/input environment. The output constructors are tagged, so
+Boolean false and atom zero cannot accidentally compare equal.
+
+At each control and tag, the finite rule list is ordered. The first enabled
+rule is chosen. The admitted format requires an unconditional default rule for
+each control/tag cell; this makes execution total by construction. Rules after
+a default in the same cell are simply unreachable under this semantics. A
+consumer must not reorder rules or reinterpret the list as nondeterministic.
+Initial registers contain only constants or empty. Extra fixed initial atoms
+can be represented by adding constants, provided their distinctness and their
+source interpretation are proved.
+
+The executable representation uses nonnegative integers as \emph{names} for
+atoms, but no arithmetic or order operation on those integers is in the machine
+language. A Python sorting operation used to choose representatives is not an
+operation available to the modeled program.
+
+\subsection{Joint support and canonical representatives}
+For machines $A$ and $B$ with $k_A$ and $k_B$ registers, form the paired state
+\[
+ s=(q_A,q_B,r_A,r_B).
+\]
+Let $k=k_A+k_B$. Its support consists of the distinct nonconstant atoms in the
+concatenated tuple $(r_A,r_B)$; the fixed constants are retained separately.
+Two paired states are equivalent when their controls match and a bijection of
+atoms fixing every constant carries one \emph{joint} register tuple to the
+other. Empty is also fixed.
+
+For example, with no constants,
+\[
+ ((a,b),(b,a))\quad\text{and}\quad((17,6),(6,17))
+\]
+represent the same paired orbit. The pairs $((a),(a))$ and $((a),(b))$ with
+$a\ne b$ do not. Canonicalizing each machine's single register separately
+would map both pairs to $((0),(0))$, losing the exact fact that their outputs
+might disagree. The canonicalizer must see both states at once.
+
+The producer preserves the integer labels of constants and scans the joint
+tuple left-to-right, assigning consecutive fresh labels to previously unseen
+nonconstant atoms. Empty remains empty. Canonicalization is a search
+optimization; the checker uses a different representation: the full pairwise
+equality matrix of
+\[
+ (\bot,c_0,\ldots,c_{c-1},r_{A,0},\ldots,r_{B,k_B-1}).
+\]
+It therefore accepts noncanonical labels while preserving all cross-machine
+relations and all anchors.
+
+\begin{lemma}[Equality patterns characterize orbits]
+\label{lem:pattern}
+Two optional-register tuples have the same equality matrix with the same fixed
+anchors if and only if a permutation of $\Atoms$ fixing those anchors carries
+one tuple to the other.
+\end{lemma}
+\begin{proof}
+A permutation preserves equality, constants, and empty, proving one direction.
+In the other direction, equality of matrices defines a well-defined bijection
+between the finitely many nonconstant atoms appearing in the tuples. It maps
+each left occurrence to the corresponding right occurrence. A bijection between
+two finite subsets extends to a permutation of their union, and hence to a
+permutation of all atoms by fixing the complement. Constants remain fixed
+because their equality classes were anchored separately.
+\end{proof}
+
+\subsection{Why one fresh representative is enough}
+Given a paired state, enumerate as possible input atoms each live atom in either
+machine, each fixed constant, and one atom distinct from all of them. Tags are
+enumerated independently.
+
+\begin{lemma}[Fresh-input coverage]
+\label{lem:freshinput}
+For a fixed paired state, every input atom belongs to exactly one of the
+following relevant cases: a particular fixed/live atom, or the single class of
+atoms outside the fixed/live support. Every atom in the last class produces a
+successor and output pair related by a permutation fixing the current state.
+\end{lemma}
+\begin{proof}
+Two atoms outside the support can be exchanged while fixing the support and
+constants. By induction on selector and guard syntax, evaluation commutes with
+such permutations: equality is preserved, Boolean connectives are unchanged,
+and a selector either returns an anchored old value or the renamed input.
+The first enabled rule is therefore unchanged. Simultaneous copying and
+selected outputs commute with the permutation as well. Hence one chosen fresh
+atom represents all outside-support atoms.
+\end{proof}
+
+``Fresh'' here means absent from \emph{currently remembered} registers and fixed
+constants, not never used at any earlier point in the execution. The machine
+cannot distinguish an old forgotten name from a globally new name. Insisting
+on globally new representatives would enlarge witness alphabets unnecessarily;
+merging a live name into the fresh case would be unsound.
+
+For atom-valued outputs, compare the two actual selected values under the same
+representative input \emph{before} forgetting their names. The property being
+proved is equality of the two outputs at each time, not a separate renaming of
+each output stream. No history of previous outputs is required for pointwise
+equality. A specification that tests equality with an arbitrarily old output
+would need to represent that additional memory explicitly.
+
+\subsection{Search and finite certificates}
+The producer performs breadth-first search from the paired initial orbit.
+For every stored representative, every tag, and every representative atom,
+it computes both outputs and both successors. Different outputs yield a
+counterexample. Otherwise it inserts the successor's \emph{joint} canonical
+state. A parent pointer records the input case and predecessor for each newly
+visited orbit.
+
+\begin{lstlisting}
+seen := { joint_initial_orbit }
+pending := FIFO queue containing it
+while pending is not empty:
+    s := pop_front(pending)
+    for tag in all_tags:
+        for a in constants_and_live_atoms(s) + [one_fresh_atom(s)]:
+            (outA, nextA) := execute(A, left(s), tag, a)
+            (outB, nextB) := execute(B, right(s), tag, a)
+            if outA != outB:
+                lift_parent_path_to_concrete_inputs(s, tag, a)
+                return Different(word)
+            t := joint_canonical(nextA, nextB)
+            if t not in seen:
+                record its parent; add t to seen and pending
+return Equivalent(list_of_seen_representatives)
+\end{lstlisting}
+
+A positive receipt is simply a finite list $S$ of paired orbit representatives.
+The checker independently verifies that the initial equality pattern belongs
+to $S$, every representative input produces equal outputs, and every successor
+pattern belongs to $S$. It does not trust producer-supplied edge lists, a
+canonicalization hash, a minimality claim, or a search status.
+
+\begin{theorem}[Orbit receipt soundness]
+\label{thm:orbitsound}
+An accepted positive receipt proves that $A$ and $B$ emit identical output
+sequences for every finite input word over $T\times\Atoms$.
+\end{theorem}
+\begin{proof}
+Relate concrete paired states to the listed representative with the same
+controls and anchored equality matrix. The initial pair is related. For a
+concrete input, use Lemmas~\ref{lem:pattern} and~\ref{lem:freshinput} to
+transport the pair and input to a checked representative case. That case has
+equal outputs and a successor represented in $S$. Transporting back preserves
+output equality and the successor relation. Induction on word length proves
+pointwise equality of the entire output sequences.
+\end{proof}
+
+A negative receipt is a word of ordinary tags and concrete nonnegative atom
+labels. The independent checker executes the original two machines and finds
+an output mismatch. During witness construction the producer lifts each
+abstract input relative to the \emph{current concrete joint state}; it does not
+concatenate canonical names from different states as though they were globally
+consistent identities. The latter shortcut is a common incorrect use of
+quotient paths.
+
+\subsection{Termination, cutoff, and witness length}
+Let $B_n$ denote the $n$th Bell number, the number of partitions of $n$ labeled
+positions. A tuple of $k$ optional registers with $c$ fixed constants is
+determined by a partition of $k+c+1$ positions, with the anchor positions kept
+pairwise distinct. Thus $B_{k+c+1}$ is a simple upper bound; it deliberately
+counts some impossible anchor identifications. With $c=0$, the empty anchor
+makes $B_{k+1}$ the exact number of optional equality patterns available over an
+infinite atom set.
+
+\begin{theorem}[Finite orbit decision]
+\label{thm:orbitcomplete}
+Without cutoffs, the breadth-first search terminates after visiting at most
+\[
+ N=|Q_A|\,|Q_B|\,B_{k_A+k_B+c+1}
+\]
+paired orbits. It either returns a positive receipt or a shortest differing
+input word. If $R$ paired orbits are reachable, a differing word, when one
+exists, has length at most $R$.
+\end{theorem}
+\begin{proof}
+There are at most $N$ control-pattern pairs, each with finitely many input
+cases. If all are exhausted without a mismatch, the visited set satisfies
+Theorem~\ref{thm:orbitsound}. If a mismatch is found, path lifting gives a
+concrete differing word. Conversely every concrete path projects to this orbit
+graph, so a concrete mismatch cannot be missed.
+
+An output mismatch occurs on an outgoing edge. A shortest path to the source
+of such an edge has no repeated paired orbit: a repeated segment can be removed,
+and the remaining abstract path can still be lifted. The prefix has length at
+most $R-1$, giving total length at most $R$. Breadth-first traversal considers
+all shorter prefixes first, so its first mismatch has minimum word length.
+\end{proof}
+
+This is not a claim that the implementation visits every orbit up to the
+Bell-number bound. Often almost all are unreachable. The cache-renaming
+example needs only three paired orbits despite the crude bound $B_5=52$.
+
+\begin{corollary}[A justified finite atom carrier]
+\label{cor:cutoff}
+Let $F\subseteq\Atoms$ contain all fixed constants and have size at least
+$k_A+k_B+c+1$. The two admitted machines are equivalent over $\Atoms$ if and
+only if they are equivalent on all words over $T\times F$.
+\end{corollary}
+\begin{proof}
+One implication is restriction. For the other, lift any differing orbit path
+using names in $F$. At each point at most $k_A+k_B$ nonconstant names are live,
+so $F$ contains a name outside the live/fixed support. Use that name for the
+fresh case, reusing names only after they have been forgotten. This preserves
+every required equality and inequality along the path and produces a differing
+word over $F$.
+\end{proof}
+
+The result is a completeness theorem for \emph{all words over a derived
+carrier}, not for all words up to a chosen length. It also assumes the specified
+copy/equality language and anchored initial registers. It does not justify a
+similar cutoff for arbitrary programs that compare keys by hash or order,
+remember an unbounded set, or create fresh atoms internally with additional
+semantics.
+
+\subsection{Worked example: the cache distinction}
+The fixtures compare a two-slot least-recently-used cache with a first-in,
+first-out cache. Both start empty, both report whether an input key was present
+before the request, and both insert a missed key at the front while dropping
+the old tail. On a hit in the tail, LRU moves the hit to the front while FIFO
+leaves the insertion order unchanged. Head hits leave both unchanged.
+
+The search returns the word
+\[
+ 0,\ 1,\ 0,\ 2,\ 0.
+\]
+The first two requests fill the cache. The third makes 0 most recent under LRU,
+but does not change FIFO's insertion order. Request 2 then evicts 1 under LRU
+and 0 under FIFO. The final request is a hit only under LRU. The delivered
+search reports five visited pair orbits and eleven checked representative
+edges before finding the mismatch.
+
+\begin{center}
+\begin{tabular}{@{}rccccc@{}}
+\toprule
+Request & 0 & 1 & 0 & 2 & 0 \\
+\midrule
+LRU hit output & false & false & true & false & true \\
+FIFO hit output & false & false & true & false & false \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Exhaustive concrete exploration over \emph{only two keys} visits seven paired
+states and reports equivalence. That answer is correct for that smaller
+alphabet: after both keys have appeared, all later requests hit. It is wrong
+as a conclusion about arbitrary keys. The fresh representative is the missing
+semantic case, not merely a request for a larger random sample.
+
+As a positive control, swapping the two physical registers and consistently
+rewriting all selector indices produces an equivalent implementation. Its
+certificate has three joint representatives:
+\[
+ (\bot,\bot\mid\bot,\bot),\quad
+ (0,\bot\mid\bot,0),\quad
+ (0,1\mid1,0).
+\]
+There are six representative input checks. The same three-state relation also
+certifies a variant that returns the evicted atom rather than a hit Boolean.
+This exercises cross-machine equality, empty registers, and atom-valued
+outputs, not just control-state isomorphism.
+
+\subsection{Checking cost and representation choices}
+Let $L$ bound the cost of interpreting the rule list and expressions for one
+transition, $k=k_A+k_B$, and $R$ be the receipt's orbit count. Each orbit has at
+most $c+k+1$ representative atoms per tag. With hashed equality signatures,
+the checker costs roughly
+\[
+ O\bigl(R\,|T|\,(c+k+1)\,(L+(c+k)^2)\bigr)
+\]
+primitive operations, plus input validation. The quadratic term is the simple
+pairwise equality-matrix construction, intentionally distinct from the
+producer's linear scan canonicalizer. A verified partition encoding could
+reduce it later. Bell-number growth remains the limiting factor as register
+count rises; the construction is not advertised as a general scalable
+replacement for every symbolic automata algorithm.

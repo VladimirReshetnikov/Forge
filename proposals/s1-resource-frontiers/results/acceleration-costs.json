@@ -1,0 +1,554 @@
+[
+  {
+    "case": "productive_00",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 10,
+      "deletions": 9,
+      "maximum_basis": 1,
+      "stale_work_items": 4,
+      "final_basis": 1,
+      "run_nodes": 6,
+      "search_ns": 109876
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 3,
+      "deletions": 2,
+      "maximum_basis": 1,
+      "stale_work_items": 1,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 46370
+    }
+  },
+  {
+    "case": "productive_01",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 15,
+      "deletions": 14,
+      "maximum_basis": 2,
+      "stale_work_items": 9,
+      "final_basis": 1,
+      "run_nodes": 6,
+      "search_ns": 95664
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 4,
+      "deletions": 3,
+      "maximum_basis": 2,
+      "stale_work_items": 2,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 41212
+    }
+  },
+  {
+    "case": "productive_02",
+    "primitive": {
+      "candidates": 36,
+      "insertions": 20,
+      "deletions": 18,
+      "maximum_basis": 2,
+      "stale_work_items": 8,
+      "final_basis": 2,
+      "run_nodes": 13,
+      "search_ns": 144127
+    },
+    "accelerated": {
+      "candidates": 9,
+      "insertions": 3,
+      "deletions": 1,
+      "maximum_basis": 2,
+      "stale_work_items": 0,
+      "final_basis": 2,
+      "run_nodes": 5,
+      "search_ns": 73641
+    }
+  },
+  {
+    "case": "productive_03",
+    "primitive": {
+      "candidates": 6,
+      "insertions": 4,
+      "deletions": 3,
+      "maximum_basis": 1,
+      "stale_work_items": 2,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 38768
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 31718
+    }
+  },
+  {
+    "case": "productive_04",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 9,
+      "deletions": 8,
+      "maximum_basis": 1,
+      "stale_work_items": 3,
+      "final_basis": 1,
+      "run_nodes": 7,
+      "search_ns": 63065
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 27792
+    }
+  },
+  {
+    "case": "productive_05",
+    "primitive": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 23806
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 26850
+    }
+  },
+  {
+    "case": "productive_06",
+    "primitive": {
+      "candidates": 12,
+      "insertions": 4,
+      "deletions": 3,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 4,
+      "search_ns": 39860
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 24277
+    }
+  },
+  {
+    "case": "productive_07",
+    "primitive": {
+      "candidates": 15,
+      "insertions": 8,
+      "deletions": 6,
+      "maximum_basis": 2,
+      "stale_work_items": 3,
+      "final_basis": 2,
+      "run_nodes": 6,
+      "search_ns": 61723
+    },
+    "accelerated": {
+      "candidates": 12,
+      "insertions": 4,
+      "deletions": 2,
+      "maximum_basis": 2,
+      "stale_work_items": 0,
+      "final_basis": 2,
+      "run_nodes": 5,
+      "search_ns": 53681
+    }
+  },
+  {
+    "case": "productive_08",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 14,
+      "deletions": 12,
+      "maximum_basis": 2,
+      "stale_work_items": 8,
+      "final_basis": 2,
+      "run_nodes": 7,
+      "search_ns": 91418
+    },
+    "accelerated": {
+      "candidates": 9,
+      "insertions": 5,
+      "deletions": 3,
+      "maximum_basis": 2,
+      "stale_work_items": 2,
+      "final_basis": 2,
+      "run_nodes": 5,
+      "search_ns": 50707
+    }
+  },
+  {
+    "case": "productive_09",
+    "primitive": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 22824
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 23876
+    }
+  },
+  {
+    "case": "productive_10",
+    "primitive": {
+      "candidates": 21,
+      "insertions": 11,
+      "deletions": 10,
+      "maximum_basis": 2,
+      "stale_work_items": 4,
+      "final_basis": 1,
+      "run_nodes": 8,
+      "search_ns": 69765
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 3,
+      "deletions": 2,
+      "maximum_basis": 1,
+      "stale_work_items": 1,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 47602
+    }
+  },
+  {
+    "case": "productive_11",
+    "primitive": {
+      "candidates": 30,
+      "insertions": 13,
+      "deletions": 10,
+      "maximum_basis": 4,
+      "stale_work_items": 3,
+      "final_basis": 3,
+      "run_nodes": 9,
+      "search_ns": 145609
+    },
+    "accelerated": {
+      "candidates": 9,
+      "insertions": 3,
+      "deletions": 0,
+      "maximum_basis": 3,
+      "stale_work_items": 0,
+      "final_basis": 3,
+      "run_nodes": 5,
+      "search_ns": 53530
+    }
+  },
+  {
+    "case": "productive_12",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 9,
+      "deletions": 8,
+      "maximum_basis": 1,
+      "stale_work_items": 3,
+      "final_basis": 1,
+      "run_nodes": 7,
+      "search_ns": 56635
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 25519
+    }
+  },
+  {
+    "case": "productive_13",
+    "primitive": {
+      "candidates": 36,
+      "insertions": 21,
+      "deletions": 20,
+      "maximum_basis": 3,
+      "stale_work_items": 9,
+      "final_basis": 1,
+      "run_nodes": 9,
+      "search_ns": 125910
+    },
+    "accelerated": {
+      "candidates": 12,
+      "insertions": 6,
+      "deletions": 5,
+      "maximum_basis": 2,
+      "stale_work_items": 2,
+      "final_basis": 1,
+      "run_nodes": 6,
+      "search_ns": 54663
+    }
+  },
+  {
+    "case": "productive_14",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 9,
+      "deletions": 6,
+      "maximum_basis": 3,
+      "stale_work_items": 3,
+      "final_basis": 3,
+      "run_nodes": 8,
+      "search_ns": 98899
+    },
+    "accelerated": {
+      "candidates": 9,
+      "insertions": 3,
+      "deletions": 0,
+      "maximum_basis": 3,
+      "stale_work_items": 0,
+      "final_basis": 3,
+      "run_nodes": 5,
+      "search_ns": 51097
+    }
+  },
+  {
+    "case": "productive_15",
+    "primitive": {
+      "candidates": 15,
+      "insertions": 8,
+      "deletions": 7,
+      "maximum_basis": 1,
+      "stale_work_items": 3,
+      "final_basis": 1,
+      "run_nodes": 6,
+      "search_ns": 81914
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 3,
+      "deletions": 2,
+      "maximum_basis": 1,
+      "stale_work_items": 1,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 27682
+    }
+  },
+  {
+    "case": "productive_16",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 15,
+      "deletions": 14,
+      "maximum_basis": 3,
+      "stale_work_items": 9,
+      "final_basis": 1,
+      "run_nodes": 8,
+      "search_ns": 90456
+    },
+    "accelerated": {
+      "candidates": 9,
+      "insertions": 5,
+      "deletions": 4,
+      "maximum_basis": 2,
+      "stale_work_items": 2,
+      "final_basis": 1,
+      "run_nodes": 5,
+      "search_ns": 43435
+    }
+  },
+  {
+    "case": "productive_17",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 11,
+      "deletions": 10,
+      "maximum_basis": 2,
+      "stale_work_items": 5,
+      "final_basis": 1,
+      "run_nodes": 7,
+      "search_ns": 70336
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 3,
+      "deletions": 2,
+      "maximum_basis": 1,
+      "stale_work_items": 1,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 29955
+    }
+  },
+  {
+    "case": "productive_18",
+    "primitive": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 20311
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 2,
+      "search_ns": 23045
+    }
+  },
+  {
+    "case": "productive_19",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 6,
+      "deletions": 5,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 7,
+      "search_ns": 49234
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 3,
+      "deletions": 2,
+      "maximum_basis": 1,
+      "stale_work_items": 1,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 70947
+    }
+  },
+  {
+    "case": "productive_20",
+    "primitive": {
+      "candidates": 18,
+      "insertions": 10,
+      "deletions": 9,
+      "maximum_basis": 2,
+      "stale_work_items": 4,
+      "final_basis": 1,
+      "run_nodes": 6,
+      "search_ns": 68733
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 27120
+    }
+  },
+  {
+    "case": "productive_21",
+    "primitive": {
+      "candidates": 3,
+      "insertions": 1,
+      "deletions": 0,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 1,
+      "search_ns": 13581
+    },
+    "accelerated": {
+      "candidates": 3,
+      "insertions": 1,
+      "deletions": 0,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 1,
+      "search_ns": 14823
+    }
+  },
+  {
+    "case": "productive_22",
+    "primitive": {
+      "candidates": 9,
+      "insertions": 4,
+      "deletions": 3,
+      "maximum_basis": 2,
+      "stale_work_items": 1,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 33501
+    },
+    "accelerated": {
+      "candidates": 6,
+      "insertions": 2,
+      "deletions": 1,
+      "maximum_basis": 1,
+      "stale_work_items": 0,
+      "final_basis": 1,
+      "run_nodes": 3,
+      "search_ns": 25228
+    }
+  },
+  {
+    "case": "productive_23",
+    "primitive": {
+      "candidates": 15,
+      "insertions": 8,
+      "deletions": 6,
+      "maximum_basis": 2,
+      "stale_work_items": 3,
+      "final_basis": 2,
+      "run_nodes": 6,
+      "search_ns": 63045
+    },
+    "accelerated": {
+      "candidates": 9,
+      "insertions": 5,
+      "deletions": 3,
+      "maximum_basis": 2,
+      "stale_work_items": 2,
+      "final_basis": 2,
+      "run_nodes": 5,
+      "search_ns": 89755
+    }
+  }
+]

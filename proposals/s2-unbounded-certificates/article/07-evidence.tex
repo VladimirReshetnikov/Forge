@@ -1,0 +1,87 @@
+\section{Executed evidence and its limits}
+\label{sec:evidence}
+\subsection{Environment and separation of runs}
+The main suite ran under Python 3.13.5 on Linux, using only the standard library. The fixed seed was \code{6071504}. The recorded environment is in \code{results/environment.json}. Search and checking use exact \code{fractions.Fraction} arithmetic; no NumPy, SciPy, SymPy, SMT solver, or algebra package is needed to run or replay the package.
+
+The main corpus, the mechanism ablations, and the inverse-free conversion experiment have separate directories and separate counts. The second main run is a reproduction of the first, not another independent collection of mathematical cases. Its accepted and rejected JSONL files were byte-identical to the first run. The report never adds these figures to Forge's twenty-seven prior runs.
+
+\subsection{Main experiment matrix}
+\begin{longtable}{P{0.29\textwidth}r P{0.47\textwidth}}
+\toprule
+Group & Count & Outcome and comparison basis \\
+\midrule
+Predecessor equivalence & 3,350 & Formula compared with operational enabling and firing; all comparisons agree.\\[4pt]
+Exhaustive conservative Petri cases & 2,100 & Complete forward BFS: 1,536 safe and 564 coverable; all match the backward worker.\\[4pt]
+Random conservative Petri cases & 120 & Complete forward BFS: 79 safe and 41 coverable; all match.\\[4pt]
+Unbounded and edge Petri cases & 6 & Five accepted safety/trace receipts and one budget-unknown control; includes the infinite-state mutex.\\[4pt]
+Scalar quadratic PPS & 45 & Exact oracle $q=\min(1,a/b)$; all 20-bit width requests met; at most 20 Newton steps.\\[4pt]
+Coupled contractive PPS & 30 & All 22-bit widths met; at most four Newton steps; 80-digit iteration is a diagnostic cross-check.\\[4pt]
+Coupled supercritical PPS & 24 & All 22-bit widths met; symmetric scalar algebraic values provide numerical diagnostics.\\[4pt]
+Spectral extinction & 26 & Exact probability-one certificates, including critical cycles and a nonuniform positive weight.\\[4pt]
+Algebraic decoder & 8 & Accepted isolated scalar least-root descriptions.\\[4pt]
+Quantitative boundary cases & 6 & Four singular one-child exceptions, a critical noncontractive system, and a valid but insufficiently narrow enclosure.\\[4pt]
+Rejection controls & 275 & All deliberately invalid or non-authoritative receipts rejected.\\[4pt]
+Malformed input controls & 5 & All rejected by input validation.\\
+\bottomrule
+\end{longtable}
+
+The main corpus contains 2,360 accepted stored receipts and 275 rejected stored receipts. These are \emph{receipt counts}, not a count of distinct source-level theorems. Some systems occur in more than one certificate form. The 3,350 predecessor comparisons and five malformed inputs are different units and are not added to the receipt count.
+
+\subsection{Why the forward oracle is complete on its test fragment}
+The finite BFS comparator is used only when every transition preserves the total number of tokens. With a fixed initial token total $s$ and dimension $d$, only finitely many nonnegative vectors sum to $s$. The oracle explores the entire reachable graph and does not use an arbitrary depth or marking cap.
+
+The exhaustive group enumerates fourteen two-place transitions with input and output totals at most two and exactly equal to one another, ten initial markings with total at most three, and fifteen bad thresholds with total at most four. Their product is $14\cdot10\cdot15=2100$ queries. The random group uses three or four places, small conserved totals, and multiple transitions.
+
+These finite tests check backward search against a computationally different forward algorithm. They do not prove the unbounded algorithm correct. The separately included infinite-state mutex and producer examples exercise that intended setting, and the soundness and termination arguments are given in Section~\ref{sec:petri}. The corpus is synthetic and small, not an industrial Petri benchmark suite.
+
+\subsection{What the probability cross-checks establish}
+For the scalar quadratic family,
+\[
+ P(x)=a+(1-a-b)x+bx^2,
+ \qquad a,b>0,\quad a+b\le1,
+\]
+the factorization
+\[
+ P(x)-x=(x-1)(bx-a)
+\]
+gives the exact least fixed point $\min(1,a/b)$. This is an exact independent value check for those 45 systems, not an approximate tolerance comparison.
+
+The coupled contractive systems use a separate high-precision decimal fixed-point iteration to compare numerical values with the exact rational enclosure. Those 80-digit computations are diagnostics, not soundness authorities and not a proof that a returned interval is valid. The exact finite certificate checks authorize the Python result. Likewise, the supercritical cyclic cubic systems exploit symmetry for an algebraic numerical diagnostic, rather than pretending a generic numerical solver selects a least root by itself.
+
+The critical and algebraic examples deliberately exercise places where a naive checker fails: the wrong fixed-point branch, singular deterministic cycles, critical equality without strict contraction, and incorrect factorization. They are not a proof that the checker has no other bugs.
+
+\subsection{Mutation and negative controls}
+The main rejection corpus includes wrong subjects, out-of-range cover indices, altered Newton inverses, a forged jump to the larger fixed point, a false precision claim, incorrect algebraic factors, the deterministic one-child exception, and a budget-exhausted object submitted as though it were a certificate. Each expected rejection is replayable from the supplied JSONL record.
+
+These are designed controls, not a claim about rejection of every possible mutation. A change to an unused statistic, a redundant valid basis row, or an equivalent rational representation need not invalidate the mathematics. Conversely, tests alone do not establish that every malformed input is rejected safely or in bounded resources.
+
+The inverse-free experiment has its own 201 rejection controls: invalid weights and directions on each of the 100 conversions, plus the nonstrict-weight forgery on $P(x)=x$. The main and conversion counts must not be pooled into a single solved-problem rate.
+
+\subsection{Search-disabled replay}
+The standalone replay script imports the checker while installing an import hook that rejects the search module and optional numerical packages. Running with \code{python -S} also disables site-package initialization. The main replay accepted all 2,360 expected certificates and rejected all 275 expected negative records. Separate replay passes cover the four ablation receipts and the 100 converted receipts with their 201 controls.
+
+This is evidence that acceptance does not depend on rerunning the producer. The checker still shares input representation, validation, and rational serialization code with the producer, and both execute on Python's runtime and rational arithmetic. It is not a formally verified independent checker and is not a Lean kernel proof.
+
+\subsection{Inverse-free format measurements}
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+Dimension & Original bytes & Weighted bytes & Direction of change \\
+\midrule
+1 & 41,410 & 55,387 & larger \\
+2 & 35,801 & 35,287 & slightly smaller \\
+3 & 57,847 & 40,131 & smaller \\
+4 & 162,855 & 97,871 & smaller \\
+\midrule
+All converted receipts & 297,913 & 228,676 & 23.2\% smaller \\
+\bottomrule
+\end{tabular}
+\end{center}
+These figures count compact UTF-8 JSON serialization of the whole receipt, including its subject and other fields. They do not count Python object memory or a hypothetical Lean expression encoding. Larger rational numerators can outweigh a reduction in the number of rational entries, which is why the report retains per-dimension results rather than advertising a uniform compression factor.
+
+The converter preserves the endpoints and requested-width outcome. Its 471 weighted steps describe the same justified lower-bound progress as the original inverse steps. No search-success improvement is inferred from format conversion alone.
+
+\subsection{What was not measured}
+There was no comparison with \code{grind}, Aesop, \code{nlinarith}, LeanHammer, the existing Forge prototypes, or a production Petri model checker. There was no Lean compilation, no Mathlib cache installation, and no source-level stochastic or resource theorem proved by the delivered package. There was no adversarial parser fuzzing, large-dimensional rational linear algebra study, or industrial benchmark evaluation.
+
+The subsecond timings in the main summary reflect tiny synthetic inputs in this execution environment. They are retained for reproducibility but are not presented as deployment estimates or evidence of a speedup. Certificate size, exactness, and oracle agreement on the stated fragments are the useful measured results here.

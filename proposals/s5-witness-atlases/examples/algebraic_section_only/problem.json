@@ -1,0 +1,43 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "algebraic_section_only",
+  "outer": "exists",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "-2"
+      ],
+      [
+        2,
+        0,
+        "1"
+      ]
+    ],
+    [
+      [
+        0,
+        1,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "eq",
+      0
+    ],
+    [
+      "eq",
+      1
+    ]
+  ]
+}

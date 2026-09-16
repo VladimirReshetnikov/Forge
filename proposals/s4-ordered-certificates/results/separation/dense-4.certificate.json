@@ -1,0 +1,70 @@
+{
+  "basis": [
+    1,
+    0
+  ],
+  "closure": [
+    {
+      "basis": 1,
+      "cover": [
+        0
+      ],
+      "predecessor": {
+        "kind": "diagonal"
+      },
+      "transition": 0
+    },
+    {
+      "basis": 1,
+      "cover": [],
+      "predecessor": {
+        "caps": [
+          20,
+          20,
+          20,
+          20
+        ],
+        "kind": "resource-cover",
+        "tree": [
+          "basis",
+          0
+        ]
+      },
+      "transition": 1
+    }
+  ],
+  "format": "forge-ordered-v1",
+  "nodes": [
+    {
+      "kind": "bad",
+      "state": {
+        "q": 1,
+        "v": [
+          20,
+          0,
+          0,
+          0
+        ]
+      },
+      "target": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "transition": 0
+    }
+  ],
+  "subject": "{\"bad\":[{\"q\":1,\"v\":[20,0,0,0]}],\"controls\":2,\"dimension\":4,\"kind\":\"resource\",\"transitions\":[{\"consume\":[1,0,0,0],\"matrix\":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],\"produce\":[20,0,0,0],\"source\":0,\"target\":1},{\"consume\":[1,0,0,0],\"matrix\":[[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]],\"produce\":[0,0,0,0],\"source\":0,\"target\":1}]}",
+  "target_cover": [
+    1
+  ]
+}

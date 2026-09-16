@@ -1,0 +1,483 @@
+{
+  "evidence_scope": "Python search, search-independent certificate replay, finite-oracle comparison; not Lean-kernel verification or a tactic comparison.",
+  "examples": {
+    "axes": {
+      "basis": [
+        [
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      "kind": "safe",
+      "schema": 1,
+      "stats": {
+        "admissions": 1,
+        "final_basis": 1,
+        "peak_basis": 1,
+        "predecessors": 2
+      }
+    },
+    "delayed_101": {
+      "initial": 0,
+      "kind": "unsafe",
+      "parameters": [],
+      "schema": 1,
+      "stats": {
+        "admissions": 102,
+        "final_basis": 1,
+        "peak_basis": 1,
+        "predecessors": 101
+      },
+      "transitions": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "enabling": {
+      "basis": [
+        [
+          [
+            1
+          ]
+        ],
+        [
+          [
+            0
+          ]
+        ]
+      ],
+      "kind": "safe",
+      "schema": 1,
+      "stats": {
+        "admissions": 2,
+        "final_basis": 2,
+        "peak_basis": 2,
+        "predecessors": 1
+      }
+    },
+    "eviction_register_swap": {
+      "kind": "equivalent",
+      "schema": 1,
+      "states": [
+        [
+          0,
+          0,
+          [
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        [
+          0,
+          0,
+          [
+            0,
+            null,
+            null,
+            0
+          ]
+        ],
+        [
+          0,
+          0,
+          [
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      ],
+      "stats": {
+        "edges": 6,
+        "orbits": 3
+      }
+    },
+    "lru_fifo": {
+      "kind": "different",
+      "schema": 1,
+      "stats": {
+        "edges": 11,
+        "orbits": 5
+      },
+      "word": [
+        [
+          "request",
+          0
+        ],
+        [
+          "request",
+          1
+        ],
+        [
+          "request",
+          0
+        ],
+        [
+          "request",
+          2
+        ],
+        [
+          "request",
+          0
+        ]
+      ]
+    },
+    "lru_fifo_two_keys": {
+      "alphabet_size": 2,
+      "equivalent": true,
+      "shortest_length": null,
+      "states": 7
+    },
+    "lru_register_swap": {
+      "kind": "equivalent",
+      "schema": 1,
+      "states": [
+        [
+          0,
+          0,
+          [
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        [
+          0,
+          0,
+          [
+            0,
+            null,
+            null,
+            0
+          ]
+        ],
+        [
+          0,
+          0,
+          [
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      ],
+      "stats": {
+        "edges": 6,
+        "orbits": 3
+      }
+    },
+    "mutex": {
+      "basis": [
+        [
+          [
+            0,
+            0,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            0,
+            1,
+            1
+          ]
+        ]
+      ],
+      "kind": "safe",
+      "schema": 1,
+      "stats": {
+        "admissions": 6,
+        "final_basis": 6,
+        "peak_basis": 6,
+        "predecessors": 24
+      }
+    },
+    "mutex_bug": {
+      "initial": 0,
+      "kind": "unsafe",
+      "parameters": [
+        1,
+        1
+      ],
+      "schema": 1,
+      "stats": {
+        "admissions": 4,
+        "final_basis": 4,
+        "peak_basis": 4,
+        "predecessors": 7
+      },
+      "transitions": [
+        2,
+        0
+      ]
+    },
+    "owner_pool": {
+      "basis": [
+        [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            2
+          ]
+        ],
+        [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            2
+          ]
+        ]
+      ],
+      "kind": "safe",
+      "schema": 1,
+      "states": [
+        [
+          0,
+          [
+            null
+          ]
+        ],
+        [
+          0,
+          [
+            0
+          ]
+        ]
+      ],
+      "stats": {
+        "admissions": 6,
+        "final_basis": 6,
+        "orbits": 2,
+        "peak_basis": 6,
+        "predecessors": 9,
+        "quotient_edges": 3
+      }
+    },
+    "owner_pool_bug": {
+      "initial": 0,
+      "kind": "unsafe",
+      "parameters": [
+        2
+      ],
+      "schema": 1,
+      "stats": {
+        "admissions": 5,
+        "final_basis": 5,
+        "orbits": 2,
+        "peak_basis": 5,
+        "predecessors": 5,
+        "quotient_edges": 3
+      },
+      "steps": [
+        [
+          0,
+          "acquire",
+          0
+        ],
+        [
+          0,
+          "acquire",
+          1
+        ]
+      ]
+    }
+  },
+  "external_solver_dependencies": [],
+  "families": {
+    "mixed": {
+      "cases": 180,
+      "oracle_agreements": 180,
+      "oracle_state_visits": 479,
+      "outcomes": {
+        "safe": 116,
+        "unsafe": 64
+      },
+      "seconds": 0.0760553190000337
+    },
+    "nominal": {
+      "cases": 160,
+      "oracle_agreements": 160,
+      "oracle_state_visits": 1097,
+      "orbit_state_visits": 440,
+      "outcomes": {
+        "different": 37,
+        "equivalent": 123
+      },
+      "seconds": 0.15928913900006592,
+      "shortest_witness_agreements": 37
+    },
+    "vass": {
+      "cases": 300,
+      "oracle_agreements": 300,
+      "oracle_state_visits": 537,
+      "outcomes": {
+        "safe": 222,
+        "unsafe": 78
+      },
+      "seconds": 0.06764553699997577
+    }
+  },
+  "handcrafted_examples": 10,
+  "lean_status": "NOT_RUN: no Lean/elan executable; compiler plugin search found none",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "rejected_mutations": 1300,
+  "seed": 20260915,
+  "stored_objects": 650
+}

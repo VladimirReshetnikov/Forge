@@ -1,0 +1,69 @@
+\section{A replayable compilation graph}\label{sec:certificates}
+
+\subsection{What the checker is asked to believe}
+The certificate is a directed acyclic array of nodes. A node binds together an ordered variable context, an explicit formula, a complete DFA, and a construction receipt. Child indices must refer strictly backward. A separately supplied \emph{expected query} must match both the bundle query and the root judgment. The checker does not accept a theorem statement merely because the producer placed it in the certificate.
+
+The wire schema is \code{forge-auto-1}. A DFA has exactly four keys: \code{k}, \code{start}, \code{trans}, and \code{final}. States are array indices. Row lengths must be \(2^k\); every target must be a valid state index; every final flag must be a Boolean. Formula coefficients and indices must be genuine integers: in Python, \code{True == 1}, so ordinary permissive type checks and structural comparisons are unsuitable at this boundary.
+
+The checker independently implements atomic arithmetic and the local construction equations. It imports neither the producer nor its formula helpers. It does not rerun breadth-first exploration, partition refinement, or the quantifier compiler. Both programs nevertheless share the \emph{mathematical specification}, and both are Python. Independence reduces correlated implementation risks; it does not constitute formal verification.
+
+\subsection{The six node kinds}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.17\linewidth}p{0.27\linewidth}X@{}}
+\toprule
+Node & Receipt & Local checks\\
+\midrule
+Atom & Carry, residue, or digit labels & Initial label, each transition equation, exact final condition\\
+Not & Child index & Same context and transitions; formula negated and finals flipped\\
+Product & Two children; state pairs & Correct initial pair, transition pairs, Boolean acceptance\\
+Quotient & Child; total state map & Start, transitions, and finals commute with the map\\
+Exists & Child; subsets; ranks; bit choices & Exact projected transitions and exact zero-tail closure\\
+Root verdict & Accepting invariant or rejecting word & Validity closure or concrete rejecting run and tuple decoding\\
+\bottomrule
+\end{tabularx}
+\end{center}
+The root verdict is not itself a compilation node, but is included here to show the whole acceptance boundary. Any unknown node kind, forward dependency, unsupported atom, context mismatch, or query mismatch is rejected.
+
+\subsection{Why commuting diagrams are enough}
+For a quotient map \(h:Q_A\to Q_B\), the checker verifies
+\[
+ h(q_A)=q_B,\quad
+ h(\delta_A(q,d))=\delta_B(h(q),d),\quad
+ [q\in F_A]=[h(q)\in F_B].
+\]
+Induction on words gives equal acceptance from the two initial states. The checker does not need to establish that \(B\) is minimal or that \(h\) is injective. Surjectivity is also unnecessary: any extra target state outside the reachable image is irrelevant to start-state behavior. This permits different search implementations to emit different valid quotients.
+
+The pair labels for products and subset labels for projection play the same role. They describe the semantic meaning of each stored state and satisfy the exact start/step/final equations. Duplicate labels would not invalidate the mathematical argument, although the producer normally constructs canonical reachable states. The checker requires canonical sorted subsets to keep the wire format deterministic and easy to inspect; uniqueness across all subset-state labels is not a separate proof obligation.
+
+\subsection{Validity and refutation receipts}
+To certify that \(\phi\) holds for all assignments of its free variables, supply a set \(I\) of states satisfying
+\[
+ q_0\in I,\qquad I\subseteq F,\qquad
+ q\in I\Longrightarrow\delta(q,d)\in I\quad(d\in\Sigma_k).
+\]
+Every run remains in \(I\), and therefore accepts. The producer uses the reachable set, but any larger transition-closed accepting set works.
+
+A refutation supplies a finite word rejected by the root DFA and the exact tuple decoded from that word. The checker follows the supplied letters directly. The producer finds a shortest rejecting \emph{word} by breadth-first search; it does not promise a numerically least tuple, and the checker need not validate shortestness.
+
+For a closed sentence, there are zero visible tracks. The alphabet still contains its unique empty letter, and every word denotes the empty tuple. A rejecting run then certifies that the sentence is false. For example, the false sentence \(\exists m\,\forall n\,(n\le m)\) has no free numerical tuple to display. Its refutation certificate is a semantic automata derivation, not a synthesized adversary strategy for the quantifier game.
+
+\begin{theorem}[Mathematical soundness of the receipt rules]\label{thm:receipt}
+Suppose a finite certificate graph satisfies all the specified typing and local receipt conditions. Its root automaton represents its root formula. An accepted validity receipt proves its universal closure under the fragment semantics; an accepted rejecting-word receipt gives a falsifying assignment to the free variables.
+\end{theorem}
+\begin{proof}
+Induct over the backward-indexed graph. Atomic labels satisfy the invariants of \S\ref{sec:semantics}. Boolean nodes preserve semantics directly. The commuting equations preserve accepted languages at quotient nodes. At existential nodes, Lemma~\ref{lem:tail} establishes the exact tail set, the subset equations establish the exact projected runs, and Theorem~\ref{thm:exists} supplies the quantified semantics. Root query binding identifies the resulting judgment with the expected one. A second word induction proves the accepting-invariant verdict; direct evaluation proves the rejecting-word verdict.
+\end{proof}
+
+\textbf{Implementation qualification.} The theorem is about the stated receipt conditions. Establishing that the implementation of \code{checker.py} enforces exactly those conditions is a separate software-correctness task. The experiments test it extensively, but there is no mechanized proof of that implementation or of its parser.
+
+\subsection{Resource and decoding discipline}
+The producer defaults to at most 8 active tracks, 8,192 states per constructed machine, 4,096 certificate nodes, and 2,000,000 accumulated transition cells. The checker separately limits contexts to 8 tracks, graphs to 4,096 nodes, tables to 20,000 states each, and their accumulated cells to 2,000,000. The checker also limits formula depth and its CLI rejects a certificate file larger than 100 MB.
+
+These are safeguards, not a hostile-input security audit. They do not fully bound arbitrary-precision integer size, JSON nesting before parsing, every allocation, or total operating-system resource use. Production use still requires byte and integer-bit limits before expensive decoding, isolated processes, cancellation, and memory accounting. A resource refusal must remain distinct from both semantic refutation and a malformed-certificate diagnosis.
+
+The producer's budget exception is caught by its CLI and serialized as \code{unknown}. The proof checker rejects bundles carrying such a status. There is no conversion from ``the search could not build the machine'' to ``the formula is false.''
+
+\subsection{Certificate completeness versus proof compression}
+For every successful unrestricted compilation, the producer can emit the local labels, maps and ranks used in the construction. Thus these receipt rules do not introduce a further logical incompleteness within the fragment. They do impose a potentially large storage cost: a small minimized root may have a much larger derivation graph.
+
+Keeping the pre-minimization source is necessary for the current quotient receipt. A future checker could accept independently certified bisimulation or language-inclusion witnesses to avoid retaining some intermediate tables, but that is not implemented here. The existing format deliberately favors transparent local checks over aggressive compression. Report the total certificate size, not just the size of its final automaton.

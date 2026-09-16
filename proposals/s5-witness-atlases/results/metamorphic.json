@@ -1,0 +1,1823 @@
+{
+  "cases": 76,
+  "agreements": 76,
+  "seconds": 2.626873064000165,
+  "records": [
+    {
+      "name": "algebraic_positive_affine_0",
+      "original": "algebraic_positive",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 7,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.03125206300001082,
+      "replay_seconds": 0.003035581999938586
+    },
+    {
+      "name": "algebraic_positive_affine_1",
+      "original": "algebraic_positive",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 7,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.024461649000159014,
+      "replay_seconds": 0.0026920779998818034
+    },
+    {
+      "name": "algebraic_positive_affine_2",
+      "original": "algebraic_positive",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 7,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.031053335000024163,
+      "replay_seconds": 0.002136735000021872
+    },
+    {
+      "name": "algebraic_positive_affine_3",
+      "original": "algebraic_positive",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 7,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.02674087800005509,
+      "replay_seconds": 0.0022378060000391997
+    },
+    {
+      "name": "square_root_conditional_affine_0",
+      "original": "square_root_conditional",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 13,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.020038423999949373,
+      "replay_seconds": 0.005219508999971367
+    },
+    {
+      "name": "square_root_conditional_affine_1",
+      "original": "square_root_conditional",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 13,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.016931955000018206,
+      "replay_seconds": 0.003288832999942315
+    },
+    {
+      "name": "square_root_conditional_affine_2",
+      "original": "square_root_conditional",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 13,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.021978093999905468,
+      "replay_seconds": 0.003332879000026878
+    },
+    {
+      "name": "square_root_conditional_affine_3",
+      "original": "square_root_conditional",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 13,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.025206414999956905,
+      "replay_seconds": 0.003074971999922127
+    },
+    {
+      "name": "square_root_unconditional_affine_0",
+      "original": "square_root_unconditional",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": 0,
+      "search_seconds": 0.007655681999949593,
+      "replay_seconds": 0.0013699450000785873
+    },
+    {
+      "name": "square_root_unconditional_affine_1",
+      "original": "square_root_unconditional",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        true,
+        false
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": 2,
+      "search_seconds": 0.005803303999982745,
+      "replay_seconds": 0.0011055180000312248
+    },
+    {
+      "name": "square_root_unconditional_affine_2",
+      "original": "square_root_unconditional",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": 0,
+      "search_seconds": 0.00869701399983569,
+      "replay_seconds": 0.0017135000000507716
+    },
+    {
+      "name": "square_root_unconditional_affine_3",
+      "original": "square_root_unconditional",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        true,
+        false
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": 2,
+      "search_seconds": 0.009208039999975881,
+      "replay_seconds": 0.0017504150000604568
+    },
+    {
+      "name": "strict_square_band_affine_0",
+      "original": "strict_square_band",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 25,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.02386092799997641,
+      "replay_seconds": 0.006206949999977951
+    },
+    {
+      "name": "strict_square_band_affine_1",
+      "original": "strict_square_band",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 25,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.02310083699990173,
+      "replay_seconds": 0.006288892999918971
+    },
+    {
+      "name": "strict_square_band_affine_2",
+      "original": "strict_square_band",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 25,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.024610993000123926,
+      "replay_seconds": 0.006509552999887092
+    },
+    {
+      "name": "strict_square_band_affine_3",
+      "original": "strict_square_band",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 25,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.030660535999913918,
+      "replay_seconds": 0.005889082000066992
+    },
+    {
+      "name": "inverse_hole_affine_0",
+      "original": "inverse_hole",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": 1,
+      "search_seconds": 0.004868300999987696,
+      "replay_seconds": 0.0012031950000164215
+    },
+    {
+      "name": "inverse_hole_affine_1",
+      "original": "inverse_hole",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": 1,
+      "search_seconds": 0.004890345000148955,
+      "replay_seconds": 0.0021793690000322385
+    },
+    {
+      "name": "inverse_hole_affine_2",
+      "original": "inverse_hole",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": 1,
+      "search_seconds": 0.012617243000022427,
+      "replay_seconds": 0.001475343000038265
+    },
+    {
+      "name": "inverse_hole_affine_3",
+      "original": "inverse_hole",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": 1,
+      "search_seconds": 0.0067767739999453624,
+      "replay_seconds": 0.0013093040001876943
+    },
+    {
+      "name": "inverse_guarded_affine_0",
+      "original": "inverse_guarded",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.005179489000056492,
+      "replay_seconds": 0.001454211000009309
+    },
+    {
+      "name": "inverse_guarded_affine_1",
+      "original": "inverse_guarded",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.004017955999870537,
+      "replay_seconds": 0.0013362250001591747
+    },
+    {
+      "name": "inverse_guarded_affine_2",
+      "original": "inverse_guarded",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.005829703000017616,
+      "replay_seconds": 0.00160528800006432
+    },
+    {
+      "name": "inverse_guarded_affine_3",
+      "original": "inverse_guarded",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 7,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.006239828999923702,
+      "replay_seconds": 0.00183580299994901
+    },
+    {
+      "name": "vanishing_content_affine_0",
+      "original": "vanishing_content",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 21,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.016705906999959552,
+      "replay_seconds": 0.006609423000099923
+    },
+    {
+      "name": "vanishing_content_affine_1",
+      "original": "vanishing_content",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 21,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.022679293999999572,
+      "replay_seconds": 0.004641180999897188
+    },
+    {
+      "name": "vanishing_content_affine_2",
+      "original": "vanishing_content",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 21,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.015688680999801363,
+      "replay_seconds": 0.0042651470000691916
+    },
+    {
+      "name": "vanishing_content_affine_3",
+      "original": "vanishing_content",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 21,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.01882604499996887,
+      "replay_seconds": 0.004054270999859
+    },
+    {
+      "name": "choose_positive_quadratic_affine_0",
+      "original": "choose_positive_quadratic",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": 2,
+      "search_seconds": 0.014843904000144903,
+      "replay_seconds": 0.0025059679999230866
+    },
+    {
+      "name": "choose_positive_quadratic_affine_1",
+      "original": "choose_positive_quadratic",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": 2,
+      "search_seconds": 0.015953557999864643,
+      "replay_seconds": 0.002759189000016704
+    },
+    {
+      "name": "choose_positive_quadratic_affine_2",
+      "original": "choose_positive_quadratic",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": 2,
+      "search_seconds": 0.022096742000030645,
+      "replay_seconds": 0.00378103100001681
+    },
+    {
+      "name": "choose_positive_quadratic_affine_3",
+      "original": "choose_positive_quadratic",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        false,
+        true,
+        false,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 17,
+      "projection_degree": 2,
+      "selected_x": 2,
+      "search_seconds": 0.02358048799987955,
+      "replay_seconds": 0.003038477000018247
+    },
+    {
+      "name": "surjective_cubic_affine_0",
+      "original": "surjective_cubic",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 23,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.07958503999998356,
+      "replay_seconds": 0.044219563000069684
+    },
+    {
+      "name": "surjective_cubic_affine_1",
+      "original": "surjective_cubic",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 23,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.0773157959999935,
+      "replay_seconds": 0.043252813000208334
+    },
+    {
+      "name": "surjective_cubic_affine_2",
+      "original": "surjective_cubic",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 23,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.08275739800001247,
+      "replay_seconds": 0.044669417000022804
+    },
+    {
+      "name": "surjective_cubic_affine_3",
+      "original": "surjective_cubic",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 5,
+      "plane_cells": 23,
+      "projection_degree": 2,
+      "selected_x": null,
+      "search_seconds": 0.08231891500008715,
+      "replay_seconds": 0.046212491000005684
+    },
+    {
+      "name": "surjective_quintic_affine_0",
+      "original": "surjective_quintic",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 4,
+      "selected_x": null,
+      "search_seconds": 0.07926487399981852,
+      "replay_seconds": 0.001971267000044463
+    },
+    {
+      "name": "surjective_quintic_affine_1",
+      "original": "surjective_quintic",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 4,
+      "selected_x": null,
+      "search_seconds": 0.06274062100010269,
+      "replay_seconds": 0.0018077610000091227
+    },
+    {
+      "name": "surjective_quintic_affine_2",
+      "original": "surjective_quintic",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 4,
+      "selected_x": null,
+      "search_seconds": 0.07378952300018682,
+      "replay_seconds": 0.001992077999830144
+    },
+    {
+      "name": "surjective_quintic_affine_3",
+      "original": "surjective_quintic",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 4,
+      "selected_x": null,
+      "search_seconds": 0.07725735399981204,
+      "replay_seconds": 0.001864646000058201
+    },
+    {
+      "name": "repeated_zero_curve_affine_0",
+      "original": "repeated_zero_curve",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.013166618000013841,
+      "replay_seconds": 0.0015086230000633805
+    },
+    {
+      "name": "repeated_zero_curve_affine_1",
+      "original": "repeated_zero_curve",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.007849802999999156,
+      "replay_seconds": 0.001308473000108279
+    },
+    {
+      "name": "repeated_zero_curve_affine_2",
+      "original": "repeated_zero_curve",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.009871655999859286,
+      "replay_seconds": 0.001712609000151133
+    },
+    {
+      "name": "repeated_zero_curve_affine_3",
+      "original": "repeated_zero_curve",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 9,
+      "projection_degree": 1,
+      "selected_x": null,
+      "search_seconds": 0.012354940000022907,
+      "replay_seconds": 0.0019690829999490234
+    },
+    {
+      "name": "strict_repeated_zero_curve_affine_0",
+      "original": "strict_repeated_zero_curve",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": 0,
+      "search_seconds": 0.0032884319998629508,
+      "replay_seconds": 0.0006107060000886122
+    },
+    {
+      "name": "strict_repeated_zero_curve_affine_1",
+      "original": "strict_repeated_zero_curve",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": 0,
+      "search_seconds": 0.0029176859998187865,
+      "replay_seconds": 0.0005977770001663885
+    },
+    {
+      "name": "strict_repeated_zero_curve_affine_2",
+      "original": "strict_repeated_zero_curve",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": 0,
+      "search_seconds": 0.003365167000083602,
+      "replay_seconds": 0.000806259000000864
+    },
+    {
+      "name": "strict_repeated_zero_curve_affine_3",
+      "original": "strict_repeated_zero_curve",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": 0,
+      "search_seconds": 0.0033175959999880433,
+      "replay_seconds": 0.0007633650000116177
+    },
+    {
+      "name": "negative_algebraic_obstruction_affine_0",
+      "original": "negative_algebraic_obstruction",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 7,
+      "plane_cells": 33,
+      "projection_degree": 3,
+      "selected_x": 1,
+      "search_seconds": 0.09674800700008745,
+      "replay_seconds": 0.06565439099995274
+    },
+    {
+      "name": "negative_algebraic_obstruction_affine_1",
+      "original": "negative_algebraic_obstruction",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "base_cells": 7,
+      "plane_cells": 33,
+      "projection_degree": 3,
+      "selected_x": 5,
+      "search_seconds": 0.09757418599997436,
+      "replay_seconds": 0.06792628900007003
+    },
+    {
+      "name": "negative_algebraic_obstruction_affine_2",
+      "original": "negative_algebraic_obstruction",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "base_cells": 7,
+      "plane_cells": 33,
+      "projection_degree": 3,
+      "selected_x": 1,
+      "search_seconds": 0.10610065400010171,
+      "replay_seconds": 0.06738830199992663
+    },
+    {
+      "name": "negative_algebraic_obstruction_affine_3",
+      "original": "negative_algebraic_obstruction",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "base_cells": 7,
+      "plane_cells": 33,
+      "projection_degree": 3,
+      "selected_x": 5,
+      "search_seconds": 0.10158822599987616,
+      "replay_seconds": 0.059925749000058204
+    },
+    {
+      "name": "quantifier_order_forall_exists_affine_0",
+      "original": "quantifier_order_forall_exists",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.003160550000075091,
+      "replay_seconds": 0.0005836459999954968
+    },
+    {
+      "name": "quantifier_order_forall_exists_affine_1",
+      "original": "quantifier_order_forall_exists",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.0022414509999180154,
+      "replay_seconds": 0.0006402310000339639
+    },
+    {
+      "name": "quantifier_order_forall_exists_affine_2",
+      "original": "quantifier_order_forall_exists",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.0023221120000016526,
+      "replay_seconds": 0.0005388290001064888
+    },
+    {
+      "name": "quantifier_order_forall_exists_affine_3",
+      "original": "quantifier_order_forall_exists",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.0023208510001495597,
+      "replay_seconds": 0.0009367049999582377
+    },
+    {
+      "name": "quantifier_order_exists_forall_affine_0",
+      "original": "quantifier_order_exists_forall",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.002204836999908366,
+      "replay_seconds": 0.0005648779999773978
+    },
+    {
+      "name": "quantifier_order_exists_forall_affine_1",
+      "original": "quantifier_order_exists_forall",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.0021013310001762875,
+      "replay_seconds": 0.0005208819998188119
+    },
+    {
+      "name": "quantifier_order_exists_forall_affine_2",
+      "original": "quantifier_order_exists_forall",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.0021526089999497344,
+      "replay_seconds": 0.0005245770000783523
+    },
+    {
+      "name": "quantifier_order_exists_forall_affine_3",
+      "original": "quantifier_order_exists_forall",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 3,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.002222523000000365,
+      "replay_seconds": 0.0005938409999544092
+    },
+    {
+      "name": "discontinuous_choice_affine_0",
+      "original": "discontinuous_choice",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 23,
+      "projection_degree": 3,
+      "selected_x": null,
+      "search_seconds": 0.03360156700000516,
+      "replay_seconds": 0.004945718000044508
+    },
+    {
+      "name": "discontinuous_choice_affine_1",
+      "original": "discontinuous_choice",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 23,
+      "projection_degree": 3,
+      "selected_x": null,
+      "search_seconds": 0.028578764000030787,
+      "replay_seconds": 0.006690664999950968
+    },
+    {
+      "name": "discontinuous_choice_affine_2",
+      "original": "discontinuous_choice",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 23,
+      "projection_degree": 3,
+      "selected_x": null,
+      "search_seconds": 0.035855027000025075,
+      "replay_seconds": 0.005978025999866077
+    },
+    {
+      "name": "discontinuous_choice_affine_3",
+      "original": "discontinuous_choice",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true,
+        true,
+        true
+      ],
+      "base_cells": 3,
+      "plane_cells": 23,
+      "projection_degree": 3,
+      "selected_x": null,
+      "search_seconds": 0.04385323400015295,
+      "replay_seconds": 0.008808330999954705
+    },
+    {
+      "name": "empty_and_constant_atoms_affine_0",
+      "original": "empty_and_constant_atoms",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.00020584799995049252,
+      "replay_seconds": 0.0003865300000143179
+    },
+    {
+      "name": "empty_and_constant_atoms_affine_1",
+      "original": "empty_and_constant_atoms",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.00018578899994281528,
+      "replay_seconds": 0.00031244799993146444
+    },
+    {
+      "name": "empty_and_constant_atoms_affine_2",
+      "original": "empty_and_constant_atoms",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.00017374100002598425,
+      "replay_seconds": 0.0003809410000030766
+    },
+    {
+      "name": "empty_and_constant_atoms_affine_3",
+      "original": "empty_and_constant_atoms",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        true
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.0001806309999210498,
+      "replay_seconds": 0.0006314570000540698
+    },
+    {
+      "name": "constant_false_affine_0",
+      "original": "constant_false",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.00010105199999088654,
+      "replay_seconds": 0.00039249899987225945
+    },
+    {
+      "name": "constant_false_affine_1",
+      "original": "constant_false",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 8.87940000211529e-05,
+      "replay_seconds": 0.00021921799998381175
+    },
+    {
+      "name": "constant_false_affine_2",
+      "original": "constant_false",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 0.00011434199996074312,
+      "replay_seconds": 0.00020905299993501103
+    },
+    {
+      "name": "constant_false_affine_3",
+      "original": "constant_false",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": false,
+      "accepted": true,
+      "closed_value": false,
+      "truth_by_x": [
+        false
+      ],
+      "base_cells": 1,
+      "plane_cells": 1,
+      "projection_degree": 0,
+      "selected_x": null,
+      "search_seconds": 8.432699996774318e-05,
+      "replay_seconds": 0.00032035999993240694
+    },
+    {
+      "name": "algebraic_section_only_affine_0",
+      "original": "algebraic_section_only",
+      "transform": [
+        1,
+        1,
+        1,
+        -1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 15,
+      "projection_degree": 2,
+      "selected_x": 1,
+      "search_seconds": 0.019659442000147465,
+      "replay_seconds": 0.016235149999829446
+    },
+    {
+      "name": "algebraic_section_only_affine_1",
+      "original": "algebraic_section_only",
+      "transform": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 15,
+      "projection_degree": 2,
+      "selected_x": 1,
+      "search_seconds": 0.017550481999933254,
+      "replay_seconds": 0.014965186000154063
+    },
+    {
+      "name": "algebraic_section_only_affine_2",
+      "original": "algebraic_section_only",
+      "transform": [
+        2,
+        -1,
+        -1,
+        1
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 15,
+      "projection_degree": 2,
+      "selected_x": 1,
+      "search_seconds": 0.018321238999988054,
+      "replay_seconds": 0.014742301000069347
+    },
+    {
+      "name": "algebraic_section_only_affine_3",
+      "original": "algebraic_section_only",
+      "transform": [
+        -2,
+        3,
+        2,
+        -3
+      ],
+      "expected": true,
+      "accepted": true,
+      "closed_value": true,
+      "truth_by_x": [
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "base_cells": 5,
+      "plane_cells": 15,
+      "projection_degree": 2,
+      "selected_x": 1,
+      "search_seconds": 0.016861820000031003,
+      "replay_seconds": 0.014183473999992202
+    }
+  ]
+}

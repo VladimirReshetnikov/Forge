@@ -1,0 +1,38 @@
+{
+  "seed": 41027,
+  "small_productive_cases": 24,
+  "frontier_disagreements": 0,
+  "primitive_small_candidates": 396,
+  "accelerated_small_candidates": 171,
+  "stress": [
+    {
+      "target": "10000",
+      "candidate_budget": 100,
+      "primitive_status": "UNKNOWN",
+      "primitive_candidates": 100,
+      "accelerated_status": "CERTIFICATE",
+      "accelerated_candidates": 2,
+      "certificate_nodes": 3
+    },
+    {
+      "target": "1000000",
+      "candidate_budget": 100,
+      "primitive_status": "UNKNOWN",
+      "primitive_candidates": 100,
+      "accelerated_status": "CERTIFICATE",
+      "accelerated_candidates": 2,
+      "certificate_nodes": 3
+    },
+    {
+      "target": "10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "candidate_budget": 100,
+      "primitive_status": "UNKNOWN",
+      "primitive_candidates": 100,
+      "accelerated_status": "CERTIFICATE",
+      "accelerated_candidates": 2,
+      "certificate_nodes": 3
+    }
+  ],
+  "records": 27,
+  "meaning": "same checker and original net; exact power acceleration"
+}

@@ -1,0 +1,51 @@
+\section{The capability delta, not another architecture}\label{sec:delta}
+
+\subsection{What is already present}
+The reviewed Forge snapshot consolidates twenty-seven proposals. Its status ledger already includes polynomial certificates, induction and recurrence synthesis, affine and integer witness extraction, finite-state contracts, closure over words and trees, noncommutative algebra, analytic certificates, games, probabilistic quantities, and pushdown summaries. Its Boolean chapter includes a proof-logging solver for quantifier-free integer difference logic. Repeating any of these as a new idea would not advance the repository. The same ledger distinguishes compiled core-only Lean theorems from unimplemented reflected checkers and explicitly says that there is no installed \code{forge} tactic~\cite{forge-status,forge-readme,forge-boolean}.
+
+The extension here is \emph{quantification over number encodings}. A state in its automaton summarizes a partially read tuple of binary numerals. Eliminating a track implements an unbounded number quantifier. Boolean combinations and nested quantifiers then operate on these representations compositionally. This is not the existing problem of proving that a matrix observation vanishes on every execution word, nor the existing extraction of a witness from a single linear projection~\cite{forge-closure}.
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.28\linewidth}XX@{}}
+\toprule
+Axis & Reviewed Forge baseline & Addition developed here\\
+\midrule
+Arithmetic search & Exact certificates and several specialized projection lanes & A first-order compiler with alternating number quantifiers\\
+Infinite domain & Unbounded executions summarized by finite objects & Unbounded numeral lengths, handled with representation-correct projection\\
+Witness language & Affine, lattice, residue and polynomial constructions & Regular least-witness graphs, including binary-automatic relations\\
+Replay & General certificate discipline already designed & Executed local receipts for the complete arithmetic compilation graph\\
+Lean status & Some core lemmas compiled; no tactic & No new kernel result; a specific dependency and porting plan\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+This comparison is a scoped review of the merged README, status ledger, and relevant closure/Boolean chapters, supported by repository retrieval. It is not a claim to have re-executed or exhaustively audited every frozen proposal. The article develops one substantial additional worker rather than restating the obligation scheduler, general certificate architecture, or source-ownership rules already discussed by Forge.
+
+\subsection{The intended improvement}
+Consider the following families. All variables below range over \(\N\).
+\begin{align}
+ &\forall x\;\exists y\;\forall z\quad (z\le x\iff z<y),\label{eq:cut}\\
+ &\forall x\;\exists q,r\quad x=17q+r\ \land\ r<17,\label{eq:division}\\
+ &\forall x\;\exists y\quad x<y\ \land\ \Pow(y),\label{eq:pow-unbounded}\\
+ &\forall x\;\exists y\quad x<y\ \land\bigl(\Even(x)\iff\Even(y)\bigr).
+\end{align}
+Here \(\Pow(y)\) means that the binary expansion has exactly one set bit, and \(\Even(y)\) means that its number of set bits is even. The compiler handles these as formulas; it does not have a separate programmed proof of each theorem. Changing a coefficient, negating a subformula, or moving a quantifier changes the automata construction automatically. Its resulting machine describes the entire solution relation on the free variables.
+
+For a witness specification \(R(x,y)\), the same compiler accepts
+\[
+ G_R(x,y):=R(x,y)\land\neg\exists z\,(z<y\land R(x,z)).
+\]
+The accepted pairs are exactly the least witnesses. After compilation, a fixed evaluator obtains a witness from the input digits and the graph. There is no fixed affine or polynomial witness template, and no numerical bound on the inputs. This is a meaningful increase in the \emph{expressible synthesis contract}, even before a Lean integration is built.
+
+\subsection{What is classical, and what is proposed}
+Automata-based arithmetic is established mathematics, not a new decision-theory discovery. Binary automata for Presburger constraints appear in the work of Wolper and Boigelot. Walnut implements first-order reasoning about nonnegative integers enriched with automatic predicates, and Mousavi describes its theorem-proving framework~\cite{wolper,mousavi,walnut}. The broad idea ``use automata for arithmetic'' is therefore not a novelty claim.
+
+There is also directly relevant Lean work. Sheng's thesis develops verified automata infrastructure and corrects projection for leading-zero encodings. The associated \code{Aeacu2/Automata} source contains a \code{project_iff} theorem. It is essential prior work, not a project to overlook while proposing a purportedly first verified automata reasoner~\cite{sheng,aeacu-projection}. This article uses least-significant-digit-first words and zero \emph{suffixes}; the inspected formalization handles a different ordering/padding interface.
+
+The proposed Forge increment is the following combination: an explicit arithmetic fragment; a producer emitting locally replayable operation receipts; exact padding closure before determinization; a regular least-witness compiler; an executable two-pass witness evaluator; and adversarial, differential, and resource-control evidence. None of these ingredients is claimed as a globally original theorem. Their implementation together is the concrete addition offered to this repository.
+
+\subsection{Evidence vocabulary}
+\status{The Python algorithms and checker were run. The proofs in this article are mathematical arguments, not machine-checked Lean proofs.}
+A returned Python \code{valid} certificate means that the Python checker accepted the automata derivation and its accepting invariant. It is not a Lean theorem. A returned counterexample refutes the explicit formula under its declared natural-number semantics; a closed false sentence has an empty free-variable tuple, not a numerical counterexample for every alternation of quantifiers. A resource limit returns \code{unknown}; it never certifies falsity.
+
+The delivered code does not change Forge, Leant or Djex on GitHub. It is an independently packaged research extension intended for review and integration. The absence of a Lean executable in this environment prevented elaboration, reflection, and native-tactic experiments. This is a limitation of the delivered evidence, not a claim that the required formalization is impossible.

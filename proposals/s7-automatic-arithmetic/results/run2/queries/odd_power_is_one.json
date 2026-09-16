@@ -1,0 +1,33 @@
+{
+  "context": [
+    "x"
+  ],
+  "formula": {
+    "op": "or",
+    "left": {
+      "op": "not",
+      "arg": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "cong",
+          "coeff": {
+            "x": 1
+          },
+          "rhs": 1,
+          "modulus": 2
+        }
+      }
+    },
+    "right": {
+      "op": "eq",
+      "coeff": {
+        "x": 1
+      },
+      "rhs": 1
+    }
+  }
+}

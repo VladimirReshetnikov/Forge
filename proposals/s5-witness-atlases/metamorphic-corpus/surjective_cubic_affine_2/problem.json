@@ -1,0 +1,39 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "surjective_cubic_affine_2",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "1"
+      ],
+      [
+        0,
+        1,
+        "-2"
+      ],
+      [
+        0,
+        2,
+        "3"
+      ],
+      [
+        0,
+        3,
+        "-1"
+      ],
+      [
+        1,
+        0,
+        "-2"
+      ]
+    ]
+  ],
+  "formula": [
+    "eq",
+    0
+  ]
+}

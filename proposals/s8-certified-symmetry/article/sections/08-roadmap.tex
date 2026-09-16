@@ -1,0 +1,44 @@
+\section{An implementation order with concrete acceptance gates}
+\label{sec:roadmap}
+The first milestone should be a trusted group certificate, not a polished tactic command that delegates to unverified scripts. Each stage below has an acceptance condition that cannot be substituted by an easier near-miss.
+
+\paragraph{Milestone 1: reflected group facts.}
+Implement the permutation-array decoder, word-DAG evaluator, and complete-chain checker in Lean. Prove Theorem~\ref{thm:chain} and instantiate it on the complete small corpus. Accept only if both positive and negative membership claims are kernel checked against the exact original generator arrays. Showing that a permutation array is well formed is not this milestone. The rejected partial-$\Sym_3$ chain must remain rejected after its order field is made internally consistent.
+
+\paragraph{Milestone 2: one real source frontend.}
+Bind the finite array model to an explicit source action on \code{Fin n}, with generator lemmas supplied by the user. Prove an original source theorem using the resulting group fact and ordinary Lean reasoning. Change one source generator and show that the old certificate no longer proves the old conclusion. A theorem only about the reified array object is not this milestone.
+
+\paragraph{Milestone 3: representatives and counts.}
+Formalize the cover checker and the symmetric/alternating shortcut. Then connect a checked cycle inventory to Mathlib's orbit-counting theorem. Acceptance requires a theorem quantified over the color count, not a table of numerical evaluations. Include identity permutations with fixed points, degree zero, $q=0$, and alternating all-distinct colorings in the tests.
+
+\paragraph{Milestone 4: polynomial integration.}
+Formalize the sparse orbit-average theorem and adapt the already selected Forge polynomial representation. Implement the dictionary-action gate and column-orbit reduction. Compare the expanded reduced certificate with the original cone checker, without changing the original target or weakening its hypotheses. Include a deliberately asymmetric hypothesis and a noninvariant target as rejection controls. A correct averaged polynomial alone is not a proof of the original inequality.
+
+\paragraph{Milestone 5: automatic discovery and evaluation.}
+Only after source-preserving explicit actions work, add graph-based symmetry proposals and external stabilizer-chain exporters. Evaluate on a corpus that contains genuinely symmetric goals, asymmetric near-misses, already easy \code{grind} goals, and goals where the symmetry machinery has overhead but no benefit. Pin Lean, Mathlib, imported modules, tactic options, timeouts, and machine details. Report source goals solved, proof-check time, certificate size, resource refusals, and axiom inventories separately. Run ablations with chain caching, canonical covers, family shortcuts, and dictionary reduction individually disabled.
+
+A fair comparison must ask the original tactics and the extended tactic to prove the \emph{same source statements}. Replacing a group-order goal by a supplied order fact, or supplying the sought canonical image as an assumption, would test a different task. The existing Forge run counts are not baselines for these new instances and should not be pooled with them.
+
+\section{Further research that the certificate boundary makes possible}
+The delivered construction gives several precise next problems rather than an unbounded wish list.
+
+\subsection{Shorter bases and proof compression}
+The full base is robust but often redundant. A short-base format should supply a checked certificate that the terminal stabilizer is trivial. One route is a second faithful action on a smaller derived domain; another is a terminal generator list checked to contain only the identity. Any such format must still justify that the listed terminal generators generate the actual stabilizer. Merely observing that the current list is empty repeats the incomplete-chain error.
+
+Word-DAG compression can also be made cost aware. Several certificates use few strong roots but many intermediate values. Search can minimize retained nodes after trimming, rather than minimize its own total generated nodes. A suitable acceptance metric is checked proof size at fixed degree and generator input, not the apparent length of an unexpanded word.
+
+\subsection{Better canonical bounds with local certificates}
+The coordinatewise orbit-minimum relaxation ignores the impossibility of reusing the same low color everywhere. A stronger bound can track color multiplicities within a block and solve a minimum-cost matching relaxation. Its dual or exact combinatorial witness can be attached to a coset cut. The proof obligation is a lower bound on \emph{every} image in the represented coset; a plausible completion found by search is an upper bound and cannot authorize pruning.
+
+The coset-cover design permits this replacement locally. Old bounds remain admissible, stronger bounds can be tried opportunistically, and the covering theorem is unchanged. Whether the additional checker cost pays for fewer cover nodes is an empirical question for a source-level benchmark.
+
+\subsection{Conjugacy-class inventories with coverage proofs}
+The current general counter enumerates every group element. A more scalable inventory could use representatives with exact centralizer orders and verified conjugacy-class coverage. Verifying only the class sizes sum to $|G|$ is insufficient unless disjointness and membership are established: duplicated classes could have the right total. A usable certificate needs an exact class partition or another theorem establishing completeness, plus source-owned words for representatives. This is a natural next finite-group worker, but none of these class certificates is implemented here.
+
+\subsection{Representation-theoretic algebraic compression}
+The orbit-reduced cone theorem handles a permutation action on a finite dictionary. It does not diagonalize general group representations or decompose semidefinite Gram matrices. A later worker could export rational invariant subspaces, change-of-basis matrices, and exact block-commutation identities, then reuse Forge's existing algebraic checkers. The established symmetry/SOS literature provides the algorithmic direction \cite{gatermann-parrilo}; the new work would be a compact Lean-checkable decomposition certificate and an exact reconstruction of the original polynomial claim.
+
+\section{Conclusion}
+The principal recommendation is to make certified finite symmetry a reusable Forge service. Its first theorem should turn a complete, source-bound stabilizer-chain certificate into exact group facts. Its first consumers should be checked canonical images and orbit counts. Sparse Reynolds projection then connects that service to the polynomial engines Forge already has, while generator-wise semantic authorization connects it to proof search without treating renaming as arbitrary equality.
+
+The prototype demonstrates that this is an implementable proposal rather than a slogan: exact constructors, separate local checkers, complete stored certificates, independent small oracles, large non-enumerative group examples, negative controls, and search-free replay are supplied. The remaining step is substantial and explicit: formalize the checkers and bind them to Lean source obligations. Nothing in the measured Python results removes that obligation. It does, however, give a sharply bounded implementation target with useful capabilities beyond the inspected Forge catalogue.

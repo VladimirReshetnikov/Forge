@@ -1,0 +1,33 @@
+\section{Implementation order and falsifiable next milestones}
+\subsection{First: one end-to-end unbounded safety theorem}
+Implement the Petri model, finite safety checker, and its generic induction theorem. Use the supplied mutex certificate as a readable first fixture, but do not stop at proving an abstract net safe. Define a small resource program and prove the source simulation. The acceptance criterion is a theorem about that original program, with no external solver required during recompilation and with its actual axiom dependencies printed and reviewed.
+
+The intentionally false sibling should permit two owners to acquire the same lock. Its extracted net should produce a concrete violating word, and the source replay should exhibit the violation. A false sibling is important here: a bridge that accidentally drops the acquire operation or misorders the resource coordinates can make every program appear safe while the abstract checker remains correct.
+
+After this works, add nonconservative nets that defeat a finite forward enumeration, larger randomly generated nets, and independent SMPT comparisons. Keep bounded-oracle exhaustion separate from agreement. Search optimizations come after source semantics and certificate replay, not before.
+
+\subsection{Second: a weighted-step enclosure theorem}
+Prove the nonnegative directional remainder lemma directly for sparse monomials. Prove the finite maximum principle and ledger induction. Start with \eqref{eq:cubic}; the resulting Lean theorem should say that the \emph{least} fixed point lies in the checked interval. A proof of $P(r)=r$ alone is not the acceptance criterion.
+
+The first negative fixtures should be the wrong fixed-point branch, an upward-rounded lower step that crosses $q$, an invalid weight, and equality $Jw=w$ falsely used as a strict lower-step witness. Replaying the supplied JSON certificates through a Lean decoder then becomes a useful integration test, rather than the only basis for believing the mathematics.
+
+Only after this abstraction-level theorem works should a branching DSL bridge prove that the interval contains a source termination probability. This sequencing prevents a large probability-library integration from obscuring a small algebraic checker defect.
+
+\subsection{Third: exact critical and algebraic conclusions}
+The critical certificate needs finite graph connectivity and the product-deficit inequality in addition to the weighted comparison machinery. Its first pair of acceptance tests is $P(x)=(1+x^2)/2$ versus $P(x)=x$. The former must yield probability one; the latter must not. This pair tests the exact condition that distinguishes branching from endless one-child continuation.
+
+The algebraic decoder should then identify \eqref{eq:cubic-root} using factorization and an isolating interval. Its first extension can reuse the baseline's existing scalar sign-certificate plans for factors with repeated roots or difficult derivative intervals. A new general algebraic-number engine is not required to deliver the first exact irrational result.
+
+\subsection{Fourth: synthesis and larger semantic fragments}
+Once source bridges exist, wire them to retained Leant/Djex candidate graphs for a small provider inventory. Measure source-contract acceptance, counterexample replay, and undecided cases separately. Preserve the original synthesis query, provider identities, and limits; replacing a hard original query by a simpler hand-written program is not acceptance of that query.
+
+For probability systems, implement strongly connected component processing with exact-value substitution first, and interval-parameter transport second. For multiset systems, add dominance indexing and certificate minimization. For Newton search, use sparse exact solves and numerical proposals followed by rational residual checks. A numerical producer can propose $d,w$ directly for \eqref{eq:weighted-step}; it does not have to reconstruct an entire inverse.
+
+Each step has an explicit mathematical contract and an available finite checker target. This makes a failure actionable: unsupported source semantics, no certified lower progress, no prefixed upper candidate, insufficient precision, or resource exhaustion are distinct engineering outcomes.
+
+\section{Assessment}
+The strongest extension is not another collection of local tactics. It is the ability to turn two genuinely infinite questions into small finite obligations of the right logical polarity.
+
+For multiset-state safety, a finite backward basis proves a forward invariant without enumerating all reachable markings. For recursive probabilities, lower histories and prefixed upper vectors distinguish a least solution from arbitrary roots. A weighted maximum principle removes full matrix inverses from many Newton certificates. At criticality, an exact nondegeneracy theorem proves probability one where strict contraction is unavailable. A factor identity and rational interval then make an irrational probability an exact mathematical result rather than a decimal guess.
+
+The delivered package demonstrates those mathematical building blocks with exact arithmetic, independent finite-oracle comparisons where available, explicit negative controls, search-disabled replay, and deterministic reproduction. It does not yet close the source-to-Lean proof chain. The module plan and acceptance criteria identify that remaining work precisely, without claiming that another Python experiment could substitute for it.

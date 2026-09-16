@@ -1,0 +1,84 @@
+\section{Reynolds projection without group enumeration}
+\label{sec:reynolds}
+The symmetry layer can improve Forge's existing polynomial workers instead of only adding a new combinatorics sublanguage. Over $\QQ[x_0,\ldots,x_{n-1}]$, the Reynolds operator is
+\[
+  \Ryn_G(p)=\frac1{|G|}\sum_{g\in G}g\cdot p.
+\]
+It is a linear projection onto invariant polynomials. Symmetry reduction in polynomial optimization has substantial established theory, including representation-theoretic reductions much stronger than the narrow construction below \cite{gatermann-parrilo}. Our immediate target is an exact sparse certificate that fits Forge's existing coefficient-based checkers, not a new numerical semidefinite solver.
+
+\subsection{The orbit formula}
+Let $p=\sum_e a_e x^e$, with unlisted coefficients taken as zero. The action on exponent vectors is $(g\cdot e)_j=e_{g^{-1}(j)}$. For a monomial orbit $O$,
+\begin{equation}
+  \Ryn_G\!\left(\sum_{e\in O}a_ex^e\right)
+  =\frac{\sum_{e\in O}a_e}{|O|}\sum_{e\in O}x^e.
+  \label{eq:reynolds-orbit}
+\end{equation}
+Indeed each source monomial visits every destination in its orbit the same number $|G|/|O|$ of times. That equal-fiber argument removes the group order from the computation: only the monomial orbit must be enumerated.
+
+\subsection{An orbit certificate rather than a second orbit search}
+For each orbit intersecting the source support, the certificate gives a rooted tree of exponent vectors. The root must occur in the original support. A nonroot vector is linked to an earlier vector by an original generator index. The checker verifies every edge by an explicit coordinate permutation, requires all vectors to be distinct, requires different listed orbits to be disjoint, and checks closure under every original generator.
+
+Because the set is finite and each generator acts bijectively, forward closure implies inverse closure. The tree proves reachability; closure proves that no point of the orbit was omitted. Finally, every source-support monomial must appear in one of the listed orbits. Thus the listed sets are exactly the relevant monomial orbits.
+
+The checker independently reconstructs the average coefficient in \eqref{eq:reynolds-orbit}. Coefficients are reduced integer numerator/positive-denominator pairs. Zero output coefficients are omitted, but an orbit whose average is zero still needs its coverage certificate: cancellation does not authorize ignoring source terms. The supplied output polynomial must agree exactly with the reconstructed result.
+
+The monomial-orbit theorem needs only validated generator bijections, not a group-order computation. The prototype accepts an already checked chain for API consistency; a production adapter can expose a weaker validated-generator object and skip chain construction when projection is the only requested operation. This is an important dependency optimization, not a weakening of the orbit-closure checks.
+
+\begin{theorem}[Sparse projection soundness]
+If the monomial-orbit certificate and its output check pass, the output is $\Ryn_G(p)$. In particular it is $G$-invariant, and applying the operator again leaves it unchanged.
+\end{theorem}
+\begin{proof}
+Reachability and closure identify each listed component with its exact orbit. Disjointness and full source-support coverage partition all nonzero input terms into those components. Formula~\eqref{eq:reynolds-orbit} computes the projection on each component. Adding the resulting components proves the claim. Each output has a constant coefficient on its orbit, which proves invariance and idempotence.
+\end{proof}
+
+\begin{example}[A cubic over forty variables]
+For the natural action of $\Sym_{40}$,
+\[
+ \Ryn_{\Sym_{40}}(x_0^2x_1)
+   =\frac1{1560}\sum_{\substack{0\leq i,j<40\\i\ne j}}x_i^2x_j.
+\]
+The exponent vector has one distinguished squared coordinate and one distinct linear coordinate, so its orbit has $40\cdot39=1560$ elements. The delivered producer constructs that orbit tree, and the separate checker verifies its coverage and all $1/1560$ coefficients. It does not enumerate $\Sym_{40}$.
+\end{example}
+
+This is not a magical cure for large polynomial supports. A degree-$d$ monomial orbit can be large, and the number of degree-$d$ monomials is $\binom{n+d-1}{d}$. The worker caps the number of orbit vectors. It returns unknown on resource exhaustion.
+
+\subsection{A precise reduction for Forge's finite cone dictionary}
+Suppose an existing Forge worker seeks a certificate
+\begin{equation}
+  p=\sum_{j\in J}c_j\phi_j,\qquad c_j\in\QQ_{\geq0},
+  \label{eq:cone-original}
+\end{equation}
+where each $\phi_j$ has an existing proof of nonnegativity on the current domain. Assume the group permutes the \emph{indexed} dictionary:
+\[
+  g\cdot\phi_j=\phi_{g\cdot j},
+\]
+and $p$ is invariant. Indexing matters: equal polynomials may carry different hypothesis receipts, so a coefficient dictionary must not identify them merely by display text.
+
+For each dictionary orbit $O\subseteq J$, define $B_O=\sum_{j\in O}\phi_j$.
+\begin{theorem}[Orbit-reduced cone completeness]
+\label{thm:cone}
+Under these assumptions, \eqref{eq:cone-original} has a rational nonnegative solution if and only if
+\begin{equation}
+  p=\sum_{O\in J/G}d_OB_O,\qquad d_O\in\QQ_{\geq0}
+  \label{eq:cone-reduced}
+\end{equation}
+has one.
+\end{theorem}
+\begin{proof}
+Given \eqref{eq:cone-original}, average its images under $G$. The left side remains $p$. On an orbit $O$, the average coefficient is
+$d_O=|O|^{-1}\sum_{j\in O}c_j$, a nonnegative rational number. This yields \eqref{eq:cone-reduced}. Conversely, expand each $B_O$ and assign coefficient $d_O$ to every member of $O$.
+\end{proof}
+
+The corresponding algorithm is explicit. Validate generator permutations of dictionary indices and their polynomial identities. Compute exact dictionary orbits. Sum each orbit column using sparse rational polynomial addition. Pass the smaller column matrix to the existing cone-search engine. Expand an accepted reduced solution back to the original dictionary and let Forge's existing cone checker validate the original target identity. The new reduction is an optional search accelerator, not a change to that checker's trust boundary.
+
+For a fully symmetric dictionary of $(x_i-x_j)^2$ with $i<j$, there is one dictionary orbit. At $n=40$, this reduces 780 coefficient variables to one. The identity
+\[
+  40\sum_i x_i^2-\left(\sum_i x_i\right)^2
+  =\sum_{i<j}(x_i-x_j)^2
+\]
+is a transparent example. The dimension reduction is a mathematical consequence of the dictionary action; no LP timing or Lean success-rate claim is inferred from it. The Reynolds projector is implemented and tested, but the adapter to Forge's existing cone package is not implemented in this artifact.
+
+\subsection{Conditions that cannot be dropped}
+An invariant target is essential for the equivalence theorem. A dictionary closed only approximately under generators does not qualify. If coefficients are tied to hypotheses, the action must transport those hypothesis proofs. For domains with distinguished bounds such as $x_0\geq2$ and $x_i\geq0$ for $i>0$, the full symmetric action is generally unavailable.
+
+Most importantly, $\Ryn_G(p)\geq0$ does not imply $p\geq0$. For example, swapping two variables sends $p=x_0-x_1$ to $-p$, so its average is zero while $p$ takes negative values. The legitimate directions are preservation of an already proved nonnegativity statement on an invariant domain, or the invariant-target cone equivalence above. A tactic must not silently replace an arbitrary goal by the easier averaged goal.

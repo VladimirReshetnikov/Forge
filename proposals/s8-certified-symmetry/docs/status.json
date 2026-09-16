@@ -1,0 +1,38 @@
+{
+  "executed": [
+    "complete_chain",
+    "membership",
+    "nonmembership",
+    "coset_cover_canonical_image",
+    "symmetric_alternating_family_image",
+    "cycle_inventory",
+    "unrestricted_color_count",
+    "fixed_binary_weight_count",
+    "symmetric_alternating_count_evaluator",
+    "sparse_Reynolds_projection",
+    "concrete_CNF_objective_symmetry_gate",
+    "standalone_replay",
+    "small_independent_oracles",
+    "optional_SymPy_corroboration"
+  ],
+  "designed_not_implemented": [
+    "Lean_reflected_checkers",
+    "source_reifier",
+    "automatic_graph_symmetry_discovery",
+    "Forge_cone_adapter",
+    "constrained_coloring_counter"
+  ],
+  "not_evaluated": [
+    "Lean_kernel_replay",
+    "tactic_comparison",
+    "speedup",
+    "source_solved_goal_gain"
+  ],
+  "generic_limitations": [
+    "coset_cover_can_be_factorial",
+    "general_cycle_inventory_enumerates_group",
+    "monomial_orbits_can_be_large"
+  ],
+  "main_result": "../results/recorded/summary.json",
+  "supplementary_result": "../results/reynolds/summary.json"
+}

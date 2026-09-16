@@ -1,0 +1,29 @@
+{
+  "context": [
+    "x",
+    "y",
+    "z"
+  ],
+  "formula": {
+    "op": "or",
+    "left": {
+      "op": "not",
+      "arg": {
+        "op": "bitxor",
+        "vars": [
+          "x",
+          "y",
+          "z"
+        ]
+      }
+    },
+    "right": {
+      "op": "bitxor",
+      "vars": [
+        "x",
+        "z",
+        "y"
+      ]
+    }
+  }
+}

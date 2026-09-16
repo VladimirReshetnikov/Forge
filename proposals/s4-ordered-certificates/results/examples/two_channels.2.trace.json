@@ -1,0 +1,50 @@
+{
+  "format": "forge-ordered-trace-v1",
+  "initial": {
+    "q": 0,
+    "v": [
+      "baa",
+      "bab"
+    ]
+  },
+  "steps": [
+    {
+      "after": {
+        "q": 1,
+        "v": [
+          "",
+          "b"
+        ]
+      },
+      "before": [
+        "a",
+        "b"
+      ],
+      "middle": [
+        "",
+        "b"
+      ],
+      "transition": 0
+    },
+    {
+      "after": {
+        "q": 2,
+        "v": [
+          "",
+          ""
+        ]
+      },
+      "before": [
+        "",
+        "b"
+      ],
+      "middle": [
+        "",
+        ""
+      ],
+      "transition": 1
+    }
+  ],
+  "subject": "{\"alphabet\":[\"a\",\"b\"],\"bad\":[{\"q\":2,\"v\":[\"\",\"\"]}],\"channels\":2,\"controls\":3,\"kind\":\"lossy\",\"transitions\":[{\"channel\":0,\"op\":\"recv\",\"source\":0,\"symbol\":\"a\",\"target\":1},{\"channel\":1,\"op\":\"recv\",\"source\":1,\"symbol\":\"b\",\"target\":2},{\"channel\":0,\"op\":\"send\",\"source\":0,\"symbol\":\"b\",\"target\":0}]}",
+  "target": 0
+}

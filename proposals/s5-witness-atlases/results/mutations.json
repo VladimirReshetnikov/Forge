@@ -1,0 +1,3247 @@
+{
+  "attempts": 540,
+  "rejected": 540,
+  "seconds": 1.0520367219999116,
+  "records": [
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "algebraic_positive",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "algebraic_section_only",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "choose_positive_quadratic",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "constant_false",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "degree_drop_at_zero",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "discontinuous_choice",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "empty_and_constant_atoms",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "inverse_guarded",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "inverse_hole",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "negative_algebraic_obstruction",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "overlapping_intervals",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "quantifier_order_exists_forall",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "quantifier_order_forall_exists",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "repeated_zero_curve",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "square_root_conditional",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "square_root_unconditional",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "strict_and_disequality",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "strict_repeated_zero_curve",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "strict_square_band",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "surjective_cubic",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "zero source uses extraneous factors"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "surjective_quintic",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "two_shifted_squares",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "uniform_positive_quadratic",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_base_stack",
+      "rejected": true,
+      "reason": "base cell coverage"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "wrong_projected_truth",
+      "rejected": true,
+      "reason": "incorrect projected truth"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "wrong_closed_result",
+      "rejected": true,
+      "reason": "incorrect closed verdict"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "malformed_quantifier",
+      "rejected": true,
+      "reason": "inner quantifier"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "invalid_atom",
+      "rejected": true,
+      "reason": "invalid atom"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "float_x_sample",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "noncanonical_x_sample",
+      "rejected": true,
+      "reason": "noncanonical rational"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_y_sign_row",
+      "rejected": true,
+      "reason": "fiber sign-row coverage"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_y_sector_sample",
+      "rejected": true,
+      "reason": "y sector sample coverage"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "wrong_inner_result",
+      "rejected": true,
+      "reason": "incorrect inner result"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "wrong_factorization_scalar",
+      "rejected": true,
+      "reason": "source factorization identity"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "incorrect_sign",
+      "rejected": true,
+      "reason": "incorrect sample sign"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "boolean_in_sign_row",
+      "rejected": true,
+      "reason": "malformed sign row"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_derivative_guard",
+      "rejected": true,
+      "reason": "derivative coverage/order"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "zero_derivative_guard",
+      "rejected": true,
+      "reason": "zero derivative guard"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "boolean_derivative_index",
+      "rejected": true,
+      "reason": "derivative index type"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_pair_guard",
+      "rejected": true,
+      "reason": "pair coverage/order"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "zero_pair_guard",
+      "rejected": true,
+      "reason": "zero pair guard"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_base_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "invalid_base_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_fiber_root",
+      "rejected": true,
+      "reason": "incomplete/excess root coverage"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "invalid_fiber_cut",
+      "rejected": true,
+      "reason": "empty/reversed root interval"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "selection_out_of_range",
+      "rejected": true,
+      "reason": "missing/invalid fiber selection"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "factor_with_float",
+      "rejected": true,
+      "reason": "rational must be a bounded canonical string"
+    },
+    {
+      "example": "vanishing_content",
+      "mutation": "missing_factorization_power",
+      "rejected": true,
+      "reason": "source factorization identity"
+    }
+  ]
+}

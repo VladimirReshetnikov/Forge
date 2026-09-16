@@ -1,0 +1,39 @@
+{
+  "seed": 20260915,
+  "families": {
+    "vass": {
+      "cases": 300,
+      "outcomes": {
+        "safe": 222,
+        "unsafe": 78
+      },
+      "oracle_agreements": 300,
+      "oracle_state_visits": 537,
+      "seconds": 0.06764553699997577
+    },
+    "nominal": {
+      "cases": 160,
+      "outcomes": {
+        "equivalent": 123,
+        "different": 37
+      },
+      "oracle_agreements": 160,
+      "shortest_witness_agreements": 37,
+      "oracle_state_visits": 1097,
+      "orbit_state_visits": 440,
+      "seconds": 0.15928913900006592
+    },
+    "mixed": {
+      "cases": 180,
+      "outcomes": {
+        "safe": 116,
+        "unsafe": 64
+      },
+      "oracle_agreements": 180,
+      "oracle_state_visits": 479,
+      "seconds": 0.0760553190000337
+    }
+  },
+  "stored_objects": 650,
+  "rejected_mutations": 1300
+}

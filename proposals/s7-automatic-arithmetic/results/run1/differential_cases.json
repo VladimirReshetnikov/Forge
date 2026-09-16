@@ -1,0 +1,4052 @@
+[
+  {
+    "case": 0,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 4,
+          "y": 3
+        },
+        "rhs": -10
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 1,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 5,
+          "y": -3
+        },
+        "rhs": -10
+      }
+    },
+    "root_states": 12
+  },
+  {
+    "case": 2,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -1,
+          "y": 5
+        },
+        "rhs": -15,
+        "modulus": 7
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 3,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 4,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 2,
+            "y": 1
+          },
+          "rhs": -6
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 5,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -6,
+            "y": -6
+          },
+          "rhs": -9
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -6,
+              "y": -6
+            },
+            "rhs": -6
+          }
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 6,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -4,
+          "y": -3
+        },
+        "rhs": 0
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 7,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 4,
+          "y": -6
+        },
+        "rhs": 1
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 8,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 5,
+          "y": 1
+        },
+        "rhs": 13,
+        "modulus": 11
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 9,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 10,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -5,
+            "y": 0
+          },
+          "rhs": 3
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 11,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": -1
+          },
+          "rhs": 0
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": -1
+            },
+            "rhs": 3
+          }
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 12,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -4,
+          "y": -2
+        },
+        "rhs": -9
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 13,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 6,
+          "y": 6
+        },
+        "rhs": 3
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 14,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 1,
+          "y": -4
+        },
+        "rhs": 3,
+        "modulus": 3
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 15,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 16,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -5,
+            "y": -4
+          },
+          "rhs": 5
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 17,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": 5
+          },
+          "rhs": -12
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": 5
+            },
+            "rhs": -9
+          }
+        }
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 18,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 6,
+          "y": 2
+        },
+        "rhs": -1
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 19,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -4,
+          "y": -4
+        },
+        "rhs": 16
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 20,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -3,
+          "y": -2
+        },
+        "rhs": 15,
+        "modulus": 6
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 21,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 22,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -6,
+            "y": 5
+          },
+          "rhs": 3
+        }
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 23,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 0,
+            "y": 4
+          },
+          "rhs": -13
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 0,
+              "y": 4
+            },
+            "rhs": -10
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 24,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -5,
+          "y": 2
+        },
+        "rhs": -15
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 25,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 6,
+          "y": -3
+        },
+        "rhs": -10
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 26,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -3,
+          "y": 4
+        },
+        "rhs": 7,
+        "modulus": 1
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 27,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 28,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 4,
+            "y": 3
+          },
+          "rhs": 1
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 29,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 2,
+            "y": 4
+          },
+          "rhs": 11
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 2,
+              "y": 4
+            },
+            "rhs": 14
+          }
+        }
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 30,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 1,
+          "y": 0
+        },
+        "rhs": -8
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 31,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 3,
+          "y": -4
+        },
+        "rhs": 3
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 32,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -5,
+          "y": 3
+        },
+        "rhs": 3,
+        "modulus": 1
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 33,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 34,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 0,
+            "y": 4
+          },
+          "rhs": -8
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 35,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -5,
+            "y": -4
+          },
+          "rhs": -2
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -5,
+              "y": -4
+            },
+            "rhs": 1
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 36,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -3,
+          "y": 0
+        },
+        "rhs": 2
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 37,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -1,
+          "y": 2
+        },
+        "rhs": 15
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 38,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 6,
+          "y": 3
+        },
+        "rhs": -8,
+        "modulus": 5
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 39,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 40,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 6,
+            "y": 4
+          },
+          "rhs": 3
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 41,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 4,
+            "y": -2
+          },
+          "rhs": -16
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 4,
+              "y": -2
+            },
+            "rhs": -13
+          }
+        }
+      }
+    },
+    "root_states": 8
+  },
+  {
+    "case": 42,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 0,
+          "y": -3
+        },
+        "rhs": -11
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 43,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 6,
+          "y": 4
+        },
+        "rhs": 11
+      }
+    },
+    "root_states": 4
+  },
+  {
+    "case": 44,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -6,
+          "y": -1
+        },
+        "rhs": 7,
+        "modulus": 10
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 45,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 46,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -2,
+            "y": 6
+          },
+          "rhs": 14
+        }
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 47,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 4,
+            "y": 6
+          },
+          "rhs": 4
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 4,
+              "y": 6
+            },
+            "rhs": 7
+          }
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 48,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -6,
+          "y": -1
+        },
+        "rhs": 4
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 49,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -5,
+          "y": -3
+        },
+        "rhs": 12
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 50,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -5,
+          "y": 1
+        },
+        "rhs": -10,
+        "modulus": 8
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 51,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 52,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 5,
+            "y": 5
+          },
+          "rhs": -6
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 53,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -2,
+            "y": -3
+          },
+          "rhs": 16
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -2,
+              "y": -3
+            },
+            "rhs": 19
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 54,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -6,
+          "y": -4
+        },
+        "rhs": 9
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 55,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 6,
+          "y": -4
+        },
+        "rhs": 13
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 56,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 0,
+          "y": -3
+        },
+        "rhs": -1,
+        "modulus": 13
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 57,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 58,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -3,
+            "y": 2
+          },
+          "rhs": -4
+        }
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 59,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": 4
+          },
+          "rhs": -6
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": 4
+            },
+            "rhs": -3
+          }
+        }
+      }
+    },
+    "root_states": 10
+  },
+  {
+    "case": 60,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 3,
+          "y": -3
+        },
+        "rhs": 7
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 61,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 1,
+          "y": -4
+        },
+        "rhs": 1
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 62,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 0,
+          "y": 0
+        },
+        "rhs": 12,
+        "modulus": 10
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 63,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 64,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 1,
+            "y": 6
+          },
+          "rhs": 15
+        }
+      }
+    },
+    "root_states": 8
+  },
+  {
+    "case": 65,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 1,
+            "y": -1
+          },
+          "rhs": -16
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 1,
+              "y": -1
+            },
+            "rhs": -13
+          }
+        }
+      }
+    },
+    "root_states": 10
+  },
+  {
+    "case": 66,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 0,
+          "y": -5
+        },
+        "rhs": 10
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 67,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": 5
+        },
+        "rhs": -15
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 68,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -4,
+          "y": 5
+        },
+        "rhs": -3,
+        "modulus": 5
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 69,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 70,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 5,
+            "y": 2
+          },
+          "rhs": -4
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 71,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": 3
+          },
+          "rhs": 14
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": 3
+            },
+            "rhs": 17
+          }
+        }
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 72,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -4,
+          "y": -6
+        },
+        "rhs": -6
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 73,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": -6
+        },
+        "rhs": -9
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 74,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 4,
+          "y": -2
+        },
+        "rhs": 8,
+        "modulus": 11
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 75,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 76,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 5,
+            "y": -3
+          },
+          "rhs": -12
+        }
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 77,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -6,
+            "y": 5
+          },
+          "rhs": -8
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -6,
+              "y": 5
+            },
+            "rhs": -5
+          }
+        }
+      }
+    },
+    "root_states": 14
+  },
+  {
+    "case": 78,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -5,
+          "y": 6
+        },
+        "rhs": 8
+      }
+    },
+    "root_states": 12
+  },
+  {
+    "case": 79,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": -3
+        },
+        "rhs": -9
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 80,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 2,
+          "y": 4
+        },
+        "rhs": 13,
+        "modulus": 12
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 81,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 82,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -5,
+            "y": 6
+          },
+          "rhs": 9
+        }
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 83,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": 4
+          },
+          "rhs": 0
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": 4
+            },
+            "rhs": 3
+          }
+        }
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 84,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 4,
+          "y": -1
+        },
+        "rhs": 1
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 85,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 2,
+          "y": 6
+        },
+        "rhs": -6
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 86,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 5,
+          "y": 2
+        },
+        "rhs": -10,
+        "modulus": 5
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 87,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 88,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 1,
+            "y": -6
+          },
+          "rhs": 15
+        }
+      }
+    },
+    "root_states": 10
+  },
+  {
+    "case": 89,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": 3
+          },
+          "rhs": 13
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": 3
+            },
+            "rhs": 16
+          }
+        }
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 90,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -5,
+          "y": -4
+        },
+        "rhs": -4
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 91,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 1,
+          "y": -3
+        },
+        "rhs": 13
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 92,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -4,
+          "y": 1
+        },
+        "rhs": 9,
+        "modulus": 11
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 93,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 94,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 0,
+            "y": 2
+          },
+          "rhs": -2
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 95,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 6,
+            "y": 1
+          },
+          "rhs": -6
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 6,
+              "y": 1
+            },
+            "rhs": -3
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 96,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 3,
+          "y": -3
+        },
+        "rhs": -13
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 97,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": -4
+        },
+        "rhs": -15
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 98,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -6,
+          "y": -2
+        },
+        "rhs": 10,
+        "modulus": 7
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 99,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 100,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -1,
+            "y": 6
+          },
+          "rhs": -13
+        }
+      }
+    },
+    "root_states": 8
+  },
+  {
+    "case": 101,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 2,
+            "y": 6
+          },
+          "rhs": -5
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 2,
+              "y": 6
+            },
+            "rhs": -2
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 102,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 6,
+          "y": 2
+        },
+        "rhs": 13
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 103,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": 4
+        },
+        "rhs": -8
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 104,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 3,
+          "y": 0
+        },
+        "rhs": 11,
+        "modulus": 9
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 105,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 106,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 6,
+            "y": -5
+          },
+          "rhs": 11
+        }
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 107,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 5,
+            "y": -2
+          },
+          "rhs": -8
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 5,
+              "y": -2
+            },
+            "rhs": -5
+          }
+        }
+      }
+    },
+    "root_states": 10
+  },
+  {
+    "case": 108,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -6,
+          "y": -6
+        },
+        "rhs": 9
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 109,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": 0
+        },
+        "rhs": 0
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 110,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -3,
+          "y": 1
+        },
+        "rhs": 14,
+        "modulus": 4
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 111,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 112,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 2,
+            "y": 2
+          },
+          "rhs": -7
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 113,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 5,
+            "y": -5
+          },
+          "rhs": 10
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 5,
+              "y": -5
+            },
+            "rhs": 13
+          }
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 114,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 5,
+          "y": 6
+        },
+        "rhs": -12
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 115,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 4,
+          "y": -1
+        },
+        "rhs": 6
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 116,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 5,
+          "y": -3
+        },
+        "rhs": 13,
+        "modulus": 13
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 117,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 118,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 6,
+            "y": 6
+          },
+          "rhs": -16
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 119,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -2,
+            "y": -5
+          },
+          "rhs": 3
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -2,
+              "y": -5
+            },
+            "rhs": 6
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 120,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -6,
+          "y": 2
+        },
+        "rhs": -2
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 121,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -6,
+          "y": 1
+        },
+        "rhs": 4
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 122,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 1,
+          "y": 4
+        },
+        "rhs": 9,
+        "modulus": 9
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 123,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 124,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 0,
+            "y": 5
+          },
+          "rhs": -1
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 125,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 6,
+            "y": -6
+          },
+          "rhs": -11
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 6,
+              "y": -6
+            },
+            "rhs": -8
+          }
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 126,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 6,
+          "y": 2
+        },
+        "rhs": 7
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 127,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -5,
+          "y": 6
+        },
+        "rhs": -11
+      }
+    },
+    "root_states": 15
+  },
+  {
+    "case": 128,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -1,
+          "y": -5
+        },
+        "rhs": -12,
+        "modulus": 12
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 129,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 130,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 1,
+            "y": 2
+          },
+          "rhs": 12
+        }
+      }
+    },
+    "root_states": 10
+  },
+  {
+    "case": 131,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -2,
+            "y": 6
+          },
+          "rhs": 11
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -2,
+              "y": 6
+            },
+            "rhs": 14
+          }
+        }
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 132,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -3,
+          "y": -6
+        },
+        "rhs": 8
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 133,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": -6
+        },
+        "rhs": -14
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 134,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 3,
+          "y": -5
+        },
+        "rhs": 5,
+        "modulus": 3
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 135,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 136,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 3,
+            "y": 6
+          },
+          "rhs": 11
+        }
+      }
+    },
+    "root_states": 4
+  },
+  {
+    "case": 137,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 4,
+            "y": -5
+          },
+          "rhs": -1
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 4,
+              "y": -5
+            },
+            "rhs": 2
+          }
+        }
+      }
+    },
+    "root_states": 12
+  },
+  {
+    "case": 138,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 4,
+          "y": -1
+        },
+        "rhs": 15
+      }
+    },
+    "root_states": 12
+  },
+  {
+    "case": 139,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -6,
+          "y": -3
+        },
+        "rhs": -16
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 140,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -2,
+          "y": -5
+        },
+        "rhs": -15,
+        "modulus": 4
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 141,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 142,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 3,
+            "y": 1
+          },
+          "rhs": 12
+        }
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 143,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 0,
+            "y": 5
+          },
+          "rhs": 6
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 0,
+              "y": 5
+            },
+            "rhs": 9
+          }
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 144,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -2,
+          "y": -3
+        },
+        "rhs": -13
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 145,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 1,
+          "y": 0
+        },
+        "rhs": 11
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 146,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -4,
+          "y": 3
+        },
+        "rhs": 7,
+        "modulus": 8
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 147,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 148,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 5,
+            "y": -1
+          },
+          "rhs": -7
+        }
+      }
+    },
+    "root_states": 14
+  },
+  {
+    "case": 149,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 2,
+            "y": -1
+          },
+          "rhs": -8
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 2,
+              "y": -1
+            },
+            "rhs": -5
+          }
+        }
+      }
+    },
+    "root_states": 8
+  },
+  {
+    "case": 150,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 4,
+          "y": -5
+        },
+        "rhs": 15
+      }
+    },
+    "root_states": 13
+  },
+  {
+    "case": 151,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -2,
+          "y": -4
+        },
+        "rhs": -8
+      }
+    },
+    "root_states": 4
+  },
+  {
+    "case": 152,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 2,
+          "y": 5
+        },
+        "rhs": 9,
+        "modulus": 11
+      }
+    },
+    "root_states": 11
+  },
+  {
+    "case": 153,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 154,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 0,
+            "y": 2
+          },
+          "rhs": -4
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 155,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 5,
+            "y": 0
+          },
+          "rhs": 6
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 5,
+              "y": 0
+            },
+            "rhs": 9
+          }
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 156,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -5,
+          "y": 6
+        },
+        "rhs": -7
+      }
+    },
+    "root_states": 12
+  },
+  {
+    "case": 157,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 1,
+          "y": -3
+        },
+        "rhs": -3
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 158,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -3,
+          "y": 6
+        },
+        "rhs": 14,
+        "modulus": 5
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 159,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 160,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -1,
+            "y": -1
+          },
+          "rhs": -2
+        }
+      }
+    },
+    "root_states": 5
+  },
+  {
+    "case": 161,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 6,
+            "y": -3
+          },
+          "rhs": 6
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 6,
+              "y": -3
+            },
+            "rhs": 9
+          }
+        }
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 162,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 5,
+          "y": -2
+        },
+        "rhs": 1
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 163,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -6,
+          "y": 0
+        },
+        "rhs": -5
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 164,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": 5,
+          "y": 6
+        },
+        "rhs": 15,
+        "modulus": 10
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 165,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 166,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": -4,
+            "y": 4
+          },
+          "rhs": 4
+        }
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 167,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 4,
+            "y": 2
+          },
+          "rhs": -5
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 4,
+              "y": 2
+            },
+            "rhs": -2
+          }
+        }
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 168,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": -6,
+          "y": 0
+        },
+        "rhs": 16
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 169,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": -1,
+          "y": 6
+        },
+        "rhs": -3
+      }
+    },
+    "root_states": 7
+  },
+  {
+    "case": 170,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -1,
+          "y": -3
+        },
+        "rhs": 14,
+        "modulus": 9
+      }
+    },
+    "root_states": 9
+  },
+  {
+    "case": 171,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 172,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 4,
+            "y": 2
+          },
+          "rhs": 6
+        }
+      }
+    },
+    "root_states": 3
+  },
+  {
+    "case": 173,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": -3,
+            "y": -3
+          },
+          "rhs": -10
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": -3,
+              "y": -3
+            },
+            "rhs": -7
+          }
+        }
+      }
+    },
+    "root_states": 4
+  },
+  {
+    "case": 174,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "eq",
+        "coeff": {
+          "x": 6,
+          "y": 3
+        },
+        "rhs": 4
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 175,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "le",
+        "coeff": {
+          "x": 2,
+          "y": -4
+        },
+        "rhs": 9
+      }
+    },
+    "root_states": 6
+  },
+  {
+    "case": 176,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "cong",
+        "coeff": {
+          "x": -2,
+          "y": 2
+        },
+        "rhs": 15,
+        "modulus": 10
+      }
+    },
+    "root_states": 1
+  },
+  {
+    "case": 177,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "iff",
+        "left": {
+          "op": "parity",
+          "var": "x",
+          "value": 1
+        },
+        "right": {
+          "op": "parity",
+          "var": "y",
+          "value": 0
+        }
+      }
+    },
+    "root_states": 2
+  },
+  {
+    "case": 178,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "and",
+        "left": {
+          "op": "pow2",
+          "var": "x"
+        },
+        "right": {
+          "op": "le",
+          "coeff": {
+            "x": 6,
+            "y": -5
+          },
+          "rhs": -3
+        }
+      }
+    },
+    "root_states": 10
+  },
+  {
+    "case": 179,
+    "query": {
+      "context": [
+        "x",
+        "y"
+      ],
+      "formula": {
+        "op": "or",
+        "left": {
+          "op": "eq",
+          "coeff": {
+            "x": 2,
+            "y": 1
+          },
+          "rhs": 6
+        },
+        "right": {
+          "op": "not",
+          "arg": {
+            "op": "le",
+            "coeff": {
+              "x": 2,
+              "y": 1
+            },
+            "rhs": 9
+          }
+        }
+      }
+    },
+    "root_states": 9
+  }
+]

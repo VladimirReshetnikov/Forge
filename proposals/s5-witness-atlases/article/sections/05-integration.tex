@@ -1,0 +1,116 @@
+\section{A concrete integration plan for Lean, Forge, Leant, and Djex}
+\label{sec:integration}
+\subsection{Separate the executable data model from the semantic model}
+The polynomial wire format should not become the mathematical definition of a real polynomial. Use a small executable representation---canonical arrays of rational coefficients or sparse monomials---with a proved interpretation into Mathlib's polynomial types. For this worker, a bivariate polynomial can be interpreted either as \code{MvPolynomial (Fin 2) Rat} followed by evaluation into $\R$, or as \code{Polynomial (Polynomial Rat)} with $Y$ outermost. The latter matches the projection algorithm; the former may fit an existing reifier more naturally. Conversion between them must be justified once, not reconstructed by ad hoc casts in each certificate.
+
+A proposed module division is:
+\begin{center}
+\begin{tabular}{p{0.36\textwidth}p{0.57\textwidth}}
+\toprule
+Module & Responsibility and proof boundary\\
+\midrule
+\code{Forge.Algebra.Poly2} & Executable sparse arithmetic; evaluation-preservation theorems\\
+\code{Forge.Algebra.Sturm} & Signed remainder chains, endpoint signs, exact root counts\\
+\code{Forge.Algebra.RootPoint} & Isolating cuts; root existence, uniqueness, comparisons\\
+\code{Forge.Algebra.Localized} & Rational functions at a selected root; nonzero-denominator proofs\\
+\code{Forge.Atlas.Guards} & Source identities, pair coverage, noncollision consequences\\
+\code{Forge.Atlas.Geometry} & Root persistence, ordered sections, sign-invariant stacks\\
+\code{Forge.Atlas.Check} & Reflected certificate validation and semantic soundness\\
+\code{Forge.Atlas.Strategy} & Root-index selector semantics and quantifier propagation\\
+\code{Forge.Tactic.Atlas} & Source reification, worker call, checked proof reconstruction\\
+\bottomrule
+\end{tabular}
+\end{center}
+These are proposed paths, not modules already added to the user's repository. The delivered Python modules mirror the lower computational portion of this split.
+
+\subsection{The Lean theorem that must actually be earned}
+Forge already has a \code{CertificateSpec} with a Boolean checker and a \code{sound} field~\cite{forge-contract}. The atlas should instantiate that interface rather than invent a competing trust architecture. For a Boolean verdict, the semantic contract can be written mathematically as
+\[
+ \operatorname{check}(p,c)=\operatorname{accepted}(b)
+ \quad\Longrightarrow\quad
+ \bigl(\operatorname{denotes}(p)\leftrightarrow b=\mathsf{true}\bigr).
+\]
+For a free-parameter result $S_c$, the stronger contract is
+\[
+ \operatorname{check}(p,c)=\operatorname{accepted}(S_c)
+ \Longrightarrow
+ \forall x\in\R,\quad
+ \bigl(Q_y y\;\llbracket F\rrbracket(x,y)\leftrightarrow x\in S_c\bigr).
+\]
+A separate theorem interprets a selected root-index program as a witness or counterstrategy on the appropriate cells. Merely proving the last finite Boolean fold is correct does not establish either contract; the hard dependencies are the geometric theorem and exact algebraic arithmetic.
+
+The included \code{lean/AtlasQuantifiers.lean} illustrates only the final composition step: a supplied cover plus a supplied correct witness on every cell yields $\forall x\exists y$, and supplied cellwise counterexamples refute $\exists x\forall y$. Its premises explicitly contain the missing mathematical work. There are no \code{sorry} placeholders, but the file was not compiled here. Its presence is not evidence that any real atlas certificate has passed the Lean kernel.
+
+\subsection{Reification must preserve the actual quantified variables}
+The first Lean adapter should support the exact fragment of Section~\ref{sec:fragment}, not a vaguely ``mostly polynomial'' approximation. It should open the requested real binders with fresh local identities, recursively recognize addition, multiplication, negation, natural powers, and exact rational constants, and return an equality theorem connecting every reified polynomial to its source expression under those binders. Boolean connectives and quantifiers require analogous semantic bridges.
+
+An opaque expression depending on $x$ or $y$ cannot be turned into a new independent coefficient. For example, replacing $\sin x$ by an unrelated constant changes a quantified sentence. A source term independent of both binders but not known to be rational also lies outside this implementation's coefficient domain. Such a term should cause a precise fragment refusal, or be handled by another explicitly proved reduction.
+
+Division deserves a separate preprocessing rule. For the initial adapter, reject variable denominators. A later extension can split on the denominator's sign and zero branch before clearing it, proving equivalence with Lean's totalized division semantics. Clearing a denominator without recording its nonzero condition changes the formula at exactly the exceptional points this worker was designed to preserve.
+
+Likewise, $\forall n:\Z$ is not $\forall x:\R$. Proving a real universal strengthening can sometimes establish an integer universal goal after a checked embedding, but real existential witnesses do not automatically become integers, and a real counterexample may not refute an integer statement. Approximation polarity belongs to the source bridge. An exact negative result is usable only for the exact encoded claim or through a separately proved implication with the correct direction.
+
+For a local theorem context $\Gamma\vdash G$, the adapter can encode the relevant real-algebraic hypotheses as an antecedent while preserving their free-variable dependencies. It must not export a refutation of an unconstrained standalone formula as a refutation of $G$ under stronger assumptions. The initial implementation should prefer an explicit two-binder subgoal over aggressive generalization of a large dependent context.
+
+\subsection{Do not turn real existence into an unpromised executable program}
+Lean's mathematical $\R$ supports classical existence proofs. A root section may be defined noncomputably from its unique-root or ordered-root specification, with the atlas supplying its existence and ordering theorem. This gives a perfectly valid mathematical witness in a theorem, but it is not an executable numerical algorithm on arbitrary real inputs.
+
+There are therefore two separate integration targets. The first is \emph{proof automation}: prove an existential theorem and, where useful, expose a noncomputable root-index definition with its specification. The second is \emph{computable synthesis}: accept a represented computable or algebraic input, return a root approximation or exact algebraic object, and prove its error or specification contract. The latter requires a representation-sensitive API and must not be advertised merely because a JSON file contains a selector.
+
+For simple cases, a postprocessor may recognize a root as \code{Real.sqrt} or another existing library construction and replace the general selector with a smaller term. Acceptance must prove that this simpler term has the same required property. The simplifier need not establish syntactic identity with the original root-index program; a direct specification proof can be cheaper.
+
+\subsection{Worker scheduling and useful partial outputs}
+Keep the initial tactic integration coarse-grained. The controller extracts a candidate bivariate subproblem, calls the external producer, and asks Lean to check the returned object. Only after checking does it publish a result to the ordinary Forge fact/obligation mechanism. There is no need to modify \code{grind}'s internal saturation state for the first milestone.
+
+A concrete trigger is a remaining existential real witness constrained by a nonlinear equality, or a universally quantified nonlinear assertion for which a finite exact parameter condition would be useful. A cheap filter records the number of variables, maximal degrees, monomial counts, and whether an exact source bridge was constructed. Reject the fragment early when it contains a third essential variable; do not let an external solver guess what was meant.
+
+Useful outputs are not limited to closing the entire goal. An exact free-parameter result can become a local case split. A negative region can guide typed candidate synthesis toward a missing branch. A root section can be passed to an existing arithmetic engine together with its defining equation and sign facts. A cell boundary can suggest an algebraic equality that another worker proves more cheaply. All such exports remain ordinary proved source-level facts.
+
+\subsection{A specific Leant/Djex cooperation loop}
+Leant's named behavioral queries associate an exact candidate with an exact assertion and distinguish a proved assertion, a proved negation, and an inconclusive proof attempt~\cite{leant-behavior}. The atlas can extend that final proof stage for assertions which reify to the supported fragment. For example, a proposed function represented by a polynomial relation and a branch condition can be checked for all real inputs, not merely on a finite example set.
+
+A candidate loop should retain the existing typed owner and provider selection. For each candidate, first elaborate its full type; next obtain a source theorem describing its relevant behavior as $F(x,y)$; then request an atlas for the exact assertion or its negation. A checked counterexample parameter may reject that candidate. An atlas timeout may only leave it inconclusive. The atlas must not authorize filtering an entire type-directed search branch merely because one tested implementation failed.
+
+A stronger future loop can synthesize branches. Starting from a candidate that fails on a parameter cell, add that exact cell as a behavioral obligation, ask Djex for an alternative term under its local hypotheses, and assemble the two candidates with a checked case split. The finite atlas supplies the geometric partition; Djex supplies type-correct terms in each branch; Lean verifies the assembled function. This is a concrete way to combine algebraic witness discovery with higher-order typed composition without erasing universe, dictionary, or nominal-provider distinctions already preserved by the neighboring projects.
+
+The delivered prototype stops before this host-level loop. Its strategies are algebraic selectors, not arbitrary higher-order Lean terms, and the unresolved Church-encoding and universe-composition work in Leant/Djex is not claimed to be solved by this proposal.
+
+\subsection{Libraries and theorem dependencies worth reusing}
+\label{sec:libraries}
+\textbf{SymPy: the current producer.} Version 1.14.0 was used. The concrete operations are rational multivariate factorization, extended gcd in $\Q(X)[Y]$, denominator lcm, square-free projection, and rational real-root isolation. The checker is independent of these imports. The independent test oracle uses exact univariate inequality reduction and root counting~\cite{sympy}.
+
+\textbf{FLINT: a performance-oriented producer backend.} Its rational multivariate polynomial and exact algebraic-number facilities are natural candidates for replacing the current producer's arithmetic bottlenecks. The documented \code{fmpq_mpoly} representation and \code{qqbar} algebraic-number representation cover relevant building blocks~\cite{flint-poly,flint-qqbar}. These libraries would remain untrusted proposers, emitting the same sparse identities and isolating cuts. This article does not claim that every required extended-gcd-over-function-field operation is a single FLINT call, nor that the current Python bindings expose every C capability. No FLINT backend was executed.
+
+\textbf{LibPoly: a nonlinear-reasoning backend candidate.} LibPoly targets polynomial manipulation for symbolic reasoning engines and offers algebraic/root-oriented operations~\cite{libpoly}. It is worth evaluating for more incremental lifting and SMT-style integration. Again, the acceptance language should remain the certificate format rather than a library-specific truth flag. No ABI, license integration, or baseline compatibility test was performed here.
+
+\textbf{Mathlib: semantic infrastructure, not an assumed ready atlas checker.} The existing polynomial derivative, root, topology, and implicit-function modules are concrete starting points. In particular, \code{Polynomial.continuous_aeval} and the \code{ImplicitFunctionData} interface address ingredients of the persistence argument; the polynomial limit library supplies useful leading-term asymptotics~\cite{mathlib-topology,mathlib-implicit,mathlib-limits}. These are mathematical building blocks. They do not by themselves turn an executable signed-remainder implementation into a checked root counter.
+
+\textbf{An upstream Sturm candidate, with a status caveat.} Mathlib PR~42558 proposes \code{Polynomial.IsSturmSequence.count_roots_between} on half-open intervals. At the retrieved status it was closed on 10 August 2026 without merging; its head is \code{df3f4a5620232d6164fb8cbb0177876f5a29de18}. The inspected module defines an abstract sign-sequence interface and describes a separate certificate layer~\cite{lean-sturm-pr,lean-sturm-source}. This is a concrete reuse candidate to review and compile against Forge's pin, not an available theorem that this delivery has imported. Our nonroot-endpoint convention would need a proved conversion from its half-open formulation.
+
+\textbf{Isabelle/AFP: formalization references.} The Sturm--Tarski development and the complete real-quantifier-elimination work by Kosaian, Tan, and Platzer demonstrate formal routes through the relevant mathematics~\cite{sturm-tarski,kosaian}. They are especially useful for decomposing sign determination and quantifier semantics into reusable lemmas. They are not drop-in Lean libraries, and the present implementation does not call Isabelle or import its proof objects.
+
+\subsection{Two concrete next algorithms, beyond the baseline prototype}
+\status{The optimizations in this subsection are designs, not measured features of the delivered worker.}
+
+\paragraph{Algorithm A: polarity-directed certificate slicing.}
+The version-1 checker deliberately validates every cell. Once its theorem is formalized, a version-2 certificate can retain only what the requested polarity needs. For true $\forall x\exists y$, retain a complete base cover and one certified true section or sector over each base cell. For false $\forall x\exists y$, retain a single exact $x$ and a complete false fibre cover. For true $\exists x\forall y$, retain one exact $x$ and a complete true fibre cover. For false $\exists x\forall y$, retain a complete base cover and one false selector per base cell.
+
+Start by slicing a fully generated atlas and proving a separate verifier sound; this measures proof-object and replay savings without changing search. Next generate the required branches lazily. The certificate must still justify each retained root's existence, the chosen sector's sign, and the required covers. It is unsound to obtain a smaller object by merely deleting rows from the version-1 format; the mutation suite explicitly rejects that.
+
+\paragraph{Algorithm B: Boolean-implicant-guided local projection.}
+At a sample where $F$ is true, derive a small conjunction of signed atoms sufficient for $F$. A propositional checker verifies that implication. Build the local algebraic cell using only the factors necessary for those atoms, with explicit guards and root-order facts. For a false sample, use a conjunction sufficient for $\neg F$. Search the uncovered parameter region for the next sample and repeat, maintaining a checked one-dimensional union of covered cells. Any newly discovered event splits the affected cells; no sampled agreement licenses extension past an unproved boundary.
+
+The first useful implementation can restrict local cells to rational endpoints and already isolated projection roots. It can fall back to the full factor set whenever a local guard cannot certify the desired interval. That yields a precise, testable progression toward cylindrical algebraic coverings rather than an instruction to ``use smarter CAD.'' Proof-oriented local-cell and quantified-covering literature gives relevant designs to compare~\cite{nalbach-cell,nalbach-cover}. The full atlas remains the completeness fallback and the reference oracle for small tests.
+
+\subsection{Implementation milestones and anti-substitution acceptance tests}
+\textbf{Milestone 1: arithmetic replay in Lean.} Port sparse identities and rational Sturm checking, with a theorem that every accepted cut denotes exactly one root and that the checked list is complete. Acceptance must include rational endpoint cases and a polynomial with an omitted real root rejected. Passing only arithmetic identities does not close this milestone.
+
+\textbf{Milestone 2: algebraic exceptional fibres.} Port the localized coefficient semantics and its exact zero/sign operations. Accept the reducible-polynomial denominator control and the cubic discriminant fibres. A rational-parameter-only checker does not count as acceptance.
+
+\textbf{Milestone 3: geometry and quantifiers.} Formalize root persistence and the sign-atlas theorem, then reconstruct the free-parameter result of the two-shifted-squares example. The proof must include the isolated irrational point cells. A numerical oracle or a proof for rational $x$ is not a substitute.
+
+\textbf{Milestone 4: source bridge and tactic entry.} Reify actual Lean goals with exact binder identities; reject third-variable and nonpolynomial dependencies; run the external worker; replay and commit a kernel-checked theorem through Forge's existing policy. The primary acceptance case is a whole quantified source theorem, not an unconnected polynomial lemma.
+
+\textbf{Milestone 5: strategy terms and composition.} Elaborate a branch-dependent witness and its specification, exercise the quantifier-order negative control, and integrate a checked free-parameter guard with another Forge worker. Only after this should measurements be described as Lean solved-goal results.
+
+These milestones isolate the difficult work instead of hiding it in a generic \code{sound} assumption. They also permit useful partial delivery: a verified rational root-cover component benefits existing Forge workers before the entire atlas tactic is ready.

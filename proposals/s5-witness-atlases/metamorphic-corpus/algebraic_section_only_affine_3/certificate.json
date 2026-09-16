@@ -1,0 +1,272 @@
+{
+  "schema": "forge.atlas.certificate/1",
+  "factors": [
+    [
+      [
+        0,
+        0,
+        "7/4"
+      ],
+      [
+        1,
+        0,
+        "-3"
+      ],
+      [
+        2,
+        0,
+        "1"
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        "-3"
+      ],
+      [
+        0,
+        1,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "1"
+      ]
+    ]
+  ],
+  "factorizations": [
+    {
+      "scalar": "4",
+      "powers": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "scalar": "2",
+      "powers": [
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  ],
+  "derivative_guards": [
+    {
+      "a": [],
+      "b": [
+        [
+          0,
+          0,
+          "1"
+        ]
+      ],
+      "guard": [
+        "1"
+      ],
+      "factor": 1
+    }
+  ],
+  "pair_guards": [],
+  "projection": [
+    "7/4",
+    "-3",
+    "1"
+  ],
+  "base_roots": [
+    [
+      "3/4",
+      "4/5"
+    ],
+    [
+      "11/5",
+      "9/4"
+    ]
+  ],
+  "stacks": [
+    {
+      "sample": "-1/4",
+      "y_roots": [
+        [
+          "5/2",
+          "15/4"
+        ]
+      ],
+      "y_samples": [
+        "3/2",
+        "19/4"
+      ],
+      "signs": [
+        [
+          1,
+          -1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        false,
+        false
+      ],
+      "value": false,
+      "selection": null
+    },
+    {
+      "sample": null,
+      "y_roots": [
+        [
+          "2",
+          "3"
+        ]
+      ],
+      "y_samples": [
+        "1",
+        "4"
+      ],
+      "signs": [
+        [
+          0,
+          -1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        true,
+        false
+      ],
+      "value": true,
+      "selection": 1
+    },
+    {
+      "sample": "3/2",
+      "y_roots": [
+        [
+          "3/2",
+          "3/2"
+        ]
+      ],
+      "y_samples": [
+        "1/2",
+        "5/2"
+      ],
+      "signs": [
+        [
+          -1,
+          -1
+        ],
+        [
+          -1,
+          0
+        ],
+        [
+          -1,
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        false,
+        false
+      ],
+      "value": false,
+      "selection": null
+    },
+    {
+      "sample": null,
+      "y_roots": [
+        [
+          "1/2",
+          "1"
+        ]
+      ],
+      "y_samples": [
+        "-1/2",
+        "2"
+      ],
+      "signs": [
+        [
+          0,
+          -1
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        true,
+        false
+      ],
+      "value": true,
+      "selection": 1
+    },
+    {
+      "sample": "13/4",
+      "y_roots": [
+        [
+          "-1/2",
+          "0"
+        ]
+      ],
+      "y_samples": [
+        "-3/2",
+        "1"
+      ],
+      "signs": [
+        [
+          1,
+          -1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        false,
+        false
+      ],
+      "value": false,
+      "selection": null
+    }
+  ],
+  "truth_by_x": [
+    false,
+    true,
+    false,
+    true,
+    false
+  ],
+  "closed_value": true,
+  "selected_x": 1
+}

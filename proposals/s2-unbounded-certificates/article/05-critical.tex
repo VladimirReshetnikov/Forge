@@ -1,0 +1,117 @@
+\section{Exact extinction at criticality}
+\label{sec:critical}
+\status{A finite exact checker and a rational-weight search are implemented. The theorem below is proved on paper; no Lean proof of it was compiled.}
+
+\subsection{Why an interval engine is not the whole answer}
+Consider
+\begin{equation}
+ \label{eq:critical}
+ P(x)=\frac12+\frac12x^2.
+\end{equation}
+Its least fixed point is $1$, and $P'(1)=1$. There is no strict contraction certificate on an interval containing the fixed point. The polynomial $P(X)-X$ has a repeated root at $1$, so the derivative-sign root decoder also does not apply directly.
+
+Newton lower bounds still work below the root. If $\ell=1-e$ with $e>0$, then $P(\ell)-\ell=e^2/2$ and $1-P'(\ell)=e$, so the Newton increment is $e/2$. Each exact Newton step halves the error. Twenty steps from zero give the exact lower bound $1-2^{-20}$.
+
+The ordinary iteration satisfies
+\[
+ e_{k+1}=e_k-\frac12e_k^2,
+\]
+which is much slower near zero. In the executed dyadically rounded ablation, 256 Kleene steps left an error of
+\[
+ \frac{8350524623}{1099511627776}\approx0.007595,
+\]
+whereas twenty Newton steps met the $2^{-20}$ width request. A separate exact-extinction certificate proves $q=1$ without approximation steps. This is a comparison between three restricted mechanisms on one stated example, not a benchmark against Lean tactics.
+
+\subsection{The finite critical certificate}
+Assume now that every row is normalized: $P(\one)=\one$. Let
+\[
+ M=J(\one)
+\]
+be the nonnegative mean-offspring matrix. Form the directed dependency graph with an edge $i\to j$ whenever $M_{ij}>0$.
+
+The certificate supplies a positive rational vector $w$. The checker verifies
+\begin{equation}
+ \label{eq:criticalweight}
+ Mw\le w,
+\end{equation}
+strong connectivity of the graph, and the following nondegeneracy condition:
+\begin{equation}
+ \label{eq:nondegenerate}
+ \begin{gathered}
+ \text{some row has }(Mw)_i<w_i,\quad\text{or}\\
+ \text{some monomial of degree at least two has positive coefficient}.
+ \end{gathered}
+\end{equation}
+Strong connectivity is checked by reachability from vertex zero in the graph and its reversal. This is a finite graph calculation. The checker does not compute eigenvalues or trust a spectral-radius estimate.
+
+\begin{theorem}[Critical or subcritical extinction]
+\label{thm:critical}
+If $P(\one)=\one$, the dependency graph is strongly connected, and \eqref{eq:criticalweight}--\eqref{eq:nondegenerate} hold with $w>0$, then $\lfp(P)=\one$.
+\end{theorem}
+\begin{proof}
+Let $q=\lfp(P)$ and put $d=\one-q\ge0$. For numbers $z_1,\ldots,z_k\in[0,1]$, the elementary product inequality
+\begin{equation}
+ \label{eq:unionbound}
+ 1-\prod_{r=1}^k(1-z_r)\le\sum_{r=1}^kz_r
+\end{equation}
+follows by induction. If at least two of the $z_r$ are strictly positive, the inequality is strict: the two-factor difference is their positive product, and adjoining further factors cannot erase that positive deficit.
+
+Using the exponent vector as a list of repeated factors, row normalization and $P(q)=q$ yield
+\[
+ d_i=\sum_\alpha p_{i,\alpha}\bigl(1-(\one-d)^\alpha\bigr)
+ \le\sum_jM_{ij}d_j.
+\]
+Thus $d\le Md$.
+
+Suppose $d\ne0$, and let $c=\max_i d_i/w_i>0$. Choose a maximizing index $i$. Then
+\[
+ cw_i=d_i\le(Md)_i\le c(Mw)_i\le cw_i.
+\]
+All inequalities are equalities. Since every summand is nonnegative, equality in the middle inequality forces $d_j=cw_j$ for each outgoing neighbor $j$ of $i$. Such a neighbor is itself maximizing, so the argument propagates along paths. Strong connectivity gives $d=cw$ in every coordinate; in particular, all $d_j$ are positive.
+
+A strict row in \eqref{eq:criticalweight} now contradicts $d\le Md$. Otherwise, a positive-coefficient monomial of degree at least two makes \eqref{eq:unionbound} strict in its row, because it contains at least two strictly positive deficits, counting repeated occurrences. This gives $d_i<(Md)_i\le cw_i=d_i$, again a contradiction. Hence $d=0$ and $q=\one$.
+\end{proof}
+
+The theorem is a finite-weight formulation of the critical/subcritical branching argument, consistent with the standard least-fixed-point treatment of multitype branching~\cite{etessami-stewart-yannakakis}. The proof is included because it defines exactly the certificate assumptions, including the exception that a spectral slogan can easily omit.
+
+\subsection{The deterministic one-child exception}
+For $P(x)=x$, the least fixed point is zero: iteration from zero never leaves zero. Yet $P(1)=1$, $M=(1)$, and $Mw=w$ for every positive $w$. The dependency graph is strongly connected. Without \eqref{eq:nondegenerate}, a purported critical-extinction checker would therefore prove something false.
+
+The same problem occurs for a deterministic cycle of types:
+\[
+ P_1(x)=x_2,\quad P_2(x)=x_3,\quad\ldots,\quad P_n(x)=x_1.
+\]
+There is exactly one child forever and no finite successful derivation. The main tests include four such systems and reject forged probability-one receipts for all of them. The inverse-free Newton experiment additionally rejects a forged lower step on the one-variable identity map whose weight inequality is nonstrict.
+
+More generally, normalized linear systems can randomize which single child is created and still create exactly one forever. If there are no terminating constants and no branching monomials, the critical equality case must not be accepted just because the type graph is irreducible. Nondegeneracy is a mathematical hypothesis, not a heuristic filter.
+
+\subsection{A weight can succeed when row sums fail}
+Take
+\[
+ P_1(x,y)=\frac1{10}+\frac9{10}y^2,
+ \qquad
+ P_2(x,y)=\frac45+\frac15x.
+\]
+Then
+\[
+ M=\begin{pmatrix}0&9/5\\1/5&0\end{pmatrix}.
+\]
+The first row sum exceeds one, so the all-ones weight fails. But $w=(2,1)^{\mathsf T}$ gives
+\[
+ Mw=(9/5,2/5)^{\mathsf T}<w.
+\]
+The graph is strongly connected and the rows are normalized. The theorem proves both extinction probabilities equal one.
+
+The producer tries a small exact family of weights: $\one$; $(I-M)^{-1}\one$ when the inverse exists; and signed vectors from an exact nullspace basis of $I-M$. It sends every candidate through the checker. This is not a general linear-programming feasibility implementation. It can miss a usable positive vector in a broader setting, and failure produces \code{unknown}. For a production solver, rational linear programming with $w_i\ge1$ and $Mw\le w$ is a concrete additional proposer; the final certificate remains just $w$.
+
+\subsection{Probability one is not finite expected work}
+For \eqref{eq:critical}, an individual has zero or two children with equal probabilities. Its expected number of children is one. Starting with one root, the expected population in every generation is therefore one, even though extinction occurs with probability one. The expected total number of individuals is the sum of those expectations and diverges.
+
+Accordingly, an \code{extinction_one} receipt has only a probability-one conclusion. It does not establish finite expected runtime, a finite worst-case bound, or termination on every possible sample sequence. These require separate quantitative or pathwise arguments. The current receipt type is deliberately not named \code{terminates}.
+
+\subsection{Strongly connected components as a next extension}
+The implemented checker treats a whole strongly connected system. A production worker should decompose a general dependency graph into strongly connected components and process dependencies first. A downstream component already proved equal to zero or one may be substituted by that \emph{exact} value, with a recorded theorem justifying the substitution.
+
+An interval enclosure of a downstream component is different. Substituting its upper endpoint changes the polynomial map and generally gives an upper abstraction, not an equal system. Lower and upper substitution maps must be related to the original least fixed point by a separate monotonicity theorem. One cannot call this ordinary SCC elimination and then use the resulting point values as equalities.
+
+This is a precise next algorithmic task: implement a component DAG, retain exact solved coordinates when available, build lower and upper polynomial maps for uncertain dependencies, and attach monotone parameter-transport lemmas. It is designed here but is not part of the executed corpus.

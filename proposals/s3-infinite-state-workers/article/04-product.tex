@@ -1,0 +1,152 @@
+\section{Names and counters in one exact worker}
+\label{sec:product}
+
+\subsection{The admitted mixed language}
+The mixed state is $(q,r,x)$, where $q$ is finite control, $r$ is a tuple of $k$
+optional equality registers, and $x\in\N^d$ is a counter vector. A rule contains
+a source and destination control, an input tag, an equality guard over old
+registers and the input, simultaneous register-copy updates, and fixed
+consumption/production vectors $(a,z)$.
+
+Unlike the deterministic equivalence worker, the mixed language is
+\emph{nondeterministic}: every rule whose tag, guard, and consumption bound hold
+is available. It need not have a default, and it can deadlock. The target is
+universal safety over all finite rule/input executions; no fairness or eventual
+release property is asserted. In particular a blocked execution cannot refute
+safety merely because it stops making progress.
+
+A bad clause combines a control location, a guard over registers and constants
+only, and an upward counter threshold. The current input is forbidden in bad
+clauses because a state property cannot depend on an unspecified next input.
+Initial registers are anchored, and counter initial states form the families
+of~\eqref{eq:family}. The current prototype gives these families a common
+initial control and register tuple; finite unions of different anchored starts
+would be a straightforward extension of the representation but are not claimed
+as implemented.
+
+\subsection{Compile structural name orbits first}
+Explore the finite orbit graph of $(q,r)$ from the anchored initial tuple,
+considering every rule and every relevant atom representative. During this
+\emph{structural} exploration, ignore counter enabledness. An edge records the
+original rule identifier, tag, representative atom, and the exact vectors
+$a,z$. The resulting finite graph is a finite-control counter system.
+
+Ignoring counters here does not mean deleting their guards. It only discovers
+an overlarge finite set of possible name-control locations. The compiled
+counter transition still requires $x\ge a$. A structurally discovered location
+may be unreachable with any feasible counters; retaining it cannot invent a
+feasible run because the counter semantics on its incoming edges remains exact.
+
+\begin{theorem}[Exact orbit--counter transport]
+\label{thm:product}
+For the admitted mixed language, every concrete execution projects to a path
+of the compiled finite-control counter system with exactly the same counter
+vectors. Conversely every compiled path from an initial family instance lifts
+to a concrete mixed execution with the same counters. The bad-state predicates
+are preserved. Hence mixed safety is equivalent to coverability safety of the
+compiled system.
+\end{theorem}
+\begin{proof}
+For projection, normalize the name tuple after each concrete step. The input
+is represented by a fixed/live case or the fresh case; guard evaluation and
+register updates commute with the corresponding permutation. That rule edge
+was therefore enumerated by structural exploration. Its vectors $a,z$ are
+unchanged, so enabledness and counter successors agree exactly.
+
+For lifting, proceed along the compiled path. Maintain a bijection between
+the current representative's live names and the concrete live names, fixing
+constants. Realize the recorded input as its mapped live/constant name or as
+a name outside the concrete support. The equality guard is true, the register
+update reaches the required orbit, and the path's counter enabledness makes
+the original rule executable. Repeat. The name guard in a bad clause is
+invariant under these renamings, and its counter threshold is untouched.
+\end{proof}
+
+The theorem depends on the separation of equality syntax and counter updates.
+It says nothing about an unbounded dictionary $\Atoms\to\N$ of per-name
+resources, atom ordering, or guards that compare counters with atom identities.
+It also does not establish a closure theorem for arbitrary products of
+infinite-state decision procedures. It proves a specific transition
+correspondence for a specific language.
+
+\subsection{Check against the mixed source, not the compiler output}
+A positive receipt supplies a list of structural orbit representatives and an
+unsafe counter basis for each. The independent checker verifies the initial
+orbit's presence and initial-family separation. It then independently evaluates
+every original rule on every representative atom. For each enabled equality
+case it requires the successor orbit to be listed and checks
+\eqref{eq:backclosed} with that rule's original consumption/production vectors.
+It also checks inclusion of every bad threshold whose original register guard
+holds at the representative.
+
+Thus a bug that omits an edge during structural compilation cannot hide behind
+a successful counter proof for an incomplete graph. The receipt is replayed
+from the caller-supplied mixed model, and its graph is reconstructed by the
+checker using equality matrices, not the producer's canonicalizer. This is
+still two Python implementations, not a formal verification result, but the
+separation targets the actual new compiler boundary.
+
+The positive proof combines forward closure of the finite name relation with
+backward closure of the per-orbit unsafe region. Induction maintains
+\[
+ \text{the current name orbit is listed}\quad\land\quad
+ x\notin\up{C_{\text{current orbit}}}.
+\]
+The first conjunct comes from the name edge check, and the second from
+Theorem~\ref{thm:countersound}'s local predecessor argument. A negative receipt
+contains initial-family parameters and triples
+\code{[ruleId, tag, concreteAtom]}; the checker executes the original mixed
+rules and counter consumption checks directly.
+
+\subsection{Worked example: a remembered owner and arbitrary clients}
+Use one optional owner register and counters $(\ell,a,w)$ for free lock tokens,
+active leases, and waiting clients. Initially
+\[
+ r=\bot,\qquad (\ell,a,w)=(1,0,n),\quad n\in\N.
+\]
+An \code{acquire(u)} rule requires $u\ne r$, consumes one free lock and one
+waiting token, produces one active lease, and remembers $u$ as owner.
+A \code{release(u)} rule requires $u=r$, consumes an active lease, produces a
+free lock and a waiting token, and empties the owner register. The safety target
+is $a<2$ at every finite execution prefix. The model is a deliberately small
+resource/identity protocol, not a complete implementation of a multi-client
+lock service.
+
+There are only two structural name orbits: empty owner and some remembered
+owner. Their compiled graph has three edges: acquisition from empty,
+acquisition with a fresh relative owner, and matching-owner release. The second
+acquisition edge is often disabled by the counters; retaining it is required
+for faithful structural compilation and for checking faulty versions.
+
+The positive receipt uses the same three backward thresholds at both orbits:
+\[
+ C=\{(0,2,0),\ (1,1,1),\ (2,0,2)\}.
+\]
+Initially, the first two thresholds are blocked by $a=0$, and the third by
+$\ell=1<2$, independent of $n$. The full receipt therefore has two name
+representatives and six stored threshold vectors. The producer performs nine
+predecessor operations.
+
+Now omit lock consumption from acquisition. The worker chooses $n=2$ and
+returns
+\[
+ \operatorname{acquire}(0),\qquad\operatorname{acquire}(1).
+\]
+The two names must differ because the second guard compares with the remembered
+owner. Counter replay yields active count two. Reusing a single representative
+atom for all requests would suppress this counterexample. Abstracting away
+counters without retaining consumption would instead falsely reject the correct
+version. This example exercises both sides of the product theorem.
+
+\subsection{A finite oracle for differential testing, not for proving this case}
+For randomized mixed tests the generator conserves total counter mass and uses
+one fixed initial marking. Its concrete counter state space is then finite.
+Combining that finite set with an atom carrier of size $k+c+1$ gives an exhaustive
+concrete oracle for the generated instances. This oracle does not build name
+orbits or antichains. It is suitable for differential testing of the algorithms.
+
+The parameterized owner example is not proved by that finite oracle: its
+initial family has unbounded mass. Its delivered evidence is a checked symbolic
+receipt under the mathematical arguments above. Keeping these two evidence
+sources separate avoids silently converting a test on finitely many clients
+into an all-populations theorem.

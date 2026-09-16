@@ -1,0 +1,3992 @@
+[
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 6,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 6
+    },
+    "name": "semaphore",
+    "replay_seconds": 0.0003073990000075355,
+    "same_exact_basis": true,
+    "search_seconds": 0.0004525699999931021,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 12
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 6,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 6
+    },
+    "name": "faulty_semaphore",
+    "replay_seconds": 0.00018893100002514984,
+    "same_exact_basis": true,
+    "search_seconds": 0.00033737000001110573,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 14
+    }
+  },
+  {
+    "checked": {
+      "basis": 6,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 6,
+      "predecessors": 0
+    },
+    "name": "merger",
+    "replay_seconds": 0.00025998299997809227,
+    "same_exact_basis": true,
+    "search_seconds": 0.0014766230000304859,
+    "stats": {
+      "basis": 6,
+      "box_nodes": 119,
+      "expansions": 6,
+      "grid_points": 0,
+      "nodes": 6,
+      "pred_calls": 7
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 3,
+      "direct_closure_rows": 1,
+      "nodes": 10,
+      "predecessors": 2
+    },
+    "name": "guarded_doubling_merger",
+    "replay_seconds": 0.00023134599996410543,
+    "same_exact_basis": true,
+    "search_seconds": 0.0013811469999609471,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 109,
+      "expansions": 8,
+      "grid_points": 0,
+      "nodes": 10,
+      "pred_calls": 16
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 334,
+      "predecessors": 1
+    },
+    "name": "huge_threshold",
+    "replay_seconds": 0.004902220999952078,
+    "same_exact_basis": true,
+    "search_seconds": 0.003863451000029272,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 334,
+      "grid_points": 0,
+      "nodes": 334,
+      "pred_calls": 335
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "blocked_reset",
+    "replay_seconds": 5.7942000012189965e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.846500000141532e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "lossy_not_reliable",
+    "replay_seconds": 8.986499994989572e-05,
+    "same_exact_basis": true,
+    "search_seconds": 6.228300003385812e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 3
+    },
+    "name": "fifo_send_loop",
+    "replay_seconds": 0.000172324999994089,
+    "same_exact_basis": true,
+    "search_seconds": 0.00020806400004858006,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 7
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 3
+    },
+    "name": "two_channels",
+    "replay_seconds": 0.0001034329999356487,
+    "same_exact_basis": true,
+    "search_seconds": 7.397599995329074e-05,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 0,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 0,
+      "predecessors": 0
+    },
+    "name": "empty_bad",
+    "replay_seconds": 8.146799996211485e-05,
+    "same_exact_basis": true,
+    "search_seconds": 1.8399999930807098e-05,
+    "stats": {
+      "basis": 0,
+      "box_nodes": 0,
+      "expansions": 0,
+      "grid_points": 0,
+      "nodes": 0,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_0",
+    "replay_seconds": 0.0001228119999723276,
+    "same_exact_basis": true,
+    "search_seconds": 0.00017925999998169573,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 8,
+      "closure_rows": 32,
+      "direct_closure_rows": 24,
+      "nodes": 9,
+      "predecessors": 5
+    },
+    "name": "conservative_1",
+    "replay_seconds": 0.0007330970000793968,
+    "same_exact_basis": true,
+    "search_seconds": 0.009631839000007858,
+    "stats": {
+      "basis": 8,
+      "box_nodes": 262,
+      "expansions": 8,
+      "grid_points": 0,
+      "nodes": 9,
+      "pred_calls": 70
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 7,
+      "direct_closure_rows": 6,
+      "nodes": 3,
+      "predecessors": 1
+    },
+    "name": "conservative_2",
+    "replay_seconds": 0.002357515999960924,
+    "same_exact_basis": true,
+    "search_seconds": 0.0005405549999295545,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 34,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 16
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_3",
+    "replay_seconds": 0.00017275799996241403,
+    "same_exact_basis": true,
+    "search_seconds": 0.0004234849999420476,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 23,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 3,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "conservative_4",
+    "replay_seconds": 0.00015731600001345214,
+    "same_exact_basis": true,
+    "search_seconds": 0.0003129240000134814,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 6,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 10
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 5,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "conservative_5",
+    "replay_seconds": 0.00015647600002921536,
+    "same_exact_basis": true,
+    "search_seconds": 0.00040864800007511803,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 20,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 10
+    }
+  },
+  {
+    "checked": {
+      "basis": 15,
+      "closure_rows": 36,
+      "direct_closure_rows": 36,
+      "nodes": 15,
+      "predecessors": 0
+    },
+    "name": "conservative_6",
+    "replay_seconds": 0.0012529429999403874,
+    "same_exact_basis": true,
+    "search_seconds": 0.016273863000037636,
+    "stats": {
+      "basis": 15,
+      "box_nodes": 657,
+      "expansions": 15,
+      "grid_points": 0,
+      "nodes": 15,
+      "pred_calls": 86
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_7",
+    "replay_seconds": 0.00014351900006204232,
+    "same_exact_basis": true,
+    "search_seconds": 0.0007136299999501716,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 10,
+      "direct_closure_rows": 10,
+      "nodes": 4,
+      "predecessors": 0
+    },
+    "name": "conservative_8",
+    "replay_seconds": 0.0002481310000348458,
+    "same_exact_basis": true,
+    "search_seconds": 0.0008357169999726466,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 58,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 23
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_9",
+    "replay_seconds": 0.00015531600001850165,
+    "same_exact_basis": true,
+    "search_seconds": 0.0002771549999351919,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 19,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 5
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 9,
+      "direct_closure_rows": 9,
+      "nodes": 4,
+      "predecessors": 0
+    },
+    "name": "conservative_10",
+    "replay_seconds": 0.0002836339999703341,
+    "same_exact_basis": true,
+    "search_seconds": 0.0025513020000289544,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 91,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 21
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_11",
+    "replay_seconds": 0.0001174190000483577,
+    "same_exact_basis": true,
+    "search_seconds": 0.00012572800005727913,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 7,
+      "direct_closure_rows": 7,
+      "nodes": 3,
+      "predecessors": 0
+    },
+    "name": "conservative_12",
+    "replay_seconds": 0.0002558810000437006,
+    "same_exact_basis": true,
+    "search_seconds": 0.0009831099999928483,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 45,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 16
+    }
+  },
+  {
+    "checked": {
+      "basis": 9,
+      "closure_rows": 24,
+      "direct_closure_rows": 24,
+      "nodes": 9,
+      "predecessors": 0
+    },
+    "name": "conservative_13",
+    "replay_seconds": 0.0005842079999638372,
+    "same_exact_basis": true,
+    "search_seconds": 0.005802534999929776,
+    "stats": {
+      "basis": 9,
+      "box_nodes": 204,
+      "expansions": 9,
+      "grid_points": 0,
+      "nodes": 9,
+      "pred_calls": 56
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_14",
+    "replay_seconds": 0.00010350499997002771,
+    "same_exact_basis": true,
+    "search_seconds": 7.014599998456106e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_15",
+    "replay_seconds": 0.00015701600000284088,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001902919999565711,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 6,
+      "direct_closure_rows": 5,
+      "nodes": 3,
+      "predecessors": 1
+    },
+    "name": "conservative_16",
+    "replay_seconds": 0.0009744179999415792,
+    "same_exact_basis": true,
+    "search_seconds": 0.0021238609999727487,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 17,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 13
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_17",
+    "replay_seconds": 0.00011550399995030602,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001513280000153827,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 8,
+      "direct_closure_rows": 6,
+      "nodes": 4,
+      "predecessors": 2
+    },
+    "name": "conservative_18",
+    "replay_seconds": 0.0002497910001011405,
+    "same_exact_basis": true,
+    "search_seconds": 0.0005247259999805465,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 24,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 18
+    }
+  },
+  {
+    "checked": {
+      "basis": 8,
+      "closure_rows": 20,
+      "direct_closure_rows": 16,
+      "nodes": 8,
+      "predecessors": 1
+    },
+    "name": "conservative_19",
+    "replay_seconds": 0.0005051520000733944,
+    "same_exact_basis": true,
+    "search_seconds": 0.003332244000034734,
+    "stats": {
+      "basis": 8,
+      "box_nodes": 146,
+      "expansions": 8,
+      "grid_points": 0,
+      "nodes": 8,
+      "pred_calls": 46
+    }
+  },
+  {
+    "checked": {
+      "basis": 5,
+      "closure_rows": 13,
+      "direct_closure_rows": 11,
+      "nodes": 5,
+      "predecessors": 0
+    },
+    "name": "conservative_20",
+    "replay_seconds": 0.00031054700002641766,
+    "same_exact_basis": true,
+    "search_seconds": 0.0010011030000214305,
+    "stats": {
+      "basis": 5,
+      "box_nodes": 81,
+      "expansions": 5,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 30
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 8,
+      "direct_closure_rows": 8,
+      "nodes": 3,
+      "predecessors": 0
+    },
+    "name": "conservative_21",
+    "replay_seconds": 0.00024077299997316004,
+    "same_exact_basis": true,
+    "search_seconds": 0.0008145440000362214,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 70,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 18
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "conservative_22",
+    "replay_seconds": 0.00011633499991603458,
+    "same_exact_basis": true,
+    "search_seconds": 0.000133636999976261,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_23",
+    "replay_seconds": 0.00016512199999851873,
+    "same_exact_basis": true,
+    "search_seconds": 0.00038686699997469987,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 23,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_24",
+    "replay_seconds": 0.00015167800006565813,
+    "same_exact_basis": true,
+    "search_seconds": 0.00026997499992376106,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 11,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 7,
+      "direct_closure_rows": 7,
+      "nodes": 3,
+      "predecessors": 0
+    },
+    "name": "conservative_25",
+    "replay_seconds": 0.00021677399990949198,
+    "same_exact_basis": true,
+    "search_seconds": 0.000750962999973126,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 70,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 16
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 2,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_26",
+    "replay_seconds": 0.00022943700002997502,
+    "same_exact_basis": true,
+    "search_seconds": 0.0021942210000815976,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 29,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 9
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_27",
+    "replay_seconds": 0.00017367999998896266,
+    "same_exact_basis": true,
+    "search_seconds": 0.0004226660000767879,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 21,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_28",
+    "replay_seconds": 0.00010396300001502823,
+    "same_exact_basis": true,
+    "search_seconds": 9.922800006734178e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_29",
+    "replay_seconds": 0.00029334900000321795,
+    "same_exact_basis": true,
+    "search_seconds": 0.00012238900001193542,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_30",
+    "replay_seconds": 0.00010065300000405841,
+    "same_exact_basis": true,
+    "search_seconds": 0.00022244400008730736,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 8,
+      "direct_closure_rows": 8,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_31",
+    "replay_seconds": 0.0002468349999844577,
+    "same_exact_basis": true,
+    "search_seconds": 0.0004917910000585834,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 35,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 17
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 4,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "conservative_32",
+    "replay_seconds": 0.00030396300007851096,
+    "same_exact_basis": true,
+    "search_seconds": 0.0005490080000072339,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 16,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 10
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_33",
+    "replay_seconds": 0.0002833879999570854,
+    "same_exact_basis": true,
+    "search_seconds": 0.0005292069999995874,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 8,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_34",
+    "replay_seconds": 0.00022576499998194777,
+    "same_exact_basis": true,
+    "search_seconds": 0.000865030999989358,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 17,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_35",
+    "replay_seconds": 0.00023064900005920208,
+    "same_exact_basis": true,
+    "search_seconds": 0.0002710439999873415,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 10,
+      "closure_rows": 25,
+      "direct_closure_rows": 25,
+      "nodes": 10,
+      "predecessors": 0
+    },
+    "name": "conservative_36",
+    "replay_seconds": 0.0006496700000298006,
+    "same_exact_basis": true,
+    "search_seconds": 0.004495085999906223,
+    "stats": {
+      "basis": 10,
+      "box_nodes": 286,
+      "expansions": 10,
+      "grid_points": 0,
+      "nodes": 10,
+      "pred_calls": 59
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_37",
+    "replay_seconds": 0.0001329650000343463,
+    "same_exact_basis": true,
+    "search_seconds": 0.00034799299999122013,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 8,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_38",
+    "replay_seconds": 0.00016318300004058983,
+    "same_exact_basis": true,
+    "search_seconds": 0.0003151700000216806,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 17,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_39",
+    "replay_seconds": 0.0001276810000945261,
+    "same_exact_basis": true,
+    "search_seconds": 0.00015221099999962462,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_40",
+    "replay_seconds": 9.823999994296173e-05,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010644200006026949,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 8,
+      "direct_closure_rows": 6,
+      "nodes": 3,
+      "predecessors": 1
+    },
+    "name": "conservative_41",
+    "replay_seconds": 0.0002537729999403382,
+    "same_exact_basis": true,
+    "search_seconds": 0.000605283000027157,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 54,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 17
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_42",
+    "replay_seconds": 0.00013041499994415062,
+    "same_exact_basis": true,
+    "search_seconds": 0.00022381600001608604,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_43",
+    "replay_seconds": 0.00011016200005542487,
+    "same_exact_basis": true,
+    "search_seconds": 0.00012534699999378063,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 6,
+      "closure_rows": 12,
+      "direct_closure_rows": 12,
+      "nodes": 6,
+      "predecessors": 0
+    },
+    "name": "conservative_44",
+    "replay_seconds": 0.0003775490000634818,
+    "same_exact_basis": true,
+    "search_seconds": 0.0021353289999979097,
+    "stats": {
+      "basis": 6,
+      "box_nodes": 132,
+      "expansions": 6,
+      "grid_points": 0,
+      "nodes": 6,
+      "pred_calls": 29
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_45",
+    "replay_seconds": 8.750699998927303e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.753599989726354e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_46",
+    "replay_seconds": 9.853699998529919e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.206300003621436e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_47",
+    "replay_seconds": 9.804400008306402e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.742800005416939e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_48",
+    "replay_seconds": 0.0001388409999663054,
+    "same_exact_basis": true,
+    "search_seconds": 0.00017976100002670137,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 8,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_49",
+    "replay_seconds": 0.00013305200002378115,
+    "same_exact_basis": true,
+    "search_seconds": 0.00023078499998518964,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 12,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 5,
+      "closure_rows": 25,
+      "direct_closure_rows": 25,
+      "nodes": 5,
+      "predecessors": 0
+    },
+    "name": "conservative_50",
+    "replay_seconds": 0.00046762900001340313,
+    "same_exact_basis": true,
+    "search_seconds": 0.0023530529999788996,
+    "stats": {
+      "basis": 5,
+      "box_nodes": 151,
+      "expansions": 5,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 54
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_51",
+    "replay_seconds": 0.0001259129999198194,
+    "same_exact_basis": true,
+    "search_seconds": 9.531500006687565e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_52",
+    "replay_seconds": 0.00023394699996970303,
+    "same_exact_basis": true,
+    "search_seconds": 0.00024261399994429667,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 8,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "conservative_53",
+    "replay_seconds": 0.0001279680000152439,
+    "same_exact_basis": true,
+    "search_seconds": 0.00018735899993771454,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 7,
+      "direct_closure_rows": 7,
+      "nodes": 3,
+      "predecessors": 0
+    },
+    "name": "conservative_54",
+    "replay_seconds": 0.0001903959999935978,
+    "same_exact_basis": true,
+    "search_seconds": 0.0009391090000008262,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 16,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 16
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_55",
+    "replay_seconds": 0.00012418699998306693,
+    "same_exact_basis": true,
+    "search_seconds": 0.00021844200000487035,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 8,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 5,
+      "closure_rows": 15,
+      "direct_closure_rows": 15,
+      "nodes": 5,
+      "predecessors": 0
+    },
+    "name": "conservative_56",
+    "replay_seconds": 0.00036351799997191847,
+    "same_exact_basis": true,
+    "search_seconds": 0.0014551049999909083,
+    "stats": {
+      "basis": 5,
+      "box_nodes": 90,
+      "expansions": 5,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 34
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_57",
+    "replay_seconds": 0.00011272200003986654,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001276560000178506,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_58",
+    "replay_seconds": 0.00012732000004689326,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011891199994806811,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 6,
+      "closure_rows": 15,
+      "direct_closure_rows": 12,
+      "nodes": 8,
+      "predecessors": 3
+    },
+    "name": "conservative_59",
+    "replay_seconds": 0.0004204779999099628,
+    "same_exact_basis": true,
+    "search_seconds": 0.0018929230000139796,
+    "stats": {
+      "basis": 6,
+      "box_nodes": 81,
+      "expansions": 7,
+      "grid_points": 0,
+      "nodes": 8,
+      "pred_calls": 38
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_60",
+    "replay_seconds": 0.00011565199997676245,
+    "same_exact_basis": true,
+    "search_seconds": 0.00016582299997480732,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_61",
+    "replay_seconds": 0.00016473499999847263,
+    "same_exact_basis": true,
+    "search_seconds": 0.00014238900007512711,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_62",
+    "replay_seconds": 0.0001761609998993663,
+    "same_exact_basis": true,
+    "search_seconds": 0.001622425000050498,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 55,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 5
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_63",
+    "replay_seconds": 0.00015942999993967533,
+    "same_exact_basis": true,
+    "search_seconds": 0.00028680400009761797,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 15,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_64",
+    "replay_seconds": 9.908999993513135e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.313199998610799e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_65",
+    "replay_seconds": 0.0001427380000222911,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011268699995525822,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_66",
+    "replay_seconds": 0.0011047179999650325,
+    "same_exact_basis": true,
+    "search_seconds": 0.00013886900001125468,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_67",
+    "replay_seconds": 0.00012137299995629292,
+    "same_exact_basis": true,
+    "search_seconds": 0.00021884000000227388,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_68",
+    "replay_seconds": 0.00010181799996189511,
+    "same_exact_basis": true,
+    "search_seconds": 8.909700000003795e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_69",
+    "replay_seconds": 0.00011812699995061848,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001563999999234511,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 9,
+      "direct_closure_rows": 7,
+      "nodes": 3,
+      "predecessors": 2
+    },
+    "name": "conservative_70",
+    "replay_seconds": 0.00030104600000413484,
+    "same_exact_basis": true,
+    "search_seconds": 0.0010962100000142527,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 21,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 19
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_71",
+    "replay_seconds": 0.00011107100010576687,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001270460001023821,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_72",
+    "replay_seconds": 0.00012932200002069294,
+    "same_exact_basis": true,
+    "search_seconds": 0.00024846200005868013,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 8,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 6,
+      "direct_closure_rows": 3,
+      "nodes": 3,
+      "predecessors": 1
+    },
+    "name": "conservative_73",
+    "replay_seconds": 0.00018570500003534107,
+    "same_exact_basis": true,
+    "search_seconds": 0.0003059150000126465,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 7,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 13
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_74",
+    "replay_seconds": 0.00013523300003726035,
+    "same_exact_basis": true,
+    "search_seconds": 0.00027126899999529996,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 10,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 10
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_75",
+    "replay_seconds": 0.000153609999983928,
+    "same_exact_basis": true,
+    "search_seconds": 0.0002853089999916847,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 6,
+      "closure_rows": 15,
+      "direct_closure_rows": 12,
+      "nodes": 6,
+      "predecessors": 0
+    },
+    "name": "conservative_76",
+    "replay_seconds": 0.00039282400007323304,
+    "same_exact_basis": true,
+    "search_seconds": 0.0020744629999853714,
+    "stats": {
+      "basis": 6,
+      "box_nodes": 101,
+      "expansions": 6,
+      "grid_points": 0,
+      "nodes": 6,
+      "pred_calls": 35
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_77",
+    "replay_seconds": 0.0011252350000177103,
+    "same_exact_basis": true,
+    "search_seconds": 0.00037205599994649674,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 31,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_78",
+    "replay_seconds": 0.00012970500006304064,
+    "same_exact_basis": true,
+    "search_seconds": 0.00018719700005931372,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_79",
+    "replay_seconds": 0.00012199100001453189,
+    "same_exact_basis": true,
+    "search_seconds": 0.00016923300006510544,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 10,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 7,
+      "direct_closure_rows": 7,
+      "nodes": 3,
+      "predecessors": 0
+    },
+    "name": "conservative_80",
+    "replay_seconds": 0.0002318649999324407,
+    "same_exact_basis": true,
+    "search_seconds": 0.000538052000024436,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 39,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 16
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 4,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_81",
+    "replay_seconds": 0.00012825399994653708,
+    "same_exact_basis": true,
+    "search_seconds": 0.00016802700008611282,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_82",
+    "replay_seconds": 8.432300001004478e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.055100009736634e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 6,
+      "direct_closure_rows": 6,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_83",
+    "replay_seconds": 0.00036479700008840155,
+    "same_exact_basis": true,
+    "search_seconds": 0.000358371999936935,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 17,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 13
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 4,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_84",
+    "replay_seconds": 0.00017033300002822216,
+    "same_exact_basis": true,
+    "search_seconds": 0.0007613989999981641,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 39,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 9
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_85",
+    "replay_seconds": 0.00011563999998998042,
+    "same_exact_basis": true,
+    "search_seconds": 0.00017641200008711166,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_86",
+    "replay_seconds": 0.00011223199999221833,
+    "same_exact_basis": true,
+    "search_seconds": 0.00022392500000023574,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 4,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_87",
+    "replay_seconds": 0.00017959299998437928,
+    "same_exact_basis": true,
+    "search_seconds": 0.0008075130000406716,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 29,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 10,
+      "direct_closure_rows": 6,
+      "nodes": 4,
+      "predecessors": 1
+    },
+    "name": "conservative_88",
+    "replay_seconds": 0.0002696349999951053,
+    "same_exact_basis": true,
+    "search_seconds": 0.0023653270000068005,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 44,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 22
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_89",
+    "replay_seconds": 0.00010988599990469083,
+    "same_exact_basis": true,
+    "search_seconds": 4.851899996083375e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 9,
+      "direct_closure_rows": 7,
+      "nodes": 4,
+      "predecessors": 0
+    },
+    "name": "conservative_90",
+    "replay_seconds": 0.00022318900005302567,
+    "same_exact_basis": true,
+    "search_seconds": 0.0005058560000179568,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 29,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 21
+    }
+  },
+  {
+    "checked": {
+      "basis": 13,
+      "closure_rows": 31,
+      "direct_closure_rows": 26,
+      "nodes": 13,
+      "predecessors": 5
+    },
+    "name": "conservative_91",
+    "replay_seconds": 0.0008602530000416664,
+    "same_exact_basis": true,
+    "search_seconds": 0.004640026999936708,
+    "stats": {
+      "basis": 13,
+      "box_nodes": 326,
+      "expansions": 13,
+      "grid_points": 0,
+      "nodes": 13,
+      "pred_calls": 74
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 4,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_92",
+    "replay_seconds": 0.0001667220000172165,
+    "same_exact_basis": true,
+    "search_seconds": 0.0008972629999561832,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 15,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 5,
+      "direct_closure_rows": 5,
+      "nodes": 2,
+      "predecessors": 0
+    },
+    "name": "conservative_93",
+    "replay_seconds": 0.00019972699999470933,
+    "same_exact_basis": true,
+    "search_seconds": 0.0004911179998998705,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 29,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 11
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_94",
+    "replay_seconds": 0.00010881500008963485,
+    "same_exact_basis": true,
+    "search_seconds": 9.53740000113612e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_95",
+    "replay_seconds": 0.00011474500001895649,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001454110000622677,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 2,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_96",
+    "replay_seconds": 0.00010813699998379889,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011309199999232078,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 4,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 3,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_97",
+    "replay_seconds": 0.00016485300000113057,
+    "same_exact_basis": true,
+    "search_seconds": 0.00015079600007084082,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 6,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_98",
+    "replay_seconds": 0.00010105199999088654,
+    "same_exact_basis": true,
+    "search_seconds": 8.736999996017403e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 1,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "conservative_99",
+    "replay_seconds": 0.00010767300000225077,
+    "same_exact_basis": true,
+    "search_seconds": 9.484400004566851e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 2,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_0",
+    "replay_seconds": 0.00028395699996508483,
+    "same_exact_basis": true,
+    "search_seconds": 9.972099996957695e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_1",
+    "replay_seconds": 8.3427999925334e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.8236000023061933e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_2",
+    "replay_seconds": 4.980000005616603e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.346699998019176e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_3",
+    "replay_seconds": 4.8665000008440984e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.328000002511544e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 5,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_4",
+    "replay_seconds": 0.0002789730000358759,
+    "same_exact_basis": true,
+    "search_seconds": 0.00015433900000516587,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_5",
+    "replay_seconds": 5.09230000034222e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.0206999983638525e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_6",
+    "replay_seconds": 7.42769999533266e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.8199999923781434e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_7",
+    "replay_seconds": 4.944199997680698e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.246400001444272e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 2
+    },
+    "name": "fifo_acyclic_8",
+    "replay_seconds": 0.0001199959999667044,
+    "same_exact_basis": true,
+    "search_seconds": 0.00013898100007736502,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_9",
+    "replay_seconds": 7.498500008296105e-05,
+    "same_exact_basis": true,
+    "search_seconds": 5.259099998511374e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_10",
+    "replay_seconds": 9.362899993448082e-05,
+    "same_exact_basis": true,
+    "search_seconds": 6.781800004773686e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_11",
+    "replay_seconds": 7.832100004634412e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.95150000006106e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 5,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_12",
+    "replay_seconds": 0.00012373100003060244,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011920600002213178,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_13",
+    "replay_seconds": 7.807700001194462e-05,
+    "same_exact_basis": true,
+    "search_seconds": 5.1432999953249237e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_14",
+    "replay_seconds": 0.00012715200000457116,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011077299996031797,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_15",
+    "replay_seconds": 7.627000002230488e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.742799990253843e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_16",
+    "replay_seconds": 0.00013171900002362236,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010906900001828035,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 7,
+      "closure_rows": 6,
+      "direct_closure_rows": 0,
+      "nodes": 7,
+      "predecessors": 6
+    },
+    "name": "fifo_acyclic_17",
+    "replay_seconds": 0.00022705399999267684,
+    "same_exact_basis": true,
+    "search_seconds": 0.00019976900000528985,
+    "stats": {
+      "basis": 7,
+      "box_nodes": 0,
+      "expansions": 7,
+      "grid_points": 0,
+      "nodes": 7,
+      "pred_calls": 12
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_18",
+    "replay_seconds": 7.126900004550407e-05,
+    "same_exact_basis": true,
+    "search_seconds": 5.307099991114228e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_19",
+    "replay_seconds": 0.00012031599999318132,
+    "same_exact_basis": true,
+    "search_seconds": 0.00012058100003287109,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_20",
+    "replay_seconds": 0.00012508399993294006,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010397400001238566,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_21",
+    "replay_seconds": 5.0031999990096665e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.2271999998556566e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_22",
+    "replay_seconds": 0.00011328499999763153,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001011069999776737,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_23",
+    "replay_seconds": 0.00010143300005438505,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001070780000418381,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 5,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 5
+    },
+    "name": "fifo_acyclic_24",
+    "replay_seconds": 0.00015460899999197864,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011994599992704025,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 10
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_25",
+    "replay_seconds": 7.742499997220875e-05,
+    "same_exact_basis": true,
+    "search_seconds": 9.469500002978748e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_26",
+    "replay_seconds": 0.00010914599999978236,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010296499999640218,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_27",
+    "replay_seconds": 0.00010039300002517848,
+    "same_exact_basis": true,
+    "search_seconds": 6.5191000089726e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_28",
+    "replay_seconds": 4.8321999997824605e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.3241000096495554e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_29",
+    "replay_seconds": 4.929800002173579e-05,
+    "same_exact_basis": true,
+    "search_seconds": 5.06509999240734e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 5,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_30",
+    "replay_seconds": 0.00013593000005585054,
+    "same_exact_basis": true,
+    "search_seconds": 0.00012876799996774935,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_31",
+    "replay_seconds": 5.297500001688604e-05,
+    "same_exact_basis": true,
+    "search_seconds": 5.055200006154337e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_32",
+    "replay_seconds": 4.8974999913298234e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.184299998792994e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 2
+    },
+    "name": "fifo_acyclic_33",
+    "replay_seconds": 9.29459999952087e-05,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010131700003057631,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_acyclic_34",
+    "replay_seconds": 4.67980000848911e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.239400007259974e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_35",
+    "replay_seconds": 7.731399989552301e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.397599995329074e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 3,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_36",
+    "replay_seconds": 0.00014771500002552784,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010048799993001012,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 3,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 1
+    },
+    "name": "fifo_acyclic_37",
+    "replay_seconds": 7.560300002751319e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.824800009828323e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 4,
+      "closure_rows": 5,
+      "direct_closure_rows": 0,
+      "nodes": 4,
+      "predecessors": 5
+    },
+    "name": "fifo_acyclic_38",
+    "replay_seconds": 0.00013925799999014998,
+    "same_exact_basis": true,
+    "search_seconds": 0.0001235419999829901,
+    "stats": {
+      "basis": 4,
+      "box_nodes": 0,
+      "expansions": 4,
+      "grid_points": 0,
+      "nodes": 4,
+      "pred_calls": 10
+    }
+  },
+  {
+    "checked": {
+      "basis": 3,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 5,
+      "predecessors": 4
+    },
+    "name": "fifo_acyclic_39",
+    "replay_seconds": 0.00015336900003148912,
+    "same_exact_basis": true,
+    "search_seconds": 0.00012478700000428944,
+    "stats": {
+      "basis": 3,
+      "box_nodes": 0,
+      "expansions": 3,
+      "grid_points": 0,
+      "nodes": 5,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_0",
+    "replay_seconds": 9.419600007731788e-05,
+    "same_exact_basis": true,
+    "search_seconds": 9.450000004562753e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_1",
+    "replay_seconds": 8.626999999705731e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.377300002848642e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_decreasing_2",
+    "replay_seconds": 4.714299996066984e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.075500001159526e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 3
+    },
+    "name": "fifo_decreasing_3",
+    "replay_seconds": 7.096699994235678e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.37469999876339e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_4",
+    "replay_seconds": 8.387599996240169e-05,
+    "same_exact_basis": true,
+    "search_seconds": 9.777299999313982e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_5",
+    "replay_seconds": 0.00011517699999785691,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010282800008099002,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_6",
+    "replay_seconds": 9.061000002930086e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.651899997857981e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_decreasing_7",
+    "replay_seconds": 6.783399999221729e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.05910000406584e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_8",
+    "replay_seconds": 8.875700007138221e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.757600005537824e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_9",
+    "replay_seconds": 8.559399998375739e-05,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010832200007371284,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_10",
+    "replay_seconds": 8.74629999998433e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.622699999705219e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_11",
+    "replay_seconds": 0.00012709199995697418,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010637500008670031,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 2
+    },
+    "name": "fifo_decreasing_12",
+    "replay_seconds": 6.430100006582506e-05,
+    "same_exact_basis": true,
+    "search_seconds": 6.95880000876059e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_13",
+    "replay_seconds": 0.0001087670000288199,
+    "same_exact_basis": true,
+    "search_seconds": 0.0003949309999597972,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 2
+    },
+    "name": "fifo_decreasing_14",
+    "replay_seconds": 7.226699995044328e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.8561999998783e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_decreasing_15",
+    "replay_seconds": 9.337599999525992e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.169600006458495e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_16",
+    "replay_seconds": 9.35760000402297e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.158599999002035e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_decreasing_17",
+    "replay_seconds": 4.823699998723896e-05,
+    "same_exact_basis": true,
+    "search_seconds": 3.184799993505294e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 3,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 3
+    },
+    "name": "fifo_decreasing_18",
+    "replay_seconds": 7.314399999813759e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.510099999308295e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 6
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_19",
+    "replay_seconds": 9.417000001121778e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.062899999255023e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 2
+    },
+    "name": "fifo_decreasing_20",
+    "replay_seconds": 6.398999994416954e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.929599992919975e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_21",
+    "replay_seconds": 0.00011420699991049332,
+    "same_exact_basis": true,
+    "search_seconds": 8.919699996567942e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_22",
+    "replay_seconds": 0.0001432330000170623,
+    "same_exact_basis": true,
+    "search_seconds": 8.966199993665214e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "fifo_decreasing_23",
+    "replay_seconds": 6.183900006817566e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.475100001855026e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_24",
+    "replay_seconds": 9.48819999848638e-05,
+    "same_exact_basis": true,
+    "search_seconds": 0.00011030399991796003,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "fifo_decreasing_25",
+    "replay_seconds": 5.777399996986787e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.213900001559523e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_26",
+    "replay_seconds": 0.000110921999976199,
+    "same_exact_basis": true,
+    "search_seconds": 7.071400000313588e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_27",
+    "replay_seconds": 9.068100007425528e-05,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010874600002352963,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "fifo_decreasing_28",
+    "replay_seconds": 5.9915999941040354e-05,
+    "same_exact_basis": true,
+    "search_seconds": 6.783799994991568e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_29",
+    "replay_seconds": 8.905800007141806e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.104700000581943e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 1,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 1
+    },
+    "name": "fifo_decreasing_30",
+    "replay_seconds": 9.315500005868671e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.78860000991699e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 2
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_31",
+    "replay_seconds": 0.00011854100000618928,
+    "same_exact_basis": true,
+    "search_seconds": 6.704099996568402e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_32",
+    "replay_seconds": 0.00012370000001737935,
+    "same_exact_basis": true,
+    "search_seconds": 6.763500005035894e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_33",
+    "replay_seconds": 9.237300002951088e-05,
+    "same_exact_basis": true,
+    "search_seconds": 7.047700000839541e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 2
+    },
+    "name": "fifo_decreasing_34",
+    "replay_seconds": 6.733700001859688e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.802699994703289e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 2,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 2
+    },
+    "name": "fifo_decreasing_35",
+    "replay_seconds": 9.193500000037602e-05,
+    "same_exact_basis": true,
+    "search_seconds": 5.005100001653773e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 4
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_36",
+    "replay_seconds": 9.157099998446938e-05,
+    "same_exact_basis": true,
+    "search_seconds": 0.00010439099992254341,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_37",
+    "replay_seconds": 8.966199993665214e-05,
+    "same_exact_basis": true,
+    "search_seconds": 8.449000006294227e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  },
+  {
+    "checked": {
+      "basis": 1,
+      "closure_rows": 0,
+      "direct_closure_rows": 0,
+      "nodes": 1,
+      "predecessors": 0
+    },
+    "name": "fifo_decreasing_38",
+    "replay_seconds": 4.711600001883198e-05,
+    "same_exact_basis": true,
+    "search_seconds": 4.849799995554349e-05,
+    "stats": {
+      "basis": 1,
+      "box_nodes": 0,
+      "expansions": 1,
+      "grid_points": 0,
+      "nodes": 1,
+      "pred_calls": 0
+    }
+  },
+  {
+    "checked": {
+      "basis": 2,
+      "closure_rows": 4,
+      "direct_closure_rows": 0,
+      "nodes": 2,
+      "predecessors": 4
+    },
+    "name": "fifo_decreasing_39",
+    "replay_seconds": 0.00010858099994948134,
+    "same_exact_basis": true,
+    "search_seconds": 8.585400007632416e-05,
+    "stats": {
+      "basis": 2,
+      "box_nodes": 0,
+      "expansions": 2,
+      "grid_points": 0,
+      "nodes": 2,
+      "pred_calls": 8
+    }
+  }
+]

@@ -1,0 +1,85 @@
+\section{Executed experiments and what they establish}
+\label{sec:experiments}
+\subsection{Environment, corpus, and evidence units}
+The implementation was executed with Python 3.13.5, SymPy 1.14.0, and pytest 9.0.2 on an x86-64 Linux environment. The seeded randomized checks use seed 20260915. Exact versions, platform strings, per-case timings, and raw records are included under \code{results/}. No Lean or Lake executable was found, so no Lean elaboration, kernel checking, or tactic benchmark was run.
+
+The primary corpus contains 24 hand-designed examples: 19 closed sentences and five free-parameter problems. They produce 356 plane cells in total. The largest projection degree in this corpus is four; the largest displayed inverse-relation degree in $Y$ is five. These are deliberately small examples selected to expose semantic edge cases, not a representative distribution of Lean arithmetic goals.
+
+\begin{center}
+\begin{tabular}{p{0.47\textwidth}r p{0.32\textwidth}}
+\toprule
+Experiment & Count & Observed result\\
+\midrule
+Primary atlases & 24 & All replayed; expected closed verdicts matched\\
+Affine-transformed closed cases & 76 & All expected verdicts matched\\
+Corrupted certificates/problems & 540 & All rejected\\
+Unit and regression tests & 42 & All passed\\
+Rational polynomial root problems & 250 & Exact SymPy root-count agreement\\
+Localized algebraic expressions & 200 & 194 sign agreements; 6 zero denominators rejected\\
+Independent rational fibre queries & 336 & All agreed; no oracle-unknown results\\
+Exact free-parameter cells & 25 & All matched five independent region descriptions\\
+Transported selector-cell probes & 237 & Required witness/counterexample truth held\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These rows must not be added into a purported number of independently solved theorems. The 42 tests include replay of the 24 primary examples. The 76 transformed cases preserve those examples' closed truth by construction. The rational fibre and selector probes overlap in parameter values. Mutation controls test rejection rather than theorem discovery. Each row has a distinct purpose and an explicitly recorded unit.
+
+\subsection{Primary acceptance and independent parameter-region checks}
+The primary producer emits a source problem, a complete certificate, and a strategy descriptor for every example. The replay checker validates all finite algebraic premises and the quantifier folds. Expected closed verdicts were supplied independently in the fixture definitions; the free-parameter cases additionally use the following independent exact answers:
+\begin{center}
+\begin{tabular}{p{0.54\textwidth}p{0.37\textwidth}}
+\toprule
+Quantified relation & Exact parameter region\\
+\midrule
+$\exists y:\ y^2=2\wedge(y-x)^2=2$ & $x=0\vee x^2=8$\\
+$\exists y:\ y^2\leq x\wedge(y-2)^2\leq x$ & $x\geq1$\\
+$\forall y:\ y^2+xy+1>0$ & $x^2<4$\\
+$\exists y:\ xy^2+y-1=0$ & $4x+1\geq0$\\
+$\exists y:\ y^2=x\wedge y\ne0$ & $x>0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The region checker evaluates these descriptions at the exact algebraic base roots and at the rational sector samples. It checks all 25 base cells, including strict endpoints. For example, the quadratic-positive region excludes $x=\pm2$, while the quadratic-existence region includes its double-root boundary. The quadratic-positive example is also a standard real-QE illustration, not a new mathematical result~\cite{england}.
+
+The overlapping-interval answer has an elementary independent proof: if both $y^2$ and $(y-2)^2$ are at most $x$, then at least one of $|y|$ and $|y-2|$ is at least one, so $x\geq1$; conversely $y=1$ works. This gives a useful oracle independent of the projection construction.
+
+\subsection{Differential arithmetic and fibre oracles}
+For 250 random rational polynomials of degree one through six, the checker arithmetic isolates the distinct real roots. SymPy independently counts them and validates every emitted cut. The test compares exact counts and rational intervals rather than floating approximations.
+
+The 200 localized-coefficient trials use the reducible defining polynomial $(X^2-2)(X^2-3)$ at the selected root $\sqrt2$. Random numerator and denominator polynomials produce 194 defined expressions whose signs agree with exact SymPy simplification. Six denominators vanish at the selected root and are rejected. The dedicated zero-divisor control also checks that a denominator vanishing at a \emph{different} root is allowed.
+
+For each of the 24 primary problems, the independent fibre oracle fixes $x$ at fourteen rational probes ranging from $-5$ to $5$, including $0$, $\pm1/4$, and $\pm1/2$. It uses SymPy's exact univariate inequality reduction on a disjunctive normal form, with universal quantification handled by negating an existential counterexample query. All 336 attempts agree with the corresponding atlas truth. The runner has an explicit oracle-unknown bucket for unsupported reductions; no such result occurred in this run. This check validates whole one-dimensional fibres at off-sample parameters, not merely a finite list of $y$ values.
+
+Separately, the selector transport test reconstructs the fibre at the same parameter probes and checks the originally selected root ordinal or sector. It has 237 applicable probes and all have the required truth. This test uses the replay arithmetic rather than an independent arithmetic backend. Its role is to catch indexing or transport mistakes that an inner-quantifier truth check alone could miss. It does not evaluate a generated Lean witness program, because no such program has been generated.
+
+\subsection{Metamorphic cases and replay without search libraries}
+Four invertible affine substitutions are applied to each of the 19 closed examples:
+\[
+ (x,y)\mapsto(x+1,y-1),\quad(-x,y+2),\quad
+ (2x-1,-y+1),\quad(-2x+3,2y-3).
+\]
+Each coordinate transformation is a bijection of $\R$, so it preserves the truth of either quantifier on that coordinate. All 76 resulting problems are solved and replayed, with their expected closed truth inherited through this elementary equivalence. Negative scales are included to exercise order changes without hand-modifying the formulas' inequalities.
+
+Both the primary and transformed certificate corpora are replayed with \code{python -S}. The recorded replay reports confirm that site packages are disabled and no \code{sympy} module is loaded. These runs validate the package boundary: a saved certificate can be audited without the producer or its computer-algebra dependency. They do not validate the checker by a second implementation.
+
+\subsection{Corruption controls}
+The 540 targeted mutations include missing base stacks, omitted base or fibre roots, invalid cuts, altered sign rows, wrong projected truth, missing derivative or pair guards, zero guards, modified factorization scalars, absent factor powers, out-of-range selections, malformed quantifiers, and invalid atom references. Canonical representation controls reject floats masquerading as exact rationals, strings such as \code{0/1}, and Boolean values masquerading as integer sign or index entries.
+
+Each mutation starts from an accepted original problem/certificate pair and changes a condition that should invalidate acceptance. All are rejected. This is evidence that the intended rejection checks are exercised, not an estimate of resistance to arbitrary malicious inputs. No full adversarial decoder audit, fuzzing campaign over arbitrary byte strings, or denial-of-service hardening is claimed.
+
+\subsection{Observed timings, with the right denominator}
+In the recorded primary run, the sum of the 24 producer times is approximately $0.507$ seconds and the sum of their replay times is approximately $0.239$ seconds. The 76-case transformed run takes approximately $2.63$ seconds in total. These are single-environment observations for tiny inputs; they exclude any Lean proof reconstruction and are not comparisons against \code{grind}, \code{nlinarith}, an industrial CAD solver, or Forge's other prototypes.
+
+The certificate structure is more informative than these timings. The tests show that a small exact implementation can represent algebraic witnesses, isolated infeasible parameters, strict sectors, and degree drops in one auditable language. A meaningful performance evaluation must later measure coefficient growth, cell growth, replay proof size, and end-to-end Lean resource consumption on independently selected goals.
+
+\subsection{A preserved failure and a code-review repair}
+The first differential run failed before reaching the full fibre oracle: the symbolic conversion of an empty sparse polynomial returned Python's integer zero, which has no SymPy \code{subs} method. The conversion now starts its sum with SymPy's exact zero. The original traceback is retained in \code{results/differential-initial-failure.log}; the successful rerun is separate. No check was weakened to obtain the successful result.
+
+A separate code-review repair removed a misleading algebraic-element hash and replaced memoization with explicit representation keys, as described in Section~\ref{sec:arithmetic}. The final unit tests also cover the zero-polynomial conversion, endpoint convention, reducer behavior, duplicate JSON keys, and a forced resource-limit outcome. The report does not count either repair as evidence of a previously accepted invalid mathematical certificate; the observed failure was a test-interface exception.
+
+\subsection{What remains unestablished}
+The Python arithmetic and checker are not formally verified. The producer and checker share some computational code. The corpus is small and correlated. There is no performance comparison with existing Lean tactics, no generic multivariate CAD extension, no generated Lean real-root strategy, and no kernel-checked atlas certificate. External SymPy factorization is not bounded by the checker's internal arithmetic counters. Some representation caps are rejection limits rather than a fully uniform resource-accounting system.
+
+These limitations identify the next engineering work; they do not reduce the mathematical content of the proposed fragment. The useful result of this delivery is an exact, executable baseline with a concrete certificate theorem and failure-sensitive tests. It gives Forge a larger witness language and a nonlinear quantifier mechanism that can now be developed against real artifacts rather than an architectural sketch.

@@ -1,0 +1,178 @@
+{
+  "schema": "forge.atlas.certificate/1",
+  "factors": [
+    [
+      [
+        0,
+        0,
+        "3"
+      ],
+      [
+        0,
+        1,
+        "-6"
+      ],
+      [
+        0,
+        2,
+        "2"
+      ],
+      [
+        1,
+        0,
+        "1"
+      ]
+    ]
+  ],
+  "factorizations": [
+    {
+      "scalar": "2",
+      "powers": [
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "derivative_guards": [
+    {
+      "a": [
+        [
+          0,
+          0,
+          "4"
+        ]
+      ],
+      "b": [
+        [
+          0,
+          0,
+          "3"
+        ],
+        [
+          0,
+          1,
+          "-2"
+        ]
+      ],
+      "guard": [
+        "-6",
+        "4"
+      ],
+      "factor": 0
+    }
+  ],
+  "pair_guards": [],
+  "projection": [
+    "-3/2",
+    "1"
+  ],
+  "base_roots": [
+    [
+      "3/2",
+      "3/2"
+    ]
+  ],
+  "stacks": [
+    {
+      "sample": "1/2",
+      "y_roots": [
+        [
+          "25/32",
+          "15/16"
+        ],
+        [
+          "35/16",
+          "75/32"
+        ]
+      ],
+      "y_samples": [
+        "-7/32",
+        "25/16",
+        "107/32"
+      ],
+      "signs": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          -1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "value": true,
+      "selection": 1
+    },
+    {
+      "sample": null,
+      "y_roots": [
+        [
+          "3/2",
+          "3/2"
+        ]
+      ],
+      "y_samples": [
+        "1/2",
+        "5/2"
+      ],
+      "signs": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "truths": [
+        false,
+        true,
+        false
+      ],
+      "value": true,
+      "selection": 1
+    },
+    {
+      "sample": "5/2",
+      "y_roots": [],
+      "y_samples": [
+        "0"
+      ],
+      "signs": [
+        [
+          1
+        ]
+      ],
+      "truths": [
+        false
+      ],
+      "value": false,
+      "selection": null
+    }
+  ],
+  "truth_by_x": [
+    true,
+    true,
+    false
+  ],
+  "closed_value": false,
+  "selected_x": 2
+}

@@ -1,0 +1,28 @@
+{
+  "context": [
+    "x",
+    "y"
+  ],
+  "formula": {
+    "op": "iff",
+    "left": {
+      "op": "le",
+      "coeff": {
+        "x": -3,
+        "y": 2
+      },
+      "rhs": -7
+    },
+    "right": {
+      "op": "not",
+      "arg": {
+        "op": "le",
+        "coeff": {
+          "x": 3,
+          "y": -2
+        },
+        "rhs": 6
+      }
+    }
+  }
+}

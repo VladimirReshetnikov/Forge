@@ -1,0 +1,62 @@
+\section{Executed experiments and what they establish}
+\label{sec:experiments}
+All numbers in this section come from the delivered result files. The main run used Python 3.13.5 on Linux, seed \code{20260915}, and no third-party libraries. Its recorded elapsed time was approximately 15.68 seconds. This is one authoring-environment observation, not a portable runtime promise or a statistical benchmark. The optional external corroboration used SymPy 1.14.0. No Lean executable was available, so all Lean compilation and kernel-replay statuses are \code{NOT_RUN}.
+
+\subsection{Main case construction and oracle separation}
+The 153 small group instances consist of all 36 ordered pairs of permutations on three points, 72 seeded random generator lists at degrees two through seven, and 45 named-family instances at degrees zero through eight. Repeated mathematical groups under different generator lists are intentional: the certificate must remain bound to the supplied generating data. They are not 153 nonisomorphic groups.
+
+The independent small group oracle traverses a right Cayley graph. The chain producer uses incremental stabilizer construction. Coloring counts are compared with connected components of the full assignment graph, not with another Burnside implementation. Canonical images are compared with explicit images under the independently enumerated small group. These differing computations are stronger evidence than merely replaying the producer's own residual claims.
+
+\begin{tabularx}{\textwidth}{@{}YrY@{}}
+\toprule
+Recorded category & Count & Interpretation\\
+\midrule
+Small chain instances & 153 & Orders compared with complete small-group enumeration.\\
+Membership queries & 8,028 & 3,852 positive and 4,176 negative; exhaustive through degree five, sampled above it.\\
+Generic canonical queries & 296 & Compared with the exact small-group minimum; 24,710 total cover nodes.\\
+Small family-image queries & 208 & Exact symmetric/alternating shortcut compared with full group images.\\
+Cycle inventories & 40 & Independently replayed through unique normal forms.\\
+Color-count queries & 160 & Four color counts per inventory, compared with assignment orbits.\\
+Fixed-weight queries & 220 & Compared with binary assignment orbits.\\
+Small family-count comparisons & 108 & Family formula compared with the same small assignment-orbit oracle.\\
+Large chain instances & 7 & No full enumeration; exact formula checks and separate SymPy corroboration.\\
+Large family images & 5 & Explicit transporters and exact recognized-family minimum rule.\\
+Malformed/corrupted controls & 33 & Rejected by the main suite.\\
+CNF gates & 5 / 10 & Five accepted invariant inputs; ten rejected asymmetric variants.\\
+Resource-refusal controls & 5 & All reported as unknown, not mathematical negatives.\\
+\bottomrule
+\end{tabularx}
+
+These rows are different and sometimes overlapping units. They must not be added into a grand ``proofs solved'' or success-rate figure. For example, the same recognized family is tested through both a cycle inventory and a closed formula, and each chain may support many membership queries.
+
+\subsection{Large certificates}
+\input{large-results}
+The order of $\Sym_{40}$ in the recorded run is
+\[
+  815915283247897734345611269596115894272000000000=40!.
+\]
+Its chain certificate contains 187 word-DAG nodes and 820 transversal entries, serialized in 11,975 compact JSON bytes. The checker performed 41,861 Schreier checks. The degree is 40; the group order is not a count of explicitly visited permutations. The 820 entries describe the chain, and the separate canonical and polynomial certificates have their own sizes.
+
+For the five recognized large symmetric/alternating cases, the corpus additionally stores 25 evaluations of the closed counting formulas. Those evaluations are replayed but are not 25 independent oracle comparisons. The small tests and the mathematical derivations provide different forms of evidence for the formulas.
+
+\subsection{Search-free replay}
+The main corpus contains 160 bundles: the 153 small cases and seven large cases. A standalone command runs the checker under \code{python -S}, which disables site-package loading. The replay script verifies that the producer module was not imported. It rechecks all chains, membership answers, image certificates, cycle inventories, stored counting evaluations, and corpus identities. Its result is \code{REPLAY_PASSED}.
+
+The replay checks a nonempty manifest, exact filename coverage, duplicate-free manifest entries, and matching bundle names. It does not permit an empty directory to count as a successful run. Scripts explicitly refuse optimized Python execution with \code{-O}, because their regression assertions must remain enabled.
+
+There are limits to this separation. Python itself, integer arithmetic, tuple representations, and ordinary programmer assumptions remain shared. The checker is not formally verified, and independently written implementations can have correlated mistakes. Search-free replay is evidence of modularity and resistance to fabricated search output; it is not kernel soundness.
+
+\subsection{The supplementary Reynolds run}
+The separate projection suite contains 25 small cases: five group families at each degree two through six. Each exact projection is compared with explicit averaging over every small group element. Each projected polynomial is then projected again and checked for idempotence. A twenty-sixth case is the $\Sym_{40}$ mixed cubic with a 1,560-element monomial orbit.
+
+Four malformed projection certificates are rejected: omitted source coverage, a false average coefficient, an invalid generator edge, and a Boolean exponent. A separate \code{python -S} replay checks all 26 stored bundles without importing either producer. The main suite and the Reynolds suite are recorded separately, rather than silently changing the main run's counts.
+
+\subsection{Regression tests, failures, and corrections}
+Twelve standard-library \code{unittest} methods pass. They include multiplication order, the empty action, incomplete stabilizer chains, incomplete orbits with a recomputed order product, malformed JSON, Boolean/integer confusion, alternating parity, the $D_{10}$ count, semantic authorization, and resource-outcome separation. These are twelve test methods, not twelve theorem proofs.
+
+The development history retains three noteworthy events. First, the generic $\Sym_{15}$ image search hit its 20,000-node cap; the family-specific route was added rather than relabeling that failure. Second, manual decoder review found that an orbit-root comparison could accept \code{False} as the integer zero because of Python equality. The root check was changed to exact integer validation and explicit null tests, and a regression was added. Third, the first Reynolds mutation harness tried to mutate the second node of a singleton orbit and raised \code{IndexError}; it was corrected to select a nontrivial orbit and the full supplementary suite was rerun.
+
+The JSON decoder rejects duplicate keys, floating-point mathematical inputs, non-finite constants, invalid permutations, unexpected fields, forward DAG references, and several size violations. These controls do not constitute hostile-input hardening. A production worker needs explicit total allocation, bit-length, recursion-depth, elapsed-time, and cancellation policies. Operating-system isolation remains advisable for external search.
+
+\subsection{Claims not supported by this evidence}
+No \code{forge} tactic was installed. No Lean certificate checker was implemented or compiled. No comparison with \code{grind}, Aesop, LeanHammer, \code{nlinarith}, GAP, or nauty was measured. No end-to-end source reifier was exercised. The cone-reduction adapter and constrained-coloring counter are designs, not delivered integrations. No generic polynomial-time canonicalizer or arbitrary-group cycle-inventory algorithm is claimed.

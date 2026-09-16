@@ -1,0 +1,112 @@
+\section{Quantifier elimination without losing long witnesses}\label{sec:projection}
+
+\subsection{Boolean operations are straightforward only after totalization}
+Conjunction, disjunction and equivalence are synchronous products. A product state records the two component states; its successor records their successors on the same letter. Acceptance applies the corresponding Boolean operator to their acceptance bits. The producer explores only reachable pairs.
+
+Negation preserves the initial state and transitions and flips every acceptance bit. This operation is correct because every DFA is complete: every state has exactly one successor for every letter. Flipping the finals of a partial machine is not a valid implementation of complement unless the missing transitions first acquire a rejecting sink. The checker rejects incomplete transition tables rather than guessing their intended meaning.
+
+An explicit quotient map may reduce a DFA between operations. Minimality is irrelevant to correctness. The relevant equations are preservation of the start state, transitions, and acceptance. The certificate checker tests those equations, not the producer's partition-refinement history.
+
+\subsection{The projection error}
+Let \(A\) represent \(\phi(\vec x,y)\). On a visible letter \(d\in\Sigma_k\), projecting away the last track creates NFA successors
+\[
+ \Delta(q,d)=\{\delta(q,(d,0)),\delta(q,(d,1))\}.
+\]
+Ordinary letterwise projection guesses exactly one hidden bit per visible input bit. It therefore recognizes witnesses fitting in the \emph{chosen representation length}, not all natural-number witnesses.
+
+Take \(\phi(x,y)\equiv y=2x+1\). The minimal encoding of \(x=1\) has one bit, while its only witness \(y=3\) needs two. The same-length projection rejects the one-bit input, but accepts a zero-padded two-bit representation of the same input. At \(x=0\), the empty encoding leaves no hidden bit positions at all, despite the witness \(y=1\).
+
+This is a semantic error, not a bad heuristic. It can reverse a theorem's truth value after complementation. The leading-zero issue is explicitly addressed in Sheng's formalization~\cite{sheng,aeacu-projection}; the least-significant-first implementation here must solve its zero-suffix counterpart.
+
+\subsection{The correct language operation}
+Write \(\pi\) for deletion of the last track. The desired existential language is
+\begin{equation}\label{eq:projection-language}
+ L_{\exists y\phi}
+ =\{w:\exists t\ge0,\ w0_k^t\in\pi(L_A)\}
+ =\pi(L_A)/0_k^*.
+\end{equation}
+The quotient by the regular zero-tail language is what allows a hidden value longer than the visible tuple. No arbitrary upper bound on the hidden integer appears in this equation.
+
+Instead of performing the correction after an exponential subset construction, compute it on the original DFA states. Define
+\begin{equation}\label{eq:tail}
+ E=\mu X\left(F\cup
+ \{q:\exists b\in\bits,\ \delta(q,(0_k,b))\in X\}\right),
+\end{equation}
+where \(F\) is the original accepting set. Thus \(q\in E\) means that some finite sequence of zero-visible letters and chosen hidden bits reaches \(F\). Reverse breadth-first search computes this set using only two outgoing edges per original state.
+
+Now determinize the projected NFA. A subset state \(S\) has transition
+\begin{equation}\label{eq:subset-step}
+ S\xrightarrow{d}
+ \bigcup_{q\in S,\ b\in\bits}\{\delta(q,(d,b))\},
+\end{equation}
+starts at \(\{q_0\}\), and accepts exactly when \(S\cap E\ne\varnothing\). Zero-tail saturation changes the final test, not these ordinary transitions.
+
+\begin{theorem}[Existential compilation]\label{thm:exists}
+If \(A\) represents \(\phi\) on every encoding, the subset automaton with transitions \eqref{eq:subset-step} and final condition \(S\cap E\ne\varnothing\) represents \(\exists y\,\phi\) on every encoding.
+\end{theorem}
+\begin{proof}
+After reading a visible word \(w\), induction on its length shows that its subset consists exactly of source states obtainable by choosing a hidden bit at every position of \(w\). If that subset intersects \(E\), some such state has a finite zero-visible tail to an original final state. Concatenating the choices gives a joint word whose visible value is \(\val(w)\) and whose hidden value is some \(y\). Source correctness yields \(\phi(\val(w),y)\).
+
+Conversely, suppose \(\phi(\val(w),y)\). Choose a length at least both \(|w|\) and the bit length of \(y\). Extend \(w\) with zeros to that length and insert the digits of \(y\) on the hidden track, padded with zeros if necessary. The joint word represents a satisfying tuple, so the source accepts it. The state after the first \(|w|\) positions lies in the projected subset and reaches an original final along the remaining zero-visible tail. It belongs to \(E\), proving acceptance of the original, possibly very short, visible word.
+\end{proof}
+
+\subsection{A rank and its closed complement certify the exact closure}
+The producer returns, for each source state, either \code{null} or a natural rank \(r(q)\). Each positive-rank state also carries a bit \(b(q)\). Let \(E_r\) be the non-null states. The checker requires:
+\begin{align}
+ &F\subseteq E_r,\label{eq:tail-base}\\
+ &r(q)=0\ \Longrightarrow\ q\in F,\label{eq:tail-zero}\\
+ &r(q)>0\ \Longrightarrow\ r(\delta(q,(0_k,b(q))))<r(q),\label{eq:tail-descent}\\
+ &q\notin E_r\ \Longrightarrow\
+   \delta(q,(0_k,0)),\delta(q,(0_k,1))\notin E_r.\label{eq:tail-exclusion}
+\end{align}
+Every referenced successor rank must be non-null. The wire format bounds all ranks below the source state count.
+
+\begin{lemma}[Exactness of the tail receipt]\label{lem:tail}
+Conditions \eqref{eq:tail-base}--\eqref{eq:tail-exclusion} imply \(E_r=E\).
+\end{lemma}
+\begin{proof}
+Rank induction proves \(E_r\subseteq E\): rank zero is already final, and a positive rank takes a recorded edge to a smaller rank. Conversely, the complement of \(E_r\) cannot reach \(E_r\) by any zero-visible edge, and contains no original final. It therefore contains no state that reaches \(F\), so \(E\subseteq E_r\).
+\end{proof}
+
+Both halves matter. Descent alone prevents spurious witnesses but permits legitimate states to be omitted. That omission becomes unsound when a later negation turns false rejection into acceptance. Complement closure alone can admit a useless cycle disconnected from the finals. The combination establishes an \emph{equality of languages}, which is the invariant required under arbitrary quantifier alternation.
+
+\begin{corollary}[Bounded tail, unbounded input]\label{cor:tail-bound}
+If a source automaton with \(Q\) states has any suitable zero-visible tail, it has one of length at most \(Q-1\).
+\end{corollary}
+\begin{proof}
+A shortest path to an accepting state repeats no state. Alternatively, the producer's reverse breadth-first ranks are shortest-path distances and are below \(Q\).
+\end{proof}
+
+This is a bound derived from the already constructed finite source graph. It is not a guessed word-length cutoff. It bounds the \emph{extra} digits a witness may need beyond a particular visible encoding, and the input itself can have arbitrarily many digits.
+
+\subsection{The complete compiler}
+\begin{lstlisting}
+compile(context, formula):
+    if formula is an atom:
+        explore exact finite carry / residue / digit states
+        emit an atomic-label receipt
+    if formula is NOT child:
+        compile child; complement the complete DFA
+    if formula is left AND/OR/IFF right:
+        compile both; explore the reachable synchronous product
+        emit state-pair labels
+    if formula is EXISTS x, child:
+        compile child in context ++ [x]
+        compute zero-visible tail ranks on the child DFA
+        determinize projected transitions
+        accept a subset exactly when it meets the tail closure
+        emit ranks, choices, and subset labels
+    optionally minimize; emit a commuting quotient map
+    return the resulting DFA node
+\end{lstlisting}
+
+The implementation memoizes by the full ordered context and formula, not merely a printed subexpression. Consecutive universal quantifiers are represented by the same complement/projection mechanisms, with no privileged universal rule. There is also no requirement to transform the formula into prenex normal form, which can unnecessarily enlarge intermediate dependencies.
+
+\begin{theorem}[Fragment decision procedure]\label{thm:decision}
+Ignoring operational cutoffs, compilation terminates for every finite formula in the supported fragment and produces an automaton satisfying \eqref{eq:semantics}. Universally closing its free variables is decidable by finite-state reachability.
+\end{theorem}
+\begin{proof}
+Each atom has a finite state space by the bounds above. Products, complements, finite quotients and powerset constructions preserve finiteness. Recursion follows the finite formula syntax. Semantic correctness follows by induction, with Theorem~\ref{thm:exists} handling existential nodes and ordinary Boolean semantics handling the others. Every natural tuple has an encoding, so all free-variable assignments satisfy the formula exactly when every reachable state is accepting.
+\end{proof}
+
+This is automata-valued quantifier elimination: the result is a finite representation of the solution relation, not necessarily a quantifier-free formula in the input syntax. Operationally the producer has limits; therefore its API is a partial procedure with explicit \code{unknown}, not a promise to decide every supported input under a fixed budget.

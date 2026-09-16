@@ -1,0 +1,1 @@
+{"schema":"forge-auto-1","query":{"context":["x"],"formula":{"op":"pow2","var":"x"}},"nodes":[{"kind":"atom","ctx":["x"],"formula":{"op":"pow2","var":"x"},"dfa":{"k":1,"start":0,"trans":[[0,1],[1,2],[2,2]],"final":[false,true,false]},"labels":[0,1,2]}],"root":0,"verdict":{"kind":"counterexample","word":[],"values":[0]}}

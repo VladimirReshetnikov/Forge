@@ -1,0 +1,23 @@
+{
+  "kind": "pt-net-coverability",
+  "dimension": 2,
+  "transitions": [
+    {
+      "name": "spend",
+      "consume": [
+        2,
+        0
+      ],
+      "produce": [
+        1,
+        1
+      ]
+    }
+  ],
+  "targets": [
+    [
+      0,
+      1
+    ]
+  ]
+}

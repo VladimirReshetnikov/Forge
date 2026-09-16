@@ -1,0 +1,91 @@
+\section{The capability to add, and the capability not to claim}
+
+Consider the following family of goals:
+\begin{equation}\label{eq:opening}
+\forall t\in\R,\quad t\geq 0\Longrightarrow
+\exists!x\in\R,\quad x>0\ \wedge\ x^5-x=t.
+\end{equation}
+There are several ways to prove this particular theorem by hand. The issue for a tactic is not that the theorem needs a mysterious new argument. It is that a useful \emph{generic worker} should discover algebraic existence, count admissible roots, distinguish a unique root from several roots, and handle the exceptional parameter values without being given the correct witness expression.
+
+This article proposes a worker called \emph{Real Fibers}. It takes a finite algebraic family together with a Boolean condition on its points. It returns an exact, quantifier-free \emph{count circuit} in the parameters. Existence becomes ``the count is positive''; uniqueness becomes ``the count is one''; a universal property of the fiber becomes ``the count of violating points is zero''. For one outer real parameter, a second worker closes the circuit over the entire real line. A third, smaller worker returns an exact algebraic-real witness for a concrete univariate problem.
+
+The central engineering choice is deliberately restrictive: begin with \emph{monic triangular equations}. Their quotient has a fixed, explicit basis at every parameter value. This avoids the unsound but tempting step of computing a basis over a rational-function field and silently using it at parameters where its denominators vanish. Within this fragment, multiple roots are allowed and no discriminant-nonzero assumption is needed.
+
+\subsection{A repository-relative delta, not a second Forge overview}
+
+The audit used Forge's README, implementation-status ledger, merged nonlinear section, provenance appendix, certificate contracts, and the dedicated Leant/Djex review at the snapshot on the cover. The related READMEs were inspected as well. These sources describe twenty-seven submissions in three rounds, so merely proposing more induction, SOS, integer projection, analytic enclosures, or finite-state closure would largely repeat existing work~\cite{forge,leant,djex}.
+
+Table~\ref{tab:delta} states the narrower distinction. This is not a claim to have read every line of every archived submission. It is a comparison with the audited merged design and its explicit capability ledger; it is also not a claim that the underlying real-algebraic mathematics is new.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{.24\textwidth}XX@{}}
+\toprule
+Already in Forge & What this article adds & Why it is different\\
+\midrule
+Square-factor/Sturm interval certificates & Uniform counts for Boolean-constrained real fibers & Counts roots under parameter specialization; not just nonnegativity on one rational interval.\\
+Affine, lattice, residue, polynomial witnesses & Algebraic root descriptors and count-based existence & A witness need not be a rational polynomial or rational expression.\\
+Mixed-strictness polyhedral projection & Finite nonlinear-fiber elimination & Nonlinear equations define the witnesses; sign correlations are preserved.\\
+Quantitative probabilistic workers & Cardinalities of real algebraic solution sets & The quantity is a distinct-root count, not probability, expectation, or a path bound.\\
+Source-owned evidence in Leant/Djex & A refined algebraic provider with a count precondition & A concrete new producer of typed witness obligations, not a new generic receipt architecture.\\
+\bottomrule
+\end{tabularx}
+\caption{The proposed addition relative to the audited Forge materials.}\label{tab:delta}
+\end{table}
+
+Forge's existing univariate worker is important prior work: it already checks a square-factor identity and a signed-remainder chain to establish nonnegativity on a rational interval. This article does not present Sturm sequences as a new Forge idea. The new object is a \emph{uniform counting certificate}, followed by a complete outer-parameter cover and, where supported, a witness selector.
+
+\subsection{What has actually been delivered}
+
+The package implements the polynomial admission check, two independent sign-indicator constructions, Hermite-matrix production and replay, characteristic-polynomial replay, rational specialization of count circuits, one-parameter quantified closure, and concrete univariate algebraic witnesses. It includes generated evidence and a replay command that disables site packages and forbids importing the producer.
+
+The Python implementation uses exact rational arithmetic. Its producer and replay perform substantially different computations in the matrix lane, but they are not fully independent: they share the source schema and sparse-polynomial representation. The outer producer also reuses the root-product assembler and verdict evaluator. These are disclosed common-mode risks, not details hidden behind the word ``independent''.
+
+No Lean executable was available for this work. The article therefore supplies no purportedly verified Lean tactic and no uncompiled theorem file masquerading as a checker. The proposed Lean interfaces later in the article are design notation. Forge itself records successful elaboration of some earlier core files; that historical fact must not be confused with verification of the new algorithms here~\cite{forge}.
+
+\subsection{Relationship to existing real-algebraic research}
+
+Hermite trace forms and Tarski queries are classical tools for real root counting. Parametric Hermite methods are developed in work by Le and Safey El Din, and by Gaillard and Safey El Din~\cite{le-safey,gaillard-safey}. Certificate-oriented univariate decision procedures and complete real quantifier elimination have also been formalized in Isabelle/HOL~\cite{li-passmore-paulson,kosaian-tan-platzer}. The present design is neither the first real quantifier-elimination algorithm nor the first verified use of algebraic certificates.
+
+The practical contribution is a small set of choices made together: admit a source fragment with a uniform basis; compile the \emph{actual Boolean goal} rather than every sign condition; verify polynomial identities rather than symbolic pivots; retain zero-sign cases; distinguish count proofs from executable witnesses; and test the whole route on source-bound artifacts. This gives Forge a capability missing from the audited ledger without requiring an immediate port of a general CAD implementation.
+
+\section{Input language and exact semantics}\label{sec:language}
+
+\subsection{Parameters, fiber variables, and a monic tower}
+
+Let $\bm t=(t_1,\ldots,t_k)$ be real parameters and $\bm x=(x_1,\ldots,x_n)$ be the variables to eliminate. Fix positive integers $d_i$ and equations
+\begin{equation}\label{eq:triangular}
+f_i(\bm t,x_1,\ldots,x_i)
+=x_i^{d_i}+\sum_{j=0}^{d_i-1}a_{ij}(\bm t,x_1,\ldots,x_{i-1})x_i^j=0,
+\end{equation}
+where every $a_{ij}$ has rational coefficients. The coefficient of $x_i^{d_i}$ is \emph{literally one}, not an expression proved nonzero on a generic region. For a fixed parameter value $\bm\tau$, define
+\[
+\calZ_{\bm\tau}=\{\bm z\in\R^n:f_i(\bm\tau,\bm z)=0\text{ for every }i\}.
+\]
+This is a set of distinct real tuples. Algebraic multiplicities are not included in its cardinality.
+
+Let $q_1,\ldots,q_m\in\Q[\bm t,\bm x]$. An atom compares one $q_j$ with zero using $<,\leq,=,\ne,\geq,$ or $>$. A formula $F$ is built with Boolean connectives. The worker's exact target is
+\begin{equation}\label{eq:countdef}
+N_F(\bm\tau)=\#\{\bm z\in\calZ_{\bm\tau}:F(\bm\tau,\bm z)\}.
+\end{equation}
+Parameter-only restrictions can be put in $F$, or kept as assumptions for the outer count circuit. Both interpretations are explicit in the source problem; the certificate does not get to choose one after seeing the result.
+
+\subsection{Logical consequences of a count}
+
+The useful consequences are
+\begin{align}
+\exists\bm x\,(\bm f=0\wedge F)&\quad\Longleftrightarrow\quad N_F>0,\label{eq:exists}\\
+\exists!\bm x\,(\bm f=0\wedge F)&\quad\Longleftrightarrow\quad N_F=1,\label{eq:unique}\\
+\forall\bm x\,(\bm f=0\Longrightarrow F)&\quad\Longleftrightarrow\quad N_{\neg F}=0.\label{eq:forall}
+\end{align}
+The uniqueness statement concerns the whole tuple $\bm x$. A request for uniqueness of only one projection requires a separate encoding; counting pairs can overcount distinct first coordinates.
+
+The final line is deliberately not $N_F=D$, where $D=\prod_i d_i$. The algebra can have complex roots, repeated roots, or no real roots. An empty real fiber makes the universal implication true. A dimension-based test would get this wrong even for $x^2+1=0$.
+
+\subsection{What the first implementation refuses}
+
+The source language excludes variable denominators, nonmonic leading coefficients, positive-dimensional fibers, transcendental equations, integer quantification, and arbitrary dependent source syntax. Refusal is not a proof of falsity. It is an opportunity for Forge's existing controller to try another worker.
+
+For example, $tx=0$ has one solution when $t\ne0$ and infinitely many when $t=0$. Dividing by $t$ destroys the exceptional fiber. The present admission test rejects this source rather than pretending that a generic rank-one quotient works everywhere. By contrast, $(x-t)^4=0$ is admitted: it has a uniform four-dimensional quotient but exactly one distinct real root at every parameter value.
+
+The mathematical results below impose no small numerical caps. The prototype does: at most four parameters, four fiber variables, six sign atoms, degree at most twelve in each leading variable, and quotient dimension at most twelve. A later query-support cap can still stop an admitted problem. The experiments exercise at most two parameters and two fiber variables; the larger parser limits are not a claim of equally extensive coverage.

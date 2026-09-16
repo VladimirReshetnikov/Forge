@@ -1,0 +1,12 @@
+{
+  "purpose": "Full entrypoint run in a separate fresh directory; delivered historical result files were not overwritten.",
+  "command": [
+    "/opt/pyvenv/bin/python",
+    "run_all.py"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 18.356953261999934,
+  "stdout": "Running examples\nRunning replay-no-site\nRunning differential\nRunning mutations\nRunning metamorphic\nRunning metamorphic-replay-no-site\nRunning strategy-probes\nRunning pytest\nAll experiment commands completed successfully.\n",
+  "stderr": "",
+  "last_pytest_log": "..........................................                               [100%]\n42 passed in 0.59s\n"
+}

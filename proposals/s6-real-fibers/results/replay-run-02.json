@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "site_packages_enabled": false,
+  "forbidden_imports": "sympy,numpy,flint,producer",
+  "counts": {
+    "valid_bundles": 99,
+    "specialization_evaluations": 748,
+    "invalid_mutations_rejected": 973,
+    "boolean_formulas": 160,
+    "boolean_truth_assignments": 4800,
+    "signature_matrices": 90
+  },
+  "elapsed_seconds": 26.394673381000075
+}

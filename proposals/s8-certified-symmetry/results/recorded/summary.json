@@ -1,0 +1,120 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "status": "ALL_ASSERTIONS_PASSED",
+  "lean_status": "NOT_RUN_NO_EXECUTABLE",
+  "unit_note": "Categories are different, sometimes overlapping units; no pooled success rate.",
+  "counts": {
+    "burnside_color_count_queries": 160,
+    "burnside_fixed_weight_queries": 220,
+    "chain_instances_checked_against_full_group_oracle": 153,
+    "cnf_symmetry_acceptances": 5,
+    "cnf_symmetry_rejections": 10,
+    "cycle_inventories": 40,
+    "family_canonical_queries": 208,
+    "generic_canonical_cover_nodes": 24710,
+    "generic_canonical_queries": 296,
+    "large_chain_instances": 7,
+    "large_family_canonical_queries": 5,
+    "malformed_or_corrupted_rejections": 33,
+    "membership_negative": 4176,
+    "membership_positive": 3852,
+    "membership_queries": 8028,
+    "resource_refusals": 5,
+    "symbolic_family_count_queries": 108
+  },
+  "corpus_bundles": 160,
+  "elapsed_seconds": 15.683628369000076,
+  "large_fixtures": [
+    {
+      "case": "S15",
+      "degree": 15,
+      "order": 1307674368000,
+      "strong_generators": 15,
+      "word_dag_nodes": 62,
+      "transversal_entries": 120,
+      "schreier_checks": 2136,
+      "certificate_bytes": 2220,
+      "search_seconds": 0.06514855399996122,
+      "check_seconds": 0.022270078000019566
+    },
+    {
+      "case": "S30",
+      "degree": 30,
+      "order": 265252859812191058636308480000000,
+      "strong_generators": 30,
+      "word_dag_nodes": 137,
+      "transversal_entries": 465,
+      "schreier_checks": 17546,
+      "certificate_bytes": 7215,
+      "search_seconds": 1.26963704100001,
+      "check_seconds": 0.4773609259999603
+    },
+    {
+      "case": "S40",
+      "degree": 40,
+      "order": 815915283247897734345611269596115894272000000000,
+      "strong_generators": 40,
+      "word_dag_nodes": 187,
+      "transversal_entries": 820,
+      "schreier_checks": 41861,
+      "certificate_bytes": 11975,
+      "search_seconds": 4.656170965999991,
+      "check_seconds": 1.8112974169999916
+    },
+    {
+      "case": "A12",
+      "degree": 12,
+      "order": 239500800,
+      "strong_generators": 39,
+      "word_dag_nodes": 118,
+      "transversal_entries": 77,
+      "schreier_checks": 2806,
+      "certificate_bytes": 2512,
+      "search_seconds": 0.15854006200004278,
+      "check_seconds": 0.023083007999957772
+    },
+    {
+      "case": "A20",
+      "degree": 20,
+      "order": 1216451004088320000,
+      "strong_generators": 107,
+      "word_dag_nodes": 358,
+      "transversal_entries": 209,
+      "schreier_checks": 20942,
+      "certificate_bytes": 7666,
+      "search_seconds": 5.4226975169999605,
+      "check_seconds": 0.3294985180000367
+    },
+    {
+      "case": "D50",
+      "degree": 50,
+      "order": 100,
+      "strong_generators": 2,
+      "word_dag_nodes": 3,
+      "transversal_entries": 100,
+      "schreier_checks": 152,
+      "certificate_bytes": 1457,
+      "search_seconds": 0.04200601400009418,
+      "check_seconds": 0.015999803999989126
+    },
+    {
+      "case": "C97",
+      "degree": 97,
+      "order": 97,
+      "strong_generators": 1,
+      "word_dag_nodes": 2,
+      "transversal_entries": 193,
+      "schreier_checks": 194,
+      "certificate_bytes": 2728,
+      "search_seconds": 0.12430244299991955,
+      "check_seconds": 0.05500758100004077
+    }
+  ],
+  "no_claims": [
+    "No Lean-kernel certificate replay",
+    "No comparison with grind or other Lean tactics",
+    "No polynomial bound for generic canonical-image search or arbitrary cycle inventory"
+  ]
+}

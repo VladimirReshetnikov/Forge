@@ -1,0 +1,109 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=27mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,enumitem,xcolor,listings}
+\usepackage{fancyhdr}
+\usepackage[hyphens]{url}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black,pdfauthor={OpenAI},pdftitle={Exact Infinite-State Workers for Forge}]{hyperref}
+\usepackage{bookmark}
+\setlength{\emergencystretch}{2em}
+\setlist{itemsep=2pt,topsep=5pt}
+\definecolor{codebg}{gray}{0.96}
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},frame=single,framerule=.2pt,rulecolor=\color{black!25},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,upquote=true,aboveskip=10pt,belowskip=10pt}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Atoms}{\mathbb A}
+\newcommand{\up}[1]{\mathord{\uparrow}#1}
+\newcommand{\pred}{\operatorname{pred}}
+\newcommand{\Reach}{\operatorname{Reach}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\can}{\operatorname{can}}
+\newcommand{\Bad}{\operatorname{Bad}}
+\newcommand{\Safe}{\operatorname{Safe}}
+\newcommand{\sem}[1]{\llbracket #1\rrbracket}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Exact Infinite-State Workers for Forge}
+\fancyhead[R]{\small September 2026}
+\fancyfoot[C]{\thepage}
+\setcounter{tocdepth}{2}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{17mm}
+{\large FORGE / TECHNICAL EXTENSION STUDY\par}
+\vspace{13mm}
+{\Huge\bfseries Exact Infinite-State\\[4pt] Workers for Forge\par}
+\vspace{9mm}
+{\LARGE Antichains, equality orbits,\\[3pt] and their checked product\par}
+\vspace{13mm}
+{\large A proposal with executable searches, independent replay paths,\\and explicit Lean implementation obligations\par}
+\vspace{11mm}
+Prepared for Vladimir Reshetnikov\\
+15 September 2026
+\vfill
+\noindent\begin{minipage}{\textwidth}
+\textbf{Repository baseline.} Forge \code{58ea206bd7ad}; Leant
+\code{6bf05ad78c46}; Djex \code{e8778f4ebd63}. Full revision identifiers
+and inspected paths appear in the source ledger.\par\medskip
+\textbf{Executed here.} Three standard-library Python workers; 27 unit-test
+methods; 640 randomized differential cases; 650 stored certificate objects;
+1,300 rejected structural or required-content mutations.\par\medskip
+\textbf{Not established here.} A Lean tactic, a verified Lean checker, a compiled
+Lean source bridge, or any solved-goal or speed advantage over another tactic.
+The included small Lean arithmetic specimen is explicitly uncompiled.
+\end{minipage}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\begin{abstract}
+Forge's inspected design already has substantial machinery for induction,
+witness synthesis, algebraic and analytic certificates, finite-dimensional
+closures, and pushdown summaries. Repeating that architecture would add little.
+This article instead specifies two semantic workers and their exact composition.
+The first computes backward-closed unsafe regions of finite-control counter
+systems using minimal antichains, deciding coverability without bounding the
+counters and admitting whole nonnegative affine families of initial states.
+The second decides equivalence of deterministic equality-register transducers
+over an unbounded alphabet by exploring joint equality orbits, not concrete
+keys. Their product handles systems with both a bounded set of remembered names
+and an unbounded vector of resource counts.
+
+Each worker has a finite positive receipt, an executable negative witness, a
+separate checker, explicit source-translation requirements, and a precise
+boundary beyond which it must return unknown or unsupported. Constructive
+proofs explain the predecessor formula, parameter separation, fresh-input
+coverage, finite-alphabet cutoff, and mixed-model transport. A two-key
+exhaustive cache test is shown to miss a three-key, five-request counterexample.
+The delivered experiments also include parameterized mutual exclusion,
+nonconvex unbounded safety, and an ownership protocol with arbitrarily many
+waiting clients. The algorithms have classical foundations; the proposed
+contribution is their concrete, narrowly typed integration into Forge, together
+with reproducible implementation evidence rather than an assertion of a new
+model-checking theory.
+\end{abstract}
+\tableofcontents
+\clearpage
+\input{01-delta.tex}
+\input{02-antichains.tex}
+\input{03-orbits.tex}
+\input{04-product.tex}
+\input{05-integration.tex}
+\input{06-evidence.tex}
+\input{07-implementation.tex}
+\appendix
+\input{08-appendices.tex}
+\input{references.tex}
+\end{document}

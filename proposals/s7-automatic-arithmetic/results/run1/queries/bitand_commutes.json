@@ -1,0 +1,26 @@
+{
+  "context": [
+    "x",
+    "y",
+    "z"
+  ],
+  "formula": {
+    "op": "iff",
+    "left": {
+      "op": "bitand",
+      "vars": [
+        "x",
+        "y",
+        "z"
+      ]
+    },
+    "right": {
+      "op": "bitand",
+      "vars": [
+        "y",
+        "x",
+        "z"
+      ]
+    }
+  }
+}

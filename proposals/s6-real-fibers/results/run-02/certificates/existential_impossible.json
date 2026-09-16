@@ -1,0 +1,307 @@
+{
+  "cells": [
+    {
+      "condition": false,
+      "count": 0,
+      "kind": "sector",
+      "parameter_atom_signs": [],
+      "sample": [
+        -2049,
+        1024
+      ]
+    },
+    {
+      "condition": false,
+      "count": 0,
+      "isolator": [
+        [
+          -1025,
+          1024
+        ],
+        [
+          -1023,
+          1024
+        ]
+      ],
+      "kind": "section",
+      "parameter_atom_signs": []
+    },
+    {
+      "condition": false,
+      "count": 0,
+      "kind": "sector",
+      "parameter_atom_signs": [],
+      "sample": [
+        -1,
+        2
+      ]
+    },
+    {
+      "condition": false,
+      "count": 0,
+      "isolator": [
+        [
+          -1,
+          1024
+        ],
+        [
+          1,
+          1024
+        ]
+      ],
+      "kind": "section",
+      "parameter_atom_signs": []
+    },
+    {
+      "condition": false,
+      "count": 1,
+      "kind": "sector",
+      "parameter_atom_signs": [],
+      "sample": [
+        1025,
+        1024
+      ]
+    }
+  ],
+  "certificate": {
+    "claim": false,
+    "fiber_certificate": {
+      "queries": [
+        {
+          "charpoly": [
+            [
+              [
+                [
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            [],
+            [
+              [
+                [
+                  2
+                ],
+                [
+                  -4,
+                  1
+                ]
+              ]
+            ]
+          ],
+          "coefficient": [
+            1,
+            2
+          ],
+          "exponents": [
+            1
+          ],
+          "hermite": [
+            [
+              [],
+              [
+                [
+                  [
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  [
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ],
+              []
+            ]
+          ]
+        },
+        {
+          "charpoly": [
+            [
+              [
+                [
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  1
+                ],
+                [
+                  -2,
+                  1
+                ]
+              ],
+              [
+                [
+                  2
+                ],
+                [
+                  -2,
+                  1
+                ]
+              ]
+            ],
+            [
+              [
+                [
+                  3
+                ],
+                [
+                  4,
+                  1
+                ]
+              ]
+            ]
+          ],
+          "coefficient": [
+            1,
+            2
+          ],
+          "exponents": [
+            2
+          ],
+          "hermite": [
+            [
+              [
+                [
+                  [
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ],
+              []
+            ],
+            [
+              [],
+              [
+                [
+                  [
+                    2
+                  ],
+                  [
+                    2,
+                    1
+                  ]
+                ]
+              ]
+            ]
+          ]
+        }
+      ],
+      "schema": "hermite-charpoly-v1"
+    },
+    "roots": [
+      [
+        [
+          -1025,
+          1024
+        ],
+        [
+          -1023,
+          1024
+        ]
+      ],
+      [
+        [
+          -1,
+          1024
+        ],
+        [
+          1,
+          1024
+        ]
+      ]
+    ],
+    "schema": "outer-sign-cover-v1"
+  },
+  "expected": false,
+  "kind": "outer",
+  "name": "existential_impossible",
+  "problem": {
+    "condition": [
+      "count",
+      "eq",
+      2
+    ],
+    "fiber": {
+      "atoms": [
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "degrees": [
+        2
+      ],
+      "equations": [
+        [
+          [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              -1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "formula": [
+        "atom",
+        0,
+        "gt"
+      ],
+      "parameters": 1,
+      "schema": "forge-real-fiber-v1"
+    },
+    "parameter_atoms": [],
+    "quantifier": "exists",
+    "schema": "outer-one-parameter-v1"
+  }
+}

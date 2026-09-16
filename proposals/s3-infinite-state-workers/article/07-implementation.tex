@@ -1,0 +1,191 @@
+\section{Concrete libraries, engineering plan, and acceptance gates}
+\label{sec:plan}
+
+\subsection{Library choices and what not to outsource}
+The first implementation should keep the receipt checkers small. The counter
+checker needs finite lists, exact natural arithmetic, indexed vectors, and
+bounded iteration over source rules. The equality checker needs finite tagged
+syntax, its interpreter, equality-pattern construction, and finite membership.
+No general SMT solver is necessary for either receipt language.
+
+For a Lean implementation, \code{Fin d -> Nat} is a useful mathematical counter
+representation; an array-backed executable form should be related to it by a
+proved length/index invariant. The distinction prevents mismatched dimensions
+from being silently truncated by a zipped traversal. \code{omega} is an
+appropriate way to establish the scalar consumption/predecessor lemmas during
+library development, while a proved Boolean checker can handle the many ground
+instances by reflection. The worker should not construct a fresh, large
+\code{omega} proof for every coordinate of every stored threshold if a shared
+soundness theorem suffices.
+
+For search termination, Mathlib's documented
+\code{Mathlib.Order.WellQuasiOrder} provides \code{WellQuasiOrdered} and
+\code{WellQuasiOrdered.pi}, the finite-product theorem needed for Dickson's
+argument. \code{WellQuasiOrderedLE.finite\_of\_isAntichain} supports a related
+finiteness statement~\cite{wqo}. The public documentation was checked, but its
+rolling build is not a proof that every spelling compiles at Forge's exact
+Mathlib pin. Resolve and compile that pin during implementation. The delivered
+counter receipt soundness proof does not need this dependency: completeness of
+the search and soundness of finite receipts should remain separate modules.
+
+The equality worker can initially use a direct finite-pattern proof rather
+than importing a broad nominal-sets framework. Define renaming action on
+selectors, guards, states, and outputs; prove evaluation equivariance by
+structural induction; prove equality-matrix completeness for finite support;
+then prove representative-input coverage. This keeps the trusted formal layer
+close to the implemented language. General permutation and finite-set support
+can be reused from Lean/Mathlib, but no unverified guessed API for a complete
+register-automata library is assumed here.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.22\textwidth}>{\raggedright\arraybackslash}p{.32\textwidth}>{\raggedright\arraybackslash}p{.40\textwidth}@{}}
+\toprule
+Component & Specific role & Qualification \\
+\midrule\endhead
+Lean core and Mathlib & Exact arithmetic, finite structures, local guard proofs,
+WQO product theorem & The portable core checker is the priority. Formal source
+bridges and checker correctness remain to be written. \\
+MinCoverPetri & Optional independent counter-model oracle or alternative
+producer & C++ tool for PNML P/T nets, using monotone-pruning coverability;
+GPLv3+. Its forward omega-cover is not our backward receipt. \\
+RaLib & Optional generator of candidate register-automaton summaries & Java
+active-learning library associated with LearnLib. Learned summaries still need
+source equivalence proofs; learning output is not a receipt. \\
+Existing Forge workers & Discharge source-side arithmetic or logical obligations &
+Reuse local \code{grind}/arithmetic support and the existing candidate contracts;
+do not implement a second proof-publication path. \\
+Djex checked embedding & Obtain reconstructed candidates for exact behavioral
+discharge & Use the curated embedding layer and proved summaries, not an
+untyped mirror of private synthesis states. \\
+\bottomrule
+\end{longtable}
+
+MinCoverPetri's documentation gives a particularly important adapter constraint:
+its documented default uses signed 8-bit marking values and reserves 127 for
+omega, interpreting initial markings at least 127 as omega. It can be rebuilt
+with different representation choices~\cite{mincover}. An adapter must enforce
+the accepted finite range or verify a suitable build before claiming agreement
+on an exact finite marking. It must also encode finite control without changing
+which transitions are enabled. Even with those repairs, the tool's forward
+minimal-cover result is not a certificate for
+\eqref{eq:badincluded}--\eqref{eq:initseparate}; a separate conversion theorem
+or producer is necessary. The delivered prototypes do not invoke it.
+
+RaLib supplies active-learning algorithms for register automata~\cite{ralib}.
+That makes it potentially useful when exploring an interface for which an
+approximate model can be learned from queries. It does not remove the need for
+exact source-model correspondence. For the admitted finite syntax, direct
+compilation is simpler and more trustworthy than learning a model already
+present in the source. No RaLib experiment is reported here.
+
+\subsection{Producer data structures}
+The prototype uses ordinary lists and dictionaries for clarity. A production
+counter producer should index incoming transitions by destination, retain a
+separate immutable justification arena, and keep per-control antichains in a
+dominance-search structure. For small $d$, sorted coordinate indexes can prune
+dominance candidates before exact comparison; for larger $d$, a trie or
+multi-index structure may help, but its usefulness must be measured on real
+receipt shapes. A list is an appropriate baseline, not an embarrassing
+implementation to replace without evidence.
+
+Maintain antichain version numbers on queued nodes so obsolete entries can be
+skipped in constant time after a lookup. Record operations on exact integers;
+never convert thresholds to floating point to speed comparisons. If a heuristic
+or external tool produces a proposed subset of unsafe thresholds, the checker
+still requires full backward closure before using it as a safe receipt.
+
+The nominal producer can hash canonical tuples with controls and anchored
+constant count. It must not use independent left/right hashes as if their
+combination preserved cross-state equalities. Cache interpreted transitions by
+model identity, control, joint pattern, tag, and input class. An optimization
+that reuses a single-machine transition table must transport atom outputs and
+register values back into the joint namespace before comparison.
+
+For mixed search, retaining quotient edge labels is necessary for negative
+witness lifting. Deduplicating edges that share controls and vectors is safe
+for pure coverability, but a witness still needs at least one original
+rule/input-case justification. Dropping those labels turns a numeric path into
+an unexplained diagnostic.
+
+\subsection{A phased implementation with falsifiable gates}
+\paragraph{Gate 1: a counter receipt theorem.}
+Implement the model, Boolean vector comparisons, and finite basis checks.
+Prove the exact predecessor lemma and \code{check\_sound} for the supplied
+model. Make the one-vector axes receipt prove a source-level theorem for all
+initial parameters, with no synthesis during subsequent compilation. Record
+successful kernel elaboration and the actual axiom inventory. Accept a
+redundant valid basis and reject the enabling trap's fake unsafe witness.
+
+\paragraph{Gate 2: counter source reflection.}
+Compile only the admitted guarded tuple-update language. Every rule receives
+a proved transition diagram. Add the parameterized mutex family and its bug,
+requiring the positive theorem for all waiting counts and a source-executable
+negative witness for the faulty version. Mutation of the original rule vectors
+must invalidate the retained receipt. A proof of the JSON model alone does not
+pass this gate.
+
+\paragraph{Gate 3: equality-pattern correctness.}
+Formalize the typed equality-language interpreter, joint pattern relation,
+anchored constants, and the fresh-input lemma. Prove the finite-carrier theorem
+with its register-count hypotheses. Compile the three-orbit register-swap
+receipt and the five-request LRU/FIFO witness. Include atom-output and
+insufficient-alphabet controls. A theorem merely about one selected finite
+alphabet does not pass.
+
+\paragraph{Gate 4: mixed direct replay.}
+Formalize the original mixed language and the two-component invariant. Check
+all original source rules rather than trusting a producer-emitted graph.
+Prove the parameterized owner-pool theorem and lift its faulty-version witness
+to two actual source steps. Deliberately remove a structural quotient edge in
+a producer test and ensure direct replay rejects any resulting incomplete
+positive receipt.
+
+\paragraph{Gate 5: controlled tactic evaluation.}
+Only after the preceding kernel-checked paths work, compare against existing
+\code{grind}, appropriate induction/\code{simp}/\code{omega} baselines, and
+Forge's nearest existing workers. Include strong manually supplied invariants
+as a separate condition, not a hidden advantage for one side. Keep model
+reflection, search, parsing, receipt checking, bridge construction, final
+kernel checking, and ordinary recompilation as separate timing categories.
+A theorem discovered once should recompile from its retained certificate
+without relaunching the producer.
+
+A meaningful test set should include hand-written Lean source definitions,
+representation changes that need nontrivial bridges, small genuine
+counterexamples, source fragments that must be rejected, increasing register
+width, increasing counter dimension, and bases with many incomparable vectors.
+Neither conservation-biased random nets nor register permutations alone cover
+that range. Report unsupported and unknown outcomes separately from incorrect
+ones; a timeout must not become a refutation or a false positive.
+
+\subsection{Routing and useful refusal diagnostics}
+Routing is mechanical once a bridge exists. Upward counter safety with monotone
+consume/produce rules selects the antichain worker. Equality of output-list
+functions with finite-register summaries selects the orbit worker. A
+register-net safety bridge selects the product. If the semantic shape fails,
+return the exact obstruction to the planner: a zero-test, an order-sensitive
+key operation, an unbounded register allocation, an unsupported initial
+parameter constraint, or an output depending on absent history.
+
+Some rejected shapes can become conditional problems. A zero-test may be
+eliminated after a proved invariant makes its outcome constant on a control
+location. A key comparator may have a supplied theorem showing it agrees with
+equality. A source collection may have a proved fixed-size summary sufficient
+for the observation. These transformations are useful, but their proofs must
+be explicit premises, not silent weakening by the worker.
+
+\subsection{A restrained direction beyond this delivery}
+The most attractive next extension is not to add another unrelated solver, but
+to make registered summaries compositional. A proved operation summary should
+survive register renaming, product state formation, and hiding unobserved
+fields. Forge's existing observable quotients can then reduce a finite numeric
+summary after the new name quotient has been justified. One must not simply
+apply an ordinary finite-dimensional rank bound to a space indexed by infinitely
+many atoms. Weighted register automata have a separate orbit-finite-dimensional
+theory~\cite{weighted}; using it would require a new certificate language and
+proof, not a change to one dimension parameter. This is a research direction,
+not an implemented fourth worker.
+
+The practical next action is Gate 1. These algorithms already run as research
+programs; the largest remaining gain in confidence comes from turning one exact
+receipt and one source bridge into a Lean theorem, not from increasing the
+number of uncompiled design contracts.

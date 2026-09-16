@@ -1,0 +1,55 @@
+\section{What this adds, and what it deliberately does not repeat}
+\label{sec:scope}
+The natural first proposals for a tactic stronger than \code{grind}---induction, auxiliary lemmas, nonlinear certificates, witness synthesis, and solver cooperation---are no longer useful contributions to this repository. Forge's inspected revision already contains three merged rounds of proposals, a broad implementation-status ledger, and extensive certificate schemas. Its later rounds include exact closure constructions, noncommutative reasoning, analytic certificates, and quantitative probabilistic and adversarial workers \cite{forge-readme,forge-status,forge-schemas}. Repeating those designs would expand the article without expanding the system.
+
+The extension developed here starts from a different finite object:
+\[
+  G=\langle g_1,\ldots,g_m\rangle\leq\Sym_n,
+\]
+and asks how a proof planner can use $G$ \emph{without enumerating its elements}. The answer is not simply ``call GAP.'' It is an explicit certificate language, a local checker, a proof of what acceptance implies, and several new consumers of the resulting group facts.
+
+\begin{tabularx}{\textwidth}{@{}p{0.24\textwidth}YY@{}}
+\toprule
+Existing prerequisite & Added object or algorithm & New consequence\\
+\midrule
+Exact arithmetic and certificate binding & Original-generator word DAG plus complete stabilizer chain & Exact membership, nonmembership, group order, unique coset coordinates.\\
+Finite search and checked coverage & Coset-cover canonical-image proof & A least orbit representative and an explicit transporter.\\
+Exact quantities & Cycle inventory and family-recognition certificates & Symbolic coloring counts and fixed-weight orbit counts.\\
+Polynomial cone workers & Locally checked monomial orbits and Reynolds projection & Invariant polynomial projection; a precise route to orbit-reduced cone searches.\\
+Source-owned synthesis evidence & Generator-wise semantic symmetry gate & Safe representative restriction that respects exact hypotheses, dictionaries, and universes.\\
+\bottomrule
+\end{tabularx}
+
+\subsection{The scope of the novelty audit}
+The audit used the pinned Forge README, its complete implementation-status ledger, the contribution catalogue, the certificate-schema section, and the discussion of Leant and Djex \cite{forge-readme,forge-status,forge-schemas,forge-neighbors}. Leant's README and current revision metadata, and Djex's README, supplied the neighboring-project context \cite{leant,djex}. These inspected capability descriptions do not provide the certificate suite developed here.
+
+This is a \emph{scoped engineering novelty claim}, not a claim to have read every line of all 27 frozen submissions. Repository code search returned no result even for the positive-control term ``Bernstein,'' which is visibly present in the status ledger. Its negative results were therefore discarded as evidence of absence. The package's \code{docs/NOVELTY.md} records this limitation so that later integration does not turn a bounded audit into an exhaustive claim.
+
+Nor are Schreier--Sims, Burnside's lemma, Reynolds averaging, or symmetry breaking new mathematics. They are established methods. GAP and SymPy provide permutation-group algorithms; Mathlib already exposes an orbit-counting theorem; certified symmetry-breaking systems and symmetry-adapted polynomial optimization have their own literature \cite{gap,sympy,mathlib-burnside,cert-symmetry,gatermann-parrilo}. The contribution is the particular certificate interfaces, their compositional soundness arguments, the tested independent replay paths, and the integration plan for Forge.
+
+\subsection{Why a coherent symmetry layer is more useful than another isolated solver}
+A group certificate can be amortized across many queries. The same checked $G$ can answer whether a proposed renaming is allowed, produce a least representative, provide a counting denominator, and certify a monomial orbit. It is not tied to one formula or one coloring. The source-level authorization to \emph{use} the group, however, remains tied to the exact obligation.
+
+For example, a cyclic renaming might preserve a family of polynomial hypotheses, yet fail to preserve a distinguished coefficient in the goal. The group-theoretic certificate remains correct; the proposed proof transformation is not authorized. Separating these objects is the central design decision. It permits aggressive external search without allowing a correct calculation about the wrong group action to become a proof of the original theorem.
+
+The initial production target should be concrete finite actions on \code{Fin n}. Arbitrary finitely presented groups, arbitrary actions on infinite types, and unrestricted discovery of semantic program equivalence are outside this extension. A representation of an abstract group by permutations also needs a separate faithfulness theorem before its image order can be called the abstract group's order.
+
+\section{The mathematical contract}
+\label{sec:contract}
+Let $[n]=\{0,\ldots,n-1\}$. Permutations are arrays of length $n$, and all arrays are checked to be bijections. Our composition convention is
+\[
+  (ab)(i)=a(b(i)),\qquad (g\cdot c)(j)=c(g^{-1}(j)).
+\]
+Thus the right factor acts first, and $g\cdot c$ moves the color at position $i$ to position $g(i)$. This convention also defines the action on exponent vectors. It is tested with noncommuting permutations; a commuting test cannot detect reversal of multiplication.
+
+The authoritative input is an ordered list of original generators, separate from the certificate. A certificate may contain derived permutations, but only through words in those original generators. Renumbering generators, changing the permutation degree, or replacing a source expression by another equal-looking expression is not a harmless metadata edit.
+
+We use four different forms of conclusion.
+\begin{description}[style=nextline]
+\item[Group fact.] A statement about exactly $G=\langle g_1,\ldots,g_m\rangle$: membership, order, or a complete orbit.
+\item[Action fact.] A statement about the explicitly defined $G$-action: a transporter, a canonical image, or an orbit count.
+\item[Source authorization.] A proof that the action preserves the original hypotheses, target, or objective in the way required by a specific transformation.
+\item[Operational outcome.] Accepted certificate, invalid certificate, or resource exhaustion. Exhaustion is \emph{unknown}; it is not nonmembership, infeasibility, or a refutation.
+\end{description}
+
+A proper subgroup of the true symmetry group is sufficient for safe symmetry reduction. It merely merges fewer cases. That same proper subgroup is \emph{not} sufficient for claiming the number of orbits under the full symmetry group. Both computations can be internally correct while answering different questions.

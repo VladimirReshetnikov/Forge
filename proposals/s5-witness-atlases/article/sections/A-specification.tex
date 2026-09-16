@@ -1,0 +1,132 @@
+\section{Reproduction and certificate specification}
+\subsection{Commands}
+The producer requires SymPy; replay does not. Run these commands from the archive's \code{prototype/} directory:
+\begin{lstlisting}
+python -m pip install -r ../requirements.txt
+python run_examples.py
+python -S verify_corpus.py
+python differential.py
+python mutation_tests.py
+python metamorphic.py
+python -S verify_corpus.py ../metamorphic-corpus
+python strategy_probes.py
+python -m pytest -q
+\end{lstlisting}
+The archived results are the observations reported in this article. Re-running the scripts may replace result JSON files and alter timings or valid isolating cuts. Preserve the archive's original result directory when a bit-for-bit record of the delivered run is needed. Different valid cuts are not different mathematical answers.
+
+An individual input can be solved and independently replayed with:
+\begin{lstlisting}
+python -m atlas solve ../examples/surjective_cubic/problem.json \
+    --output /tmp/cubic-certificate.json
+python -S -m atlas verify ../examples/surjective_cubic/problem.json \
+    /tmp/cubic-certificate.json
+\end{lstlisting}
+A successful verification exit code means the certificate is accepted, including a certificate for a false encoded sentence. Inspect \code{closed_value} to learn the sentence's truth. \code{null} means the outer variable is free, with its truth set in \code{truth_by_x}; it is not an unknown closed verdict. An arithmetic \code{LimitExceeded} outcome is reported as \unknown{}. Other invalid input or failed acceptance returns a nonzero exit code and no accepted verdict.
+
+The JSON decoder rejects duplicate object keys and nonfinite JSON constants. The checker performs mathematical and canonical-form validation after decoding. These controls are useful but not a claim of complete hostile-input hardening; notably, large expressions can still be expensive before a later cap is reached.
+
+\subsection{Problem format}
+A problem object has schema \code{forge.atlas.problem/1}, a diagnostic \code{name}, \code{outer} and \code{inner} quantifiers, a list of polynomials, and a formula tree. Sparse polynomial terms are sorted triples $[i,j,c]$ for $cX^iY^j$, with nonnegative integer exponents and a nonzero canonical rational string. The empty term list is zero. For example,
+\begin{lstlisting}
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "inverse_hole",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [[[0, 0, "-1"], [1, 1, "1"]]],
+  "formula": ["eq", 0]
+}
+\end{lstlisting}
+encodes $\forall x\exists y\;(xy-1=0)$. Rational strings such as \code{"-3/7"} are accepted; floats, \code{"2/2"}, and \code{"0.0"} are not. Atom indices are zero-based. Formula nodes are Boolean literals, sign tests, or \code{and}, \code{or}, \code{not}, and \code{implies}. The checker validates every child even if another child determines the Boolean result, so a short circuit cannot hide an invalid subtree.
+
+\subsection{Certificate fields and their obligations}
+\begin{longtable}{p{0.28\textwidth}p{0.65\textwidth}}
+\toprule
+Field & What replay verifies\\
+\midrule\endhead
+\code{factors} & Canonical nonzero nonconstant sparse polynomials; no duplicates\\
+\code{factorizations} & Every original polynomial equals its scalar times its factor powers; all factor uses are accounted for\\
+\code{derivative_guards} & Exactly one receipt for each positive-$Y$ factor; exact identity and nonzero guard\\
+\code{pair_guards} & Exactly every unordered positive-$Y$ pair; exact identity and nonzero guard\\
+\code{projection} & Exact monic square-free lcm of all guards; dense coefficients in increasing degree\\
+\code{base_roots} & Complete ordered isolating cuts for real projection roots\\
+\code{stacks} & Exactly one stack for every base section and sector\\
+\code{sample} & A rational sample strictly inside an open base sector, or null for a root section\\
+\code{y_roots} & Complete root cover of the square-free specialized fibre-boundary product\\
+\code{y_samples} & One valid rational sample per open fibre sector\\
+\code{signs} & Exact signs of every original specialized polynomial on each section/sample\\
+\code{truths}, \code{value} & Formula evaluation and the inner quantifier fold\\
+\code{selection} & A correctly typed index of a required true/false fibre cell, or null when no selector is required\\
+\code{truth_by_x} & The complete vector of inner quantified truth values\\
+\code{closed_value} & The appropriate outer fold, or null for free $x$\\
+\code{selected_x} & A valid outer witness/counterexample cell exactly when required\\
+\bottomrule
+\end{longtable}
+
+The arithmetic routines use dense low-degree-first tuples internally for univariate operations. Bivariate source and identity checks use sparse dictionaries. The file format does not serialize implementation-specific algebraic-field objects: they are reconstructed from the validated base root and the source factor coefficients. This avoids trusting a foreign minimal-polynomial cache or a mutable library handle.
+
+\subsection{Checker order}
+\begin{lstlisting}
+verify(problem, certificate):
+    validate_problem_and_boolean_AST(problem)
+    check_all_source_factorizations()
+    check_derivative_coverage_and_identities()
+    check_pair_coverage_and_identities()
+    recompute_projection_from_all_required_guards()
+    base_roots := verify_complete_root_cover(projection)
+    require exactly 2 * len(base_roots) + 1 stacks
+
+    for each base cell:
+        x := checked_rational_sample_or_selected_algebraic_root()
+        fiber_poly := squarefree_product_of_nonconstant_specialized_factors()
+        y_roots := verify_complete_root_cover(fiber_poly)
+        check_sector_samples_against_actual_roots()
+        recompute_all_original_polynomial_signs()
+        recompute_formula_truths_and_inner_fold()
+        validate_witness_or_counterexample_selection()
+
+    recompute_outer_fold_or_free_parameter_truth_set()
+    validate_outer_selection()
+    return accepted_encoded_result
+\end{lstlisting}
+
+A production reflected checker may replace recomputation with smaller arithmetic receipts where profitable. For example, a gcd could be accompanied by divisibility identities and a coprimeness witness rather than recomputed by Euclidean reduction. Such a change requires a new soundness argument for the optimized check, not a trusted hint that the gcd routine probably agrees.
+
+\section{Primary corpus inventory}
+The following table is generated from the recorded primary results. ``Free'' denotes a parameter-region problem rather than an unresolved Boolean answer. The archive includes each formula and certificate, not just the summary.
+\input{primary-table}
+
+\section{Review record and artifact map}
+\subsection{Repository snapshots}
+\begin{description}[style=nextline,leftmargin=0pt,labelwidth=0pt,labelsep=0pt]
+\item[Forge]
+\nolinkurl{58ea206bd7ad501b930add568151217bcc7f82a2}. Reviewed README and status material, the complete merged nonlinear chapter, \nolinkurl{docs/IDEAS-FROM-LEANT-DJEX.md}, \nolinkurl{lean/Forge/Design/Contracts.lean}, and \nolinkurl{lean/Forge/Closure/Covers.lean}. The read scope is narrower than an audit of every archived proposal.
+\item[Leant]
+\nolinkurl{6bf05ad78c467989e68290f2d08bbed40802d485}. Reviewed README and the behavioral-synthesis documentation. The latter's inspected blob has SHA \nolinkurl{6b1f20e624d8e87bc6edbbba3651fab5a2a3e21d}.
+\item[Djex]
+\nolinkurl{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}. Reviewed README and used Forge's existing neighboring-project analysis to avoid duplicating already adopted synthesis/ownership ideas. The inspected README blob has SHA \nolinkurl{12fec0edf075937f2eb42125e800845a480d4b76}.
+\end{description}
+No repository writes were made. The archive is a standalone extension proposal and prototype, not a patched checkout of Forge. Online library documentation was used to identify concrete integration candidates; compatibility with Forge's pinned Lean/Mathlib baseline remains to be tested.
+
+\subsection{Files in the companion archive}
+\begin{description}[style=nextline,leftmargin=0pt,labelwidth=0pt,labelsep=0pt]
+\item[\code{article/}]
+This article, its modular LaTeX sources, generated corpus table, and final PDF. Build with \code{latexmk -pdf atlas.tex}; no external font files are required or included.
+\item[\code{prototype/atlas/}]
+Exact arithmetic, sparse polynomial operations, strict JSON loading, producer, checker, examples, and the command-line interface.
+\item[\code{prototype/tests/}]
+Unit/regression tests. Standalone runners next to this directory generate examples and run mutation, differential, metamorphic, selector, and dependency-free replay checks.
+\item[\code{examples/} and \code{metamorphic-corpus/}]
+Twenty-four primary and seventy-six transformed problem/certificate pairs. Primary examples additionally contain selector descriptors.
+\item[\code{results/}]
+Environment metadata, per-case records, independent checks, corruption results, dependency-free replay reports, test logs, and the preserved initial differential failure.
+\item[\code{lean/}]
+Two uncompiled semantic composition lemmas with an explicit status note. No reflected algebraic checker is hidden in this directory.
+\item[\code{docs/}]
+Source review record, implementation status, and run history. These distinguish executed features from suggested future optimizations.
+\end{description}
+
+\section{Closing recommendation}
+Add this as a bounded, optional \emph{algebraic quantifier worker}, not as the universal executor of Forge. Its first substantial acceptance target should be a fully kernel-checked parameter-region theorem with an isolated irrational feasible point. That target forces the implementation to earn its source bridge, complete root coverage, exceptional-fibre arithmetic, and quantifier semantics together.
+
+Once that boundary is established, the same machinery can supply algebraic witnesses, exact counterexample regions, branch hypotheses for typed synthesis, and smaller facts for the other Forge workers. The significant capability gain is not the word ``CAD'' in the architecture diagram. It is a checked path from a nonlinear quantified source assertion to a complete finite geometric object, and from that object back to a proof or a correctly dependent witness.

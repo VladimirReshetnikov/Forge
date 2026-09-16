@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/data/Forge_Automatic_Arithmetic/prototype/experiments.py", line 262, in <module>
+    args=p.parse_args(); run(args.out)
+                         ~~~^^^^^^^^^^
+  File "/mnt/data/Forge_Automatic_Arithmetic/prototype/experiments.py", line 246, in run
+    else: raise AssertionError('budget did not trigger')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: budget did not trigger

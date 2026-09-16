@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/data/forge_algebraic_atlas/prototype/differential.py", line 124, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/data/forge_algebraic_atlas/prototype/differential.py", line 90, in main
+    f=expr_formula(p['formula'],[sp.expand(v.subs(x,sp.Rational(q.numerator,q.denominator))) for v in polys])
+                                           ^^^^^^
+AttributeError: 'int' object has no attribute 'subs'

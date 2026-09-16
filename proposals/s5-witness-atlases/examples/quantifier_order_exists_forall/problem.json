@@ -1,0 +1,24 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "quantifier_order_exists_forall",
+  "outer": "exists",
+  "inner": "forall",
+  "polynomials": [
+    [
+      [
+        0,
+        1,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "gt",
+    0
+  ]
+}

@@ -1,0 +1,288 @@
+\section{Backward antichains for unbounded counters}
+\label{sec:antichain}
+
+\subsection{Exact fragment and semantics}
+Fix a finite set of control locations $Q$ and $d\ge1$ counters. A state is
+$(q,x)$ with $x\in\N^d$. A transition is a tuple
+\[
+ e=(q,a,z,q'),\qquad a,z\in\N^d,
+\]
+with semantics
+\begin{equation}
+ (q,x)\xrightarrow{e}(q',x-a+z)
+ \quad\Longleftrightarrow\quad x\ge a.
+ \label{eq:netstep}
+\end{equation}
+All vector comparisons are componentwise. Consumption happens before
+production. This is a finite-control place/transition-net representation; it
+can encode a vector addition system by choosing appropriate input and output
+arcs, but input and output arcs must not be collapsed without preserving the
+enabling test.
+
+A finite collection $B_q\subseteq\N^d$ specifies the unsafe target at location
+$q$:
+\[
+ \Bad_q=\up{B_q}:=\{x\mid \exists b\in B_q,\ b\le x\}.
+\]
+Thus the question is whether a target marking can be \emph{covered}, not whether
+a prescribed vector can be reached with exact equality in every coordinate.
+For example, ``at least one process is in each of two critical sections'' is
+upward-closed. A condition such as ``counter $i$ equals zero'' generally is not.
+
+Initial states may form a finite union of families
+\begin{equation}
+ X_f=\left\{b_f+\sum_{j=1}^{m_f}n_jr_{f,j}\;:\;
+                    n_j\in\N\right\},\qquad r_{f,j}\in\N^d,
+ \label{eq:family}
+\end{equation}
+with a supplied control location $q_f$. Zero rays and $m_f=0$ are allowed.
+All parameters are independent. Correlated or bounded parameters, negative
+coefficients, and side constraints are different interfaces, not implicit
+extensions of this one.
+
+\subsection{The exact predecessor formula}
+For one target threshold $b$, the set of predecessors under $e$ is itself an
+upward cone. Define
+\begin{equation}
+ \pred_e(b)=a+(b-z)^+=\max(a,a+b-z),
+ \label{eq:pred}
+\end{equation}
+where positive part and maximum are componentwise. The expression $a+b-z$ on
+the right is interpreted over integers; $b-z$ on the left may equivalently be
+natural-number truncated subtraction.
+
+\begin{lemma}[Enabling-aware predecessor]
+\label{lem:pred}
+For $x,a,z,b\in\N^d$,
+\[
+ x\ge a\ \land\ x-a+z\ge b
+ \quad\Longleftrightarrow\quad x\ge\pred_e(b).
+\]
+Consequently $\operatorname{Pre}_e(\up b)=\up{\pred_e(b)}$.
+\end{lemma}
+\begin{proof}
+Work in one coordinate. Under $x\ge a$, the second inequality is equivalent to
+$x\ge a+b-z$ over integers. Together the two inequalities say
+$x\ge\max(a,a+b-z)=a+\max(0,b-z)$. The argument applies to every coordinate.
+\end{proof}
+
+\begin{example}[The delta-only bug]
+There are two controls and one transition from control 0 to control 1, consuming
+one token and producing one token. Initially the state is $(0,0)$. Every state
+at control 1 is bad. The net change is zero, but the transition is disabled.
+The correct backward basis is $C_1=\{0\}$ and $C_0=\{1\}$, so the initial
+state is safe. A formula using only the net change would give predecessor
+threshold zero and invent a nonexistent counterexample. The fixture
+\code{enabling} checks exactly this case.
+\end{example}
+
+\subsection{Parameter separation without a solver}
+A receipt must be disjoint from \emph{all} states in an initial family, not just
+its base. This check has a simple exact form because the rays are nonnegative.
+
+\begin{lemma}[Affine-family separation]
+\label{lem:separation}
+Let $X=b+\sum_j\N r_j\subseteq\N^d$, and let $c\in\N^d$.
+Then $X\cap\up c=\varnothing$ if and only if there is a coordinate $i$ such that
+\[
+ b_i<c_i\qquad\text{and}\qquad (r_j)_i=0\text{ for every }j.
+\]
+\end{lemma}
+\begin{proof}
+Such a coordinate stays below $c_i$ for every parameter assignment, proving
+separation. Conversely suppose no such coordinate exists. Write
+$s_i=\sum_j(r_j)_i$. Whenever $b_i<c_i$, we have $s_i>0$. Choose
+\begin{equation}
+ t=\max_{i:b_i<c_i}\left\lceil\frac{c_i-b_i}{s_i}\right\rceil,
+ \qquad\max\varnothing=0,
+ \label{eq:commonparameter}
+\end{equation}
+and set every $n_j=t$. Then $b_i+t s_i\ge c_i$ in every deficient coordinate,
+and nonnegative rays cannot spoil the other coordinates. This constructs a
+member of $X\cap\up c$. With no rays, absence of an obstruction simply means
+$b\ge c$, and the parameter tuple is empty.
+\end{proof}
+
+Different thresholds may use different obstructing coordinates. To show
+$X\cap\up C=\varnothing$, the checker verifies the lemma separately for every
+$c\in C$; it need not find one coordinate separating the entire union.
+Likewise the common value $t$ is merely a convenient witness. It is not claimed
+to minimize any initial population.
+
+This interface accommodates an arbitrary number of waiting clients while
+keeping the checker entirely within exact natural arithmetic. It does not turn
+arbitrary parameterized programs into counter systems; population abstraction
+still needs its own source-simulation proof.
+
+\subsection{Search by minimal unsafe configurations}
+Let $U^{(0)}=\Bad$ and repeatedly add all one-step predecessors. Each set is
+upward-closed, so store only its componentwise minimal vectors at each control.
+The producer keeps a queue of newly admitted vectors and an immutable
+justification node for each admission.
+
+\begin{lstlisting}
+active[q] := empty antichain for every q
+history := immutable nodes; pending := FIFO queue
+
+admit(q, v, justification):
+    if some w in active[q] has w <= v: return
+    remove every w in active[q] with v <= w
+    append (q, v, justification) to history
+    put the node in active[q] and pending
+    if an initial family at q covers v:
+        construct its parameters and follow history to a bad node
+        return the executable transition sequence
+
+admit every target threshold, with terminal justification
+while pending is not empty:
+    remove a node (q', b) from pending
+    if it is no longer active: continue
+    for every incoming transition e : q -> q':
+        admit(q, consume[e] + positive_part(b - produce[e]),
+              (e, successor_node))
+return the per-control active vectors
+\end{lstlisting}
+
+Removing a dominated vector does not remove its upward cone from the represented
+set: the newly admitted smaller vector covers it. Skipping its queued expansion
+is also sound. If $b'\le b$, then $\pred_e(b')\le\pred_e(b)$, so expansion
+of the smaller active threshold eventually covers the predecessors of the
+removed one. The worklist and active-map checks implement this argument rather
+than merely asserting that subsumption should be safe.
+
+\begin{theorem}[Termination and decision on the admitted fragment]
+\label{thm:countercomplete}
+Without operational cutoffs, the search terminates. It returns either a
+backward-closed unsafe-region receipt disjoint from every initial family, or
+an executable initial-family instance and finite trace reaching $\Bad$.
+\end{theorem}
+\begin{proof}
+Order $Q\times\N^d$ by equal control and componentwise comparison. Finite
+products of $\N$ are well quasi-ordered (Dickson's lemma), as is a finite
+disjoint union of them~\cite{abdulla,finkel,wqo}. Suppose infinitely many
+vectors were admitted. At its admission each new vector is outside the upward
+closure of all earlier admitted vectors: deletion by subsumption does not
+change that accumulated upward region. Hence there are no earlier and later
+admissions in the same control with the earlier vector below the later one.
+This contradicts the well-quasi-order property. Each admission schedules only
+finitely many predecessor operations, so the worklist empties.
+
+Initially the represented set is $\Bad$. Every admitted predecessor can reach
+a previously justified upward cone, hence eventually $\Bad$, by
+Lemma~\ref{lem:pred}. Conversely at termination the represented set contains
+$\Bad$ and is predecessor-closed, so induction on trace length shows that it
+contains every state from which $\Bad$ is reachable. It is therefore the exact
+backward reachable region. Lemma~\ref{lem:separation} decides whether any
+initial family intersects it and constructs an initial instance whenever it
+does. The stored derivation supplies the corresponding trace.
+\end{proof}
+
+The theorem does not imply a small basis, short runtime, short counterexample,
+or polynomial bit complexity. The mathematical termination argument and the
+engineering resource limit have different roles. The prototype reports
+\code{unknown} when its admission or predecessor budget is exhausted. A
+partially saturated basis is not a safe receipt.
+
+\subsection{A positive certificate smaller than the search}
+A positive receipt supplies finite lists $C_q$; they need not be minimal,
+antichains, or search-generated. The checker verifies:
+\begin{align}
+ &\forall b\in B_q,\quad \exists c\in C_q,\ c\le b,
+ \label{eq:badincluded}\\
+ &\forall e:q\to q',\ \forall b\in C_{q'},\quad
+      \exists c\in C_q,\ c\le\pred_e(b),
+ \label{eq:backclosed}\\
+ &\forall f,\quad X_f\cap\up{C_{q_f}}=\varnothing.
+ \label{eq:initseparate}
+\end{align}
+The final condition uses the obstruction coordinates of
+Lemma~\ref{lem:separation}. The certificate can carry those coordinates as
+indices for faster checking; the delivered simple checker finds them itself.
+
+\begin{theorem}[Counter receipt soundness]
+\label{thm:countersound}
+Conditions~\eqref{eq:badincluded}--\eqref{eq:initseparate} imply that no finite
+execution from an admitted initial state reaches $\Bad$.
+\end{theorem}
+\begin{proof}
+Set $I(q,x):\!\iff x\notin\up{C_q}$. This holds initially. Suppose a valid step
+from $(q,x)$ reaches $(q',y)$ and $y\in\up{C_{q'}}$. Choose $b\in C_{q'}$
+with $b\le y$. Lemma~\ref{lem:pred} yields $\pred_e(b)\le x$;
+\eqref{eq:backclosed} then gives a $c\in C_q$ below $x$, contradicting $I$.
+Thus $I$ is preserved. By \eqref{eq:badincluded}, $I$ excludes every bad state.
+Induct over the finite execution.
+\end{proof}
+
+This theorem needs neither Dickson's lemma nor correctness of the search.
+The formalized checker can be shipped before a formal proof of search
+termination. Its invariant is the \emph{complement} of a backward unsafe region,
+which is often a disjunction:
+\[
+ I(q,x)\equiv\bigwedge_{c\in C_q}\bigvee_{i<d}x_i<c_i.
+\]
+For natural counters, zero thresholds contribute impossible disjuncts; no
+subtraction of one from zero should be performed when presenting this formula.
+
+If $M=\sum_q|C_q|$, the naive closure check costs
+\[
+ O\!\left(d\sum_{e:q\to q'}|C_q|\,|C_{q'}|\right)
+\]
+integer comparisons and additions. Initial checks cost
+$O(d\sum_f m_f|C_{q_f}|)$ with a small extra term for the bases; precomputing
+which coordinates have nonzero ray sums reduces repeated work. All figures
+count arithmetic operations, not bit operations. Counter magnitudes and
+certificate byte limits remain explicit resources.
+
+\subsection{Why witness history must outlive subsumption}
+An unsafe receipt contains the selected initial family, its parameter tuple,
+and a list of original transition indices. The checker executes that list,
+checking every source control and consumption bound, and tests the final
+marking against the original bad set. It does not accept a producer's claim
+that a basis vector is reachable.
+
+A backward justification has the shape
+\[
+ (q,\pred_e(b))\xRightarrow{e}(q',b)\xRightarrow{\text{suffix}}\Bad,
+\]
+where the first arrow means that firing from the threshold produces a marking
+\emph{at least} $b$, not necessarily equal to it. Monotonicity makes the same
+suffix executable from any larger marking. This is the reason threshold
+justifications can be composed.
+
+The chain must use persistent node identifiers, not references to mutable
+antichain entries. In the one-counter fixture with increment $+1$, initial
+zero, and target 101, the active basis always has size one: $101$ is replaced
+by $100$, then by $99$, and so on. The successful negative receipt nevertheless
+has 101 steps and uses 102 historical admissions. Deleting dominated history
+would destroy the only explanation of the answer. No shortest-counterexample
+claim is made for this subsumption search.
+
+\subsection{Worked unbounded examples}
+\paragraph{A nonconvex safe region.}
+Start from any marking $(1+n,0)$ or $(0,1+n)$, with $n\in\N$. A transition
+consumes one token from a coordinate and returns two to that same coordinate.
+The unsafe target is $(1,1)$. The single basis vector $C=\{(1,1)\}$ is
+backward-closed, and each initial family has a different fixed zero coordinate.
+The receipt proves that both counters are never simultaneously positive,
+although either counter is unbounded. A single convex region containing both
+families cannot separate the bad target: it contains $(2,0)$ and $(0,2)$ and
+therefore their midpoint $(1,1)$. This distinguishes the receipt from a single
+polyhedral invariant, not from every possible polynomial or disjunctive proof.
+
+\paragraph{Mutual exclusion for arbitrary waiting populations.}
+Use coordinates $(\ell,a,b,u,v)$ for a lock, active clients of two kinds, and
+waiting clients. The initial family is
+\[
+ (1,0,0,n,m),\quad n,m\in\N.
+\]
+Entering the first critical section consumes one lock and one waiting token of
+kind $u$, and produces an active-$a$ token. Release reverses this transfer;
+kind $v$ acts analogously. The bad threshold is $(0,1,1,0,0)$. The delivered
+search computes six minimal backward thresholds, checks 24 predecessor
+operations, and certifies all $n,m$ simultaneously. Removing lock consumption
+from the second entry rule produces a two-step trace at $(n,m)=(1,1)$.
+
+This toy protocol also has an obvious resource invariant
+$\ell+a+b=1$ in its correct version. The experiment is not evidence that other
+methods cannot prove it; it demonstrates parameter extraction, original-edge
+replay, and a useful complete fragment without a user-supplied invariant.

@@ -1,0 +1,38 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "strict_and_disequality",
+  "outer": "free",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ],
+    [
+      [
+        0,
+        1,
+        "1"
+      ]
+    ]
+  ],
+  "formula": [
+    "and",
+    [
+      "eq",
+      0
+    ],
+    [
+      "ne",
+      1
+    ]
+  ]
+}

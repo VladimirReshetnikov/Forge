@@ -1,0 +1,45 @@
+{
+  "status": "PASSED",
+  "comparison": "restricted internal mechanisms, not Lean tactics",
+  "critical": {
+    "kleene_steps": 256,
+    "kleene_error": [
+      8350524623,
+      1099511627776
+    ],
+    "kleene_20_bits_met": false,
+    "newton_steps": 20,
+    "newton_error": [
+      1,
+      1048576
+    ],
+    "newton_20_bits_met": true,
+    "strict_contraction_available": false,
+    "spectral_answer": "q=1"
+  },
+  "cubic": {
+    "global_derivative_at_one": [
+      9,
+      4
+    ],
+    "local_contraction_checked": true,
+    "newton_steps": 3,
+    "lower": [
+      [
+        2320080405985,
+        8796093022208
+      ]
+    ],
+    "upper": [
+      [
+        605633950408728311530180016855333172567,
+        2296132579995160660323869492132024680448
+      ]
+    ],
+    "rho": [
+      3301132336989137853702891914561723123824100407534958300754604304137764612325401,
+      21088899299660931476031694417253168124841066619918788591014970804317586053922816
+    ]
+  },
+  "accepted_receipts": 4
+}

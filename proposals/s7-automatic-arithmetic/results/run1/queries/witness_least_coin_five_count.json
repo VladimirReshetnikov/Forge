@@ -1,0 +1,53 @@
+{
+  "context": [
+    "x",
+    "y"
+  ],
+  "formula": {
+    "op": "and",
+    "left": {
+      "op": "exists",
+      "var": "b",
+      "arg": {
+        "op": "eq",
+        "coeff": {
+          "x": 1,
+          "y": -5,
+          "b": -7
+        },
+        "rhs": 0
+      }
+    },
+    "right": {
+      "op": "not",
+      "arg": {
+        "op": "exists",
+        "var": "u",
+        "arg": {
+          "op": "and",
+          "left": {
+            "op": "le",
+            "coeff": {
+              "u": 1,
+              "y": -1
+            },
+            "rhs": -1
+          },
+          "right": {
+            "op": "exists",
+            "var": "b",
+            "arg": {
+              "op": "eq",
+              "coeff": {
+                "x": 1,
+                "b": -7,
+                "u": -5
+              },
+              "rhs": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

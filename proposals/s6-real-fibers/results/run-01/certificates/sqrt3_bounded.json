@@ -1,0 +1,105 @@
+{
+  "certificate": {
+    "interval": [
+      [
+        71,
+        41
+      ],
+      [
+        97,
+        56
+      ]
+    ],
+    "schema": "algebraic-witness-v1"
+  },
+  "expected_signs": [
+    1,
+    1
+  ],
+  "kind": "witness",
+  "name": "sqrt3_bounded",
+  "problem": {
+    "atoms": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            -1,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            -1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "degrees": [
+      2
+    ],
+    "equations": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            -3,
+            1
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "formula": [
+      "and",
+      [
+        "atom",
+        0,
+        "gt"
+      ],
+      [
+        "atom",
+        1,
+        "gt"
+      ]
+    ],
+    "parameters": 0,
+    "schema": "forge-real-fiber-v1"
+  }
+}

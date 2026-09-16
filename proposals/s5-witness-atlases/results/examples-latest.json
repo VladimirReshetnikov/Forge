@@ -1,0 +1,418 @@
+[
+  {
+    "name": "algebraic_positive",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true
+    ],
+    "base_cells": 1,
+    "plane_cells": 7,
+    "projection_degree": 2,
+    "selected_x": null,
+    "search_seconds": 0.017915514000037547,
+    "replay_seconds": 0.0015147410000508899
+  },
+  {
+    "name": "square_root_conditional",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 13,
+    "projection_degree": 1,
+    "selected_x": null,
+    "search_seconds": 0.009898572999986754,
+    "replay_seconds": 0.0022203690000424103
+  },
+  {
+    "name": "square_root_unconditional",
+    "expected": false,
+    "accepted": true,
+    "closed_value": false,
+    "truth_by_x": [
+      false,
+      true,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 9,
+    "projection_degree": 1,
+    "selected_x": 0,
+    "search_seconds": 0.004401810000103978,
+    "replay_seconds": 0.0012180159999388707
+  },
+  {
+    "name": "strict_square_band",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "base_cells": 5,
+    "plane_cells": 25,
+    "projection_degree": 2,
+    "selected_x": null,
+    "search_seconds": 0.01742382700001599,
+    "replay_seconds": 0.004425825999987865
+  },
+  {
+    "name": "inverse_hole",
+    "expected": false,
+    "accepted": true,
+    "closed_value": false,
+    "truth_by_x": [
+      true,
+      false,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 7,
+    "projection_degree": 1,
+    "selected_x": 1,
+    "search_seconds": 0.003813617999981034,
+    "replay_seconds": 0.0007565050000266638
+  },
+  {
+    "name": "inverse_guarded",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 7,
+    "projection_degree": 1,
+    "selected_x": null,
+    "search_seconds": 0.003358757000000878,
+    "replay_seconds": 0.0011403099999824917
+  },
+  {
+    "name": "vanishing_content",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 21,
+    "projection_degree": 1,
+    "selected_x": null,
+    "search_seconds": 0.00933413699999619,
+    "replay_seconds": 0.0028281200000037643
+  },
+  {
+    "name": "two_shifted_squares",
+    "expected": null,
+    "accepted": true,
+    "closed_value": null,
+    "truth_by_x": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ],
+    "base_cells": 7,
+    "plane_cells": 55,
+    "projection_degree": 3,
+    "selected_x": null,
+    "search_seconds": 0.1807190649999484,
+    "replay_seconds": 0.12606456100002106
+  },
+  {
+    "name": "overlapping_intervals",
+    "expected": null,
+    "accepted": true,
+    "closed_value": null,
+    "truth_by_x": [
+      false,
+      false,
+      false,
+      true,
+      true
+    ],
+    "base_cells": 5,
+    "plane_cells": 31,
+    "projection_degree": 2,
+    "selected_x": null,
+    "search_seconds": 0.03102983899998435,
+    "replay_seconds": 0.0062959109999383145
+  },
+  {
+    "name": "uniform_positive_quadratic",
+    "expected": null,
+    "accepted": true,
+    "closed_value": null,
+    "truth_by_x": [
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "base_cells": 5,
+    "plane_cells": 17,
+    "projection_degree": 2,
+    "selected_x": null,
+    "search_seconds": 0.01186352899992471,
+    "replay_seconds": 0.002097735000006651
+  },
+  {
+    "name": "choose_positive_quadratic",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      false,
+      false,
+      true,
+      false,
+      false
+    ],
+    "base_cells": 5,
+    "plane_cells": 17,
+    "projection_degree": 2,
+    "selected_x": 2,
+    "search_seconds": 0.008744872999955078,
+    "replay_seconds": 0.0021601990000590376
+  },
+  {
+    "name": "surjective_cubic",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "base_cells": 5,
+    "plane_cells": 23,
+    "projection_degree": 2,
+    "selected_x": null,
+    "search_seconds": 0.057964237000078356,
+    "replay_seconds": 0.03472853399989617
+  },
+  {
+    "name": "surjective_quintic",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true
+    ],
+    "base_cells": 1,
+    "plane_cells": 3,
+    "projection_degree": 4,
+    "selected_x": null,
+    "search_seconds": 0.03175507599996763,
+    "replay_seconds": 0.0006740510000327049
+  },
+  {
+    "name": "repeated_zero_curve",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 9,
+    "projection_degree": 1,
+    "selected_x": null,
+    "search_seconds": 0.005593728000008014,
+    "replay_seconds": 0.0010438749999366337
+  },
+  {
+    "name": "strict_repeated_zero_curve",
+    "expected": false,
+    "accepted": true,
+    "closed_value": false,
+    "truth_by_x": [
+      false
+    ],
+    "base_cells": 1,
+    "plane_cells": 3,
+    "projection_degree": 0,
+    "selected_x": 0,
+    "search_seconds": 0.0031830829999535126,
+    "replay_seconds": 0.00032352499999888096
+  },
+  {
+    "name": "negative_algebraic_obstruction",
+    "expected": false,
+    "accepted": true,
+    "closed_value": false,
+    "truth_by_x": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "base_cells": 7,
+    "plane_cells": 33,
+    "projection_degree": 3,
+    "selected_x": 1,
+    "search_seconds": 0.042261300000063784,
+    "replay_seconds": 0.029688527999951475
+  },
+  {
+    "name": "quantifier_order_forall_exists",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true
+    ],
+    "base_cells": 1,
+    "plane_cells": 3,
+    "projection_degree": 0,
+    "selected_x": null,
+    "search_seconds": 0.0027478499999915584,
+    "replay_seconds": 0.0002646869999125556
+  },
+  {
+    "name": "quantifier_order_exists_forall",
+    "expected": false,
+    "accepted": true,
+    "closed_value": false,
+    "truth_by_x": [
+      false
+    ],
+    "base_cells": 1,
+    "plane_cells": 3,
+    "projection_degree": 0,
+    "selected_x": null,
+    "search_seconds": 0.002229353000075207,
+    "replay_seconds": 0.00032971399991765793
+  },
+  {
+    "name": "discontinuous_choice",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true,
+      true,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 23,
+    "projection_degree": 3,
+    "selected_x": null,
+    "search_seconds": 0.02485037300004933,
+    "replay_seconds": 0.005064954999966176
+  },
+  {
+    "name": "empty_and_constant_atoms",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      true
+    ],
+    "base_cells": 1,
+    "plane_cells": 1,
+    "projection_degree": 0,
+    "selected_x": null,
+    "search_seconds": 0.0005298039999388493,
+    "replay_seconds": 8.528800003659853e-05
+  },
+  {
+    "name": "constant_false",
+    "expected": false,
+    "accepted": true,
+    "closed_value": false,
+    "truth_by_x": [
+      false
+    ],
+    "base_cells": 1,
+    "plane_cells": 1,
+    "projection_degree": 0,
+    "selected_x": null,
+    "search_seconds": 0.00012642899991988088,
+    "replay_seconds": 7.442200001150923e-05
+  },
+  {
+    "name": "degree_drop_at_zero",
+    "expected": null,
+    "accepted": true,
+    "closed_value": null,
+    "truth_by_x": [
+      false,
+      true,
+      true,
+      true,
+      true
+    ],
+    "base_cells": 5,
+    "plane_cells": 17,
+    "projection_degree": 2,
+    "selected_x": null,
+    "search_seconds": 0.012491060000002108,
+    "replay_seconds": 0.002303704000041762
+  },
+  {
+    "name": "strict_and_disequality",
+    "expected": null,
+    "accepted": true,
+    "closed_value": null,
+    "truth_by_x": [
+      false,
+      false,
+      true
+    ],
+    "base_cells": 3,
+    "plane_cells": 13,
+    "projection_degree": 1,
+    "selected_x": null,
+    "search_seconds": 0.008730811999953403,
+    "replay_seconds": 0.0018477500000244618
+  },
+  {
+    "name": "algebraic_section_only",
+    "expected": true,
+    "accepted": true,
+    "closed_value": true,
+    "truth_by_x": [
+      false,
+      true,
+      false,
+      true,
+      false
+    ],
+    "base_cells": 5,
+    "plane_cells": 15,
+    "projection_degree": 2,
+    "selected_x": 1,
+    "search_seconds": 0.015556876000005104,
+    "replay_seconds": 0.01205121100008455
+  }
+]

@@ -1,0 +1,72 @@
+\section{The capability delta, not another architectural rewrite}
+\label{sec:delta}
+\subsection{What the reviewed repository already settles}
+The reference point is the merged Forge repository at commit \repo{}, not the original one-page idea. Its status ledger describes three rounds and twenty-seven contributing proposals. Its nonlinear chapter already covers exact quadratic decomposition, polynomial cone certificates, Bernstein subdivision, univariate square-factor/Sturm certificates, and cooperation with other theories. Affine, integer-lattice, residue, and polynomial witnesses are also present. Later rounds add real linear projection, noncommutative reasoning, analytic certificates, and quantitative verification. These are prerequisites, not contributions of the present article~\cite{forge-status,forge-nonlinear}.
+
+The review for this extension concentrated on the complete merged nonlinear chapter, the current status and neighboring-project ledgers, the public certificate contract, and the finite-cover interface. It did not re-audit every frozen proposal or rerun Forge's existing suites. Thus the claim is deliberately specific: this delivery implements a coherent nonlinear algebraic-quantifier lane not implemented in the reviewed merged capability inventory. It does not claim that the word ``quantification'' or a general aspiration to stronger arithmetic never appeared in an archived proposal.
+
+Forge's existing univariate worker answers a question such as whether a specified $p(t)$ is nonnegative on a specified interval. Its polynomial-witness workers search a chosen expression language. The new worker answers a different question:
+\begin{equation}\label{eq:main-goal}
+  \forall x\in\R\;\exists y\in\R\;F(x,y),
+\end{equation}
+where $F$ can combine equations, disequalities, strict inequalities, disjunctions, and implications. It can also determine exactly which $x$ admit such a $y$, or refute a proposed quantifier order by producing a counterstrategy.
+
+This distinction changes the search object. Instead of guessing one algebraic expression and trying to verify it globally, we discover the finitely many ways the admissible fibres can change, then construct a witness separately on each resulting parameter cell.
+
+\begin{center}
+\begin{tabular}{p{0.27\textwidth}p{0.31\textwidth}p{0.32\textwidth}}
+\toprule
+Existing ingredient & What it provides & Additional object here\\
+\midrule
+Univariate root/sign checking & Signs for a fixed polynomial & Parametric root sections and exceptional fibres\\
+Affine/polyhedral projection & Linear guards and witnesses & Nonlinear algebraic boundaries and disconnected fibres\\
+Polynomial witness search & A successful dictionary term & Root-index and piecewise semialgebraic selectors\\
+Finite algebra covers & Induction over a discrete algebra & A cover of all real parameters and all fibre sectors\\
+Certificate ownership & Association with an exact source problem & An atlas receipt occupying that existing interface\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The implementation is intentionally not a replacement for cheap local saturation. A factorization, simple square, or linear elimination should still be discharged without constructing a plane decomposition. The proposed controller invokes this worker when an essential nonlinear real quantifier, a changing root structure, or an exact parameter-region request survives those cheaper routes.
+
+\subsection{A witness language that is genuinely larger}
+Consider
+\[
+ \forall x\in\R\;\exists y\in\R\quad y^2=x^2+1\ \wedge\ y\geq0.
+\]
+The natural answer is the positive root of $T^2-x^2-1$. There is no polynomial $p\in\R[X]$ satisfying $p(x)^2=x^2+1$ for all real $x$: a nonconstant solution must have degree one, say $ax+b$, and coefficient comparison forces $a^2=1$, $2ab=0$, and $b^2=1$, which is impossible. Raising a polynomial-template degree cap cannot repair that mismatch.
+
+The atlas does not need a radical simplifier. It selects the appropriate real root by its ordered position in the fibre's root list. The same representation applies to $y^5+y=x$, where a uniform radical syntax is an unnecessary restriction. It also applies when a sign condition forces the positive branch for $x\geq0$ and the negative branch for $x<0$. A single continuous witness is then not always the right target, whereas a finite branch-dependent selector is.
+
+A second kind of gain is negative information. The sentence $\forall x\exists y\;xy=1$ fails only at the isolated parameter $x=0$. A sample away from zero is excellent heuristic evidence and entirely inadequate as a proof. A complete atlas must include that parameter as its own cell. Similarly, some feasible parameter regions consist only of isolated irrational points; no collection of rational test points can discover their membership by numerical sampling alone.
+
+\subsection{The precise supported fragment}
+\label{sec:fragment}
+An input consists of polynomials $p_0,\ldots,p_{m-1}\in\Q[X,Y]$, a Boolean formula built from
+\[
+ p_i\mathrel{\bowtie}0,\qquad
+ \bowtie\in\{=,\ne,<,\le,>,\ge\},
+\]
+and quantifiers
+\[
+ Q_x\,x\;Q_y\,y\;F(x,y),\qquad
+ Q_y\in\{\exists,\forall\},\quad
+ Q_x\in\{\exists,\forall,\text{free}\}.
+\]
+``Free'' means that the output is the exact subset of the $x$-line on which the inner quantified formula holds. This is a two-stage, two-variable real-algebraic fragment. It is not the entire first-order language with two reusable variable names, and it does not support arbitrary additional symbolic real parameters. Quantified subformulas inside $F$, transcendental functions, integer quantification, and dependent source types are outside the delivered parser.
+
+A bounded domain is encoded without a second mechanism. For example, $x\in[a,b]$ becomes an antecedent for universal $x$, or a conjunction for existential $x$. A bound on existential $y$ belongs in the conjunction; a restriction on universal $y$ belongs in an implication. That polarity distinction is part of the meaning of the input, not a solver optimization.
+
+The implementation distinguishes a valid certificate for a true sentence, a valid certificate for a false sentence, and failure to obtain or replay a certificate. An accepted false verdict is a mathematical answer to the encoded closed sentence. A timeout, limit, or malformed certificate is not a false verdict. Without a proved Lean reification bridge, neither kind of accepted Python verdict is a Lean theorem.
+
+\subsection{Relationship to existing mathematics and software}
+The geometric foundation is cylindrical algebraic decomposition (CAD): partition real space into connected cells on which every relevant polynomial has constant sign, then exploit the cylindrical arrangement to propagate quantifiers. This is classical mathematics, introduced by Collins and extensively developed since; modern work also studies coverings, local cells, and proof-oriented formulations~\cite{collins,england,nalbach-cell,nalbach-cover}.
+
+The contribution here is an implementable Forge-specific specialization: a certificate with explicit guard identities, exact exceptional-fibre arithmetic, complete coverage checks, executable sign tables, and root-index strategy extraction. Limiting the first implementation to a parameter line makes the root-continuation argument and the exceptional-case boundary relatively transparent. It avoids pretending that the difficult nullification issues of higher-dimensional projection disappear by renaming them.
+
+The source-level ownership and acceptance principles are inherited from Forge, Leant, and Djex, not rediscovered. Leant's behavioral synthesis currently checks an exact rendered candidate against an exact assertion, using bounded proof attempts; the proposed atlas supplies a new proof-producing route for supported universally quantified real-algebraic assertions. Djex remains useful for constructing the surrounding higher-order term and choosing typed provider applications. Neither project needs to adopt the atlas's polynomial representation as a substitute for its own typed source graph~\cite{forge-neighbors,leant-behavior,djex}.
+
+\subsection{Deliverable status at a glance}
+\status{Executed: Python producer, exact arithmetic, replay checker, examples, differential tests, mutation tests, affine metamorphic corpus, and root-index transport probes.}
+\status{Specified but not implemented in Lean: polynomial reification, the reflected checker and its soundness theorem, root-section semantics, a tactic adapter, and strategy elaboration into source-level terms.}
+Two small core-Lean semantic combinators are included to show the final quantifier-composition shape. They are explicitly uncompiled specimens; they are not a surrogate for the missing algebraic or geometric verification. No Lean executable was available in the execution environment, and no Lean tactic comparison is reported.

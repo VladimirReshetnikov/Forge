@@ -1,0 +1,203 @@
+\section{Lean integration at the actual Forge boundary}
+\label{sec:integration}
+
+\subsection{Reuse the existing contracts}
+Forge already separates logical certificate specifications from runtime
+candidates. Its \code{ForgeContracts.CertificateSpec} has \code{denotes},
+\code{check}, and a theorem \code{sound}; its runtime sketch provides
+\code{ForgeDesign.Obligation}, \code{Candidate}, \code{ConditionalCandidate},
+\code{ScopeKey}, and \code{EngineReply}~\cite{forge-contracts,forge-runtime}.
+The new workers should implement instances of those contracts, not introduce
+another independent authority or scheduler.
+
+For the counter worker, the \code{denotes} proposition says every admitted
+initial state avoids the supplied upward bad set along every finite execution.
+For the nominal worker it says the two supplied model interpretations have
+equal output lists for every input list. For the mixed worker it says the
+original register-net model is safe, not merely its producer-generated graph.
+The model is supplied by the caller. A certificate must not replace it with an
+easier model carrying a similar name or an identical debug string.
+
+A candidate accepted by the logical checker is only one part of closing the
+source goal. The source bridge must establish the precise proposition needed
+by the current obligation, including its types, local assumptions, and
+observations. Forge's existing scope and candidate-publication rules remain in
+force. A JSON field declaring \code{safe} is not a \code{Lean.Expr} proof.
+
+\subsection{A proof-carrying frontend for counter programs}
+Let a source state space be $S$, source transition relation be $\to_S$, and
+source initial predicate be $\mathrm{Init}_S$. A safe abstraction into a model
+$M$ requires a map $\alpha:S\to Q\times\N^d$ and three bridges:
+\begin{align}
+ &\mathrm{Init}_S(s)\Longrightarrow\alpha(s)\in\mathrm{Init}_M,
+ \label{eq:bridgeinit}\\
+ &s\to_S s'\Longrightarrow\alpha(s)\to_M^*\alpha(s'),
+ \label{eq:bridgestep}\\
+ &\Bad_S(s)\Longrightarrow\Bad_M(\alpha(s)).
+ \label{eq:bridgebad}
+\end{align}
+For the first implementation, require one model step per source step; permitting
+finite stuttering paths is a later representation choice with an explicit
+path proof. These conditions let a model safety theorem imply source safety.
+The direction of \eqref{eq:bridgebad} is essential: excluding a subset of the
+source bad behavior would not establish the required goal.
+
+The converse direction is needed for a source-level counterexample. A model
+trace can be spurious under an overapproximating abstraction. Publish a negative
+result as a refutation of the \emph{model} unless every edge has a source lift
+and the initial and bad endpoints are connected appropriately. For an exact
+reification of the admitted rule language, the lift is available by evaluation;
+for a manually supplied abstraction it may not be. The runtime should then
+return a diagnostic or a refinement obligation, not falsely assert the original
+Lean proposition has been disproved.
+
+A restricted frontend can inspect a function that selects a finite transition
+and updates a fixed tuple of natural counters. It should recognize checked
+predicates of the form \code{consume[i] <= x[i]} and expressions
+\code{x[i] - consume[i] + produce[i]}. It must prove, rather than assume, that
+the enabled branch is used. Lean's natural subtraction is truncated; the
+unconditional expression may be defined even when the model's consumption
+transition is disabled. The bridge therefore exposes the guard as a hypothesis
+of each transition theorem.
+
+The local mathematical core is small:
+\begin{lstlisting}
+-- Proposed local proof obligations; not an installed Forge API.
+preScalar a z b := a + (b - z)  -- Nat subtraction
+
+preScalar a z b <= x <->
+  a <= x /\ b <= x - a + z
+
+preVector consume produce b <= x <->
+  consume <= x /\ b <= stepCounters consume produce x
+\end{lstlisting}
+The shipped \code{lean/CounterLemmas.lean} spells out these facts and the
+one-step complement-invariant argument using core Lean and \code{omega}.
+It has no placeholders, but it was not compiled here. It is not the missing
+certificate-soundness theorem and does not make the Python checker trusted.
+
+\subsection{A proof-carrying frontend for equality programs}
+For a deterministic source transducer with state $S$, one-step function
+\[
+ \mathrm{step}_S:S\to T\times\Atoms\to O\times S,
+\]
+a model registration should provide a relation $R:S\to\mathrm{ModelState}\to
+\mathrm{Prop}$ with an initial proof and a step diagram. If
+$R(s,m)$, source and model steps on the same input must give related successor
+states and equal observations. Two such registrations transport a model
+equivalence certificate to equality of source output lists by induction.
+A relation, rather than only a projection, accommodates different physical
+register layouts and hidden source fields.
+
+The one-step bridge can often be generated by splitting equality guards and
+simplifying selector updates. \code{grind} or \code{simp} can help discharge
+these \emph{local} equations, but the all-input theorem comes from the checked
+orbit certificate. That is the division of responsibility: local reasoning
+establishes that a source step has the model semantics, and the worker settles
+an unbounded family of steps.
+
+In Lean, equality of keys must really mean equality. For \code{BEq}-based source
+code, request a law connecting the Boolean result with propositional equality,
+such as a suitable \code{LawfulBEq} assumption or an explicit theorem for the
+comparison function. A hash-only comparator does not become suitable merely
+because its type is \code{Alpha -> Alpha -> Bool}. The frontend should reject
+ordering, hashing, conversion to integers, or arbitrary user callbacks unless a
+separate proof reduces their behavior to the admitted equality language.
+
+An arbitrary \code{DecidableEq} dictionary supplies equality tests, not
+additional observations about the representation of keys. The source statement
+should make this semantic scope clear. For a finite key type too small to
+realize every proposed fresh case, the infinite-atom model is a conservative
+extension for \emph{positive} equivalence: its theorem restricts to the finite
+type. A negative word must be checked for realizability in that type. For an
+infinite key type, a finite set of distinct witness labels can be embedded; a
+concrete witness printer can use the source type's supplied sample constructor
+only after validating distinctness.
+
+\subsection{Registering summaries of reusable primitives}
+The useful library unit is a proved \emph{one-step summary}, not an unchecked
+string describing a function's behavior. For example, a two-entry cache
+primitive can register a model together with the diagram connecting its
+record fields, equality tests, and return value to that model. A register
+permutation can be composed into that relation without resynthesizing an
+entire proof about arbitrary input lists.
+
+Proposed module boundaries, not existing declarations, are:
+\begin{lstlisting}
+Forge/Infinite/Counter/Model.lean
+Forge/Infinite/Counter/Certificate.lean
+Forge/Infinite/Counter/Soundness.lean
+Forge/Infinite/Equality/Language.lean
+Forge/Infinite/Equality/Patterns.lean
+Forge/Infinite/Equality/Certificate.lean
+Forge/Infinite/Equality/Soundness.lean
+Forge/Infinite/Mixed/Model.lean
+Forge/Infinite/Mixed/Soundness.lean
+Forge/Infinite/Frontend/Counter.lean
+Forge/Infinite/Frontend/Equality.lean
+Forge/Infinite/Worker.lean
+\end{lstlisting}
+The model and certificate modules should not import the search implementations.
+The equality-language interpreter should be the common \emph{formal semantics},
+while the search remains untrusted. The Python choice of different producer and
+checker interpreters is a testing device, not a recommendation to duplicate the
+trusted Lean semantics forever.
+
+\subsection{Candidate construction and proof replay}
+The worker flow is concrete. Recognize an admitted source obligation or find a
+registered summary. Build the model together with its bridge proof. Submit only
+the model data to the external or native search. Parse the returned receipt
+with resource limits. Compute the checker result and construct a proof of its
+truth using kernel-supported evaluation or proved reflection. Apply the
+corresponding \code{CertificateSpec.sound} theorem, then the source bridge.
+Finally publish a \code{Candidate} for the original obligation in its original
+scope.
+
+When some bridge facts are missing, return a \code{ConditionalCandidate} whose
+premises are those exact obligations and whose constructor uses \emph{all}
+of them. Do not publish the model theorem as if it had closed the source goal.
+An unsupported atom primitive maps to \code{FailureKind.unsupported}; a search
+cutoff to \code{budgetExhausted}; a malformed or rejected receipt to
+\code{rejectedEvidence}. These are existing Forge failure categories, not a
+new mutually incompatible result protocol.
+
+The equality worker's successful result is an equivalence theorem; the counter
+worker's is a safety theorem. Routing should use the goal's semantic shape and
+available bridge, not just names such as \code{cache} or \code{lock}. A
+counterexample from a candidate checker is useful search feedback, but the
+boundary must keep proof goals, data synthesis, and model diagnostics distinct.
+
+\subsection{How Leant and Djex fit, without overclaiming their problems}
+Leant's current indexing-composition report is especially instructive: the
+required function-valued fold and the integer-case step appear separately,
+while the original bounded composition query still has no accepted
+implementation. The report distinguishes an isolated step's candidate ordinal
+from its position in the original query and preserves the original failed
+cell~\cite{leant}. Djex likewise distinguishes checked higher-rank synthesis
+from completeness only in narrower fragments~\cite{djex}.
+
+The new workers should therefore be optional \emph{semantic discharge services}
+after normal candidate construction and reconstruction, not a replacement for
+lexical identity, universe selections, dictionary evidence, or compiler checks.
+For a candidate and specification with proved equality-machine summaries, run
+exact orbit equivalence. An inequivalent candidate yields a concrete input word
+for the behavioral filter; an equivalent candidate yields a finite receipt that
+can be turned into an all-input proof once the Lean checker and source bridge
+exist. For a resource-managing candidate with a proved mixed summary, use the
+mixed safety worker analogously.
+
+The curated Djex embedding entry point is
+\code{Language.Haskell.Djex}, with narrower checked adapters or focused
+\code{Language.Haskell.Synthesis.*} modules for specialized use~\cite{djex}.
+An integration should consume the reconstructed candidate's identity and
+attached, proved semantic summary, not private search-node structure. A
+cache of validated model equivalences must include the exact model, fixed
+constants, source bridge, interpretation of outputs, and environment identity;
+reusing a certificate solely by rendered source name is insufficient.
+
+No current prototype extracts a register machine from a higher-rank term,
+compiles Church encodings, or closes Leant's original integer-indexing query.
+Nor does this article present continuation-local synthesis as a new discovery;
+Forge's extension ledger already contains it. The added capability is exact
+all-word or all-population validation for candidates whose finite semantic
+interface has actually been established.

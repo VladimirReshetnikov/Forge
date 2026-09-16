@@ -1,0 +1,58 @@
+{
+  "status": "PASSED",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "commands": [
+    {
+      "command": [
+        "run_experiments.py",
+        "--out",
+        "/mnt/data/forge-final-validation-02/main"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "replay.py",
+        "/mnt/data/forge-final-validation-02/main"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "ablations.py",
+        "--out",
+        "/mnt/data/forge-final-validation-02/ablations"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "replay.py",
+        "/mnt/data/forge-final-validation-02/ablations"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "compact_experiment.py",
+        "/mnt/data/forge-final-validation-02/main",
+        "--out",
+        "/mnt/data/forge-final-validation-02/compact"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "replay.py",
+        "/mnt/data/forge-final-validation-02/compact"
+      ],
+      "returncode": 0
+    }
+  ],
+  "byte_identical_to_recorded_main": {
+    "certificates.jsonl": true,
+    "rejections.jsonl": true
+  },
+  "lean_compilation": "NOT_RUN",
+  "source_bridge": "NOT_IMPLEMENTED"
+}

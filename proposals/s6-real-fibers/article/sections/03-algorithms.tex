@@ -1,0 +1,167 @@
+\section{Closing one outer real parameter}\label{sec:outer}
+
+A uniform count circuit is already a useful elimination result, but it may leave a theorem about its parameters. For exactly one real parameter $t$, the package implements a complete sign-cell cover. This is a small, exact one-dimensional elimination layer; it is not a general multivariate CAD engine.
+
+\subsection{The cover polynomial}
+
+Collect every nonconstant, nonzero polynomial occurring among the characteristic coefficients used by the count circuit. Add every parameter polynomial in the outer condition. Form the monic squarefree product, equivalently the least common multiple of their monic squarefree parts:
+\begin{equation}\label{eq:coverpoly}
+P(t)=\operatorname{sqfree}\left(\prod_{g\in\mathcal G}g(t)\right).
+\end{equation}
+When $\mathcal G$ is empty, take $P=1$. Repeated copies and scalar multiples need not be retained. The checker constructs this polynomial from the already checked circuit and independently supplied outer condition; the producer cannot omit a difficult coefficient from $\mathcal G$.
+
+Let the distinct real roots of $P$ be $\alpha_1<\cdots<\alpha_s$. They define $2s+1$ cells: the point sections $\{\alpha_i\}$ and the open sectors between consecutive roots, including both unbounded tails. Every support-polynomial sign is constant on each sector, by continuity and absence of roots.
+
+\subsection{What the certificate stores}
+
+The certificate supplies rational open intervals $(\ell_i,u_i)$ containing the sections. It does not supply a truth table that the replay simply believes. The replay checks
+\[
+\ell_i<u_i<\ell_{i+1},\qquad
+\RootCount(P;(\ell_i,u_i))=1,
+\qquad s=\RootCount(P;\R).
+\]
+No finite endpoint may be a root of $P$. The exact counts use a signed rational remainder sequence constructed by the checker. The final equality establishes coverage: the disjoint intervals already account for every real root of $P$.
+
+For a sector, choose any rational point between the adjacent isolators; choose a point beyond the outer isolator for a tail. For a section, determine the sign of a support polynomial $g$ as follows. If $g$ is zero or constant, its sign is immediate. Otherwise count its roots in the section isolator. Every root of $g$ is a root of $P$, and the isolator contains exactly one root of $P$. Therefore a count of one means $g(\alpha_i)=0$. A count of zero means $g$ has constant nonzero sign throughout the isolator, so its rational midpoint gives the sign at $\alpha_i$.
+
+This argument depends on forming $P$ from \emph{all} support polynomials. Without that inclusion, a root of $g$ inside the isolator could be unrelated to $\alpha_i$. The witness checker in the next section cannot use this shortcut unless it also isolates a suitable union of roots.
+
+\begin{theorem}[Complete one-parameter sign cover]\label{thm:outer}
+An accepted cover determines the exact count-circuit value and outer-condition truth value on every cell of the real line. Consequently a universal outer quantifier is the conjunction of the cell truth values, and an existential outer quantifier is their disjunction.
+\end{theorem}
+\begin{proof}
+The interval counts, disjointness, and total root count identify all real roots of $P$ in order. No sector contains any support-polynomial root, so every such polynomial has the sign of its rational sector sample. The section procedure above computes the exact signs at each boundary point. The uniform elimination theorem then gives the exact fiber count on each cell; evaluating the outer Boolean condition is exact as well. These cells partition $\R$, proving both quantifier reductions.
+\end{proof}
+
+An isolator is a representation of an exact algebraic point, not a numerical approximation substituted for that point. A false universal claim can therefore return an algebraic counterparameter section. Likewise, a true existential claim may be witnessed only on a section, with no rational parameter satisfying it.
+
+\subsection{Two boundary-only failures}
+
+The first regression asks whether
+\[
+\forall t\geq0,\quad \exists!x>0,\quad x^2=t.
+\]
+It is false only at $t=0$. Every open sector of the complete cover makes the implication true: for $t<0$ the premise fails; for $t>0$ there is one positive root. Removing the section test produces a false acceptance.
+
+The second asks whether
+\[
+\forall t\in\R,\quad t^2-2\geq0\Longrightarrow
+\exists!x>0,\quad x^2=t^2-2.
+\]
+It is false exactly at $t=\pm\sqrt2$. Again every open sector passes. Moreover, testing \emph{every rational parameter} would still miss the counterexamples. The retained artifact contains isolating intervals for the algebraic sections and rejects the universal claim there.
+
+The dual positive control is
+\[
+\exists t\in\R,\quad t^2-2=0\ \wedge\
+\#\{x\geq0:x^2=t^2-2\}=1.
+\]
+It is true only at the two algebraic sections. The package checks an existential verdict and records a section as the decisive cell. Thus the cover is used for both negative and positive evidence, not merely for a collection of universal tests.
+
+\subsection{Limits of this closure layer}
+
+With two or more outer parameters, the prototype still constructs a uniform count circuit and evaluates it at exact rational parameter tuples, but it does not build a complete parameter-space decomposition. Sampling such tuples cannot prove a universal statement. A future higher-dimensional closure module needs a separately certified decomposition or a theorem proving the count-circuit guard from the original hypotheses. It cannot turn the existing rational specialization tests into that theorem.
+
+The one-parameter cover is not promised to be minimal. Characteristic coefficients may vanish without changing the final count. Merging adjacent cells is safe only after checking that the section and both neighboring sectors have the same relevant result. That compression is a prospective optimization, not part of the recorded implementation.
+
+\section{Algebraic witnesses rather than larger rational dictionaries}\label{sec:witness}
+
+The count theorem establishes existence, but an executable witness is another artifact. These two outputs must not be conflated.
+
+\subsection{A concrete univariate witness format}
+
+For a rational univariate source $f(x)=0$, the implemented descriptor is an open rational interval $(\ell,u)$ containing exactly one distinct real root of $f$. The source polynomial remains part of the independent problem, not a replacement chosen by the certificate. The semantic value is ``the unique root of this source polynomial in this interval''.
+
+For each source sign atom $q$, the witness replay computes $g=\gcd(f,q)$. If $g$ has a root in the isolator, it must be the isolated $f$-root, and $q$ is zero there. Otherwise the replay requires that $q$ have no root anywhere in the isolator and determines its sign at a rational midpoint. If an unrelated $q$-root remains in the isolator, the certificate is refused with a request for refinement; the checker does not infer a sign from proximity.
+
+\begin{proposition}[Witness-descriptor soundness]\label{prop:witness}
+If the source-root count is one and every atom sign is checked as above, evaluating $F$ to true proves that the uniquely isolated root satisfies the original source formula.
+\end{proposition}
+\begin{proof}
+The source-root count gives existence and uniqueness within the isolator. A common root of $f$ and $q$ is a root of their greatest common divisor, and conversely. If the common-root count is one, it is the unique $f$-root in the interval. In the other case, the no-$q$-root check and continuity fix the atom's sign throughout the interval. Hence all atom truth values at the isolated root are correct; structural evaluation of $F$ completes the argument.
+\end{proof}
+
+Local isolation does not establish that the whole source has only one admissible root. Global uniqueness needs $N_F=1$ or another global argument. Conversely, $N_F>0$ does not magically provide a rational interval selector for a multivariate parameterized fiber. The delivered selector is concrete, rational-coefficient, and univariate.
+
+\subsection{A representation gap that more search fuel cannot fix}
+
+The descriptor for the positive root of $x^2-2$ is not a rational witness. For example, the generated interval
+\[
+\frac{41}{29}<\sqrt2<\frac{58}{41}
+\]
+is a representation of the root, not a claim that either endpoint equals it.
+
+More generally, no rational function $r(t)\in\Q(t)$ satisfies $r(t)^2=t$ on a nonempty open interval. Writing $r=p/q$ and clearing denominators would give the polynomial identity $p^2=tq^2$. Comparing degrees yields an even integer equal to an odd integer. Thus increasing the degree bound in a rational-polynomial witness dictionary cannot solve the uniform square-root witness problem. At the concrete parameter $t=2$, any defined expression built solely from rational constants and rational field operations is also rational, which makes the obstruction even more immediate.
+
+An existing library provider such as a square-root function can of course change the witness language. The claim is only about the specified rational-expression grammar, not about every conceivable Lean term synthesizer. The generic root descriptor extends that grammar without requiring a named closed-form function for every algebraic equation. The quintic witness in the package illustrates this use without assuming a formula in radicals.
+
+\subsection{Proof-only and computational providers}
+
+A future Lean count theorem can produce an existence proof, from which \code{Classical.choose} supplies a real witness when noncomputability is acceptable. Such a term is a valid mathematical witness but is not an algorithm for evaluating arbitrary real inputs.
+
+For computational synthesis, the provider should instead expose a root descriptor over exact algebraic inputs and a verified interpretation into $\R$. Generalizing the implemented selector to several fiber variables requires algebraic-number arithmetic over successive extensions, certified coordinate isolation, and a proof that the selected tuple satisfies every source equation. None of those steps is delivered here. An interface should report this distinction explicitly rather than advertise a proof-only choice operation as an executable root solver.
+
+\section{Concrete algorithms and cost controls}\label{sec:algorithms}
+
+\subsection{Producer and replay pipelines}
+
+The main producer follows this sequence:
+\begin{lstlisting}
+produceFiber(source):
+  admit the monic triangular source and fixed variable order
+  interpolate the truth indicator on the sign cube
+  construct the quotient basis by the prescribed degree bounds
+  compute multiplication matrices using a Groebner normal form
+  build H1 once
+  for each nonzero indicator coefficient c[e]:
+    w := product of source atoms q[j]^e[j]
+    H := H1 * multiplicationMatrix(w)
+    emit e, c[e], H, characteristicPolynomial(H)
+\end{lstlisting}
+The replay is deliberately different:
+\begin{lstlisting}
+checkFiber(source, receipt):
+  re-check the source schema and literal monic triangular shape
+  compile the source Boolean indicator recursively
+  require exactly its nonzero support, in canonical order
+  for each required e:
+    recompute H[i,j] = trace(multiply(w*b[i]*b[j]))
+      by descending-variable substitution and diagonal coefficients
+    require exact equality with the supplied H
+    recompute trace(H), ..., trace(H^D)
+    check all Newton identities for the supplied coefficients
+  return the symbolic count circuit, not a Lean proof
+\end{lstlisting}
+
+The certificate supplies no floating eigenvalues, approximate zero tests, guessed multiplicities, or unchecked answer table. Its data are rational polynomials, exponent vectors, and exact matrix coefficients.
+
+\subsection{Arithmetic cost rather than a misleading speed guarantee}
+
+Let $C_{\mathrm{red}}$ denote the cost of a normal-form reduction at the relevant degrees, and count arithmetic operations in $R_0=\Q[\bm t]$ separately from their bit cost. The direct trace replay performs on the order of $rD^3$ reductions. Its straightforward Newton replay uses $D$ dense matrix multiplications per query, giving $O(rD^4)$ base-ring operations. These estimates explain the prototype's small dimension cap.
+
+They are not bit-complexity bounds. Sparse products can become dense; parameter degrees can grow; rational numerator and denominator lengths matter; and $D=\prod_i d_i$ already grows exponentially with the number of fiber variables when degrees are fixed above one. A low-degree but many-variable problem is not necessarily cheap.
+
+For one outer parameter, let $L$ be the degree of the squarefree cover polynomial. There are at most $2L+1$ real cells, but constructing and isolating the polynomial may dominate runtime. Subresultant remainder sequences and modular arithmetic are appropriate engineering improvements, provided their outputs still replay against exact identities and exact root counts.
+
+\subsection{Optimizations with an unchanged acceptance theorem}
+
+\textbf{Compile sparsely.} Replace truth-table interpolation in the producer by a memoized recursive indicator compiler or a ternary decision diagram. Keep the existing recursive replay independently specified. The current producer's matrix queries are demand-directed, but its initial Boolean construction still enumerates $3^m$ sign vectors; this cost must not be hidden in a sparse-query headline.
+
+\textbf{Cache reduced weights and traces.} Distinct sign monomials may reduce to the same quotient element. Exact equality of their normal forms allows reuse of the same Hermite matrix. Precompute the trace functional on the quotient basis; after a normal form is known, its trace becomes a linear combination of cached basis traces. For a faster replay variant, accompany a multiplication table with local reduction identities and prove the table's regular-representation law. Do not replace this law by the much weaker assertion that its matrices satisfy the equations.
+
+\textbf{Use exact backends where they fit.} SymPy supplies the symbolic polynomial and matrix operations used here~\cite{sympy}. Python-FLINT exposes rational-matrix characteristic polynomials and exact arithmetic, making it a candidate accelerator for concrete rational specializations~\cite{python-flint}. That interface is not by itself a multivariate symbolic Hermite engine. A symbolic FLINT-backed producer would need an additional polynomial-matrix or modular-interpolation layer; the Newton replay can remain unchanged.
+
+\textbf{Keep specialization and uniform checking distinct.} At one concrete parameter value, exact rational $LDL^{\mathsf T}$ or other inertia methods may be cheaper than a uniform characteristic-coefficient circuit. That is a useful separate path. It does not certify the unsampled parameter values. A controller should label these two products differently and never cache a pointwise inertia result as a uniform theorem.
+
+\subsection{A safe route beyond literally triangular input}
+
+There are two useful extensions that can reuse existing Forge algebraic machinery rather than duplicate it.
+
+First, select a monic triangular subsystem and leave all additional equations as equality atoms in $F$. The admitted tower supplies a finite containing fiber; the formula filters it back to the original source solution set. This handles some overdetermined systems without any ideal-equivalence certificate.
+
+Second, let an untrusted elimination engine propose a triangular presentation $T_i$. Require polynomial multiplier identities in \emph{both} directions,
+\[
+T_i=\sum_j a_{ij}f_j,\qquad f_j=\sum_i b_{ji}T_i.
+\]
+Exact expansion proves ideal equality, hence equality of the source zero sets at every specialization. Forge's existing ideal-multiplier work can supply that acceptance mechanism; the new role is to justify the finite-fiber presentation. If the identities require parameter denominators, their nonzero guards and complementary cases must be proved separately. This normalization frontend is proposed, not implemented in the package.
+
+Neither extension makes a positive-dimensional source finite by decree. If no finite containing tower or equivalent finite presentation can be certified, the worker declines the problem.

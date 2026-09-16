@@ -1,0 +1,270 @@
+{
+  "certificate": {
+    "queries": [
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          []
+        ],
+        "coefficient": [
+          -1,
+          2
+        ],
+        "exponents": [
+          1,
+          0
+        ],
+        "hermite": [
+          [
+            []
+          ]
+        ]
+      },
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          []
+        ],
+        "coefficient": [
+          -1,
+          4
+        ],
+        "exponents": [
+          1,
+          1
+        ],
+        "hermite": [
+          [
+            []
+          ]
+        ]
+      },
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          []
+        ],
+        "coefficient": [
+          1,
+          4
+        ],
+        "exponents": [
+          1,
+          2
+        ],
+        "hermite": [
+          [
+            []
+          ]
+        ]
+      },
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          []
+        ],
+        "coefficient": [
+          1,
+          2
+        ],
+        "exponents": [
+          2,
+          0
+        ],
+        "hermite": [
+          [
+            []
+          ]
+        ]
+      },
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          []
+        ],
+        "coefficient": [
+          1,
+          4
+        ],
+        "exponents": [
+          2,
+          1
+        ],
+        "hermite": [
+          [
+            []
+          ]
+        ]
+      },
+      {
+        "charpoly": [
+          [
+            [
+              [],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          []
+        ],
+        "coefficient": [
+          -1,
+          4
+        ],
+        "exponents": [
+          2,
+          2
+        ],
+        "hermite": [
+          [
+            []
+          ]
+        ]
+      }
+    ],
+    "schema": "hermite-charpoly-v1"
+  },
+  "kind": "fiber",
+  "name": "random_univariate_025",
+  "problem": {
+    "atoms": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            -1,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            0
+          ],
+          [
+            -2,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            -1,
+            1
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "degrees": [
+      1
+    ],
+    "equations": [
+      [
+        [
+          [
+            0
+          ],
+          [
+            -1,
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ]
+    ],
+    "formula": [
+      "and",
+      [
+        "atom",
+        1,
+        "ge"
+      ],
+      [
+        "atom",
+        0,
+        "lt"
+      ]
+    ],
+    "parameters": 0,
+    "schema": "forge-real-fiber-v1"
+  },
+  "specializations": [
+    {
+      "count": 0,
+      "parameters": []
+    }
+  ]
+}

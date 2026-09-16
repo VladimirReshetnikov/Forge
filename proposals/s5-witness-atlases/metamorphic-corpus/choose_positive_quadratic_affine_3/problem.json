@@ -1,0 +1,39 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "choose_positive_quadratic_affine_3",
+  "outer": "exists",
+  "inner": "forall",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "1"
+      ],
+      [
+        0,
+        1,
+        "-6"
+      ],
+      [
+        0,
+        2,
+        "4"
+      ],
+      [
+        1,
+        0,
+        "6"
+      ],
+      [
+        1,
+        1,
+        "-4"
+      ]
+    ]
+  ],
+  "formula": [
+    "gt",
+    0
+  ]
+}

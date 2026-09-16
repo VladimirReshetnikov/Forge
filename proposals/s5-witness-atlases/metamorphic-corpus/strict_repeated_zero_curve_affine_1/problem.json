@@ -1,0 +1,44 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "strict_repeated_zero_curve_affine_1",
+  "outer": "forall",
+  "inner": "forall",
+  "polynomials": [
+    [
+      [
+        0,
+        0,
+        "4"
+      ],
+      [
+        0,
+        1,
+        "4"
+      ],
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "4"
+      ],
+      [
+        1,
+        1,
+        "2"
+      ],
+      [
+        2,
+        0,
+        "1"
+      ]
+    ]
+  ],
+  "formula": [
+    "gt",
+    0
+  ]
+}

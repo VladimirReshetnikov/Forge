@@ -1,0 +1,4 @@
+mutex {'kind': 'safe', 'subject': '{"initial":[1,0,0],"kind":"petri","targets":[[0,2,0]],"transitions":[{"post":[0,1,0],"pre":[1,0,0]},{"post":[1,0,0],"pre":[0,1,0]},{"post":[0,0,1],"pre":[0,0,0]}]}', 'basis': [[0, 2, 0], [1, 1, 0], [2, 0, 0]], 'target_cover': [0], 'predecessor_cover': [[1, 0, 0], [2, 0, 1], [2, 1, 2]], 'stats': {'expansions': 3, 'peak_basis': 3, 'provenance_nodes': 3}} True
+cubic 3 [[72502512687, 274877906944]] [[18482481396745732464410246833797625, 70072405395371337826511543087398912]] True True
+algebraic True
+critical {'kind': 'extinction_one', 'subject': '{"kind":"pps","polynomials":[[{"coefficient":[1,2],"powers":[0,0]},{"coefficient":[1,2],"powers":[1,1]}],[{"coefficient":[1,2],"powers":[0,0]},{"coefficient":[1,2],"powers":[2,0]}]]}', 'weight': [[1, 1], [1, 1]]} True

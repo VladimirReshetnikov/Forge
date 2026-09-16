@@ -1,0 +1,73 @@
+{
+  "context": [],
+  "formula": {
+    "op": "not",
+    "arg": {
+      "op": "exists",
+      "var": "x",
+      "arg": {
+        "op": "not",
+        "arg": {
+          "op": "or",
+          "left": {
+            "op": "not",
+            "arg": {
+              "op": "le",
+              "coeff": {
+                "x": 1
+              },
+              "rhs": 5
+            }
+          },
+          "right": {
+            "op": "exists",
+            "var": "y",
+            "arg": {
+              "op": "and",
+              "left": {
+                "op": "le",
+                "coeff": {
+                  "y": 1
+                },
+                "rhs": 5
+              },
+              "right": {
+                "op": "not",
+                "arg": {
+                  "op": "exists",
+                  "var": "z",
+                  "arg": {
+                    "op": "not",
+                    "arg": {
+                      "op": "or",
+                      "left": {
+                        "op": "not",
+                        "arg": {
+                          "op": "le",
+                          "coeff": {
+                            "z": 1
+                          },
+                          "rhs": 5
+                        }
+                      },
+                      "right": {
+                        "op": "cong",
+                        "coeff": {
+                          "x": -3,
+                          "y": -3,
+                          "z": -2
+                        },
+                        "rhs": -2,
+                        "modulus": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

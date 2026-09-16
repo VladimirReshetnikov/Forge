@@ -1,0 +1,185 @@
+[
+  {
+    "constants": 0,
+    "controls": 1,
+    "initial_control": 0,
+    "initial_registers": [
+      null,
+      null
+    ],
+    "registers": 2,
+    "rules": [
+      {
+        "dst": 0,
+        "guard": [
+          "eq",
+          [
+            "input"
+          ],
+          [
+            "reg",
+            0
+          ]
+        ],
+        "output": [
+          "bool",
+          true
+        ],
+        "src": 0,
+        "tag": "request",
+        "update": [
+          [
+            "reg",
+            0
+          ],
+          [
+            "reg",
+            1
+          ]
+        ]
+      },
+      {
+        "dst": 0,
+        "guard": [
+          "eq",
+          [
+            "input"
+          ],
+          [
+            "reg",
+            1
+          ]
+        ],
+        "output": [
+          "bool",
+          true
+        ],
+        "src": 0,
+        "tag": "request",
+        "update": [
+          [
+            "input"
+          ],
+          [
+            "reg",
+            0
+          ]
+        ]
+      },
+      {
+        "dst": 0,
+        "guard": true,
+        "output": [
+          "bool",
+          false
+        ],
+        "src": 0,
+        "tag": "request",
+        "update": [
+          [
+            "input"
+          ],
+          [
+            "reg",
+            0
+          ]
+        ]
+      }
+    ],
+    "tags": [
+      "request"
+    ]
+  },
+  {
+    "constants": 0,
+    "controls": 1,
+    "initial_control": 0,
+    "initial_registers": [
+      null,
+      null
+    ],
+    "registers": 2,
+    "rules": [
+      {
+        "dst": 0,
+        "guard": [
+          "eq",
+          [
+            "input"
+          ],
+          [
+            "reg",
+            0
+          ]
+        ],
+        "output": [
+          "bool",
+          true
+        ],
+        "src": 0,
+        "tag": "request",
+        "update": [
+          [
+            "reg",
+            0
+          ],
+          [
+            "reg",
+            1
+          ]
+        ]
+      },
+      {
+        "dst": 0,
+        "guard": [
+          "eq",
+          [
+            "input"
+          ],
+          [
+            "reg",
+            1
+          ]
+        ],
+        "output": [
+          "bool",
+          true
+        ],
+        "src": 0,
+        "tag": "request",
+        "update": [
+          [
+            "reg",
+            0
+          ],
+          [
+            "reg",
+            1
+          ]
+        ]
+      },
+      {
+        "dst": 0,
+        "guard": true,
+        "output": [
+          "bool",
+          false
+        ],
+        "src": 0,
+        "tag": "request",
+        "update": [
+          [
+            "input"
+          ],
+          [
+            "reg",
+            0
+          ]
+        ]
+      }
+    ],
+    "tags": [
+      "request"
+    ]
+  }
+]

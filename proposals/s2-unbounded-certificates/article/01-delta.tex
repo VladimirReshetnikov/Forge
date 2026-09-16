@@ -1,0 +1,45 @@
+\section{What this adds, and what it deliberately does not repeat}
+\subsection{The actual baseline}
+The baseline is not the first proposal for a stronger version of \code{grind}. Forge at commit \code{58ea206bd7ad501b930add568151217bcc7f82a2} contains a 128-page merged article and twenty-seven archived proposals, arranged in three rounds. Its README distinguishes the unimplemented tactic from the Python algorithms and from the core-only Lean specimens subsequently elaborated by the merge. The latter distinction matters: it would be false to say that no Lean file in Forge has ever compiled. Conversely, their compilation does not constitute an implementation of the certificate checkers proposed here. These are the repository's own statements, not experiments performed in this report~\cite{forge-readme}.
+
+The inspection covered the README, the merged conclusion, the quantitative section, the beginning of the closure section, the repository tree, and the existing Leant/Djex integration review. The neighboring repositories' READMEs and current commit metadata were also inspected~\cite{forge-quant,forge-closure,forge-neighbors,leant,djex}. This is a targeted audit of the merged baseline, not a claim to have read every line of every archived submission. In particular, the absence claims below concern the capabilities described in that merged baseline. The exact files and revisions are retained in \code{SOURCE-AUDIT.md}.
+
+The baseline already covers induction and generalization, witness synthesis, nonlinear arithmetic certificates, observable-space and ideal closures, finite algebraic covers, noncommutative identities, analytic remainder certificates, finite probabilistic systems, games, couplings, and nonprobabilistic pushdown summaries. It also already specifies scoped verification receipts, source ownership, worker separation, and disciplined negative evidence. None of these is presented as a new contribution here.
+
+The strongest direct opening is in the baseline's quantitative section. It excludes probabilistic pushdown and several other fragments when the result need not be an exact rational. That exclusion is a useful implementation boundary, but it is not a boundary of \emph{exact certification}: rational enclosures can certify an irrational value, and a finite polynomial root description can sometimes identify it exactly~\cite{forge-quant,etessami-yannakakis}.
+
+\subsection{Four new certificate forms}
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{P{0.21\textwidth}P{0.34\textwidth}P{0.36\textwidth}}
+\toprule
+Certificate & What it establishes & What makes it different from the baseline \\
+\midrule
+Backward antichain & An upward-closed bad set cannot be reached in an unbounded multiset system. & The reachable state set need not be finite; termination of search comes from a well-quasi-order, not a fixed state bound or vector-space dimension.\\[4pt]
+Least-fixed-point enclosure & Rational $\ell,u$ with $\ell\le\lfp(P)\le u$, optionally to a requested width. & Nonlinear recursive probability equations can have several fixed points and an irrational least solution.\\[4pt]
+Weighted Newton step & A new certified lower bound without a matrix inverse in the certificate. & A finite maximum-principle argument changes checker cost and certificate shape; it is implemented and measured here.\\[4pt]
+Critical extinction / isolated root & Either $\lfp(P)=\one$, including a critical branching case, or an exact isolated algebraic root. & Strict contraction and rational-value solving do not express all these conclusions.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These are not four competing architectures. They are additional workers attached to the already proposed obligation controller. Their common pattern is unusually small: retain a finite object that certifies a fact about an infinite semantics. But their proof rules differ enough that they must not be conflated. An antichain is backward closed; a probability upper bound is a prefixed point; a probability lower bound needs a path from zero or another justified lower bound; and critical extinction needs a nondegeneracy argument.
+
+\subsection{Established algorithms, concrete engineering contribution}
+Backward coverability in well-structured systems and Newton methods for positive polynomial systems are established subjects~\cite{finkel-schnoebelen,esparza-kiefer-luttenberger,etessami-stewart-yannakakis}. This report does not claim to invent either. It derives the specific finite checks needed by Forge, proves their soundness in the precise fragments used by the prototypes, and exposes the places where a plausible generalization is false.
+
+The distinction is useful for evaluating the work. A new name for an existing closure is not progress. A checker accepting an unbounded resource invariant, or a certified interval containing an irrational return probability, is a genuine change in the kinds of obligations the design can represent. Turning either into a Lean theorem still requires the explicitly listed source bridge and checker-soundness proofs.
+
+\subsection{What comes from Leant and Djex}
+Leant and Djex already preserve source-owned typed candidate information and separate successful reconstruction from unsupported negative claims. Forge's own review already imports those lessons, so this report does not repackage them~\cite{forge-neighbors,leant,djex}. The additional connection proposed here is \emph{behavioral}: a candidate using a small certified multiset or independent-branching API can be translated to a Petri or polynomial-system obligation, then analyzed by one of these workers.
+
+A typed synthesis graph is useful provenance for that translation, not its correctness proof. A callback of a particular type need not have a particular transition effect. Two calls of the same function type need not use independent random choices. Each provider therefore needs a separate semantic law, and the adapter must preserve which provider and which law the candidate actually used. This creates a concrete route from typed synthesis to these new behavioral results without claiming that the current integer-indexing or two-universe synthesis gaps in Leant and Djex have been solved.
+
+\section{Two infinite semantics, two different finite explanations}
+The state space $\N^d$ is infinite even when $d$ and the transition set are fixed. The lattice of real probability vectors $[0,1]^n$ is infinite even when the polynomial system is finite. Neither difficulty is removed by testing more finite instances.
+
+The coverability worker exploits an order on \emph{states}. Once a marking can reach an upward-closed bad set, a larger marking can do so too. An entire infinite set can therefore have a finite basis. The probability worker exploits an order on \emph{approximations}. Iterating a monotone polynomial map from zero approaches its least fixed point, and finite algebraic inequalities can bracket that point without enumerating recursive runs.
+
+This contrast controls the implementation. Coverability produces a finite closure or a concrete trace. Probability approximation produces an interval, an exact special-case result, or a valid interval that is still too wide. A single Boolean ``success'' flag would erase useful distinctions. The prototype retains a requested-width result separately from validity; it does not invent a new system-wide outcome architecture in place of Forge's existing one.
+
+The mathematical carrier used below is explicit. All vector inequalities are componentwise. All certificate coefficients and all executed arithmetic are exact integers or rationals. Real numbers occur in the semantic theorems, not as floating-point inputs to the checkers. Numerical computations in the experiments are labeled diagnostic and do not authorize acceptance.

@@ -1,0 +1,97 @@
+\section{Canonical images with checkable pruning}
+\label{sec:canonical}
+For a coloring $c:[n]\to\NN$, the canonical-image problem is
+\[
+  \can_G(c)=\min_{g\in G}^{\mathrm{lex}} g\cdot c.
+\]
+A transporter $g$ proves only that a proposed image is reachable. It does not prove that the image is least. The additional certificate is a complete cover of the group's coset decomposition, with a locally checkable lower bound at every pruned node.
+
+\subsection{A lower bound for an entire coset}
+At level $i$ of an accepted chain, let $O_i(k)$ be the orbit of point $k$ under $K_i$. Define
+\[
+  m_i(k)=\min_{t\in O_i(k)}c(t).
+\]
+The producer computes these point orbits with union--find. The checker recomputes them by graph traversal under the prefix-fixing generators. It does not reuse the producer's orbit partition.
+
+A node of the search represents the coset $pK_i$. Its proposed lower bound is the tuple
+\begin{equation}
+  L(p,i)=p\cdot m_i.\label{eq:coset-lower}
+\end{equation}
+\begin{lemma}[Coset lower bound]
+For every $h\in K_i$ and every coordinate $j$,
+\[
+   (ph\cdot c)(j)\geq L(p,i)(j).
+\]
+In particular $L(p,i)\leq_{\mathrm{lex}}ph\cdot c$.
+\end{lemma}
+\begin{proof}
+Put $k=p^{-1}(j)$. Then
+$(ph\cdot c)(j)=c(h^{-1}(k))$, and $h^{-1}(k)\in O_i(k)$.
+The coordinatewise lower bound follows from the definition of $m_i$.
+A coordinatewise lower bound is also a lexicographic lower bound.
+\end{proof}
+
+The minima at different coordinates need not be simultaneously attainable by one permutation. That is harmless: a lower bound may be an optimistic relaxation. It becomes unsound only if the implementation mistakenly treats the relaxed tuple as a reachable solution. Reachability is checked separately through the transporter.
+
+\subsection{The coverage certificate}
+The canonical-image certificate contains a claimed best tuple $b$, a transporter, and a tree whose nodes are either \code{["cut"]} or \code{["split", children]}. The checker starts at $(p,i)=(1,0)$ and derives all child cosets itself.
+
+At a cut it verifies $L(p,i)\geq_{\mathrm{lex}} b$. At a split it requires exactly one child for each transversal in $T_i$, in the chain's fixed table order. The child associated with $t\in T_i$ represents $(pt)K_{i+1}$. Missing children are rejected. Splitting below the full base is rejected. A leaf at the bottom has an exact bound because $K_n$ is trivial.
+
+\begin{theorem}[Canonical-cover soundness]
+\label{thm:canonical}
+Suppose the chain is accepted, the supplied transporter belongs to $G$ and sends $c$ to $b$, and every node of the coverage certificate passes its check. Then $b=\can_G(c)$.
+\end{theorem}
+\begin{proof}
+Theorem~\ref{thm:chain} makes each split a disjoint, exhaustive decomposition of its parent coset. Induction on the finite cover tree shows that every element of $G$ lies below a cut. The lower-bound lemma shows that each corresponding image is at least $b$. The checked transporter gives an element attaining $b$, so $b$ is the minimum.
+\end{proof}
+
+The producer performs two passes. First it searches for an incumbent, visiting children in increasing lower-bound order. Then it constructs a cover for the final incumbent. Only the second tree is the minimality certificate. Search-node counts and proof-node counts are recorded separately because an efficient discovery order need not yield a small proof of completeness.
+
+\subsection{What this does and does not make easy}
+The certificate makes each pruning decision explicit, but it does not make generic canonical-image search polynomial. In the worst case the coset tree approaches explicit enumeration. Repeated colors can leave the pointwise lower bound far below every attainable tuple, so many branches survive. In the recorded development run, the generic $\Sym_{15}$ case with colors repeating $0,1,2$ exhausted a 20,000-node budget. This result is preserved as \emph{unknown}, not hidden in a success count.
+
+Three improvements are concrete but not implemented here: stabilize already individualized color classes to tighten the remaining group; cache lower-bound data for repeated cosets with checked transport; and accept stronger block-orbit bounds that solve a smaller matching problem with its own certificate. Each improvement must leave the complete-cover rule unchanged or replace it with an explicitly proved covering theorem. An external canonical-labeling program's answer alone is not a minimality certificate.
+
+For orbit equality, however, there is an immediate useful consequence. If checked transporters satisfy $g_c\cdot c=b$ and $g_d\cdot d=b$, then $(g_d^{-1}g_c)\cdot c=d$. Distinct checked canonical images prove that $c$ and $d$ lie in different $G$-orbits. The latter negative conclusion requires complete minimality certificates on both sides, unless a separate invariant already distinguishes them.
+
+\section{Recognized families: an exact escape from factorial search}
+\label{sec:families}
+A generic algorithm should not ignore a group it can identify exactly. A checked chain proves the order, so family recognition can be elementary rather than probabilistic.
+
+\begin{proposition}[Symmetric and alternating recognition]
+Let $G\leq\Sym_n$ have an accepted chain.
+\begin{enumerate}
+\item If $|G|=n!$, then $G=\Sym_n$.
+\item If $n\geq2$, every original generator is even, and $2|G|=n!$, then $G=\Alt_n$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+A subgroup of a finite group with the same cardinality is the whole group. In the second case the sign homomorphism gives $G\subseteq\Alt_n$, whose order is $n!/2$ for $n\geq2$.
+\end{proof}
+
+The certificate is just a family tag. The checker recomputes the order and parity conditions; a solver's family label has no authority. This differs deliberately from a probabilistic recognition shortcut. SymPy documents Monte Carlo symmetric/alternating recognition for some degrees; such routines are acceptable proposal sources but cannot replace these exact gates \cite{sympy}.
+
+\subsection{Canonical images for the symmetric group}
+For $\Sym_n$, the least image is the sorted tuple. The producer builds an explicit sorting transporter by assigning each occurrence of a color to an unused destination of that color. The checker requires the proposed best tuple to equal the sorted source, checks transporter membership by the accepted chain, and checks its action.
+
+This certificate has no coset cover. Its minimality proof is the usual exchange argument for sorting, to be formalized once. Its data size is linear in $n$, apart from the already shared chain certificate. The Python implementation uses comparison sorting and quadratic inversion counting in the alternating case; no linear-runtime claim is made.
+
+\subsection{Canonical images for the alternating group}
+Even permutations introduce a small but important distinction.
+
+\begin{theorem}[Alternating canonical image]
+\label{thm:alternating-image}
+Let $n\geq2$ and let $a$ be the sorted version of $c$.
+If $c$ contains a repeated color, then $\can_{\Alt_n}(c)=a$.
+If all colors are distinct, let $\epsilon$ be the parity of the unique sorting transporter. For $\epsilon=0$ the minimum is $a$; for $\epsilon=1$ it is $a$ with its last two entries exchanged.
+\end{theorem}
+\begin{proof}
+With a repeated color, a transposition of two equal-colored source positions fixes $c$. Composing an odd sorting transporter with this odd stabilizer element makes it even without changing its image.
+
+With distinct colors, the sorting transporter is unique. If it is even, sorting is feasible. Otherwise a feasible image must differ from the sorted tuple by an odd permutation. Among all nonsorted permutations of a strictly increasing tuple, the lexicographically smallest exchanges only the final two entries: any permutation first differing earlier is larger at that earlier coordinate. This final transposition is odd, so composing it with the odd sorting transporter gives an even transporter and the claimed minimum.
+\end{proof}
+
+For instance, under $\Alt_5$ the tuple $(1,0,2,3,4)$ has minimum $(0,1,2,4,3)$, not $(0,1,2,3,4)$. In contrast, a repeated-color tuple such as $(1,0,0,2,3)$ can reach its sorted image. Both branches are covered by tests against full group enumeration at small degrees.
+
+This family-specific certificate resolves the recorded $\Sym_{15}$ budget fixture, but it does not retroactively make the generic search successful. The artifact ledger keeps both facts: a generic refusal and a separate accepted shortcut.

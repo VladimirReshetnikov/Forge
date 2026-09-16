@@ -1,0 +1,24 @@
+{
+  "schema": "forge.atlas.problem/1",
+  "name": "square_root_unconditional",
+  "outer": "forall",
+  "inner": "exists",
+  "polynomials": [
+    [
+      [
+        0,
+        2,
+        "1"
+      ],
+      [
+        1,
+        0,
+        "-1"
+      ]
+    ]
+  ],
+  "formula": [
+    "eq",
+    0
+  ]
+}

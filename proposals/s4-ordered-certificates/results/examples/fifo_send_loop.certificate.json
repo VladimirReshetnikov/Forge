@@ -1,0 +1,89 @@
+{
+  "basis": [
+    3,
+    1,
+    0
+  ],
+  "closure": [
+    {
+      "basis": 0,
+      "cover": [
+        0
+      ],
+      "predecessor": {
+        "kind": "lossy-word"
+      },
+      "transition": 0
+    },
+    {
+      "basis": 1,
+      "cover": [
+        0
+      ],
+      "predecessor": {
+        "kind": "lossy-word"
+      },
+      "transition": 1
+    },
+    {
+      "basis": 2,
+      "cover": [
+        1
+      ],
+      "predecessor": {
+        "kind": "lossy-word"
+      },
+      "transition": 2
+    }
+  ],
+  "format": "forge-ordered-v1",
+  "nodes": [
+    {
+      "kind": "bad",
+      "state": {
+        "q": 2,
+        "v": [
+          ""
+        ]
+      },
+      "target": 0
+    },
+    {
+      "child": 0,
+      "kind": "pred",
+      "state": {
+        "q": 1,
+        "v": [
+          "b"
+        ]
+      },
+      "transition": 2
+    },
+    {
+      "child": 1,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          "ab"
+        ]
+      },
+      "transition": 1
+    },
+    {
+      "child": 2,
+      "kind": "pred",
+      "state": {
+        "q": 0,
+        "v": [
+          "a"
+        ]
+      },
+      "transition": 0
+    }
+  ],
+  "subject": "{\"alphabet\":[\"a\",\"b\"],\"bad\":[{\"q\":2,\"v\":[\"\"]}],\"channels\":1,\"controls\":3,\"kind\":\"lossy\",\"transitions\":[{\"channel\":0,\"op\":\"send\",\"source\":0,\"symbol\":\"b\",\"target\":0},{\"channel\":0,\"op\":\"recv\",\"source\":0,\"symbol\":\"a\",\"target\":1},{\"channel\":0,\"op\":\"recv\",\"source\":1,\"symbol\":\"b\",\"target\":2}]}",
+  "target_cover": [
+    2
+  ]
+}

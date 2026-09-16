@@ -1,0 +1,75 @@
+\section{Complexity, next algorithms, and acceptance milestones}\label{sec:next}
+
+\subsection{Where the cost actually goes}
+With \(k\) active tracks, the explicit alphabet has \(2^k\) letters. A product may have \(Q_1Q_2\) states; projecting a \(Q\)-state DFA may create up to \(2^Q\) subsets. Repeated complementation and projection can make successive quantifier alternations costly. The unbounded-input semantics does not imply tractable complexity.
+
+The tail correction is relatively cheap: there are only two relevant zero-visible edges per source state, so reverse reachability is linear in the source graph size for one eliminated track. Moving this calculation before determinization is a concrete advantage of the design. It avoids doing tail reachability on a potentially exponential powerset graph and gives ranks with the source-state bound.
+
+Atomic carries are finite, but their simple interval bounds depend on \emph{numeric} coefficient magnitudes rather than their bit lengths. Congruence states can also grow with the modulus. A formula with a huge binary-written coefficient may therefore be difficult despite having very little source text. Resource prediction should account for coefficient size as well as syntax size and alternation depth.
+
+The implemented minimizer repeatedly refines states by the pair consisting of their acceptance bit and their successor partition identifiers. There are at most \(Q\) refinement rounds, each inspecting \(2^k Q\) transitions, before stabilization. Dictionary operations and tuple construction add real implementation costs. The checker avoids proving refinement optimality by validating only the resulting quotient map.
+
+Replay checks the entire stored derivation. Atomic and quotient checks are essentially linear in their table sizes, apart from integer arithmetic. Projection checks materialize the exact successor image of each stored subset on each letter, which costs in proportion to the subset members examined, not merely the number of output states. The source and target tables, label arrays, and formula payloads all contribute to storage.
+
+\subsection{Block existential elimination}
+A concrete optimization is to combine adjacent existential quantifiers before determinization. For
+\(\exists y_1\cdots\exists y_m\,\phi\), project the \(m\)-bit hidden block at once:
+\[
+ \Delta(q,d)=\{\delta(q,(d,b)):b\in\bits^m\}.
+\]
+Compute the tail closure using the zero-visible transitions for all \(2^m\) hidden letters, then perform one subset construction. The receipt needs a hidden block value at each positive-rank state, complement closure under every hidden block, and exact subset images over the same block alphabet.
+
+The soundness proof is identical to Theorem~\ref{thm:exists}, now choosing a common length for all hidden values. This can avoid repeated intermediate determinization. Its local branching cost is \(2^m\), so a controller should cap block size rather than combine an arbitrarily long block automatically. The current prototype eliminates one variable at a time; the block rule is a specified next implementation, not a measured result.
+
+\subsection{Track support and justified miniscoping}
+The present compiler keeps every active context track in every atom, even when an atom ignores most of them. A support analysis can annotate each subformula with exactly the free tracks it uses. Compile a machine over that smaller alphabet, then add a proved letter map when combining it with a larger context. The receipt is the equation
+\[
+ \delta_B(q,d)=\delta_A(q,\operatorname{restrict}_S(d)),
+\]
+plus identical initial and final states. This is a concrete use of the letter-comapping interface rather than an unproved elimination of apparently irrelevant variables.
+
+Scope-safe rewrites can further reduce the active alphabet:
+\[
+ \exists y\,(A\land B)\iff A\land\exists y\,B
+ \qquad\text{when }y\notin\operatorname{FV}(A).
+\]
+Analogous rules should be admitted through explicit propositional equivalences and freshness premises. Apply them bottom-up when they reduce estimated peak tracks; avoid gratuitous prenex conversion. This targets the \(2^k\) alphabet factor before applying lower-level state optimizations.
+
+\subsection{Minimize by expected downstream savings}
+The ablation suggests a conditional policy. For a candidate quotient, estimate its downstream use count \(u\), source and quotient cell counts \(C_s,C_q\), and the cost of constructing and storing the receipt. Prefer minimization when a predicted quantity such as
+\[
+ u(C_s-C_q)-C_{\mathrm{receipt}}-C_{\mathrm{refinement}}
+\]
+is positive, using these values only for scheduling, never for correctness. Before a determinization, even a moderate state reduction can be valuable; before a final verdict on a tiny graph, it may not be.
+
+The scheduler should record the policy choice and retain an on/off comparison mode. Do not learn a cost rule from the same nine examples and then report its improvement on those examples as independent evaluation. Larger families with changing moduli, coefficients, track counts and alternation depth are needed.
+
+\subsection{Bitmaps, tables, and proof sharing}
+The prototype represents subsets as sorted tuples and replays them as explicit sets. A production producer can replace them with bitmaps and precompute the two successor images for each retained letter. The certificate format can remain explicit initially. Later, compressed bitmaps can be decoded into finite sets with a theorem that decoding preserves membership and bitwise union.
+
+The witness evaluator sorts reachable states at each position for deterministic output. Its \(O(nQ)\) transition count therefore coexists with an additional comparison cost of up to \(O(nQ\log Q)\) in this Python implementation. An indexed bitmap scan can give deterministic enumeration without comparison sorting. This is a small but concrete distinction between the abstract evaluator bound and the delivered code.
+
+Subformula memoization already shares nodes within one compilation. Cross-goal cache entries need more than identical arithmetic text: their source bridges, contexts, atom definitions and Lean environment dependencies must still be valid. A safe first cache stores automata as \emph{search hints} and reruns receipt verification against the current typed query. Environment-aware certified reuse is a later optimization, not a reason to weaken root binding.
+
+\subsection{An implementation sequence with falsifiable gates}
+\paragraph{Milestone 1: formal semantics and local atoms.}
+Compile encoding, finite tables, and exact equality/inequality atom theorems in the pinned Lean environment. Include negative coefficients, zero, large constants, and a deliberate wrong floor-division control. The acceptance condition is a theorem about the original natural-number atom, not merely a theorem about an integer recurrence.
+
+\paragraph{Milestone 2: exact projection.}
+Compile the tail-receipt theorem and subset correctness. Replay the empty-input case \(\exists y\,(y=1)\) and the longer-witness family \(\forall x\,\exists y\,(y=2x+1)\). Reject certificates with omitted and spurious tail states. A same-length encoding theorem does not satisfy this milestone.
+
+\paragraph{Milestone 3: original Lean goals.}
+Implement the supported expression reifier and a minimal tactic adapter. Compile the original statements for the alternating cut, division by 17, and the 5/7 coin threshold. Inspect the final theorem's axiom inventory and keep actual false statements as completed rejection controls. This is the first point at which a native capability gain may be claimed.
+
+\paragraph{Milestone 4: automatic atoms and executable witnesses.}
+Prove the Lean bridges for powers of two and popcount parity. Implement the bounded dynamic-program witness evaluator and prove its specification. Evaluate the next-power and next-parity selectors at the stated large inputs inside Lean. A Python result pasted as a numeral is not a synthesized Lean function, and a graph theorem without an executable witness does not close this gate.
+
+\paragraph{Milestone 5: comparative evaluation.}
+Only after those gates, compare with the relevant native methods on original statements under matched trust and resource settings. Separate arithmetic-only, automatic-predicate, and witness-construction tasks. Record solved statements, semantic refusals, timeouts, peak memory, certificate bytes and replay costs. Report cold and warm caches separately. Fixed-width bit-vector instances belong in a different benchmark class unless an explicit theorem justifies their finite bound.
+
+No duration estimate is warranted from the Python measurements alone. The difficult work is not writing another BFS; it is formalizing the encoding/reification bridge and making the original statement survive the entire pipeline.
+
+\section{Conclusion}
+The most useful addition here is a new \emph{semantic lane}, not another outer scheduler: first-order automatic arithmetic on unbounded naturals, compiled into finite relations with exact replay receipts. Its quantifier rule handles long hidden values correctly, and its least-graph construction turns those relations into concrete witness programs without a fixed algebraic ansatz.
+
+The proposal is deliberately bounded in what it claims. Classical automata theory supplies the mathematics; existing Lean formalizations supply relevant foundations; the delivered Python implementation demonstrates the proposed operational contract and exposes the padding error with direct controls. The next decisive advance is an end-to-end Lean replay of the original quantified statement. The bundle provides the algorithms, equations, tests and evidence needed to make that advance specific and reviewable.

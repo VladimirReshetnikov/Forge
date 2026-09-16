@@ -1,0 +1,285 @@
+\section{Compile the goal before computing the algebra}\label{sec:indicator}
+
+A general sign-determination algorithm can compute how many points realize each of the $3^m$ sign vectors in $\{-1,0,1\}^m$. A particular proof goal often needs much less information. We first turn its truth value into a polynomial on this finite sign cube.
+
+\subsection{The sign-indicator algebra}
+
+Introduce variables $s_1,\ldots,s_m$ with relations $s_j^3=s_j$. Their intended values are $s_j=\sgn(q_j)$. The following identities are exact on the sign cube:
+\begin{align*}
+\mathbf1_{s>0}&=\frac{s^2+s}{2},&
+\mathbf1_{s<0}&=\frac{s^2-s}{2},&
+\mathbf1_{s=0}&=1-s^2,\\
+\mathbf1_{s\ne0}&=s^2,&
+\mathbf1_{s\ge0}&=1-\frac{s^2-s}{2},&
+\mathbf1_{s\le0}&=1-\frac{s^2+s}{2}.
+\end{align*}
+If $I$ and $J$ are the indicators of two formulas, Boolean operations become
+\begin{align*}
+I_{\neg F}&=1-I,&I_{F\wedge G}&=IJ,&I_{F\vee G}&=I+J-IJ,\\
+I_{F\Rightarrow G}&=1-I+IJ,&
+I_{F\Leftrightarrow G}&=1-I-J+2IJ.
+\end{align*}
+After each product, replace a positive exponent $a$ by $1+((a-1)\bmod2)$. Thus every monomial has exponent vector in $\{0,1,2\}^m$. The zero exponent remains zero; in particular, $s^0=1$ even when $s=0$.
+
+\begin{proposition}[Exact indicator compiler]\label{prop:indicator}
+The recursive construction yields a polynomial
+\[
+I_F(\bm s)=\sum_{\bm e\in\{0,1,2\}^m}c_{\bm e}\bm s^{\bm e}
+\]
+with rational coefficients such that $I_F(\bm s)$ is exactly $1$ or $0$ according as $F$ is true or false on the sign vector $\bm s$.
+\end{proposition}
+\begin{proof}
+Check each atomic identity at $-1,0,1$. The Boolean identities are the truth tables of the corresponding operations on $\{0,1\}$. Reduction by $s_j^3=s_j$ preserves values on the cube. Structural induction on the source formula proves the result.
+\end{proof}
+
+The prototype's producer intentionally uses a different construction. For each sign vector satisfying $F$, it adds the tensor-product Lagrange indicator
+\[
+\prod_{j=1}^m L_{s_j}(z_j),\qquad
+L_0(z)=1-z^2,\quad L_{+1}(z)=\frac{z^2+z}{2},\quad
+L_{-1}(z)=\frac{z^2-z}{2}.
+\]
+The replay side uses the recursive compiler above. The reduced polynomials are equal because these tensor products form the interpolation basis for all functions on the sign cube. This producer is deliberately simple, not the preferred scalable implementation: it enumerates the cube even when the final query support is sparse.
+
+\subsection{Tarski queries only on the support}
+
+For a finite real zero set $Z$, define
+\[
+\TaQ(w,Z)=\sum_{z\in Z}\sgn(w(z)).
+\]
+The multiplicativity of the real sign function gives
+\begin{equation}\label{eq:indicatorcount}
+N_F(\bm t)=\sum_{\bm e:c_{\bm e}\ne0}c_{\bm e}\,
+\TaQ\left(\prod_jq_j^{e_j},\calZ_{\bm t}\right).
+\end{equation}
+Only the nonzero coefficient support is needed. Let its size be $r$. A single positivity atom requires two queries rather than three. Two simultaneous positivity atoms require four rather than nine. A constant-true formula needs only the weight $1$, irrespective of unused source atoms.
+
+This is an exact elimination of irrelevant queries, not heuristic pruning. The worst case remains $r=3^m$. A production compiler should use a canonical sparse map or a decision diagram during Boolean compilation, share repeated subformulas, and enforce a support budget before any large matrix computation.
+
+\begin{example}[Why marginal counts are not enough]\label{ex:correlation}
+On the roots of $x^2-1=0$, each of $x>0$ and $-x>0$ has one solution. Their conjunction has none. Its indicator is
+\[
+\frac14\left(s_1s_2+s_1s_2^2+s_1^2s_2+s_1^2s_2^2\right).
+\]
+For $q_1=x$ and $q_2=-x$, the four Tarski queries are respectively $-2,0,0,2$, so the answer is zero. Keeping only the two marginal counts loses precisely the correlation required by the goal.
+\end{example}
+
+\section{A quotient basis that survives every specialization}\label{sec:tower}
+
+Set $R_0=\Q[\bm t]$ and
+\[
+\calA=R_0[x_1,\ldots,x_n]/(f_1,\ldots,f_n).
+\]
+There is no rational-function field in this definition. The candidate basis is the rectangular monomial set
+\begin{equation}\label{eq:basis}
+\B=\left\{x_1^{a_1}\cdots x_n^{a_n}:0\leq a_i<d_i\right\},
+\qquad D=\prod_i d_i.
+\end{equation}
+
+\begin{lemma}[Monic quotient basis]\label{lem:monic}
+For any commutative ring $R$ and a monic polynomial $f\in R[X]$ of degree $d>0$, the quotient $R[X]/(f)$ is free over $R$ with basis $1,X,\ldots,X^{d-1}$.
+\end{lemma}
+\begin{proof}
+Division by a monic polynomial is possible without dividing any coefficient in $R$. Repeatedly subtract the appropriate multiple of $f$ to reduce the degree. This proves spanning. For uniqueness, the difference of two degree-less-than-$d$ remainders would equal $fh$. If $h\ne0$, the leading coefficient of $fh$ is the leading coefficient of $h$, because $f$ is monic; hence $\deg(fh)=d+\deg h\geq d$, a contradiction. Thus the difference is zero.
+\end{proof}
+
+\begin{theorem}[Uniform finite free tower]\label{thm:tower}
+For equations of the form~\eqref{eq:triangular}, $\B$ is an $R_0$-basis of $\calA$. For every $\bm\tau\in\R^k$, its specialized images form an $\R$-basis of
+\[
+\calA_{\bm\tau}=\R[\bm x]/(f_1(\bm\tau),\ldots,f_n(\bm\tau)).
+\]
+Polynomial reduction, multiplication matrices, and their traces commute with specialization.
+\end{theorem}
+\begin{proof}
+Construct the quotient one variable at a time. After adjoining $x_1,\ldots,x_{i-1}$, equation $f_i$ remains monic in $x_i$ over the preceding quotient ring. Apply Lemma~\ref{lem:monic}; multiplying the successive bases yields~\eqref{eq:basis}. Specializing the parameters is a ring homomorphism and preserves the leading coefficient $1$. The same quotient argument therefore gives exactly the same basis size in every specialized algebra.
+
+Alternatively, verify commutation directly on the normal-form algorithm. Replace each $x_i^{d_i}$ by the negative lower-degree tail of $f_i$, starting with the largest variable index. Each replacement is a polynomial identity over $R_0$, and evaluation at $\bm\tau$ preserves it. The specialized normal form is unique by the basis result. Multiplication-matrix entries are coefficients of these normal forms, and traces are finite sums of diagonal entries, so both commute as well.
+\end{proof}
+
+The descending-variable rewrite is terminating: a rewrite lowers the exponent of its highest affected variable, and can increase only lower-variable exponents. The induced lexicographic monomial order is well-founded. The prototype also has operational caps because a terminating expansion may still be too large.
+
+\subsection{Why an arbitrary small matrix representation is insufficient}
+
+A collection of commuting matrices satisfying $f_i(M_1,\ldots,M_n)=0$ is not enough to count \emph{all} roots of the source ideal. It may represent only one component. For $x^2-1=0$, the one-by-one matrix $[1]$ satisfies the equation but loses the root $-1$.
+
+The worker must use the regular representation on the \emph{entire source quotient}, with its proved basis, or provide a separately proved equivalent presentation. A numerical dimension guess, a matrix satisfying the equations, or a one-way ideal inclusion cannot replace this requirement. This is one of the strongest reasons to use the monic tower in the first version: the admission theorem supplies the missing completeness relation without asking a certificate to prove a general Gr\"obner basis.
+
+\subsection{Real points, complex points, and multiplicity}
+
+The dimension $D$ counts the complex algebra with multiplicity, not the distinct real solutions. Three simple fibers expose the differences:
+\[
+\begin{array}{c|c|c}
+\text{Equation}&D&\#\calZ\\\hline
+x^2-1=0&2&2\\
+x^2+1=0&2&0\\
+x^2=0&2&1
+\end{array}
+\]
+These are not corner cases to exclude. They are ordinary fibers of the admitted language. The next theorem handles all three with one trace-form rule.
+
+\section{Hermite trace forms count distinct real points}\label{sec:hermite}
+
+For $p\in\calA$, let $M_p$ denote multiplication by $p$ in the basis $\B$. For a weight $w$, form the symmetric matrix
+\begin{equation}\label{eq:hermite}
+H_w(i,j)=\Tr\bigl(M_{w b_i b_j}\bigr),\qquad b_i,b_j\in\B.
+\end{equation}
+Its entries are rational polynomials in the parameters. The signature of a real symmetric matrix is the number of positive eigenvalues minus the number of negative eigenvalues, with multiplicities; zero eigenvalues contribute zero.
+
+The following is the classical Hermite trace-form principle underlying this worker~\cite{le-safey,gaillard-safey}. We include its algebraic proof because the treatment of repeated roots is essential to the design, not an optional optimization.
+
+\begin{theorem}[Hermite signature, including nonreduced fibers]\label{thm:hermite}
+For every admitted source and every real parameter tuple $\bm\tau$,
+\begin{equation}\label{eq:hermitesignature}
+\sig H_w(\bm\tau)=\sum_{z\in\calZ_{\bm\tau}}\sgn(w(\bm\tau,z)).
+\end{equation}
+Each distinct real point appears once, even when its algebraic multiplicity exceeds one.
+\end{theorem}
+\begin{proof}
+Fix the parameters and write $A=\calA_{\bm\tau}$. It is a finite-dimensional commutative real algebra. Such an algebra is Artinian and decomposes as a product of local Artinian algebras. Their residue fields are finite extensions of $\R$, hence are $\R$ or $\C$. Multiplication and the trace pairing respect this product decomposition, so signatures add over its factors.
+
+Consider one local factor with maximal ideal $\mathfrak m$ and residue field $K$. The ideal $\mathfrak m$ is nilpotent. Filter the algebra by its powers. Each successive quotient is a finite-dimensional $K$-vector space, and multiplication by $a$ acts there as multiplication by its residue $\bar a\in K$. If the sum of these $K$-dimensions is $\ell>0$, additivity of trace along the filtration gives
+\[
+\Tr_{\R}(M_a)=\ell\,\Tr_{K/\R}(\bar a).
+\]
+Consequently the weighted bilinear form on this factor is
+\[
+(a,b)\longmapsto \ell\,\Tr_{K/\R}(\bar w\bar a\bar b).
+\]
+It vanishes whenever one argument lies in $\mathfrak m$, so nilpotent directions contribute only zero eigenvalues.
+
+For $K=\R$, the remaining form is the one-dimensional form $\ell w(z)uv$. Its signature is $\sgn w(z)$, since $\ell$ is positive. The local length changes the magnitude, not the sign or the number of nonzero directions.
+
+For $K=\C$, write $\bar w=a+bi$ and use the real basis $1,i$. Apart from the positive scalar $\ell$, the matrix is
+\[
+2\begin{pmatrix}a&-b\\-b&-a\end{pmatrix}.
+\]
+When $\bar w\ne0$ its determinant is negative, so it has one positive and one negative eigenvalue. When $\bar w=0$ it is zero. In both cases its signature is zero.
+
+The real residue-field factors are in bijection with the distinct real common zeros of the source equations. Summing their contributions proves~\eqref{eq:hermitesignature}. The uniform-basis theorem identifies the computed specialization of~\eqref{eq:hermite} with this trace form.
+\end{proof}
+
+\subsection{Two genuinely different matrix computations}
+
+The producer builds multiplication matrices using a SymPy Gr\"obner normal form. It forms $H_1$ and uses
+\begin{equation}\label{eq:h1mw}
+H_w=H_1M_w.
+\end{equation}
+The identity follows by expanding $wb_j$ in the basis and using linearity of trace. Although the right side is not visibly symmetric, it equals the symmetric trace matrix.
+
+The replay side does not trust $M_w$, does not call a Gr\"obner engine, and does not reuse~\eqref{eq:h1mw}. It constructs each entry by direct triangular substitution of $wb_ib_jb_\ell$ and sums the coefficient of $b_\ell$ over $\ell$. This is the trace in~\eqref{eq:hermite}. Exact equality with the supplied matrix is required.
+
+This distinction matters. A producer can make a matrix-layout or normal-form error while still returning a matrix with a plausible spectrum. Checking its characteristic polynomial alone would validate only that wrong matrix. The replay must first bind the matrix to the source quotient.
+
+\section{Uniform signatures without symbolic pivot assumptions}\label{sec:signature}
+
+A symmetric elimination method can compute a signature over a field, but symbolic pivoting requires branches for zero pivots. Ignoring those branches is especially dangerous here: the source goals care about precisely the parameter values at which roots coalesce. We use a coefficient-sign formula that includes zeros directly.
+
+\subsection{Characteristic coefficients as polynomial certificates}
+
+Write
+\begin{equation}\label{eq:charpoly}
+\chi_H(\lambda)=\det(\lambda I-H)
+=\lambda^D+c_1\lambda^{D-1}+\cdots+c_D,
+\qquad c_0=1.
+\end{equation}
+For our matrices every $c_j$ belongs to $\Q[\bm t]$. Let $V$ count sign variations after deleting zero entries. Then define
+\begin{equation}\label{eq:sigformula}
+S_H(\bm t)=
+V\bigl(1,c_1(\bm t),\ldots,c_D(\bm t)\bigr)
+-V\bigl((-1)^D,(-1)^{D-1}c_1(\bm t),\ldots,c_D(\bm t)\bigr).
+\end{equation}
+Only signs are passed to $V$; the notation suppresses this conversion.
+
+\begin{lemma}[Descartes is exact for a real-rooted polynomial]\label{lem:descartes}
+If a nonzero real polynomial $p$ has only real roots, then its positive-root count, including multiplicity, equals $V(p)$, the sign variations of its descending coefficient list. Its negative-root count equals $V(p(-X))$.
+\end{lemma}
+\begin{proof}
+Remove a power of $X$, which does not affect coefficient variations or nonzero roots. Let the remaining degree be $d$, and let $n_+$ and $n_-$ be its positive- and negative-root counts. Real-rootedness gives $n_++n_-=d$. Descartes' rule gives $n_+\leq V(p)$ and $n_-\leq V(p(-X))$.
+
+For completeness, $V(p)+V(p(-X))\leq d$ even when internal coefficients vanish. Compare two consecutive nonzero coefficients whose exponents differ by $g$. If $g$ is odd, the corresponding pair contributes exactly one variation across the two lists. If $g$ is even, it contributes zero or two, which is at most $g$. Sum over exponent gaps. The first and last surviving exponents differ by $d$. Hence the two inequalities from Descartes must both be equalities.
+\end{proof}
+
+\begin{theorem}[Zero-safe signature formula]\label{thm:signature}
+For every real symmetric $D\times D$ matrix $H$, $S_H=\sig H$.
+\end{theorem}
+\begin{proof}
+The spectral theorem makes $\chi_H$ real-rooted. Its positive and negative roots, with multiplicities, are exactly the positive and negative eigenvalues. Apply Lemma~\ref{lem:descartes} to $\chi_H$ and $\chi_H(-X)$. Trailing zero coefficients represent zero eigenvalues and are deleted by the variation count. No nonvanishing-minor or simple-eigenvalue hypothesis appears.
+\end{proof}
+
+A sign-variation routine without the real-rootedness premise is not a general root-counting algorithm. For example, $X^2-X+1$ has two variations but no real roots. Here real-rootedness is earned by the \emph{checked symmetric matrix}, not inferred from an arbitrary polynomial supplied by the producer.
+
+\subsection{Replay by Newton identities}
+
+The producer uses SymPy's characteristic-polynomial routine. The checker instead verifies all $D$ coefficient identities
+\begin{equation}\label{eq:newton}
+jc_j=-\sum_{i=1}^j c_{j-i}\Tr(H^i),\qquad 1\leq j\leq D.
+\end{equation}
+Both sides are compared as exact rational polynomials. Matrix powers and traces are recomputed by the replay implementation.
+
+\begin{lemma}[Newton replay is sufficient]\label{lem:newton}
+Over a commutative $\Q$-algebra, a list $c_0=1,c_1,\ldots,c_D$ satisfying~\eqref{eq:newton} is the coefficient list of $\det(\lambda I-H)$.
+\end{lemma}
+\begin{proof}
+The actual characteristic coefficients satisfy~\eqref{eq:newton}. One derivation uses the formal power series $E(z)=\det(I-zH)$. Since $E(0)=1$, its inverse exists. The adjugate identity and differentiation of the determinant give
+\[
+\frac{E'(z)}{E(z)}=-\Tr\bigl(H(I-zH)^{-1}\bigr)
+=-\sum_{i\geq1}\Tr(H^i)z^{i-1}.
+\]
+Comparing coefficients in $E'$ yields~\eqref{eq:newton}. Conversely, the $j$th identity uniquely determines $c_j$ from the earlier coefficients, since the nonzero integer $j$ is invertible in a $\Q$-algebra. Induction identifies the supplied coefficients with the actual ones.
+\end{proof}
+
+The only divisions in this argument are by positive integers, not by parameter polynomials. At $t=0$, at a discriminant zero, or at any other specialization, the same identities remain valid. A future fraction-free implementation can clear these fixed denominators; that is a performance change, not a change of acceptance conditions.
+
+\subsection{An entire square-root count by hand}
+
+For $f=x^2-t$, use basis $(1,x)$. The three useful trace matrices are
+\begin{equation}\label{eq:sqrtmatrices}
+H_1=\begin{pmatrix}2&0\\0&2t\end{pmatrix},\quad
+H_x=\begin{pmatrix}0&2t\\2t&0\end{pmatrix},\quad
+H_{x^2}=\begin{pmatrix}2t&0\\0&2t^2\end{pmatrix}.
+\end{equation}
+Their characteristic polynomials are
+\begin{align*}
+\chi_{H_1}&=\lambda^2-2(1+t)\lambda+4t,\\
+\chi_{H_x}&=\lambda^2-4t^2,\\
+\chi_{H_{x^2}}&=\lambda^2-2t(1+t)\lambda+4t^3.
+\end{align*}
+The indicator formulas give
+\[
+N_{x>0}=\tfrac12\bigl(\sig H_x+\sig H_{x^2}\bigr),\qquad
+N_{x\geq0}=\sig H_1+\tfrac12\sig H_x-\tfrac12\sig H_{x^2}.
+\]
+For $t<0$ both counts are zero. For $t>0$ both are one. At $t=0$, $H_1$ has signature one while the other matrices are zero; the counts are therefore zero and one respectively. The strictness distinction is not recovered by a numerical tolerance. It is a separate exact sign case.
+
+The coefficient $-2(1+t)$ also vanishes at $t=-1$, where the root count does not change. A coefficient-sign decomposition may thus have more cells than the minimal geometric decomposition. Correctness does not require minimality, and the prototype's five-cell square-root cover deliberately retains this extra boundary.
+
+\section{The resulting elimination theorem}\label{sec:elimination}
+
+For every exponent vector in the indicator support, let $w_{\bm e}=\prod_jq_j^{e_j}$. Compute $H_{w_{\bm e}}$ and its checked characteristic coefficients. Define
+\begin{equation}\label{eq:countcircuit}
+\mathcal C_F(\bm t)=\sum_{\bm e:c_{\bm e}\ne0}c_{\bm e}S_{H_{w_{\bm e}}}(\bm t).
+\end{equation}
+
+\begin{theorem}[Uniform finite-fiber elimination]\label{thm:main}
+For every monic triangular source, every Boolean sign formula $F$, and every real parameter tuple $\bm\tau$,
+\[
+\mathcal C_F(\bm\tau)=N_F(\bm\tau).
+\]
+The expression on the left is a finite circuit built from signs of rational parameter polynomials, finite sign-variation counts, and rational arithmetic. In particular, every comparison of $N_F$ with an integer is equivalent to a quantifier-free Boolean combination of parameter-polynomial comparisons.
+\end{theorem}
+\begin{proof}
+Proposition~\ref{prop:indicator} and finite summation give~\eqref{eq:indicatorcount}. Theorem~\ref{thm:tower} makes the computed trace matrices valid at every specialization. Theorem~\ref{thm:hermite} replaces each Tarski query by its signature. Lemma~\ref{lem:newton} identifies the checked characteristic coefficients, and Theorem~\ref{thm:signature} evaluates the signature by their signs. Substitution yields~\eqref{eq:countcircuit}.
+
+For the final assertion, enumerate the three possible signs of each distinct parameter polynomial appearing in the circuit. On each sign assignment the circuit has a fixed rational value, so an integer comparison is either true or false. Form the disjunction of the corresponding sign conditions for the true assignments. Unrealizable assignments cause no difficulty: their conjunctions have no real parameter instances. This is a finite quantifier-free formula, although an explicit expansion may be much larger than the circuit.
+\end{proof}
+
+\begin{corollary}[Meaning of certificate acceptance]
+If the source admission check, indicator-support check, trace-matrix checks, and Newton checks succeed, the supplied count circuit is mathematically correct at every real parameter value. No root-separation, nonzero-discriminant, or genericity assumption is needed for this admitted fragment.
+\end{corollary}
+
+This corollary describes the mathematics that a Lean checker must formalize. Executing its Python analogue is not itself a proof that the Python implementation satisfies the corollary. The tests later in the article give implementation evidence, not a replacement for that formalization.
+
+\subsection{Completeness and the resource boundary}
+
+Ignoring resource limits, the admitted source class has a finite construction: the basis is finite, the Boolean indicator has at most $3^m$ terms, and each characteristic polynomial is finite. Thus the specified method computes the exact count circuit for every source in the class. This is a \emph{fragment} completeness result, not a claim to decide all nonlinear real goals.
+
+The delivered program is bounded. It can stop during polynomial expansion, indicator construction, matrix arithmetic, or outer root-product formation. A cap does not imply that the goal is false, that no certificate exists, or that a competing worker would fail. It produces no mathematical verdict. The same qualification applies to a proposed but unaccepted algebraic witness.
