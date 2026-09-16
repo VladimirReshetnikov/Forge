@@ -131,21 +131,27 @@ three they mean.
 
 ## The Lean result
 
-Three files are new. All eighteen proposals recorded their Lean status as
-`NOT_RUN` — no toolchain in any authoring environment — under a dozen different
-filenames and several formats. This merge installed the pinned
+Seven files are new. All thirty-six proposals recorded their Lean status as
+`NOT_RUN` — no toolchain in any authoring environment — under some twenty-five
+different filenames and several formats. This merge installed the pinned
 `leanprover/lean4:v4.34.0` and elaborated every file that imports nothing beyond
-Lean core: three design files in the merged tree (`lean-core-elaboration.json`),
-ten across the extension proposals (`lean-extensions-elaboration.json`), and
-three that this merge wrote by deduplicating those ten
-(`lean-closure-elaboration.json` — the ten contained six spellings of one
-reachability theorem and five of one word-fold theorem).
+Lean core: three design files in the merged tree, ten across the extension
+proposals, three that this merge wrote by deduplicating those ten (the ten
+contained six spellings of one reachability theorem and five of one word-fold
+theorem), two of the third round's three, and both of the fourth round's two.
 
-All sixteen elaborate, and ten of them print `does not depend on any axioms` for
-every theorem they expose. That is the whole claim. It is not an axiom audit, it says nothing about the twenty-one
-Mathlib-dependent files, it does not establish that any checker is correct, it
-is not a comparison against any tactic, and it does not change what any of those
-files says.
+**Twenty elaborate, one does not, and one scan of ours was wrong.** The third
+round's third core-only file defines `prefix`, a reserved keyword, and fails to
+parse; the diagnosis and a tested repair are recorded with it, and the archived
+source is left as delivered. Twelve of the twenty print `does not depend on any
+axioms` for every theorem they expose. Separately, this merge's own `sorry`
+scanner reported a file as defective because the file's header says it has no
+`sorry`; with that fixed, all 88 Lean files scan clean.
+
+That is the whole claim. It is not an axiom audit, it says nothing about the
+thirty-four Mathlib-dependent files, it does not establish that any checker is
+correct, it is not a comparison against any tactic, and it does not change what
+any of those files says.
 
 See [`../docs/LEAN-STATUS.md`](../docs/LEAN-STATUS.md).
 
@@ -162,39 +168,63 @@ compared. It establishes that the suites pass and that the recorded counts are
 accurate. It establishes nothing about checker correctness, and it is not a Lean
 result.
 
-## The merged package is a nineteenth run, not a fraction of a total
+## The merged package is a thirty-seventh run, not a fraction of a total
 
-`prototype/` is a single package assembled from the eighteen codebases: the
-design round's algorithm families, plus the five extension-round closure lanes
-that are standard library only. It has its own test suite and its own
-certificate corpus, and those numbers belong to it alone:
+`prototype/` is a single package assembled from twenty-one of the thirty-six
+codebases: the design round's algorithm families, the five extension-round
+closure lanes that are standard library only, and the fourth round's three
+antichain lanes. It has its own test suite and its own certificate corpus, and
+those numbers belong to it alone:
 
 | | |
 | --- | --- |
-| `python -m pytest -q` | 748 passed |
-| `python -S bin/verify.py` | 33 certificates rechecked, 50 mutations rejected |
+| `python -m pytest -q` | 776 passed |
+| `python -S bin/verify.py` | 35 certificates rechecked, 53 mutations rejected |
 | Environment | Python 3.14.4, NumPy 2.4.4, SciPy 1.17.1, SymPy 1.14.0 |
 
-That environment differs from the eighteen runs' (Python 3.13.5, NumPy 2.3.5,
+That environment differs from the thirty-six runs' (Python 3.13.5, NumPy 2.3.5,
 SciPy 1.17.0), so even the families it inherits unchanged are a fresh
-observation rather than a reproduction. The 748 is a merged suite: it is not the
-sum of the eighteen suites, and several source assertions did not survive the
+observation rather than a reproduction. The 776 is a merged suite: it is not the
+sum of the thirty-six suites, and several source assertions did not survive the
 merge because they pinned counts that depended on one proposal's own search
 grammar.
 
-Two extension lanes are *not* folded in. Target-generated ideal closure needs a
-Gröbner engine and boundary-safe telescoping needs exact bivariate nullspaces,
-so neither search can be standard-library-only, and folding them in would cost
-the package the property that makes its replay evidence worth anything. They
-stay under `proposals/e1`, `e3`, `e6`, `e7` and `e9`, run from there, and their
+**What the fourth round's merge removed.** Four proposals do backward-antichain
+coverability. Between them they wrote one well-quasi-order, one antichain, one
+predecessor formula and one saturation loop three or four times each.
+`forge/wsts/` states each of those once and keeps separate only what genuinely
+differs: the model languages and their predecessor rules. Three of those four
+also computed the *same* three-element mutual-exclusion antichain --- identical
+under a coordinate bijection --- so it is stored once, as one result.
+
+Lanes deliberately *not* folded in, and why:
+
+| Lane | Reason |
+| --- | --- |
+| Ideal closure (`e1`, `e3`, `e6`, `e7`) | needs a Gröbner engine |
+| Telescoping (`e2`, `e3`, `e6`, `e9`) | needs exact bivariate nullspaces |
+| All of the third round (`r1`..`r9`) | needs a noncommutative Gröbner engine, interval arithmetic over transcendental constants, and exact linear programming |
+| Probabilistic fixed points (`s2`) | shares the word "coverability" with `s1` and nothing else |
+| Register transducers (`s3`) | finite by the Bell numbers, not by a well-quasi-order |
+| Real cell covers (`s5`, `s6`) | needs a computer-algebra producer |
+
+Folding any of them in would cost the package the property that makes its
+replay evidence worth anything: that the whole of it, search included, runs
+under `python -S`. They stay under `proposals/`, run from there, and their
 counts are theirs.
 
-The 33 certificates are a deliberately small regression corpus covering every
-family once, not a re-run of any proposal's benchmark. Eleven of them are the
-closure families, and six of those are negative: two separating words, a
-constructor counterexample and three Kripke countermodels. They are results,
-not failures. Nothing here supersedes
-the recorded runs, and nothing here should be compared against them.
+The 35 certificates are a deliberately small regression corpus covering every
+family once, not a re-run of any proposal's benchmark. Thirteen of them are the
+closure and antichain families, and six of those are negative: two separating
+words, a constructor counterexample and three Kripke countermodels. They are
+results, not failures. Nothing here supersedes the recorded runs, and nothing
+here should be compared against them.
+
+**One collision closed by accident.** Before this merge the package's suite
+reported 748 tests, and `s6` reports 748 specialization evaluations. The two
+numbers were never related. Adding the antichain lanes moved the first to 776,
+which removes the coincidence but not the lesson: a number appearing twice in
+this repository is not evidence that it is the same number.
 
 ## Re-running
 

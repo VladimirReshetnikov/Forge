@@ -324,6 +324,44 @@ def closure_records() -> list[dict]:
         raise RuntimeError('singularity plan regression')
     out.append({'id': 'missed_singularity', 'family': 'Singularity plan',
                 'input': {'operator': enc(operator)}, 'certificate': plan})
+
+    # --- fourth round: finite bases for infinite state spaces ---------------
+    from forge.wsts import nets as wsts_nets
+    from forge.wsts import search as wsts_search
+
+    # s1 + s3 + s4 each computed this frontier. It is one result, stored once.
+    lock = wsts_nets.Net.from_dict({
+        'kind': 'pt-net-coverability', 'dimension': 3,
+        'transitions': [
+            {'name': 'enter', 'consume': [1, 1, 0], 'produce': [0, 0, 1]},
+            {'name': 'leave', 'consume': [0, 0, 1], 'produce': [1, 1, 0]}],
+        'targets': [[0, 0, 2]]})
+    found = wsts_search.frontier(lock)
+    if found['kind'] != 'frontier' or found['stats']['basis'] != 3:
+        raise RuntimeError('coverability frontier regression')
+    out.append({'id': 'mutual_exclusion_frontier', 'family': 'Coverability frontier',
+                'input': lock.to_dict(), 'certificate': found['certificate']})
+
+    # s3: a safety basis that holds for an infinite family of initial states.
+    buffer_problem = {
+        'kind': 'vass-coverability', 'controls': 1, 'dimension': 2,
+        'transitions': [
+            {'src': 0, 'dst': 0, 'consume': [1, 0], 'produce': [0, 1]},
+            {'src': 0, 'dst': 0, 'consume': [0, 1], 'produce': [1, 0]}],
+        'bad': [{'control': 0, 'vector': [0, 3]}],
+        'initials': [{'control': 0, 'base': [2, 0], 'rays': []}]}
+    system = wsts_nets.Vass(1, 2, tuple(
+        wsts_nets.Edge(t['src'], t['dst'], tuple(t['consume']), tuple(t['produce']))
+        for t in buffer_problem['transitions']))
+    safe = wsts_search.solve_vass(system, [(0, (0, 3))],
+                                  [wsts_nets.InitialFamily(0, (2, 0), ())])
+    if safe['kind'] != 'safe':
+        raise RuntimeError('backward-closed basis regression')
+    out.append({'id': 'bounded_buffer_safe', 'family': 'Backward-closed basis',
+                'input': buffer_problem,
+                'certificate': {'schema': 'forge.wsts.safe.v1',
+                                'problem': buffer_problem,
+                                'basis': [[list(v) for v in safe['basis'][0]]]}})
     return out
 
 

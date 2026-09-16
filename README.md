@@ -209,14 +209,32 @@ verification, not a Lean proof.
 Five extension lanes are merged into that package, under `forge/closure/`:
 observable-space closure with separating words, finite-algebra covers with
 counterexample trees, exact integer projection, Kripke countermodels, and Ore
-transport with singularity seed plans. All five are standard library only with
-their *searches* included, so the whole subpackage runs under `python -S`.
+transport with singularity seed plans.
 
-Two lanes are deliberately **not** merged. Target-generated ideal closure needs
-a Gröbner engine and boundary-safe telescoping needs exact bivariate
-nullspaces, so neither search can be standard-library-only, and folding them in
-would cost the merged package the property that makes its replay evidence worth
-anything.
+Three fourth-round lanes are merged under `forge/wsts/`: place/transition
+frontiers with compressed witness runs, finite-control counter systems with
+parameterised initial families, and matrix-update systems with lossy FIFO
+channels. Those three proposals, plus a fourth, wrote one well-quasi-order, one
+antichain, one predecessor formula and one saturation loop three or four times
+between them; each is written once here, and only the model languages and their
+predecessor rules are still spelled out separately. The three-element
+mutual-exclusion antichain that three of them computed independently is stored
+once, as one result.
+
+All eight merged lanes are standard library only with their *searches*
+included, so both subpackages run under `python -S`.
+
+Six lanes are deliberately **not** merged, because folding them in would cost
+the merged package the property that makes its replay evidence worth anything:
+
+| Lane | Needs |
+| --- | --- |
+| Ideal closure (`e1`, `e3`, `e6`, `e7`) | a Gröbner engine |
+| Telescoping (`e2`, `e3`, `e6`, `e9`) | exact bivariate nullspaces |
+| All of the third round (`r1`–`r9`) | a noncommutative Gröbner engine, interval arithmetic over transcendental constants, exact linear programming |
+| Probabilistic fixed points (`s2`) | shares the word "coverability" with `s1` and nothing else |
+| Register transducers (`s3`) | finite by the Bell numbers, not by any well-quasi-order |
+| Real cell covers (`s5`, `s6`) | a computer-algebra producer |
 
 The nine extension packages remain under `proposals/e*/prototype/` and run from
 there; each proposal's README gives its own command, and

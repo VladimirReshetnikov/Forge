@@ -328,10 +328,10 @@
   ],
   "merged_prototype": {
     "path": "prototype/",
-    "note": "One package assembled from the design round's algorithm families plus the five extension-round closure lanes that are standard library only. No third-round lane is merged in yet. Its numbers are its own and are not comparable with, or a reproduction of, any recorded run.",
-    "tests_passed": 748,
+    "note": "One package assembled from twenty-one of the thirty-six codebases: the design round's algorithm families, the five extension-round closure lanes that are standard library only, and the fourth round's three antichain lanes (s1, s3, s4). No third-round lane is merged in; its searches need a noncommutative Groebner engine, interval arithmetic over transcendental constants, and exact linear programming. Its numbers are its own and are not comparable with, or a reproduction of, any recorded run.",
+    "tests_passed": 776,
     "certificates_in_regression_corpus": 33,
-    "mutations_rejected": 50,
+    "mutations_rejected": 53,
     "replay_is_stdlib_only": true,
     "replay_verified_with_site_packages_disabled": true,
     "replay_survives_dash_O": true,
@@ -353,6 +353,18 @@
       "target-generated ideal closure",
       "telescoping"
     ],
-    "closure_lanes_not_merged_reason": "their searches need a Groebner engine and exact bivariate nullspaces, so they cannot be standard library only; run them from proposals/e1, e3, e6, e7 and e9"
+    "closure_lanes_not_merged_reason": "their searches need a Groebner engine and exact bivariate nullspaces, so they cannot be standard library only; run them from proposals/e1, e3, e6, e7 and e9",
+    "certificates_rechecked": 35,
+    "fourth_round_lanes_merged": {
+      "package": "forge/wsts",
+      "proposals": [
+        "s1-resource-frontiers",
+        "s3-infinite-state-workers",
+        "s4-ordered-certificates"
+      ],
+      "deduplicated": "one well-quasi-order, one antichain, one predecessor formula and one saturation loop, each written three or four times across the four antichain proposals, now written once",
+      "shared_result_stored_once": "the three-element mutual-exclusion antichain that s1, s3 and s4 each computed independently",
+      "standard_library_only_including_search": true
+    }
   }
 }

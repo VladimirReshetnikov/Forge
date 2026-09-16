@@ -1,4 +1,4 @@
-"""Forge: one merged prototype assembled from eighteen independent proposals.
+"""Forge: one merged prototype assembled from twenty-two independent proposals.
 
 Each module names the proposal it was based on and what was folded into it.
 Nothing in the import path of this package pulls in NumPy, SciPy or SymPy: those
@@ -35,12 +35,32 @@ five are standard library only with their searches included:
 The ideal-closure and telescoping lanes are not merged: their searches need a
 Groebner engine and exact bivariate nullspaces respectively, so they cannot be
 standard library only. Run those from proposals/e1, e3, e6, e7 and e9.
+
+The fourth round added workers that return a FINITE BASIS for an infinite set
+of states, so that one certificate settles infinitely many instances by
+comparison rather than by search. Its largest cluster is merged here:
+
+  wsts.orders        s1 + s3 + s4   Dickson and Higman orders, one antichain
+  wsts.nets          s1 + s3 + s4   nets, counter systems, matrix updates,
+                                    lossy FIFO channels
+  wsts.summaries     s1             compressed runs and a hash-consed run DAG
+  wsts.search        s1 + s3 + s4   one backward loop, four predecessor rules
+  wsts.certificates  s1 + s3 + s4   every checker, no search code
+
+Four proposals wrote that order, antichain, predecessor formula and saturation
+loop three or four times between them. Each appears once here. The rest of the
+fourth round is not merged: see forge/wsts/__init__.py for which, and why.
+
+The third round is not merged at all. Its noncommutative, analytic and
+quantitative lanes need a noncommutative Groebner engine, interval arithmetic
+over transcendental constants, and exact linear programming respectively. Run
+them from proposals/r1..r9.
 """
 from . import (poly, linalg, certificates, cone, quadratic, bernstein, univariate,
                recurrence, terms, induction, horn, sat, witness, io,
-               closure)  # noqa: F401
+               closure, wsts)  # noqa: F401
 
 __all__ = ['poly', 'linalg', 'certificates', 'cone', 'quadratic', 'bernstein',
            'univariate', 'recurrence', 'terms', 'induction', 'horn', 'sat',
-           'witness', 'io', 'closure']
+           'witness', 'io', 'closure', 'wsts']
 __version__ = '0.1.0'

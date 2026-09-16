@@ -47052,5 +47052,277 @@
     ]
    ]
   }
+ },
+ {
+  "certificate": {
+   "basis": [
+    {
+     "marking": [
+      0,
+      0,
+      2
+     ],
+     "run": 0,
+     "target": 0
+    },
+    {
+     "marking": [
+      1,
+      1,
+      1
+     ],
+     "run": 1,
+     "target": 0
+    },
+    {
+     "marking": [
+      2,
+      2,
+      0
+     ],
+     "run": 2,
+     "target": 0
+    }
+   ],
+   "predecessor_cover": [
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ],
+    [
+     2,
+     1
+    ]
+   ],
+   "problem": {
+    "dimension": 3,
+    "kind": "pt-net-coverability",
+    "targets": [
+     [
+      0,
+      0,
+      2
+     ]
+    ],
+    "transitions": [
+     {
+      "consume": [
+       1,
+       1,
+       0
+      ],
+      "name": "enter",
+      "produce": [
+       0,
+       0,
+       1
+      ]
+     },
+     {
+      "consume": [
+       0,
+       0,
+       1
+      ],
+      "name": "leave",
+      "produce": [
+       1,
+       1,
+       0
+      ]
+     }
+    ]
+   },
+   "runs": [
+    {
+     "op": "empty"
+    },
+    {
+     "op": "step",
+     "transition": 0
+    },
+    {
+     "left": 1,
+     "op": "seq",
+     "right": 1
+    }
+   ],
+   "schema": "forge.wsts.frontier.v1",
+   "target_cover": [
+    0
+   ]
+  },
+  "family": "Coverability frontier",
+  "id": "mutual_exclusion_frontier",
+  "input": {
+   "dimension": 3,
+   "kind": "pt-net-coverability",
+   "targets": [
+    [
+     0,
+     0,
+     2
+    ]
+   ],
+   "transitions": [
+    {
+     "consume": [
+      1,
+      1,
+      0
+     ],
+     "name": "enter",
+     "produce": [
+      0,
+      0,
+      1
+     ]
+    },
+    {
+     "consume": [
+      0,
+      0,
+      1
+     ],
+     "name": "leave",
+     "produce": [
+      1,
+      1,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "certificate": {
+   "basis": [
+    [
+     [
+      0,
+      3
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      3,
+      0
+     ]
+    ]
+   ],
+   "problem": {
+    "bad": [
+     {
+      "control": 0,
+      "vector": [
+       0,
+       3
+      ]
+     }
+    ],
+    "controls": 1,
+    "dimension": 2,
+    "initials": [
+     {
+      "base": [
+       2,
+       0
+      ],
+      "control": 0,
+      "rays": []
+     }
+    ],
+    "kind": "vass-coverability",
+    "transitions": [
+     {
+      "consume": [
+       1,
+       0
+      ],
+      "dst": 0,
+      "produce": [
+       0,
+       1
+      ],
+      "src": 0
+     },
+     {
+      "consume": [
+       0,
+       1
+      ],
+      "dst": 0,
+      "produce": [
+       1,
+       0
+      ],
+      "src": 0
+     }
+    ]
+   },
+   "schema": "forge.wsts.safe.v1"
+  },
+  "family": "Backward-closed basis",
+  "id": "bounded_buffer_safe",
+  "input": {
+   "bad": [
+    {
+     "control": 0,
+     "vector": [
+      0,
+      3
+     ]
+    }
+   ],
+   "controls": 1,
+   "dimension": 2,
+   "initials": [
+    {
+     "base": [
+      2,
+      0
+     ],
+     "control": 0,
+     "rays": []
+    }
+   ],
+   "kind": "vass-coverability",
+   "transitions": [
+    {
+     "consume": [
+      1,
+      0
+     ],
+     "dst": 0,
+     "produce": [
+      0,
+      1
+     ],
+     "src": 0
+    },
+    {
+     "consume": [
+      0,
+      1
+     ],
+     "dst": 0,
+     "produce": [
+      1,
+      0
+     ],
+     "src": 0
+    }
+   ]
+  }
  }
 ]

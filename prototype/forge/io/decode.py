@@ -40,13 +40,15 @@ from .. import sat as sat_module
 from ..closure import certificates as closure_checkers
 from ..closure import kripke as kripke_module
 from ..closure import words as words_module
+from ..wsts import certificates as wsts_checkers
 
 RATIONAL = re.compile(r'-?[0-9]+(?:/[1-9][0-9]*)?')
 
 REQUIRED_FAMILIES = ('Quadratic SOS', 'Bernstein box', 'List induction',
                      'CDCL(T) refutation', 'Observable closure',
                      'Finite cover', 'Integer projection',
-                     'Kripke countermodel', 'Ore common multiple')
+                     'Kripke countermodel', 'Ore common multiple',
+                     'Coverability frontier', 'Backward-closed basis')
 
 
 class DecodeError(ValueError):
@@ -329,6 +331,24 @@ def verify(record) -> bool:
     if family == 'CDCL(T) resolution refutation':
         atoms = {int(k): sat_module.DiffAtom(**v) for k, v in inp['atoms'].items()}
         return sat_module.verify_resolution(inp['clauses'], atoms, inp.get('nodes'), c)
+    # --- fourth round: finite bases for infinite state spaces ---------------
+    # These raise on rejection rather than returning False, because a rejected
+    # certificate here is a specific mathematical complaint worth reporting.
+    if family in ('Coverability frontier', 'Backward-closed basis',
+                  'Unsafe run', 'Parameter threshold'):
+        try:
+            if family == 'Coverability frontier':
+                wsts_checkers.check_frontier(inp, c)
+            elif family == 'Backward-closed basis':
+                wsts_checkers.check_backward_closed(inp, c)
+            elif family == 'Unsafe run':
+                wsts_checkers.check_counterexample(inp, c)
+            else:
+                wsts_checkers.check_threshold(inp, c)
+        except (wsts_checkers.InvalidCertificate, KeyError, TypeError,
+                IndexError, ValueError):
+            return False
+        return True
     raise DecodeError('unknown family: ' + str(family))
 
 
@@ -496,6 +516,19 @@ def mutations(record) -> list:
         bad = copy.deepcopy(record)
         bad['certificate']['bound'] = 0
         out.append(bad)                      # an understated root bound
+    elif family == 'Coverability frontier':
+        bad = copy.deepcopy(record)
+        bad['certificate']['basis'][0]['marking'][0] += 1
+        out.append(bad)                      # the basis is no longer minimal
+        bad = copy.deepcopy(record)
+        if len(bad['certificate']['basis']) > 1:
+            del bad['certificate']['basis'][-1]
+            out.append(bad)                  # a dropped element breaks closure
+    elif family == 'Backward-closed basis':
+        bad = copy.deepcopy(record)
+        if bad['certificate']['basis'][0]:
+            bad['certificate']['basis'][0][0][0] += 1
+            out.append(bad)                  # raising it opens a predecessor gap
     return out
 
 
