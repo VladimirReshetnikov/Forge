@@ -2,7 +2,7 @@
 
 **A certificate-producing proof-planning layer above Lean's `grind`.**
 
-Start with **[`article/forge.pdf`](article/forge.pdf)** (128 pages). Its editable
+Start with **[`article/forge.pdf`](article/forge.pdf)** (144 pages). Its editable
 source is in [`article/`](article/).
 
 ---
@@ -13,19 +13,19 @@ A design for a broader Lean 4 automation system that keeps `grind` as its local
 saturation engine and adds an outer layer which *changes the proof obligation*:
 it selects induction principles, generalises accumulators, synthesises auxiliary
 lemmas, constructs witnesses, obtains exact algebraic certificates, computes
-closures that make an unbounded family finite, and returns exact quantities for
-probabilistic and adversarial behaviour. Anything that succeeds must return
-something Lean can check.
+closures that make an unbounded family finite, returns exact quantities for
+probabilistic and adversarial behaviour, and exhibits finite bases for infinite
+sets of states. Anything that succeeds must return something Lean can check.
 
 Alongside the design are Python prototypes of its central algorithms, the
-certificates they produced, and the recorded evidence of twenty-seven separate
+certificates they produced, and the recorded evidence of thirty-six separate
 runs.
 
 ## What this is not
 
 **`forge` is not an implemented Lean tactic.** Nothing here installs one.
 
-None of the twenty-seven contributing efforts had a Lean executable available;
+None of the thirty-six contributing efforts had a Lean executable available;
 none of them compiled any Lean source, and none measured any comparison against
 `grind`, Aesop, `nlinarith`, LeanHammer, or any other tactic. No speedup and no
 solved-goal gain is claimed anywhere.
@@ -50,20 +50,20 @@ lean/           merged Lean sources: design contracts, closure principles, repla
 results/        derived cross-run index, and the new measurements
 docs/           status, sources, validation, and the Lean ledger
 tools/          check_lean.py, build_results_index.py
-proposals/      the twenty-seven original submissions, verbatim and frozen
+proposals/      the thirty-six original submissions, verbatim and frozen
 ```
 
 `proposals/` is the provenance. Every claim in the merged draft is auditable
-against it, and the twenty-seven runs' raw evidence stays there rather than
-being copied or reformatted.
+against it, and the thirty-six runs' raw evidence stays there rather than being
+copied or reformatted.
 
-## Three rounds
+## Four rounds
 
-The draft has been merged three times. The **design round** `p1`..`p9` came
+The draft has been merged four times. The **design round** `p1`..`p9` came
 first. The **extension round** `e1`..`e9` was prepared *against that merged
-draft*, at commit `674521027d96`, and merged in turn. The **third round**
-`r1`..`r9` was prepared against *that* result, at commit `c98e47c5`, and merged
-in turn again.
+draft*, at commit `674521027d96`. The **third round** `r1`..`r9` was prepared
+against *that* result, at `c98e47c5`. The **fourth round** `s1`..`s9` was
+prepared against *that* result, at `58ea206`, and merged in turn again.
 
 That ordering matters for reading the evidence. No later round is a second
 opinion on an earlier one: its proposals read the merged design, treat its
@@ -80,19 +80,25 @@ article can state decision results and length bounds in §6 where §7 can only
 state completeness relative to a dictionary. The third round adds three
 subjects the document had no way to express: certificates where **order
 matters** (§8), certificates over **transcendental** data (§9), and
-certificates that return a **quantity** rather than a verdict (§10).
+certificates that return a **quantity** rather than a verdict (§10). The fourth
+adds five more: **finite bases** for infinite state spaces (§11), decisions over
+the **reals** by certified cell covers (§12), **automatic** arithmetic on
+unbounded naturals (§13), **group** certificates including certified
+non-membership (§14), and **integral homology** with obstructions to chain
+homotopy (§15).
 
 ## Reading order
 
 1. [`article/forge.pdf`](article/forge.pdf) — the design. §1–2 for the objective
-   and the baseline, §5–10 for the algorithms, §13 for what was actually
+   and the baseline, §5–15 for the algorithms, §18 for what was actually
    measured.
 2. [`docs/STATUS.md`](docs/STATUS.md) — what is executed, what is generated but
    uncompiled, and what is designed only.
-3. [`docs/LEAN-STATUS.md`](docs/LEAN-STATUS.md) — the Lean ledger, including
-   the eighteen files this merge compiled and the one it found broken.
+3. [`docs/LEAN-STATUS.md`](docs/LEAN-STATUS.md) — the Lean ledger: the twenty
+   files this merge compiled, the one it found broken, and the defect it found
+   in its own scanner.
 4. Appendix B of the article — the merge ledger: which proposal each idea came
-   from, what was deduplicated, and how the twenty-seven's disagreements were
+   from, what was deduplicated, and how the thirty-six's disagreements were
    resolved.
 5. [`docs/IDEAS-FROM-LEANT-DJEX.md`](docs/IDEAS-FROM-LEANT-DJEX.md) — a review
    of two neighbouring projects that had already built the verification boundary
@@ -100,17 +106,18 @@ certificates that return a **quantity** rather than a verdict (§10).
 
 ## The new results
 
-All twenty-seven proposals recorded their Lean status as `NOT_RUN`. This
+All thirty-six proposals recorded their Lean status as `NOT_RUN`. This
 environment had `elan`, which installed the pinned
 `leanprover/lean4:v4.34.0`, so every file importing nothing beyond Lean core
-could be elaborated. **Eighteen files elaborate** — six in the merged tree, ten
-across the extension proposals, two of the third round's three — and eleven of
-them print `does not depend on any axioms` for every theorem they expose.
+could be elaborated. **Twenty files elaborate** — six in the merged tree, ten
+across the extension proposals, two of the third round's three, and both of the
+fourth round's two — and twelve of them print `does not depend on any axioms`
+for every theorem they expose.
 
 **And one does not.** The third round's remaining core-only file fails to parse:
 it defines `prefix`, a reserved keyword in Lean 4, and all ten errors cascade
 from that. The mathematics is fine and a rename repairs it. It is the only
-delivered Lean in twenty-seven proposals that a compiler has contradicted,
+delivered Lean in thirty-six proposals that a compiler has contradicted,
 because it is nearly the only delivered Lean a compiler has seen — and one
 proposal, `r9`, declined to ship any Lean at all for exactly that reason. The
 failure, its diagnosis and the tested repair are recorded together in
@@ -128,6 +135,7 @@ the archived source is left as delivered.
 | `e1`…`e9` core specimens (10 files) | elaborated; 7 with no axiom dependencies |
 | `r3`, `r7` core specimens (2 files) | elaborated; 1 with no axiom dependencies |
 | `r8/lean/RankTelescoping.lean` | **failed to parse**; `prefix` is a keyword |
+| `s3`, `s5` core specimens (2 files) | elaborated; 1 with no axiom dependencies |
 
 The three `Closure` files are the merge's own work: the ten core-only extension
 specimens contained six spellings of one reachability theorem and five of one
@@ -138,7 +146,17 @@ lemmas are kept and attributed. Recorded in
 and
 [`results/lean-closure-elaboration.json`](results/lean-closure-elaboration.json).
 
-That is eighteen files of fifty-seven, with one more compiled and rejected. It is not an axiom audit, it does not
+That is twenty files of fifty-nine, with one more compiled and rejected.
+
+**And one defect in our own tooling.** The first round-four scan reported a file
+as containing a `sorry`. Its only occurrence of the token was the sentence in
+its own header saying there were none — the scanner tested for a substring and
+so reported exactly backwards. It now strips Lean comments first, with a depth
+counter because Lean block comments nest. Re-auditing **all 88 Lean files**
+finds **zero** real `sorry` or `sorryAx` anywhere in this repository; all 22
+occurrences are authors stating there are none. That is a better result than
+anyone claimed, and it could not have been established before, because the
+unfixed scanner could not tell the two cases apart. It is not an axiom audit, it does not
 cover the twenty-one Mathlib-dependent files, it does not establish that any
 checker is correct, and it is not a comparison against any tactic. **It also
 does not change what any of those files says** — `e8`'s indexing sketch
@@ -146,8 +164,8 @@ type-checks and still proves an equation between two ordinary-list definitions,
 which is exactly what its author claimed for it.
 
 The second new result is a re-run. The design round's authoring environments
-were unavailable here, but every later suite runs, and **all eighteen reproduce
-their recorded counts** — on Python 3.14.4 rather than 3.13.5, so a reproduction
+were unavailable here, but every later suite runs, and **all twenty-six
+reproduce their recorded counts** — on Python 3.14.4 rather than 3.13.5, so a reproduction
 on different versions rather than a bit-identical replay. The third round's
 eight replay corpora also return zero, covering 119, 228, 284, 246, 304, 520,
 1,564 and 28,566 stored objects. Recorded in
@@ -233,14 +251,15 @@ passes.
 
 ## Reading the numbers
 
-**The twenty-seven runs are not comparable and must never be summed** — not
-within a round, and not across the three.
+**The thirty-six runs are not comparable and must never be summed** — not
+within a round, and not across the four.
 
 They look comparable. Five design-round runs recorded the seed `20260914`; five
-extension-round runs recorded `20260915`, one day later on the same interpreter
-and platform; and four third-round runs recorded `20260915` *again*, so the same
-integer now labels runs in two different rounds over entirely unrelated
-generators. That is a trap every time: the same seed drives entirely different
+extension-round runs recorded `20260915`; four third-round runs recorded
+`20260915` *again*; and **seven of round four's nine** recorded it as well.
+Sixteen runs across three rounds now carry one integer over sixteen unrelated
+generators — Petri nets, real-root covers, binary automata, permutation groups,
+chain complexes and more. That is a trap every time: the same seed drives entirely different
 generators over entirely different case sets — 30 cone cases in one run, 1,080
 witness tables in another, 1,500 differential SAT cases in a third. And "cases",
 "checks", "assertions", "tests", "certificates", "bundles", "records",
@@ -259,7 +278,13 @@ projection, disclosed by the proposal that built it — the checker reconstructs
 the answer with the same assembler the search used, so replay catches a modified
 certificate but not an arithmetic mistake common to both.
 
-The third round's own files contain three more traps, all documented in §13 of
+A different kind of duplication is worth knowing before quoting the
+collection's most readable example: **three round-four proposals independently
+computed the same three-element mutual-exclusion antichain.** Verified directly
+— the nets are identical under a coordinate bijection. It is one result, and a
+ledger counting it three times is wrong by a factor of three.
+
+The third round's own files contain three more traps, all documented in §18 of
 the article: two summaries reporting identical headline totals from different
 runs, one corpus counted in two report files, and three different units that
 look like one. A fourth is worth knowing before quoting any oracle-agreement
@@ -327,9 +352,27 @@ Four of these nine wrapped their contents in a directory named differently from
 the archive, so the slugs name what each package contains rather than what its
 file was called.
 
+The fourth round:
+
+| | Emphasis |
+| --- | --- |
+| `s1-resource-frontiers` | coverability frontiers for *all* initial markings |
+| `s2-unbounded-certificates` | one-marking coverability; irrational least fixed points |
+| `s3-infinite-state-workers` | counter systems; equality registers |
+| `s4-ordered-certificates` | matrix updates and lossy FIFO; separation receipts |
+| `s5-witness-atlases` | bivariate real quantification; root-index witnesses |
+| `s6-real-fibers` | uniform real-fiber counts over the same cover |
+| `s7-automatic-arithmetic` | binary-automatic arithmetic; least-witness graphs |
+| `s8-certified-symmetry` | stabiliser chains; canonical images; Reynolds projection |
+| `s9-constructive-exactness` | integral homology; homotopy obstructions |
+
+Four of these nine do backward-antichain coverability — the largest
+single-subject cluster in the collection — and §11 merges them rather than
+printing four adjacent accounts of one idea.
+
 Each slug names that submission's distinguishing emphasis. Appendix B of the
 article records what each contributed, which ideas survive in exactly one
-source, and how the twenty-seven's disagreements were resolved — always toward
+source, and how the thirty-six's disagreements were resolved — always toward
 the more conservative reading, and, where two similar-looking results turned out
 not to be the same result, toward keeping the distinction. That judgement went
 both ways in the third round: two of its noncommutative soundness theorems are

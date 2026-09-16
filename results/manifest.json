@@ -1,5 +1,5 @@
 {
-  "note": "Derived index over the twenty-seven recorded runs. The runs themselves are under proposals/<slug>/results/ and are never modified. Counts are per run and are not commensurable across runs, nor across the three rounds.",
+  "note": "Derived index over the thirty-six recorded runs. The runs themselves are under proposals/<slug>/results/ and are never modified. Counts are per run and are not commensurable across runs, nor across the three rounds.",
   "design_round_environment": {
     "date": "2026-09-14",
     "python": "3.13.5",
@@ -31,11 +31,26 @@
       "r9 distinguishes arenas (22,300), region records (26,915) and start-state replays (67,260)"
     ]
   },
+  "fourth_round_environment": {
+    "date": "2026-09-15",
+    "python": "3.13.5",
+    "platform": "Linux",
+    "prepared_against_forge_revision": "58ea206bd7ad501b930add568151217bcc7f82a2",
+    "note": "Seven of these nine recorded the seed value 20260915, bringing the total to sixteen runs across three rounds carrying one integer over sixteen unrelated generators. All nine also record byte-identical Python and platform strings: the NOT_RUN Lean status appearing nine times is one environmental fact reported nine times.",
+    "rerun_in_merge_environment": "results/round-four-suites-rerun.json",
+    "traps": [
+      "s6 and s7 each ship a superseded run that reproduces its own headline totals; both say not to add them",
+      "s7's 643 appears twice inside one proposal -- its witness count and a mutation class inside its 1,096",
+      "s8 and s9 each report exactly twelve unit tests, sharing no name and no subject",
+      "s5 and s6 share a computer-algebra producer in a shared environment, so a defect there would correlate across two proposals"
+    ]
+  },
   "lean": {
-    "all_twenty_seven_runs": "NOT_RUN -- no lean/lake executable available",
+    "all_thirty_six_runs": "NOT_RUN -- no lean/lake executable available",
     "this_merge_merged_tree": "results/lean-core-elaboration.json",
     "this_merge_extensions": "results/lean-extensions-elaboration.json",
-    "this_merge_third_round": "results/lean-round-three-elaboration.json -- 2 elaborated, 1 failed to parse"
+    "this_merge_third_round": "results/lean-round-three-elaboration.json -- 2 elaborated, 1 failed to parse",
+    "this_merge_fourth_round": "results/lean-round-four-elaboration.json -- 2 elaborated, plus an 88-file sorry audit finding none"
   },
   "runs": [
     {
@@ -608,6 +623,199 @@
         "value": "NOT_RUN: Lean executable unavailable; no tactic comparison"
       },
       "family_count": 3
+    },
+    {
+      "round": "fourth",
+      "run": "s1",
+      "slug": "s1-resource-frontiers",
+      "emphasis": "exact coverability frontiers for all initial markings",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 68,
+      "test_unit": "test methods",
+      "certificates": 423,
+      "certificate_layout": "seven jsonl corpora by certificate kind",
+      "replay": "423 records, search module not imported",
+      "pdf_pages": null,
+      "results_path": "proposals/s1-resource-frontiers/results",
+      "lean_status_recorded": {
+        "file": "results/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean executable available"
+      },
+      "family_count": 7
+    },
+    {
+      "round": "fourth",
+      "run": "s2",
+      "slug": "s2-unbounded-certificates",
+      "emphasis": "one-marking coverability; irrational least fixed points",
+      "seed": 6071504,
+      "test_framework": null,
+      "test_count": null,
+      "test_unit": "no unit suite; in-experiment assertions",
+      "certificates": 2360,
+      "certificate_layout": "run-01 jsonl plus rejection corpus",
+      "replay": "2,360 accepted, 275 rejections, site packages disabled",
+      "pdf_pages": 31,
+      "results_path": "proposals/s2-unbounded-certificates/results",
+      "lean_status_recorded": {
+        "file": "results/environment.json",
+        "field": "lean",
+        "value": "NOT_RUN -- recorded as a null executable path"
+      },
+      "family_count": 6
+    },
+    {
+      "round": "fourth",
+      "run": "s3",
+      "slug": "s3-infinite-state-workers",
+      "emphasis": "counter systems; equality registers; their product",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 27,
+      "test_unit": "test methods",
+      "certificates": 650,
+      "certificate_layout": "one corpus.json, three engines",
+      "replay": "650 objects, producer and oracle not imported",
+      "pdf_pages": 29,
+      "results_path": "proposals/s3-infinite-state-workers/results",
+      "lean_status_recorded": {
+        "file": "results/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean/elan executable; compiler plugin search found none"
+      },
+      "family_count": 3
+    },
+    {
+      "round": "fourth",
+      "run": "s4",
+      "slug": "s4-ordered-certificates",
+      "emphasis": "matrix updates and lossy FIFO; separation receipts",
+      "seed": 941572603,
+      "test_framework": "combined runner",
+      "test_count": null,
+      "test_unit": "run_tests.py reporting REPLAY_OK",
+      "certificates": 383,
+      "certificate_layout": "eager and separation certificates over one model set",
+      "replay": "190 eager and 193 separation certificates; 37 corruptions rejected",
+      "pdf_pages": 26,
+      "results_path": "proposals/s4-ordered-certificates/results",
+      "lean_status_recorded": {
+        "file": "results/summary.json",
+        "field": "lean",
+        "value": {
+          "available": false,
+          "compiled_files": 0,
+          "note": "No Lean executable found in this run."
+        }
+      },
+      "family_count": 2
+    },
+    {
+      "round": "fourth",
+      "run": "s5",
+      "slug": "s5-witness-atlases",
+      "emphasis": "bivariate real quantification; root-index witnesses",
+      "seed": 20260915,
+      "test_framework": "pytest",
+      "test_count": 42,
+      "test_unit": "test items",
+      "certificates": 100,
+      "certificate_layout": "24 primary atlases plus 76 metamorphic",
+      "replay": "100 atlases under python -S",
+      "pdf_pages": null,
+      "results_path": "proposals/s5-witness-atlases/results",
+      "lean_status_recorded": {
+        "file": "results/environment.json",
+        "field": "lean",
+        "value": "NOT_RUN -- recorded as a null executable path"
+      },
+      "family_count": 4
+    },
+    {
+      "round": "fourth",
+      "run": "s6",
+      "slug": "s6-real-fibers",
+      "emphasis": "uniform real-fiber counts over the same cover",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 25,
+      "test_unit": "test methods",
+      "certificates": 99,
+      "certificate_layout": "run-02 bundles (run-01 superseded, not pooled)",
+      "replay": "99 bundles, 973 mutations rejected, sympy/numpy/flint forbidden",
+      "pdf_pages": 30,
+      "results_path": "proposals/s6-real-fibers/results",
+      "lean_status_recorded": {
+        "file": "results/run-02/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean executable available"
+      },
+      "family_count": 3
+    },
+    {
+      "round": "fourth",
+      "run": "s7",
+      "slug": "s7-automatic-arithmetic",
+      "emphasis": "binary-automatic arithmetic; least-witness graphs",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 7,
+      "test_unit": "interface tests",
+      "certificates": 90,
+      "certificate_layout": "run1 (run2 reproduces it; not pooled)",
+      "replay": "90 certificates and 643 concrete witnesses",
+      "pdf_pages": null,
+      "results_path": "proposals/s7-automatic-arithmetic/results",
+      "lean_status_recorded": {
+        "file": "results/run2/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean executable was available"
+      },
+      "family_count": 3
+    },
+    {
+      "round": "fourth",
+      "run": "s8",
+      "slug": "s8-certified-symmetry",
+      "emphasis": "stabilizer chains; canonical images; Reynolds projection",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 12,
+      "test_unit": "test methods",
+      "certificates": 160,
+      "certificate_layout": "160 chain bundles plus a separate 26-bundle suite",
+      "replay": "REPLAY_PASSED; producer not imported",
+      "pdf_pages": 31,
+      "results_path": "proposals/s8-certified-symmetry/results",
+      "lean_status_recorded": {
+        "file": "results/recorded/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN_NO_EXECUTABLE"
+      },
+      "family_count": 7
+    },
+    {
+      "round": "fourth",
+      "run": "s9",
+      "slug": "s9-constructive-exactness",
+      "emphasis": "integral homology; reductions; homotopy obstructions",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 12,
+      "test_unit": "test methods",
+      "certificates": 656,
+      "certificate_layout": "one corpus.json, seven outcome kinds",
+      "replay": "656 accepted, 489 rejections, sympy absent from sys.modules",
+      "pdf_pages": null,
+      "results_path": "proposals/s9-constructive-exactness/results",
+      "lean_status_recorded": {
+        "file": "results/recorded/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean executable available"
+      },
+      "family_count": 7
     }
   ]
 }

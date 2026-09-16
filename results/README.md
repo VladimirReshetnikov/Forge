@@ -1,12 +1,12 @@
 # Results
 
-Recorded evidence from the twenty-seven prototype runs — the design round
-`p1`..`p9`, the extension round `e1`..`e9`, and the third round `r1`..`r9` —
-plus the measurements this merge was able to add.
+Recorded evidence from the thirty-six prototype runs — the design round
+`p1`..`p9`, the extension round `e1`..`e9`, the third round `r1`..`r9`, and the
+fourth `s1`..`s9` — plus the measurements this merge was able to add.
 
 ## Where the evidence lives
 
-**The twenty-seven original runs stay where they were recorded**, under
+**The thirty-six original runs stay where they were recorded**, under
 `proposals/<slug>/results/`. They are not copied here and not edited. Each run
 is a self-contained record of one execution — its own seed, its own generators,
 its own case set, its own byte-identical duplicate files — and rewriting any of
@@ -28,12 +28,16 @@ results/
                                 replay corpora re-run here
   lean-round-three-elaboration.json  NEW: 2 elaborated, 1 failed, with the
                                 diagnosis and a tested repair
+  round-four-suites-rerun.json  NEW: round four's suites and replay corpora
+  lean-round-four-elaboration.json  NEW: 2 elaborated, plus a defect found in
+                                our own sorry scan and the 88-file audit it
+                                made possible
 ```
 
 ## The non-pooling rule
 
-The twenty-seven runs are **not comparable and must never be summed** — not
-within a round, and not across the three rounds.
+The thirty-six runs are **not comparable and must never be summed** — not
+within a round, and not across the four rounds.
 
 This needs saying loudly because they look comparable. All nine design-round
 runs ran on 2026-09-14, on Python 3.13.5 / NumPy 2.3.5 / SciPy 1.17.0 / SymPy 1.14.0 under
@@ -62,6 +66,20 @@ shared value. The same integer therefore labels runs in two different rounds
 over entirely unrelated generators — polyhedral cases, exponential-polynomial
 ladders, Markov decision processes and pushdown systems. It has stopped being a
 coincidence worth explaining and become a standing hazard.
+
+The fourth round finishes the pattern: **seven of its nine** record
+`20260915` as well. Sixteen runs across three rounds now carry that one integer
+over sixteen unrelated generators — Petri nets, real-root covers, binary
+automata, permutation groups, chain complexes, and more. Two proposals defuse it
+in their own text. The rest do not. A matching seed here is not evidence of a
+shared corpus.
+
+Round four also contains three traps worth knowing before quoting any of its
+numbers. Two proposals ship superseded runs that reproduce their own headline
+totals and say not to add them. One proposal's `643` appears twice inside itself
+— as its witness count and as a mutation class inside its 1,096 — so quoting
+both is right and adding them is not. And two proposals each report exactly
+twelve unit tests whose lists share no name and no subject.
 
 Across the rounds there is a second reason not to add anything up. The extension
 proposals were written *against the merged design*, and several of them

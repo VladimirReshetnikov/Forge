@@ -4,7 +4,7 @@ What was checked, by whom, and what the check is worth. Merged from the
 proposals that wrote narrative validation reports and the ones that recorded
 machine-readable validation files.
 
-## Checks performed by the twenty-seven original runs
+## Checks performed by the thirty-six original runs
 
 ### Test suites
 
@@ -48,9 +48,23 @@ Third round:
 | r8 | unittest | 14 | regression methods |
 | r9 | unittest | 36 | test methods |
 
-These are twenty-seven separate suites over twenty-seven separate codebases.
-They cannot be summed, and three of the design-round nine ship no standalone
-test suite at all — their assertions live inside the experiment driver, so
+Fourth round:
+
+| Run | Framework | Count | Unit |
+| --- | --- | ---: | --- |
+| s1 | unittest | 68 | test methods |
+| s2 | — | — | no unit suite; replay corpus and in-experiment assertions |
+| s3 | unittest | 27 | test methods |
+| s4 | combined runner | — | `run_tests.py` reporting `REPLAY_OK` |
+| s5 | pytest | 42 | test items (the only round-four suite needing pytest) |
+| s6 | unittest | 25 | test methods |
+| s7 | unittest | 7 | interface tests |
+| s8 | unittest | 12 | test methods |
+| s9 | unittest | 12 | test methods |
+
+These are thirty-six separate suites over thirty-six separate codebases. They
+cannot be summed, and four of them ship no standalone test suite at all --- three
+of the design-round nine and `s2` — their assertions live inside the experiment driver, so
 `pytest` would pass vacuously on those modules.
 
 **Eighteen of the twenty-seven were re-run here**, in a different environment,
@@ -206,8 +220,11 @@ Three more from the extension round belong in the same list:
 | Core Lean elaboration, merged tree | 6 of 21 files, Lean v4.34.0, no errors |
 | Core Lean elaboration, extension round | 10 of 20 source files, no errors |
 | Core Lean elaboration, third round | 2 of 3 core-only files; **1 fails to parse** |
-| Theorems printing no axiom dependencies | 11 of the 18 elaborated files |
+| Core Lean elaboration, fourth round | 2 of 2 files |
+| Theorems printing no axiom dependencies | 12 of the 20 elaborated files |
 | Third-round suites re-run | 9 of 9 pass; 8 of 8 replay corpora return zero |
+| Fourth-round suites re-run | 8 of 8 existing suites pass; 7 of 7 replay corpora return zero |
+| **`sorry` audit, all 88 Lean files** | **0 real occurrences**; 22 mentions, all in comments denying them |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine design-round runs; it is a timing field |
@@ -259,8 +276,15 @@ In rough order of value per unit of work:
 5. The controlled Lean evaluation described in Section 10 of the article.
 6. An external audit.
 
-Before any of those, there is now a five-minute item that was not available
-until this round: **compile the Lean that already exists.** Thirty-four
+One item on this list has been partly answered by the collection itself, and
+the answer is worth recording: **stop shipping uncompiled Lean.** Round four
+did, without being asked, after one round-three proposal argued the point and a
+compiler agreed with it. Seven of its nine proposals ship a statement of
+obligations instead of a theorem file, which is both more honest and more
+useful.
+
+Before any of the rest, there is still a five-minute item: **compile the Lean
+that already exists.** Thirty-four
 delivered files import Mathlib and have never been checked by anything. The one
 time a compiler was pointed at previously-unchecked delivered Lean, it found a
 file that does not parse. That is not a criticism of its author — it is a

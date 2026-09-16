@@ -1,5 +1,5 @@
 {
-  "note": "Machine-readable twin of docs/STATUS.md. Merged from the twenty-seven proposals' status files, which used some twenty filenames in several formats.",
+  "note": "Machine-readable twin of docs/STATUS.md. Merged from the thirty-six proposals' status files, which used some twenty-five filenames in several formats.",
   "baseline": {
     "lean": "v4.34.0",
     "lean_released": "2026-09-14",
@@ -22,7 +22,7 @@
       "performed": true,
       "toolchain": "leanprover/lean4:v4.34.0",
       "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
-      "files_elaborated_total": 18,
+      "files_elaborated_total": 20,
       "merged_tree": {
         "files_total": 21,
         "files_elaborated": 6,
@@ -47,7 +47,7 @@
       "is_tactic_comparison": false,
       "establishes_checker_correctness": false,
       "elaboration_changes_what_a_file_says": false,
-      "files_printing_no_axiom_dependencies": 11,
+      "files_printing_no_axiom_dependencies": 12,
       "files_failing_to_elaborate": 1,
       "third_round": {
         "source_files_total": 16,
@@ -64,15 +64,58 @@
           "repair_tested_outside_the_repository": true,
           "archived_source_left_as_delivered": true
         }
+      },
+      "fourth_round": {
+        "source_files_total": 2,
+        "lines_total": 98,
+        "files_elaborated": 2,
+        "proposals_shipping_no_lean_directory": 4,
+        "proposals_shipping_an_obligation_document_instead": 3,
+        "record": "results/lean-round-four-elaboration.json"
+      },
+      "candidate_lean_by_round": {
+        "design": {
+          "files": 21,
+          "lines": 3022
+        },
+        "extension": {
+          "files": 20,
+          "lines": 3144
+        },
+        "third": {
+          "files": 16,
+          "lines": 755
+        },
+        "fourth": {
+          "files": 2,
+          "lines": 98
+        }
+      },
+      "sorry_audit": {
+        "files_scanned": 88,
+        "real_sorry_or_sorryAx": 0,
+        "token_occurrences_in_comments_only": 22,
+        "scanner_defect_found_and_fixed": true,
+        "scanner_defect": "the scan tested for the substring \"sorry\" in the raw file and reported a defect on a file whose only occurrence was its header sentence denying one"
       }
     },
-    "all_twenty_seven_original_runs": "NOT_RUN",
-    "all_twenty_seven_reason": "no lean/lake executable in any authoring environment",
-    "one_proposal_shipped_no_lean_deliberately": "r9-infinite-horizon"
+    "one_proposal_shipped_no_lean_deliberately": "r9-infinite-horizon",
+    "all_thirty_six_original_runs": "NOT_RUN",
+    "all_thirty_six_reason": "no lean/lake executable in any authoring environment",
+    "proposals_shipping_no_theorem_file_deliberately": [
+      "r9-infinite-horizon",
+      "s1-resource-frontiers",
+      "s2-unbounded-certificates",
+      "s4-ordered-certificates",
+      "s6-real-fibers",
+      "s7-automatic-arithmetic",
+      "s8-certified-symmetry",
+      "s9-constructive-exactness"
+    ]
   },
   "runs": {
-    "count": 27,
-    "rounds": 3,
+    "count": 36,
+    "rounds": 4,
     "design_round": {
       "labels": "p1..p9",
       "date": "2026-09-14",
@@ -121,6 +164,22 @@
       "recorded_counts_reproduced": 9,
       "replay_corpora_rerun": 8,
       "rerun_record": "results/round-three-suites-rerun.json"
+    },
+    "fourth_round": {
+      "labels": "s1..s9",
+      "date": "2026-09-15",
+      "prepared_against": "58ea206bd7ad501b930add568151217bcc7f82a2",
+      "environment": {
+        "python": "3.13.5",
+        "platform": "Linux"
+      },
+      "shared_seed_value": 20260915,
+      "runs_sharing_it": 7,
+      "runs_sharing_it_across_rounds": 16,
+      "suites_rerun_in_merge_environment": 8,
+      "proposals_without_a_suite": 1,
+      "replay_corpora_rerun": 7,
+      "rerun_record": "results/round-four-suites-rerun.json"
     }
   },
   "certificate_corpus": {
@@ -180,7 +239,22 @@
     "exact MDP reachability, expected hitting time, and polynomial drift potentials",
     "parity games with threshold-local ranks; Buchi/co-Buchi dual ranks",
     "exact optimal transport with Farkas and Hall duals",
-    "unbounded-stack pushdown summaries with proof-sharing DAGs"
+    "unbounded-stack pushdown summaries with proof-sharing DAGs",
+    "exact minimal coverability frontiers for all initial markings",
+    "guarded compressed-run summary algebra and productive-transition acceleration",
+    "certified population thresholds and multiparameter Pareto frontiers",
+    "backward antichains for counter systems with multi-ray initial families",
+    "matrix-update transition systems and lossy FIFO under the subsequence order",
+    "direct-cover receipts that avoid materialising a predecessor basis",
+    "equality-register transducer equivalence over an infinite atom alphabet",
+    "exact rational enclosures of irrational least fixed points",
+    "inverse-free weighted Newton certificates and extinction certificates",
+    "bivariate real quantification by certified cell covers with root-index witnesses",
+    "uniform real-fiber count circuits over a certified cover",
+    "binary-automatic arithmetic with zero-tail saturation and least-witness graphs",
+    "stabilizer chains with certified non-membership and coset-cover canonical images",
+    "Burnside cycle inventories and sparse Reynolds projection",
+    "integral homology coordinates, certified reductions, and homotopy obstructions"
   ],
   "unique_to_one_run": [
     "square-factor and Sturm univariate certificates",
@@ -203,7 +277,15 @@
     "the observable quotient -- the only construction that changes the state space (r1)",
     "pop summaries with shared subproofs (r9)",
     "the properness potential yielding three exact values at once (r9)",
-    "shipping no Lean deliberately, and being vindicated by a compiler (r9)"
+    "shipping no Lean deliberately, and being vindicated by a compiler (r9)",
+    "the two-sided coverability frontier with a positive run per basis element (s1)",
+    "a direct-cover receipt avoiding 26,075,972,546 minimal predecessors (s4)",
+    "Bell-number finiteness owing nothing to a well-quasi-order (s3)",
+    "root-index witnesses for real existentials (s5)",
+    "zero-tail saturation (s7)",
+    "certified non-membership in a finitely generated group (s8)",
+    "the Reynolds reduction, which accelerates an existing worker (s8)",
+    "an obstruction to chain homotopy that homology cannot see (s9)"
   ],
   "designed_not_implemented": [
     "the forge tactic and its syntax",
@@ -238,7 +320,11 @@
     "An uncompiled Lean file is worth what its author's care is worth. Of the three delivered files finally compiled, two were fine and one did not parse.",
     "A bounded oracle that reaches its limit returns no verdict; a truncated search must not be counted as corroboration.",
     "A represented length is not an executed one. A DAG denoting 2^60 steps was expanded concretely only to small depth.",
-    "Expectation is not a ring homomorphism, so the ideal-closure rule does not survive being extended to moments."
+    "Expectation is not a ring homomorphism, so the ideal-closure rule does not survive being extended to moments.",
+    "A matching seed in this repository is not evidence of a shared corpus: sixteen runs across three rounds record 20260915 over unrelated generators.",
+    "Three proposals independently computed the same mutual-exclusion antichain. It is one result.",
+    "An obstruction saying the computed invariant is too coarse is not a counterexample, and instructs a planner differently.",
+    "A check that disappears under python -O was never a check."
   ],
   "merged_prototype": {
     "path": "prototype/",

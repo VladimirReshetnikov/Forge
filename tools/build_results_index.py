@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 """Regenerate the derived cross-run views under results/.
 
-Reads the twenty-seven recorded runs under proposals/<slug>/results/ -- the
-design round p1..p9, the extension round e1..e9, and the third round r1..r9 --
-and writes:
+Reads the thirty-six recorded runs under proposals/<slug>/results/ -- the
+design round p1..p9, the extension round e1..e9, the third round r1..r9, and
+the fourth s1..s9 -- and writes:
 
     results/manifest.json          one row per run
     results/certificate-counts.csv per run, per family
 
 Nothing here edits a recorded run. The derived files always carry `run` and
 `round` columns, and certificate-counts.csv deliberately emits no grand total:
-the twenty-seven runs used different seeds, generators, case sets and units,
+the thirty-six runs used different seeds, generators, case sets and units,
 their counts are not commensurable within a round, and the rounds attack
 overlapping problems so a cross-round total would double-count. Worse, the
-shared seed value 20260915 now appears in two different rounds over unrelated
-generators, so matching seeds are not even evidence of a shared corpus. See
-results/README.md.
+shared seed value 20260915 now appears in sixteen runs across three rounds over
+sixteen unrelated generators, so matching seeds are not even evidence of a
+shared corpus. See results/README.md.
+
+Three proposals independently computed the same three-element mutual-exclusion
+antichain (s1, s3, s4). It is one result. Two round-four proposals each report
+exactly twelve unit-test methods whose lists share no name and no subject.
 
 The `outcome` column matters as much as the counts. A row whose expected
 outcome is `refuted` and whose `achieved` equals its `cases` is a fully
@@ -584,6 +588,187 @@ THIRD_RUNS: list[dict] = [
     },
 ]
 
+FOURTH_RUNS: list[dict] = [
+    {
+        "run": "s1",
+        "slug": "s1-resource-frontiers",
+        "emphasis": "exact coverability frontiers for all initial markings",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 68,
+        "test_unit": "test methods",
+        "certificates": 423,
+        "certificate_layout": "seven jsonl corpora by certificate kind",
+        "replay": "423 records, search module not imported",
+        "pdf_pages": None,
+        "families": [
+            ("least_unsafe_parameter", "certified", 136, 136, None),
+            ("coverability_frontier", "certified", 94, 94, None),
+            ("unsafe_parameter_frontier", "certified", 69, 69, None),
+            ("equivalence_equal", "certified", 63, 63, None),
+            ("equivalence_different", "refuted", 58, 58, None),
+            ("compressed_run", "certified", 1, 1, None),
+            ("lasso", "refuted", 2, 2, None),
+        ],
+    },
+    {
+        "run": "s2",
+        "slug": "s2-unbounded-certificates",
+        "emphasis": "one-marking coverability; irrational least fixed points",
+        "seed": 6071504,
+        "test_framework": None,
+        "test_count": None,
+        "test_unit": "no unit suite; in-experiment assertions",
+        "certificates": 2360,
+        "certificate_layout": "run-01 jsonl plus rejection corpus",
+        "replay": "2,360 accepted, 275 rejections, site packages disabled",
+        "pdf_pages": 31,
+        "families": [
+            ("petri_exhaustive", "mixed", 2100, 2100, None),
+            ("petri_random", "mixed", 120, 120, None),
+            ("pps_enclosure", "certified", 99, 99, None),
+            ("spectral_extinction", "certified", 26, 26, None),
+            ("algebraic_decoder", "certified", 8, 8, None),
+            ("rejection_controls", "refuted", 275, 275, None),
+        ],
+    },
+    {
+        "run": "s3",
+        "slug": "s3-infinite-state-workers",
+        "emphasis": "counter systems; equality registers; their product",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 27,
+        "test_unit": "test methods",
+        "certificates": 650,
+        "certificate_layout": "one corpus.json, three engines",
+        "replay": "650 objects, producer and oracle not imported",
+        "pdf_pages": 29,
+        "families": [
+            ("vass", "mixed", 305, 305, None),
+            ("mixed", "mixed", 182, 182, None),
+            ("nominal", "mixed", 163, 163, None),
+        ],
+    },
+    {
+        "run": "s4",
+        "slug": "s4-ordered-certificates",
+        "emphasis": "matrix updates and lossy FIFO; separation receipts",
+        "seed": 941572603,
+        "test_framework": "combined runner",
+        "test_count": None,
+        "test_unit": "run_tests.py reporting REPLAY_OK",
+        "certificates": 383,
+        "certificate_layout": "eager and separation certificates over one model set",
+        "replay": "190 eager and 193 separation certificates; 37 corruptions rejected",
+        "pdf_pages": 26,
+        "families": [
+            # 190 and 193 are the SAME models twice, not 383 systems.
+            ("eager_region", "certified", 190, 190, None),
+            ("separation_region", "certified", 193, 193, None),
+        ],
+    },
+    {
+        "run": "s5",
+        "slug": "s5-witness-atlases",
+        "emphasis": "bivariate real quantification; root-index witnesses",
+        "seed": 20260915,
+        "test_framework": "pytest",
+        "test_count": 42,
+        "test_unit": "test items",
+        "certificates": 100,
+        "certificate_layout": "24 primary atlases plus 76 metamorphic",
+        "replay": "100 atlases under python -S",
+        "pdf_pages": None,
+        "families": [
+            ("primary_atlas", "certified", 24, 24, None),
+            ("metamorphic", "certified", 76, 76, None),
+            ("root_problems", "certified", 250, 250, None),
+            ("localized_trials", "certified", 200, 200, None),
+        ],
+    },
+    {
+        "run": "s6",
+        "slug": "s6-real-fibers",
+        "emphasis": "uniform real-fiber counts over the same cover",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 25,
+        "test_unit": "test methods",
+        "certificates": 99,
+        "certificate_layout": "run-02 bundles (run-01 superseded, not pooled)",
+        "replay": "99 bundles, 973 mutations rejected, sympy/numpy/flint forbidden",
+        "pdf_pages": 30,
+        "families": [
+            ("valid_bundles", "certified", 99, 99, None),
+            ("specialization_evaluations", "certified", 748, 748, None),
+            ("boolean_formulas", "mixed", 160, 160, None),
+        ],
+    },
+    {
+        "run": "s7",
+        "slug": "s7-automatic-arithmetic",
+        "emphasis": "binary-automatic arithmetic; least-witness graphs",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 7,
+        "test_unit": "interface tests",
+        "certificates": 90,
+        "certificate_layout": "run1 (run2 reproduces it; not pooled)",
+        "replay": "90 certificates and 643 concrete witnesses",
+        "pdf_pages": None,
+        "families": [
+            ("named_queries", "certified", 25, 25, None),
+            ("guarded_alternating", "certified", 60, 60, None),
+            ("witness_graphs", "certified", 5, 5, None),
+        ],
+    },
+    {
+        "run": "s8",
+        "slug": "s8-certified-symmetry",
+        "emphasis": "stabilizer chains; canonical images; Reynolds projection",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 12,
+        "test_unit": "test methods",
+        "certificates": 160,
+        "certificate_layout": "160 chain bundles plus a separate 26-bundle suite",
+        "replay": "REPLAY_PASSED; producer not imported",
+        "pdf_pages": 31,
+        "families": [
+            ("membership_queries", "mixed", 8028, 8028, None),
+            ("canonical_images", "certified", 296, 296, None),
+            ("canonical_family_images", "certified", 213, 213, None),
+            ("chain_bundles", "certified", 160, 160, None),
+            ("fixed_weight_queries", "certified", 220, 220, None),
+            ("color_count_queries", "certified", 160, 160, None),
+            ("cycle_inventories", "certified", 40, 40, None),
+        ],
+    },
+    {
+        "run": "s9",
+        "slug": "s9-constructive-exactness",
+        "emphasis": "integral homology; reductions; homotopy obstructions",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 12,
+        "test_unit": "test methods",
+        "certificates": 656,
+        "certificate_layout": "one corpus.json, seven outcome kinds",
+        "replay": "656 accepted, 489 rejections, sympy absent from sys.modules",
+        "pdf_pages": None,
+        "families": [
+            ("no_homotopy", "refuted", 145, 145, None),
+            ("fill", "certified", 129, 129, None),
+            ("homotopy", "certified", 100, 100, None),
+            ("homology", "certified", 97, 97, None),
+            ("reduction", "certified", 72, 72, None),
+            ("obstruction", "refuted", 65, 65, None),
+            ("induced", "certified", 48, 48, None),
+        ],
+    },
+]
+
 COMMON_ENVIRONMENT = {
     "date": "2026-09-14",
     "python": "3.13.5",
@@ -642,6 +827,34 @@ THIRD_ENVIRONMENT = {
 }
 
 
+FOURTH_ENVIRONMENT = {
+    "date": "2026-09-15",
+    "python": "3.13.5",
+    "platform": "Linux",
+    "prepared_against_forge_revision": (
+        "58ea206bd7ad501b930add568151217bcc7f82a2"
+    ),
+    "note": (
+        "Seven of these nine recorded the seed value 20260915, bringing the "
+        "total to sixteen runs across three rounds carrying one integer over "
+        "sixteen unrelated generators. All nine also record byte-identical "
+        "Python and platform strings: the NOT_RUN Lean status appearing nine "
+        "times is one environmental fact reported nine times."
+    ),
+    "rerun_in_merge_environment": "results/round-four-suites-rerun.json",
+    "traps": [
+        "s6 and s7 each ship a superseded run that reproduces its own headline "
+        "totals; both say not to add them",
+        "s7's 643 appears twice inside one proposal -- its witness count and a "
+        "mutation class inside its 1,096",
+        "s8 and s9 each report exactly twelve unit tests, sharing no name and "
+        "no subject",
+        "s5 and s6 share a computer-algebra producer in a shared environment, "
+        "so a defect there would correlate across two proposals",
+    ],
+}
+
+
 def lean_status(slug: str) -> dict:
     """Find whatever that run recorded about Lean, under any of its filenames."""
     directory = PROPOSALS / slug / "results"
@@ -669,7 +882,12 @@ def lean_status(slug: str) -> dict:
         "environment.json",
         "experiment-summary.json",
         "LEAN-STATUS.json",
+        "run-02/summary.json",
         "run-01/summary.json",
+        "run2/summary.json",
+        "run1/summary.json",
+        "recorded/summary.json",
+        "experiment_stdout.json",
         "accepted/summary.json",
         "examples/summary.json",
         "full/report.json",
@@ -710,7 +928,11 @@ def lean_status(slug: str) -> dict:
             "evidence",
         ):
             if key in data:
-                return {"file": name, "field": key, "value": data[key]}
+                value = data[key]
+                if value is None:
+                    # A null lean/lake path is a recorded NOT_RUN, not a gap.
+                    value = "NOT_RUN -- recorded as a null executable path"
+                return {"file": name, "field": key, "value": value}
         nested = data.get("environment")
         if isinstance(nested, dict) and "lean_status" in nested:
             return {
@@ -718,6 +940,9 @@ def lean_status(slug: str) -> dict:
                 "field": "environment.lean_status",
                 "value": nested["lean_status"],
             }
+        if "lean" in data and data["lean"] is None:
+            return {"file": name, "field": "lean",
+                    "value": "NOT_RUN -- recorded as a null executable path"}
         meta = data.get("metadata")
         if isinstance(meta, dict) and "lean_available" in meta:
             return {
@@ -743,7 +968,7 @@ def main() -> int:
 
     manifest = {
         "note": (
-            "Derived index over the twenty-seven recorded runs. The runs "
+            "Derived index over the thirty-six recorded runs. The runs "
             "themselves are under proposals/<slug>/results/ and are never "
             "modified. Counts are per run and are not commensurable across "
             "runs, nor across the three rounds."
@@ -751,8 +976,9 @@ def main() -> int:
         "design_round_environment": COMMON_ENVIRONMENT,
         "extension_round_environment": EXTENSION_ENVIRONMENT,
         "third_round_environment": THIRD_ENVIRONMENT,
+        "fourth_round_environment": FOURTH_ENVIRONMENT,
         "lean": {
-            "all_twenty_seven_runs": (
+            "all_thirty_six_runs": (
                 "NOT_RUN -- no lean/lake executable available"
             ),
             "this_merge_merged_tree": "results/lean-core-elaboration.json",
@@ -761,13 +987,18 @@ def main() -> int:
                 "results/lean-round-three-elaboration.json -- 2 elaborated, "
                 "1 failed to parse"
             ),
+            "this_merge_fourth_round": (
+                "results/lean-round-four-elaboration.json -- 2 elaborated, "
+                "plus an 88-file sorry audit finding none"
+            ),
         },
         "runs": [],
     }
 
     for round_name, entries in (("design", RUNS),
                                 ("extension", EXTENSION_RUNS),
-                                ("third", THIRD_RUNS)):
+                                ("third", THIRD_RUNS),
+                                ("fourth", FOURTH_RUNS)):
         for entry in entries:
             record = {"round": round_name}
             record.update({k: v for k, v in entry.items() if k != "families"})
@@ -830,6 +1061,20 @@ def main() -> int:
                     [
                         entry["run"],
                         "third",
+                        entry["slug"],
+                        family,
+                        outcome,
+                        cases,
+                        ok,
+                        "" if ablation is None else ablation,
+                    ]
+                )
+        for entry in FOURTH_RUNS:
+            for family, outcome, cases, ok, ablation in entry["families"]:
+                writer.writerow(
+                    [
+                        entry["run"],
+                        "fourth",
                         entry["slug"],
                         family,
                         outcome,

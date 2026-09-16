@@ -1,27 +1,45 @@
 # Lean status
 
-One canonical record. The twenty-seven proposals stated this twenty-seven
-different ways under some twenty filenames in several formats; those originals
-stay frozen under `proposals/<slug>/results/` and `proposals/<slug>/lean/`.
+One canonical record. The thirty-six proposals stated this thirty-six different
+ways under some twenty-five filenames in several formats; those originals stay
+frozen under `proposals/<slug>/results/` and `proposals/<slug>/lean/`.
 
 ## The short version
 
-**No proposal compiled any Lean.** All twenty-seven recorded `NOT_RUN` for the
+**No proposal compiled any Lean.** All thirty-six recorded `NOT_RUN` for the
 same reason: no `lean` or `lake` executable in the authoring environment.
 Consequently none performed a kernel check, an axiom audit, or any comparison
 against a Lean tactic. One of them — `r9` — responded by shipping no Lean at
 all, saying it "deliberately contains no placeholder theorem files presented as
 implemented proofs".
 
-**This merge compiled eighteen files, and one of them failed.** The merge
+**This merge compiled twenty files, and one of them failed.** The merge
 environment has `elan`, which installed the pinned
 `leanprover/lean4:v4.34.0`. Six of the twenty-one files in the merged tree, ten
-of the twenty extension-round source files, and two of the third round's three
-core-only files elaborate with no errors; eleven of the eighteen print `does not
-depend on any axioms` for every theorem they expose.
+of the twenty extension-round source files, two of the third round's three
+core-only files, and both of the fourth round's two elaborate with no errors;
+twelve of the twenty print `does not depend on any axioms` for every theorem
+they expose.
+
+**The candidate Lean shrank by a factor of thirty across four rounds.**
+
+| Round | Source files | Lines |
+| --- | ---: | ---: |
+| Design `p1`–`p9` | 21 | 3,022 |
+| Extension `e1`–`e9` | 20 | 3,144 |
+| Third `r1`–`r9` | 16 | 755 |
+| Fourth `s1`–`s9` | **2** | **98** |
+
+It did not shrink because the proposals got smaller. `r9` argued that an
+uncompiled theorem file is not evidence and shipped none; a compiler then found
+that another round-three file did not parse. By round four, four proposals ship
+no `lean/` directory at all and three ship one containing only an obligation
+document — three of them saying, in nearly the same words, that the directory
+"deliberately contains no `sorry`-based or uncompiled theorem file presented as
+a completed implementation".
 
 The third round's remaining core-only file does **not** parse, and it is the
-only delivered Lean in twenty-seven proposals that a compiler has contradicted
+only delivered Lean in thirty-six proposals that a compiler has contradicted
 — because it is nearly the only delivered Lean a compiler has seen.
 
 ## What each run recorded
@@ -116,6 +134,36 @@ the merged tree if and when the lemma is adopted. Recording the failure, the
 diagnosis and the tested repair together is what keeps a later reader from
 mistaking "did not compile" for "is unsound" — or for "compiles".
 
+### The fourth round
+
+Recorded in
+[`../results/lean-round-four-elaboration.json`](../results/lean-round-four-elaboration.json).
+Two files, both core-only, both elaborating.
+
+| File | Result |
+| --- | --- |
+| `s3/lean/CounterLemmas.lean` | elaborated; depends on `propext`, `Classical.choice`, `Quot.sound` |
+| `s5/lean/AtlasQuantifiers.lean` | elaborated; no axiom dependencies for either theorem |
+
+**A defect in this repository's own scanner, found here.** The first run
+reported `CounterLemmas.lean` as `elaborated_with_sorry`. That was wrong. The
+scan in `tools/check_lean.py` tested `"sorry" in text` over the raw file, and
+that file's only occurrence of the token is its own header sentence, *"There are
+no sorry/admit placeholders"* — so the scan reported a defect on a file
+declaring its own cleanliness.
+
+`strip_lean_comments()` now removes Lean block and line comments before a
+word-boundary search, using a depth counter because Lean block comments nest.
+A token found only in prose is recorded as `sorry_token_in_comments_only`.
+
+**The audit that became possible.** Re-scanning all 88 Lean files across the
+four rounds and the merged tree: **none contains a real `sorry` or `sorryAx`.**
+All 22 occurrences of the token are authors stating that there are none. That
+is a better result than anyone claimed, and it could not have been established
+before, because the unfixed scanner could not distinguish the two cases. The
+earlier rounds' scans happened to be correct — none of the files they examined
+contained the token at all — but that was luck, not design.
+
 ### The extension proposals
 
 Recorded in
@@ -153,8 +201,8 @@ empty.
 - It is not a transitive axiom audit. Where no `#print axioms` line exists, the
   file's dependencies are simply unknown; where one does, it covers that
   declaration and not the file.
-- It says nothing about the thirty-four Mathlib-dependent files across the
-  three rounds. Nothing has ever checked them.
+- It says nothing about the thirty-four Mathlib-dependent files across the four
+  rounds. Nothing has ever checked them.
 - **An uncompiled file is worth what its author's care is worth.** Twenty-six
   proposals ship `.lean` files carrying `#print axioms` commands that were
   never executed. Two of the three that were finally compiled were fine; one

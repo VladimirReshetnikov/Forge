@@ -131,13 +131,9 @@ The checker derives the base and step contexts and the single permitted
 induction hypothesis itself; these are never claims supplied by the certificate.
 It reconstructs each substitution and replacement rather than trusting a recorded
 output term, and the two replayed sides must end syntactically identical. The
-recursion index is a rigid eigenvariable; only the named generalised parameters
-may be instantiated. In the base case the induction hypothesis is not available
-at all.
-
-The strongest variant attaches to each rule an explicit \emph{flexible} variable
-set and requires the trace to supply exactly that substitution domain with
-correct sorts.
+rigid-eigenvariable discipline on the recursion index, and the flexible variable
+set attached to each rule in the strongest variant, are as stated in
+\Sef{sec:structural}.
 
 Certificates are stored and replayed in dependency order, and a lemma is
 installed only after its own certificate has been checked. A bundle checker must

@@ -1,15 +1,15 @@
 # Implementation status
 
-Merged from the twenty-seven proposals' status files, which appeared under
-some twenty different names in several formats. The three-bucket model below is taken from
+Merged from the thirty-six proposals' status files, which appeared under some
+twenty-five different names in several formats. The three-bucket model below is taken from
 the clearest of them.
 
 Machine-readable twin: [`status.json`](status.json).
 
 ## Executed
 
-Implemented in Python and actually run, in at least one of the twenty-seven
-runs. Section 13 of the article says which run, with what result, and under
+Implemented in Python and actually run, in at least one of the thirty-six
+runs. Section 18 of the article says which run, with what result, and under
 what caveat.
 
 - Exact sparse rational polynomial arithmetic, with canonical-form enforcement
@@ -95,6 +95,38 @@ From the third round:
 - Re-run of all nine third-round suites and eight replay corpora in a second
   environment, reproducing every recorded count
 
+From the fourth round:
+
+- Exact minimal coverability frontiers for ALL initial markings of a
+  place/transition net, with a positive run per basis element
+- Guarded compressed-run summary algebra, productive-transition acceleration,
+  positive self-covering lassos, and guarded endpoint equivalence
+- Certified scalar population thresholds and multiparameter Pareto frontiers
+- Backward antichains for finite-control counter systems with multi-ray
+  nonnegative affine initial families
+- Matrix-update transition systems (reset, transfer, merge, duplication) and
+  finite-control lossy FIFO under the subsequence order
+- A direct-cover receipt that certifies a predecessor obligation without
+  materialising its 26,075,972,546 minimal elements
+- Exact equality-register transducer equivalence over an infinite atom alphabet
+- Exact rational enclosures of irrational least fixed points of probabilistic
+  polynomial systems, with inverse-free weighted Newton certificates
+- Critical and subcritical extinction certificates, and isolated scalar
+  algebraic least roots
+- Bivariate real quantification by certified cell covers, with piecewise
+  root-index witnesses and counterstrategies
+- Uniform real-fiber count circuits over the same cover, by Hermite quadratic
+  forms and Descartes-exact reasoning
+- First-order arithmetic over unbounded naturals by binary-automatic
+  predicates, with zero-tail saturation and regular least-witness graphs
+- Complete stabilizer-chain certificates with certified non-membership,
+  coset-cover canonical images, exact symmetric/alternating recognition, cycle
+  inventories, and sparse Reynolds projection
+- Integral homology coordinates, certified chain reductions with witness
+  transport, and adjoint obstructions to chain homotopy
+- Re-run of every round-four suite and all seven replay corpora in a second
+  environment
+
 ## Generated but not compiled
 
 Produced as Lean source, never checked by a compiler — with one exception.
@@ -106,18 +138,22 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exceptions.** Eighteen files import nothing beyond Lean core and now
-elaborate against `leanprover/lean4:v4.34.0`: six in the merged tree (the
-runtime contract, the certificate-soundness contract, the Mathlib-free
-structural proofs, and three `Forge/Closure` files holding the induction
-principles the closure workers lower to), ten across the extension proposals,
-and two of the third round's three. Eleven of the eighteen print `does not
-depend on any axioms` for every theorem they expose.
+**The exceptions.** Twenty files import nothing beyond Lean core and now
+elaborate against `leanprover/lean4:v4.34.0`: six in the merged tree, ten
+across the extension proposals, two of the third round's three, and both of the
+fourth round's two. Twelve of the twenty print `does not depend on any axioms`
+for every theorem they expose.
 
 **And one file that does not compile.** The third round's third core-only file
 fails to parse: it defines `prefix`, a reserved keyword. This is the only
-delivered Lean in twenty-seven proposals that a compiler has contradicted,
-because it is nearly the only delivered Lean a compiler has seen. See
+delivered Lean in thirty-six proposals that a compiler has contradicted,
+because it is nearly the only delivered Lean a compiler has seen.
+
+**And one scan of ours that was wrong.** The first round-four run reported a
+file as containing a `sorry`. Its only occurrence of the token was the sentence
+in its own header saying there were none. The scanner now strips Lean comments
+before searching; re-auditing all 88 Lean files finds **zero** real `sorry` or
+`sorryAx` anywhere in this repository. See
 [`LEAN-STATUS.md`](LEAN-STATUS.md).
 
 Elaboration does not change what a file says. `e8/lean/IndexingSketch.lean`
@@ -198,9 +234,17 @@ partly is.
 - The Python checkers are not formally verified, and several share
   representation code with the searches they audit.
 - Neither the checkers nor the decoders are hardened against hostile input.
-- The twenty-seven runs' counts are not comparable and were never pooled — not
-  within a round, and not across the three rounds, which attack overlapping
+- The thirty-six runs' counts are not comparable and were never pooled — not
+  within a round, and not across the four rounds, which attack overlapping
   problems and would double-count.
+- Sixteen runs across three rounds record the seed `20260915`, over sixteen
+  unrelated generators. A matching seed in this repository is not evidence of a
+  shared corpus.
+- Three proposals independently computed the *same* three-element mutual-
+  exclusion antichain. That is one result. A ledger counting it three times is
+  wrong by a factor of three on the collection's most quotable example.
+- Two round-four proposals each report exactly twelve unit-test methods. The
+  lists share no name and no subject.
 - Three specific pooling traps in the third round's own recorded files are
   documented rather than silently avoided: two summaries with identical
   headline totals from different runs, one corpus counted in two report files,
