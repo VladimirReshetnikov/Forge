@@ -1,16 +1,16 @@
 \section{Executed experiments}
 \label{sec:experiments}
 
-\subsection{Twenty-seven runs, reported separately}
+\subsection{Thirty-six runs, reported separately}
 
-This section reports twenty-seven independent prototype runs in three rounds:
-the design round \src{p1}--\src{p9}, covered first; the extension round
-\src{e1}--\src{e9}, covered in Section~\ref{sec:extension-runs}; and the
-third round \src{r1}--\src{r9}, covered in
-Section~\ref{sec:round-three-runs}. All twenty-seven are named after the
-source proposals listed in Appendix~\ref{app:provenance}. They are reported
-separately and they are \emph{not} pooled --- neither within a round nor
-across the three --- for a reason stronger than caution.
+This section reports thirty-six independent prototype runs in four rounds: the
+design round \src{p1}--\src{p9}, covered first; the extension round
+\src{e1}--\src{e9} (Section~\ref{sec:extension-runs}); the third round
+\src{r1}--\src{r9} (Section~\ref{sec:round-three-runs}); and the fourth
+\src{s1}--\src{s9} (Section~\ref{sec:round-four-runs}). All thirty-six are
+named after the source proposals listed in Appendix~\ref{app:provenance}. They
+are reported separately and they are \emph{not} pooled --- neither within a
+round nor across the four --- for a reason stronger than caution.
 
 All nine of the design-round runs ran on the same day in the same kind of
 environment --- Python 3.13.5
@@ -838,26 +838,181 @@ during replay and report having done so. Recorded in
 \texttt{results/round-three-suites-rerun.json}. As before, this establishes that
 the suites pass, that the recorded counts are accurate, and that the
 certificates replay. It establishes nothing about checker correctness.
+\subsection{The fourth round: nine more, and one seed in seven of them}
+\label{sec:round-four-runs}
+
+A fourth round of nine proposals was prepared against the merged draft at
+commit \code{58ea206}, which is to say against the twenty-seven-proposal
+document including Sections~\ref{sec:noncommutative} to~\ref{sec:quantitative}.
+They are labelled \src{s1} to \src{s9}.
+
+The seed observation has now completed its arc. In the design round five runs
+shared \code{20260914}; in the extension round five shared \code{20260915}; in
+the third round four shared that same value; and in this round \emph{seven of
+the nine} record \code{20260915} --- \src{s1}, \src{s3}, \src{s5}, \src{s6},
+\src{s7}, \src{s8}, \src{s9}. Across three rounds, sixteen runs now carry one
+integer, over sixteen unrelated generators: polyhedral cells, exponential
+ladders, Markov decision processes, pushdown systems, Petri nets, real-root
+covers, binary automata, permutation groups and chain complexes. One of them
+anticipates the hazard and defuses it in its own text --- ``these seeds have
+meaning only together with the supplied generators and are unrelated to
+similarly numbered experiments in Forge'' --- and another says the same. The
+rest do not. A matching seed in this collection is not evidence of a shared
+corpus, and by now it is barely evidence of anything.
+
+All nine also record byte-identical Python and platform strings, which means
+they ran on one host image. That has a consequence worth stating: the
+\code{NOT\_RUN} Lean status appearing nine times is \emph{one} environmental
+fact reported nine times, not nine independent findings.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+Run & Headline unit & Recorded outcome \\
+\midrule
+\src{s1} & 423 replay records &
+94 coverability frontiers, 136 least unsafe parameters, 69 parameter
+frontiers, 63 equal and 58 different guarded endpoint equivalences, plus
+compressed runs and lassos; 68 unit tests; 8 invalid records rejected; 4
+cutoff controls returning \unknown{}. \\
+\src{s2} & 2{,}360 receipts &
+2{,}100 exhaustive Petri instances (1{,}536 safe, 564 coverable), 120 random,
+45 scalar and 54 coupled probabilistic systems, 26 spectral extinction cases,
+8 algebraic decoders; 275 rejection controls; no unit-test suite. \\
+\src{s3} & 650 stored objects &
+305 counter-system, 163 nominal, 182 mixed; 27 test methods; one Lean specimen
+that elaborates. \\
+\src{s4} & 190 and 193 certificates &
+Eager and separation producers over the same models, agreeing on every basis;
+1{,}296 local predecessor problems and 63{,}504 membership comparisons against
+an oracle; 11{,}520 complete finite execution queries; 37 corruption attempts
+rejected; 4 cutoff controls. \\
+\src{s5} & 100 replayed atlases &
+24 primary examples with 356 plane cells, 76 metamorphic derivations, 250 root
+problems, 200 localised trials; 540 mutations; 42 pytest items. \\
+\src{s6} & 99 valid bundles &
+748 exact count comparisons over 19 quantified problems and 113 cells; 973
+invalid mutations rejected; 160 Boolean formulas and 4{,}800 truth
+assignments; 25 unit tests. \\
+\src{s7} & 90 certificates &
+25 named queries, 60 guarded alternating formulas, 5 witness-relation graphs;
+643 concrete witnesses including one at $10^{100}+37$; 1{,}096 mutation
+objects; 7 interface tests. \\
+\src{s8} & 8{,}028 membership queries &
+3{,}852 positive and 4{,}176 negative; 160 chain bundles; 296 canonical images
+over 24{,}710 cover nodes; 40 cycle inventories; 33 corruption controls; 12
+test methods; $40!$ certified in 11{,}975 bytes. \\
+\src{s9} & 656 certificates &
+97 homology coordinates, 129 fillers, 65 obstructions, 48 induced maps, 72
+reductions, 100 homotopies, 145 no-homotopy obstructions; 489 rejection
+controls; 12 test methods. \\
+\bottomrule
+\end{tabularx}
+\caption{The fourth round. Nine more incommensurable ledgers, and the units
+have stopped being nameable in common: ``records'', ``receipts'', ``objects'',
+``certificates'', ``atlases'', ``bundles'' and ``queries'' are seven different
+things here, and none of them is a theorem.}
+\label{tab:round-four-runs}
+\end{table}
+
+\subsubsection*{The traps this round contains}
+
+Three are of a kind already seen, and two are new.
+
+\paragraph{Superseded runs that reproduce their own totals.} Two proposals ship
+two runs each and both say, in their own words, not to add them. One records
+``96 valid bundles and 944 rejected mutations'' in an earlier run and warns:
+``Do not add these numbers to run-02. Most mathematical cases are shared.'' The
+other: ``Runs 1 and 2 use the same seed, generators and mathematical cases.
+Their counts must not be summed or represented as independent coverage.'' This
+is the same shape as the previous round's identical-headline pilot, and it is
+now the third round in which it has occurred.
+
+\paragraph{A number that appears twice inside one proposal.} \src{s7}'s 643 is
+both its count of accepted witness traces and the size of one mutation class
+inside its 1{,}096 total. The mutation table sums to exactly 1{,}096 with that
+class included, so quoting ``643 witnesses and 1{,}096 mutations'' is correct
+while adding them is not.
+
+\paragraph{Twelve and twelve.} \src{s8} and \src{s9} each report exactly twelve
+unit-test methods. The two lists share no name and no subject --- one tests
+alternating parity and noncommuting composition, the other tests transposition
+and rectangular multiplication. Numerically identical, entirely unrelated, and
+the single most likely accidental conflation in the collection.
+
+\paragraph{Three impossibility results are three.} \src{s5}, \src{s6} and
+\src{s7} each prove a small impossibility, by three different techniques, with
+one shared moral. They are recorded separately in
+Section~\ref{sec:realalgebraic}; a ledger citing them as one confirmation of
+one fact would be wrong three times over.
+
+\paragraph{A common-mode risk no single proposal could see.} \src{s5} and
+\src{s6} both use the same computer-algebra package as their untrusted
+producer, and both ran in this round's shared environment. Each discloses the
+dependency \emph{within itself}. Neither is in a position to observe that a
+defect in that package would be correlated across two independent proposals,
+and this document is.
+
+\subsubsection*{What the re-run added}
+
+Every round-four suite that exists runs in the merge environment and passes:
+68, 27, 42, 25, 7, 12 and 12 test methods for \src{s1}, \src{s3}, \src{s5},
+\src{s6}, \src{s7}, \src{s8} and \src{s9}, plus \src{s4}'s combined
+\code{run\_tests.py} reporting \code{REPLAY\_OK}. \src{s2} ships no unit suite
+at all; its evidence is the replay corpus and in-experiment assertions.
+
+Seven replay entry points return zero, covering 423, 2{,}360, 650, 99, 90,
+8{,}028-query and 656 stored objects respectively. Recorded in
+\texttt{results/round-four-suites-rerun.json}.
+
+\begin{remark}[Two proposals, opposite instructions about \code{-O}]
+\src{s2} instructs: \emph{do not} run under \code{python -O}, because its
+experiment assertions must remain enabled. The previous round's \src{r7} ran
+its suite under \code{-O} \emph{specifically} so that no check could be
+implemented as a removable \code{assert}. Both were followed as written here.
+They are opposite conclusions from the same observation --- that \code{assert}
+disappears under optimisation --- and the second is the safer discipline: a
+check that vanishes under a flag was never a check.
+\end{remark}
 \subsection{Lean status}
 
-\subsubsection*{What the twenty-seven runs recorded}
+\subsubsection*{What the thirty-six runs recorded}
 
-None of the twenty-seven compiled any Lean source. Every one of them recorded
-the same reason --- no \code{lean} or \code{lake} executable in the authoring
+None of the thirty-six compiled any Lean source. Every one of them recorded the
+same reason --- no \code{lean} or \code{lake} executable in the authoring
 environment --- under several different filenames and in more than one format.
 Consequently none performed a kernel check, an axiom audit, or any comparison
 against \grind{}, Aesop, \code{nlinarith}, LeanHammer, or any other tactic.
-Twenty-one \code{.lean} files across the design round, totalling about
-3{,}000 lines, twenty across the extension round, totalling about 3{,}100, and
-sixteen across the third round, totalling about 750, were \emph{candidate
-source}. That three independent rounds produced this much uncompiled Lean is
-itself worth noticing: the bottleneck was never the amount of Lean anyone was
-willing to write.
 
-One of the third round declines to participate. \src{r9} ships no Lean at all,
-and says why: it ``deliberately contains no placeholder theorem files presented
-as implemented proofs''. That is a pointed remark about the practice the other
-twenty-six follow, and the next subsection shows it landing.
+The quantity of candidate Lean source, by round, is the most legible trend in
+this document:
+
+\begin{center}\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Round & Source files & Lines \\
+\midrule
+Design \src{p1}--\src{p9}     & 21 & 3{,}022 \\
+Extension \src{e1}--\src{e9}  & 20 & 3{,}144 \\
+Third \src{r1}--\src{r9}      & 16 & \phantom{0}755 \\
+Fourth \src{s1}--\src{s9}     & \phantom{0}2 & \phantom{00}98 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+It did not decline because the proposals got smaller. It declined because one
+of them argued that an uncompiled file is not evidence, and a compiler then
+agreed.
+
+\src{r9} was first: it ships no Lean at all, and says why --- it ``deliberately
+contains no placeholder theorem files presented as implemented proofs''. That
+is a pointed remark about the practice the other twenty-six follow, and the
+next subsection shows it landing. By the fourth round, four proposals ship no
+\code{lean/} directory at all and three ship one containing only an obligation
+document, three of them in near-identical words: the directory ``deliberately
+contains no \code{sorry}-based or uncompiled theorem file presented as a
+completed implementation''.
 
 \subsubsection*{What this merge was able to add}
 
@@ -977,6 +1132,35 @@ across the third round, and it would be merged the way
 Section~\ref{sec:closure}'s principles were.
 \end{remark}
 
+\subsubsection*{The fourth round, and a defect in this repository's own tools}
+
+Round four ships two Lean files and both elaborate: \src{s3}'s counter lemmas
+in 93\,s, depending on \code{propext}, \code{Classical.choice} and
+\code{Quot.sound}; and \src{s5}'s atlas-quantifier composition lemmas in
+5\,s, with no axiom dependencies for either theorem it exposes.
+
+The first run reported the former as \code{elaborated\_with\_sorry}, and that
+was wrong. The scan in \code{tools/check\_lean.py} tested for the substring
+\code{sorry} in the raw file. That file's only occurrence of the token is its
+own header sentence, \emph{``There are no sorry/admit placeholders''} --- so
+the scan reported a defect on a file that was declaring its own cleanliness.
+The harness now strips Lean comments before the search, with a depth counter
+because Lean block comments nest, and a token found only in prose is recorded
+as such rather than as a defect.
+
+Re-auditing all eighty-eight Lean files across the four rounds and the merged
+tree with the corrected scanner: \emph{none} contains a real \code{sorry} or
+\code{sorryAx}. All twenty-two occurrences of the token are authors stating
+that there are none. That is a better result than anyone claimed, and it could
+not have been established before, because the unfixed scanner could not tell
+the two cases apart.
+
+The defect is recorded here rather than quietly fixed because the earlier
+rounds' scans were produced by the unfixed version. They happened to be correct
+--- none of the files they examined contained the token at all --- but that was
+luck, and a tool that false-positives on a comment would equally have missed a
+\code{sorry} placed where comment-stripping changes the answer.
+
 The same three disclaimers apply, and one more besides. \src{e8}'s
 \code{IndexingSketch.lean} elaborates, and its author had marked it
 \emph{uncompiled} and \emph{not a substitute for the original query}. Both
@@ -1030,14 +1214,16 @@ symbolic search libraries; that the specified mutation and corruption tests are
 rejected; that several mechanisms solve problems their own restricted precursors
 cannot; that all nine extension suites re-run and reproduce their recorded
 counts on a different interpreter and different library versions; that all
-nine third-round suites do the same and that their stored objects replay; and
-that eighteen Lean artefacts --- three from the design round, ten from the
-extension round, three the merge wrote by deduplicating those ten, and two from
-the third round --- type-check under the pinned toolchain, eleven of them
-printing \emph{does not depend on any axioms} for every theorem they expose.
+nine third-round suites and every round-four suite do the same and that their
+stored objects replay; and that twenty Lean artefacts --- three from the design
+round, ten from the extension round, three the merge wrote by deduplicating
+those ten, two from the third round and two from the fourth --- type-check
+under the pinned toolchain, twelve of them printing \emph{does not depend on
+any axioms} for every theorem they expose.
 
 It also establishes, for the first time, that a delivered Lean file did
-\emph{not} type-check.
+\emph{not} type-check --- and, separately, that a scan in this repository's own
+tooling reported a defect that was not there.
 
 It does not establish that \forge{} is implemented as a Lean tactic, that the
 Mathlib-dependent candidate scripts compile, that any certificate is checked by

@@ -158,7 +158,7 @@ nonlinear probability equations and is not automatically a finite rational
 Markov chain. That sentence is the boundary of this entire section.
 \end{remark}
 
-\subsection{What is excluded, and what that exclusion is doing}
+\subsection{What is excluded --- and a later correction to that exclusion}
 
 All three efforts are exact-rational and none has a tolerance parameter. The
 fragments they exclude are, in every case, the fragments where the answer would
@@ -167,6 +167,77 @@ continuous distributions, interval-uncertain probabilities, symbolic probability
 parameters, unbounded-state chains, and probabilistic pushdown. These are not
 gaps in an implementation. They are the boundary of exactness, and drawing it
 explicitly is what lets everything inside it be checked by comparing rationals.
+
+A later effort accepts that as an implementation boundary and denies that it is
+the boundary of \emph{certification} \src{s2}:
+
+\begin{quote}\small
+That exclusion is a useful implementation boundary, but it is not a boundary of
+\emph{exact certification}: rational enclosures can certify an irrational
+value, and a finite polynomial root description can sometimes identify it
+exactly.
+\end{quote}
+
+The point is well taken and the correction is adopted here. An irrational
+quantity can be pinned by a certificate that is entirely rational --- a
+descending sequence of rational upper bounds together with an ascending
+sequence of lower bounds, each step checkable, and the target
+inequality decided as soon as the interval clears it. Nothing needs to be named.
+
+\subsection{Certifying a value that is not rational}
+\status{Implemented and tested in Python \src{s2}; no Lean discharge.}
+
+The worked case is a probabilistic recursive system: a vector of polynomial
+equations $x=P(x)$ with nonnegative rational coefficients whose least fixed
+point in $[0,1]^n$ is the extinction or termination probability. That least
+fixed point is generally irrational, and it is generally \emph{not} the
+obvious solution.
+
+\begin{remark}[The fixed point you find need not be the one you want]
+For $P(x)=\tfrac14+\tfrac34x^3$ the value $x=1$ satisfies $P(x)=x$ exactly.
+The least fixed point is $(\sqrt{21}-3)/6\approx0.2637626158$. Reporting $1$
+because it solves the equation would report a termination probability that is
+wrong by a factor of nearly four, and no amount of checking the equation
+detects it. This is the same failure as
+\S\ref{sec:quantitative}'s harmonic equation, one degree up.
+\end{remark}
+
+Two certificates bracket the answer. An upper bound is a \emph{prefixed
+point}: any $u$ with $P(u)\le u$ satisfies $q\le u$, by induction on the
+Kleene iterates --- one polynomial evaluation and a comparison. A lower bound
+needs more care, because the obvious Newton step requires inverting
+$I-J(\ell)$ and rounding the result can break the inequality: $I-J$ has
+negative off-diagonal entries, so componentwise rounding-down of a solution of
+$(I-J)d=r$ need not preserve $(I-J)d\le r$.
+
+The repair is to avoid the inverse entirely. Supply a positive rational weight
+vector $w$ with $J(\ell)w<w$ and a step $d$ with $(I-J(\ell))d\le
+P(\ell)-\ell$; then every $\ell'$ between $\ell$ and $\ell+d$ is still below
+the least fixed point. The checker multiplies matrices and compares --- no
+linear solve, no inversion, no rounding decision.
+
+\begin{remark}[Strictness is not decoration]
+The weight condition must be strict. For $P(x)=x$ take $\ell=0$, $w=1$,
+$d=1$: the residual inequality reads $0\le0$, and a checker that accepted a
+non-strict weight test would certify $\ell'=1$ as a lower bound for a least
+fixed point that is zero. A stored rejection control exercises exactly this
+forgery.
+\end{remark}
+
+The same effort supplies a critical-case extinction certificate --- a positive
+rational weight proving extinction probability one --- with its own negative
+control showing why a spectral slogan is not enough: for $P(x)=x$ the matrix is
+$(1)$, every positive $w$ satisfies $Mw=w$, the dependency graph is strongly
+connected, and the least fixed point is zero. Without the extra nondegeneracy
+condition a plausible critical-extinction checker proves something false.
+
+\begin{remark}[Probability one is not finite expected work]
+An extinction certificate concludes that termination happens with probability
+one. It does not bound the expected number of steps, and the effort names its
+receipt accordingly rather than calling it \code{terminates}. That is the same
+distinction Section~\ref{sec:wsts} draws between a terminating algorithm and a
+bounded one.
+\end{remark}
 
 Two further limits deserve the same visibility. Rational bit complexity is
 additional to every operation count reported anywhere in this document ---
