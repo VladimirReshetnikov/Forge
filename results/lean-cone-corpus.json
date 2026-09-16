@@ -1,0 +1,40 @@
+{
+  "what": "Every cone certificate in the prototype bundle, converted from rational to integer form for Forge.Checker.Cone. The integer identity is re-checked in Python before emission and again by the Lean kernel when Corpus.lean is elaborated.",
+  "generated_lean": "lean/Forge/Checker/Corpus.lean",
+  "checked_by": "kernel reduction via `decide`; native_decide is not used",
+  "certificates": [
+    {
+      "id": "hidden_quadratic",
+      "family": "Quadratic SOS",
+      "variables": 2,
+      "target_is_p_times": 7,
+      "scale": 51,
+      "squares": 3,
+      "multipliers": 0,
+      "inequality_constraints": 0,
+      "equality_constraints": 0
+    },
+    {
+      "id": "equality_constrained",
+      "family": "Finite cone LP",
+      "variables": 2,
+      "target_is_p_times": 2,
+      "scale": 1,
+      "squares": 1,
+      "multipliers": 1,
+      "inequality_constraints": 0,
+      "equality_constraints": 1
+    },
+    {
+      "id": "guard_product",
+      "family": "Finite cone LP",
+      "variables": 2,
+      "target_is_p_times": 1,
+      "scale": 1,
+      "squares": 1,
+      "multipliers": 0,
+      "inequality_constraints": 2,
+      "equality_constraints": 0
+    }
+  ]
+}

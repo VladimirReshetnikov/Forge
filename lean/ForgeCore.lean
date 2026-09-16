@@ -1,14 +1,23 @@
 /-
   Forge: the part that needs core Lean only.
 
-  Two proposed design contracts, one set of Mathlib-free structural proofs, and
-  the induction principles the closure workers lower to. This is the library
-  with recorded compilation evidence: all six files elaborate against
-  leanprover/lean4:v4.34.0. See results/lean-core-elaboration.json and
-  results/lean-closure-elaboration.json.
+  Two proposed design contracts, one set of Mathlib-free structural proofs, the
+  induction principles the closure workers lower to, and --- new, and the only
+  part of this repository that closes the loop the project is named for --- a
+  CHECKED certificate checker with the prototype's own certificates run through
+  it.
 
-  Elaboration is not an axiom audit and does not make any of these an
-  implemented tactic. No `forge` tactic exists.
+  `Forge.Checker` is not a design sketch. `Cone.Cert.check` is a total function
+  returning `Bool`; `Cone.Cert.sound` proves that when it returns `true` the
+  polynomial really is nonnegative on the constrained set, for every assignment
+  rather than any tested one. `Checker.Corpus` is generated from the Python
+  prototype's certificate bundle and the Lean kernel checks each one by
+  reduction. Every theorem in the three files depends on `propext` and
+  `Quot.sound` and nothing else.
+
+  Still true, and worth keeping in view: elaboration is not an axiom audit, and
+  no `forge` TACTIC exists. What exists is a checker, its soundness proof, and
+  three certificates that pass it.
 -/
 import Forge.Design.Runtime
 import Forge.Design.Contracts
@@ -16,3 +25,6 @@ import Forge.Examples.Structural
 import Forge.Closure.Principles
 import Forge.Closure.Covers
 import Forge.Closure.Indexing
+import Forge.Checker.Poly
+import Forge.Checker.Cone
+import Forge.Checker.Corpus
