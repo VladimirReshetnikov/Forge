@@ -23,6 +23,7 @@ Output is JSON on stdout, and to --output if given.
 from __future__ import annotations
 
 import argparse
+import re
 import json
 import platform
 import shutil
@@ -98,14 +99,55 @@ def run_one(
 
     # `lean` exits 0 on a file whose declarations are admitted, so an
     # explicit sorry scan is part of the verdict rather than a nicety.
+    #
+    # The scan must ignore comments. A file whose header says "there are no
+    # sorry/admit placeholders" is not a file containing a sorry, and a naive
+    # substring test reports exactly backwards on it -- observed on
+    # proposals/s3-infinite-state-workers/lean/CounterLemmas.lean, whose only
+    # occurrence of the token is the sentence denying it.
     text = path.read_text(encoding="utf-8", errors="replace")
-    if "sorry" in text or "sorryAx" in text:
+    code = strip_lean_comments(text)
+    if re.search(r"\bsorry\b|\bsorryAx\b", code):
         record["contains_sorry_token"] = True
         record["status"] = "elaborated_with_sorry"
+    elif re.search(r"\bsorry\b", text):
+        # Present, but only in prose. Recorded so the scan stays auditable.
+        record["sorry_token_in_comments_only"] = True
 
     if axioms and record["status"] == "elaborated":
         record["axiom_audit"] = "not_performed"
     return record
+
+
+def strip_lean_comments(text: str) -> str:
+    """Remove Lean 4 block and line comments, preserving nothing else.
+
+    Block comments nest in Lean, so a depth counter is required; `/- -/` pairs
+    cannot be removed by a non-greedy regex without mis-handling `/- /- -/ -/`.
+    """
+    out = []
+    i = 0
+    depth = 0
+    n = len(text)
+    while i < n:
+        if text.startswith("/-", i):
+            depth += 1
+            i += 2
+            continue
+        if text.startswith("-/", i) and depth:
+            depth -= 1
+            i += 2
+            continue
+        if depth:
+            i += 1
+            continue
+        if text.startswith("--", i):
+            end = text.find("\n", i)
+            i = n if end < 0 else end
+            continue
+        out.append(text[i])
+        i += 1
+    return "".join(out)
 
 
 def main() -> int:

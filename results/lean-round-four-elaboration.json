@@ -1,0 +1,85 @@
+{
+  "status": "RUN",
+  "scope": "The two Lean sources shipped by the nine round-four proposals. Both import nothing beyond Lean core. Four of the nine ship no lean/ directory at all, and three ship one containing only an obligation document.",
+  "mode": "elaborate",
+  "lean_version": "Lean (version 4.34.0, x86_64-w64-windows-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+  "platform": "Windows-11-10.0.26340-SP0",
+  "counts": {
+    "elaborated": 2
+  },
+  "files": [
+    {
+      "file": "proposals/s3-infinite-state-workers/lean/CounterLemmas.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 93.16,
+      "axioms_printed": [
+        "'ForgeInfiniteSpecimen.preScalar_iff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'ForgeInfiniteSpecimen.preVector_iff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'ForgeInfiniteSpecimen.avoid_step' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "sorry_token_in_comments_only": true
+    },
+    {
+      "file": "proposals/s5-witness-atlases/lean/AtlasQuantifiers.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 4.817,
+      "axioms_printed": [
+        "'ForgeAtlasSpec.forall_exists_of_cell_witnesses' does not depend on any axioms",
+        "'ForgeAtlasSpec.not_exists_forall_of_cell_counterexamples' does not depend on any axioms"
+      ]
+    }
+  ],
+  "inventory": {
+    "lean_files_total": 2,
+    "lines_total": 98,
+    "core_only": 2,
+    "mathlib_dependent": 0,
+    "proposals_shipping_no_lean_directory": 4,
+    "proposals_shipping_an_obligation_document_instead": 3
+  },
+  "harness_defect_found_and_fixed": {
+    "what": "The first run reported CounterLemmas.lean as \"elaborated_with_sorry\". That was wrong.",
+    "cause": "tools/check_lean.py tested `\"sorry\" in text` over the raw file. The file's only occurrence of the token is its own header sentence, \"There are no sorry/admit placeholders\" -- so the scan reported exactly backwards on a file that was declaring its own cleanliness.",
+    "fix": "strip_lean_comments() removes Lean block and line comments (with a depth counter, since Lean block comments nest) before a word-boundary search; a token found only in prose is now recorded as sorry_token_in_comments_only rather than as a defect.",
+    "first_run_counts": {
+      "elaborated_with_sorry": 1,
+      "elaborated": 1
+    },
+    "corrected_counts": {
+      "elaborated": 2
+    },
+    "note": "The defect was in this repository's tooling, not in any proposal. It is recorded here because a tool that reports a false positive on a correct file would have reported a false negative on a file that hid a sorry in a comment-stripped position, and because the previous rounds' results were produced by the unfixed version."
+  },
+  "sorry_audit_across_all_four_rounds": {
+    "files_scanned": 83,
+    "files_with_a_real_sorry_in_code": [],
+    "files_where_the_token_appears_only_in_comments": [
+      "proposals/e5-finite-certificates/lean/ForgeExtension/Worked.lean",
+      "proposals/p1-structural-search/lean/BernsteinReplay.lean",
+      "proposals/p1-structural-search/lean/GeneratedReplay.lean",
+      "proposals/p2-obligation-controller/lean/ReplayExamples.lean",
+      "proposals/p4-theory-cooperation/lean/ReplayExamples.lean",
+      "proposals/p6-proof-logging-cdcl/lean/Examples.lean",
+      "proposals/p7-successor-architecture/lean/GeneratedInduction.lean",
+      "proposals/p7-successor-architecture/lean/GeneratedSOS.lean",
+      "proposals/p8-obligation-broker/lean/ReplayExamples.lean",
+      "proposals/r1-grammar-closure/lean/ReplayLeafCount.lean",
+      "proposals/r2-noncommutative/lean/CertificatePrinciples.lean",
+      "proposals/r3-three-engines/lean/SourceExamples.lean",
+      "proposals/r4-analytic-certificates/lean/LadderBridge.lean",
+      "proposals/r6-flow-ladders/lean/FlowTargets.lean",
+      "proposals/s3-infinite-state-workers/lean/CounterLemmas.lean",
+      "lean/Forge/Examples/Arithmetic.lean",
+      "lean/Forge/Examples/Mixed.lean",
+      "lean/Forge/Examples/Residue.lean",
+      "lean/Forge/Generated/Bernstein.lean",
+      "lean/Forge/Generated/Induction.lean",
+      "lean/Forge/Generated/SOSExtra.lean",
+      "lean/Forge/Generated/Witnesses.lean"
+    ],
+    "conclusion": "No Lean file anywhere in this repository contains a real sorry or sorryAx. Every one of the occurrences is an author stating that there are none. That is worth recording precisely because the earlier scans could not have distinguished the two cases."
+  },
+  "note": "Successful elaboration is not a transitive axiom audit and is not a comparison against any Lean tactic. CounterLemmas.lean depends on propext, Classical.choice and Quot.sound; AtlasQuantifiers.lean reports no axiom dependencies for either theorem it exposes."
+}
