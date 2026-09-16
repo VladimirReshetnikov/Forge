@@ -226,14 +226,16 @@ Three more from the extension round belong in the same list:
 | Core Lean elaboration, design-round proposals | 3 of 3 core-only files (never scanned before) |
 | Core Lean elaboration, third round | 2 of 3 core-only files; **1 fails to parse** |
 | Core Lean elaboration, fourth round | 2 of 2 files |
-| Core Lean elaboration, all rounds | **27 of 28** Mathlib-free files (transitively) |
+| Core Lean elaboration, all rounds | **28 of 29** Mathlib-free files (transitively) |
 | **`Forge.Checker` soundness proved** | **yes** — `Cert.sound`, `propext` + `Quot.sound` only |
 | **Prototype certificates checked by the Lean kernel** | **3 of 3** cone certificates, via `decide` |
 | Mathlib-importing file that also fails to parse | **1** (`r6`), found by sweeping all 86 files |
 | Theorems printing no axiom dependencies | 12 of the 23 elaborated files |
 | Third-round suites re-run | 9 of 9 pass; 8 of 8 replay corpora return zero |
 | Fourth-round suites re-run | 8 of 8 existing suites pass; 7 of 7 replay corpora return zero |
-| **`sorry` audit, all 86 Lean files** | **0 real occurrences**; 25 mentions, all in comments denying them |
+| **`sorry` audit, all 90 Lean files** | **0 real occurrences**; 26 mentions, all in comments denying them |
+| **Certificate benchmark** | 30/30 verified; **6/6 negative controls rejected** |
+| **`grind` on the same 30** | 0/30 — and it cannot prove `0 ≤ x^2`, so this measures its scope |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine design-round runs; it is a timing field |

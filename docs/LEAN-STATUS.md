@@ -25,22 +25,26 @@ through it and accepted by the Lean kernel. Core Lean only; `decide`, not
 `ForgeCore` also now **builds as a library** — nine modules with real imports —
 rather than only elaborating file by file.
 
-**This merge compiled twenty-seven files, and two others failed.** The merge
+**This merge compiled twenty-eight files, and two others failed.** The merge
 environment has `elan`, which installed the pinned `leanprover/lean4:v4.34.0`.
-This repository holds 89 `.lean` files. **28 of them are Mathlib-free** — not
+This repository holds 90 `.lean` files. **29 of them are Mathlib-free** — not
 merely free of a direct `import Mathlib`, but free of one anywhere in their
-dependency cone — and **27 of those 28 elaborate with no errors**. Twelve print
+dependency cone — and **28 of those 29 elaborate with no errors**. Twelve print
 `does not depend on any axioms` for every theorem they expose.
+
+Regenerate these figures with `python tools/lean_inventory.py` rather than
+copying them; three counts on this page were wrong at some point today because
+they had been derived by hand and carried forward.
 
 | Where | Mathlib-free | Elaborate |
 | --- | ---: | ---: |
 | Merged tree (incl. the `ForgeCore` root) | 7 | 7 |
-| **`Forge.Checker` (new)** | **3** | **3** |
+| **`Forge.Checker` (new)** | **4** | **4** |
 | Design-round proposals `p1`–`p9` | 3 | 3 |
 | Extension proposals `e1`–`e9` | 10 | 10 |
 | Third round `r1`–`r9` | 3 | 2 |
 | Fourth round `s1`–`s9` | 2 | 2 |
-| **Total** | **28** | **27** |
+| **Total** | **29** | **28** |
 
 The transitive reading matters and the earlier figures did not use it. They
 counted 48 files as importing Mathlib directly and 11 as importing a sibling,
@@ -196,6 +200,7 @@ than a description of one.
 | `Forge/Checker/Poly.lean` | elaborates; no axioms beyond `propext`, `Quot.sound` |
 | `Forge/Checker/Cone.lean` | elaborates; `Cert.sound` proved |
 | `Forge/Checker/Corpus.lean` | elaborates; generated, 3 real certificates accepted |
+| `Forge/Checker/Bench.lean` | elaborates in 11.7 s; 36 generated problems, 6 of them negative controls |
 
 **What is proved.**
 
@@ -221,7 +226,7 @@ nonnegativity at integer points. The identity holds in every commutative ring;
 lifting the conclusion to ℝ needs an ordered field and therefore Mathlib, and is
 therefore exactly the kind of file this repository has never been able to check.
 
-**Why core-only.** Because 58 of the 89 files here depend on Mathlib and none
+**Why core-only.** Because 58 of the 90 files here depend on Mathlib and none
 of them has ever been checked by anything. A checker in that bucket would have
 been one more uncompiled claim.
 
@@ -247,9 +252,9 @@ declaring its own cleanliness.
 word-boundary search, using a depth counter because Lean block comments nest.
 A token found only in prose is recorded as `sorry_token_in_comments_only`.
 
-**The audit that became possible.** Re-scanning all 86 Lean files across the
+**The audit that became possible.** Re-scanning all 90 Lean files across the
 four rounds and the merged tree: **none contains a real `sorry` or `sorryAx`.**
-All 25 occurrences of the token are authors stating that there are none. That
+All 26 occurrences of the token are authors stating that there are none. That
 is a better result than anyone claimed, and it could not have been established
 before, because the unfixed scanner could not distinguish the two cases. The
 earlier rounds' scans happened to be correct — none of the files they examined

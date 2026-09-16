@@ -138,8 +138,8 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exceptions.** Twenty-eight files are Mathlib-free, and **27 of them
-elaborate** against `leanprover/lean4:v4.34.0`: seven in the merged tree, three
+**The exceptions.** Twenty-nine files are Mathlib-free, and **28 of them
+elaborate** against `leanprover/lean4:v4.34.0`: seven in the merged tree, four
 in the new `Forge.Checker`, three in the design-round proposals, ten across the
 extension proposals, two of the third round's three, and both of the fourth
 round's two. Twelve print `does not depend on any axioms` for every theorem they
@@ -162,7 +162,7 @@ seen.
 **And one scan of ours that was wrong.** The first round-four run reported a
 file as containing a `sorry`. Its only occurrence of the token was the sentence
 in its own header saying there were none. The scanner now strips Lean comments
-before searching; re-auditing all 86 Lean files finds **zero** real `sorry` or
+before searching; re-auditing all 90 Lean files finds **zero** real `sorry` or
 `sorryAx` anywhere in this repository. See
 [`LEAN-STATUS.md`](LEAN-STATUS.md).
 

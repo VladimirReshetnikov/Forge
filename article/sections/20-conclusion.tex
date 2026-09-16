@@ -159,7 +159,7 @@ by one proposal, a compiler agreed with it, and the practice changed.
 The merge's own tooling also turned out to be wrong in the same area, and in
 the more embarrassing direction: its \code{sorry} scan reported a defect in a
 file whose only occurrence of the word was a sentence saying there were none.
-Fixing the scan and re-auditing all eighty-six Lean files in the repository
+Fixing the scan and re-auditing all ninety Lean files in the repository
 establishes something better than anything claimed --- not one of them contains
 a real \code{sorry} --- and establishes it for the first time, because the
 unfixed scanner could not have told.
@@ -208,7 +208,7 @@ now builds as a library rather than elaborating file by file.
 Three things are worth saying about what this did and did not require.
 
 \emph{It is core Lean only, and that was the binding constraint.} Fifty-eight of
-this repository's eighty-nine Lean files depend on Mathlib and not one of them
+this repository's ninety Lean files depend on Mathlib and not one of them
 has ever been checked by anything. A checker in that bucket would have been one
 more uncompiled claim, so there is no \code{ring} and no \code{nlinarith} here;
 coefficients are integers because \code{Int} is in core and \code{Rat}'s

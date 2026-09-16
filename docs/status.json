@@ -22,7 +22,7 @@
       "performed": true,
       "toolchain": "leanprover/lean4:v4.34.0",
       "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
-      "files_elaborated_total": 27,
+      "files_elaborated_total": 28,
       "merged_tree": {
         "files_total": 21,
         "files_elaborated": 6,
@@ -92,9 +92,9 @@
         }
       },
       "sorry_audit": {
-        "files_scanned": 86,
+        "files_scanned": 90,
         "real_sorry_or_sorryAx": 0,
-        "token_occurrences_in_comments_only": 25,
+        "token_occurrences_in_comments_only": 26,
         "scanner_defect_found_and_fixed": true,
         "scanner_defect": "the scan tested for the substring \"sorry\" in the raw file and reported a defect on a file whose only occurrence was its header sentence denying one"
       },
@@ -118,8 +118,9 @@
         "lakefiles": 3,
         "note": "Nothing has ever checked the 58. The one time this merge looked inside that bucket for a reason unrelated to Mathlib, it found r6's file, which cannot parse. That is one observation, not a basis for estimating the rest."
       },
-      "mathlib_free_files_total": 28,
-      "dependency_counting": "TRANSITIVE. A file importing a sibling that is itself Mathlib-free is Mathlib-free. Earlier figures split 48 direct-Mathlib from 11 sibling-importing and filed the second group with the unchecked, which understated what is checkable."
+      "mathlib_free_files_total": 29,
+      "dependency_counting": "TRANSITIVE. A file importing a sibling that is itself Mathlib-free is Mathlib-free. Earlier figures split 48 direct-Mathlib from 11 sibling-importing and filed the second group with the unchecked, which understated what is checkable.",
+      "regenerate_with": "python tools/lean_inventory.py"
     },
     "one_proposal_shipped_no_lean_deliberately": "r9-infinite-horizon",
     "all_thirty_six_original_runs": "NOT_RUN",
@@ -396,7 +397,8 @@
     "files": [
       "Poly.lean",
       "Cone.lean",
-      "Corpus.lean"
+      "Corpus.lean",
+      "Bench.lean"
     ],
     "lean_version": "leanprover/lean4:v4.34.0",
     "mathlib_required": false,
@@ -423,6 +425,24 @@
       "anything about the other twelve certificate families",
       "anything over the reals -- Env assigns integers, and lifting the conclusion to an ordered field needs Mathlib"
     ],
-    "is_not": "a tactic. Applying a certificate is a generated `have` plus `simp`/`omega`, not automation that finds the certificate."
+    "is_not": "a tactic. Applying a certificate is a generated `have` plus `simp`/`omega`, not automation that finds the certificate.",
+    "benchmark": {
+      "problems": 36,
+      "positive_verified": 30,
+      "negative_controls_rejected": 6,
+      "grind_proved_unaided": 0,
+      "omega_proved_unaided": 0,
+      "grind_caveat": "grind cannot prove 0 <= x^2, so 0/30 measures its scope and not the difficulty of the problems. It must not be quoted as Forge outperforming it.",
+      "whole_file_elaboration_seconds": 11.7,
+      "kernel_cost": "tracks polynomial size, not coefficient size: 2.4e8 growth in coefficients costs nothing measurable, while term count drives cost superlinearly (24x time for 9x terms), which is what the quadratic insertTerm in `collect` predicts",
+      "record": "results/lean-cone-benchmark.json"
+    },
+    "bug_found_and_fixed": {
+      "where": "tools/export_lean_cone.lean_concrete (the bridge emitter)",
+      "what": "monomial factors were emitted left-associated, (x0 * x1 * x2), while monoEvalFrom recurses on the tail and builds x0 * (x1 * x2); omega atomises both and rejects a true goal",
+      "why_it_hid": "a monomial with at most two factors associates the same way either direction, and every certificate in Corpus.lean has two variables",
+      "found_by": "the three-variable benchmark family",
+      "note": "the defect was in the BRIDGE, not the checker or its soundness proof -- the part that translates a verified statement into the goal someone wants is the part with no theorem attached to it"
+    }
   }
 }

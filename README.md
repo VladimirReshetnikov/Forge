@@ -129,8 +129,8 @@ homotopy (§15).
 All thirty-six proposals recorded their Lean status as `NOT_RUN`. This
 environment had `elan`, which installed the pinned
 `leanprover/lean4:v4.34.0`, so every file importing nothing beyond Lean core
-could be elaborated. Twenty-eight files are Mathlib-free, and
-**27 of them elaborate** — six in the merged tree, three in the design-round
+could be elaborated. Twenty-nine files are Mathlib-free, and
+**28 of them elaborate** — six in the merged tree, three in the design-round
 proposals, ten across the extension proposals, two of the third round's three,
 and both of the fourth round's two. Twelve print `does not depend on any
 axioms` for every theorem they expose.
@@ -173,7 +173,7 @@ lemmas are kept and attributed. Recorded in
 and
 [`results/lean-closure-elaboration.json`](results/lean-closure-elaboration.json).
 
-That is 27 of the 28 Mathlib-free files — counting transitively, so a file
+That is 28 of the 29 Mathlib-free files — counting transitively, so a file
 importing a sibling that is itself Mathlib-free counts as Mathlib-free. The
 other 58 depend on Mathlib and **nothing has ever checked any of them** — and
 the one time this merge looked inside that bucket for a reason unrelated to
@@ -186,9 +186,10 @@ is two, not one.
 as containing a `sorry`. Its only occurrence of the token was the sentence in
 its own header saying there were none — the scanner tested for a substring and
 so reported exactly backwards. It now strips Lean comments first, with a depth
-counter because Lean block comments nest. Re-auditing **all 86 Lean files**
-finds **zero** real `sorry` or `sorryAx` anywhere in this repository; all 25
-occurrences are authors stating there are none. That is a better result than
+counter because Lean block comments nest. Re-auditing **all 90 Lean files**
+finds **zero** real `sorry` or `sorryAx` anywhere in this repository; all 26
+occurrences are authors stating there are none. `tools/lean_inventory.py`
+regenerates this rather than restating it. That is a better result than
 anyone claimed, and it could not have been established before, because the
 unfixed scanner could not tell the two cases apart. It is not an axiom audit, it does not
 cover the twenty-one Mathlib-dependent files, it does not establish that any

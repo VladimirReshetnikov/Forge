@@ -1249,9 +1249,9 @@ The harness now strips Lean comments before the search, with a depth counter
 because Lean block comments nest, and a token found only in prose is recorded
 as such rather than as a defect.
 
-Re-auditing all eighty-six Lean files across the four rounds and the merged
+Re-auditing all ninety Lean files across the four rounds and the merged
 tree with the corrected scanner: \emph{none} contains a real \code{sorry} or
-\code{sorryAx}. All twenty-five occurrences of the token are authors stating
+\code{sorryAx}. All twenty-six occurrences of the token are authors stating
 that there are none. That is a better result than anyone claimed, and it could
 not have been established before, because the unfixed scanner could not tell
 the two cases apart.
@@ -1348,7 +1348,7 @@ Python, and then accepted by the Lean kernel through \code{decide} rather than
 \code{sorryAx}. \code{ForgeCore} now builds as a library.
 
 Three constraints shaped it. It is core Lean only, because fifty-eight of this
-repository's eighty-nine Lean files depend on Mathlib and none has ever been
+repository's ninety Lean files depend on Mathlib and none has ever been
 checked --- a checker in that bucket would have been one more uncompiled claim.
 Coefficients are integers, because \code{Int} is in core and \code{Rat}'s
 lemmas are not; clearing denominators is a change of representation, and every
