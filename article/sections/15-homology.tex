@@ -1,0 +1,110 @@
+\section{Chain complexes: coordinates, torsion, and an obstruction that homology cannot see}
+\label{sec:homology}
+
+The last contributing effort of the fourth round opens the collection's only
+homological algebra. Its objects are finitely generated free $\Z$-modules with
+integer matrices $A,B$ satisfying $BA=0$, and its question is the cycle-modulo-
+boundary one: given a cycle, is it a boundary, and if not, what exactly is in
+the way?
+
+Section~\ref{sec:structural} already solves integer systems, by row-by-row
+unimodular elimination with a divisibility obstruction. This effort is explicit
+that it does not claim a new integer solver --- it lists ``Smith normal form as
+a new algorithm'' under what it is \emph{not} claiming, and reuses a lattice
+solver as its inner engine. What is new is what the receipts have to carry so
+that several such solutions stay compatible with each other.
+
+\subsection{Coordinates that survive being used together}
+
+A single Smith decomposition answers one question. This worker needs the cycle
+space, a set of representatives, the coordinate map, the relation matrix and
+the induced map to agree simultaneously, so its certificate carries a matched
+family: a kernel basis, a coordinate map $X$ and representatives $R$ with
+$XR=I$ and $BR=0$, the invariant factors, and --- for each concrete question ---
+either a filler $w$ with $Aw$ equal to the given cycle, or an obstruction.
+
+The obstruction is a row functional $\phi$ together with a modulus $q$: $\phi$
+vanishes on every boundary but not on the given cycle modulo $q$. That is the
+same species of witness the existing lattice worker emits, and the effort says
+so. What the existing worker does not produce is the rest of the family, and
+the certificate exists so that a filler found for one cycle and a coordinate
+map used for another are answers about the same decomposition.
+
+\begin{remark}[Cycle-restricted exactness is not ambient splitting]
+The effort's sharpest scope condition, and the one a naive integration would
+get wrong. With $B=(2)$, the middle-exactness statement ``every cycle is a
+boundary'' can hold while the stronger ambient identity --- that the sequence
+splits --- fails. A checker that encoded exactness as a splitting identity
+would reject correct inputs, and a source bridge that assumed it would prove
+something else. The theorem is about $\ker B/\operatorname{im}A$ and nothing
+wider.
+\end{remark}
+
+\subsection{Reductions, and why the middle term matters}
+
+A chain reduction is a triple $(f,g,h)$ between a complex and a smaller one,
+with $h$ a chain homotopy witnessing that the composites are the identity up to
+boundary. Cancelling a unit entry in a differential produces one; composing
+reductions produces another. The point is that a solution found in the reduced
+complex lifts back, and the lifting formula is
+\[
+ H=h_D T+g_D\bar H f_C+g_D f_D T h_C,
+\]
+in which all three terms are needed. The effort keeps a fixture whose reduced
+homotopy is nonzero precisely so that the middle term is exercised, rather than
+testing only complexes that reduce to zero and in which it vanishes silently.
+
+The recorded ablation is a dimension experiment: a family in which the direct
+system grows to 288 equations in 144 variables, exceeding the search cap, while
+the reduced system has \emph{zero} equations and the lifted witness is checked
+against the original problem. The effort's own caption is the right reading of
+it --- ``a capability observation under a stated cap, not a general speedup'',
+on a family chosen to contain cancellable summands, with no claim about how
+often such summands occur.
+
+\subsection{The obstruction homology cannot see}
+
+The result that earns this section its place is a negative one, and it is a
+kind of negative the collection did not previously have.
+
+Two chain maps can induce \emph{equal maps on all homology groups} and still
+fail to be chain homotopic. The certificate for that failure is not a
+divisibility obstruction on a lattice system; it is a matrix $W$ satisfying an
+adjoint condition under the Frobenius pairing, which separates the difference
+$F-G$ from the image of the homotopy operator. The smallest instance is the
+equation $2a+2b=1$: unsolvable over $\Z$, and the reason two maps agreeing
+everywhere homology can see are nonetheless different.
+
+\begin{remark}[Three species of negative evidence, now four]
+Section~\ref{sec:structural} refutes derivability by a Kripke countermodel.
+Section~\ref{sec:closure} refutes an automaton equivalence by a separating
+word. Section~\ref{sec:noncommutative} refutes an algebra identity by
+exhibiting an algebra. This refutes a homotopy by exhibiting a functional, and
+it differs from all three in what it tells you: not that the statement is
+false, but that \emph{the invariant you computed is too coarse to decide it}.
+An obstruction of that kind is a reason to compute something finer, which is a
+different instruction to a planner than a counterexample is.
+\end{remark}
+
+The checker for the negative runs a structurally different computation from the
+producer that found it --- a pairing evaluation against a linear solve --- which
+is a stronger producer/checker separation than most of this document's lanes
+achieve.
+
+\subsection{What it is not, and one convention that would break it}
+
+An algebraic statement about a supplied differential is not a topological one.
+Acyclicity, chain-homotopy equivalence, simple-homotopy equivalence and
+topological homotopy equivalence are four different claims, and matching
+homology summaries establish none of the others. The effort refuses to infer a
+topological theorem from a homology computation, and says so.
+
+For the Lean statement, two details are recorded and both matter. A
+\code{Homotopy} in Mathlib is \emph{data}, not a proposition, so the negative
+result is stated as $\Not(\Nonempty(\ldots))$ rather than by negating a
+structure. And Mathlib's \code{comm} field is arranged as $F=dH+Hd+G$ where
+this worker's matrices satisfy $F-G=dH+Hd$; the adapter must prove that
+rearrangement rather than paste a matrix into a field with a different
+convention. Mathlib supplies the homotopy object and the theorem that homotopic
+maps induce equal homology maps. What it does not supply is the constructive
+search, the reflected checker, or the source binding --- which is the work.

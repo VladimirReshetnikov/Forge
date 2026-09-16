@@ -1,0 +1,146 @@
+\section{Real algebra: deciding by cells, not by sampling}
+\label{sec:realalgebraic}
+
+Section~\ref{sec:nonlinear} certifies that a polynomial is nonnegative. It does
+not decide a quantified statement about real solutions, and the two problems
+are genuinely different: a certificate search that fails proves nothing,
+whereas a decision procedure must answer. Two contributing efforts supply
+decision procedures over the reals, and they agree on the one thing that makes
+the subject tractable and disagree about everything above it.
+
+The agreement is on how to name a real algebraic number, which is the
+representation question the whole subject turns on. One does not name
+$\sqrt2$. One supplies a rational polynomial together with a rational interval
+containing exactly one of its roots, and the pair \emph{is} the number. Every
+downstream operation is then rational arithmetic on that data, and nothing is
+approximated.
+
+\subsection{The shared component: a complete cover of the line}
+
+Both efforts build the same object, by the same three steps, and neither cites
+the other.
+
+Collect the polynomials whose sign can change the answer --- leading
+coefficients, discriminants, resultants of pairs, and the outer problem's own
+parameter polynomials. Form $P$, the monic squarefree part of their product.
+Its real roots $\alpha_1<\cdots<\alpha_r$ cut the line into $2r+1$ \emph{cells}:
+the $r$ points themselves, the $r-1$ open intervals between them, and the two
+unbounded tails. On each cell every collected polynomial has constant sign, so
+the original question has a constant answer there, and finitely many cells
+decide a statement about uncountably many reals.
+
+What makes this checkable rather than merely computable is the completeness
+check, and both efforts implement the same three-part test:
+
+\begin{enumerate}[leftmargin=1.4em]
+\item each supplied interval isolates exactly one root of $P$, verified by a
+  rational root count on that interval;
+\item the intervals are disjoint and strictly increasing, with no endpoint a
+  root of $P$;
+\item their number equals the \emph{total} number of real roots of $P$.
+\end{enumerate}
+
+The third is the one that matters. Without it a certificate that quietly omits
+a root describes a coarser partition on which the answer may be constant for
+the wrong reason, and every cell-local check still passes. Both efforts make
+the checker recompute $P$ itself from the required guards rather than accept a
+supplied polynomial, for the same reason: a producer that omits a guard would
+otherwise be believed.
+
+\begin{remark}[An isolator is not an approximation]
+The interval denotes the unique root inside it. Refining it changes the
+representation and not the number, and a checker that compared floating-point
+endpoints would be checking a different statement. One effort admits a
+degenerate point descriptor $[a,a]$ for rational roots; the other forbids
+finite endpoints that are roots at all. Both conventions are sound and they are
+not interchangeable, so the schemas stay distinct.
+\end{remark}
+
+That shared component is exactly one module, and both efforts independently
+name it as their first Lean milestone. It should be built once.
+
+\subsection{Above the cover, they diverge completely}
+
+\paragraph{Fibres and root indices.} One effort takes a bivariate problem and,
+over each cell of the line, decomposes the fibre: it specialises the
+coefficients at the cell's algebraic point, isolates the $y$-roots there, and
+cuts the plane above that cell into $2n+1$ pieces. A quantified statement then
+becomes a truth vector over finitely many plane cells, and --- the part that
+makes it a \emph{witness} rather than a verdict --- an existential is answered
+by a \emph{root index}: not a number, but the position of a root in the ordered
+list over that cell. The witness is a selector, constant on each cell, and it
+is checkable because the ordering is.
+
+Determining the sign of a polynomial at an algebraic point is the technical
+core, and it is done by localised fractions with a gcd zero test and interval
+refinement, never by evaluation at a numerical approximation.
+
+\paragraph{Counting without building the fibre.} The other effort never
+constructs a fibre object. Over each cell it evaluates a \emph{count circuit}:
+the number of real roots of the specialised system is determined from the signs
+of characteristic coefficients, by Hermite's quadratic-form method and
+Descartes-exact reasoning. The output per cell is an integer, and the outer
+verdict follows from the integers. For univariate problems it can also return
+an isolating interval, but its general answer is a count and not a witness.
+
+These are different capabilities, not two implementations of one. A count
+settles ``how many'' uniformly; a root index settles ``which one'' and can be
+substituted into a source goal. Neither subsumes the other, and the merge keeps
+both --- while noting that they share their entire lower half.
+
+\subsection{Three impossibility proofs with one moral}
+
+The most useful thing these two efforts do, and a third from the same round
+does it too, is refute the natural objection that a bigger dictionary would
+have sufficed. Each proves a small impossibility, by a different technique:
+
+\begin{itemize}[leftmargin=1.4em]
+\item no polynomial $p$ satisfies $p(x)^2=x^2+1$ identically;
+\item no rational function $r$ satisfies $r(t)^2=t$ on an open interval;
+\item no synchronised binary automaton with a fixed number of states
+  recognises $y=x^2$ or $y=2^x$ --- a growth obstruction, from
+  Section~\ref{sec:automatic}.
+\end{itemize}
+
+The moral is shared and the theorems are not. Each says that the relevant
+\emph{representation} is the obstacle, so enlarging a search budget inside that
+representation cannot help. They are three results and a provenance ledger that
+cites them as one would be wrong three ways.
+
+\subsection{The trap that only shows up after a negation}
+
+Both efforts here, and one elsewhere in the same round, hit the same failure
+mode in different clothing, and it is worth isolating because it is invisible
+until someone takes a complement.
+
+A decision procedure that reasons about the \emph{generic} case --- the open
+cells, the typical parameter, the padded encoding --- can be right about every
+case it considered and still return the wrong answer, because the exceptional
+case it dropped was exactly where the statement failed. The real-algebraic
+version is the exceptional parameter: for $xy=1$ the value $x=0$ has no
+solution at all, and a procedure that reasons only over open cells will report a
+universally solvable system. The automatic-structures version is the zero-tail:
+an encoding that ignores trailing zeros gets $y=2x+1$ right for every
+represented input and wrong at $x=0$.
+
+In both cases the original answer is correct and the \emph{negation} is false,
+which is why testing the positive direction finds nothing. The discipline both
+efforts adopt is the same: the exceptional cells are cells, carried through the
+whole computation and checked, not special-cased at the end.
+
+\subsection{What these decisions cost, and what they do not claim}
+
+The cell count is the cost, and it is not small. One effort's corpus tops out
+at a cover polynomial of degree 25 and fifteen cells for a quintic with a
+threshold; the other records 356 plane cells across 24 examples. Neither claims
+scalability, and one states the position plainly: these are exact procedures on
+small inputs, and a general cylindrical decomposition is doubly exponential no
+matter how the cells are certified.
+
+Two further scope conditions are worth carrying. A count is not a witness, and
+a witness index is not a closed form --- substituting a root index into a Lean
+goal requires the ordering theorem, not just the index. And both producers use
+the same computer-algebra backend for their untrusted search; since both also
+share this round's environment, a defect in that backend would be a
+\emph{common-mode} risk across two proposals rather than one, which neither
+effort is in a position to notice about the other and which this document is.

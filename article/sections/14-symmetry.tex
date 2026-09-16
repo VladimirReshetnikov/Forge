@@ -1,0 +1,138 @@
+\section{Symmetry: using a group without enumerating it}
+\label{sec:symmetry}
+
+A permutation group on $n$ points can have $n!$ elements. A proof planner that
+wants to exploit symmetry --- to merge equivalent cases, to count orbits, to
+reduce a cone search --- cannot enumerate them, and one contributing effort
+supplies the certificate language that makes the group usable without doing so.
+This is the collection's only group theory.
+
+\subsection{The certificate, and what makes non-membership checkable}
+
+The object is a \emph{stabiliser chain}. Fix the base $0,1,\ldots,n-1$ and let
+$K_i$ be the subgroup fixing the first $i$ points. The certificate supplies,
+per level, the orbit of the $i$th point under $K_i$ as a \emph{tree} --- each
+non-root entry recording its point, an earlier parent, and the signed generator
+reaching it --- together with a claimed group order and a word DAG deriving
+every strong generator from the \emph{original} supplied generators.
+
+The claimed order is checked by the product $\prod_i|\Omega_i|$, and the effort
+is blunt that this check alone is worthless: ``a malformed collection of tables
+also has a product.'' What makes the product a group order is the Schreier
+condition, and the acceptance requirement is that \emph{every} Schreier residue
+$t_{s(x)}^{-1}s\,t_x$ sifts to the identity --- every generator, every orbit
+point, no sampling and no producer-chosen subset.
+
+\begin{theorem}[Complete chain]\label{thm:chain}
+An accepted certificate yields a bijection
+$T_0\times\cdots\times T_{n-1}\to G$ by multiplication. Consequently the order
+product is $|G|$, and sifting decides membership.
+\end{theorem}
+\begin{proof}
+The strong list generates $G$, so $K_0=G$, and the Schreier condition
+identifies each $K_{i+1}$ with the stabiliser of $i$ in $K_i$. The bottom group
+is trivial because a permutation fixing every point is the identity, so
+repeated coset decomposition gives surjectivity. For uniqueness, compare two
+products: their values at $0$ select the same point of $\Omega_0$ and hence the
+same stored transversal; cancel and continue down the base. If a member of $G$
+failed sifting, its unique coset digit would be absent from an exact orbit,
+which contradicts the orbit being exactly $K_i\cdot i$.
+\end{proof}
+
+That last sentence is the answer to the question this section exists to
+answer. A failed sift is a \emph{negative} membership witness --- and it is one
+only because the chain's completeness was established first, by a finite,
+fully enumerated check. This is not a bounded search reporting exhaustion. It
+is a decision, and the finiteness is the number of Schreier edges rather than a
+budget.
+
+The regression fixture that isolates the gate is the right one: take
+$\Sym_3$, supply all three orbit points at level $0$ but only the roots below,
+and the order product is correct, every listed orbit is closed under its listed
+generators, and both original generators are present. The certificate is still
+rejected, because a residue fails to sift. Every superficial check passes and
+the logical gate catches it.
+
+\subsection{Canonical images, and a minimum that is not the sorted tuple}
+
+For symmetry breaking the useful operation is the canonical image: the
+lexicographically least $g\cdot c$ over $g\in G$. It is certified by a coset
+cover --- a tree whose splits enumerate every transversal at a level and whose
+cuts carry a proved lower bound --- plus one transporter attaining the claimed
+minimum. Coverage proves no coset was skipped; the transporter proves the bound
+is reached.
+
+The worked case that repays attention is the alternating group. For
+$\Alt_n$ the canonical image of a tuple with all-distinct entries is
+\emph{not} the sorted tuple when the sorting permutation is odd: it is the
+sorted tuple with its last two entries exchanged. With a repeated entry the
+sorted tuple is reachable after all, because a transposition of two
+equal-valued positions is an odd element of the stabiliser. Both branches are
+in the corpus, checked against full enumeration at small degree.
+
+\begin{remark}[What a symmetry tactic may and may not do]
+The soundness conditions are exactly two equivalences,
+\[
+ \exists x\,P(x)\iff\exists x\,[P(x)\wedge r(x)=x],\qquad
+ \forall x\,P(x)\iff\forall x\,[r(x)=x\Rightarrow P(x)],
+\]
+for a representative map $r$ and a $G$-invariant $P$. What they do \emph{not}
+license is proving $x=r(x)$, rewriting occurrences of $x$ by $r(x)$ inside an
+arbitrary expression, or conjoining a canonical-form constraint to the original
+goal as though it held pointwise. Symmetry breaking preserves existence, or a
+properly transported universal; it does not preserve the solution set.
+\end{remark}
+
+A second scope condition is sharper than it looks. A \emph{proper} subgroup of
+the true symmetry group is perfectly sound for case merging --- it merges
+fewer cases. It is not sound for orbit counting, where the answer depends on
+the whole group. Both computations can be internally correct while answering
+different questions, and only the source authorization distinguishes them.
+
+\subsection{Counting, and a reduction for an existing worker}
+
+Burnside's lemma turns the group into a polynomial: with $a_G(\lambda)$
+elements of cycle type $\lambda$, the number of colourings up to symmetry is
+$|G|^{-1}\sum_\lambda a_G(\lambda)q^{|\lambda|}$, universally in $q$. The
+inventory is the certificate, and the checker recomputes it a different way ---
+enumerating unique transversal normal forms from Theorem~\ref{thm:chain} and
+recomputing cycles --- rather than re-running the producer's Cayley-graph walk.
+
+Recognising $\Sym_n$ or $\Alt_n$ exactly, by order and parity gates rather than
+by a probabilistic test, then replaces the inventory entirely by a closed
+formula. That is what lets a degree-40 symmetric group be used: $40!$ is
+certified in under twelve kilobytes of chain data, and the three-colour orbit
+count follows from a binomial identity rather than from any enumeration.
+
+The lane that matters most for the rest of this document is the Reynolds
+projection. Averaging a polynomial over $G$ is a projection onto the invariants,
+and on a monomial orbit it is computed without touching $|G|$ at all, because
+each source monomial reaches every destination in its orbit the same number of
+times. A cone search over a $G$-stable dictionary can therefore be replaced by
+a search over orbit sums, and the effort's example collapses 780 coefficient
+variables to one. The accepted reduced solution is then expanded back and
+validated by the \emph{existing} cone checker of Section~\ref{sec:nonlinear} ---
+an accelerator that does not move the trust boundary.
+
+\begin{remark}[Averaging does not preserve the goal]
+The projection is a tool for the search, not a substitute for the target. With
+$G$ the swap and $p=x_0-x_1$, the average is zero, so $\mathcal{R}_G(p)\ge0$ holds
+while $p\ge0$ does not. A tactic must not replace a goal by its average.
+\end{remark}
+
+\subsection{Scope and a formalisation hazard}
+
+The fragment is concrete finite actions on $\{0,\ldots,n-1\}$ with permutations
+given as arrays. Finitely presented groups, actions on infinite types, and
+inferring a group from a program's behaviour are outside it. Representing an
+abstract group by permutations needs its own faithfulness theorem before the
+image's order may be called the group's order.
+
+One Mathlib detail is worth carrying forward because it would silently
+invalidate every counting certificate. The natural translation of ``number of
+cycles'' via the length of \code{cycleType} undercounts: \code{cycleType}
+omits fixed points, so the identity would be recorded as having zero cycles
+rather than $n$. The correct exponent is
+$\#\operatorname{cycleType}(g)+n-|\operatorname{supp}(g)|$. This is a small
+representation mismatch of exactly the kind Section~\ref{sec:trust} exists to
+catch, and it was found by reading the library rather than by running anything.

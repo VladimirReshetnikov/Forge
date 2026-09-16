@@ -1,0 +1,271 @@
+\section{Unbounded resources: antichains over a well-quasi-order}
+\label{sec:wsts}
+
+Four contributing efforts arrive at the same mathematical shape, and the shape
+is worth stating before any of them. A transition system is \emph{monotone} if
+having more resources never disables a step: $s\preceq s'$ and $s\to s'$'s
+source can fire implies the larger state can fire the same transition and land
+at least as high. If in addition $\preceq$ is a well-quasi-order --- every
+infinite sequence contains $i<j$ with $s_i\preceq s_j$ --- then the set of
+states from which something bad is reachable is upward closed, and an upward
+closed set in a well-quasi-order has a \emph{finite} basis.
+
+That is the whole idea. The unsafe region of an infinite-state system is
+described exactly by finitely many minimal states, and a backward search
+terminates because it cannot admit an infinite antichain.
+
+\begin{lemma}[Dickson]\label{lem:dickson}
+Every infinite sequence in $\N^d$ contains indices $i<j$ with $x_i\le x_j$
+coordinatewise. In particular every antichain in $\N^d$ is finite.
+\end{lemma}
+\begin{proof}
+Every infinite sequence of naturals has an infinite nondecreasing subsequence:
+if some value recurs infinitely often take the constant subsequence, and
+otherwise choose successively larger values from later positions. Apply this to
+the first coordinate, then to the second coordinate of the retained
+subsequence, and so on. After $d$ restrictions all coordinates are
+nondecreasing, and any two positions of the final subsequence give the pair.
+The case $d=0$ is immediate.
+\end{proof}
+
+Only one of the four proves this; the others cite it. It is stated here once.
+The same is true of the predecessor computation, which every one of them needs
+and every one of them derives independently.
+
+\begin{lemma}[Minimal predecessor]\label{lem:backpre}
+For a transition consuming $c$ and producing $p$, let
+$\pre_t(b)=c+(b-p)^{+}$ where $(\cdot)^{+}$ is coordinatewise positive part.
+Then $\{m: \exists m'\ge b,\ m\xrightarrow{t}m'\}=\Up{\{\pre_t(b)\}}$, and
+firing $t$ from $\pre_t(b)$ lands at $\max(b,p)\ge b$.
+\end{lemma}
+\begin{proof}
+The condition is $m\ge c$ together with $m-c+p\ge b$. Coordinatewise: where
+$b_i\le p_i$ the enabling requirement $m_i\ge c_i$ already suffices; where
+$b_i>p_i$ the two inequalities together say $m_i\ge c_i+b_i-p_i$. That is the
+displayed maximum. At the threshold the endpoint is $(b-p)^{+}+p=\max(b,p)$.
+\end{proof}
+
+The four efforts write this four ways --- as a maximum, as a positive part, as
+$\max(a,a+b-z)$, and abstractly through a \emph{strong upward compatibility}
+axiom --- and they are the same function.
+
+\subsection{One initial state, or all of them}
+
+Here the four separate, and the distinction is the most consequential thing in
+this section because it is invisible in the certificate's shape.
+
+Three of the efforts compute the unsafe region for \emph{every} initial state.
+The fourth binds its receipt to one, by adding a third obligation: every basis
+element must fail to be below the given $m_0$. Its certificate is otherwise
+identical in form --- the same basis, the same target coverage, the same
+backward closure --- and it does not require the basis to be minimal or even an
+antichain, because for its purpose a redundant over-approximation is enough.
+
+That effort then says exactly what it has left on the table:
+
+\begin{quote}\small
+There is a reusable theorem hiding in this certificate. Once
+[target coverage] and [backward closure] are checked, the same $A$ proves
+safety for \emph{every} initial marking outside $\up A$. The prototype binds
+each receipt to one initial marking, but a Lean port should expose the
+stronger invariant lemma and then specialize it.
+\end{quote}
+
+Another effort in the same round delivers precisely that theorem, checked, with
+the extra ingredient the stronger statement needs. The merge states it once, in
+the strong form:
+
+\begin{theorem}[Exact frontier]\label{thm:wsts-exact}
+Let $B$ be finite with: every bad target above some $b\in B$; for every $b\in B$
+and transition $t$, some $a\in B$ with $a\le\pre_t(b)$; and for every $b\in B$
+a recorded run $u_b$ enabled at $b$ whose endpoint covers an original target.
+Then for every state $m$,
+\[
+ \text{bad is reachable from } m \iff \exists b\in B,\ b\le m .
+\]
+If $B$ is an antichain its members are exactly the minimal unsafe states.
+\end{theorem}
+\begin{proof}
+Right to left: choose $b\le m$ and run $u_b$; monotonicity lifts the run from
+$b$ to $m$ and the endpoint still covers a target. Left to right: induct
+backwards along a bad execution. Its last state is in $\Up B$ by target
+coverage; if a successor covers $b\in B$ via $t$ then by
+Lemma~\ref{lem:backpre} the predecessor covers $\pre_t(b)$, and backward
+closure supplies $a\in B$ below it. For minimality, if $x\le b\in B$ is unsafe
+then exactness gives $a\in B$ with $a\le x\le b$, and incomparability forces
+$a=b$.
+\end{proof}
+
+\begin{remark}[Two halves, and why neither suffices]
+Target coverage and backward closure alone prove $\Up B$ is an
+\emph{over-approximation} of the unsafe set --- enough for safety, which is why
+the one-initial-state certificate needs nothing more. The recorded runs alone
+prove an \emph{under-approximation}. Only together do they give exactness, and
+only exactness gives a threshold: the least population at which a system
+becomes unsafe is a statement about the minimal basis, not about any
+over-approximation of it. A frontier computed under a fixed-initial-state
+assumption and then reported as global would erase exactly that threshold, and
+one of the efforts warns against this in those words.
+\end{remark}
+
+\begin{invariant}[A family-relative certificate is not a frontier]
+\label{inv:frontier}
+A basis proved safe relative to one initial state, or pruned using an invariant
+that holds only there, must not be published as the minimal unsafe basis. The
+two claims have different strengths and the certificates are distinguishable
+only by the presence of the positive runs.
+\end{invariant}
+
+\begin{theorem}[Termination]\label{thm:wsts-terminates}
+Without operational cutoffs the backward worklist terminates, and returns
+either a basis satisfying Theorem~\ref{thm:wsts-exact} or a concrete bad
+execution.
+\end{theorem}
+\begin{proof}
+Each admitted candidate lies outside the upward closure of the current
+antichain, and deleting a dominated member does not shrink the represented set
+because the new smaller member covers its whole cone. If infinitely many were
+admitted, Lemma~\ref{lem:dickson} would put an earlier one below a later one,
+whose cone was still represented at that time --- contradicting admission. So
+finitely many are admitted, each scheduling finitely many predecessor tasks,
+and the queue empties. Every admitted entry carries a genuine run by
+Lemma~\ref{lem:backpre} and monotonicity; at termination every surviving entry
+has been expanded and every predecessor is covered.
+\end{proof}
+
+The proof is qualitative, and the efforts say so: it bounds nothing. A
+terminating coverability method can still be hopeless on a given input, and one
+of them exhibits the reason directly. A transfer step consuming $(1,0)$ and
+producing $(0,1)$ with target $(0,N)$ has minimal unsafe basis
+$\{(0,N),(1,N-1),\ldots,(N,0)\}$ --- $N+1$ pairwise incomparable vectors. Any
+certificate format that lists the basis explicitly must contain all of them.
+
+\subsection{The same three vectors, three times}
+
+The four efforts were prepared independently, and three of them chose mutual
+exclusion as their readable worked example. Their computed bases are:
+\[
+ \{(0,0,2),(1,1,1),(2,2,0)\},\qquad
+ \{(0,2,0),(1,1,1),(2,0,2)\},\qquad
+ \{(0,2,0),(1,1,1),(2,0,2)\}.
+\]
+Under the coordinate bijection matching \emph{waiting} to \emph{idle} and
+\emph{permit} to \emph{lock}, the first two are the same net and the same
+antichain, vector for vector; the third is a third presentation of it. One
+effort derives ``$(n,1,0)$ is safe for every $n$'' from it and another checks
+its own version at $n=10^{30}$.
+
+This is one result, and this document records it once. It is also a warning
+about the shape of the evidence in this collection: three independent packages
+producing an identical three-element antichain is not three confirmations of
+anything, and a provenance ledger that counts it three times is wrong by a
+factor of three on its most quotable example.
+
+\begin{remark}[A field-name collision that is not a naming quibble]
+Two of the efforts use the field names \code{basis}, \code{target\_cover} and
+\code{predecessor\_cover} for objects with \emph{different} semantics: in one
+the basis is minimal and every element carries a positive run, in the other it
+may be redundant and carries none. A merge that unified the schemas on the
+strength of matching field names would silently upgrade a family-relative
+receipt into a frontier. Appendix~\ref{app:schemas} keeps them apart.
+\end{remark}
+
+\subsection{Two ways to survive a large instance}
+
+The efforts diverge again on what to do when an instance is big, and the two
+answers are complementary rather than competing.
+
+One accelerates the \emph{search}. It proves a power-summary law for repeating
+a transition $n$ times and a finite loop-star bound, then emits a witness
+containing a \code{repeat} node. The checker is unchanged --- no new trusted
+rule --- and a target of $10^{100}$ is certified by a three-node witness.
+
+The other changes the \emph{certificate language}. Its problem is not the
+witness but the local predecessor obligation: a merge transition with $d$
+residual counters and threshold $h$ has $\binom{h+d-1}{d-1}$ minimal
+predecessors, which at $d=8,h=100$ is $26{,}075{,}972{,}546$. Enumerating them
+to discover they are all already covered is wasted work, so it adds a receipt
+tag whose leaves point directly at global basis indices. The resulting
+certificate is $1{,}063$ bytes.
+
+The cost of having only the second is visible in its own corpus: its
+$10^{100}$ fixture needs $334$ nodes and $39{,}194$ bytes, because its doubling
+loop is unrolled where the first effort would have written one \code{repeat}.
+The cost of having only the first is that it cannot express the dense-predecessor
+case at all. A production worker wants both, and they compose --- one compresses
+the witness, the other compresses the obligation.
+
+\subsection{How far the model stretches}
+
+The four admit different transition rules, and they form a ladder. The
+narrowest is the ordinary net: $m'=m-c_t+p_t$ under $m\ge c_t$, with constant
+effect. Adding a finite control is routine. The widest admits
+$x'=A(x-a)+b$ with $A$ a nonnegative integer matrix, which buys resets (a zero
+row), transfers and merges (several unit entries in one row), and duplication
+(an entry above one) --- none of which has constant effect, and the narrowest
+effort excludes them by name for exactly that reason.
+
+A different axis is the order itself. One effort leaves $\N^d$ entirely for
+finite-control \emph{lossy FIFO} channels, ordered by the subsequence embedding
+$u\sqsubseteq w$, which is a well-quasi-order by Higman's lemma rather than
+Dickson's. The predecessor law is correspondingly different --- for a receive,
+$\Pre(\Up u)=\Up{\{au\}}$; for a send, $\Up{\{v\}}$ where $u=va$ or $u$ itself
+--- and it is proved rather than asserted. The abstract monotonicity axiom is
+what lets one termination proof cover both domains.
+
+\begin{remark}[Lossy is not reliable]
+A counterexample under lossy semantics is not a counterexample to the reliable
+system. The recorded fixture is two controls and one receive: from queue $ba$
+the lossy system may drop $b$ and then receive $a$, reaching the bad control,
+while the reliable system's receive is blocked. Both facts are true, and only
+one of them is about the program a user wrote.
+\end{remark}
+
+\subsection{Finiteness for a different reason}
+
+One effort adds a worker in this family that does \emph{not} rest on a
+well-quasi-order at all, and says so plainly: ``For counters, finiteness comes
+from a well quasi-order on natural vectors. For names, it comes from
+quotienting by renamings that preserve everything the program can observe.
+These are different reasons for finiteness.''
+
+The model is a register machine over an infinite alphabet of atoms, with a
+finite control and finitely many registers each holding an atom or nothing.
+What is finite is not a basis but the set of \emph{equality patterns} among
+registers and constants --- which atoms coincide with which --- and the count is
+bounded by a Bell number, $B_{k+c+1}$ for $k$ registers and $c$ constants. Two
+configurations with the same pattern are related by a renaming the machine
+cannot detect, so equivalence of two deterministic such machines over all
+finite words is decidable by exploring patterns.
+
+The implementation detail that matters is a discipline rather than an
+algorithm, and it generalises past this worker: the executable representation
+numbers atoms as integers, but \emph{no arithmetic or comparison on those
+integers is available to the modelled program}. A Python sort used to pick a
+representative is a tool of the checker, not an operation of the machine. A
+source bridge that forgot this would prove a theorem about a different, more
+powerful language.
+
+\subsection{What this section does not claim}
+
+Coverability is not reachability. With one transition $x\mapsto x+2$ from
+$x=0$, the target $x\ge1$ is coverable and the exact marking $x=1$ is not
+reachable; a source adapter that translates an equality goal into an upward
+coverage query has changed the theorem. Nor is any of this a claim about
+fairness, deadlock-freedom under a scheduler, recurring visits, or exact-state
+reachability --- all of which need different predicates and none of which is
+imported by a coverability result.
+
+Two of the four also report defects found in their own harnesses rather than in
+their mathematics: a Python equality that let a Boolean compare equal to an
+integer, and a reporting key collision that replaced a list of basis vectors by
+its length. Both are scoped honestly by their authors --- ``an engineering
+correction, not a discovered false Lean proof''; ``a reporting defect, not
+evidence of a false region certificate'' --- and both are the kind of thing that
+only shows up when someone actually runs the code.
+
+And, as everywhere in this document, none of it has been checked by Lean. Three
+of these four ship no Lean at all, two of them stating that as a policy rather
+than an accident; the fourth ships a single small specimen whose one-step
+complement-invariance lemma is the shared kernel of all four soundness
+theorems, and is the right first thing to formalise.

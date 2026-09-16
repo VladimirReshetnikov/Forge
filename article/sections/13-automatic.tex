@@ -1,0 +1,100 @@
+\section{Automatic structures: deciding arithmetic with automata}
+\label{sec:automatic}
+
+One contributing effort decides first-order statements about unbounded natural
+numbers by compiling them to finite automata. The fragment is not all of
+arithmetic --- it could not be --- but it is wider than it first appears, and
+the certificate is unusually cheap to check.
+
+A predicate is \emph{automatic} when the tuples satisfying it, written in binary
+and read synchronously one bit-position at a time, form a regular language.
+Linear equalities and inequalities are automatic; so are congruences, powers of
+two, popcount parity, and bitwise \textsc{and} and \textsc{xor}. Boolean
+connectives become automaton products, and --- the reason the fragment is
+interesting --- \emph{quantifiers become projection and determinisation}. An
+existential quantifier erases one track and the result is determinised; a
+universal is the complement of a projection. Arbitrary quantifier nesting is
+therefore supported, at the usual cost.
+
+\subsection{The trailing zeros, and why they are the whole difficulty}
+
+Natural numbers have no canonical bit-width, so the encoding pads. Padding is
+where this subject goes wrong, and the effort's own framing of the problem is
+worth stating exactly: a witness may need \emph{more digits than any of the
+visible inputs}. Projecting away a track without accounting for that loses
+witnesses that exist only at greater width.
+
+The repair is \emph{zero-tail saturation}: before determinising a projection,
+close the state set under the transitions taken on the all-zeros extension, so
+that a state reachable only by reading further padding is still reachable. The
+effort's negative control is the smallest possible one --- $y=2x+1$, where the
+naive projection is correct for every represented input and wrong at $x=0$ ---
+and it is the same shape as the exceptional-cell trap in
+Section~\ref{sec:realalgebraic}: correct on everything considered, wrong on the
+case dropped by the encoding, and invisible until someone takes a negation.
+
+\subsection{What the checker does, and what it refuses to do}
+
+The certificate is a construction trace: the automaton for each subformula,
+together with the local equations relating it to its children --- this product
+is that intersection, this projection has these saturated states. The checker
+verifies those local equations against \emph{a separately supplied expected
+query}, and that is all it does.
+
+It does not explore the automaton, minimise it, or re-run the compiler. The
+effort is explicit that its checker ``imports neither producer nor formula
+helpers, performs no graph exploration or minimization''. This is the cheapest
+producer/checker separation anywhere in the collection: the search does
+determinisation, which is exponential; the checker does table lookups.
+
+A second object is the \emph{least-witness graph}. For an existential, the
+automaton can be refined so that it computes not merely whether a witness
+exists but the least one, as a regular function of the inputs --- which is then
+evaluated at concrete naturals by a dynamic program. The recorded corpus does
+this at $10^{100}+37$, which is the point: the witness is produced by running a
+finite graph, not by searching a bounded range.
+
+\begin{remark}[A regular function is a witness a source proof can use]
+This is the same distinction Section~\ref{sec:realalgebraic} draws between a
+count and a root index, arrived at from the other side. An automaton that
+accepts the graph of a function is a \emph{uniform} witness: one finite object
+that answers for every input, rather than a procedure that must be re-run. What
+it costs is that the function must be regular, which brings us to the limit.
+\end{remark}
+
+\subsection{The limit, proved rather than assumed}
+
+Squaring is not automatic. Neither is exponentiation. The effort proves it by a
+growth argument rather than asserting it: a synchronised automaton with a fixed
+number of states cannot recognise $y=x^2$, because the relation between the
+lengths of the two encodings is not bounded by the pumping structure a fixed
+state set provides.
+
+That is the third of the three independent impossibility results this round
+produced, and like the other two it says the \emph{representation} is the
+obstacle. No amount of additional search inside the automatic fragment reaches
+multiplication of two variables. A router should treat a nonlinear atom as a
+signal to leave this worker, not as a harder instance of it.
+
+\begin{remark}[Two different reasons a finite object suffices]
+It is worth putting this beside Section~\ref{sec:wsts}. There, finiteness comes
+from a well-quasi-order: an upward-closed set has a finite basis. Here it comes
+from regularity: a language closed under the relevant operations has a finite
+automaton. In the same round a third worker gets finiteness from a Bell-number
+bound on equality patterns. Three finite certificates for infinite-state
+questions, three unrelated reasons, and no one of them is a special case of
+another.
+\end{remark}
+
+\subsection{Scope}
+
+The fragment is linear arithmetic with the listed bitwise predicates, over
+naturals, in a fixed base. Multiplication of variables, and anything that grows
+faster than the encoding, are outside it and are outside it provably. Automaton
+sizes are the cost: determinising a projection is exponential in the worst case,
+and the effort reports its own minimisation ablation on nine examples with the
+warning not to learn a cost rule from those nine and then report its improvement
+on the same nine.
+
+And as with the rest of this round: no Lean. This effort ships none, and says
+that no scaffold is included merely to make the package look implemented.

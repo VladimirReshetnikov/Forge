@@ -1,8 +1,8 @@
 % ---------------------------------------------------------------------------
 % Forge: a certificate-producing proof-planning layer above Lean's `grind`
 %
-% Merged working draft. Assembled from twenty-seven independently prepared
-% proposals -- nine per round, over three rounds -- retained verbatim
+% Merged working draft. Assembled from thirty-six independently prepared
+% proposals -- nine per round, over four rounds -- retained verbatim
 % under proposals/ for provenance.
 %
 % Build (pdfLaTeX, standard TeX Live / MiKTeX packages only -- deliberately no
@@ -101,9 +101,17 @@
 \DeclareMathOperator{\E}{\mathbb{E}}
 \DeclareMathOperator{\Prob}{\mathbb{P}}
 \newcommand{\eval}[1]{\mathopen{[\![}#1\mathclose{]\!]}}
+\newcommand{\Up}[1]{{\uparrow}#1}
+\DeclareMathOperator{\pre}{pre}
+\DeclareMathOperator{\Pre}{Pre}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\Alt}{Alt}
+\newcommand{\up}[1]{{\uparrow}#1}
+\newcommand{\Not}{\neg}
+\newcommand{\Nonempty}{\operatorname{Nonempty}}
 
-% Provenance marker: which of the twenty-seven source proposals a result
-% comes from -- pN design round, eN extension round, rN third round.
+% Provenance marker: which of the thirty-six source proposals a result comes
+% from -- pN design round, eN extension, rN third round, sN fourth round.
 \newcommand{\src}[1]{{\small\textsf{[#1]}}}
 
 % Implementation-status banner used throughout, so that a specified algorithm
@@ -125,7 +133,7 @@ above Lean's \texttt{grind}\par}
 \vspace{1.4cm}
 {\large Merged working draft\par}
 \vspace{0.4cm}
-{\large Consolidated from twenty-seven independent proposals\par}
+{\large Consolidated from thirty-six independent proposals\par}
 
 \vspace{2.2cm}
 \begin{minipage}{0.82\textwidth}
@@ -140,7 +148,7 @@ witnesses, and obtains exact algebraic certificates. Every component that can
 succeed must return something Lean can check.
 
 \textbf{What this document is not.} \forge{} is \emph{not an implemented Lean
-tactic}. None of the twenty-seven contributing efforts had a Lean executable
+tactic}. None of the thirty-six contributing efforts had a Lean executable
 available; no Lean source was compiled by any of them; no comparison against
 \grind{}, Aesop, \code{nlinarith}, LeanHammer, or any other Lean tactic was
 measured. The Python prototypes are research code and are not formally
@@ -152,7 +160,7 @@ revision \texttt{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
 \end{minipage}
 
 \vfill
-{\small Twenty-seven source proposals retained verbatim under
+{\small Thirty-six source proposals retained verbatim under
 \texttt{proposals/}; see Appendix~\ref{app:provenance} for the merge
 ledger.\par}
 \end{titlepage}
@@ -170,11 +178,16 @@ ledger.\par}
 \input{sections/08-noncommutative}
 \input{sections/09-analytic}
 \input{sections/10-quantitative}
-\input{sections/11-boolean-and-external}
-\input{sections/12-integration}
-\input{sections/13-experiments}
-\input{sections/14-evaluation}
-\input{sections/15-conclusion}
+\input{sections/11-wsts}
+\input{sections/12-realalgebraic}
+\input{sections/13-automatic}
+\input{sections/14-symmetry}
+\input{sections/15-homology}
+\input{sections/16-boolean-and-external}
+\input{sections/17-integration}
+\input{sections/18-experiments}
+\input{sections/19-evaluation}
+\input{sections/20-conclusion}
 
 \appendix
 \input{sections/A-schemas}
