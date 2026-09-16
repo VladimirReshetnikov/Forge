@@ -1,0 +1,250 @@
+{
+  "note": "Independent re-run of the nine round-four proposals in the merge environment. Every suite that exists was executed and every replay entry point was invoked, each exactly as its own README specifies.",
+  "date": "2026-09-15",
+  "round": "four (s1..s9)",
+  "prepared_against_forge_revision": "58ea206bd7ad501b930add568151217bcc7f82a2",
+  "environment": {
+    "python": "3.14.4",
+    "platform": "Windows"
+  },
+  "authoring_environment_reported_by_the_proposals": {
+    "python": "3.13.5",
+    "platform": "Linux"
+  },
+  "caveat": "The interpreter differs from the authoring environment, so a match reproduces a recorded count on a different version rather than replaying it bit-identically. No timing was compared.",
+  "suites": [
+    {
+      "run": "s1",
+      "slug": "s1-resource-frontiers",
+      "cwd": ".",
+      "command": "python -m unittest discover -s prototype/tests",
+      "observed": "Ran 68 tests in 0.084s",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s3",
+      "slug": "s3-infinite-state-workers",
+      "cwd": ".",
+      "command": "python -S tests/test_core.py",
+      "observed": "Ran 27 tests in 0.005s",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s4",
+      "slug": "s4-ordered-certificates",
+      "cwd": "prototype",
+      "command": "python -S run_tests.py --output C:\\Users\\vresh\\AppData\\Local\\Temp\\s4out",
+      "observed": "\"stdout\": \"REPLAY_OK\\n\",",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s5",
+      "slug": "s5-witness-atlases",
+      "cwd": "prototype",
+      "command": "python -m pytest -q",
+      "observed": "42 passed in 1.60s",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s6",
+      "slug": "s6-real-fibers",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "observed": "Ran 25 tests in 0.002s",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s7",
+      "slug": "s7-automatic-arithmetic",
+      "cwd": "prototype",
+      "command": "python -S -m unittest test_interfaces",
+      "observed": "Ran 7 tests in 0.004s",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s8",
+      "slug": "s8-certified-symmetry",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "observed": "Ran 12 tests in 0.018s",
+      "result": "OK",
+      "returncode": 0
+    },
+    {
+      "run": "s9",
+      "slug": "s9-constructive-exactness",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "observed": "Ran 12 tests in 0.000s",
+      "result": "OK",
+      "returncode": 0
+    }
+  ],
+  "replays": [
+    {
+      "run": "s1",
+      "slug": "s1-resource-frontiers",
+      "command": "python -S prototype/replay.py results/frontiers.jsonl results/accelerated-frontiers.jsonl results/thresholds.jsonl results/parameters.jsonl results/runs.jsonl results/lassos.jsonl results/equivalences.jsonl",
+      "returncode": 0,
+      "summary": {
+        "status": "PYTHON_CHECKED",
+        "records": 423,
+        "by_kind": {
+          "exact minimal coverability frontier": 94,
+          "least unsafe natural parameter": 136,
+          "exact minimal unsafe parameter frontier": 69,
+          "exact compressed finite run": 1,
+          "unbounded": 1,
+          "nontermination": 1,
+          "equal guarded endpoint partial functions": 63,
+          "different guarded endpoint partial functions": 58
+        },
+        "search_imported": false
+      }
+    },
+    {
+      "run": "s2",
+      "slug": "s2-unbounded-certificates",
+      "command": "python -S replay.py ../results/run-01",
+      "returncode": 0,
+      "summary": {
+        "status": "PASSED",
+        "counts": {
+          "certificates.jsonl": 2360,
+          "rejections.jsonl": 275
+        },
+        "seconds": 0.192817199998899,
+        "search_imported": false,
+        "site_packages_enabled": false
+      }
+    },
+    {
+      "run": "s3",
+      "slug": "s3-infinite-state-workers",
+      "command": "python -S prototype/replay.py",
+      "returncode": 0,
+      "summary": {
+        "tail": [
+          "ACCEPTED 650 stored objects: {'vass': 305, 'nominal': 163, 'mixed': 182}",
+          "Producer and oracle modules were not imported. This is Python checking, not Lean checking."
+        ]
+      }
+    },
+    {
+      "run": "s6",
+      "slug": "s6-real-fibers",
+      "command": "python -S prototype/bin/replay.py results/run-02",
+      "returncode": 0,
+      "summary": {
+        "status": "PASS",
+        "site_packages_enabled": false,
+        "forbidden_imports": "sympy,numpy,flint,producer",
+        "counts": {
+          "valid_bundles": 99,
+          "specialization_evaluations": 748,
+          "invalid_mutations_rejected": 973,
+          "boolean_formulas": 160,
+          "boolean_truth_assignments": 4800,
+          "signature_matrices": 90
+        },
+        "elapsed_seconds": 63.480857300000935
+      }
+    },
+    {
+      "run": "s7",
+      "slug": "s7-automatic-arithmetic",
+      "command": "python -S replay_all.py ../results/run1",
+      "returncode": 0,
+      "summary": {
+        "status": "accepted",
+        "certificates": 90,
+        "concrete_witnesses": 643,
+        "producer_imported": false,
+        "formula_module_imported": false,
+        "site_disabled": true,
+        "scope": "Python replay, not Lean verification"
+      }
+    },
+    {
+      "run": "s8",
+      "slug": "s8-certified-symmetry",
+      "command": "python -S verify_corpus.py ../results/recorded",
+      "returncode": 0,
+      "summary": {
+        "status": "REPLAY_PASSED",
+        "site_packages_disabled": true,
+        "producer_imported": false,
+        "counts": {
+          "canonical_family_images": 213,
+          "canonical_images": 296,
+          "chain_bundles": 160,
+          "color_count_queries": 160,
+          "cycle_inventories": 40,
+          "fixed_weight_queries": 220,
+          "large_family_count_queries": 25,
+          "membership_queries": 8028,
+          "recognized_families": 109
+        }
+      }
+    },
+    {
+      "run": "s9",
+      "slug": "s9-constructive-exactness",
+      "command": "python -S replay.py ../results/recorded/corpus.json",
+      "returncode": 0,
+      "summary": {
+        "accepted": 656,
+        "outcomes": {
+          "homology": 97,
+          "fill": 129,
+          "obstruction": 65,
+          "induced": 48,
+          "reduction": 72,
+          "homotopy": 100,
+          "no_homotopy": 145
+        },
+        "search_imported": false
+      }
+    }
+  ],
+  "invocation_notes": [
+    "s2 ships no unit-test suite at all; its evidence is the replay corpus plus in-experiment assertions.",
+    "s2 explicitly instructs \"Do not use `python -O`: experiment assertions must remain enabled\". That is the opposite of r7's discipline in the previous round, which ran under -O precisely so that checks could not be implemented as removable asserts. Both were followed as specified.",
+    "s5 is the only proposal in this round whose suite needs pytest; the other eight run under the standard library, and seven under `python -S`.",
+    "s4 has no separate suite entry point: run_tests.py performs the checks and reports REPLAY_OK."
+  ],
+  "lean": {
+    "source_files_total": 2,
+    "lines_total": 98,
+    "proposals_shipping_no_lean_directory": [
+      "s1-resource-frontiers",
+      "s4-ordered-certificates",
+      "s6-real-fibers",
+      "s7-automatic-arithmetic"
+    ],
+    "proposals_shipping_an_obligation_document_instead": [
+      "s2-unbounded-certificates",
+      "s8-certified-symmetry",
+      "s9-constructive-exactness"
+    ],
+    "note": "Three of those documents say, in near-identical words, that the directory \"deliberately contains no sorry-based or uncompiled theorem file presented as a completed implementation\". That is the practice r9 advocated in round three, now adopted by several proposals at once."
+  },
+  "notes": [
+    "Counts are per proposal and are NOT poolable across proposals, nor across the four rounds, for the reasons set out in results/README.md.",
+    "This establishes that the suites pass, that the replay corpora are accepted, and that the checkers run with site packages disabled and their producer modules unimported where they claim to. It does not establish that any checker is correct, and it is not a Lean result."
+  ],
+  "summary": {
+    "suites_run": 8,
+    "suites_passing": 8,
+    "proposals_without_a_suite": 1,
+    "replays_run": 7,
+    "replays_returning_zero": 7,
+    "failures": 0
+  }
+}
