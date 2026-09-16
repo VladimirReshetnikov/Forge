@@ -13,13 +13,44 @@ against a Lean tactic. One of them — `r9` — responded by shipping no Lean at
 all, saying it "deliberately contains no placeholder theorem files presented as
 implemented proofs".
 
-**This merge compiled twenty files, and one of them failed.** The merge
-environment has `elan`, which installed the pinned
-`leanprover/lean4:v4.34.0`. Six of the twenty-one files in the merged tree, ten
-of the twenty extension-round source files, two of the third round's three
-core-only files, and both of the fourth round's two elaborate with no errors;
-twelve of the twenty print `does not depend on any axioms` for every theorem
-they expose.
+**This merge compiled twenty-three files, and two others failed.** The merge
+environment has `elan`, which installed the pinned `leanprover/lean4:v4.34.0`.
+This repository holds 86 `.lean` files. Twenty-four of them import nothing
+beyond Lean core; **23 of those 24 elaborate with no errors**, and twelve print
+`does not depend on any axioms` for every theorem they expose.
+
+| Where | Core-only | Elaborate |
+| --- | ---: | ---: |
+| Merged tree | 6 | 6 |
+| Design-round proposals `p1`–`p9` | 3 | 3 |
+| Extension proposals `e1`–`e9` | 10 | 10 |
+| Third round `r1`–`r9` | 3 | 2 |
+| Fourth round `s1`–`s9` | 2 | 2 |
+| **Total** | **24** | **23** |
+
+The three design-round proposal files are a late correction: every round's scan
+covered the merged tree and that round's own proposals, and no round went back
+over `p1`–`p9`'s own `lean/` directories. `p3/DesignAPI.lean`,
+`p6/Contracts.lean` and `p9/Structural.lean` import only `Lean` and all three
+elaborate — while each carries a header saying it was not compiled, which was
+true of its authoring environment and is false of this one.
+
+**A broken file that prints a clean axiom line.** `r8`'s file exits 1 with ten
+errors — and its last line of output is
+`'ForgeAP.prefix_bounded' does not depend on any axioms`. Lean recovers from
+parse errors and keeps going, so the `#print axioms` command on a declaration
+that did elaborate still ran. Any tool that greps for that phrase without
+checking the exit code reads this file as clean; this repository's own sweep
+script did, counting 13 files where 12 elaborated, which is how the case was
+found. **The figure quoted everywhere here is 12**, counting only files that
+also compiled.
+
+**Two files fail, not one.** `r8/RankTelescoping.lean` defines `prefix`, a
+reserved keyword. And `r6/FlowTargets.lean` puts a module docstring above its
+`import Mathlib`, which is a parse error in Lean 4 whether or not Mathlib is
+present — verified by a four-line reproduction using `import Init`. `r6`'s was
+missed by every earlier scan because it imports Mathlib and so sat in the
+never-checked bucket.
 
 **The candidate Lean shrank by a factor of thirty across four rounds.**
 
@@ -156,9 +187,9 @@ declaring its own cleanliness.
 word-boundary search, using a depth counter because Lean block comments nest.
 A token found only in prose is recorded as `sorry_token_in_comments_only`.
 
-**The audit that became possible.** Re-scanning all 88 Lean files across the
+**The audit that became possible.** Re-scanning all 86 Lean files across the
 four rounds and the merged tree: **none contains a real `sorry` or `sorryAx`.**
-All 22 occurrences of the token are authors stating that there are none. That
+All 25 occurrences of the token are authors stating that there are none. That
 is a better result than anyone claimed, and it could not have been established
 before, because the unfixed scanner could not distinguish the two cases. The
 earlier rounds' scans happened to be correct — none of the files they examined
@@ -201,13 +232,15 @@ empty.
 - It is not a transitive axiom audit. Where no `#print axioms` line exists, the
   file's dependencies are simply unknown; where one does, it covers that
   declaration and not the file.
-- It says nothing about the thirty-four Mathlib-dependent files across the four
-  rounds. Nothing has ever checked them.
+- It says nothing about the 48 files that import Mathlib directly or the 11
+  that import sibling modules. Nothing has ever checked any of those 59 — and
+  the one time this merge looked inside that bucket for a reason unrelated to
+  Mathlib, it found `r6`'s file, which cannot parse.
 - **An uncompiled file is worth what its author's care is worth.** Twenty-six
   proposals ship `.lean` files carrying `#print axioms` commands that were
   never executed. Two of the three that were finally compiled were fine; one
   was not. Before this round there was no way to tell those cases apart, and
-  for the thirty-four Mathlib-dependent files there still is not.
+  for the 59 Mathlib-dependent and sibling-importing files there still is not.
 - It does not establish that any certificate checker is correct. The contracts
   are *types*; a type is not a proof that an implementation satisfies it.
 - It is not a comparison against any Lean tactic. A hand-written example that

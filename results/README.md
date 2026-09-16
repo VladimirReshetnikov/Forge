@@ -140,16 +140,20 @@ proposals, three that this merge wrote by deduplicating those ten (the ten
 contained six spellings of one reachability theorem and five of one word-fold
 theorem), two of the third round's three, and both of the fourth round's two.
 
-**Twenty elaborate, one does not, and one scan of ours was wrong.** The third
-round's third core-only file defines `prefix`, a reserved keyword, and fails to
-parse; the diagnosis and a tested repair are recorded with it, and the archived
-source is left as delivered. Twelve of the twenty print `does not depend on any
-axioms` for every theorem they expose. Separately, this merge's own `sorry`
+**Twenty-three elaborate, two do not, and one scan of ours was wrong.** Of the
+24 files importing nothing beyond Lean core, 23 elaborate; twelve print `does
+not depend on any axioms` for every theorem they expose. The exception is the
+third round's third core-only file, which defines `prefix`, a reserved keyword.
+A sweep over all 86 files then found a second: `r6`'s `FlowTargets.lean` places
+a module docstring above its `import`, a parse error independent of Mathlib.
+Both diagnoses and a tested repair are recorded; the archived sources are left
+as delivered. Separately, this merge's own `sorry`
 scanner reported a file as defective because the file's header says it has no
-`sorry`; with that fixed, all 88 Lean files scan clean.
+`sorry`; with that fixed, all 86 Lean files scan clean.
 
 That is the whole claim. It is not an axiom audit, it says nothing about the
-thirty-four Mathlib-dependent files, it does not establish that any checker is
+48 Mathlib-importing and 11 sibling-importing files, it does not establish
+that any checker is
 correct, it is not a comparison against any tactic, and it does not change what
 any of those files says.
 

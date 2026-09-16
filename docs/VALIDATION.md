@@ -223,12 +223,15 @@ Three more from the extension round belong in the same list:
 | Merged article builds | pdfLaTeX, no errors, no undefined references or citations |
 | Core Lean elaboration, merged tree | 6 of 21 files, Lean v4.34.0, no errors |
 | Core Lean elaboration, extension round | 10 of 20 source files, no errors |
+| Core Lean elaboration, design-round proposals | 3 of 3 core-only files (never scanned before) |
 | Core Lean elaboration, third round | 2 of 3 core-only files; **1 fails to parse** |
 | Core Lean elaboration, fourth round | 2 of 2 files |
-| Theorems printing no axiom dependencies | 12 of the 20 elaborated files |
+| Core Lean elaboration, all rounds | **23 of 24** core-only files |
+| Mathlib-importing file that also fails to parse | **1** (`r6`), found by sweeping all 86 files |
+| Theorems printing no axiom dependencies | 12 of the 23 elaborated files |
 | Third-round suites re-run | 9 of 9 pass; 8 of 8 replay corpora return zero |
 | Fourth-round suites re-run | 8 of 8 existing suites pass; 7 of 7 replay corpora return zero |
-| **`sorry` audit, all 88 Lean files** | **0 real occurrences**; 22 mentions, all in comments denying them |
+| **`sorry` audit, all 86 Lean files** | **0 real occurrences**; 25 mentions, all in comments denying them |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine design-round runs; it is a timing field |

@@ -1160,6 +1160,29 @@ for the theorem below it, which never parsed. The mathematics is fine: renaming
 the definition on a scratch copy makes both theorems elaborate, depending on
 \code{propext} and \code{Quot.sound} by way of \code{omega} and \code{simp}.
 
+\begin{remark}[The broken file prints a clean axiom line]
+The last line \src{r8}'s file emits is
+\code{'ForgeAP.prefix\_bounded' does not depend on any axioms}.
+
+It exits~1 with ten errors above that line. Lean recovers from parse errors and
+keeps processing, so the \code{\#print axioms} command attached to a
+declaration that \emph{did} elaborate still ran and still printed. A reader who
+looks at the tail of that output, or any tool that greps for the phrase without
+checking the exit code, reads this file as clean.
+
+This document's own sweep script made exactly that mistake and counted thirteen
+files reporting no axiom dependencies where twelve elaborated --- which is how
+the case was found. It is the second tooling defect this merge discovered in
+itself, after the \code{sorry} scan, and it has the same shape: a substring
+taken as a verdict. The figure quoted everywhere in this document is twelve,
+counting only files that also compiled.
+
+The lesson is narrower than ``do not trust \code{\#print axioms}''. The
+command is sound; it reports on the declaration it was given. What carries no
+evidence is the \emph{line}, detached from the exit status of the file that
+produced it --- which is the form in which such lines usually travel.
+\end{remark}
+
 Nothing about this is a mathematical criticism of that proposal, and the repair
 was deliberately \emph{not} applied to the archived source --- the proposals
 are frozen as delivered, and the fix belongs in the merged tree if the lemma is
@@ -1168,6 +1191,38 @@ proposals had no way to discover: an uncompiled \code{.lean} file with an
 unexecuted \code{\#print axioms} command at the bottom carries exactly as much
 evidence as its author's care, and no more. Two of these three carried that
 care. One did not, and only a compiler could tell them apart.
+
+\subsubsection*{A second broken file, found only by sweeping everything}
+
+The table above covers the three core-only files, which is the set every
+round's scan looked at. A final sweep over \emph{all} eighty-six
+\code{.lean} files in the repository --- Mathlib-importing ones included, on
+the expectation that they would fail for want of Mathlib and could be dismissed
+as a class --- found one that fails for a different reason.
+
+\src{r6}'s \code{lean/FlowTargets.lean} opens with a module docstring and
+places \code{import Mathlib} on line~9, below it. In Lean~4 an \code{import}
+must precede everything, including a docstring, so the file stops at
+\code{invalid 'import' command, it must be used in the beginning of the file}.
+The error is at parse time and before import resolution, so Mathlib's absence
+is not the cause: a four-line file consisting of a docstring, \code{import
+Init} and a trivial theorem reproduces it exactly, and moving the import to the
+top makes that file elaborate. \src{r6}'s would parse under the same repair.
+
+So the count of delivered Lean a compiler has contradicted is \emph{two}, not
+one, and the two are different failures. \src{r8}'s is a core-only file that
+was expected to elaborate and did not. \src{r6}'s is a file nobody had ever
+tried, whose first four lines are wrong in a way that has nothing to do with
+its mathematics --- and whose own header states that it ``was not compiled in
+the creation environment,'' which is true, and which is why nobody found out.
+
+The asymmetry is the point. Forty-eight files import Mathlib and eleven import
+sibling modules; none of the fifty-nine has ever been checked by anything, and
+the one time this document looked inside that bucket for a reason unrelated to
+Mathlib, it found a file that cannot parse. That is one observation and not a
+basis for estimating how many others there are. It does establish that
+``fails because Mathlib is missing'' was an assumption about those files rather
+than a measurement of them.
 
 \begin{remark}[The two rounds also duplicated a lemma in Lean]
 \src{r7}'s \code{coupling\_left\_expectation} and \src{r8}'s
@@ -1194,9 +1249,9 @@ The harness now strips Lean comments before the search, with a depth counter
 because Lean block comments nest, and a token found only in prose is recorded
 as such rather than as a defect.
 
-Re-auditing all eighty-eight Lean files across the four rounds and the merged
+Re-auditing all eighty-six Lean files across the four rounds and the merged
 tree with the corrected scanner: \emph{none} contains a real \code{sorry} or
-\code{sorryAx}. All twenty-two occurrences of the token are authors stating
+\code{sorryAx}. All twenty-five occurrences of the token are authors stating
 that there are none. That is a better result than anyone claimed, and it could
 not have been established before, because the unfixed scanner could not tell
 the two cases apart.
@@ -1247,10 +1302,25 @@ twelve of their theorems print \emph{does not depend on any axioms}.}
 \label{tab:lean-closure}
 \end{table}
 
-Twenty files therefore elaborate in total: six in the merged tree, ten in the
-extension proposals, two of the third round's three and both of the fourth
-round's two, with twelve of the twenty reporting no axiom dependencies. The merged \code{Indexing.lean} inherits \src{e8}'s scope note
-verbatim rather than quietly widening it.
+Twenty-three files therefore elaborate: six in the merged tree, three in the
+design-round proposals, ten in the extension proposals, two of the third
+round's three and both of the fourth round's two. Twelve of the twenty-three
+report no axiom dependencies. The merged \code{Indexing.lean} inherits
+\src{e8}'s scope note verbatim rather than quietly widening it.
+
+The three design-round files are a late correction, and the reason they were
+missed is worth stating. Each round's scan looked at the merged tree and at
+that round's own proposals; no round went back over \src{p1}--\src{p9}'s own
+\code{lean/} directories. \src{p3}'s \code{DesignAPI.lean}, \src{p6}'s
+\code{Contracts.lean} and \src{p9}'s \code{Structural.lean} import only
+\code{Lean}, and all three elaborate. All three also carry a header declaring
+that they were not compiled --- \src{p9}'s says so in capitals --- which is
+true of their authoring environment and false of this one.
+
+That is twenty-three of the twenty-four files in this repository that import
+nothing beyond Lean core. The twenty-fourth is \src{r8}'s, below. Forty-eight
+more import Mathlib directly and eleven import sibling modules; nothing has
+ever checked any of those fifty-nine.
 
 \subsection{What the evidence establishes}
 
@@ -1261,11 +1331,12 @@ rejected; that several mechanisms solve problems their own restricted precursors
 cannot; that all nine extension suites re-run and reproduce their recorded
 counts on a different interpreter and different library versions; that all
 nine third-round suites and every round-four suite do the same and that their
-stored objects replay; and that twenty Lean artefacts --- three from the design
-round, ten from the extension round, three the merge wrote by deduplicating
-those ten, two from the third round and two from the fourth --- type-check
-under the pinned toolchain, twelve of them printing \emph{does not depend on
-any axioms} for every theorem they expose.
+stored objects replay; and that twenty-three Lean artefacts --- three design
+files in the merged tree, three more in the design-round proposals, ten from
+the extension round, three the merge wrote by deduplicating those ten, two from
+the third round and two from the fourth --- type-check under the pinned
+toolchain, twelve of them printing \emph{does not depend on any axioms} for
+every theorem they expose.
 
 It also establishes, for the first time, that a delivered Lean file did
 \emph{not} type-check --- and, separately, that a scan in this repository's own

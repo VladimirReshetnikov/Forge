@@ -119,11 +119,12 @@ homotopy; every stored certificate replays without the search libraries; the
 specified mutation and corruption tests are rejected; several mechanisms solve
 problems their own restricted precursors cannot; all twenty-six later suites
 re-run in a different environment and reproduce their recorded counts; and
-twenty Lean artefacts elaborate under the pinned v4.34.0 toolchain, twelve of
-them with no axiom dependencies.
+twenty-three Lean artefacts elaborate under the pinned v4.34.0 toolchain,
+twelve of them with no axiom dependencies.
 
 Not established: that \forge{} is implemented as a Lean tactic; that the
-thirty-four Mathlib-dependent candidate scripts compile; that any certificate
+fifty-nine Mathlib-dependent or sibling-importing candidate scripts compile;
+that any certificate
 is checked by Lean's kernel; that any checker is correct rather than merely
 tested; that the methods outperform any existing Lean tactic; or that any
 success rate transfers to user developments. No head-to-head comparison against
@@ -158,7 +159,7 @@ by one proposal, a compiler agreed with it, and the practice changed.
 The merge's own tooling also turned out to be wrong in the same area, and in
 the more embarrassing direction: its \code{sorry} scan reported a defect in a
 file whose only occurrence of the word was a sentence saying there were none.
-Fixing the scan and re-auditing all eighty-eight Lean files in the repository
+Fixing the scan and re-auditing all eighty-six Lean files in the repository
 establishes something better than anything claimed --- not one of them contains
 a real \code{sorry} --- and establishes it for the first time, because the
 unfixed scanner could not have told.
@@ -168,7 +169,7 @@ prototype experiments can close, and three further rounds are the evidence for
 that: twenty-seven more independent efforts, more certificates, more mutations,
 more proved theorems on paper --- and the Lean column reads \code{NOT\_RUN} in
 every one of the thirty-six source packages. Four rounds have produced roughly
-seven thousand lines of candidate Lean and twenty compiled files, every one of
+seven thousand lines of candidate Lean and twenty-three compiled files, every one of
 which was compiled here rather than by any author. The gap closes only by
 writing the Lean implementation described in Section~\ref{sec:integration} and
 running the evaluation described in Section~\ref{sec:evaluation}.

@@ -22,7 +22,7 @@
       "performed": true,
       "toolchain": "leanprover/lean4:v4.34.0",
       "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
-      "files_elaborated_total": 20,
+      "files_elaborated_total": 23,
       "merged_tree": {
         "files_total": 21,
         "files_elaborated": 6,
@@ -92,11 +92,33 @@
         }
       },
       "sorry_audit": {
-        "files_scanned": 88,
+        "files_scanned": 86,
         "real_sorry_or_sorryAx": 0,
-        "token_occurrences_in_comments_only": 22,
+        "token_occurrences_in_comments_only": 25,
         "scanner_defect_found_and_fixed": true,
         "scanner_defect": "the scan tested for the substring \"sorry\" in the raw file and reported a defect on a file whose only occurrence was its header sentence denying one"
+      },
+      "core_only_files_total": 24,
+      "files_failing": 2,
+      "failures": {
+        "r8-alternation-probability/lean/RankTelescoping.lean": "defines `prefix`, a reserved Lean 4 command keyword; ten cascading errors",
+        "r6-flow-ladders/lean/FlowTargets.lean": "module docstring placed above `import Mathlib`; Lean 4 requires imports to precede everything. Parse-time error, independent of Mathlib, confirmed by a four-line reproduction using `import Init`."
+      },
+      "design_round_proposal_files": {
+        "source_files_core_only": 3,
+        "files_elaborated": 3,
+        "files": [
+          "p3-planner-certificate-layer/lean/DesignAPI.lean",
+          "p6-proof-logging-cdcl/lean/Contracts.lean",
+          "p9-proof-planner/lean/Structural.lean"
+        ],
+        "note": "Never scanned before round four's final sweep. Each round's scan covered the merged tree and that round's own proposals; no round went back over p1-p9's own lean/ directories. All three carry a header declaring they were not compiled."
+      },
+      "never_checked_by_anything": {
+        "imports_mathlib_directly": 48,
+        "imports_sibling_modules": 11,
+        "total": 59,
+        "note": "The one time this merge looked inside this bucket for a reason unrelated to Mathlib, it found r6's file, which cannot parse. That is one observation, not a basis for estimating the rest."
       }
     },
     "one_proposal_shipped_no_lean_deliberately": "r9-infinite-horizon",

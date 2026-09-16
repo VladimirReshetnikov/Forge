@@ -2,7 +2,7 @@
 
 **A certificate-producing proof-planning layer above Lean's `grind`.**
 
-Start with **[`article/forge.pdf`](article/forge.pdf)** (145 pages). Its editable
+Start with **[`article/forge.pdf`](article/forge.pdf)** (146 pages). Its editable
 source is in [`article/`](article/).
 
 ---
@@ -109,10 +109,17 @@ homotopy (§15).
 All thirty-six proposals recorded their Lean status as `NOT_RUN`. This
 environment had `elan`, which installed the pinned
 `leanprover/lean4:v4.34.0`, so every file importing nothing beyond Lean core
-could be elaborated. **Twenty files elaborate** — six in the merged tree, ten
-across the extension proposals, two of the third round's three, and both of the
-fourth round's two — and twelve of them print `does not depend on any axioms`
-for every theorem they expose.
+could be elaborated. Twenty-four files import nothing beyond Lean core, and
+**23 of them elaborate** — six in the merged tree, three in the design-round
+proposals, ten across the extension proposals, two of the third round's three,
+and both of the fourth round's two. Twelve print `does not depend on any
+axioms` for every theorem they expose.
+
+The three design-round proposal files turned up late, and the reason is worth
+knowing: every round's scan looked at the merged tree and at that round's own
+proposals, and nobody went back over `p1`–`p9`'s own `lean/` directories. All
+three import only `Lean`, all three elaborate, and all three carry a header
+saying they were not compiled.
 
 **And one does not.** The third round's remaining core-only file fails to parse:
 it defines `prefix`, a reserved keyword in Lean 4, and all ten errors cascade
@@ -146,14 +153,20 @@ lemmas are kept and attributed. Recorded in
 and
 [`results/lean-closure-elaboration.json`](results/lean-closure-elaboration.json).
 
-That is twenty files of fifty-nine, with one more compiled and rejected.
+That is 23 of the 24 files that import nothing beyond Lean core. Forty-eight
+more import Mathlib directly and eleven import sibling modules; **nothing has
+ever checked any of those 59** — and the one time this merge looked inside that
+bucket for a reason unrelated to Mathlib, it found a second broken file. `r6`'s
+`FlowTargets.lean` puts a module docstring above its `import`, which Lean 4
+rejects at parse time whether or not Mathlib is present. So the count of
+delivered Lean a compiler has contradicted is two, not one.
 
 **And one defect in our own tooling.** The first round-four scan reported a file
 as containing a `sorry`. Its only occurrence of the token was the sentence in
 its own header saying there were none — the scanner tested for a substring and
 so reported exactly backwards. It now strips Lean comments first, with a depth
-counter because Lean block comments nest. Re-auditing **all 88 Lean files**
-finds **zero** real `sorry` or `sorryAx` anywhere in this repository; all 22
+counter because Lean block comments nest. Re-auditing **all 86 Lean files**
+finds **zero** real `sorry` or `sorryAx` anywhere in this repository; all 25
 occurrences are authors stating there are none. That is a better result than
 anyone claimed, and it could not have been established before, because the
 unfixed scanner could not tell the two cases apart. It is not an axiom audit, it does not
