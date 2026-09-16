@@ -591,6 +591,110 @@ what it established, and never silently replace equality of functions by
 equality of their counts.
 \end{remark}
 
+\subsection{Several recursive children at once}
+\label{sec:multilinear}
+\status{Implemented and tested in Python \src{r1}; no Lean discharge.}
+
+The observable closure of \S\ref{sec:obs-closure} reads a \emph{word}: one
+successor per step, one unary action per letter. A recursive definition with two
+recursive children does not fit, and the reason is not a missing feature but a
+different shape. Summarising a node means combining the summaries of several
+children, and the combining operation is multilinear rather than linear.
+
+\src{r1} takes that case. Fix a finite set of sorts $\mathcal S$, a rational
+vector space $V_s=\Q^{d_s}$ per sort, and operations
+\[
+ F_p:V_{s_1}\times\cdots\times V_{s_k}\longrightarrow V_s,
+\]
+multilinear in each argument, with $k=0$ permitted for constants. Let
+$\mathcal R_s$ be the set of values of well-sorted derivation trees of sort $s$
+and $W_s=\Span_\Q\mathcal R_s$. The goal is $q\,\eval{t}=0$ for every tree $t$
+of the target sort.
+
+The certificate is a basis matrix $B_s$ per sort with
+\begin{equation}\label{eq:multilinear}
+ F_p(B_{s_1}e_{i_1},\ldots,B_{s_k}e_{i_k})=B_s\,h_{p,\bm i},
+ \qquad qB_s=0,
+\end{equation}
+and the checker verifies these finite identities. Note what is quantified: one
+identity per operation \emph{and per tuple of basis indices}. The count is
+$\sum_p\prod_j r_{s_j}$, not one per operation.
+
+\begin{remark}[Partial coverage is unsound, and this is the whole difficulty]
+Checking $F(b_0,b_0)$ and $F(b_1,b_1)$ does \emph{not} establish closure for
+$F(b_0,b_1)$. A bilinear map is determined by its values on a basis \emph{pair}
+grid, and skipping the off-diagonal entries leaves the certificate proving
+nothing about the trees that mix children. There is no unary analogue of this
+obligation --- at $k=1$ it degenerates to ordinary linearity, which
+\S\ref{sec:obs-closure} uses implicitly and never has to state.
+\end{remark}
+
+\begin{theorem}[Multilinear coverage]\label{thm:multilinear}
+If \eqref{eq:multilinear} holds for every operation and every basis tuple, then
+$\eval{t}\in\operatorname{im}B_s$ for every well-sorted tree $t$ of sort $s$,
+and hence $q\,\eval{t}=0$ at the target sort.
+\end{theorem}
+\begin{proof}
+Induct on tree height. A nullary operation is covered by its own identity. For
+$F_p$ applied to children $t_1,\ldots,t_k$, the induction hypothesis puts each
+$\eval{t_j}$ in $\operatorname{im}B_{s_j}$, so $\eval{t_j}=B_{s_j}c_j$ for
+some coordinate vector $c_j$. Expanding each $c_j$ in the standard basis and
+using multilinearity in each argument separately writes
+$F_p(\eval{t_1},\ldots,\eval{t_k})$ as a linear combination of the values
+$F_p(B_{s_1}e_{i_1},\ldots,B_{s_k}e_{i_k})$, each of which is
+$B_s h_{p,\bm i}$ by hypothesis. The combination therefore lies in
+$\operatorname{im}B_s$. Conclude with $qB_s=0$.
+\end{proof}
+
+\paragraph{This is the dual of the word closure, not an instance of it.} The
+distinction is worth being exact about, because the two look interchangeable
+and are not. \S\ref{sec:obs-closure} closes a space of \emph{functionals} under
+pullback and certifies $Gs=0$ --- a condition on the state. This closes a space
+of \emph{values} under pushforward and certifies
+$\eval{t}\in\operatorname{im}B$ --- a membership condition. Specialise to one
+sort, one nullary, and every operation unary, and the two decide the same
+predicate with the same bound; they still do it from opposite sides, on
+different bases. The generalisation that genuinely contains
+\S\ref{sec:obs-closure} is the \emph{other} closure \src{r1} builds, below.
+
+\paragraph{The bound is on height, and does not transfer to length.} With
+$N=\sum_s d_s$, a false target has a counterexample derivation of height at
+most $N-1$. Height is not the size of the object: the recorded
+\code{exponential\_60} fixture has every sort of dimension one, $N=61$, and its
+counterexample is a $61$-node witness DAG denoting a tree of $2^{61}-1$ nodes
+whose terminal word has length $2^{60}$. The checker verifies it in $61$
+frontend checks.
+
+That is the same compression Section~\ref{sec:quantitative}'s pushdown lane
+exhibits with $31$ nodes for $2^{31}-1$ steps, and it carries the same
+obligation: the length is \emph{represented}, not executed. A DAG that denotes
+a large tree is evidence about that tree only if the denotation is checked, and
+both efforts check it by evaluating the DAG rather than by expanding it.
+
+\subsection{Quotients: removing what is reachable but invisible}
+\label{sec:quotient}
+
+Forward closure removes directions no tree can reach. It does not remove
+directions that are reached but make no difference to the observation, and for
+those the backward direction is needed. For a unary system that is exactly
+\S\ref{sec:obs-closure} run from $qB_s$. For a $k$-ary constructor it is not,
+because the influence of one child depends on the values of its siblings: every
+pullback is indexed by the chosen hole \emph{and} by the tuple of sibling basis
+values.
+
+Closing under those one-hole contexts yields a subspace whose quotient is an
+exact observable summary --- the smallest state the observation can be computed
+in --- verified by finite commuting diagrams rather than by testing trees. The
+recorded fixture reduces a noisy five-coordinate tree summary to two observable
+coordinates.
+
+This is the first quotient construction in the document. Everything earlier
+either finds an invariant or exhibits a counterexample; nothing earlier
+\emph{changes the state space}. It is worth one caution, which the effort
+supplies: a quotient certifies that observations are preserved. It does not
+certify that the original target is true, and a plain enclosure makes no target
+claim at all. Those are three different results and the worker returns them as
+three different constructors.
 \subsection{Summation certificates with moving support}
 \label{sec:summation}
 \status{Implemented and tested in Python by four independent efforts.}
@@ -1013,6 +1117,34 @@ table, and the small cover checker suffice, with budgets in state discoveries, t
 evaluations, table size and certificate size. State-product blow-up is the real
 structural limit, and the prototype's transition-evaluation cutoff is a research
 safeguard, not hardening against hostile table sizes.
+
+\subsection{Two things this closure does not extend to}
+
+The ideal closure above is stated for a deterministic update, and both of its
+natural-looking generalisations fail --- one soundly and one unsoundly, which
+is the more dangerous pair.
+
+\paragraph{Expectation breaks the rule, not just the proof.} The construction
+works because pullback along an update is a \emph{ring homomorphism}:
+$(pq)\circ T=(p\circ T)(q\circ T)$. That identity is what licenses multiplying
+a certificate through by a polynomial multiplier, which is the whole mechanism.
+Replace the deterministic update by a probabilistic one and the natural move is
+to replace pullback by expectation --- and expectation is not multiplicative.
+A worker that keeps this rule's shape while transporting moments would certify
+false statements about products of correlated quantities. The remedy, and the
+reason this is flagged here rather than only in
+Section~\ref{sec:quantitative}, is that the two operations must not share an
+interface: see Invariant~\ref{inv:moment} \src{r7}.
+
+\paragraph{Finite words do not reach an infinite horizon.} A weighted-word
+identity says something about products along finite words, and no quantity of
+such identities establishes that an infinite-horizon limit takes the claimed
+boundary value. The harmonic equation $u=Pu$ is satisfied by the answer and by
+many non-answers; a single self-loop is enough. What closes the gap is a
+separate \emph{properness witness}, and Section~\ref{sec:quantitative}
+supplies it \src{r9}. This failure is sound rather than unsound --- the
+closure proves what it proves --- but a reader who expects the value to follow
+will be disappointed, and the obligation is easy to leave implicit.
 
 \subsection{What a counterexample here actually refutes}
 

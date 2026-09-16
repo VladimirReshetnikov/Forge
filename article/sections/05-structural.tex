@@ -858,6 +858,7 @@ with exhaustive, proved branch conditions --- never on the assumption that
 finitely many sampled regions cover the domain.
 
 \subsubsection*{Affine witnesses with Farkas multipliers}
+\label{sec:affine-witness}
 \status{Implemented and tested in Python.}
 
 Let the input domain be the rational polyhedron $g(x)=Ax+b\ge0$ and the target
@@ -1167,6 +1168,45 @@ violating $C$ is evidence only after the domain hypothesis has been checked and
 the projection equivalence replayed --- a raw solver model for an unrelated
 abstraction refutes nothing about the original goal.
 
+\subsubsection*{The same construction over an ordered field}
+\status{Implemented and tested in Python \src{r3}; no Lean discharge.}
+
+The projection above is over $\Z$, and its difficulty is arithmetic:
+divisibility, B\'ezout receipts, a period. Over an ordered field the arithmetic
+difficulty vanishes and a different one takes its place --- \emph{strictness}.
+
+The fragment is a conjunction of affine constraints, mixing $\le$ and $<$, with
+one or more real outputs. Eliminating an output is Fourier--Motzkin: pair every
+lower bound with every upper bound. The witness is then a midpoint, and the two
+facts that make this work are that a midpoint exists between any two distinct
+rationals --- so no analogue of the integer period is needed --- and that
+mixing a strict with a non-strict bound yields a strict pair, which the
+bookkeeping must track rather than round away.
+
+Three things distinguish this from the affine-template witnesses of
+\S\ref{sec:affine-witness}, and the first is the reason the worker exists at
+all. Some valid linear specifications have \emph{no affine witness}. Spending
+more search time on a coefficient template cannot repair that; the specification
+is satisfiable at every parameter value, but no single affine function of the
+parameters works. The recorded impossibility example is
+$\max(0,x+y-1)$ --- a four-corner obstruction, where the four vertices force
+four inconsistent affine constraints on any candidate.
+
+The witness is therefore not an affine expression but a \emph{$\min/\max$ DAG}
+over affine leaves, shared across outputs. Second, elimination is run in both
+directions and the receipt records \emph{complete pair coverage}: a checker
+that confirms only the pairs the search happened to use would accept a witness
+valid on part of the region. Third, the negative result is a genuine semantic
+object --- a rational parameter value satisfying the domain under which no
+output exists at all --- rather than an exhausted search.
+
+\begin{remark}[Midpoint reconstruction is not an integer operation]
+This worker does not subsume the integer one, and the effort says so plainly.
+The midpoint of two integers need not be an integer, and the whole
+B\'ezout/CRT apparatus of the previous subsection exists because over $\Z$
+there is no such move. The two workers cover ordered fields and the integers
+respectively; neither is the other's special case.
+\end{remark}
 \subsubsection*{Polynomial witnesses certified by nonnegativity}
 \status{Implemented and tested in Python.}
 
@@ -1521,6 +1561,34 @@ about one fixed current value cannot be silently generalised to $H(n)$ for all
 $n$. Printed variable names do not identify a telescope, and an
 alpha-normalised goal body alone does not determine which hypotheses may travel
 to a recursive call.
+
+\subsubsection*{Where this compiler is the wrong shape}
+
+Two later efforts found the same limitation from opposite directions, and it is
+a limitation of the \emph{criterion}, not of the search.
+
+A winning strategy for a recurrence condition --- visit the good set infinitely
+often --- produces plays that are correct \emph{and} infinite. No globally
+strictly decreasing measure exists along such a play, because there cannot be
+one. Insisting on well-founded descent everywhere therefore rejects a correct
+proof, and no amount of additional ranking grammar repairs that. The fix is a
+rank that decreases locally and is permitted to \emph{reset} on the good set,
+which is what Section~\ref{sec:quantitative}'s parity and B\"uchi certificates
+carry \src{r8, r9}.
+
+The probabilistic case fails for a different reason with the same conclusion. A
+loop can terminate with probability one while individual executions increase
+any given measure; demanding a pointwise decrease demands something false. The
+correct local obligation is a decrease \emph{in expectation}, and it must be
+routed to the polynomial machinery of Section~\ref{sec:nonlinear} in that form
+rather than as the stronger pointwise condition \src{r8}.
+
+Neither observation invalidates what this subsection builds. Well-founded
+descent on a tagged state remains the right compilation for a terminating
+recursive obligation, which is what it was introduced for. What both efforts
+establish is that the obligation graph must be able to \emph{route away} from
+it, and that a failure to find a global rank is not evidence that the recursion
+is unsound.
 
 \subsubsection*{The recorded outcomes}
 
