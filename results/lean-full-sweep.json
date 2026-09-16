@@ -844,5 +844,10 @@
     "last_stdout_line": "'ForgeAP.prefix_bounded' does not depend on any axioms",
     "why": "Lean recovers from parse errors and continues, so the `#print axioms` command for a declaration that did elaborate still ran and printed. The ten errors are above it in the same stream.",
     "consequence": "A `does not depend on any axioms` line is not evidence that the file compiled. Any tool that greps for the phrase without checking the exit code will read this file as clean. This repository's own sweep script did exactly that, which is how the case was found."
+  },
+  "superseded_by": {
+    "file": "results/lean-inventory.json",
+    "tool": "tools/lean_inventory.py",
+    "why": "This record was produced by an ad-hoc sweep and its dependency counting was not transitive: it split 48 direct-Mathlib from 11 sibling-importing files and filed the second group with the unchecked. A file importing a sibling that is itself Mathlib-free is Mathlib-free. Regenerate the live figures with the tool; what is kept here is the failure diagnoses and the list of corrections this sweep produced, which are history rather than counts."
   }
 }
