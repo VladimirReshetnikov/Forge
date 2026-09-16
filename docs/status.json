@@ -22,7 +22,7 @@
       "performed": true,
       "toolchain": "leanprover/lean4:v4.34.0",
       "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
-      "files_elaborated_total": 23,
+      "files_elaborated_total": 27,
       "merged_tree": {
         "files_total": 21,
         "files_elaborated": 6,
@@ -98,7 +98,6 @@
         "scanner_defect_found_and_fixed": true,
         "scanner_defect": "the scan tested for the substring \"sorry\" in the raw file and reported a defect on a file whose only occurrence was its header sentence denying one"
       },
-      "core_only_files_total": 24,
       "files_failing": 2,
       "failures": {
         "r8-alternation-probability/lean/RankTelescoping.lean": "defines `prefix`, a reserved Lean 4 command keyword; ten cascading errors",
@@ -115,11 +114,12 @@
         "note": "Never scanned before round four's final sweep. Each round's scan covered the merged tree and that round's own proposals; no round went back over p1-p9's own lean/ directories. All three carry a header declaring they were not compiled."
       },
       "never_checked_by_anything": {
-        "imports_mathlib_directly": 48,
-        "imports_sibling_modules": 11,
-        "total": 59,
-        "note": "The one time this merge looked inside this bucket for a reason unrelated to Mathlib, it found r6's file, which cannot parse. That is one observation, not a basis for estimating the rest."
-      }
+        "mathlib_dependent": 58,
+        "lakefiles": 3,
+        "note": "Nothing has ever checked the 58. The one time this merge looked inside that bucket for a reason unrelated to Mathlib, it found r6's file, which cannot parse. That is one observation, not a basis for estimating the rest."
+      },
+      "mathlib_free_files_total": 28,
+      "dependency_counting": "TRANSITIVE. A file importing a sibling that is itself Mathlib-free is Mathlib-free. Earlier figures split 48 direct-Mathlib from 11 sibling-importing and filed the second group with the unchecked, which understated what is checkable."
     },
     "one_proposal_shipped_no_lean_deliberately": "r9-infinite-horizon",
     "all_thirty_six_original_runs": "NOT_RUN",
@@ -388,5 +388,41 @@
       "shared_result_stored_once": "the three-element mutual-exclusion antichain that s1, s3 and s4 each computed independently",
       "standard_library_only_including_search": true
     }
+  },
+  "lean_checker": {
+    "status": "IMPLEMENTED_AND_CHECKED",
+    "what": "A sum-of-squares / cone certificate checker with a proved soundness theorem, and the prototype's own certificates run through it and accepted by the Lean kernel.",
+    "location": "lean/Forge/Checker/",
+    "files": [
+      "Poly.lean",
+      "Cone.lean",
+      "Corpus.lean"
+    ],
+    "lean_version": "leanprover/lean4:v4.34.0",
+    "mathlib_required": false,
+    "theorem": "Cert.sound : c.check p ineqs eqs = true -> (forall g in ineqs, 0 <= eval x g) -> (forall f in eqs, eval x f = 0) -> 0 <= eval x p",
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "uses_native_decide": false,
+    "checked_by": "kernel reduction via `decide`",
+    "certificates_accepted": 3,
+    "certificate_source": "prototype/results/certificates.json, families \"Quadratic SOS\" and \"Finite cone LP\"",
+    "exporter": "tools/export_lean_cone.py",
+    "record": "results/lean-cone-corpus.json",
+    "forgecore_builds_as_a_library": true,
+    "proved": [
+      "soundness of the checker",
+      "evaluation is a ring homomorphism",
+      "isZero decides identical vanishing"
+    ],
+    "not_proved": [
+      "completeness -- nothing says a certificate exists for a given problem",
+      "that `eval` is the right semantics for `Poly`; that is a definition",
+      "anything about the other twelve certificate families",
+      "anything over the reals -- Env assigns integers, and lifting the conclusion to an ordered field needs Mathlib"
+    ],
+    "is_not": "a tactic. Applying a certificate is a generated `have` plus `simp`/`omega`, not automation that finds the certificate."
   }
 }

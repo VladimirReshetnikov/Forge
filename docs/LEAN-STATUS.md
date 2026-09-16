@@ -9,24 +9,45 @@ frozen under `proposals/<slug>/results/` and `proposals/<slug>/lean/`.
 **No proposal compiled any Lean.** All thirty-six recorded `NOT_RUN` for the
 same reason: no `lean` or `lake` executable in the authoring environment.
 Consequently none performed a kernel check, an axiom audit, or any comparison
-against a Lean tactic. One of them — `r9` — responded by shipping no Lean at
+against a Lean tactic. All three of those have now been done here, for one
+certificate family — see **The checker** below. One of them — `r9` — responded by shipping no Lean at
 all, saying it "deliberately contains no placeholder theorem files presented as
 implemented proofs".
 
-**This merge compiled twenty-three files, and two others failed.** The merge
+**Three of these files are now a checker rather than a specimen.** Until this
+point every Lean file in this repository stated what a checker would have to
+prove. `Forge/Checker/{Poly,Cone,Corpus}.lean` is one: a total `Bool`-valued
+`Cert.check`, a proof `Cert.sound` that accepting implies the polynomial really
+is nonnegative on the constrained set, and the prototype's own certificates run
+through it and accepted by the Lean kernel. Core Lean only; `decide`, not
+`native_decide`; `propext` and `Quot.sound` and nothing else.
+
+`ForgeCore` also now **builds as a library** — nine modules with real imports —
+rather than only elaborating file by file.
+
+**This merge compiled twenty-seven files, and two others failed.** The merge
 environment has `elan`, which installed the pinned `leanprover/lean4:v4.34.0`.
-This repository holds 86 `.lean` files. Twenty-four of them import nothing
-beyond Lean core; **23 of those 24 elaborate with no errors**, and twelve print
+This repository holds 89 `.lean` files. **28 of them are Mathlib-free** — not
+merely free of a direct `import Mathlib`, but free of one anywhere in their
+dependency cone — and **27 of those 28 elaborate with no errors**. Twelve print
 `does not depend on any axioms` for every theorem they expose.
 
-| Where | Core-only | Elaborate |
+| Where | Mathlib-free | Elaborate |
 | --- | ---: | ---: |
-| Merged tree | 6 | 6 |
+| Merged tree (incl. the `ForgeCore` root) | 7 | 7 |
+| **`Forge.Checker` (new)** | **3** | **3** |
 | Design-round proposals `p1`–`p9` | 3 | 3 |
 | Extension proposals `e1`–`e9` | 10 | 10 |
 | Third round `r1`–`r9` | 3 | 2 |
 | Fourth round `s1`–`s9` | 2 | 2 |
-| **Total** | **24** | **23** |
+| **Total** | **28** | **27** |
+
+The transitive reading matters and the earlier figures did not use it. They
+counted 48 files as importing Mathlib directly and 11 as importing a sibling,
+and filed the second group with the unchecked. But a file importing a sibling
+that is itself Mathlib-free is Mathlib-free: `Forge/Checker/Cone.lean` imports
+`Forge/Checker/Poly.lean` and nothing else. Transitively the split is 28
+Mathlib-free, 58 Mathlib-dependent, 3 lakefiles.
 
 The three design-round proposal files are a late correction: every round's scan
 covered the merged tree and that round's own proposals, and no round went back
@@ -165,6 +186,45 @@ the merged tree if and when the lemma is adopted. Recording the failure, the
 diagnosis and the tested repair together is what keeps a later reader from
 mistaking "did not compile" for "is unsound" — or for "compiles".
 
+### The checker
+
+`Forge/Checker/` is the first thing in this repository that is a checker rather
+than a description of one.
+
+| File | Status |
+| --- | --- |
+| `Forge/Checker/Poly.lean` | elaborates; no axioms beyond `propext`, `Quot.sound` |
+| `Forge/Checker/Cone.lean` | elaborates; `Cert.sound` proved |
+| `Forge/Checker/Corpus.lean` | elaborates; generated, 3 real certificates accepted |
+
+**What is proved.**
+
+```lean
+theorem Cert.sound (c : Cert) (p : Poly) (ineqs eqs : List Poly)
+    (hcheck : c.check p ineqs eqs = true) (x : Env)
+    (hge : ∀ g ∈ ineqs, 0 ≤ eval x g)
+    (hz  : ∀ f ∈ eqs,   eval x f = 0) : 0 ≤ eval x p
+```
+
+The certificate asserts a polynomial *identity*, `D·p = Σ wᵢ(Π gₖ^eᵢₖ)qᵢ² + Σ hⱼfⱼ`
+with `D > 0` and `wᵢ ≥ 0`. Identity is stronger than agreement at any finite set
+of points, which is why the conclusion can quantify over every assignment.
+Underneath, `Poly.lean` proves evaluation is a ring homomorphism and that
+`isZero` decides identical vanishing.
+
+**What is not proved.** Completeness — nothing says a certificate exists for any
+given problem. And soundness is relative to `eval` being the right semantics for
+`Poly`, which is a definition rather than a theorem; a reader should look at it.
+
+**Scope.** `Env` assigns *integers* to variables, so this establishes
+nonnegativity at integer points. The identity holds in every commutative ring;
+lifting the conclusion to ℝ needs an ordered field and therefore Mathlib, and is
+therefore exactly the kind of file this repository has never been able to check.
+
+**Why core-only.** Because 58 of the 89 files here depend on Mathlib and none
+of them has ever been checked by anything. A checker in that bucket would have
+been one more uncompiled claim.
+
 ### The fourth round
 
 Recorded in
@@ -232,15 +292,14 @@ empty.
 - It is not a transitive axiom audit. Where no `#print axioms` line exists, the
   file's dependencies are simply unknown; where one does, it covers that
   declaration and not the file.
-- It says nothing about the 48 files that import Mathlib directly or the 11
-  that import sibling modules. Nothing has ever checked any of those 59 — and
-  the one time this merge looked inside that bucket for a reason unrelated to
-  Mathlib, it found `r6`'s file, which cannot parse.
+- It says nothing about the 58 files that depend on Mathlib. Nothing has ever
+  checked any of them — and the one time this merge looked inside that bucket
+  for a reason unrelated to Mathlib, it found `r6`'s file, which cannot parse.
 - **An uncompiled file is worth what its author's care is worth.** Twenty-six
   proposals ship `.lean` files carrying `#print axioms` commands that were
   never executed. Two of the three that were finally compiled were fine; one
   was not. Before this round there was no way to tell those cases apart, and
-  for the 59 Mathlib-dependent and sibling-importing files there still is not.
+  for the 58 Mathlib-dependent files there still is not.
 - It does not establish that any certificate checker is correct. The contracts
   are *types*; a type is not a proof that an implementation satisfies it.
 - It is not a comparison against any Lean tactic. A hand-written example that

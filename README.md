@@ -21,19 +21,39 @@ Alongside the design are Python prototypes of its central algorithms, the
 certificates they produced, and the recorded evidence of thirty-six separate
 runs.
 
+And, new, **one certificate family implemented in Lean end to end**: a checker,
+a proof that the checker is sound, and the prototype's own certificates run
+through it and accepted by the Lean kernel. See
+[`lean/Forge/Checker/`](lean/Forge/Checker/). It is a small part of the design.
+It is the part that is no longer a proposal.
+
 ## What this is not
 
 **`forge` is not an implemented Lean tactic.** Nothing here installs one.
+`Forge.Checker` is a checker with a soundness proof, which is a different and
+smaller thing: applying a certificate to a goal is a generated `have` and a
+`simp`/`omega`, not automation that finds the certificate for you.
 
 None of the thirty-six contributing efforts had a Lean executable available;
 none of them compiled any Lean source, and none measured any comparison against
 `grind`, Aesop, `nlinarith`, LeanHammer, or any other tactic. No speedup and no
-solved-goal gain is claimed anywhere.
+solved-goal gain was claimed anywhere in them.
+
+That is still the right description of the **proposals**. It is no longer the
+description of this repository: `Forge.Checker` compiles, its soundness theorem
+is proved, and the comparison against `grind` and `nlinarith` has now been run.
+What that comparison showed is in
+[`lean/Forge/Checker/README.md`](lean/Forge/Checker/README.md) and §18 of the
+article --- and it is a comparison on a handful of problems, not a benchmark.
 
 The Python checkers are research code. They are not formally verified, they
 share representation code with the searches they audit, and they are not
 hardened against hostile input. **A passing Python check is not a Lean-kernel
-proof.**
+proof.** The one exception is the cone family: those certificates are now
+re-checked by the Lean kernel in
+[`lean/Forge/Checker/Corpus.lean`](lean/Forge/Checker/Corpus.lean), by
+`decide` rather than `native_decide`, so nothing there rests on the compiler.
+The other twelve families are Python-checked only.
 
 A bounded search that finds nothing returns **unknown**. It never means the
 statement is false.
@@ -109,8 +129,8 @@ homotopy (§15).
 All thirty-six proposals recorded their Lean status as `NOT_RUN`. This
 environment had `elan`, which installed the pinned
 `leanprover/lean4:v4.34.0`, so every file importing nothing beyond Lean core
-could be elaborated. Twenty-four files import nothing beyond Lean core, and
-**23 of them elaborate** — six in the merged tree, three in the design-round
+could be elaborated. Twenty-eight files are Mathlib-free, and
+**27 of them elaborate** — six in the merged tree, three in the design-round
 proposals, ten across the extension proposals, two of the third round's three,
 and both of the fourth round's two. Twelve print `does not depend on any
 axioms` for every theorem they expose.
@@ -153,13 +173,14 @@ lemmas are kept and attributed. Recorded in
 and
 [`results/lean-closure-elaboration.json`](results/lean-closure-elaboration.json).
 
-That is 23 of the 24 files that import nothing beyond Lean core. Forty-eight
-more import Mathlib directly and eleven import sibling modules; **nothing has
-ever checked any of those 59** — and the one time this merge looked inside that
-bucket for a reason unrelated to Mathlib, it found a second broken file. `r6`'s
-`FlowTargets.lean` puts a module docstring above its `import`, which Lean 4
-rejects at parse time whether or not Mathlib is present. So the count of
-delivered Lean a compiler has contradicted is two, not one.
+That is 27 of the 28 Mathlib-free files — counting transitively, so a file
+importing a sibling that is itself Mathlib-free counts as Mathlib-free. The
+other 58 depend on Mathlib and **nothing has ever checked any of them** — and
+the one time this merge looked inside that bucket for a reason unrelated to
+Mathlib, it found a second broken file. `r6`'s `FlowTargets.lean` puts a module
+docstring above its `import`, which Lean 4 rejects at parse time whether or not
+Mathlib is present. So the count of delivered Lean a compiler has contradicted
+is two, not one.
 
 **And one defect in our own tooling.** The first round-four scan reported a file
 as containing a `sorry`. Its only occurrence of the token was the sentence in

@@ -174,6 +174,60 @@ which was compiled here rather than by any author. The gap closes only by
 writing the Lean implementation described in Section~\ref{sec:integration} and
 running the evaluation described in Section~\ref{sec:evaluation}.
 
+\subsection{One certificate family, closed}
+
+That last sentence stood unanswered for four rounds. It is now partly answered,
+for one family, and the size of what was required is the most useful thing to
+report.
+
+\code{Forge.Checker} is a checker for cone certificates --- sums of squares,
+products of the inequality constraints, and equality multipliers --- together
+with a proof that accepting one establishes the claim:
+
+\begin{quote}\small\ttfamily
+Cert.sound : c.check p ineqs eqs = true $\to$\\
+\hphantom{Cert.sound : }($\forall$ g $\in$ ineqs, 0 $\le$ eval x g) $\to$
+($\forall$ f $\in$ eqs, eval x f = 0) $\to$\\
+\hphantom{Cert.sound : }0 $\le$ eval x p
+\end{quote}
+
+\code{check} is a total Boolean function performing no search. The theorem
+quantifies over every assignment rather than any tested set, and says nothing
+about provenance: a certificate found by search, written by hand, or produced
+adversarially faces the same check. Underneath it, evaluation is proved to be a
+ring homomorphism and the zero test is proved to decide identical vanishing ---
+which is the lemma the whole thing rests on, since a certificate asserts an
+\emph{identity}, and identity is stronger than agreement anywhere finite.
+
+The prototype's own three cone certificates are exported, cleared of
+denominators, and accepted by the Lean kernel through \code{decide} rather than
+\code{native\_decide}, so nothing rests on the compiler. Every theorem depends
+on \code{propext} and \code{Quot.sound} and nothing else. \code{ForgeCore}
+now builds as a library rather than elaborating file by file.
+
+Three things are worth saying about what this did and did not require.
+
+\emph{It is core Lean only, and that was the binding constraint.} Fifty-eight of
+this repository's eighty-nine Lean files depend on Mathlib and not one of them
+has ever been checked by anything. A checker in that bucket would have been one
+more uncompiled claim, so there is no \code{ring} and no \code{nlinarith} here;
+coefficients are integers because \code{Int} is in core and \code{Rat}'s
+lemmas are not. Clearing denominators is a change of representation, not a
+weakening: every multiplier introduced is positive, so the constraint hypotheses
+transfer exactly.
+
+\emph{The encoding is not the statement.} A theorem about
+\code{eval x target} for a \code{Poly} literal is not a goal anyone would
+type. Each certificate therefore gets a second, generated theorem in ordinary
+arithmetic. Without that bridge the checker proves things about its own data
+structure, which is a different and much less useful achievement --- and the
+distance between the two is small but not zero.
+
+\emph{It is a checker, not a tactic.} Applying a certificate is a generated
+\code{have} and a \code{simp}; nothing here searches. The honest description
+of what now exists is one rung of the ladder in
+Section~\ref{sec:integration}, not the ladder.
+
 What has changed across the rounds is not the gap but the honesty about it. The
 first round shipped three thousand lines of Lean that had never met a compiler
 and said little about that. The fourth shipped ninety-eight lines and a set of

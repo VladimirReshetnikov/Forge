@@ -226,7 +226,9 @@ Three more from the extension round belong in the same list:
 | Core Lean elaboration, design-round proposals | 3 of 3 core-only files (never scanned before) |
 | Core Lean elaboration, third round | 2 of 3 core-only files; **1 fails to parse** |
 | Core Lean elaboration, fourth round | 2 of 2 files |
-| Core Lean elaboration, all rounds | **23 of 24** core-only files |
+| Core Lean elaboration, all rounds | **27 of 28** Mathlib-free files (transitively) |
+| **`Forge.Checker` soundness proved** | **yes** — `Cert.sound`, `propext` + `Quot.sound` only |
+| **Prototype certificates checked by the Lean kernel** | **3 of 3** cone certificates, via `decide` |
 | Mathlib-importing file that also fails to parse | **1** (`r6`), found by sweeping all 86 files |
 | Theorems printing no axiom dependencies | 12 of the 23 elaborated files |
 | Third-round suites re-run | 9 of 9 pass; 8 of 8 replay corpora return zero |

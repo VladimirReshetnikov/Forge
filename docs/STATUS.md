@@ -138,12 +138,17 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exceptions.** Twenty-four files import nothing beyond Lean core, and
-**23 of them elaborate** against `leanprover/lean4:v4.34.0`: six in the merged
-tree, three in the design-round proposals, ten across the extension proposals,
-two of the third round's three, and both of the fourth round's two. Twelve of
-the twenty-three print `does not depend on any axioms` for every theorem they
+**The exceptions.** Twenty-eight files are Mathlib-free, and **27 of them
+elaborate** against `leanprover/lean4:v4.34.0`: seven in the merged tree, three
+in the new `Forge.Checker`, three in the design-round proposals, ten across the
+extension proposals, two of the third round's three, and both of the fourth
+round's two. Twelve print `does not depend on any axioms` for every theorem they
 expose.
+
+**And one of them is no longer a specimen.** `Forge.Checker` is a certificate
+checker with a proved soundness theorem, and the prototype's own cone
+certificates are accepted by the Lean kernel through it. That is the one item
+on this page that moved from proposed to implemented.
 
 **And two files that do not compile.** The third round's third core-only file
 defines `prefix`, a reserved keyword. And `r6`'s `FlowTargets.lean` places a
