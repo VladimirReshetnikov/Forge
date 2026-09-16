@@ -1,0 +1,83 @@
+\section{Artifact guide and source provenance}
+\label{app:artifacts}
+
+\subsection{What is in the archive}
+\begin{longtable}{@{}p{0.42\textwidth}p{0.52\textwidth}@{}}
+\toprule
+Path & Purpose \\
+\midrule\endhead
+\path{article/forge-extensions.tex} & Main editable source for this report \\
+\path{article/sections/} & Technical sections and artifact guide \\
+\path{article/forge-extensions.pdf} & Rendered report \\
+\path{prototype/forge_delta/poly_search.py} & Exact mixed Fourier--Motzkin search and lifting \\
+\path{prototype/forge_delta/poly_check.py} & Independent projection and contradiction replay \\
+\path{prototype/forge_delta/poly_witness.py} & Checked schedule to shared min--max expression graph \\
+\path{prototype/forge_delta/nc_search.py} & Traced bounded noncommutative completion \\
+\path{prototype/forge_delta/nc_check.py} & Direct original-relation identity checker \\
+\path{prototype/forge_delta/analytic_search.py} & Elementary enclosures, subdivision, jets, automatic selector \\
+\path{prototype/forge_delta/analytic_check.py} & Independent domain, derivative, enclosure, and coverage replay \\
+\path{prototype/run_experiments.py} & Deterministic generators, controls, and measurements \\
+\path{prototype/verify.py} & Replay with search imports prohibited \\
+\path{prototype/tests/} & Unit tests and independent exact oracles \\
+\path{prototype/discover_jets.py} & Overlapping automatic-jet search-profile experiment \\
+\path{prototype/numerical_crosscheck.py} & Optional numerical sanity checks, outside acceptance \\
+\path{results/} & Problems, certificates, measurements, mutation outcomes, and execution logs \\
+\path{lean/} & Uncompiled source-level specimens and composition lemmas \\
+\path{docs/STATUS.md} & Implementation and acceptance ledger \\
+\path{docs/sources.json} & Revision pins, reviewed source paths, and external references \\
+\bottomrule
+\end{longtable}
+
+The archive contains newly authored material, not copies of the eighteen earlier submissions or their PDFs. No font files or third-party package source are redistributed. The referenced projects retain their own licensing terms.
+
+\subsection{Running the supplied code}
+From the extracted archive:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+cd prototype
+python -S -m unittest discover -s tests -v
+python -S verify.py
+python -S verify.py ../results/jet-discovery.json
+python -S run_experiments.py --out reproduced-results
+python -S discover_jets.py --out reproduced-jets.json
+
+# Optional, outside proof acceptance:
+python -m pip install mpmath
+python numerical_crosscheck.py --out numerical-crosscheck.json
+\end{lstlisting}
+\end{minipage}\par
+The reference environment used Python 3.13.5. The code uses ordinary modern Python features and exact \code{fractions.Fraction}; other versions should be tested rather than assumed bit-for-bit identical. No third-party package is required for search or replay.
+
+To build the article with a reasonably complete TeX Live or MiKTeX installation:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-extensions.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-extensions.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-extensions.tex
+\end{lstlisting}
+\end{minipage}\par
+The font packages are standard TeX packages; there is no shell escape, bibliography tool, or font-file download step in the build.
+
+\subsection{Pinned repositories and reviewed surfaces}
+\begin{description}[style=nextline,leftmargin=1.5em]
+\item[Forge]
+\path{c98e47c5f804e92880fc1d0e378c1b95832b685c}.
+Reviewed README, implementation status, provenance, consolidated witness and nonlinear sections, Leant/Djex transfer document, and runtime contract. The repository records a Lean v4.34.0 baseline and Mathlib revision
+\path{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
+\item[Leant]
+\path{6bf05ad78c467989e68290f2d08bbed40802d485}.
+Reviewed README and its current synthesis scope/priorities. This is contextual evidence for the adapter design, not a new test of Leant's historical acceptance ledger.
+\item[Djex]
+\path{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}.
+Reviewed the canonical rank-N document's opening rules and scope account. No Djex build or synthesis suite was run in this study.
+\end{description}
+
+The Mathlib and external-library documentation was viewed on 15 September 2026. Those are live documentation surfaces, not a claim that every displayed API was tested at Forge's pinned Mathlib revision. Exact porting work should use the pin, compile the adapter, and record any necessary signature changes. The source manifest distinguishes repository snapshots from live documentation for that reason.
+
+\subsection{Reproduction and interpretation notes}
+The entry points named \code{prove} are untrusted proposers. Their status tags are meaningful only with the externally supplied problem and the appropriate checker; they do not construct a Lean proof object. Unknown outcomes are stored for audit and are intentionally rejected by certificate replay.
+
+The diagnostic Lean-style expression emitted for the corner witness is a presentation artifact. Its existence is not evidence that a Lean elaborator accepted it. The same applies to the hand-written files in \code{lean/}. Their headers state their uncompiled status, and they introduce no substitute \code{sorry}-based acceptance path.
+
+The preserved results contain the final successful execution of the deterministic suite and the independent replay logs. During preparation, additional mutation cases and the automatic jet profile were added as separate validation increments. There was no failed full-suite run whose result was converted into a successful claim. Future reproductions should preserve failures alongside their command line and environment rather than overwrite them with a later success.

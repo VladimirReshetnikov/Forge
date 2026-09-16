@@ -1,0 +1,119 @@
+{
+  "access_date": "2026-09-15",
+  "audit_scope": "Targeted review of consolidated design/status and selected neighboring-project documentation; not an exhaustive line-by-line review of all archived proposals.",
+  "repositories": [
+    {
+      "name": "Forge",
+      "revision": "c98e47c5f804e92880fc1d0e378c1b95832b685c",
+      "baseline_lean": "leanprover/lean4:v4.34.0",
+      "baseline_mathlib": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+      "surfaces": [
+        {
+          "path": "README.md",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/README.md"
+        },
+        {
+          "path": "docs/STATUS.md",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/docs/STATUS.md"
+        },
+        {
+          "path": "docs/IDEAS-FROM-LEANT-DJEX.md",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/docs/IDEAS-FROM-LEANT-DJEX.md"
+        },
+        {
+          "path": "article/sections/B-provenance.tex",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/article/sections/B-provenance.tex"
+        },
+        {
+          "path": "article/sections/05-structural.tex",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/article/sections/05-structural.tex"
+        },
+        {
+          "path": "article/sections/07-nonlinear.tex",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/article/sections/07-nonlinear.tex"
+        },
+        {
+          "path": "lean/Forge/Design/Runtime.lean",
+          "url": "https://github.com/VladimirReshetnikov/Forge/blob/c98e47c5f804e92880fc1d0e378c1b95832b685c/lean/Forge/Design/Runtime.lean"
+        }
+      ]
+    },
+    {
+      "name": "Leant",
+      "revision": "6bf05ad78c467989e68290f2d08bbed40802d485",
+      "surfaces": [
+        {
+          "path": "README.md",
+          "url": "https://github.com/VladimirReshetnikov/Leant/blob/6bf05ad78c467989e68290f2d08bbed40802d485/README.md"
+        }
+      ]
+    },
+    {
+      "name": "Djex",
+      "revision": "e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5",
+      "surfaces": [
+        {
+          "path": "docs/rank-n.md",
+          "url": "https://github.com/VladimirReshetnikov/Djex/blob/e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5/docs/rank-n.md",
+          "reviewed_lines": [
+            1,
+            160
+          ]
+        }
+      ]
+    }
+  ],
+  "external_sources": [
+    {
+      "title": "Lean grind manual",
+      "url": "https://lean-lang.org/doc/reference/latest/The--grind--tactic/",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Liepins, Fourier-Motzkin elimination for mixed systems",
+      "url": "https://digital.library.unt.edu/ark:/67531/metadc1099248/",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Bergman, Diamond Lemma author page",
+      "url": "https://math.berkeley.edu/~gbergman/papers/updates/diamond.html",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "GBNP trace functions",
+      "url": "https://gap-packages.github.io/gbnp/doc/chap3.html",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Mathlib noncomm_ring",
+      "url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/NoncommRing.html",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Mathlib FreeAlgebra basis",
+      "url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/LinearAlgebra/FreeAlgebra.html",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Solovyev-Hales Taylor interval verification",
+      "url": "https://arxiv.org/abs/1301.1702",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Rocq Interval",
+      "url": "https://coqinterval.gitlabpages.inria.fr/",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "Mathlib Taylor",
+      "url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/Calculus/Taylor.html",
+      "kind": "live primary-source documentation or original research record"
+    },
+    {
+      "title": "python-flint Arb",
+      "url": "https://python-flint.readthedocs.io/en/latest/arb.html",
+      "kind": "live primary-source documentation or original research record"
+    }
+  ],
+  "version_caveat": "Live Mathlib documentation was consulted for integration targets, not compiled at the pinned baseline."
+}

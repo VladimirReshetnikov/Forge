@@ -1,0 +1,105 @@
+{
+  "seed": 2026091503,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "dependency_policy": "Python standard library; authoring command used python -S",
+  "lean_status": "NOT_RUN: no Lean executable available",
+  "families": [
+    {
+      "family": "commuting",
+      "queries": 30,
+      "positive_certificates": 15,
+      "matrix_countermodels": 15,
+      "oracle_disagreements": 0,
+      "max_countermodel_dimension": 10,
+      "seconds": 0.1791753710000421
+    },
+    {
+      "family": "monomial",
+      "queries": 30,
+      "positive_certificates": 15,
+      "matrix_countermodels": 15,
+      "oracle_disagreements": 0,
+      "max_countermodel_dimension": 10,
+      "seconds": 0.18238960700000462
+    },
+    {
+      "family": "exterior",
+      "queries": 30,
+      "positive_certificates": 15,
+      "matrix_countermodels": 15,
+      "oracle_disagreements": 0,
+      "max_countermodel_dimension": 8,
+      "seconds": 0.21218721299999288
+    },
+    {
+      "family": "homogeneous_gram",
+      "queries": 40,
+      "positive_certificates": 20,
+      "outside_homogeneous_square_cone": 20,
+      "oracle_disagreements": 0,
+      "seconds": 0.015032249000000775
+    },
+    {
+      "family": "worked_examples",
+      "queries": 9,
+      "positive_certificates": 9,
+      "seconds": 0.04571326199993564
+    }
+  ],
+  "ablation": [
+    {
+      "atoms": 3,
+      "bound": 4,
+      "full_seconds": 0.002919239999982892,
+      "full_rank": 86,
+      "full_selected": 102,
+      "full_certificate_terms": 3,
+      "sliced_seconds": 0.00014373800001976633,
+      "sliced_rank": 3,
+      "sliced_selected": 3,
+      "sliced_certificate_terms": 3,
+      "columns_assembled": 102
+    },
+    {
+      "atoms": 4,
+      "bound": 4,
+      "full_seconds": 0.024138937999964583,
+      "full_rank": 271,
+      "full_selected": 342,
+      "full_certificate_terms": 3,
+      "sliced_seconds": 0.00034743599997000274,
+      "sliced_rank": 3,
+      "sliced_selected": 3,
+      "sliced_certificate_terms": 3,
+      "columns_assembled": 342
+    },
+    {
+      "atoms": 5,
+      "bound": 4,
+      "full_seconds": 0.13939133600001696,
+      "full_rank": 655,
+      "full_selected": 860,
+      "full_certificate_terms": 3,
+      "sliced_seconds": 0.0007588390000137224,
+      "sliced_rank": 3,
+      "sliced_selected": 3,
+      "sliced_certificate_terms": 3,
+      "columns_assembled": 860
+    },
+    {
+      "atoms": 6,
+      "bound": 4,
+      "full_seconds": 0.5724570349999567,
+      "full_rank": 1345,
+      "full_selected": 1815,
+      "full_certificate_terms": 3,
+      "sliced_seconds": 0.0016018150000718379,
+      "sliced_rank": 3,
+      "sliced_selected": 3,
+      "sliced_certificate_terms": 3,
+      "columns_assembled": 1815
+    }
+  ],
+  "stored_evidence_objects": 119
+}

@@ -1,0 +1,42 @@
+{
+  "basis": {
+    "S": [
+      [
+        "1",
+        "0",
+        "0",
+        "1"
+      ]
+    ]
+  },
+  "closures": [
+    {
+      "children": [],
+      "coeff": [
+        "1"
+      ],
+      "op": 0
+    },
+    {
+      "children": [
+        0
+      ],
+      "coeff": [
+        "1"
+      ],
+      "op": 1
+    },
+    {
+      "children": [
+        0,
+        0
+      ],
+      "coeff": [
+        "1"
+      ],
+      "op": 2
+    }
+  ],
+  "kind": "invariant",
+  "schema": "forge.mlc.certificate.v1"
+}

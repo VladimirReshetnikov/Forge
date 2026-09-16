@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "pdf_pages": 31,
+  "pdf_rendering": "31 pages rendered at 100 dpi; all inspected in contact sheets; integration page inspected full size",
+  "latex_overfull_boxes": 0,
+  "latex_undefined_references": 0,
+  "text_outside_page": [],
+  "commands": [
+    {
+      "command": "-S -m unittest discover -s tests -v",
+      "return_code": 0,
+      "stdout": "",
+      "stderr": "test_adversary_edge_may_not_be_dropped (test_regressions.RegressionTests.test_adversary_edge_may_not_be_dropped) ... ok\ntest_dependent_coupling_beats_independent_product (test_regressions.RegressionTests.test_dependent_coupling_beats_independent_product) ... ok\ntest_geometric_retry_has_finite_mean_but_infinite_path (test_regressions.RegressionTests.test_geometric_retry_has_finite_mean_but_infinite_path) ... ok\ntest_infinite_good_cycle_needs_no_global_descent (test_regressions.RegressionTests.test_infinite_good_cycle_needs_no_global_descent) ... ok\ntest_optimal_defect_has_positive_dual (test_regressions.RegressionTests.test_optimal_defect_has_positive_dual) ... ok\ntest_priority_seen_once_does_not_win (test_regressions.RegressionTests.test_priority_seen_once_does_not_win) ... ok\ntest_probability_mass_must_be_exact (test_regressions.RegressionTests.test_probability_mass_must_be_exact) ... ok\ntest_responder_may_depend_on_challenger_action (test_regressions.RegressionTests.test_responder_may_depend_on_challenger_action) ... ok\ntest_simulation_negative_is_not_trace_inequality (test_regressions.RegressionTests.test_simulation_negative_is_not_trace_inequality) ... ok\ntest_strict_json_boundary (test_regressions.RegressionTests.test_strict_json_boundary) ... ok\ntest_terminal_semantics_cannot_be_silently_repaired (test_regressions.RegressionTests.test_terminal_semantics_cannot_be_silently_repaired) ... ok\ntest_universal_not_existential_scheduler (test_regressions.RegressionTests.test_universal_not_existential_scheduler) ... ok\ntest_unreachable_trap_is_not_a_refutation (test_regressions.RegressionTests.test_unreachable_trap_is_not_a_refutation) ... ok\ntest_zero_potential_cannot_ignore_time_cost (test_regressions.RegressionTests.test_zero_potential_cannot_ignore_time_cost) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.002s\n\nOK\n"
+    },
+    {
+      "command": "-S replay.py ../results/full/corpus.json",
+      "return_code": 0,
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"records_by_kind\": {\n    \"parity\": 884,\n    \"transport\": 400,\n    \"mdp\": 180,\n    \"simulation\": 100\n  },\n  \"search_imports\": \"FORBIDDEN\",\n  \"site_packages_enabled\": false,\n  \"elapsed_seconds\": 0.06958031899989692,\n  \"lean_kernel_checked\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": "-S replay.py ../results/examples/corpus.json",
+      "return_code": 0,
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"records_by_kind\": {\n    \"parity\": 2,\n    \"transport\": 4,\n    \"mdp\": 2,\n    \"simulation\": 1\n  },\n  \"search_imports\": \"FORBIDDEN\",\n  \"site_packages_enabled\": false,\n  \"elapsed_seconds\": 0.0007371730000613752,\n  \"lean_kernel_checked\": false\n}\n",
+      "stderr": ""
+    }
+  ],
+  "lean_kernel_checks": "NOT_RUN"
+}

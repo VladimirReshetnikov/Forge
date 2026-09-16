@@ -1,0 +1,44 @@
+\section{An implementation sequence with falsifiable release gates}
+\label{sec:roadmap}
+
+\subsection{Gate 1: promote exact polyhedral receipts to Lean theorems}
+The first deliverable should not be a broad \forge{} command with a long list of unsupported options. It should be a small command or tactic that replays one explicit polyhedral certificate against a source goal. Prove the row-combination theorem, strictness propagation, complete one-variable lifting, and reverse-schedule witness correctness. Connect the source reifier only after those theorems exist.
+
+The acceptance examples must include the non-affine four-corner specification, at least one simultaneous-output specification, open intervals, touching extrema with nonactive strict bounds, an empty domain, and a genuine source-level counterexample. The negative gate must explicitly exclude counterexamples to lossy atom abstractions. A solution that proves only the closed non-strict one-output fragment does not close this gate.
+
+Once replay works, connect the current Python producer or an in-process equivalent. The proof-producing boundary should accept the same problem and certificate regardless of which search backend proposed it. Before replacing the deterministic pivot order, preserve its results as a regression profile.
+
+\subsection{Gate 2: noncommutative certificates before completion in Lean}
+Start with a hand-supplied certificate in the form \eqref{eq:nc-cert}. Prove the sparse polynomial evaluator correct and show that every contextual original-relation term vanishes. A successful kernel replay should not depend on trusting a claim that the returned rules are a Gr\"obner basis.
+
+The acceptance gate includes \eqref{eq:nc-small}, Weyl and Clifford specimens, a noncommuting left/right context mutation, a nonzero rational coefficient mutation, and a changed target. It must also demonstrate that a nonzero remainder returns no proof of disequality. Then attach the Python completion worker; an optional GBNP adapter can be added without changing the checker theorem.
+
+Large flattened receipts should be measured before implementing a DAG format. If proof construction rather than search becomes the bottleneck, preserve sharing at the certificate layer and prove the DAG interpreter once. The optimization must not replace original relation indices with unaudited derived-rule names.
+
+\subsection{Gate 3: analytic atoms, then exact jets}
+Prove one elementary atom family at a time. A useful order is rational interval operations, exponential and logarithm bounds, trigonometric bounds, expression denotation, derivative correctness, then the jet constructor. The domain checker should be in place before algebraic simplification is admitted at the source boundary.
+
+The gate is not closed by a source proof that calls a preexisting theorem for \(e^x\ge1+x\) while bypassing the new certificate. Such a proof is a valid theorem but does not validate the proposed checker. The accepted result must replay the same series orders, interval tree, and vanishing conditions that the worker emitted. Conversely, the baseline comparison should be allowed to use ordinary library lemmas, so it does not artificially hide existing automation.
+
+At least one zero-containing inequality must be proved by the automatic selector, not only by a manually supplied jet order. A sign-changing odd-power control, a false inequality, a missing analytic domain, a coverage gap, and an inexact anchor-zero claim must be rejected. The initial gate is univariate; multivariate Taylor models are a separate release criterion.
+
+\subsection{Gate 4: composition through the obligation broker}
+The witness-plus-exponential example in Section~\ref{sec:integration} should become an end-to-end test: source reification, polyhedral synthesis, domain propagation, analytic replay, and final conjunction assembly. Every accepted result must close the original source goal, not a weakened linear projection of it.
+
+For Leant/Djex integration, select a source-owned scalar contract and retain its binder telescope through witness extraction and term reconstruction. A generated body that checks only after changing the selected type, erasing a dictionary, or introducing an undeclared variable is a failure of the adapter, even if the body looks mathematically plausible.
+
+This gate should include cancellation and worker failure. A timed-out producer may return \unknown{}, but it must not leave a partially accepted lemma in the context. Existing Forge scope and admission machinery should enforce that behavior; there is no need to invent a second trust protocol for the three new workers.
+
+\subsection{Evaluation that would justify a stronger claim}
+The next corpus should separate four questions: how often the reifier accepts the intended fragment, how often the producer finds a certificate within its budget, how often reconstruction succeeds, and how much kernel work the resulting proof requires. A single solved/unsolved bit hides the most informative failures.
+
+For polyhedral synthesis, hold out coefficient patterns and dependency graphs, not merely new scalar multiples of the corner example. Include exact comparisons with an independent polyhedral backend and cases that force several nested extrema. For noncommutative search, vary presentation, generator order, overlap depth, and coefficient growth; report completion growth and proof size separately. For analytic search, separate strictly positive goals, exact-zero goals, domain failures, and large-argument range-reduction cases.
+
+A fair Lean comparison should record a local baseline portfolio, each new worker alone, the full cooperative configuration, and relevant ablations. It should include source reification, search, proof construction, and kernel checking in separate timing fields. Any timeout policy, supplied lemma set, and hint configuration should be identical where the comparison intends to isolate a mechanism.
+
+None of these corpus-level claims is established by the present synthetic workloads. What the present study supplies is a concrete implementation and certificate basis on which such evaluation can be built.
+
+\subsection{Recommended scope decision}
+The most valuable immediate addition is constructive polyhedral projection: it replaces an incomplete witness grammar with a complete algorithm for a clearly delimited but useful fragment. Noncommutative completion comes next because its proof object is exceptionally simple relative to the power of its search. The analytic worker should follow with a narrow, fully proved atom library and exact jets before a larger catalog of functions.
+
+Together they extend Forge along three different axes without replacing its existing strengths. They construct witnesses its affine templates cannot express, discover algebraic consequences its initial rewrite set may not expose, and establish analytic inequalities outside its polynomial fragment while respecting exact zeros. The mathematical rules, executable prototypes, and recorded failures-to-prove all fit the same design principle already present in Forge: make a useful search result small enough that a much simpler checker can justify exactly what it means.

@@ -1,0 +1,92 @@
+{
+  "status": "PASS",
+  "examples": [
+    {
+      "id": "parity-infinite-good-cycle",
+      "winner_of_both_vertices": 0
+    },
+    {
+      "id": "parity-good-priority-only-once",
+      "winner_of_both_vertices": 1
+    },
+    {
+      "id": "coupled-fair-bits",
+      "optimal_defect": [
+        0,
+        1
+      ],
+      "independent_product_defect": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "monotone-bernoulli",
+      "optimal_defect": [
+        0,
+        1
+      ],
+      "independent_product_defect": [
+        1,
+        9
+      ]
+    },
+    {
+      "id": "impossible-perfect-monotone-coupling",
+      "optimal_defect": [
+        1,
+        3
+      ],
+      "independent_product_defect": [
+        4,
+        9
+      ]
+    },
+    {
+      "id": "two-coins-versus-binomial",
+      "optimal_defect": [
+        0,
+        1
+      ],
+      "independent_product_defect": [
+        5,
+        8
+      ]
+    },
+    {
+      "id": "adversarial-geometric-retry",
+      "exact_worst_expectation": [
+        4,
+        1
+      ],
+      "tight_action": 1
+    },
+    {
+      "id": "good-policy-is-not-universal-termination",
+      "nontermination_probability_lower": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "forall-source-action-exists-target-action",
+      "survivors": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "target_action_table": [
+        0,
+        1,
+        0,
+        1
+      ]
+    }
+  ],
+  "lean": "NOT_RUN"
+}

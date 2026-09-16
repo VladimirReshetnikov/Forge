@@ -1,0 +1,61 @@
+COMPRESSED PUSHDOWN RUN (length computed from DAG, not expanded)
+{
+  "dag_nodes": 31,
+  "expanded_steps": 2147483647,
+  "outcome": "reachable"
+}
+
+UNBOUNDED STACKS, UNREACHABLE TARGET
+{
+  "outcome": "unreachable",
+  "summaries": 1
+}
+
+EXIT CONTROLLED BY PROTAGONIST
+{
+  "max_rank": 1,
+  "outcome": "winning",
+  "region_size": 2
+}
+
+EXIT CONTROLLED BY ANTAGONIST
+{
+  "max_rank": 0,
+  "outcome": "losing",
+  "region_size": 1
+}
+
+RANDOM EXIT: ALMOST-SURE ABSORPTION IS NOT EVERY-PATH TERMINATION
+{
+  "expected_cost": {
+    "rational": [
+      6,
+      1
+    ]
+  },
+  "expected_terminal_payoff": {
+    "rational": [
+      1,
+      1
+    ]
+  },
+  "expected_time": {
+    "rational": [
+      4,
+      1
+    ]
+  },
+  "outcome": "almost_sure"
+}
+
+POSITIVE-PROBABILITY TRAP
+{
+  "failure_probability_lower_bound": {
+    "rational": [
+      1,
+      3
+    ]
+  },
+  "outcome": "not_almost_sure"
+}
+

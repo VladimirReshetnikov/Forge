@@ -1,0 +1,189 @@
+\section{A concrete Lean implementation plan}
+\label{sec:implementation}
+
+\subsection{New modules, not a replacement for the existing controller}
+The proposed namespace is \code{Forge.Horizon}; it is a design namespace, not
+an existing repository API. The existing \forge{} controller should route an
+accepted semantic contract to one of these modules and receive an ordinary
+proved consequence. Local equality and arithmetic reasoning can remain with
+\code{grind}; this proposal does not require rewriting its saturation engine
+\cite{grind}.
+
+\begin{longtable}{@{}p{0.34\textwidth}p{0.60\textwidth}@{}}
+\toprule
+Proposed module & Concrete responsibility \\
+\midrule\endhead
+\code{Horizon/Pushdown/Semantics} & Define configurations, top-first rules, finite runs, and the suffix-lifting theorem. \\
+\code{Horizon/Pushdown/Check} & Check productive DAGs and closed exclusions; prove the two semantic soundness theorems. \\
+\code{Horizon/Pushdown/}\newline\code{RegularTarget} & Define the one-way DFA monitor and prove both directions of the target reduction. \\
+\code{Horizon/Buchi/Semantics} & Define total turn-based arenas, positional policies, consistent infinite plays, and recurrent acceptance. \\
+\code{Horizon/Buchi/Check} & Check winning and losing ranks; prove recurrence and bounded accepting-visit count. \\
+\code{Horizon/Markov/Finite} & Define rational stochastic matrices and exact finite execution distributions. \\
+\code{Horizon/Markov/Check} & Check properness, cost and payoff residuals, and closed-class path certificates. \\
+\code{Horizon/Markov/Probability} & Relate finite distributions and their limits to PMFs, kernels, and hitting-time semantics. \\
+\code{Horizon/Bridge} & Keep reachability, positive-game, negative-game and probability refinement obligations distinct. \\
+\code{Horizon/Elab} & Recognize supported goals, quote data, invoke search, replay, and apply a source bridge. \\
+\bottomrule
+\end{longtable}
+
+The corresponding Python implementation already separates
+\code{pushdown.py}, \code{games.py}, and \code{markov.py} from
+\code{checkers.py}. Only the latter needs a direct semantic port for the first
+Lean checker milestone; the Python searches may remain untrusted helpers.
+The complete standard-library source is included, rather than a dependency on
+an unavailable external service.
+
+\subsection{The exact theorems to implement first}
+Here is specification notation for the proposed APIs. The names are new, and
+this listing is not claimed to be compiled Lean syntax:
+\begin{lstlisting}[caption={Required soundness contracts, with the original model supplied independently.}]
+checkPopDAG p cert = true
+  -> ReachEmpty p p.start p.stack p.finals
+
+checkPopExclusion p cert = true
+  -> not (ReachEmpty p p.start p.stack p.finals)
+
+checkBuchiWin g start cert = true
+  -> exists policy,
+       forall play, ConsistentPlay g policy start play
+         -> forall N, exists n >= N, Accepting g (play n)
+
+checkBuchiLose g start cert = true
+  -> exists counterpolicy,
+       forall play, ConsistentCounterplay g counterpolicy start play
+         -> AcceptingVisitCount play <= cert.rank[start]
+
+checkAbsorption p cert = true
+  -> FiniteHorizonIdentitiesAndBounds p cert
+
+checkClosedClass p cert = true
+  -> NonterminationProbability p >= PositivePathMass p cert.path
+\end{lstlisting}
+
+The last two require a deliberate staging choice. The matrix checker and
+finite-horizon bounds can be formalized with rational finite sums first. The
+path-probability statement requires the probability semantics. Its theorem
+must not be introduced as an unproved axiom to make the early prototype appear
+complete. The published state of each theorem should say whether it is
+specified, proved on paper, implemented in Lean, elaborated, and exercised by
+an end-to-end source example.
+
+For the game checker, the central reusable lemma is even smaller than the
+finite arena: if a sequence $x_n$ has a natural rank strictly decreasing
+whenever $B(x_n)$ is false, then $B(x_n)$ holds infinitely often. A second lemma
+sums the co-B\"uchi inequalities. The finite checker need only establish the
+local hypotheses and closure. This makes the game worker a particularly good
+first formalization despite its infinite-play conclusion.
+
+\subsection{Quoting a certificate without expanding its witness}
+The generated Lean artifact should define the typed model and certificate as
+separate constants, prove a concrete Boolean check by kernel reduction or other
+ordinary proof-producing computation, invoke the general soundness theorem,
+and then apply the source bridge. Conceptually:
+\begin{lstlisting}
+private def model : EncodedArena := ...
+private def cert : WinCertificate model := ...
+private theorem replay : checkWin model cert = true := by
+  decide
+
+private theorem model_result := checkWin_sound model cert replay
+
+theorem original_goal := source_bridge model_result
+\end{lstlisting}
+This is a deployment template, not a source file reported as compiled. The
+exact type parameters and declaration syntax should be settled in the pinned
+Lean project. In particular, a Boolean evaluation outside Lean is not a proof
+of the displayed replay equation. No new oracle axiom or native-evaluation
+shortcut is part of the proposed acceptance path.
+
+For pushdown positives, preserve node sharing. A generic soundness proof for a
+DAG array can induct over its indices and retain semantic summaries, instead
+of expanding recursive child trees into an explicit run. A final existential
+reachability theorem does not normally need the concrete transition list to
+be normalized. If the application explicitly asks to print that list, its
+exponential output size is unavoidable and must be reported rather than hidden
+behind a ``fast proof'' claim.
+
+For game strategies, the source realizer must produce an executable function
+with the required policy behavior. A finite table can be quoted as a total
+function on finite indices, with arbitrary legal choices outside the winning
+region. The source theorem is restricted to starts in the region. For Markov
+certificates, clear denominator normalizations in a controlled way and prove
+the exact rational identities; do not make a decimal pretty-printer part of
+the authoritative path.
+
+\subsection{Libraries and what they would actually do}
+\begin{longtable}{@{}p{0.26\textwidth}p{0.68\textwidth}@{}}
+\toprule
+Library or facility & Proposed role and boundary \\
+\midrule\endhead
+Lean core and Mathlib finite data & \code{Nat}, \code{Fin}, arrays, finite sets, finite sums, and rational arithmetic support the small checkers. Search remains separate; finite data types alone are not checker soundness proofs. \\
+\code{Mathlib.}\newline\code{Computability.DFA} & Reuse DFA evaluation and accepted-language definitions for the regular-target bridge. The inspected definition permits arbitrary state types, so the adapter must also supply finiteness. \\
+Mathlib PMFs and their monad & Give semantics to discrete randomized source programs and compose transition distributions; prove the matrix pushforward equation. \\
+Mathlib probability kernels and Ionescu--Tulcea trajectory modules & Build or connect to infinite trajectory semantics when the source goal uses path measures or hitting times. These are integration dependencies, not a ready-made absorption checker. \\
+FLINT \code{fmpq_mat_solve} & Replace the dense Fraction solve with an exact rational search backend. Returned values still face the same residual checker. \\
+Storm & Optional search and model-analysis backend for larger probabilistic instances. Use an exact-preserving input/export route and replay against the source-owned rational matrix. \\
+Spot & Optional future temporal-monitor producer. Its LTL/$\omega$-automata functionality does not imply that an arbitrary exported acceptance condition fits the B\"uchi checker. Translation and acceptance conversion need their own theorems. \\
+\bottomrule
+\end{longtable}
+
+The DFA module was inspected at Forge's pinned Mathlib commit
+\code{1cf325a0cf67}; its top-first word scan is
+convenient for the monitor bridge \cite{mathlib-dfa}. The other library paths
+are documented integration points \cite{mathlib-pmf,mathlib-kernel,
+mathlib-traj,flint,storm,spot}, not a claim that a particular collection of
+imports has been built here. The delivered prototypes require none of those
+external search libraries.
+
+Using a heavyweight temporal tool should come after the small B\"uchi lane is
+working. A deterministic monitor produced from a formula may have a parity or
+other acceptance condition, not the one accepted by this worker. Silently
+dropping acceptance colors is not a conversion. The finite round-robin product
+in Section~\ref{sec:games} is a concrete, much smaller next feature.
+
+\subsection{A router driven by proof obligations}
+The first router should require explicit registration of a semantic contract.
+For example, a source lemma can register an empty-stack reachability encoding,
+a game bridge with its initial state and accepting predicate, or an exact
+finite probabilistic quotient. Routing then consists of checking the contract's
+fragment conditions, quoting finite data, and selecting the corresponding
+worker. It should not infer a game from a graph while guessing ownership, or a
+probabilistic chain from numerical weights while guessing normalization.
+
+The returned object can be useful even when it does not finish the entire
+source theorem. A pushdown nonreachability fact may discharge one branch of an
+inductive safety proof. A game strategy can supply an existential function and
+its temporal law. An absorption certificate may prove an exact expected-cost
+lemma needed by a larger inequality. These are ordinary proved intermediate
+facts, so the existing controller can use them without a new global proof
+language.
+
+Relevant resource estimates are available before search: $n^2a$ potential
+pushdown summaries, $n+m$ entries in a game certificate, and the transient
+matrix dimension and rational bit lengths in a chain. They should control
+admission and replay budgets separately. The shipped searches are mathematically
+terminating on finite valid inputs, but do not implement a hardened service
+scheduler. Resource interruption must return no verdict rather than being
+interpreted as a negative certificate.
+
+\subsection{Interface examples, with unsupported features made visible}
+A future syntax could expose contracts rather than solver switches:
+\begin{lstlisting}
+forge using pushdown_contract
+forge using recurrent_strategy_contract
+forge using exact_probability_contract
+\end{lstlisting}
+These are proposed front-end forms, not commands installed by this package.
+Each contract should determine the model, target and bridge. A diagnostic can
+say ``no regular-target bridge was provided,'' ``the arena has a deadlock,''
+``an opponent action is missing from the abstraction,'' or ``the probability
+rows contain floats.'' Such diagnostics identify a missing semantic obligation
+instead of suggesting that increasing search depth would solve a translation
+error.
+
+Initial support should be for fixed finite models and fixed rational
+parameters. A theorem quantified over an arbitrary probability $p>0$ may be
+handled later by a symbolic family theorem, but it is not covered by repeatedly
+running the finite rational solver at a few sample values. The same restriction
+applies to arbitrary symbolic stack-frame data and games with an unbounded
+number of players or states.

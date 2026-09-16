@@ -1,0 +1,100 @@
+{
+  "environment": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "site_packages_disabled": true
+  },
+  "seed": 20260915,
+  "recorded_certificates": 284,
+  "categories": {
+    "boundary-zero": 25,
+    "named": 8,
+    "auxiliary-factors": 4,
+    "compact-cover": 4,
+    "random-eventual-sign": 240,
+    "growth-witness": 2,
+    "counterexample": 1
+  },
+  "all_replayed": true,
+  "ghost_ablation": [
+    {
+      "epsilon": "1",
+      "native": "unknown",
+      "extra_factors": 4,
+      "beta": "-4",
+      "total_factors": 7
+    },
+    {
+      "epsilon": "1/2",
+      "native": "unknown",
+      "extra_factors": 7,
+      "beta": "-8",
+      "total_factors": 10
+    },
+    {
+      "epsilon": "1/4",
+      "native": "unknown",
+      "extra_factors": 13,
+      "beta": "-16",
+      "total_factors": 16
+    },
+    {
+      "epsilon": "1/16",
+      "native": "unknown",
+      "extra_factors": 46,
+      "beta": "-64",
+      "total_factors": 49
+    }
+  ],
+  "growth_anchor_attempts": [
+    {
+      "anchor": 0,
+      "accepted": false
+    },
+    {
+      "anchor": 1,
+      "accepted": false
+    },
+    {
+      "anchor": 2,
+      "accepted": false
+    },
+    {
+      "anchor": 4,
+      "accepted": false
+    },
+    {
+      "anchor": 8,
+      "accepted": false
+    },
+    {
+      "anchor": 16,
+      "accepted": false
+    },
+    {
+      "anchor": 32,
+      "accepted": true
+    }
+  ],
+  "order_ablation": {
+    "cases": 200,
+    "distinct_orders_checked": 14409,
+    "canonical_acceptances": 44,
+    "mismatches": 0
+  },
+  "unknown_controls": [
+    {
+      "id": "interior_zero",
+      "outcome": "unknown",
+      "reason": "bounded ghost search; mathematical obstruction proved in article"
+    },
+    {
+      "id": "interval_at_boundary_zero",
+      "outcome": "unknown",
+      "max_depth": 14
+    }
+  ],
+  "elapsed_seconds": 0.9774623470000279,
+  "lean_status": "NOT_RUN: no Lean executable installed in execution environment",
+  "comparison_with_grind": "NOT_RUN"
+}

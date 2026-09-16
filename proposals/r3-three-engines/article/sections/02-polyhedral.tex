@@ -1,0 +1,183 @@
+\section{Constructive polyhedral projection}
+\label{sec:poly}
+\status{Implemented in Python, including multiple outputs, strict rows, exact counterexamples, separately implemented certificate checking, and witness-DAG extraction. Lean reification and checker soundness have not been implemented.}
+
+\subsection{The fragment and its semantics}
+Let \(x\in\R^p\) be parameters and \(y\in\R^q\) existential outputs. The input is
+\begin{equation}\label{eq:poly-goal}
+ \forall x,\quad D(x)\Longrightarrow\exists y,\ R(x,y),
+\end{equation}
+where \(D\) and \(R\) are finite conjunctions of rational affine inequalities, each either strict or non-strict. Equalities can be encoded by two non-strict inequalities. A row is a pair \((a,\sigma)\), with a constant coordinate appended to \(a\), and means
+\[
+ a_0z_0+\cdots+a_{n-1}z_{n-1}+a_n
+ \begin{cases}\ge0,&\sigma=0,\\>0,&\sigma=1.\end{cases}
+\]
+The parameter domain must not mention output coordinates. There are no disequalities, disjunctions, products of variables, floor operations, or integer coercions in this first fragment.
+
+The result is not a collection of sampled solutions. It is an explicit term \(W(x)\), constructed from rational affine operations, \(\min\), and \(\max\), together with a finite proof that it meets the relation for every parameter in the domain. This is a constructive use of elimination: remove outputs while recording how to restore them. Mixed strict/non-strict Fourier--Motzkin elimination supplies the underlying projection operation~\cite{liepins}.
+
+\subsection{A valid specification that defeats every affine template}
+Consider
+\begin{equation}\label{eq:corner}
+ 0\le x,y\le1\quad\Longrightarrow\quad
+ \exists z,\quad 0\le z,\quad x+y-1\le z,\quad z\le x,\quad z\le y.
+\end{equation}
+The four corners determine the value of any admissible witness there:
+\[
+ z(0,0)=0,\quad z(1,0)=0,\quad z(0,1)=0,\quad z(1,1)=1.
+\]
+
+\begin{proposition}[Affine obstruction]\label{prop:affine-obstruction}
+No affine function \(z=ax+by+c\) satisfies \eqref{eq:corner} on the whole unit square. Nevertheless, the continuous piecewise-affine function
+\[
+ W(x,y)=\max(0,x+y-1)
+\]
+satisfies it everywhere on that square.
+\end{proposition}
+\begin{proof}
+The first three corner values force \(c=0\), \(a=0\), and \(b=0\); the last then gives the contradiction \(0=1\). For the proposed witness, both lower bounds follow from the definition of maximum. The two arguments of the maximum are each at most \(x\): \(0\le x\), and \(x+y-1\le x\) because \(y\le1\). Hence \(W\le x\). The proof of \(W\le y\) is symmetric.
+\end{proof}
+
+This is not a heuristic failure caused by a poor LP solver. The affine search space contains no solution. The new worker changes the representation of witnesses while retaining exact linear arithmetic for its proof obligations. The example also exposes a useful practical feature: the witness is continuous, so there is no need to invent a discontinuous branch split at \(x+y=1\).
+
+\subsection{One elimination step}
+Fix an output variable \(t\), and write the other variables as \(z\). Partition the rows by the sign of the coefficient of \(t\). After dividing only by positive rationals, the relevant rows have the forms
+\[
+ t\ \mathrel{\trianglerighteq_i}\ L_i(z),
+ \qquad
+ U_j(z)\ \mathrel{\trianglerighteq_j}\ t,
+\]
+where \(\trianglerighteq\) is either \(\ge\) or \(>\). Keep every row independent of \(t\). For each lower--upper pair create
+\begin{equation}\label{eq:pair-row}
+ U_j(z)-L_i(z)\begin{cases}
+ \ge0,&\text{both source rows are non-strict},\\
+ >0,&\text{at least one source row is strict}.
+ \end{cases}
+\end{equation}
+The strictness bit is a logical part of the row, not a formatting choice.
+
+In the original coefficient representation, if \(a_{it}>0\) and \(a_{jt}<0\), the projected affine expression is
+\begin{equation}\label{eq:fm-combination}
+ \frac{r_i}{a_{it}}-\frac{r_j}{a_{jt}}.
+\end{equation}
+Both multipliers are positive. The prototype rescales a nonzero output row by a positive factor so that its first nonzero coefficient has absolute value one. It deduplicates equal normalized rows, retaining the strictness bit. Rescaling by a negative factor would reverse the inequality and is forbidden.
+
+\begin{theorem}[Exact one-variable projection]\label{thm:projection}
+For every assignment to \(z\), the projected conjunction holds if and only if there exists \(t\in\R\) satisfying the original conjunction.
+\end{theorem}
+\begin{proof}
+The forward implication from an original solution to every projected row follows by the positive combination \eqref{eq:fm-combination}. If one contributing inequality is strict, its positive contribution makes the sum strict. Independent rows are unchanged.
+
+For lifting, suppose the projected conjunction holds. If both lower and upper bounds are present, set
+\[
+ L=\max_i L_i(z),\qquad U=\min_j U_j(z).
+\]
+All pairs imply \(L\le U\). If every bound on \(t\) is non-strict, choose \(t=L\). If any is strict, choose \(t=(L+U)/2\). When \(L<U\), the midpoint lies strictly between the extrema and meets every strict bound. When \(L=U\), every strict lower bound is strictly below \(U\), and every strict upper bound is strictly above \(L\), by its pair rows. Thus the same midpoint still satisfies all strict bounds. This last case matters: a nonactive strict bound need not force the two active extrema apart.
+
+With only lower bounds, choose their maximum if all are non-strict, and that maximum plus one otherwise. With only upper bounds, use their minimum or that minimum minus one. With no bounds on \(t\), use zero. In every case, the independent rows remain true.
+\end{proof}
+
+For example, \(t>0\), \(t\ge1\), \(t\le1\) is feasible with \(t=1\). An implementation that sees ``some strict bound'' and therefore demands \(L<U\) would incorrectly reject it. This exact touching-extrema case is included in the experiments.
+
+\subsection{The certificate must check both directions}
+An elimination trace that checks only nonnegative combinations establishes
+\[
+ R(z,t)\Longrightarrow Q(z).
+\]
+That is sufficient for some refutations but insufficient for witness extraction. A malicious or incomplete producer could delete every projected row, present \(Q=\mathsf{True}\), and thereby make every parameter look feasible. The lifting implication must be checked separately.
+
+Each step therefore contains two complementary components. Every published output row comes with exact nonnegative weights expressing it as a combination of the input rows. In addition, a coverage table names \emph{every} zero-coefficient row and \emph{every} lower--upper pair, and points to an output row that is a positive scalar multiple of the required row with exactly the required strictness.
+
+The independent checker reconstructs the set of required indices from the input coefficients, rejects missing or repeated coverage entries, and tests the pointed-to rows arithmetically. It does not call the projection assembler. Multiple required pairs may share one normalized output row. Additional output rows are harmless only because their nonnegative-combination receipts separately prove they are consequences of the input.
+
+This format makes the two directions operationally visible. The implication direction is a linear identity; the lifting direction is a complete local enumeration. The latter is the essential addition beyond a usual Farkas-style proof of an already selected affine witness.
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+project_checked(rows, variable):
+  P, N, Z := partition rows by coefficient sign
+  required := all Z rows and all pairs in P x N
+  outputs := normalized required rows, with exact deduplication
+  for each output:
+      record nonnegative input-row multipliers
+  for each required item:
+      record its output index
+  return outputs and the two-direction receipt
+\end{lstlisting}
+\end{minipage}\par
+
+\subsection{From projection to a global witness}
+Eliminate the output variables in a fixed order. At the end, the projected relation \(Q(x)\) contains only parameters and is exactly equivalent to \(\exists y,R(x,y)\). Prove each row of \(Q\) from the parameter domain. Then restore the eliminated variables in reverse order using Theorem~\ref{thm:projection}.
+
+The reverse order is not an implementation detail. When eliminating \(y_q\), its bounds may mention \(y_1,\ldots,y_{q-1}\). Those variables must already have been reconstructed when \(y_q\) is restored. The emitted expression graph enforces this dependency order: a node may refer only to parameters and earlier available nodes.
+
+The witness graph has six constructors:
+\[
+ \mathsf{Const}(c),\quad\mathsf{Param}(i),\quad
+ \mathsf{Add}(u,v),\quad\mathsf{Scale}(c,u),\quad
+ \mathsf{Max}(u,v),\quad\mathsf{Min}(u,v).
+\]
+It is hash-consed and emitted in topological order. A midpoint is an addition followed by scaling by \(1/2\); one-sided slack is addition of \(1\) or \(-1\). There is no infinity literal and no division by a variable. The prototype's \code{compile\_witness} first invokes the independent positive checker and then deterministically rebuilds this graph. It never accepts an arbitrary source program supplied alongside the certificate.
+
+\begin{corollary}[Piecewise-affine selection]\label{cor:piecewise}
+Every satisfiable instance of \eqref{eq:poly-goal} has a witness expressible by the finite graph above. The extracted witness is continuous and piecewise affine as a function of the parameters.
+\end{corollary}
+\begin{proof}
+Every normalized bound is affine in the currently remaining variables. Reverse reconstruction substitutes previously obtained continuous piecewise-affine expressions into such bounds and combines them with addition, rational scaling, finite minimum, and finite maximum. These operations preserve continuity and piecewise affinity. Induction over the reverse elimination schedule proves the statement. The witness is guaranteed to satisfy the relation only on \(D\), although the expression itself is defined on all real parameter values.
+\end{proof}
+
+For the coupled test family, an additional output obeys \(w=2z+x\). Both outputs are eliminated and reconstructed. The procedure does not first guess \(z\), freeze that guess, and hope to solve for \(w\); it projects the simultaneous relation and restores a compatible tuple.
+
+\subsection{Proving the parameter-domain implications}
+For a projected row \(r\), test the feasibility of \(D\land\neg r\). Negation must switch strictness:
+\[
+ \neg(a\ge0)\equiv -a>0,
+ \qquad
+ \neg(a>0)\equiv -a\ge0.
+\]
+The prototype uses the same mathematical elimination procedure as a search engine, carrying nonnegative origin weights through each step. Its \emph{checker}, however, verifies only the final combination of the original domain rows and the negated target row.
+
+A contradiction receipt consists of weights \(\lambda_i\ge0\) such that the variable coefficients vanish and the resulting constant is negative, or is zero with at least one strictly positive weight on a strict input row. In formulas, if
+\[
+ \sum_i\lambda_i r_i(z)=c,
+\]
+then a contradiction is obtained when \(c<0\), or when \(c=0\) and
+\(\exists i,\lambda_i>0\land\sigma_i=1\). A strict input with weight zero must not make the sum strict. The test suite contains precisely this control.
+
+This handles empty parameter domains automatically: an inconsistent \(D\) proves every projected row without requiring an arbitrary witness to satisfy an impossible premise. Empty-domain cases are recorded separately from nonempty-domain successes in the generator, rather than used to inflate an apparent capability result.
+
+\subsection{A real counterexample, not merely failure to synthesize}
+If \(D\land\neg r\) is feasible, the feasibility search reconstructs a rational point \(x_0\). The negative certificate contains that parameter assignment, the projection trace, and the index of the violated projected row. The checker verifies
+\[
+ D(x_0),\qquad \neg r(x_0),\qquad R(x,y)\Longrightarrow Q(x).
+\]
+Consequently no output tuple can satisfy \(R(x_0,y)\). Unlike a failed affine-template LP, this is a counterexample to the universally quantified specification itself.
+
+\begin{theorem}[Unbounded-fragment completeness]\label{thm:poly-complete}
+With exact rational arithmetic and no resource caps, the projection-and-lifting algorithm terminates on every input in the stated fragment. It either constructs a witness for \eqref{eq:poly-goal} or constructs a rational parameter counterexample.
+\end{theorem}
+\begin{proof}
+Each elimination removes one variable and produces a finite collection of rows. Theorem~\ref{thm:projection} preserves feasibility in both directions. Eliminating every variable therefore reduces feasibility to finitely many constant comparisons, and reverse reconstruction produces a rational solution whenever those comparisons are consistent. Apply this procedure to the finite collection of domain implication tests. If all are inconsistent, their contradiction receipts prove \(D\Rightarrow Q\), and reverse lifting supplies a witness. Otherwise the rational solution of one implication test gives the stated counterexample.
+\end{proof}
+
+The concrete executable imposes a projection pair budget and finite decoder bounds. Those versions are intentionally incomplete and return \unknown{} when a search cap is reached. The theorem describes the underlying algorithm, not an assurance that a fixed-budget call always decides its input.
+
+\subsection{Cost, improvements, and precise library choices}
+If a step has \(m_+\) positive, \(m_-\) negative, and \(m_0\) zero rows, it creates at most
+\[
+ m_+m_-+m_0
+\]
+required items before deduplication. Repeated projection can produce doubly exponential growth. The prototype chooses a fixed reverse coordinate order for reproducibility, not because that order is optimal.
+
+A production implementation should choose a pivot minimizing the pair count, with a tie-breaker based on support size and coefficient bit lengths. The checker then verifies the explicit permutation and dependency schedule. Exact duplicate elimination is already implemented. Redundancy deletion is a separate extension: deleting a nonduplicate row requires an implication certificate from retained rows, including the correct strictness condition. Omitting a required lower--upper pair because a numerical LP regards it as redundant is not acceptable evidence.
+
+Dense origin-weight vectors are convenient but can dominate memory. Replace them with a sparse addition/scaling DAG and replay it in topological order. The final proof need not expand every derivation into an exponentially duplicated Lean term. This is a lane-specific reason to use shared proof terms, not a proposal to replace Forge's existing proof-cost policy.
+
+For the initial port, Lean's rational and integer arithmetic plus small proved row-combination lemmas are sufficient. \code{linarith} can be used as a reconstruction aid for small source-level specimens, but the final reflected checker should evaluate the supplied exact multipliers rather than rerun an unconstrained proof search. External exact LP or polyhedral tools are optional proposal engines, not dependencies of the supplied prototype. Fourier--Motzkin was chosen here because it makes witness reconstruction and strictness auditing transparent; it is not a claim that it is the fastest feasibility algorithm.
+
+\subsection{Extensions deliberately not included in the executable}
+Boolean specifications can be handled by finite branch decomposition followed by guarded choice, but a branch's projected domain must be proved, and the union of branch domains must cover \(D\). A decision tree of witnesses is not licensed merely because each leaf works somewhere. Reusing the new polyhedral projection objects as exact guards would provide the right ingredients; the Boolean controller is not implemented here.
+
+Alternating quantifiers require a further distinction. A witness for \(\exists u\,\forall v\,\exists w\) cannot refer to \(v\), while the witness for \(w\) may. The current single parameter block and single output block avoid that dependency problem. A future quantified-real worker must preserve the original quantifier order and use strategy-like witnesses, rather than treating every displayed variable as a parameter.
+
+Integer outputs must use the existing lattice/residue machinery or a separate Presburger synthesis procedure. Replacing a real midpoint by truncating division is unsound. These exclusions keep the completeness statement narrow enough to be proved and broad enough to add a genuine capability.

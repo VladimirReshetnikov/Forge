@@ -1,0 +1,287 @@
+\section{Executed experiments and their limits}
+\label{sec:evidence}
+
+\subsection{Environment and independent replay}
+
+The recorded run used Python 3.13.5 on Linux x86-64 and seed
+\code{2026091503}. Every experiment, test, and replay command used
+\code{python -S}, so site packages were disabled. No SymPy, NumPy, SDP solver,
+FLINT, Wolfram kernel, Leant, or Djex executable was needed for the run.
+The raw environment string, per-family timings, and outcomes are stored in
+\code{results/experiments.json}. Timing values are single-process observations
+on this environment, not statistically stable performance estimates.
+
+The standalone replay script installs an import guard that rejects imports of
+\code{ncforge.algebra}, \code{ncforge.search}, and \code{experiments}.
+It then loads the stored external problems and certificates, validates their
+shapes, and recomputes every identity or matrix witness using only
+\code{ncforge.checker}. It replayed all 119 stored objects without failure.
+This demonstrates that the stored objects are sufficient for the independent
+Python checker, not that the checker is formally verified.
+
+\subsection{Three exact equality oracles}
+
+The generated equality corpus contains three families of thirty queries each.
+Each family interleaves targets planted in the degree-bounded relation span with
+arbitrary sparse targets. The expected verdict comes from a mathematically
+different oracle, not from the producer's zero-remainder test.
+
+\begin{description}[style=nextline,leftmargin=0pt,labelwidth=0pt,labelsep=0pt]
+\item[Commuting generators.]
+The relations make two generators commute. The oracle groups coefficients by
+ordinary exponent counts; membership is equivalent to the resulting commutative
+polynomial being zero. It does not run noncommutative elimination.
+\item[Monomial relations.]
+The relations are $x^2=0$ and $yxy=0$. A word lies in their monomial ideal exactly
+when it contains one of these forbidden words as a contiguous substring. The
+oracle uses that substring predicate independently on every target monomial.
+\item[Exterior relations.]
+Three generators square to zero and pairwise anticommute. A repeated generator
+makes a word zero; otherwise sorting its letters produces a sign determined by
+the number of inversions. The oracle collects these signed normal forms rather
+than computing a rational relation basis.
+\end{description}
+
+All targets have degree at most three. Each family produced fifteen positive
+equality receipts and fifteen checked rational matrix countermodels, with no
+oracle disagreements. Maximum witness dimensions were ten, ten, and eight,
+respectively. The counts are outcomes on ninety selected object-language
+queries, not evidence that ninety previously unsolved Lean goals now close.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule Family & Queries & Equality receipts & Matrix witnesses & Disagreements\\
+\midrule
+Commuting & 30 & 15 & 15 & 0\\
+Monomial & 30 & 15 & 15 & 0\\
+Exterior & 30 & 15 & 15 & 0\\
+\bottomrule
+\end{tabular}
+\caption{Exact equality outcomes. Negative objects satisfy all relation matrices,
+not just sampled relation evaluations.}
+\end{table}
+
+\subsection{Forty homogeneous Gram queries}
+
+The homogeneous-square experiment uses four-by-four rational Gram matrices for
+two-letter words of length two, hence degree-four free polynomials. Twenty
+matrices are generated as $A^{\mathsf T}A$; twenty are independently generated
+symmetric matrices. The oracle checks every principal minor by a separate dense
+determinant routine. The producer instead uses pivoted $LDL$.
+
+The outcome is twenty accepted square receipts and twenty cases outside the
+homogeneous square cone, with no disagreement against the exact principal-minor
+oracle. All forty queries are reproducible from the recorded seed. The twenty
+nonreceipt inputs and their Gram data are additionally stored in
+\code{results/negative-gram-queries.json}. They are not included among the
+119 replayable positive/countermodel objects, and no matrix-nonpositivity witness
+is claimed for them.
+
+\subsection{Nine worked obligations}
+
+The worked corpus contributes nine receipts, with distinct roles:
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule Name & Mechanism exercised\\\midrule
+Square-zero sum & Three homogeneous relations combined at degree two.\\
+Resolvent identity & Inhomogeneous two-sided relation contexts.\\
+Push-through & Degree-five proof of a degree-two target; lower-bound controls.\\
+Projection positivity & A square plus an equality residual.\\
+Positive congruence & A nontrivial positive premise inside a sandwich.\\
+Degree-six Gram & Automatic factor recovery without a supplied dictionary.\\
+Trace, not operator & Cyclic residuals with a concrete negative operator test.\\
+CHSH operator bound & Automatically generated six-ray dictionary, rational
+weights, and equality reconstruction.\\
+CHSH self-adjointness & A separate source-shape obligation for the squared form.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+The two CHSH receipts are two obligations in one derivation, not independent
+end-to-end theorems for benchmark purposes. Altogether the stored evidence
+count is $90+20+9=119$: forty-five equality countermodels, forty-five generated
+equality receipts, twenty homogeneous-square receipts, and nine worked receipts.
+This is a storage count, not a combined success rate over different tasks.
+
+\subsection{An ablation with the same producer and target}
+
+For $m=3,4,5,6$, give every pair of atoms a commutation relation and ask for
+$x_0^3x_1-x_1x_0^3=0$ at context bound four. Run the same exact producer with
+component slicing disabled and enabled. Both routes return three-term receipts.
+The complete results are in \code{results/slicing.csv}.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule Atoms & Assembled columns & Sliced columns & Full rank & Full time (ms) & Sliced (ms)\\
+\midrule
+3 & 102 & 3 & 86 & 2.919 & 0.144 \\
+4 & 342 & 3 & 271 & 24.139 & 0.347 \\
+5 & 860 & 3 & 655 & 139.391 & 0.759 \\
+6 & 1,815 & 3 & 1,345 & 572.457 & 1.602 \\
+\bottomrule
+\end{tabular}
+\caption{Single-run Python ablation. Both paths assemble all context columns;
+only the elimination component is reduced. Sliced rank is three in every row.}
+\label{tab:slicing}
+\end{table}
+
+The strongest stable observation is structural: at six atoms, only three of
+1,815 assembled columns need elimination, while the unsliced basis has rank
+1,345. The elapsed time changes from about 572 milliseconds to about
+1.6 milliseconds in this recorded run. Those are not Lean timings, and the
+ratio on one deliberately structured family is not a general speedup estimate.
+In particular, this family is chosen to make unused commutation components
+visible; a densely connected target could retain almost every column.
+
+\subsection{Tests and mutation audit}
+
+The unit suite reports \textbf{57 passing test methods}. One method includes all
+24 atom-renaming subtests of the CHSH construction; these are not silently added
+to the method count. The suite covers exact fraction arithmetic, star reversal
+and atom mapping, zero and singular Gram branches, elimination provenance,
+slicing, unsupported inhomogeneous quotient construction, and resource refusal.
+Its semantic controls include characteristic-domain metadata refusal,
+unsupported fixed-dimension metadata, positivity-premise deletion, and the
+trace/operator distinction.
+
+The certificate mutation audit records \textbf{195 attempted invalid objects,
+with zero incorrectly accepted}. Its deterministic attacks replace the original
+target while keeping a receipt, erase a nonzero ideal contribution, negate a
+square weight, or zero a separating vector. These are deliberately falsifying
+mutations, not a claim that arbitrary modifications to a valid receipt must
+fail: some modifications, such as adding a zero summand, preserve correctness.
+Detailed per-object outcomes are retained in \code{results/mutations.json}.
+
+Additional unit attacks cover swapped left/right context placement, dropped or
+replaced relations, float or Boolean coefficients, zero denominators,
+unreduced fractions, duplicate monomials, malformed involutions, out-of-range
+letters, altered certificate interpretation, duplicate JSON keys, and a relation
+that vanishes only on the witness vector. The last control is particularly
+important for the graded countermodel construction.
+
+Mutation rejection is useful evidence against concrete implementation errors.
+It is not a proof of checker correctness, and zero accepted mutations does not
+measure the probability of an undiscovered bug.
+
+\subsection{What was not executed}
+
+There was no Lean compiler or Lake executable in the authoring environment. The
+explicit compiler gate therefore returned \code{NOT\_RUN}; its JSON record is
+included. None of the supplied Lean files is represented as elaborated, and no
+source-to-object correspondence was tested. No comparison with \code{grind},
+\code{noncomm\_ring}, Aesop, or an integrated Forge prototype was run. No
+external linear-algebra, completion, or SDP backend was invoked.
+
+The report's mathematical proofs establish the stated abstract contracts by
+ordinary mathematical reasoning. They have not themselves been formalized.
+The executed evidence establishes the behavior of the delivered Python programs
+on the recorded corpus. Conflating those two statements would overstate the
+result, even when every tested certificate is correct.
+
+\section{Reproducing and extending the package}
+
+\subsection{Files that matter}
+
+\begin{longtable}{@{}p{0.37\textwidth}p{0.56\textwidth}@{}}
+\toprule Path & Purpose\\\midrule\endhead
+\code{article/forge-noncommutative.tex} & Main LaTeX source, with five section
+files, the recorded ablation table, and a conventional bibliography.\\
+\code{article/forge-noncommutative.pdf} & Compiled article.\\
+\code{prototype/ncforge/algebra.py} & Producer-side exact word arithmetic and
+provenance-carrying elimination.\\
+\code{prototype/ncforge/search.py} & Equality, graded countermodel, Gram,
+finite-ray, cyclic, and graph-dictionary producers.\\
+\code{prototype/ncforge/checker.py} & Separate canonical decoding, identity
+replay, and whole-matrix countermodel replay.\\
+\code{prototype/experiments.py} & Seeded oracle corpus, worked obligations,
+and the slicing ablation.\\
+\code{prototype/replay.py} & Stored-evidence replay with producer imports blocked.\\
+\code{prototype/tests/} & Unit and semantic-boundary tests.\\
+\code{prototype/mutation\_audit.py} & Per-object falsifying mutation checks.\\
+\code{results/} & Original run data, certificates, nonreceipt inputs, tests,
+mutations, replay record, initial failure, and Lean status.\\
+\code{lean/CertificatePrinciples.lean} & Six uncompiled reconstruction targets.\\
+\code{tools/check\_lean.py} & Compiler gate requiring an existing built Mathlib
+project. Missing tools are not successes.\\
+\code{docs/} & Source audit, schema contract, limitations, and failure note.\\
+\bottomrule
+\end{longtable}
+
+\subsection{Reproduction commands}
+
+From the package root:
+\begin{lstlisting}
+cd prototype
+python -S -m unittest discover -s tests -v
+python -S replay.py ../results/certificates.json
+python -S experiments.py --output ../reproduced-results
+python -S mutation_audit.py
+\end{lstlisting}
+The experiment command writes new output separately by default, so the original
+recorded timings are not overwritten. The mutation script reads the recorded
+corpus and regenerates its mutation report under \code{results/}; the README
+makes that local-file behavior explicit. All commands are local and make no
+network calls.
+
+To compile the article, run \code{tools/build\_article.sh}, or run pdfLaTeX
+three times in \code{article/}. To test the uncompiled Lean targets in an
+already built compatible Mathlib checkout:
+\begin{lstlisting}
+python tools/check_lean.py --project /path/to/mathlib-project
+\end{lstlisting}
+A successful invocation would validate those six targets only. It would still
+not validate the absent reifier, reflected checker, worker integration, or full
+JSON corpus. A fresh, pinned project should preserve and report its actual
+compiler output and axiom inventory.
+
+\subsection{A direct Python use example}
+
+\begin{lstlisting}
+from ncforge.algebra import var, mul, add, power, problem
+from ncforge.search import equality_search
+from ncforge.checker import verify
+
+x, y = var(0), var(1)
+relation = add(mul(x, y), mul(y, x), -1)
+target = add(mul(power(x, 2), y), mul(y, power(x, 2)), -1)
+original = problem(target, [relation], 2)
+answer = equality_search(target, [relation], 2, D=3)
+if answer["status"] == "certificate":
+    result = verify(original, answer["certificate"])
+    assert result["accepted"]
+else:
+    print(answer["reason"])  # a bounded search failure, not a false theorem
+\end{lstlisting}
+
+The public research API returns Python dictionaries rather than enforcing an
+opaque capability type. A production Forge adapter should wrap successful
+\emph{Lean} reconstruction in the host's already-designed proof-receipt
+boundary. The Python \code{accepted} field has no authority to assign a Lean
+metavariable.
+
+\section{Conclusion}
+
+The main recommendation is to add one coherent, order-preserving algebra worker
+rather than another general search slogan. Two-sided word receipts cover
+relations inside arbitrary multiplication contexts. Homogeneous presentations
+admit a degree-complete positive/negative alternative with explicit finite
+rational matrices. Unique homogeneous word Gram matrices give an automatic
+Hermitian-square fragment beyond scalar quadratic arithmetic. Conditional
+operator inequalities require adjoint sandwiches, while trace inequalities
+permit explicitly reconstructed commutator residuals and must remain a separate
+output kind.
+
+The implemented prototypes make those distinctions executable. They also show
+where a planner can profit from cooperation: an equality proof establishes the
+self-adjointness needed by an operator goal, equality-space reduction simplifies
+positive-weight search, and structural relations propose useful squares before
+any numerical backend is considered. The tested incidence slice is an exact
+search reduction with a small proof, not a heuristic declaration that ignored
+hypotheses are irrelevant.
+
+The next decisive artifact is not a larger survey or more generated examples.
+It is a Lean source bridge and a small set of original goals closed by
+kernel-checked reconstruction. The current package supplies the algorithms,
+mathematical contracts, executable reference behavior, and rejection controls
+needed to make that implementation concrete.

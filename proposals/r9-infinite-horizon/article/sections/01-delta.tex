@@ -1,0 +1,93 @@
+\section{The actual delta to Forge}
+\label{sec:delta}
+
+\subsection{A pinned, deliberately narrow novelty claim}
+The reference point is Forge commit
+\code{c98e47c5f804e92880fc1d0e378c1b95832b685c}. Its README and merged
+provenance ledger describe eighteen proposals and an extensive existing
+capability set \cite{forge,forge-provenance}. This article was prepared after
+reading that merged ledger, its conclusions, the Leant/Djex integration notes,
+and the neighboring projects' published interfaces. Targeted repository
+searches supplemented that inspection. It is not a byte-by-byte audit of every
+file in every frozen submission, and the claim of nonduplication is relative to
+the published merged design and capability ledger.
+
+In particular, induction with generalization, finite-algebra covers, polynomial
+and observable-space closure, exact arithmetic witnesses, Kripke countermodels,
+telescoping, Ore transport, cyclic proof compilation through well-founded
+measures, and the certificate acceptance boundary are already baseline
+material. None is presented here as a new invention. The baseline's own
+conclusion correctly asks for narrow implementations instead of further vague
+architecture \cite{forge-conclusion}. This proposal follows that direction by
+shipping three complete Python search/replay pairs and by stating the precise
+Lean theorems still required.
+
+The new mathematical ingredients are also not original discoveries in the
+literature: pushdown saturation, finite B\"uchi games, and finite-chain
+absorption are established subjects. What is new to the inspected Forge design
+is a set of \emph{source-level obligations}, \emph{specialized certificate
+formats}, and \emph{implemented adapters and tests} for these subjects. The
+article makes no claim of worldwide priority for the algorithms or rank
+arguments.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.23\textwidth}XX@{}}
+\toprule
+Existing prerequisite & Added capability & Distinction that must survive translation \\
+\midrule
+Finite-algebra closure & Pushdown reachability and regular stack targets & A finite summary describes infinitely many configurations; it is not a finite enumeration of those configurations. \\
+Well-founded cyclic proof compilation & Recurrent adversarial strategies & Execution may continue forever. A rank resets after acceptance rather than decreasing globally. \\
+Weighted finite-word observations & Infinite-horizon probabilistic values & A harmonic equation alone does not prove absorption, uniqueness, or preservation of probability mass. \\
+Typed witness synthesis & Strategies with persistent behavioral laws & One policy must work against every future opponent choice, not one unrelated witness per finite sample. \\
+\bottomrule
+\end{tabularx}
+\caption{The extension boundary. Baseline mechanisms can be reused as infrastructure; they are not claimed to be unable to encode these problems in principle.}
+\label{tab:delta}
+\end{table}
+
+There is an important qualification to the first row. Pop summaries can be
+viewed as a finite relational closure, and derivations can be encoded by trees.
+Consequently Forge's generic cover or closure principles may be useful in their
+formalization. The addition is not ``finite closure, again.'' It is the
+suffix-parametric pushdown semantics, its exact translation, its productive
+proof representation, its regular-target compiler, and the resulting complete
+worker for a named infinite-state fragment. The same distinction applies to
+reusing ordinary arithmetic to check ranks and rational residuals.
+
+\subsection{Three semantic quantifiers rather than three solver names}
+Consider a program that can remain in a loop or leave it. Depending on the
+meaning of a transition, three entirely different questions arise:
+\begin{align*}
+&\exists\text{ a finite execution reaching a target};\\
+&\exists\sigma\;\forall\text{ opponent choices}\;\GF\,B;\\
+&\Prob(\text{termination})=1\quad\text{and}\quad\E[\text{cost}]=v.
+\end{align*}
+The first is existential reachability. The second asks for a persistent strategy
+that visits $B$ infinitely often. The third is a statement about a measure on
+executions. A solver that forgets which question it is answering can return a
+perfectly valid certificate for the wrong proposition.
+
+The proposed router therefore recognizes a \emph{behavioral contract}, not just
+syntactic occurrences of recursion, a graph, or a matrix. An empty-stack query
+can enter the pushdown lane. A universally quantified infinite play under an
+existential policy can enter the game lane. A hitting-time or expected-cost
+claim can enter the probabilistic lane only after transition probabilities and
+terminal behavior have been preserved. Unsupported source constructs remain
+outside these fragments; the worker must not manufacture a finite model by
+silently erasing them.
+
+\subsection{What is already executable}
+The package uses the Python standard library only. All probabilities and
+numerical certificates use \code{fractions.Fraction}; no floating-point solve
+is used. There are three search modules and one replay module. Replay imports
+neither search nor the algorithms used by the independent reference oracles.
+The input dataclasses and rational arithmetic runtime are shared, so this is
+algorithmic separation, not a proof of independent implementation correctness.
+
+The payload of a successful Python replay is a \emph{research result}. It is
+not a Lean expression, a theorem declaration, or a trusted receipt from the
+existing Forge boundary. In the proposed Lean implementation, a successful
+certificate check must still yield a proof of the corresponding object-level
+semantic theorem and be transported back to the original goal. These are
+explicitly separate milestones throughout the article.

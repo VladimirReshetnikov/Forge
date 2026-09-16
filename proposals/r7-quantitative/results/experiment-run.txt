@@ -1,0 +1,109 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "dependencies": "Python standard library only; invoked with -S",
+  "workers": [
+    {
+      "worker": "reach",
+      "records": 60,
+      "kinds": {
+        "reach_max": 60
+      },
+      "independent_oracle_agreements": 60,
+      "distinct_problems": 57,
+      "mutations_rejected": 60,
+      "search_ms_median": 0.1262705,
+      "check_ms_median": 0.1443925,
+      "search_ms_max": 0.358441,
+      "check_ms_max": 0.261385,
+      "certificate_bytes_max": 117
+    },
+    {
+      "worker": "runtime",
+      "records": 50,
+      "kinds": {
+        "runtime_upper": 50
+      },
+      "independent_oracle_agreements": 50,
+      "distinct_problems": 49,
+      "mutations_rejected": 50,
+      "search_ms_median": 0.17050749999999998,
+      "check_ms_median": 0.1339975,
+      "search_ms_max": 1.927629,
+      "check_ms_max": 1.880988,
+      "certificate_bytes_max": 74
+    },
+    {
+      "worker": "transport",
+      "records": 180,
+      "kinds": {
+        "hall": 83,
+        "transport": 97
+      },
+      "independent_oracle_agreements": 180,
+      "distinct_problems": 173,
+      "mutations_rejected": 180,
+      "search_ms_median": 0.19866499999999998,
+      "check_ms_median": 0.04638,
+      "search_ms_max": 3.297015,
+      "check_ms_max": 0.203347,
+      "certificate_bytes_max": 148
+    },
+    {
+      "worker": "bisimulation",
+      "records": 120,
+      "kinds": {
+        "bisimulation": 40,
+        "no_bisimulation": 80
+      },
+      "independent_oracle_agreements": 120,
+      "distinct_problems": 120,
+      "mutations_rejected": 120,
+      "search_ms_median": 0.8863125000000001,
+      "check_ms_median": 0.16258,
+      "search_ms_max": 21.624367,
+      "check_ms_max": 0.794169,
+      "certificate_bytes_max": 799
+    },
+    {
+      "worker": "contraction",
+      "records": 60,
+      "kinds": {
+        "contraction": 40,
+        "rate_obstruction": 20
+      },
+      "independent_oracle_agreements": 60,
+      "distinct_problems": 59,
+      "mutations_rejected": 60,
+      "search_ms_median": 4.9030024999999995,
+      "check_ms_median": 0.6769365,
+      "search_ms_max": 70.551429,
+      "check_ms_max": 4.616866,
+      "certificate_bytes_max": 3294
+    },
+    {
+      "worker": "polynomial_cost",
+      "records": 50,
+      "kinds": {
+        "polynomial_cost": 50
+      },
+      "independent_oracle_agreements": 50,
+      "distinct_problems": 50,
+      "mutations_rejected": 50,
+      "search_ms_median": 0.113932,
+      "check_ms_median": 0.153096,
+      "search_ms_max": 0.413915,
+      "check_ms_max": 0.334264,
+      "certificate_bytes_max": 126
+    }
+  ],
+  "records": 520,
+  "rejected_mutations": 520,
+  "unknown_controls": 5,
+  "lean_kernel_proofs": 0,
+  "polynomial_finite_horizon_checks": 600,
+  "reach_records_with_fractional_state": 53,
+  "negative_bisim_with_nonempty_trace": 80,
+  "note": "Times are single-process local measurements, not Lean tactic benchmarks."
+}

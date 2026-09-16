@@ -1,0 +1,97 @@
+\section{The gap this extension addresses}
+\label{sec:scope}
+
+\subsection{A delta against the repository, not another Forge introduction}
+
+The audited Forge snapshot is
+\pathline{c98e47c5f804e92880fc1d0e378c1b95832b685c}.
+Its merged article already treats polynomial cones, exact quadratic decomposition,
+Bernstein and univariate certificates, structural generalisation, witness
+construction, discrete observable-space and ideal closure, finite-algebra
+covers, telescoping, and operator transport. Its status ledger distinguishes
+executed Python prototypes, emitted Lean candidates, and unimplemented runtime
+components. Those mechanisms are prerequisites here, not contributions to be
+reintroduced under new names~\cite{forge-readme,forge-status,forge-nonlinear,forge-closure}.
+
+The narrow addition is \emph{analytic sign information}. For example, replacing
+$e^x$ by a fresh positive real variable discards precisely the relationship to
+$x$ needed to establish
+\[
+ e^x\ge 1+x,\qquad
+ e^x\ge \sum_{k=0}^{n}\frac{x^k}{k!}\quad(x\ge0),\qquad
+ \exists X\ \forall x\ge X:\ e^x>1000x^5.
+\]
+Polynomial reasoning alone does not recover that relationship from an opaque
+atom. It needs a proved analytic consequence, a derivative identity, or a
+change of variable which exposes the missing structure.
+
+This article does not assert that existing Lean tactics fail on these displayed
+examples. Several have short library proofs. Their purpose is to exhibit the
+input language and proof certificates, not to construct a weak baseline. The
+proposed capability is a systematic worker for expanded, unfamiliar combinations
+of such terms, including automatic cutoffs and useful routing diagnostics.
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.23\linewidth}XX@{}}
+\toprule
+Concern & Already present in Forge & Addition here\\
+\midrule
+Positivity & Exact polynomial certificates & Derivative-linked exponential-polynomial certificates\\
+Unbounded reasoning & Discrete invariant and observable closure & Positivity on a continuous ray; explicit eventual sign\\
+Search structure & Candidate generation and closure & A canonical factor order, with a proof eliminating order search\\
+Failure handling & Bounded failure is unknown & A proved interior-zero obstruction, and a precise alternate route\\
+Lean integration & General proof and source contracts & A concrete analytic step theorem, sparse checker obligations, and a replay emitter\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The audit read the merged repository's overview, status, nonlinear arithmetic,
+closure, and conclusion material, and examined neighbouring indexing diagnostics.
+It was not a line-by-line review of every historical proposal. Consequently the
+claim is a substantive delta against those documented capabilities, not a claim
+that no related word or idea appears anywhere in the repository.
+
+\subsection{What Leant and Djex contribute to this design}
+
+The inspected neighbouring snapshots are Leant
+\pathline{6bf05ad78c467989e68290f2d08bbed40802d485}
+and Djex
+\pathline{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}.
+Their current indexing diagnostics make a useful distinction: synthesising the
+right components separately does not establish that the original bounded query
+has been solved. The original integer-indexing acceptance remains absent in
+those diagnostics~\cite{leant,djex}.
+
+There is an exact analytic analogue. A certificate for $f(x)>0$ when $x\ge32$
+does not close a request for $f(x)\ge0$ when $x\ge0$. A proof about the transformed
+exponential polynomial does not close a source theorem until the logarithmic
+chart and its domain have been proved. A generated nonnegativity theorem does
+not close a strict-positivity request. Accordingly the prototype has a separate
+\code{verify_goal} layer, not merely a predicate saying that a receipt is
+internally consistent. These particular distinctions are enforced by negative
+tests, rather than being left as aspirations in a general trust model.
+
+\subsection{Mathematical provenance and the intended claim}
+
+The ingredients are classical: constant-coefficient differential equations,
+integrating factors, real exponential-polynomial function spaces, and exact
+Taylor bounds. Extended Chebyshev systems provide a broader setting for related
+ordered bases~\cite{chebyshev}; differential-invariant proof systems address a
+much larger class of continuous dynamics~\cite{differential-invariance}.
+Nothing here claims invention of differential induction or of positive bases.
+
+The contribution relative to Forge is the particular algorithmic package: a
+small accepted language, an ordering theorem that removes an apparent search
+dimension, an exact enrichment hierarchy, a useful impossibility criterion for
+that hierarchy, a total explicit tail constructor, and detailed lowering to
+ordinary Lean theorems. The proofs are included so that these claims need not
+rest on an analogy with a larger literature.
+
+\status{\textbf{Implementation status in one place.}
+The sparse algebra, ladder search, auxiliary-factor search, rational enclosures,
+tail search, reference interval cover, source-goal binding, mutation checks,
+and replay experiments were executed in Python. Four Lean replay files and a
+candidate analytic bridge were generated, but not compiled. The semantic Lean
+reifier, reflected checker, integrated \forge{} worker, and Lean benchmark suite
+remain implementation work. Later sections do not silently promote one status
+to another.}

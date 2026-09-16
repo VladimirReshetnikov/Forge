@@ -1,0 +1,135 @@
+\section{Worked certificates and what they buy}
+\label{sec:examples}
+
+\subsection{Arbitrarily high Taylor truncations need one step}
+
+For $n\in\N$ and rational $r>0$, let
+\[
+ f_n(x)=e^{rx}-\sum_{j=0}^n\frac{(rx)^j}{j!}.
+\]
+Direct differentiation gives
+\begin{equation}
+ T_r f_n=\frac{r^{n+1}}{n!}x^n\in\Cplus,
+ \qquad f_n(0)=0.
+ \label{eq:taylor-one}
+\end{equation}
+Thus every concrete truncation has a one-step ladder, independent of $n$. Repeated ordinary differentiation would take many more steps before the exponential and the polynomial comparison become easy. The compiler finds the better operation because the nonzero mode forces one cofactor $r$ and no zero cofactors are needed.
+
+There is a parallel alternating family:
+\[
+ h_n(x)=(-1)^{n+1}\left(e^{-rx}-\sum_{j=0}^n\frac{(-rx)^j}{j!}\right).
+\]
+Its cofactor is $-r$, and
+\[
+ T_{-r}h_n=\frac{r^{n+1}}{n!}x^n\in\Cplus,
+ \qquad h_n(0)=0.
+\]
+Both families are implemented for $n=0,\ldots,15$ and four rational rates. These 128 instances test exact factorial coefficients, negative rates, parity signs, and high-order cancellation. They are not 128 unrelated theorem families.
+
+The mathematics above proves the family uniformly in $n$. The prototype reifies \emph{concrete} polynomial coefficient arrays; it does not synthesize a Lean proof with a symbolic natural-number truncation parameter. Such a parametric theorem can be added once and instantiated, or handled by Forge's existing induction machinery. Confusing concrete instance generation with parametric induction would overstate the implementation.
+
+\subsection{An exponential majorant for binomial powers}
+
+Let $n\ge1$, $r>0$, and $u(x)=1+rx/n$. For
+\[
+ f(x)=e^{rx}-u(x)^n
+\]
+one obtains
+\[
+ T_r f=r u^n-r u^{n-1}
+       =\frac{r^2}{n}x\,u^{n-1}\in\Cplus.
+\]
+The binomial expansion of $u^{n-1}$ has nonnegative rational coefficients, and $f(0)=0$. Hence
+\[
+ \left(1+\frac{rx}{n}\right)^n\le e^{rx}\qquad(x\ge0).
+\]
+The corpus includes $n=1,\ldots,12$ at the same four rates. The search is not given this derivation as a special theorem; it computes the cofactor residual from the expanded input.
+
+\subsection{A fully expanded four-step certificate}
+
+Consider
+\begin{equation}
+ f(x)=e^{2x}-(2+x^2)e^x+1.
+ \label{eq:symmetric}
+\end{equation}
+The emitted cofactors are $(1,1,1,2)$. Every intermediate function can be displayed:
+\begin{align*}
+ g_0&=e^{2x}-(2+x^2)e^x+1,\\
+ g_1&=e^{2x}-2xe^x-1,\\
+ g_2&=e^{2x}-2e^x+1,\\
+ g_3&=e^{2x}-1,\\
+ g_4&=2.
+\end{align*}
+The first three transitions are $g_{i+1}=g_i'-g_i$ and the last is $g_4=g_3'-2g_3$. The anchors are
+\[
+ (g_0(0),g_1(0),g_2(0),g_3(0),g_4(0))=(0,0,0,0,2).
+\]
+Backward application of the scalar rule proves \eqref{eq:symmetric} nonnegative. Equivalently,
+\[
+ (e^x-1)^2\ge x^2e^x\qquad(x\ge0).
+\]
+There is no floating-point evaluation in this proof. The three occurrences of cofactor $1$ are forced by the degree-two coefficient polynomial of $e^x$, and cofactor $2$ is forced by the other nonzero mode. Four steps are therefore minimal in the declared grammar. The full increasing-order pass uses an unnecessary initial zero cofactor and has five steps; the optimal compiler removes it.
+
+This example is also a useful source-normalization test. A Lean user might state it as $(\operatorname{Real.exp}x-1)^2\ge x^2\operatorname{Real.exp}x$, while the worker stores \eqref{eq:symmetric}. The front end must prove that these expressions agree, using the exponential addition law and ring normalization, rather than compare printed strings.
+
+\subsection{Hyperbolic inequalities with exact contact at zero}
+
+Put $S=\sinh x$ and $C=\cosh x$. The following residuals reduce to exponential polynomials and produce the listed certificates. A superscript on a cofactor in the table denotes its multiplicity, not exponentiation of the differential operator's argument.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.29\textwidth}p{0.27\textwidth}X@{}}
+\toprule
+Residual & Sorted cofactors & Nonzero anchors; terminal\\
+\midrule
+$x(C+2)-3S$ & $(-1,-1,1,1)$ & All anchors zero; terminal $2x$\\
+$S^2C+xS-2x^2C$ & $(-3,(-1)^3,1^3,3)$ & $g_6(0)=128$, $g_7(0)=384$; terminal $0$\\
+$S^3-x^3C$ & $(-3,(-1)^4,1^4,3)$ & $g_7(0)=336$, $g_8(0)=1344$, $g_9(0)=3072$; terminal $0$\\
+\bottomrule
+\end{tabularx}
+\caption{Exact unscaled certificates. All omitted anchors are zero.}
+\label{tab:hyperbolic}
+\end{table}
+
+For $x>0$, division by the proved positive quantities $x$, $x^2C$, and $x^3$ gives, respectively,
+\begin{align*}
+ \frac{\sinh x}{x}&\le\frac{\cosh x+2}{3},\\
+ \left(\frac{\sinh x}{x}\right)^2+\frac{\tanh x}{x}&\ge2,\\
+ \left(\frac{\sinh x}{x}\right)^3&\ge\cosh x.
+\end{align*}
+The normalization identity for the second inequality uses $\tanh x=S/C$ and $C>0$. These denominator side conditions belong in the Lean source bridge. They are not inferred from an unguarded cancellation in the prototype.
+
+The last two residuals have their first nonzero Taylor terms in degrees six and seven. The ladder accounts for all preceding zeros exactly. The opposite cofactor ordering fails for these examples even though its full annihilator is the same. This is the concrete reason for the exchange theorem, and supplies eight failures of the decreasing-order ablation after the four argument scalings are included.
+
+\subsection{A rational envelope without floating point}
+
+For
+\[
+ p(x)=(x-2)e^x+x+2,
+\]
+the compiler emits two cofactors $(1,1)$:
+\[
+ T_1p=e^x-x-1,\qquad T_1^2p=x.
+\]
+All anchors are zero. Hence $p(x)\ge0$ on the right ray. On the additional domain $0\le x<2$, this gives
+\[
+ e^x\le\frac{x+2}{2-x}.
+\]
+The half-line certificate and the bounded-domain rational envelope are different statements. Only the former is directly represented by the current prototype; the latter follows by a host-side positivity proof for the denominator. A normalizer that dropped $x<2$ would reverse an inequality in the wrong region.
+
+\subsection{An explicit success language, not a hidden universal claim}
+
+The controls
+\begin{equation}
+ f_{q,\varepsilon}(x)=(e^x-q)^2+\varepsilon,
+ \quad q\in\{3/2,2,3,4\},\quad
+ \varepsilon\in\{0,1/10000\}
+ \label{eq:outside}
+\end{equation}
+are nonnegative. Nevertheless their first canonical cofactor is zero, because of the constant mode, and
+\[
+ f'_{q,\varepsilon}(0)=2-2q<0.
+\]
+The canonical obstruction is therefore immediate. The $\varepsilon=0$ instances have an interior zero; the positive-$\varepsilon$ instances show that even strict positivity does not imply membership in the finite grammar. These are successful \emph{negative language decisions}, not failed attempts to disprove a true theorem.
+
+For Forge, the useful policy is to leave the original goal alive and offer the factorized expression to the existing polynomial worker. That worker only needs the algebraic fact that a square is nonnegative; it need not know any calculus. This is genuine cooperation between different certificate languages, rather than a reason to inflate the new worker's scope.

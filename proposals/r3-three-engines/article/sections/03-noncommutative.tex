@@ -1,0 +1,200 @@
+\section{Noncommutative completion with original-relation certificates}
+\label{sec:nc}
+\status{Implemented in Python: sparse rational word polynomials, overlap and inclusion compositions, traced reduction, bounded completion, and an independent direct identity checker. No Lean reifier or reflected noncommutative checker was compiled.}
+
+\subsection{Why this is a separate algebraic worker}
+The commutative identity \(xy=yx\) is not a harmless normalization rule for matrices, endomorphisms, differential operators, or elements of a presented associative algebra. A commutative polynomial representation erases precisely the information needed to reason about these objects.
+
+Forge's existing Ore-operator transport is related but different. It is specialized to recurrence operators and their coefficient-shift rules. The worker here accepts arbitrary finite sets of rational polynomial relations in a free associative algebra and seeks consequences in their two-sided ideal. It does not replace the specialized Ore algorithms when their additional structure is useful.
+
+Mathlib already has \code{noncomm\_ring}; it handles noncommutative ring expressions, and its documented syntax permits hypothesis-directed simplification. Thus ``add noncommutative normalization'' would not be an adequate proposal. The additional mechanism is \emph{completion-driven generation of missing consequences}, followed by a certificate in the original hypotheses. Existing normalization is a building block for replay, not an opponent the report claims to beat~\cite{noncomm-ring}.
+
+\subsection{Words, polynomials, and interpretation}
+Fix a finite alphabet \(\Sigma=\{0,\ldots,d-1\}\). A word is a finite list of letters, including the empty word \(\epsilon\). A polynomial is a finitely supported map
+\[
+ p:\Sigma^*\longrightarrow\Q.
+\]
+Addition combines coefficients of identical words. Multiplication concatenates words:
+\[
+ (pq)(w)=\sum_{uv=w}p(u)q(v).
+\]
+The empty word is the multiplicative unit. Word order is preserved throughout; the keys \((0,1)\) and \((1,0)\) are different.
+
+Let \(A\) be a unital associative \(\Q\)-algebra, and assign an element \(\rho(i)\in A\) to each generator. Define
+\[
+ \eval{a_1\cdots a_k}_\rho=\rho(a_1)\cdots\rho(a_k),
+ \qquad
+ \eval{p}_\rho=\sum_w p(w)\mathbin{\cdot}\eval{w}_\rho.
+\]
+Rational coefficients act centrally through the algebra structure. This is the semantic reason for the \(\Q\)-algebra restriction. Interpreting a rational coefficient in an arbitrary ring by an unguarded division operation would not establish the same theorem.
+
+The input consists of original relations \(r_i\) interpreted as zero and a target difference \(p\). A goal \(s=t\) is represented by \(p=s-t\). The source reifier must prove that this interpretation matches the actual Lean multiplication, addition, scalar action, and atoms in scope.
+
+\subsection{A certificate that does not require a completed basis}
+The positive certificate is a finite list of tuples
+\[
+ (c_j,u_j,i_j,v_j),\qquad c_j\in\Q,\quad u_j,v_j\in\Sigma^*,
+\]
+satisfying the formal identity
+\begin{equation}\label{eq:nc-cert}
+ p=\sum_j c_j\,u_jr_{i_j}v_j.
+\end{equation}
+Unlike the polyhedral multipliers, the coefficients here have no sign restriction.
+
+\begin{theorem}[Two-sided certificate soundness]\label{thm:nc-sound}
+If \eqref{eq:nc-cert} holds as an exact word-polynomial identity and every original relation evaluates to zero, then \(\eval{p}_\rho=0\) in every unital associative \(\Q\)-algebra.
+\end{theorem}
+\begin{proof}
+Evaluation preserves rational linear combinations and word concatenation. Evaluating the right-hand side gives
+\[
+ \sum_j c_j\mathbin{\cdot}
+ \bigl(\eval{u_j}_\rho\,\eval{r_{i_j}}_\rho\,\eval{v_j}_\rho\bigr)=0.
+\]
+The formal identity identifies this value with \(\eval{p}_\rho\).
+\end{proof}
+
+This theorem deliberately does not mention a monomial order, critical pairs, termination, or confluence. Those concepts help the producer find the certificate. Once the identity is supplied, none is needed to check it.
+
+The checker in \path{prototype/forge_delta/nc_check.py} parses the externally supplied target and original relations, multiplies each original relation by the recorded left and right words, accumulates exact coefficients, removes zero coefficients, and compares the resulting dictionary with the target. It does not import the reducer or completion engine. Reversing a left context into a right context is rejected when it changes the identity.
+
+\subsection{A minimal completion-only example}
+Assume
+\[
+ ab=a,\qquad ba=b.
+\]
+Orient these as reductions \(ab\to a\), \(ba\to b\), and ask for \(a^2=a\). The target difference \(a^2-a\) contains neither left-hand side, so direct reduction does nothing. However, the overlap word \(aba\) reduces in two ways:
+\[
+ (ab)a\longrightarrow a^2,
+ \qquad
+ a(ba)\longrightarrow ab\longrightarrow a.
+\]
+Their disagreement produces the missing rule \(a^2\to a\).
+
+Writing \(r_1=ab-a\) and \(r_2=ba-b\), the final certificate is
+\begin{equation}\label{eq:nc-small}
+ a^2-a=r_1-r_1a+ar_2.
+\end{equation}
+Expanding the right-hand side cancels the two occurrences of \(aba\) and the two of \(ab\), leaving the desired target. This identity is what the checker sees; it need not reconstruct how the ambiguity was discovered.
+
+The executable ablation is exact: with completion disabled, the result is \unknown{} with two initial rules and no reduction steps. With completion enabled, a third rule is found and the target is certified. On the recorded run the search counted three examined compositions and two reductions. These tiny counts are implementation diagnostics, not performance estimates for an arbitrary algebra problem.
+
+\subsection{The traced completion algorithm}
+The prototype uses degree-lexicographic order: first compare word lengths, then compare the integer letters lexicographically. For a nonzero polynomial, let \(\LM(p)\) be its greatest word. Divide by its leading rational coefficient to obtain a monic rule
+\[
+ \ell-f=0,
+\]
+where every word in \(f\) is strictly below \(\ell\). A rule carries both its polynomial and a representation of that polynomial in the original relations.
+
+Suppose a polynomial contains a term \(c\,u\ell v\). Subtract
+\[
+ c\,u(\ell-f)v
+\]
+and add the same contextual multiple of the rule's original-relation receipt to the reduction trace. If the initial polynomial is \(p_0\) and the current residual is \(p\), the invariant is
+\begin{equation}\label{eq:reduction-invariant}
+ p_0-p=\sum_j c_j u_jr_{i_j}v_j.
+\end{equation}
+Every elementary reduction is therefore already proof-producing.
+
+For two monic rules \(f\) and \(g\), the engine considers two kinds of ambiguity.
+
+\paragraph{Overlap.} If \(\LM(f)=us\) and \(\LM(g)=sv\) for a nonempty shared word \(s\), form
+\[
+ fv-ug.
+\]
+The greatest overlap word cancels. Reduce the result by the current rules.
+
+\paragraph{Inclusion.} If \(\LM(f)=u\LM(g)v\), form
+\[
+ f-ugv.
+\]
+This also cancels a leading occurrence. Inclusion must be considered separately; suffix--prefix overlaps alone do not cover a leading word occurring strictly inside another.
+
+Each composition has an original-relation receipt obtained by contextual addition and subtraction of the two parent receipts. If its reduced residual is nonzero, subtract the reduction trace from that receipt and normalize both by the residual's leading coefficient. This creates a new monic rule with a checked algebraic meaning. Re-enqueue its pairs with the existing rules and retry the target.
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+complete_for_target(relations, target, budgets):
+  rules := monic original relations, with unit provenance
+  try target reduction
+  queue := all ordered pairs of rules
+  while queue is not empty:
+      enforce budgets
+      take a pair
+      for each overlap or inclusion composition:
+          residual, reduction_trace := reduce(composition)
+          if residual is nonzero:
+              provenance := composition_trace - reduction_trace
+              add normalized residual with normalized provenance
+              enqueue pairs involving the new rule
+              retry target reduction
+              if target residual is zero:
+                  return original-relation identity
+  return UNKNOWN
+\end{lstlisting}
+\end{minipage}\par
+
+The algorithm is a bounded, target-oriented instance of the noncommutative completion tradition associated with Gr\"obner--Shirshov bases and the Diamond Lemma. The theoretical framework is established; what matters for Forge is that the positive output is reduced to \eqref{eq:nc-cert} rather than requiring the kernel to trust the implementation of completion~\cite{bergman,gbnp}.
+
+\subsection{Termination claims that are and are not justified}
+A fixed finite set of the oriented rules terminates under this word order. Replacing an occurrence of a leading word by strictly smaller words decreases the corresponding well-founded multiset measure on the polynomial support. This is compatible with left and right contexts because degree-lexicographic order is a monomial order on words.
+
+The \emph{completion process} need not terminate. A finitely presented noncommutative algebra need not have a finite completed basis in the chosen generators and order. The commutative polynomial ring's Noetherian termination argument cannot simply be reused. The prototype therefore caps reduction steps, accumulated term/provenance size, rules, and examined compositions.
+
+If a finite converged basis has been established and its critical-pair conditions verified, a normal-form procedure can decide equality in the formal presented quotient. That is stronger evidence than this prototype exports. In particular, a nonzero residual under an incomplete set of rules does not prove even formal nonmembership.
+
+There is another semantic restriction even after a complete quotient analysis. A nonzero element of the \emph{universal presented algebra} can still map to zero under the particular interpretation in the user's Lean goal. For example, with no relations the word polynomial \(ab-ba\) is nonzero, but a particular pair of matrices may commute. A negative result about the presentation is not automatically a proof of \(ab\ne ba\) for those matrices. The shipped worker returns \unknown{} for both situations rather than crossing that boundary.
+
+\subsection{Examples with mathematical structure}
+
+\subsubsection{Weyl normal ordering}
+Let \(D\) and \(X\) satisfy
+\[
+ DX-XD=1.
+\]
+For positive integers \(m,n\), the tested target is
+\begin{equation}\label{eq:weyl}
+ D^mX^n=\sum_{k=0}^{\min(m,n)}
+ \binom{m}{k}\frac{n!}{(n-k)!}X^{n-k}D^{m-k}.
+\end{equation}
+For each concrete pair \(1\le m,n\le6\), the generator forms the two sides and the engine returns an original-relation identity. The checker verifies that identity exactly. The test generator's closed formula is not used by the checker.
+
+There is also a genuinely different computational oracle: interpret \(X\) as multiplication by the polynomial variable and \(D\) as differentiation, then act on \(1,x,\ldots,x^7\). Operators are applied rightmost first, and polynomial degree is allowed to grow as needed. The resulting 288 action checks agree with the certificates.
+
+It would be a mistake to substitute fixed finite-dimensional matrices with a truncated derivative/multiplication action and assume they satisfy the Weyl relation. In characteristic zero, \(\operatorname{tr}(DX-XD)=0\), whereas \(\operatorname{tr}(I)=d\) for a nonzero finite dimension \(d\). Boundary truncation necessarily breaks the relation. The oracle avoids that issue by using exact actions on individual monomials without a truncation boundary. These finite action tests are still sanity checks, not a proof of the general normal-ordering formula; the formal identity receipts establish the individual tested instances.
+
+\subsubsection{The quantum plane}
+For a fixed rational \(q\), use the relation
+\[
+ YX=qXY.
+\]
+A word with \(r\) occurrences of \(X\), \(s\) occurrences of \(Y\), and \(I\) inverted \(Y\)-before-\(X\) pairs should normalize to
+\[
+ q^I X^rY^s.
+\]
+The workload contains forty deterministic pseudo-random choices of a rational \(q\) and a word of length between three and twelve. Some words are already normal and yield an empty identity certificate; that is legitimate, not missing evidence. Changing the target by adding the constant one makes the saved certificate fail.
+
+A symbolic \(q\) is not silently covered by these rational instances. A production extension can use a central polynomial coefficient ring with monic relations, or add explicit commutation relations for a distinguished parameter. If leading coefficients must be inverted, the corresponding nonvanishing or invertibility obligations must be carried into Lean.
+
+\subsubsection{Clifford-style relations}
+Take generators satisfying \(e_i^2=1\) and \(e_ie_j+e_je_i=0\) for distinct indices. The tested family proves
+\[
+ (e_1+\cdots+e_d)^2=d,
+ \qquad 2\le d\le6.
+\]
+This demonstrates cooperation among many original relations and cancellation of cross terms. It does not formalize a Clifford algebra construction or prove its universal properties. It proves the displayed consequence in every interpretation satisfying the supplied relations.
+
+\subsection{Concrete library integration}
+GAP's GBNP package is an especially well-matched optional producer. Its documented \code{SGrobnerTrace} computes traceable noncommutative bases, \code{StrongNormalFormTraceDiff} supplies a trace for a reduction difference, and \code{EvalTrace} evaluates a trace in the original relations. The trace tuples already distinguish left context, relation index, right context, and coefficient~\cite{gbnp}.
+
+An adapter should decode those structured traces directly, convert their generator numbering and coefficient representation, and pass the result to Forge's independent checker. It should not scrape \code{PrintTraceList} output, and it should not use GBNP's own \code{EvalTrace} as its only checker. The supplied prototype has no GAP dependency; GBNP is a concrete larger-scale search replacement, not something executed in this study.
+
+For Lean, \code{FreeAlgebra} provides the semantic object, and Mathlib exposes a free-monoid basis suitable for connecting a sparse word representation to algebraic semantics~\cite{free-algebra}. A practical first replay path expands a small certificate into contextual hypothesis equalities and discharges the remaining ring rearrangement with \code{noncomm\_ring}. The scalable path proves one interpretation theorem for a sparse word-polynomial checker, reducing each later replay to exact coefficient arithmetic plus Theorem~\ref{thm:nc-sound}.
+
+The source reifier should initially accept only a single multiplication carrier with a known associative algebra structure. Function application is not automatically multiplication in an endomorphism algebra. Rectangular matrix products need a typed-path or multi-sorted extension. Inverses, adjoints, and transposes require explicit interpretation rules or supplied relations. Treating them as opaque generator expressions is safe for positive consequences, but loses the identities that would require analyzing their meaning.
+
+\subsection{Search improvements that preserve the same checker}
+The reference engine scans words and rule left-hand sides naively. A production implementation can index leading words by a prefix trie and maintain occurrence information, reducing repeated substring scans. Critical pairs can be prioritized by the degree of their overlap and by whether their residual words occur in the current target support. A deterministic age quota is needed if the intended search claim depends on eventual processing of deferred pairs.
+
+Certificate size may be a worse bottleneck than polynomial size. Store rule provenance as a DAG of contextual linear combinations rather than eagerly expanding it after every reduction. Before export, retain only nodes reachable from the target proof. The final checker can replay the DAG with memoized sparse polynomials or accept a flattened certificate when it is already small. All of these changes preserve the theorem checked by the current direct evaluator.
+
+The important engineering separation is therefore unusually sharp: the search can grow from this small Python implementation to GBNP or a specialized normal-ordering engine without changing the meaning of an accepted positive certificate.

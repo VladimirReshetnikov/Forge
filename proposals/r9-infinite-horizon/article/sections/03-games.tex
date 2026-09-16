@@ -1,0 +1,275 @@
+\section{Persistent witnesses: B\"uchi strategies and their dual certificates}
+\label{sec:games}
+
+\status{A finite total-arena B\"uchi solver and both certificate checkers are
+implemented in Python. Generalized acceptance and source-level strategy
+extraction are specified extensions, not executed features.}
+
+\subsection{A strategy is a witness with obligations over its future}
+Let $G=(V,V_0,V_1,E,B)$ be a finite directed arena. The ownership sets partition
+$V$, every vertex has at least one successor, and $B\subseteq V$ is the set of
+accepting vertices. Player 0 is the protagonist; player 1 is the antagonist.
+A play is an infinite sequence $v_0v_1\ldots$ following $E$. Each owner chooses
+the successor when its vertex is visited.
+
+The positive question at an initial vertex $s$ is
+\begin{equation}
+ \exists\sigma\;\forall\pi\text{ consistent with }\sigma\text{ from }s,
+ \quad \forall N\in\N\;\exists n\geq N:\ v_n\in B.
+ \label{eq:buchi}
+\end{equation}
+The expression on the right is the B\"uchi condition, denoted $\GF B$.
+A strategy may in general inspect the play history. On finite B\"uchi games,
+positional strategies, depending only on the current vertex, suffice for both
+players \cite{chatterjee-henzinger}. The shipped certificate language therefore
+contains a finite policy table, not a program with unbounded history.
+
+A single path through $B$ proves neither recurrence nor resistance to an
+opponent. A witness synthesized separately for each finite sample proves
+neither that the same policy works for all samples nor that it works forever.
+The policy itself must be the persistent witness, and its behavioral law must
+quantify over \emph{all} permitted future choices.
+
+The input validator rejects deadlocks. Whether a deadlock should lose, win, or
+be completed by a self-loop depends on the source semantics. Completing it
+without an explicit convention changes the meaning of \eqref{eq:buchi}.
+Likewise, any fairness restriction on an opponent must be represented as part
+of the objective or the model; no fairness is assumed here.
+
+\subsection{Positive certificate: decrease until acceptance, then reset}
+A positive certificate consists of a region $W\subseteq V$ containing $s$, a
+legal positional choice $\sigma(v)$ at every $v\in W\cap V_0$, and a natural
+rank $\rho:W\to\N$. Define the allowed edges under this policy by
+\[
+ E_\sigma(v)=
+ \begin{cases}
+  \{\sigma(v)\},&v\in V_0,\\
+  E(v),&v\in V_1.
+ \end{cases}
+\]
+The checker verifies
+\begin{align}
+ &E_\sigma(v)\subseteq W &&(v\in W),\label{eq:win-closed}\\
+ &\rho(v)>\rho(w) &&(v\in W\setminus B,\ w\in E_\sigma(v)).
+ \label{eq:win-rank}
+\end{align}
+There is no decrease requirement when the \emph{source} vertex belongs to $B$.
+At such a vertex the rank may rise again. Closure still applies there.
+
+\begin{theorem}[Positive rank soundness]
+\label{thm:buchi-rank}
+An accepted positive certificate proves \eqref{eq:buchi} with its supplied
+policy, extended arbitrarily outside $W$.
+\end{theorem}
+\begin{proof}
+Closure keeps every consistent play in $W$. Suppose some such play visits $B$
+only finitely often. Beyond its last accepting visit, every edge has a source
+outside $B$, so \eqref{eq:win-rank} gives an infinite strictly decreasing
+sequence of natural numbers. This is impossible. Equivalently, from any
+nonaccepting position, at most its current rank many transitions can occur
+before an accepting vertex is reached. Apply this argument after every finite
+prefix to obtain the quantifiers in \eqref{eq:buchi}.
+\end{proof}
+
+This is not ordinary termination. For the two-vertex cycle $a\to b\to a$ with
+$B=\{a\}$, take $\rho(a)=0$ and $\rho(b)=1$. The edge $b\to a$ decreases;
+$a\to b$ resets the rank. Every run is infinite and accepting. A globally
+strictly decreasing ranking would reject this correct recurrent behavior.
+This is the specific difference from Forge's existing compilation of cyclic
+proof obligations to well-founded descent.
+
+There is a useful bounded response property hidden in the same certificate.
+Let $H=\max_{v\in W}\rho(v)$. Starting at a nonaccepting vertex, acceptance
+occurs within $H$ transitions. Starting at an accepting vertex, a later
+accepting vertex occurs within $H+1$ transitions. The certificate thus gives a
+coarse recurrence-gap bound as well as qualitative infinite recurrence.
+This bound concerns graph steps; a source adapter with variable-duration steps
+needs an additional cost or timing argument.
+
+\subsection{Negative certificate: bound all future accepting visits}
+A negative result must do more than exhibit one bad play. It must show that
+\emph{no} protagonist strategy satisfies the objective. The dual witness is an
+antagonist strategy $\tau$ that defeats every protagonist continuation.
+
+Its certificate consists of $L\subseteq V$ containing $s$, a legal choice
+$\tau(v)$ at every $v\in L\cap V_1$, and $\kappa:L\to\N$. Now the allowed
+edges are
+\[
+ E_\tau(v)=
+ \begin{cases}
+  E(v),&v\in V_0,\\
+  \{\tau(v)\},&v\in V_1.
+ \end{cases}
+\]
+The local checks are
+\begin{align}
+ &E_\tau(v)\subseteq L,\label{eq:lose-closed}\\
+ &\kappa(v)\geq\kappa(w)+\one_B(v)
+       \qquad(w\in E_\tau(v)).\label{eq:lose-rank}
+\end{align}
+Unlike the positive rank, this rank never increases. Each departure from an
+accepting vertex consumes at least one unit. Nonaccepting cycles of constant
+rank are allowed, and are usually the intended counterbehavior.
+
+\begin{theorem}[Negative rank soundness]
+\label{thm:cobuchi-rank}
+An accepted negative certificate forces at most $\kappa(s)$ accepting visits
+on every infinite play consistent with $\tau$ from $s$. In particular,
+\eqref{eq:buchi} is false.
+\end{theorem}
+\begin{proof}
+For every finite prefix of length $N$, summing \eqref{eq:lose-rank} gives
+\[
+ \sum_{i=0}^{N-1}\one_B(v_i)
+ \leq \kappa(v_0)-\kappa(v_N)
+ \leq \kappa(s).
+\]
+Closure makes every rank in this expression defined. The bound holds for every
+$N$, so infinitely many accepting visits are impossible. The certificate
+checks every protagonist edge, hence the conclusion does not depend on a
+particular protagonist policy.
+\end{proof}
+
+The distinction between a counterstrategy and a counterexample lasso is
+operationally important. A lasso can refute one fixed candidate policy. It
+cannot refute the existence of a different winning policy. The negative
+certificate leaves all player-0 choices available and checks them universally.
+
+\subsection{Search by repeated attractors}
+For a total subarena $U$, the player-$i$ attractor of $T\subseteq U$ is the
+least set containing $T$ and closed under the following additions: a
+player-$i$ vertex is added when it has a successor already in the set; a vertex
+owned by the other player is added when all its successors in $U$ are already
+in the set. A layered construction records the round of addition and a
+rank-decreasing choice at the controlled vertices.
+
+The solver uses the classical repeated-attractor scheme discussed in
+\cite{chatterjee-henzinger}, not that paper's faster specialized algorithm.
+\begin{lstlisting}[caption={The implemented Buechi search, in semantic pseudocode.}]
+U := all vertices
+while U is nonempty:
+    A := Attr_0(B intersect U) inside U
+    D := U minus A
+    if D is empty:
+        return U as the winning region
+    Z := Attr_1(D) inside U
+    record player-1 choices that reach D and then avoid B
+    remove Z from U
+return the empty winning region
+\end{lstlisting}
+
+The maintained subarena is total: every remaining player-0 vertex has some
+remaining successor, and every successor of a remaining player-1 vertex
+remains. Thus the attractor computation never gains a spurious victory from an
+empty successor set. This invariant also explains why the final attractor
+policy remains winning in the original arena rather than only in an induced
+graph with some inconvenient opponent edges removed.
+
+When $D$ is nonempty, no vertex of $D$ is accepting. At a player-0 vertex of
+$D$, every successor that remains in $U$ stays in $D$; at a player-1 vertex
+there is a successor in $D$. The antagonist can therefore reach $D$ from $Z$
+and avoid $B$ thereafter, unless the protagonist exits to an earlier removed
+region. That earlier region is already losing. Layer numbers can decrease only
+finitely often, so the assembled antagonist policy is co-B\"uchi winning.
+At least one vertex is removed in each unsuccessful outer iteration.
+
+When the final $U$ equals its attractor, the attractor levels supply the
+positive rank. At nonaccepting player-0 vertices the recorded move descends; at
+nonaccepting player-1 vertices all moves descend. At accepting player-0
+vertices, choose any successor in $U$. No descent is required there.
+
+The negative certificate intentionally does not expose the search's removal
+layers as its authoritative argument. After fixing the assembled antagonist
+policy on the losing region, the implementation solves the local longest-weight
+problem
+\begin{equation}
+ \kappa(v)=\max_{w\in E_\tau(v)}
+                  \bigl(\one_B(v)+\kappa(w)\bigr)
+ \label{eq:counter-longest}
+\end{equation}
+by monotone iteration from zero. An accepting vertex cannot occur on a cycle
+of this fixed-policy graph, or the policy would not force co-B\"uchi. Cycles
+therefore have weight zero. Removing repeated zero-weight cycles from a walk
+shows that its total accepting-departure weight has a finite maximum, and the
+iteration stabilizes. The replay checker verifies only
+\eqref{eq:lose-closed}--\eqref{eq:lose-rank}, not this optimization or the
+attractor computations that preceded it.
+
+\subsection{Completeness and computational costs}
+\begin{proposition}[Completeness of the finite rank languages]
+Every winning initial vertex in a finite total B\"uchi game has a positive
+certificate of the preceding form; every losing initial vertex has a negative
+certificate.
+\end{proposition}
+\begin{proof}
+Choose positional winning strategies, whose existence follows from finite-game
+memoryless determinacy. Under a winning protagonist policy, a reachable cycle
+entirely outside $B$ would be a losing play. The subgraph on nonaccepting
+vertices is therefore acyclic. Give an accepting vertex rank zero and a
+nonaccepting vertex the maximum number of transitions needed to reach the
+first accepting vertex in this policy graph. These ranks satisfy
+\eqref{eq:win-rank}.
+
+Under a winning antagonist policy, a reachable cycle containing an accepting
+vertex would allow infinitely many accepting visits. No such cycle exists.
+Give each vertex the maximum accepting-departure count of a finite walk from
+it. Nonaccepting cycles can be erased without reducing this count; the maximum
+is finite and satisfies \eqref{eq:lose-rank}. Restrict either construction to
+the corresponding strategy-closed region.
+\end{proof}
+
+The implemented attractor uses repeated scans for transparency. With $n$
+vertices and $m$ edges, one attractor may require $O(nm)$ work and there may be
+$O(n)$ outer iterations, giving a coarse $O(n^2m)$ bound for this Python
+version. It would be incorrect to label the implementation $O(nm)$ merely
+because that bound is standard for the classical algorithm with better data
+structures.
+
+The direct production improvement is a predecessor queue with a counter of
+not-yet-attracted successors for each opponent-owned vertex. Each edge is then
+processed once per attractor, yielding $O(nm)$ for the outer algorithm. The
+negative longest-weight iteration also admits an SCC-condensation dynamic
+program. Neither optimization is required for soundness, and neither is
+claimed to have been measured here. The rank checker itself costs $O(n+m)$
+local tests, apart from integer bit costs and input validation.
+
+\subsection{Examples that separate the semantics}
+In the arena with edges $s\to s$, $s\to b$, $b\to b$ and $B=\{b\}$,
+player 0 wins from $s$ when it owns $s$: choose $b$. Change only the owner of
+$s$ to player 1 and the antagonist can remain at $s$ forever. The edge graph
+has not changed, but the correct verdict has. Tests check both outcomes and
+also reject the old policy after the ownership mutation.
+
+In the arena $a\to b$, $b\to b$, with $B=\{a\}$ and start $a$, the target is
+visited immediately. The B\"uchi objective is still false: there is only one
+accepting visit. This is a regression against substituting ordinary
+reachability for a temporal specification.
+
+A final trap is to omit an inconvenient opponent edge during replay. The
+positive checker reads all successors of every player-1 vertex from the
+original problem. A certificate cannot shrink this list. Similarly, the
+negative checker cannot remove a player-0 choice. These are semantic checks,
+not optional certificate-format hygiene.
+
+\subsection{A concrete next extension: several recurring obligations}
+For a conjunction $\bigwedge_{j<k}\GF B_j$, a finite monitor can remember the
+next acceptance set that must be visited. This is a specified extension, not
+part of the shipped solver API. Use product states $(v,j)$, with $j\in\{0,
+\ldots,k-1\}$, preserve the owner of $v$, and update on each departure from $v$:
+\[
+ j'=\begin{cases}(j+1)\bmod k,&v\in B_j,\\j,&v\notin B_j.\end{cases}
+\]
+Let the product accepting set consist of $(v,k-1)$ with $v\in B_{k-1}$.
+A visit to this set completes a full round. Infinitely many completed rounds
+are equivalent to infinitely many visits to every $B_j$; both directions follow
+by following the next-required index. A positional product strategy becomes a
+source strategy with $k$ memory states.
+
+Crucially, ``the monitor index is zero'' is \emph{not} an adequate accepting
+condition: an execution may remain at index zero forever without satisfying
+$B_0$. The acceptance event must mean completion of a round. A future
+implementation should test a system stuck before its first required event and
+a system whose successful policy must alternate between two obligations.
+This extension remains finite and precise; it does not silently claim support
+for arbitrary fairness assumptions, partial observation, or general temporal
+logic.

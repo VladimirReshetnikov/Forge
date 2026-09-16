@@ -1,0 +1,5345 @@
+{
+  "jet/exp_a1/4_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/4"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1/4_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1/4_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1/4_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1/4_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/4"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "2/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1/4_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "2/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1/4_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "2/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1/4_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "2/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1/4_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/4"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "3/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1/4_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "3/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1/4_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "3/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1/4_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/4"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/4"
+          ]
+        ]
+      ],
+      "b": "3/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1/2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/2"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/2"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1/2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1/2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1/2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1/2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/2"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/2"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1/2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1/2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1/2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1/2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/2"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/2"
+            ]
+          ]
+        ]
+      ],
+      "b": "3/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1/2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "3/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1/2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "3/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1/2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/2"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/2"
+          ]
+        ]
+      ],
+      "b": "3/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a1_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "3/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a1_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "3/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a1_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "3/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a1_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "1/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "1/1"
+          ]
+        ]
+      ],
+      "b": "3/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "2/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "2/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "1/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "1/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a2_r1/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "1/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "2/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "2/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a2_r1/2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_a2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "2/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "2/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "3/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/sin_a2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "sin",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "3/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/log1p_a2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "log1p",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "3/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/atan_a2_r3/4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "poly",
+          [
+            "0/1",
+            "2/1"
+          ]
+        ],
+        [
+          "neg",
+          [
+            "atan",
+            "2/1"
+          ]
+        ]
+      ],
+      "b": "3/8"
+    },
+    "description": "scaled elementary gap",
+    "expected_kind": "anchored"
+  },
+  "jet/product_0": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "1/4"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "1/4"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "1/4"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "1/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/1"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_1": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "1/2"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "1/2"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "1/2"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "1/2"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_2": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "3/4"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "3/4"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "3/4"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "3/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/3"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_3": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "1/1"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "1/1"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "1/1"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "1/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/4"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_4": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "5/4"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "5/4"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "5/4"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "5/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/5"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_5": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "3/2"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "3/2"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "3/2"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "3/2"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/6"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_6": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "7/4"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "7/4"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "7/4"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "7/4"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/7"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/product_7": {
+    "subject": {
+      "expr": [
+        "mul",
+        [
+          "add",
+          [
+            "exp",
+            "2/1"
+          ],
+          [
+            "neg",
+            [
+              "poly",
+              [
+                "1/1",
+                "2/1"
+              ]
+            ]
+          ]
+        ],
+        [
+          "add",
+          [
+            "poly",
+            [
+              "0/1",
+              "2/1"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "sin",
+              "2/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/8"
+    },
+    "description": "product of two elementary gaps",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_remainder_2": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "higher-order exponential gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_remainder_3": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1",
+              "1/2"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "higher-order exponential gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_remainder_4": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1",
+              "1/2",
+              "1/6"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "higher-order exponential gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_remainder_5": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1",
+              "1/2",
+              "1/6",
+              "1/24"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "higher-order exponential gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_remainder_6": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1",
+              "1/2",
+              "1/6",
+              "1/24",
+              "1/120"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "higher-order exponential gap",
+    "expected_kind": "anchored"
+  },
+  "jet/exp_remainder_7": {
+    "subject": {
+      "expr": [
+        "add",
+        [
+          "exp",
+          "1/1"
+        ],
+        [
+          "neg",
+          [
+            "poly",
+            [
+              "1/1",
+              "1/1",
+              "1/2",
+              "1/6",
+              "1/24",
+              "1/120",
+              "1/720"
+            ]
+          ]
+        ]
+      ],
+      "b": "1/2"
+    },
+    "description": "higher-order exponential gap",
+    "expected_kind": "anchored"
+  },
+  "ladder/exp_linear": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand example",
+    "expected_kind": "ladder"
+  },
+  "ladder/exp_taylor_2": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand Taylor family",
+    "expected_kind": "ladder"
+  },
+  "ladder/exp_taylor_3": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1",
+            "-1/2"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand Taylor family",
+    "expected_kind": "ladder"
+  },
+  "ladder/exp_taylor_4": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1",
+            "-1/2",
+            "-1/6"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand Taylor family",
+    "expected_kind": "ladder"
+  },
+  "ladder/exp_taylor_5": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1",
+            "-1/2",
+            "-1/6",
+            "-1/24"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand Taylor family",
+    "expected_kind": "ladder"
+  },
+  "ladder/exp_taylor_6": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1",
+            "-1/2",
+            "-1/6",
+            "-1/24",
+            "-1/120"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand Taylor family",
+    "expected_kind": "ladder"
+  },
+  "ladder/exp_taylor_7": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/1",
+            "-1/1",
+            "-1/2",
+            "-1/6",
+            "-1/24",
+            "-1/120",
+            "-1/720"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "hand Taylor family",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_0": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "3/1",
+            "2/1",
+            "0/1",
+            "1/3"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_1": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "3/4"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-3/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "9/4",
+            "-3/2",
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_2": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-2/3"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "3/2",
+            "-2/1",
+            "0/1",
+            "-1/3"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "13/6"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_3": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-253/108",
+            "-23/18",
+            "-1/6"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "3/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "-9/4"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "70/27"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_4": {
+    "subject": {
+      "exp_poly": [
+        [
+          "1/1",
+          [
+            "0/1",
+            "2/1",
+            "1/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_5": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "5/1"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-4/1",
+            "6/1",
+            "-3/2",
+            "2/3"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_6": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-2/3"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "9/8",
+            "3/4",
+            "1/4"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "-11/24",
+            "3/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_7": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-187/216",
+            "-17/36",
+            "-1/12"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "2/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "1/8"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "47/27"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_8": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-1/4"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "9/4",
+            "-1/2",
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_9": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "3/1"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-3/1",
+            "6/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_10": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-13/2",
+            "-3/1",
+            "-1/2"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "2/1",
+            "-7/1"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "9/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_11": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "4249/1944",
+            "1031/324",
+            "43/108",
+            "4/27",
+            "1/36"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "-3/8"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "46/243"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_12": {
+    "subject": {
+      "exp_poly": [
+        [
+          "1/1",
+          [
+            "0/1",
+            "3/1",
+            "1/1",
+            "1/3"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_13": {
+    "subject": {
+      "exp_poly": [
+        [
+          "1/1",
+          [
+            "3/1"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "-3/1",
+            "3/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_14": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "2/1",
+            "-5/4",
+            "1/4"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "1/1",
+            "-3/4",
+            "1/4"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_15": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "1/1",
+            "1/1",
+            "3/2",
+            "0/1",
+            "1/6",
+            "1/40"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_16": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-6/1",
+            "-3/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "9/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_17": {
+    "subject": {
+      "exp_poly": [
+        [
+          "2/1",
+          [
+            "2/1",
+            "3/1",
+            "2/1",
+            "1/6"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_18": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "277/81",
+            "88/27",
+            "8/9",
+            "2/9"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-2/1"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "47/81"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_19": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-29/36",
+            "-7/6"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "17/4",
+            "-1/2",
+            "1/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "-7/4"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "11/36"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_20": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "7/9"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "2/9",
+            "1/3"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_21": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-41/27",
+            "-14/9",
+            "-1/3"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "41/27"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_22": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "59/16",
+            "2/1",
+            "5/8",
+            "1/6"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "-27/16",
+            "19/8"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_23": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "27/8",
+            "5/4"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-4/1",
+            "1/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "29/8",
+            "-3/2",
+            "1/4"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_24": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "-5/2",
+            "-1/1",
+            "-1/2"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "5/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_25": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "1/4",
+            "7/4"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "3/4",
+            "-1/4",
+            "1/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_26": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "67/27",
+            "13/9",
+            "1/6"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-3/2"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "109/54"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_27": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "2/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "7/1",
+            "10/1",
+            "5/2",
+            "2/3"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "-9/1",
+            "4/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_28": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "19/9"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "8/9",
+            "1/3"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_29": {
+    "subject": {
+      "exp_poly": [
+        [
+          "0/1",
+          [
+            "1/2"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "-4/1",
+            "-2/1"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "9/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_30": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "7/1",
+            "2/1"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-11/1",
+            "3/1",
+            "-2/1"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "5/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_31": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "2132/729",
+            "67/81",
+            "43/54",
+            "13/81"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "55/729",
+            "-13/243",
+            "2/81"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_32": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-7/4"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "7/4",
+            "1/2",
+            "1/1"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_33": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "-10/27",
+            "7/9"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "10/27",
+            "1/9"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_34": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "1/3"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "-3/1",
+            "-2/1",
+            "-1/2",
+            "-1/3"
+          ]
+        ],
+        [
+          "2/1",
+          [
+            "17/3"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "ladder/planted_35": {
+    "subject": {
+      "exp_poly": [
+        [
+          "-1/1",
+          [
+            "1/2"
+          ]
+        ],
+        [
+          "0/1",
+          [
+            "-3/1",
+            "-2/1",
+            "-1/2",
+            "-1/3"
+          ]
+        ],
+        [
+          "1/1",
+          [
+            "11/2"
+          ]
+        ]
+      ],
+      "domain": "x>=0"
+    },
+    "description": "planted integrating-factor chain",
+    "expected_kind": "ladder"
+  },
+  "tail/rational_0": {
+    "subject": {
+      "numerator": [
+        "2/1"
+      ],
+      "denominator": [
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_1": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "-1/1",
+        "-4/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "-4/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_2": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "-1/1",
+        "4/1"
+      ],
+      "denominator": [
+        "3/1",
+        "2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_3": {
+    "subject": {
+      "numerator": [
+        "-1/1",
+        "-4/1",
+        "4/1"
+      ],
+      "denominator": [
+        "2/1",
+        "2/1",
+        "-2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_4": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "2/1",
+        "1/1",
+        "2/1"
+      ],
+      "denominator": [
+        "4/1",
+        "1/1",
+        "-2/1",
+        "-3/1",
+        "3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_5": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "4/1"
+      ],
+      "denominator": [
+        "1/1",
+        "-4/1",
+        "2/1",
+        "4/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_6": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "1/1",
+        "-3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "3/1",
+        "-1/1",
+        "4/1",
+        "-1/1",
+        "-1/1",
+        "3/1",
+        "0/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_7": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "-1/1",
+        "1/1",
+        "0/1",
+        "0/1",
+        "-4/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_8": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "4/1"
+      ],
+      "denominator": [
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_9": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "2/1"
+      ],
+      "denominator": [
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_10": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "1/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "3/1",
+        "4/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_11": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "4/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_12": {
+    "subject": {
+      "numerator": [
+        "-1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "1/1",
+        "4/1",
+        "-2/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_13": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "3/1",
+        "3/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "-3/1",
+        "-1/1",
+        "4/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_14": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "-4/1",
+        "2/1",
+        "-3/1",
+        "4/1"
+      ],
+      "denominator": [
+        "4/1",
+        "-4/1",
+        "3/1",
+        "4/1",
+        "-3/1",
+        "3/1",
+        "0/1",
+        "-2/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_15": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "-3/1",
+        "-1/1",
+        "-1/1",
+        "2/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_16": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "-1/1",
+        "1/1",
+        "4/1"
+      ],
+      "denominator": [
+        "-4/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_17": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "4/1"
+      ],
+      "denominator": [
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_18": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "4/1"
+      ],
+      "denominator": [
+        "-4/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_19": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "-3/1",
+        "4/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-1/1",
+        "-3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_20": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "0/1",
+        "-1/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_21": {
+    "subject": {
+      "numerator": [
+        "2/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "-2/1",
+        "0/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_22": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "1/1",
+        "4/1"
+      ],
+      "denominator": [
+        "3/1",
+        "2/1",
+        "-4/1",
+        "2/1",
+        "0/1",
+        "-4/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_23": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-3/1",
+        "3/1",
+        "0/1",
+        "2/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_24": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "3/1"
+      ],
+      "denominator": [
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_25": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "1/1"
+      ],
+      "denominator": [
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_26": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_27": {
+    "subject": {
+      "numerator": [
+        "2/1"
+      ],
+      "denominator": [
+        "1/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_28": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "3/1",
+        "-4/1",
+        "3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-2/1",
+        "4/1",
+        "4/1",
+        "3/1",
+        "3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_29": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "-1/1",
+        "-4/1",
+        "-2/1",
+        "4/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "1/1",
+        "-1/1",
+        "3/1",
+        "1/1",
+        "0/1",
+        "-3/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_30": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "-4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "-1/1",
+        "-3/1",
+        "-2/1",
+        "1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_31": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "-2/1",
+        "-3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "-1/1",
+        "2/1",
+        "-2/1",
+        "4/1",
+        "1/1",
+        "3/1",
+        "-1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_32": {
+    "subject": {
+      "numerator": [
+        "3/1"
+      ],
+      "denominator": [
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_33": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_34": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_35": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "3/1",
+        "3/1"
+      ],
+      "denominator": [
+        "0/1",
+        "1/1",
+        "2/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_36": {
+    "subject": {
+      "numerator": [
+        "2/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_37": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "0/1",
+        "1/1",
+        "-3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "3/1",
+        "1/1",
+        "3/1",
+        "-2/1",
+        "3/1",
+        "-1/1",
+        "3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_38": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "-2/1",
+        "2/1",
+        "-3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_39": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "2/1"
+      ],
+      "denominator": [
+        "1/1",
+        "-2/1",
+        "1/1",
+        "-4/1",
+        "2/1",
+        "0/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_40": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "-3/1",
+        "0/1",
+        "2/1",
+        "4/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "4/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_41": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "2/1",
+        "3/1",
+        "3/1",
+        "4/1"
+      ],
+      "denominator": [
+        "3/1",
+        "-3/1",
+        "3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_42": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "-1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "2/1",
+        "0/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_43": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "-3/1",
+        "4/1",
+        "1/1",
+        "2/1"
+      ],
+      "denominator": [
+        "2/1",
+        "4/1",
+        "1/1",
+        "-4/1",
+        "4/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_44": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "-3/1",
+        "-4/1",
+        "4/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "-2/1",
+        "-1/1",
+        "1/1",
+        "-1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_45": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "-4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "1/1",
+        "1/1",
+        "-1/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_46": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "3/1",
+        "1/1"
+      ],
+      "denominator": [
+        "4/1",
+        "-3/1",
+        "-1/1",
+        "3/1",
+        "3/1",
+        "3/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_47": {
+    "subject": {
+      "numerator": [
+        "3/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "0/1",
+        "4/1",
+        "2/1",
+        "-3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_48": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "-1/1",
+        "-4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_49": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "3/1"
+      ],
+      "denominator": [
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_50": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "-4/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "-1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_51": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "1/1",
+        "-3/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_52": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "4/1",
+        "-2/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "0/1",
+        "-2/1",
+        "4/1",
+        "-4/1",
+        "1/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_53": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "-2/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "-2/1",
+        "-3/1",
+        "-4/1",
+        "1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_54": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "3/1"
+      ],
+      "denominator": [
+        "4/1",
+        "-1/1",
+        "-4/1",
+        "-3/1",
+        "-2/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_55": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "4/1",
+        "-1/1",
+        "4/1",
+        "-4/1",
+        "4/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_56": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "-2/1",
+        "1/1"
+      ],
+      "denominator": [
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_57": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_58": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "-3/1",
+        "4/1"
+      ],
+      "denominator": [
+        "2/1",
+        "-3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_59": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "4/1",
+        "-1/1",
+        "-3/1",
+        "4/1"
+      ],
+      "denominator": [
+        "0/1",
+        "4/1",
+        "-2/1",
+        "3/1",
+        "2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_60": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "3/1",
+        "-2/1",
+        "2/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-3/1",
+        "0/1",
+        "-1/1",
+        "2/1",
+        "-4/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_61": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-2/1",
+        "0/1",
+        "0/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_62": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "1/1",
+        "3/1",
+        "1/1",
+        "0/1",
+        "2/1",
+        "1/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_63": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "-3/1",
+        "2/1",
+        "-3/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "-1/1",
+        "-4/1",
+        "3/1",
+        "0/1",
+        "-2/1",
+        "0/1",
+        "-2/1",
+        "-4/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_64": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "1/1"
+      ],
+      "denominator": [
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_65": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "2/1"
+      ],
+      "denominator": [
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_66": {
+    "subject": {
+      "numerator": [
+        "3/1"
+      ],
+      "denominator": [
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_67": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "-4/1",
+        "-3/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-4/1",
+        "-4/1",
+        "3/1",
+        "-2/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_68": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "1/1",
+        "-1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "0/1",
+        "3/1",
+        "-1/1",
+        "1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_69": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "-1/1",
+        "-2/1",
+        "3/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_70": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-4/1",
+        "0/1",
+        "0/1",
+        "-2/1",
+        "1/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_71": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "2/1",
+        "1/1",
+        "3/1",
+        "2/1",
+        "-3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_72": {
+    "subject": {
+      "numerator": [
+        "-1/1",
+        "-4/1",
+        "4/1"
+      ],
+      "denominator": [
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_73": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "-1/1",
+        "-4/1",
+        "0/1",
+        "3/1"
+      ],
+      "denominator": [
+        "1/1",
+        "-1/1",
+        "-2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_74": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "4/1",
+        "-1/1",
+        "4/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "1/1",
+        "-3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_75": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "3/1",
+        "-4/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "1/1",
+        "-4/1",
+        "-4/1",
+        "-4/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_76": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "1/1",
+        "4/1",
+        "4/1",
+        "3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_77": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "1/1",
+        "-2/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_78": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "4/1",
+        "-1/1",
+        "-3/1",
+        "4/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_79": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "4/1",
+        "-2/1",
+        "2/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-4/1",
+        "1/1",
+        "-3/1",
+        "-4/1",
+        "3/1",
+        "0/1",
+        "-4/1",
+        "-3/1",
+        "2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_80": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_81": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "0/1",
+        "-2/1",
+        "1/1",
+        "4/1"
+      ],
+      "denominator": [
+        "2/1",
+        "3/1",
+        "-2/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_82": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "-4/1",
+        "-1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "0/1",
+        "-3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_83": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "-3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "4/1",
+        "4/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_84": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "-4/1",
+        "4/1",
+        "-3/1",
+        "1/1"
+      ],
+      "denominator": [
+        "4/1",
+        "3/1",
+        "3/1",
+        "-1/1",
+        "0/1",
+        "2/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_85": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "0/1",
+        "1/1",
+        "0/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "2/1",
+        "-2/1",
+        "3/1",
+        "4/1",
+        "0/1",
+        "1/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_86": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "2/1",
+        "3/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-4/1",
+        "3/1",
+        "0/1",
+        "1/1",
+        "0/1",
+        "0/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_87": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "-3/1",
+        "1/1"
+      ],
+      "denominator": [
+        "4/1",
+        "2/1",
+        "1/1",
+        "-2/1",
+        "0/1",
+        "1/1",
+        "-2/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_88": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "1/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_89": {
+    "subject": {
+      "numerator": [
+        "-1/1",
+        "3/1",
+        "-3/1",
+        "-4/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "-3/1",
+        "-3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_90": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "4/1"
+      ],
+      "denominator": [
+        "3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_91": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "0/1",
+        "2/1"
+      ],
+      "denominator": [
+        "2/1",
+        "2/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_92": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-4/1",
+        "1/1",
+        "-4/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_93": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "-1/1",
+        "-3/1",
+        "4/1",
+        "2/1"
+      ],
+      "denominator": [
+        "3/1",
+        "-4/1",
+        "4/1",
+        "1/1",
+        "2/1",
+        "-2/1",
+        "-2/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_94": {
+    "subject": {
+      "numerator": [
+        "3/1"
+      ],
+      "denominator": [
+        "0/1",
+        "3/1",
+        "2/1",
+        "2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_95": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "2/1",
+        "2/1",
+        "-1/1",
+        "-2/1",
+        "1/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_96": {
+    "subject": {
+      "numerator": [
+        "4/1",
+        "3/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_97": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "3/1"
+      ],
+      "denominator": [
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_98": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_99": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_100": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "1/1",
+        "-3/1",
+        "1/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_101": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "-4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "3/1",
+        "3/1",
+        "-3/1",
+        "-2/1",
+        "-1/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_102": {
+    "subject": {
+      "numerator": [
+        "3/1"
+      ],
+      "denominator": [
+        "1/1",
+        "-3/1",
+        "1/1",
+        "-4/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_103": {
+    "subject": {
+      "numerator": [
+        "-4/1",
+        "4/1",
+        "3/1",
+        "1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "-2/1",
+        "0/1",
+        "-4/1",
+        "4/1",
+        "1/1",
+        "-4/1",
+        "-1/1",
+        "-4/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_104": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_105": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_106": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "-3/1",
+        "4/1",
+        "1/1"
+      ],
+      "denominator": [
+        "-3/1",
+        "2/1",
+        "1/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_107": {
+    "subject": {
+      "numerator": [
+        "-1/1",
+        "3/1",
+        "-3/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "3/1",
+        "4/1",
+        "4/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_108": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "3/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_109": {
+    "subject": {
+      "numerator": [
+        "-1/1",
+        "2/1"
+      ],
+      "denominator": [
+        "-1/1",
+        "4/1",
+        "2/1",
+        "-1/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_110": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "4/1",
+        "2/1",
+        "-2/1",
+        "-1/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_111": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "-3/1",
+        "0/1",
+        "-4/1",
+        "2/1"
+      ],
+      "denominator": [
+        "2/1",
+        "0/1",
+        "3/1",
+        "1/1",
+        "-4/1",
+        "-2/1",
+        "3/1",
+        "-2/1",
+        "3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_112": {
+    "subject": {
+      "numerator": [
+        "-2/1",
+        "1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_113": {
+    "subject": {
+      "numerator": [
+        "0/1",
+        "-2/1",
+        "1/1"
+      ],
+      "denominator": [
+        "4/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_114": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "-4/1",
+        "3/1"
+      ],
+      "denominator": [
+        "3/1",
+        "-2/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_115": {
+    "subject": {
+      "numerator": [
+        "3/1",
+        "-1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "-2/1",
+        "-3/1",
+        "-2/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "divergence"
+  },
+  "tail/rational_116": {
+    "subject": {
+      "numerator": [
+        "-3/1",
+        "-2/1",
+        "-1/1",
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "-4/1",
+        "-1/1",
+        "3/1",
+        "2/1",
+        "3/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_117": {
+    "subject": {
+      "numerator": [
+        "1/1",
+        "1/1",
+        "3/1"
+      ],
+      "denominator": [
+        "0/1",
+        "3/1",
+        "4/1",
+        "0/1",
+        "3/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_118": {
+    "subject": {
+      "numerator": [
+        "4/1"
+      ],
+      "denominator": [
+        "0/1",
+        "3/1",
+        "-2/1",
+        "1/1",
+        "2/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "tail/rational_119": {
+    "subject": {
+      "numerator": [
+        "2/1",
+        "0/1",
+        "2/1"
+      ],
+      "denominator": [
+        "3/1",
+        "0/1",
+        "0/1",
+        "-3/1",
+        "1/1",
+        "2/1",
+        "3/1",
+        "4/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "unplanted positive-leading rational function",
+    "expected_kind": "barrier"
+  },
+  "optimized/p2_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p2_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p2_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p3_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p3_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p3_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p4_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p4_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p4_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p5_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p5_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p5_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p6_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p6_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p6_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p7_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p7_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p7_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p8_N2": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p8_N5": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  },
+  "optimized/p8_N10": {
+    "subject": {
+      "numerator": [
+        "1/1"
+      ],
+      "denominator": [
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "0/1",
+        "1/1"
+      ],
+      "interpretation": "eventual-rational-tail"
+    },
+    "description": "exact one-variable coefficient optimization",
+    "expected_kind": "barrier"
+  }
+}

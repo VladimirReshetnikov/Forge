@@ -1,0 +1,176 @@
+\section{Alternating probabilistic simulation}
+\label{sec:simulation}
+
+\subsection{A fixed point whose quantifiers matter}
+
+A probabilistic implementation can have several enabled actions. To match it,
+a specification may choose a different action depending on which
+implementation action was chosen. This cannot be represented by ordinary
+closure under all pairs of actions.
+
+Let $S,T$ be finite state sets. Each source state $s$ has a nonempty finite
+set of actions $A(s)$, with transition law $P_{s,a}$ on $S$. Each target state
+$t$ has actions $B(t)$ and laws $Q_{t,b}$ on $T$. Let $R_0\subseteq S\times T$
+be an externally supplied observation compatibility relation. For a relation
+$R$, define
+\begin{equation}
+ \mathcal F(R)=\left\{(s,t)\in R_0:
+ \begin{array}{l}
+ \forall a\in A(s),\ \exists b\in B(t),\ \exists\gamma,\\
+ \gamma\text{ couples }P_{s,a},Q_{t,b}
+       \text{ and }\supp\gamma\subseteq R
+ \end{array}\right\}.
+ \label{eq:sim-operator}
+\end{equation}
+The operator is monotone. A simulation is a post-fixed relation
+$R\subseteq\mathcal F(R)$, and the desired output is the greatest such
+relation contained in $R_0$.
+
+The order of choice is part of the semantics:
+\[
+ \forall\text{ source action }a\quad
+ \exists\text{ target action }b\quad
+ \exists\text{ joint transition }\gamma\quad
+ \forall\text{ positive-mass outcomes}.
+\]
+The responder sees the state pair and the source action. It does not see the
+sampled successor before choosing its action. Swapping those binders changes
+the refinement contract.
+
+\subsection{Positive and negative evidence in one certificate}
+
+The proposer starts with $R_0$ and repeatedly removes a pair that violates
+\eqref{eq:sim-operator}. Its certificate has two parts.
+
+First, an ordered deletion trace records a removed pair $(s,t)$, one offending
+source action $a$, and for \emph{each} target action $b$ a Hall subset
+$A_b\subseteq S$ such that
+\begin{equation}
+ P_{s,a}(A_b)>Q_{t,b}(R(A_b)),
+ \label{eq:sim-obstruction}
+\end{equation}
+where $R$ is the live relation immediately \emph{before} this deletion.
+By Lemma~\ref{lem:hall}, no coupling for that target action can be supported
+by the current relation.
+
+Second, for the final live relation $R_*$, the certificate lists a target action
+and a zero-defect coupling for every triple $(s,t,a)$ with $(s,t)\in R_*$ and
+$a\in A(s)$. The checker verifies complete source-action coverage, rather than
+accepting a subset of the action table. These couplings establish
+$R_*\subseteq\mathcal F(R_*)$.
+
+\begin{theorem}[Greatest-simulation certificate]
+\label{thm:simulation}
+If every deletion obstruction is valid against its pre-deletion relation, and
+the final matching table covers all surviving pairs and source actions, then
+$R_*$ is the greatest simulation contained in $R_0$.
+\end{theorem}
+\begin{proof}
+Let $S'$ be any simulation contained in $R_0$. Inductively suppose
+$S'\subseteq R$ just before a deletion. If the deleted pair $(s,t)$ belonged
+to $S'$, the simulation condition for its offending action $a$ would give some
+target action $b$ and a coupling supported by $S'$, hence supported by $R$.
+That contradicts \eqref{eq:sim-obstruction}. Thus $S'$ remains a subset after
+the deletion. At the end, every simulation is contained in $R_*$. The final
+matching table proves that $R_*$ itself is a simulation, so it is greatest.
+\end{proof}
+
+This is not a negative verdict inferred from saturation stopping. Every removed
+pair has a local obstruction, and the checker replays the relation changes
+in order. Conversely, a trace of valid removals without a final complete
+matching table would establish only exclusion of those pairs, not greatestness
+of the remaining relation.
+
+\subsection{Algorithm, complexity, and incremental improvement}
+
+For each live pair and each source action, run the exact transport proposer
+against target actions until a zero-defect coupling is found. If every target
+action has positive defect, record the Hall subsets and remove the pair.
+Restart scanning, and finally generate the matching table for survivors.
+
+\begin{lstlisting}
+R := observation-compatible pairs
+removed := []
+repeat:
+  find (s,t) in R and source action a such that:
+    for every target action b,
+      optimalTransportDefect(P[s,a], Q[t,b], R) > 0
+  if no such pair exists: break
+  emit (s,t,a, one strict Hall obstruction for every b)
+  R := R minus {(s,t)}
+emit one supported coupling for every (s,t,a) remaining
+\end{lstlisting}
+
+There are at most $|R_0|$ deletions. For $N=|R_0|$, at most $A$ source actions
+and $B$ target actions per state, and transport-search cost $C$, naive repeated
+scans cost $O(N^2ABC)$ plus final witness extraction. This is the deliberately
+transparent prototype. A worklist implementation can index existing couplings
+by the relation edges on which they place positive mass. Removing a pair need
+not invalidate a witness that has zero mass there. Only affected action
+obligations need a new max-flow computation, which can warm-start from the
+surviving flow.
+
+Such incremental search must not change the replay format. The replayed
+obstruction is still checked against the full then-live relation, not the
+smaller set of edges a cached flow happened to consider. Likewise, deleting
+states with a heuristic similarity test may guide exploration but cannot
+justify a deletion record.
+
+A positive matching table has one coupling matrix per surviving pair and source
+action, so dense certificates may be much larger than the state graph.
+Sparse nonzero entries are a sensible second format, provided duplicate
+coordinates are rejected or normalized in one specified way and absent entries
+mean exactly zero. The delivered version uses dense matrices to keep these
+issues out of the first checker.
+
+\subsection{A quantifier-order example}
+
+Take two states $0,1$ on each side and allow two actions everywhere: action 0
+moves deterministically to 0, action 1 moves deterministically to 1. Let the
+base relation be equality. The relation $\{(0,0),(1,1)\}$ is a simulation:
+respond to action $a$ with the same action $a$. The extracted table therefore
+contains different target choices for the two source actions.
+
+A procedure searching for one target action that matches \emph{all} source
+actions would incorrectly reject this example. A procedure that allowed the
+responder to inspect the sampled outcome before choosing an action could
+incorrectly accept other examples. The prototype directly tests the first
+boundary, while the certificate schema fixes the second: each matching record
+contains a single target action and a full coupling for its law.
+
+There is a further distinction between a mathematical coupling and an
+implementation protocol. A joint distribution proving refinement does not
+license changing two separately specified programs to share random bits.
+Its marginals establish properties of those programs without modifying them.
+When Forge synthesizes an executable coordinated implementation, access to
+shared randomness must be a resource present in the source interface.
+
+\subsection{The exact meaning of a negative answer}
+
+A removed initial pair is not in the greatest simulation defined by
+\eqref{eq:sim-operator}. It does \emph{not} follow that the programs have unequal
+trace distributions. Strong simulation is a particular structural relation;
+trace equivalence and other observational contracts are different questions.
+The public result should therefore be named something like
+\code{ExcludedFromStrongSimulation}, not \code{ProgramsUnequal}.
+
+Similarly, a base relation $R_0$ generated from an abstraction must carry its
+meaning. If it approximates source observations, a proved model simulation
+transfers only through a sound refinement theorem. Deletion of a pair from an
+under-approximating model is not a source-level refutation.
+
+\subsection{Connection to Leant and Djex}
+
+The new synthesis interface is naturally dependent on the local obligation:
+for every surviving pair and source action, choose a target action and a
+coupling witness. Leant and Djex already preserve exact selected providers and
+source-owned typed candidates in their supported fragments~\cite{leant,djex}.
+Forge should reuse that identity discipline when rendering a strategy table,
+not replace it with equality of printed action names.
+
+The proposed division of labor is concrete. Type-directed synthesis can build
+the table-shaped term and select source constructors. The simulation worker
+fills the action and probability data and supplies the behavioral proof. Lean
+then checks that this term has the original dependent type. This is a new
+behavioral backend interface; it makes no claim to solve Leant's separate,
+still-open Church-indexing or multi-universe synthesis queries.

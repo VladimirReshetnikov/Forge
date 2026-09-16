@@ -1,0 +1,127 @@
+{
+  "enclosure": {
+    "basis": {
+      "T": [
+        [
+          "1",
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "2",
+          "1"
+        ]
+      ]
+    },
+    "closures": [
+      {
+        "children": [],
+        "coeff": [
+          "1",
+          "0"
+        ],
+        "op": 0
+      },
+      {
+        "children": [
+          0,
+          0
+        ],
+        "coeff": [
+          "0",
+          "1"
+        ],
+        "op": 1
+      },
+      {
+        "children": [
+          0,
+          1
+        ],
+        "coeff": [
+          "-1",
+          "2"
+        ],
+        "op": 1
+      },
+      {
+        "children": [
+          1,
+          0
+        ],
+        "coeff": [
+          "-1",
+          "2"
+        ],
+        "op": 1
+      },
+      {
+        "children": [
+          1,
+          1
+        ],
+        "coeff": [
+          "-2",
+          "3"
+        ],
+        "op": 1
+      }
+    ]
+  },
+  "kind": "quotient",
+  "left_inverses": {
+    "T": [
+      [
+        "2",
+        "-1",
+        "0"
+      ],
+      [
+        "-1",
+        "1",
+        "0"
+      ]
+    ]
+  },
+  "maps": {
+    "T": []
+  },
+  "model": {
+    "name": "leaf_count_quotient",
+    "operations": [
+      {
+        "inputs": [],
+        "name": "leaf",
+        "out": "T",
+        "terms": []
+      },
+      {
+        "inputs": [
+          "T",
+          "T"
+        ],
+        "name": "node",
+        "out": "T",
+        "terms": []
+      }
+    ],
+    "schema": "forge.mlc.problem.v1",
+    "sorts": {
+      "T": 0
+    },
+    "targets": [
+      {
+        "q": [],
+        "sort": "T"
+      }
+    ]
+  },
+  "schema": "forge.mlc.certificate.v1",
+  "sections": {
+    "T": [
+      [],
+      []
+    ]
+  }
+}

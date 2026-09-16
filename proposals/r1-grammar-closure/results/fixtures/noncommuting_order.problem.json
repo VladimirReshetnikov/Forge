@@ -1,0 +1,82 @@
+{
+  "name": "noncommuting_order",
+  "operations": [
+    {
+      "inputs": [],
+      "name": "rule_0",
+      "out": "S",
+      "terms": [
+        {
+          "in": [],
+          "out": 0,
+          "q": "1"
+        },
+        {
+          "in": [],
+          "out": 1,
+          "q": "1"
+        },
+        {
+          "in": [],
+          "out": 2,
+          "q": "1"
+        },
+        {
+          "in": [],
+          "out": 3,
+          "q": "2"
+        }
+      ]
+    }
+  ],
+  "schema": "forge.mlc.problem.v1",
+  "sorts": {
+    "S": 4
+  },
+  "source": {
+    "dimension": 2,
+    "kind": "cfg",
+    "matrices": {
+      "a": [
+        [
+          "1",
+          "1"
+        ],
+        [
+          "0",
+          "1"
+        ]
+      ],
+      "b": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "1"
+        ]
+      ]
+    },
+    "rules": [
+      {
+        "lhs": "S",
+        "rhs": [
+          "t:a",
+          "t:b"
+        ]
+      }
+    ]
+  },
+  "targets": [
+    {
+      "q": [
+        "1",
+        "0",
+        "0",
+        "-1"
+      ],
+      "sort": "S"
+    }
+  ]
+}

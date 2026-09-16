@@ -1,0 +1,72 @@
+{
+  "basis": {
+    "T": [
+      [
+        "1",
+        "1",
+        "0"
+      ],
+      [
+        "1",
+        "2",
+        "1"
+      ]
+    ]
+  },
+  "closures": [
+    {
+      "children": [],
+      "coeff": [
+        "1",
+        "0"
+      ],
+      "op": 0
+    },
+    {
+      "children": [
+        0,
+        0
+      ],
+      "coeff": [
+        "0",
+        "1"
+      ],
+      "op": 1
+    },
+    {
+      "children": [
+        0,
+        1
+      ],
+      "coeff": [
+        "-1",
+        "2"
+      ],
+      "op": 1
+    },
+    {
+      "children": [
+        1,
+        0
+      ],
+      "coeff": [
+        "-1",
+        "2"
+      ],
+      "op": 1
+    },
+    {
+      "children": [
+        1,
+        1
+      ],
+      "coeff": [
+        "-2",
+        "3"
+      ],
+      "op": 1
+    }
+  ],
+  "kind": "invariant",
+  "schema": "forge.mlc.certificate.v1"
+}

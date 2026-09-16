@@ -1,0 +1,60 @@
+[
+  {
+    "name": "candidate",
+    "result": {
+      "reason": "candidate_limit",
+      "stats": {
+        "candidate_evaluations": 0,
+        "ranks": {
+          "T": 0
+        },
+        "scheduled": 1,
+        "seconds": 2.558899996074615e-05,
+        "witness_nodes": 0
+      },
+      "status": "UNKNOWN"
+    }
+  },
+  {
+    "name": "basis",
+    "result": {
+      "reason": "basis_limit",
+      "stats": {
+        "candidate_evaluations": 1,
+        "ranks": {
+          "T": 0
+        },
+        "scheduled": 1,
+        "seconds": 3.432199991948437e-05,
+        "witness_nodes": 0
+      },
+      "status": "UNKNOWN"
+    }
+  },
+  {
+    "name": "exponential_coefficient_bits",
+    "result": {
+      "reason": "coefficient_bit_limit",
+      "stats": {
+        "candidate_evaluations": 7,
+        "ranks": {
+          "N0": 1,
+          "N1": 1,
+          "N10": 0,
+          "N2": 1,
+          "N3": 1,
+          "N4": 1,
+          "N5": 1,
+          "N6": 0,
+          "N7": 0,
+          "N8": 0,
+          "N9": 0
+        },
+        "scheduled": 7,
+        "seconds": 0.00012720099994112388,
+        "witness_nodes": 6
+      },
+      "status": "UNKNOWN"
+    }
+  }
+]

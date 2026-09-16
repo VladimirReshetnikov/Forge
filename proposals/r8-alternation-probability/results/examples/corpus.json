@@ -1,0 +1,833 @@
+[
+  {
+    "id": "parity-infinite-good-cycle",
+    "problem": {
+      "kind": "parity",
+      "owner": [
+        0,
+        1
+      ],
+      "priority": [
+        1,
+        2
+      ],
+      "edges": [
+        [
+          1
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    "certificate": {
+      "regions": [
+        {
+          "player": 0,
+          "vertices": [
+            0,
+            1
+          ],
+          "strategy": [
+            1,
+            -1
+          ],
+          "ranks": [
+            {
+              "priority": 1,
+              "values": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "player": 1,
+          "vertices": [],
+          "strategy": [
+            -1,
+            -1
+          ],
+          "ranks": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "parity-good-priority-only-once",
+    "problem": {
+      "kind": "parity",
+      "owner": [
+        0,
+        0
+      ],
+      "priority": [
+        2,
+        1
+      ],
+      "edges": [
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    "certificate": {
+      "regions": [
+        {
+          "player": 0,
+          "vertices": [],
+          "strategy": [
+            -1,
+            -1
+          ],
+          "ranks": []
+        },
+        {
+          "player": 1,
+          "vertices": [
+            0,
+            1
+          ],
+          "strategy": [
+            -1,
+            -1
+          ],
+          "ranks": [
+            {
+              "priority": 2,
+              "values": [
+                1,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "coupled-fair-bits",
+    "problem": {
+      "kind": "transport",
+      "mu": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "nu": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "relation": [
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          true
+        ]
+      ]
+    },
+    "certificate": {
+      "joint": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      ],
+      "bad_mass": [
+        0,
+        1
+      ],
+      "hall_subset": []
+    }
+  },
+  {
+    "id": "monotone-bernoulli",
+    "problem": {
+      "kind": "transport",
+      "mu": [
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "nu": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "relation": [
+        [
+          true,
+          true
+        ],
+        [
+          false,
+          true
+        ]
+      ]
+    },
+    "certificate": {
+      "joint": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "bad_mass": [
+        0,
+        1
+      ],
+      "hall_subset": []
+    }
+  },
+  {
+    "id": "impossible-perfect-monotone-coupling",
+    "problem": {
+      "kind": "transport",
+      "mu": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "nu": [
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "relation": [
+        [
+          true,
+          true
+        ],
+        [
+          false,
+          true
+        ]
+      ]
+    },
+    "certificate": {
+      "joint": [
+        [
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "bad_mass": [
+        1,
+        3
+      ],
+      "hall_subset": [
+        1
+      ]
+    }
+  },
+  {
+    "id": "two-coins-versus-binomial",
+    "problem": {
+      "kind": "transport",
+      "mu": [
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "nu": [
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "relation": [
+        [
+          true,
+          false,
+          false
+        ],
+        [
+          false,
+          true,
+          false
+        ],
+        [
+          false,
+          true,
+          false
+        ],
+        [
+          false,
+          false,
+          true
+        ]
+      ]
+    },
+    "certificate": {
+      "joint": [
+        [
+          [
+            1,
+            4
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      ],
+      "bad_mass": [
+        0,
+        1
+      ],
+      "hall_subset": []
+    }
+  },
+  {
+    "id": "adversarial-geometric-retry",
+    "problem": {
+      "kind": "mdp",
+      "actions": [
+        [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "terminal": [
+        1
+      ],
+      "start": 0
+    },
+    "certificate": {
+      "outcome": "optimal_bound",
+      "region": [
+        0,
+        1
+      ],
+      "values": [
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "policy": [
+        1,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "good-policy-is-not-universal-termination",
+    "problem": {
+      "kind": "mdp",
+      "actions": [
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "terminal": [
+        1
+      ],
+      "start": 0
+    },
+    "certificate": {
+      "outcome": "nontermination",
+      "trap": [
+        0
+      ],
+      "policy": [
+        1,
+        -1
+      ],
+      "path": [],
+      "probability_lower": [
+        1,
+        1
+      ]
+    }
+  },
+  {
+    "id": "forall-source-action-exists-target-action",
+    "problem": {
+      "kind": "simulation",
+      "left": [
+        [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "right": [
+        [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "base": [
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          true
+        ]
+      ]
+    },
+    "certificate": {
+      "removed": [],
+      "survivors": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "matches": [
+        {
+          "pair": [
+            0,
+            0
+          ],
+          "left_action": 0,
+          "right_action": 0,
+          "coupling": {
+            "joint": [
+              [
+                [
+                  1,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "bad_mass": [
+              0,
+              1
+            ],
+            "hall_subset": []
+          }
+        },
+        {
+          "pair": [
+            0,
+            0
+          ],
+          "left_action": 1,
+          "right_action": 1,
+          "coupling": {
+            "joint": [
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            "bad_mass": [
+              0,
+              1
+            ],
+            "hall_subset": []
+          }
+        },
+        {
+          "pair": [
+            1,
+            1
+          ],
+          "left_action": 0,
+          "right_action": 0,
+          "coupling": {
+            "joint": [
+              [
+                [
+                  1,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "bad_mass": [
+              0,
+              1
+            ],
+            "hall_subset": []
+          }
+        },
+        {
+          "pair": [
+            1,
+            1
+          ],
+          "left_action": 1,
+          "right_action": 1,
+          "coupling": {
+            "joint": [
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              [
+                [
+                  0,
+                  1
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            "bad_mass": [
+              0,
+              1
+            ],
+            "hall_subset": []
+          }
+        }
+      ]
+    }
+  }
+]

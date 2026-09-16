@@ -1,0 +1,197 @@
+\section{Alternating infinite behavior: parity strategies}
+\label{sec:parity}
+
+\subsection{The source of the additional power}
+
+Suppose a protocol must keep granting requests while an adversary chooses when
+to issue them. A finite-state invariant may establish that no illegal grant
+occurs. It does not establish that requests are eventually answered, and a
+termination rank is inappropriate because the intended protocol runs forever.
+An infinite game packages the missing alternation and recurrence information.
+Parity games are a standard vehicle for such reasoning; Oink provides a mature
+implementation of several solvers~\cite{oink}. Here we deliberately separate
+solving from a particularly simple certificate for a supplied strategy.
+
+\begin{definition}[Finite max-parity arena]
+An arena consists of a nonempty finite set $S$, a total directed edge relation
+$E\subseteq S\times S$, an owner $o:S\to\{0,1\}$, and priorities
+$p:S\to\N$. At a vertex owned by player $i$, that player selects the next edge.
+An infinite play is won by the parity of the \emph{largest priority occurring
+infinitely often}. A positional strategy chooses a successor using only the
+current vertex.
+\end{definition}
+
+The qualifier ``infinitely often'' and the choice of \emph{largest}, rather than
+smallest, must appear in the source bridge and the serialization version. A
+solver using min-parity can be adapted only through an explicit,
+parity-preserving conversion. Dead ends are rejected: declaring them losing,
+winning, or self-looping would otherwise change the problem.
+
+\subsection{A local certificate with no trusted game solver}
+
+For player $i$, the certificate supplies a region $W_i$ and a strategy
+$\sigma_i$ on the vertices of $W_i$ that it owns. The checker first establishes
+\begin{align}
+  o(v)=i,\ v\in W_i &\Longrightarrow
+     (v,\sigma_i(v))\in E\ \land\ \sigma_i(v)\in W_i,\label{eq:own}\\
+  o(v)\ne i,\ v\in W_i &\Longrightarrow
+     \forall w,\ (v,w)\in E\Rightarrow w\in W_i.\label{eq:opp}
+\end{align}
+Let $H_i$ retain the selected edge at owned vertices and \emph{all} edges at
+opponent vertices. This graph represents every play consistent with the
+proposed strategy. Checking only the edges the solver happened to explore would
+be unsound.
+
+For every priority $q$ occurring in $W_i$ whose parity is unfavorable to $i$,
+form the threshold graph
+\[
+ H_{i,\le q}=H_i[\{v\in W_i:p(v)\le q\}].
+\]
+The certificate gives a natural-number rank $r_q$ on that graph. Every retained
+edge $v\to w$ with both priorities at most $q$ must satisfy
+\begin{equation}
+ r_q(v)\ \ge\ r_q(w)+\one{p(v)=q}.
+ \label{eq:parity-rank}
+\end{equation}
+There is no condition across an edge passing through a priority larger than
+$q$. The rank may reset there. This is exactly what a single global decreasing
+rank cannot express.
+
+The implementation stores one rank array per unfavorable threshold, with
+irrelevant entries fixed to zero and every relevant entry at most $|S|$. It
+also supplies both regions and checks that they partition the entire arena.
+For a goal about one initial state, a single suitable region is mathematically
+enough; the stronger partition contract makes the delivered solver's complete
+answer easy to test.
+
+\begin{theorem}[Soundness of threshold-local ranks]
+\label{thm:parity}
+If \eqref{eq:own}, \eqref{eq:opp}, and \eqref{eq:parity-rank} hold, every play
+starting in $W_i$ and following $\sigma_i$ is won by player $i$.
+\end{theorem}
+\begin{proof}
+The closure checks keep every vertex of the play in $W_i$. Since $S$ is finite,
+at least one priority occurs infinitely often. Let $q$ be the largest such
+priority. All priorities greater than $q$ occur only finitely many times, so
+some tail of the play lies in $H_{i,\le q}$. If $q$ were unfavorable, its
+certificate rank would never increase along this tail and would strictly
+decrease on every departure from a $q$-vertex. There are infinitely many such
+departures. A natural number admits only finitely many strict decreases, a
+contradiction. Thus $q$ has parity $i$.
+\end{proof}
+
+\begin{proposition}[Completeness of the certificate for a winning strategy]
+\label{prop:rank-complete}
+Fix a positional strategy that wins from every vertex in a closed region $W_i$.
+For each unfavorable $q$, ranks satisfying \eqref{eq:parity-rank} exist with
+values at most $|S|$.
+\end{proposition}
+\begin{proof}
+The threshold graph has no directed cycle containing a $q$-vertex. Otherwise
+an opponent could follow that cycle forever; all owned edges on it already
+agree with the fixed strategy. The largest recurrent priority would be $q$,
+contradicting winningness. Give each threshold edge weight
+$\one{p(v)=q}$. Every directed cycle therefore has weight zero. The largest
+weight of a finite walk starting at $v$ is finite: removing repeated-vertex
+cycles never changes its weight, so a maximizing walk has weight at most
+$|S|$. This largest weight is a rank satisfying the required inequalities.
+\end{proof}
+
+Together with positional determinacy of finite parity games, the proposition
+explains why the certificate language is sufficient for complete finite-arena
+solving. It does \emph{not} make the recursive search polynomial, and it is not
+a claim to have implemented the lexicographic small-progress-measures algorithm.
+The certificate is intentionally a simple post-processing object for a chosen
+strategy. Standard solver and progress-measure families are documented in
+Oink~\cite{oink}.
+
+\subsection{Concrete search algorithm}
+
+The proposer uses recursive Zielonka solving. In a subarena $U$, let $q$ be the
+largest priority, let $i=q\bmod2$, and let $T$ contain the vertices of priority
+$q$. Compute the attractor $A=\operatorname{Attr}_i(T,U)$: repeatedly add an
+$i$-vertex with a successor already in $A$, or an opponent vertex all of whose
+subarena successors lie in $A$. Store the chosen move whenever an owned vertex
+is added.
+
+Solve $U\setminus A$ recursively. If the opponent's winning region is empty,
+player $i$ wins $U$ using the attractor strategy and the recursive strategy.
+Otherwise attract the opponent to its recursively winning region, remove this
+second attractor, solve the remainder, and combine the two strategies.
+The implementation checks that recursive subarenas remain total; a malformed
+recursion is a diagnostic failure, never negative evidence.
+
+\begin{lstlisting}
+solve(U):
+  if U is empty: return empty winning regions and strategies
+  q := maximum priority in U
+  i := q mod 2
+  A, reachA := attract(i, vertices of priority q, U)
+  W, sigma := solve(U minus A)
+  if W[1-i] is empty:
+    return combine(i wins A, reachA, W, sigma)
+  B, reachB := attract(1-i, W[1-i], U)
+  V, tau := solve(U minus B)
+  return combine(1-i wins B, reachB, sigma[1-i], V, tau)
+\end{lstlisting}
+
+After strategies are found, the prototype computes rank arrays by repeated
+relaxation of \eqref{eq:parity-rank}, starting at zero. A nonconvergent positive
+cycle causes rejection. A production emitter should instead compute strongly
+connected components of each threshold graph and longest weighted paths in
+its condensation; this changes rank extraction, not checking.
+
+Writing $n=|S|$, $m=|E|$, and $d$ for the number of distinct unfavorable
+thresholds, the rank certificate occupies $O(dn\log n)$ bits apart from the
+strategy and region encoding. Its mathematical local checker performs $O(dm)$
+rank comparisons and $O(n+m)$ closure work. The supplied Python implementation
+uses straightforward list/set membership rather than claiming an optimized
+realization of every asymptotic bound. Its rank emitter uses at most $O(dnm)$
+relaxation work. Recursive Zielonka search retains its exponential worst-case
+behavior; an Oink adapter would be the appropriate scaling experiment.
+
+\subsection{Two semantic regression examples}
+
+Consider the forced cycle
+\[
+ a\ (p=1)\ \longrightarrow\ b\ (p=2)\ \longrightarrow\ a.
+\]
+Player 0 wins because priority 2 recurs infinitely often. There is no natural
+rank strictly decreasing around the whole cycle. For the sole unfavorable
+threshold $q=1$, the threshold graph has the vertex $a$ but no edge, so the
+zero rank suffices. This is not evasion: visiting priority 2 is precisely what
+makes unbounded repetition acceptable.
+
+By contrast,
+\[
+ a\ (p=2)\ \longrightarrow\ b\ (p=1),\qquad b\longrightarrow b
+\]
+is won by player 1. The largest priority seen anywhere is 2, but the largest
+one seen infinitely often is 1. Both examples are executed regressions. Another
+regression constructs a strategy certificate for an arena with one adversarial
+edge removed and verifies that it is rejected against the original arena.
+
+\subsection{How the strategy becomes a Lean witness}
+
+The source result should have the form ``there exists a legal controller such
+that every legal environment run satisfies the parity condition.'' A table
+$\sigma_i$ is an executable witness once a proved finite enumeration maps source
+states and actions to the arena. The proof uses Theorem~\ref{thm:parity}; it
+must not identify an arbitrary source function with a vertex table by pretty
+printing or by sampling its behavior.
+
+A finite arena may be an abstraction of an infinite-state source program.
+Then a winning abstract controller transfers only with a proved alternating
+simulation in the correct direction: the controller's abstract choices must be
+realizable, and every concrete adversarial move must be covered. An
+opponent-winning abstract strategy need not refute concrete controller
+existence if the abstraction introduced spurious adversarial moves. Negative
+transfer consequently needs an exact model or a separately proved reverse
+bridge. This distinction is not encoded by a bare Boolean ``abstract model
+verified'' flag.
+
+Spot can propose temporal automata and manipulate parity games~\cite{spot}.
+However, checking a strategy in an automaton does not check that the automaton
+recognizes the original temporal formula. The first release should accept
+explicit, already interpreted parity arenas. A verified temporal translation
+can be added later without putting the translator into the trusted boundary.

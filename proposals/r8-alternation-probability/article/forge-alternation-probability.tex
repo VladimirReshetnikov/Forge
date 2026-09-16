@@ -1,0 +1,106 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=0.9in,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,enumitem}
+\usepackage[table]{xcolor}
+\usepackage{listings,fancyhdr,xurl,graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\definecolor{accent}{HTML}{465A50}
+\definecolor{soft}{HTML}{F3F5F2}
+\definecolor{dim}{HTML}{696969}
+\usepackage[colorlinks=true,linkcolor=accent,citecolor=accent,urlcolor=accent,
+ pdfauthor={OpenAI},pdftitle={Forge beyond Universal Closure}]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt plus 1pt minus 1pt}
+\setlist{nosep,leftmargin=1.6em}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily Forge: alternation and probability}
+\fancyhead[R]{\small\sffamily Technical extension}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,
+ breaklines=true,frame=single,framerule=0.3pt,rulecolor=\color{dim},
+ backgroundcolor=\color{soft},showstringspaces=false,tabsize=2,
+ keywordstyle=\bfseries,commentstyle=\color{dim},aboveskip=9pt,belowskip=8pt}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Post}{\operatorname{Post}}
+\newcommand{\one}[1]{\mathbf{1}_{\{#1\}}}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\grind}{\texttt{grind}}
+\newcommand{\status}[1]{\textsf{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\important}[1]{\par\smallskip\noindent\colorbox{soft}{\parbox{\dimexpr\linewidth-2\fboxsep}{#1}}\par\smallskip}
+\begin{document}
+\begin{center}
+{\color{accent}\rule{\linewidth}{1pt}}\\[12pt]
+{\LARGE\bfseries Forge beyond Universal Closure}\\[9pt]
+{\Large Alternating strategies, probabilistic couplings,\\[3pt] and quantitative liveness}\\[12pt]
+{\large A repository-relative design with exact executable prototypes}\\[8pt]
+15 September 2026
+\end{center}
+\vspace{5pt}
+\begin{abstract}
+\noindent
+Forge already proposes a broad certificate-producing layer around Lean's
+\grind{}, including induction, arithmetic witnesses, nonlinear certificates,
+and finite closures. Adding those ideas again would not extend it. This article
+instead develops four compatible workers for obligations in which choices are
+adversarial, executions are infinite, or transitions are probabilistic:
+parity-game strategy certificates; optimal finite couplings with Hall-dual
+obstructions; alternating probabilistic simulation; and worst-case expected
+termination with Bellman potentials and reachable nontermination traps.
+
+The contribution is an integration design and a set of independently replayable
+certificate formats, not a claim to have invented these mathematical subjects.
+The article proves the local soundness arguments, states the exact finite
+fragments for which the algorithms are complete, and identifies the source-to-Lean
+bridges still required. The accompanying standard-library-only Python
+implementation was executed against independent finite oracles: 884 parity
+arenas, 400 transport problems, 180 Markov decision processes, and 100 simulation
+problems. Fourteen semantic regressions pass, every deliberately invalid
+mutation is rejected, and all stored certificates replay with search imports
+forbidden. These are Python results, not Lean-kernel proofs or a benchmark
+against existing tactics.
+\end{abstract}
+\important{\textbf{Reading the evidence.} The algorithms and Python checkers are
+implemented and tested. The Lean lowering specimens are uncompiled. No new Lean
+\forge{} tactic, source reifier, or formally verified certificate checker is
+claimed. The proposed extension is relative to Forge commit
+\texttt{c98e47c5f804e92880fc1d0e378c1b95832b685c}.}
+\newpage
+\tableofcontents
+\newpage
+\input{sections/01-scope}
+\input{sections/02-parity}
+\input{sections/03-transport}
+\input{sections/04-simulation}
+\input{sections/05-bellman}
+\input{sections/06-integration}
+\input{sections/07-experiments}
+\input{sections/08-development}
+\appendix
+\input{sections/09-artifacts}
+\input{references}
+\end{document}

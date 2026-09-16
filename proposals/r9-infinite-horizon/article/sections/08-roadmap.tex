@@ -1,0 +1,63 @@
+\section{Implementation order and falsifiable acceptance gates}
+\label{sec:roadmap}
+
+The right next step is not another solver family. It is to turn one of these
+small replay computations into a checked source theorem. The B\"uchi rank lane
+is the first choice: its checker is finite, its core proof uses natural-number
+descent, and it exposes the important difference between typing a strategy and
+proving its recurring behavior without initially requiring measure theory.
+
+\begin{longtable}{@{}p{0.14\textwidth}p{0.34\textwidth}p{0.46\textwidth}@{}}
+\toprule
+Milestone & Deliverable & Acceptance gate \\
+\midrule\endhead
+1. Game replay & Lean arena definitions, both rank checkers, and both soundness theorems & Compile without placeholders; replay winning and losing fixtures; reject ownership, edge, start and rank mutations; record the actual theorem axiom inventory. \\
+2. Source strategy & One explicit source arena bridge and a generated executable policy & Prove the original recurrent specification, not merely the finite table check. A source ownership change must invalidate the bridge or proof. \\
+3. Pushdown replay & Productive summary and closed exclusion checkers, suffix theorem, and regular-target reduction & Prove an unbounded-stack safety example and a compressed positive reachability example without expanding their configuration spaces or traces. \\
+4. Rational residuals & Stochastic-matrix validator and finite-horizon identities and bounds & Check the retry example and reject the harmonic-only self-loop. Verify costs and fractional terminal payoffs under their distinct meanings. \\
+5. Probability bridge & A discrete source semantics linked to the matrix by exact pushforward & Prove almost-sure termination and the original expected-cost statement; changing an original probability must invalidate the proof. \\
+6. Tactic integration & Contract recognition, search invocation, cached replay and source-goal closure & Evaluate against pinned baseline tactics and manually supplied model proofs, with model construction and kernel replay costs included. \\
+\bottomrule
+\end{longtable}
+
+The comparison at milestone 6 should separate two sources of value. One track
+supplies the same source bridge and local lemmas to all tactics, testing how
+well the new worker finds the model certificate. A second track measures the
+whole user experience, including contract recognition and bridge construction.
+The first must not be described as an end-to-end automation result; the second
+must not hide manually authored bridges as if the tactic synthesized them.
+The existing repository's general benchmark discipline can be reused; only
+these worker-specific distinctions need to be added.
+
+\subsection{What should remain outside the first release}
+General parity games, games with imperfect information, arbitrary temporal
+formulas, stochastic games, unbounded-state Markov chains, and arbitrary
+recursive Lean definitions should remain explicitly unsupported. The small
+round-robin monitor, queue-based attractors, exact finite quotients, and
+fraction-free linear solving are concrete extensions with clear proof
+obligations. They are better next targets than a claim to solve all of the
+larger subjects at once.
+
+The three workers also cannot be combined merely by connecting their data
+formats. An existential pop summary does not summarize an adversarial stack
+game: its successful internal choices might belong to the opponent. A
+probabilistic pushdown process can produce nonlinear probability equations and
+is not automatically a finite rational Markov chain. Combining the present
+workers requires a proved intermediate semantics, not a shared use of words
+such as ``state,'' ``closure,'' or ``transition.''
+
+\subsection{Assessment}
+These extensions expand the kinds of statements Forge could automate rather
+than only increasing a saturation budget. They give finite witnesses for
+unbounded stack behavior, persistent strategies for infinite adversarial
+execution, and properness-backed exact values for stochastic execution. Their
+negative results have equally concrete meanings: a closed exclusion relation,
+a counterstrategy bounding accepting visits, or a positive-probability path to
+a nonterminal closed class.
+
+The strongest completed deliverable is the combination of executable searches,
+separate replay code, explicit source-bridge contracts, and exhaustive or
+orthogonal tests on carefully delimited fragments. The principal unfinished
+work is the Lean port and its end-to-end source examples. That work is now a
+set of named checker theorems and translation obligations, rather than a
+request to design a more powerful prover in the abstract.

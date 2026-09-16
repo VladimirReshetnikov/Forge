@@ -1,0 +1,68 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "quick": false,
+  "status": "PASS",
+  "units": {
+    "parity": {
+      "cases": 884,
+      "accepted_records": 884,
+      "oracle_comparisons": 884,
+      "rejected_mutations": 1128
+    },
+    "transport": {
+      "strict_improvement_over_independent": 211,
+      "zero_defect": 77,
+      "positive_defect": 323,
+      "cases": 400,
+      "accepted_records": 400,
+      "oracle_comparisons": 400,
+      "rejected_mutations": 723
+    },
+    "mdp": {
+      "optimal_bound": 164,
+      "cases": 180,
+      "accepted_records": 180,
+      "oracle_comparisons": 180,
+      "rejected_mutations": 180,
+      "nontermination": 16
+    },
+    "simulation": {
+      "cases": 100,
+      "accepted_records": 100,
+      "oracle_comparisons": 100,
+      "removed_pairs": 77,
+      "surviving_pairs": 81,
+      "rejected_mutations": 86
+    }
+  },
+  "lean": "NOT_RUN",
+  "regression_tests": {
+    "run": 14,
+    "failures": 0,
+    "errors": 0
+  },
+  "exhaustive_parity_arenas": 584,
+  "algorithm_counters": {
+    "parity": {
+      "recursive_calls": 2884
+    },
+    "transport": {
+      "augmentations": 1219
+    },
+    "mdp": {
+      "trap_iterations": 383,
+      "policy_evaluations": 231
+    },
+    "simulation": {
+      "transport_calls": 386
+    }
+  },
+  "elapsed_seconds": 0.4137681930000099,
+  "claims": [
+    "exact finite-model Python differential tests only",
+    "no tactic baseline was executed",
+    "no Lean compiler was run"
+  ]
+}

@@ -1,0 +1,95 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype,booktabs,longtable,tabularx,array}
+\usepackage{xcolor,enumitem,listings,fancyhdr,titlesec}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{pdftitle={Order matters: noncommutative certificates for Forge},pdfauthor={Research report prepared for Vladimir Reshetnikov},pdfsubject={Exact algorithms, prototypes, and Lean integration plan},pdfkeywords={Lean, Forge, noncommutative algebra, certificates, matrix positivity}}
+\definecolor{ink}{HTML}{19344A}
+\definecolor{codebg}{HTML}{F4F5F6}
+\titleformat{\section}{\Large\bfseries\color{ink}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection}{0.7em}{}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+\setcounter{tocdepth}{2}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Forge: noncommutative certificates}
+\fancyhead[R]{\small Research extension / 15 September 2026}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{codebg},
+  breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,
+  frame=single,rulecolor=\color{black!15},xleftmargin=4pt,xrightmargin=4pt}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb Q}\newcommand{\R}{\mathbb R}\newcommand{\N}{\mathbb N}
+\newcommand{\F}{\mathcal F}\newcommand{\Span}{\operatorname{span}}
+\newcommand{\tr}{\operatorname{tr}}\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\unknown}{\textsf{UNKNOWN}}
+\newcommand{\starred}[1]{#1^{*}}
+\newcommand{\status}[1]{\smallskip\noindent\textbf{Evidence status.} #1\par\smallskip}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.5in}
+{\small\sffamily\bfseries\color{ink} FORGE / A CONCRETE CAPABILITY EXTENSION\par}
+\vspace{0.25in}
+{\Huge\bfseries\color{ink} Order matters\par}
+\vspace{0.18in}
+{\LARGE Certified noncommutative consequences,\par
+matrix countermodels, and operator inequalities\par}
+\vspace{0.35in}
+{\large Algorithms, complete fragments, executable prototypes,\par
+and a Lean integration plan\par}
+\vspace{0.3in}
+{\large Prepared for Vladimir Reshetnikov\par}
+{15 September 2026\par}
+\vspace{0.35in}
+\begin{abstract}
+Forge already proposes induction planning, witness synthesis, commutative
+polynomial certificates, finite-dimensional and ideal closures, and specialized
+Ore-operator transport. This report adds a different mathematical worker:
+reasoning in a free associative algebra while preserving multiplication order.
+Its outputs are two-sided ideal receipts, finite rational matrix countermodels,
+and separate operator-positive and trace-positive certificates.
+
+The central exact result is a finite decision procedure for consequences of
+homogeneous relations. A target of degree $D$ needs only relation contexts of
+total degree at most $D$; failure yields a concrete matrix model of a truncated
+quotient. A second exact fragment reduces homogeneous Hermitian-square search at
+arbitrary even degree to a unique rational Gram matrix. Mixed-degree and
+conditional positivity use bounded ray search modulo the equality space.
+A structural involution/commutation graph proposes the rays used in the CHSH
+worked example automatically.
+
+The delivered Python implementation uses only the standard library. Its
+independent replay program accepts 119 stored evidence objects, including 45
+matrix countermodels; 57 unit tests pass and 195 deliberately invalid mutations
+are rejected. These are object-language experiments, not Lean proofs or tactic
+benchmarks. The accompanying Lean reconstruction targets were not compiled.
+\end{abstract}
+\vfill
+\hrule\medskip
+\textbf{Delivery boundary.} No installed \code{forge} tactic, Lean reifier,
+verified computational checker, or measured gain against \code{grind} is
+claimed. The contribution is an implemented search/check layer with proved
+mathematical contracts and an explicit path to kernel-checked integration.
+\end{titlepage}
+{\small\setlength{\parskip}{0pt}\tableofcontents}
+\newpage
+\input{01-scope}
+\input{02-equalities}
+\input{03-positivity}
+\input{04-integration}
+\input{05-evidence}
+\input{references}
+\end{document}

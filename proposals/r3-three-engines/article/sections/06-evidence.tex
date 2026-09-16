@@ -1,0 +1,96 @@
+\section{Executed evidence and its limits}
+\label{sec:evidence}
+
+\subsection{Environment and reproducibility}
+The experiments were executed with Python 3.13.5 on Linux x86-64, using seed \code{20260915}. Search, certificate checking, witness extraction, the exact vertex oracle, and the unit suite use the standard library. A separate optional script uses \code{mpmath} for numerical sanity checks. Exact interpreter and platform strings are recorded in \path{results/summary.json}.
+
+No Lean or Lake executable was available in this execution environment. The supplied Lean examples have not been compiled, and no new Lean-kernel acceptance result is claimed. The reviewed repository's own historical elaboration receipts are separate evidence and are not reused as validation of this study's new code.
+
+The experiment runner writes to \code{reproduced-results/} by default. The delivered evidence is under \code{results/}; reproducing an experiment therefore does not silently replace the recorded run. All certificates are stored together with their original externally checked problems. The generator and checker sources are included, rather than only a summary table.
+
+\subsection{Keep the units and outcomes separate}
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Workload & Cases & Positive receipts & Refutations & Unknown \\
+\midrule
+Polyhedral specifications & 110 & 79 & 30 & 1 \\
+Noncommutative identities & 85 & 82 & 0 & 3 \\
+Analytic inequalities & 44 & 37 & 0 & 7 \\
+\bottomrule
+\end{tabular}
+\caption{Recorded outcomes. Analytic positives comprise 33 interval and four jet certificates. A positive receipt here means successful exact Python replay, not a Lean proof.}
+\end{table}
+
+Every expected outcome was obtained. That is not a theorem-proving success rate on an independent benchmark: the workloads were generated to exercise known mechanisms and controls, and several cases are parameterized variants of the same mathematical family. The rows should not be pooled into a single ``goals solved'' headline. In particular, the negative and budget-limited cases were designed to be reported as negative or unknown.
+
+\subsection{Polyhedral workload}
+The 79 positive cases consist of forty scaled four-corner specifications, thirty strict interval-selection specifications, one touching-extrema strictness case, three one-sided or unconstrained-output cases, and five empty-domain cases. Half of the corner specifications add a coupled second output. The thirty negative cases have an exact rational parameter counterexample; the remaining case deliberately sets the pair budget to zero.
+
+The witness extractor was evaluated at 490 rational parameter tuples across the corner and strict-selection families. Every value agreed with the reverse-lifting evaluator and satisfied all target rows under an independent row evaluation. This is an execution check of the generated function graphs, not the reason the universal specifications are accepted: the projection and implication receipts carry that reason.
+
+A separate exact feasibility workload contains 160 bounded two-variable mixed systems. It is compared with a different algorithm: introduce a common strict slack \(\delta\in[0,1]\), replace each strict row by a non-strict row strengthened by \(\delta\), and enumerate vertices of the resulting bounded polyhedron using rational Gaussian elimination. A strict feasible point exists exactly when the maximum possible slack is positive; on a nonempty compact polyhedron a linear maximum is attained at a vertex. For systems without strict rows, ordinary feasible-vertex existence suffices.
+
+The oracle reports 89 feasible and 71 infeasible systems, agreeing with Fourier--Motzkin on all 160. The original variables are explicitly boxed, so the compactness premise of the vertex oracle is not an unstated assumption. These 160 systems are not the 110 quantified specifications and are not counted as additional synthesized functions.
+
+\subsection{Noncommutative workload}
+The 85 cases comprise the completion-disabled/enabled pair, 36 Weyl instances, forty quantum-plane words, five Clifford instances, and two additional unknown controls. The positive count is 82. The controls ensure that commutativity is not silently assumed and that the false consequence \(DX-XD=0\) is not accepted under \(DX-XD=1\).
+
+The completion-disabled case is also \unknown{}. It is not labeled a refutation: its target is true and the completion-enabled run proves it. The two runs therefore isolate an actual capability difference between the prototype's search profiles without claiming anything about a different tactic implementation.
+
+The 288 polynomial-action checks for the Weyl family use a representation different from formal word expansion. They are useful differential evidence, but only a finite set of input monomials is evaluated. The accepted certificates themselves are identities in the free algebra, which gives the stronger conclusion for each concrete \((m,n)\) instance.
+
+\subsection{Analytic workload and automatic rediscovery}
+The 44 cases comprise twenty exponential positive-margin inequalities, twelve explicit dependency/subdivision tests, one nested exponential/logarithm example, four plain-interval attempts on zero-containing goals, the corresponding four jet proofs, and three false/domain controls. The ordinary interval profile returns \unknown{} on each of the four zero-containing tests under the recorded depth cap, while the selected jet profiles are accepted.
+
+The controls include a false exponential inequality, a logarithm crossing its admitted domain, and a division whose denominator crosses zero. No analytic refutation is emitted for them. The first is a false goal; the other two are fragment/domain failures, and the implementation does not conflate those reasons into a universal false verdict.
+
+The automatic selector was then run on the same four successful jet goals. It found orders \(2,2,2,3\), with certificates checked independently. Those results are stored separately in \path{results/jet-discovery.json}. They are an overlapping search-profile experiment, not four more independent mathematical cases.
+
+The 320 optional 80-digit point checks cover exponential, logarithm, sine, and cosine at rational arguments. Their output file is explicitly labeled \code{NUMERICAL\_SANITY\_ONLY}. They are not invoked by the certificate checker.
+
+\subsection{Mutation and structural controls}
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lrp{0.60\textwidth}@{}}
+\toprule
+Lane & Rejected & Representative mutations \\
+\midrule
+Polyhedral & 180 & Wrong eliminated variable, missing pair coverage, changed output coefficient, lost strictness, invalid counterexample-row index \\
+Noncommutative & 81 & Perturbed provenance coefficient, changed target, noncanonical rational or floating-point coefficient \\
+Analytic & 81 & Invalid series order, escaped anchor, invalid jet order, changed target, false advertised bound, coverage gap \\
+\bottomrule
+\end{tabular}
+\caption{Generated mutation attempts, all rejected. These are test counts, not a claim of parser hardening or a measure of independent bug classes.}
+\end{table}
+
+The unit suite contains twelve named tests, including all-recorded-case replay as subtests. The targeted checks cover a zero weight on a strict row, missing projection coverage, left/right noncommutative context order, odd-jet orientation, original-expression domain retention, and invalid interval coverage. All twelve tests pass.
+
+The mutation counts should not be mistaken for adversarial security certification. Many are parameterized repeats of the same fault shape. The shared rational parser imposes some canonicality and bit-length checks, but the tools are not hardened against deliberately enormous or deeply adversarial external inputs. In particular, byte limits before JSON parsing, global memory limits, and comprehensive exception isolation are production requirements, not properties demonstrated by these runs.
+
+\subsection{Replay with search unavailable}
+The replay command installs an import hook that rejects imports of the three search modules and the witness-proposal module. It then loads the independent checkers and the stored problems/certificates. Running it with \code{python -S} also disables site packages.
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+cd prototype
+python -S verify.py
+python -S verify.py ../results/jet-discovery.json
+python -S -m unittest discover -s tests -v
+python -S run_experiments.py --out reproduced-results
+python -S discover_jets.py --out reproduced-jets.json
+\end{lstlisting}
+\end{minipage}\par
+The default recorded replay accepts 109 polyhedral receipts (79 positive and thirty negative), 82 noncommutative receipts, and 37 analytic receipts. It rejects the corresponding unknown objects as noncertificates. This verifies that the checkers do not secretly call the producer entry points during these replays.
+
+Producer/checker independence is nevertheless bounded. All programs run on the same Python runtime and exact rational implementation. The analytic atom formulas are a shared mathematical specification. The tests do not prove the checkers correct. The intended next evidence level is a Lean theorem relating each reflected Boolean check to its semantic proposition.
+
+\subsection{Timing and size data}
+Per-case search and replay wall times, as well as serialized certificate byte counts, are available in \path{results/measurements.csv}. These are single local runs of deliberately small research fixtures. They do not measure Lean elaboration, proof-term construction, kernel checking, source reification, process startup, or IDE cancellation behavior. No speedup relative to \grind{}, Aesop, \code{linarith}, \code{noncomm\_ring}, or another tactic is inferred.
+
+The serialized certificate totals by lane are 65,364 bytes for the polyhedral workload, 96,989 bytes for noncommutative identities, and 17,592 bytes for analytic cases, using the runner's compact JSON serialization for each object. The pretty-printed artifact file also includes the original problems and therefore has a different size. These byte totals describe exactly what the runner serialized; they are not estimates of Lean proof sizes.
+
+\subsection{What the evidence establishes}
+The supplied data establish that these concrete implementations find and independently replay the reported certificates, that the specified control cases receive the intended outcomes, and that several distinct computations agree on overlapping finite tests. The paper supplies mathematical proofs for the certificate rules and the exact fragment-level claims.
+
+The evidence does not establish a working Forge tactic, a verified source reifier, a formally verified Python or Lean checker, broad benchmark superiority, or robustness at production problem sizes. Those are separate engineering and evaluation tasks, with explicit release gates in the next section. Keeping them separate allows the actual implemented advances to remain useful without overstating them.

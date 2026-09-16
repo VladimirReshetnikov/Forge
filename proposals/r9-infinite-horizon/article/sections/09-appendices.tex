@@ -1,0 +1,84 @@
+\section{Wire format and executable entry points}
+\label{app:wire}
+
+The transport uses JSON with explicit rational objects:
+\begin{lstlisting}
+{"rational": [numerator, positive_denominator]}
+\end{lstlisting}
+Integer identifiers, rational values and absent entries are distinct. A vector
+entry outside a certified region is \code{null}, not an arbitrary numerical
+zero. A record contains \code{problem}, \code{certificate}, and
+\code{expected}; a game record also supplies its \code{start}. Only the first
+two and the game start determine the check. The expected result is a test
+assertion, not a premise of the mathematical certificate.
+
+\begin{longtable}{@{}p{0.23\textwidth}p{0.35\textwidth}p{0.36\textwidth}@{}}
+\toprule
+Certificate kind & Principal fields & Meaning of acceptance \\
+\midrule\endhead
+\code{pds_reach} & \code{nodes}: triple, input rule index, earlier children; \code{chain}: initial-stack roots & An actual finite run empties the stack at an input final control. \\
+\code{pds_exclude} & \code{relation}: distinct summary triples & A rule-closed relation excludes every root chain to an input final control. \\
+\code{buchi_win} & \code{region}, \code{rank}, \code{policy} & One protagonist policy forces recurrent acceptance from the supplied start. \\
+\code{buchi_lose} & \code{region}, \code{rank}, \code{policy} & One antagonist policy bounds all accepting visits from the supplied start. \\
+\code{mc_absorb} & \code{support}, \code{time}, \code{cost}, \code{value} & Properness and exact time, cost, and terminal-payoff equations hold. \\
+\code{mc_trap} & \code{closed}, \code{path} & A positive-probability source path enters a closed nonterminal set. \\
+\bottomrule
+\end{longtable}
+
+The Python APIs are \code{pushdown.solve(p)}, \code{games.solve(g)}, and
+\code{markov.solve(c)}. The game solver returns both regions; the caller chooses
+the certificate whose region contains the desired start. The replay APIs are
+\code{check_pds(p, cert)}, \code{check_game(g, cert, start)}, and
+\code{check_chain(c, cert)}. They validate the input again. Their checked models
+are immutable dataclasses, but the research certificate dictionaries are not
+unforgeable authority objects; only the eventual Lean proof could supply that
+authority.
+
+\section{Reproduction and artifact map}
+From the extracted archive's top directory:
+\begin{lstlisting}
+python -S -m unittest discover -s tests -v
+python -S prototype/demo.py
+python -S prototype/verify.py
+python -S prototype/run_experiments.py
+python -S prototype/verify.py reproduced-results/certificates.json
+\end{lstlisting}
+The default experimental output is \code{reproduced-results/}, so a new run does
+not overwrite the recorded evidence. The \code{--quick} option restricts
+exhaustive games to sizes one and two; it is a different corpus and will not
+reproduce the full game counts. Do not invoke the tests with Python's optimized
+\code{-O} flag, since reference-oracle assertions are part of the experiment.
+
+Build the article with stock pdfLaTeX:
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-infinite-horizon.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-infinite-horizon.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-infinite-horizon.tex
+\end{lstlisting}
+No bibliography program, shell escape, downloaded font, or numerical package
+is required. The archive includes the master source, section sources, references,
+and the rendered PDF.
+
+\code{results/certificates.json} stores all certificate records;
+\code{results/summary.json} records the machine-readable counts and timings;
+\code{results/unit-tests.txt}, \code{results/replay.txt}, and
+\code{results/demo.txt} retain console evidence. \code{tests/oracles.py}
+contains the alternative computations. \code{docs/STATUS.md} distinguishes
+executed code from proposed Lean work, and \code{docs/SOURCES.md} records the
+repository and library provenance.
+
+\section{A compact theorem-obligation ledger}
+\begin{longtable}{@{}p{0.26\textwidth}p{0.37\textwidth}p{0.31\textwidth}@{}}
+\toprule
+Object & Mathematical obligation & Delivered evidence \\
+\midrule\endhead
+Pushdown summaries & Productive closure is exact; suffix lifting preserves untouched stack data & Paper proofs; agenda search; local replay; finite and bounded concrete oracles \\
+Regular target compiler & Target language iff compiled empty-stack target & Paper proof; 100 complete source/compiled comparisons; orientation and empty-stack controls \\
+Positive game rank & Every policy-consistent play visits acceptance infinitely often & Paper proof; search; rank replay; exhaustive small arenas and policy-enumeration oracle \\
+Negative game rank & Every counterpolicy-consistent play has bounded accepting visits & Paper proof; dual search; rank replay; same exhaustive corpus \\
+Absorption values & Properness plus residuals imply exact values and finite-horizon bounds & Paper proof; exact search and replay; numerical and graph reference computations \\
+Closed-class path & Positive path mass lower-bounds nontermination probability & Paper proof; SCC search; local replay; analytic and closed-subset controls \\
+Lean and source bridges & Accepted object theorem implies the original typed source proposition & Detailed contracts and implementation plan only; no compiled Lean artifacts \\
+\bottomrule
+\end{longtable}

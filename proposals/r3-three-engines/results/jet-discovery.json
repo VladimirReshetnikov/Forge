@@ -1,0 +1,215 @@
+{
+  "scope": "same four goals, automatic proposal profile; not extra independent cases",
+  "results": [
+    {
+      "name": "exp-with-jet",
+      "problem": {
+        "expr": [
+          "add",
+          [
+            "add",
+            [
+              "exp",
+              [
+                "x"
+              ]
+            ],
+            [
+              "c",
+              "-1"
+            ]
+          ],
+          [
+            "neg",
+            [
+              "x"
+            ]
+          ]
+        ],
+        "box": [
+          "-1",
+          "1"
+        ]
+      },
+      "certificate": {
+        "kind": "jet",
+        "order": 2,
+        "anchor": "0",
+        "tree": {
+          "kind": "leaf",
+          "order": 8,
+          "bound": [
+            "1201463/3265920",
+            "8877691/3265920"
+          ]
+        },
+        "discovery": {
+          "attempts": 2,
+          "policy": "zero-and-endpoints-v1"
+        }
+      }
+    },
+    {
+      "name": "log-with-jet",
+      "problem": {
+        "expr": [
+          "add",
+          [
+            "x"
+          ],
+          [
+            "neg",
+            [
+              "log",
+              [
+                "add",
+                [
+                  "c",
+                  "1"
+                ],
+                [
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "box": [
+          "-1/2",
+          "1"
+        ]
+      },
+      "certificate": {
+        "kind": "jet",
+        "order": 2,
+        "anchor": "0",
+        "tree": {
+          "kind": "leaf",
+          "order": 8,
+          "bound": [
+            "1/4",
+            "4"
+          ]
+        },
+        "discovery": {
+          "attempts": 2,
+          "policy": "zero-and-endpoints-v1"
+        }
+      }
+    },
+    {
+      "name": "cos-with-jet",
+      "problem": {
+        "expr": [
+          "add",
+          [
+            "add",
+            [
+              "cos",
+              [
+                "x"
+              ]
+            ],
+            [
+              "c",
+              "-1"
+            ]
+          ],
+          [
+            "mul",
+            [
+              "c",
+              "1/2"
+            ],
+            [
+              "pow",
+              [
+                "x"
+              ],
+              2
+            ]
+          ]
+        ],
+        "box": [
+          "-1",
+          "1"
+        ]
+      },
+      "certificate": {
+        "kind": "jet",
+        "order": 2,
+        "anchor": "0",
+        "tree": {
+          "kind": "leaf",
+          "order": 8,
+          "bound": [
+            "0",
+            "36389/72576"
+          ]
+        },
+        "discovery": {
+          "attempts": 2,
+          "policy": "zero-and-endpoints-v1"
+        }
+      }
+    },
+    {
+      "name": "sin-with-jet",
+      "problem": {
+        "expr": [
+          "add",
+          [
+            "add",
+            [
+              "sin",
+              [
+                "x"
+              ]
+            ],
+            [
+              "neg",
+              [
+                "x"
+              ]
+            ]
+          ],
+          [
+            "mul",
+            [
+              "c",
+              "1/6"
+            ],
+            [
+              "pow",
+              [
+                "x"
+              ],
+              3
+            ]
+          ]
+        ],
+        "box": [
+          "0",
+          "1"
+        ]
+      },
+      "certificate": {
+        "kind": "jet",
+        "order": 3,
+        "anchor": "0",
+        "tree": {
+          "kind": "leaf",
+          "order": 8,
+          "bound": [
+            "0",
+            "36389/72576"
+          ]
+        },
+        "discovery": {
+          "attempts": 4,
+          "policy": "zero-and-endpoints-v1"
+        }
+      }
+    }
+  ]
+}

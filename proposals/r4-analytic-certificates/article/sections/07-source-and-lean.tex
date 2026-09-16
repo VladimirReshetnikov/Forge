@@ -1,0 +1,229 @@
+\section{From source expressions to Lean proofs}
+\label{sec:lean}
+
+\subsection{A small semantic bridge rather than an unverified translation}
+
+The first end-to-end target should be an origin-anchored inequality over a
+literal exponential polynomial. Its proof construction has four distinct
+objects:
+\[
+ \text{source expression}
+ \xrightarrow{\text{proved equality}}
+ \operatorname{eval}(p)
+ \xrightarrow{\text{checked ladder}}
+ \operatorname{NonnegativeRay}(p,a)
+ \xrightarrow{\text{domain transport}}
+ \text{original goal}.
+\]
+The arrows represent proofs, not merely successful parsing or a matching hash.
+The final arrow is trivial only when the source and certificate domains and
+strictness already coincide.
+
+A proposed Lean interface is:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+-- Interface sketch; names are proposed, not existing Forge declarations.
+structure ExpPoly where
+  blocks : Array (Rat x Array Rat)
+
+structure ReifiedExpPoly where
+  source      : Expr
+  polynomial  : ExpPoly
+  evalEq      : Expr  -- proof: source = eval polynomial at the chosen variable
+  variable    : FVarId
+  contextKey  : ContextKey
+
+structure LadderReceipt where
+  anchor  : Rat
+  factors : Array Rat
+  pointCertificates : Array PointCertificate
+
+checkLadder_sound :
+  checkLadder p c = true ->
+  forall x : Real, c.anchor <= x -> 0 <= eval p x
+\end{lstlisting}
+\end{minipage}\par
+
+The syntax in this sketch uses readable placeholders such as \code{x} for a
+product and \code{Real} for the real type; it is not advertised as compiling
+Lean. The supplied \code{LadderBridge.lean}, in contrast, is actual candidate
+Lean source with the full intended theorem and proof, but remains uncompiled.
+
+The internal polynomial representation should have a well-formedness predicate
+for ordered unique rates, trimmed coefficient arrays, and exact rationals.
+Either use a subtype carrying that proof, or canonicalise before every checked
+operation. Do not permit two distinct encodings of the same block to bypass a
+terminal-zero or source-equality check.
+
+\subsection{Logarithmic charts expand the useful source language}
+
+For $x>0$, put $t=\log x$, so $x=e^t$. An expression
+\[
+ \sum_{j,k}c_{j,k}x^{r_j}(\log x)^k
+\]
+with rational exponents becomes
+$\sum_{j,k}c_{j,k}t^ke^{r_jt}$ once the real-power identities and their domain
+conditions have been proved. Integer negative powers also fit this pattern.
+The map is particularly convenient on $x\ge1$, which corresponds to $t\ge0$.
+On $0<x\le1$, use $u=-\log x\ge0$ and reflection.
+
+The chart is not permission to rewrite real powers at nonpositive arguments.
+A denominator must be proved positive or nonzero before clearing it; a square
+root must be connected to its exponential representation on the positive
+domain; and $\log1=0$ must preserve whether the original endpoint is included.
+
+\begin{example}[Entropy inequality]
+For $x>0$,
+\[
+ x\log x-x+1\ge0.
+\]
+Its chart is $f(t)=(t-1)e^t+1$. On $t\ge0$, native factors $(0,1,1)$ have
+initial vector $(0,0,1)$. On $t\le0$, reflect: $f(-u)=1-(u+1)e^{-u}$,
+whose factors $(-1,-1,0)$ also have initial vector $(0,0,1)$.
+Thus the source inequality follows on both sides of one, with equality at one
+and strict positivity elsewhere.
+\end{example}
+
+\begin{example}[A rational lower bound for the logarithm]
+For $x\ge1$,
+\[
+ \log x\ge\frac{2(x-1)}{x+1}.
+\]
+After proving $x+1>0$ and writing $x=e^t$, the target is
+\[
+ (t-2)e^t+t+2\ge0\qquad(t\ge0).
+\]
+Factors $(0,0,1,1)$ have initial vector $(0,0,0,1)$. The third-order boundary
+contact is handled exactly; no interval precision is spent resolving it.
+\end{example}
+
+\begin{example}[A square-root upper bound for the logarithm]
+For $x\ge1$,
+\[
+ \log x\le\frac{x-1}{\sqrt x}.
+\]
+The proved positive-domain chart gives
+\[
+ e^{t/2}-e^{-t/2}-t\ge0\qquad(t\ge0).
+\]
+Factors $(-1/2,0,0,1/2)$ have initial vector $(0,0,0,1/4)$.
+\end{example}
+
+The archive records certificates for these \emph{chart polynomials}. It does
+not contain an executed Lean reifier proving the original logarithmic source
+goals. The transformations above are mathematical derivations and concrete
+acceptance targets for that reifier; they are not additional kernel-checked
+experiment rows.
+
+\subsection{Composing the worker with existing algebra}
+
+Several useful extensions require no new analytic checker. For a quotient
+$f/g$ with a proved nonzero denominator, its derivative has numerator
+$f'g-fg'$ and denominator $g^2>0$. The numerator is again an exponential
+polynomial if $f$ and $g$ are. Certifying its sign establishes monotonicity;
+certifying the corresponding next derivative numerator can establish convexity.
+The denominator obligations must remain attached to the original domain.
+
+A common positive factor may be removed. For example,
+\[
+ e^x\ge e^y(1+x-y)
+\]
+reduces, after multiplication by $e^{-y}>0$, to
+$e^t\ge1+t$ with $t=x-y$. A proof over all real $t$ combines the two reflected
+ray certificates. This handles a multivariate source through a one-dimensional
+proved reduction; it is not a general multivariate exponential procedure.
+
+Similarly, polynomial factors known to be nonnegative should be retained
+outside the ladder whenever possible. Expanding a square only to force an
+analytic search to rediscover positivity wastes both algebraic structure and
+proof size. The router should compare the expanded derivative representation
+with a factored source view rather than making either view globally canonical.
+
+\subsection{Concrete libraries to reuse}
+
+\paragraph{Mathlib derivative and monotonicity theorems.}
+Use the explicit-derivative API in
+\pathline{Mathlib/Analysis/Calculus/Deriv/MeanValue.lean}
+and
+\pathline{Mathlib/Analysis/SpecialFunctions/ExpDeriv.lean}.
+These expose the monotonicity and exponential chain-rule ingredients for the
+step theorem~\cite{mathlib-meanvalue,mathlib-expderiv}. Explicit
+\code{HasDerivAt} witnesses avoid the default-zero behaviour of a totalised
+\code{deriv} when differentiability has not been established.
+
+\paragraph{LeanCert for bounded analytic obligations.}
+LeanCert's maintained interface documents checked interval evaluation,
+automatic differentiation, bounds, optimisation, and root certificates.
+Programmatic entry points include \code{LeanCert.evalInterval},
+\code{LeanCert.evalInterval_correct}, \code{LeanCert.API.Bounds}, and
+\code{LeanCert.API.Optimization}. Its documented automatic tail fragment is
+currently reciprocal-power bounds over naturals, rather than general
+exponential or logarithmic tails~\cite{leancert}. Thus it is a concrete
+candidate for the compact-domain and point-bound adapter, not a reason to
+reimplement its interval evaluator inside Forge.
+
+Trust selection must be explicit. LeanCert documents a native mode using
+\code{native_decide}, a kernel mode, and an automatic mode that can fall back.
+For the strict kernel-only route envisioned here, request
+\code{leancert (trust := kernel)} or use the corresponding checked API without
+native fallback. This archive inspected those interfaces; it did not install,
+run, or benchmark LeanCert.
+
+\paragraph{IntervalBounds for small concrete endpoint estimates.}
+The \code{peti12352/lean-interval-bounds} project provides \code{approx},
+\code{interval_decide}, and \code{norm_num} extensions for exact transcendental
+bounds. Its documented approach avoids floating-point proof arithmetic and
+\code{native_decide}. It is narrower than a quantified interval worker, but
+well matched to rational-anchor estimates. Its README reports a
+\code{v4.33.0-rc1} toolchain, different from the audited Forge baseline;
+compatibility must be compiled rather than assumed~\cite{intervalbounds}.
+
+\paragraph{Exact arithmetic and algebraic side conditions.}
+The prototype needs only Python's \code{Fraction}, integer arithmetic, arrays,
+and maps. A first Lean implementation can use rational coefficients and proved
+sparse operations, plus ordinary ring normalisation and numerical proofs for
+small emitted identities. No SAT, SMT, SDP, or numerical eigenvalue library is
+required for the native ladder or the total tail constructor. Adding one would
+complicate deployment without solving a missing subproblem in these algorithms.
+
+The library recommendation is therefore narrow: Mathlib for the analytic bridge,
+a proved exact polynomial representation for the certificate arithmetic,
+LeanCert or IntervalBounds for endpoint and compact obligations, and Forge's
+existing algebraic worker for factors. These pieces have separate responsibilities
+and no implied claim of plug-and-play version compatibility.
+
+\subsection{Candidate proof emission in the archive}
+
+The supplied \code{LadderBridge.lean} states the one-step theorem in terms of
+arbitrary real functions and explicit derivative proofs. The emitter then
+creates a private definition for every $q_j$, proves its derivative identity,
+proves its initial value by exact arithmetic, and applies the step theorem
+backwards from the zero function. This is intentionally a proof-producing
+path, not an invocation of the Python verifier from Lean.
+
+The four generated modules cover the Taylor remainder of order four, the
+positive entropy chart, the rational logarithm-bound chart, and the
+auxiliary-factor example with $\varepsilon=1$. Their final statements
+say nonnegativity on the closed nonnegative ray. Some corresponding Python
+receipts establish stronger strict conclusions, but the emitted Lean statements
+are not presented as closing those stronger requests.
+
+Every candidate requests an axiom inventory. None of those requests was
+executed because this environment has no Lean executable. The first integration
+milestone must compile and repair the bridge and all four replays without
+weakening their statements or introducing proof holes. Only then should proof
+emission be replaced with a reflected checker for larger certificates.
+
+\subsection{Why a reflected checker is the second step, not the first}
+
+A reflected checker should prove soundness once for evaluation, shifted
+ differentiation, point certificates, and ladder recursion. It then reduces a
+closed Boolean certificate check and invokes the soundness theorem. This can
+avoid a large tower of repeated ring proofs, especially for auxiliary-factor
+certificates with long integer coefficients.
+
+However, reflection introduces additional obligations: correctness of rational
+casts, polynomial evaluation, sorting and trimming, and the executable
+arithmetic backend. A small emitted proof is an excellent reference oracle
+while those lemmas are developed. Keep the source-emission path as a fallback
+and differential test even after reflection becomes the production route.

@@ -1,0 +1,46 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "evidence": "Python exact replay only; no Lean compilation or tactic comparison",
+  "lanes": {
+    "poly": {
+      "cases": 110,
+      "outcomes": {
+        "proved": 79,
+        "refuted": 30,
+        "unknown": 1
+      },
+      "certificate_bytes": 65364
+    },
+    "nc": {
+      "cases": 85,
+      "outcomes": {
+        "unknown": 3,
+        "proved": 82
+      },
+      "certificate_bytes": 96989
+    },
+    "analytic": {
+      "cases": 44,
+      "outcomes": {
+        "interval": 33,
+        "unknown": 7,
+        "jet": 4
+      },
+      "certificate_bytes": 17592
+    }
+  },
+  "mutation_rejections": {
+    "poly": 180,
+    "nc": 81,
+    "analytic": 81
+  },
+  "independent_oracles": {
+    "poly_vertex_cases": 160,
+    "poly_feasible": 89,
+    "poly_infeasible": 71,
+    "weyl_polynomial_actions": 288
+  },
+  "witness_evaluations": 490
+}

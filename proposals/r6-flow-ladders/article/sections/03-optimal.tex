@@ -1,0 +1,163 @@
+\section{From a search problem to an optimal compiler}
+\label{sec:optimal}
+
+\subsection{The finite grammar to which completeness applies}
+
+For each nonzero coefficient polynomial in \eqref{eq:exp-poly}, put
+\[
+ m_\lambda=1+\deg P_\lambda,
+ \qquad N=\sum_{\lambda\in\Lambda}m_\lambda.
+\]
+Define $m_0=0$ when the rate zero is absent. The full operator
+\begin{equation}
+ L_f=\prod_{\lambda\in\Lambda}(\D-\lambda)^{m_\lambda}
+ \label{eq:annihilator}
+\end{equation}
+annihilates $f$. This follows immediately from
+\[
+ (\D-\lambda)^j\bigl(P_\lambda e^{\lambda x}\bigr)
+ =P_\lambda^{(j)}e^{\lambda x}
+\]
+and commutation of constant-coefficient differential operators.
+
+\begin{definition}[Input-spectrum polynomial-terminal grammar]
+\label{def:grammar}
+A ladder belongs to $\mathcal G(f)$ if each cofactor belongs to the input rate set $\Lambda$, rate $\lambda$ occurs at most $m_\lambda$ times, and its terminal test is exactly membership in $\Cplus$. Early stopping is allowed. The zero function has the empty ladder.
+\end{definition}
+
+The sound checker can accept rational cofactors outside this grammar. The following completeness and optimality theorems cannot. In particular, they do not allow extra cofactor rates, more than the input multiplicities, a different anchor, or a stronger polynomial terminal prover.
+
+The initial implementation explored states $(k_\lambda)_{\lambda\in\Lambda}$ with $0\le k_\lambda\le m_\lambda$. Commutation makes the transformed expression depend only on this vector, so tabling avoids redundant permutations. Nevertheless, the grid has
+\begin{equation}
+ \prod_{\lambda\in\Lambda}(m_\lambda+1)
+ \label{eq:grid}
+\end{equation}
+states. The next two results eliminate the need to traverse that grid.
+
+\subsection{Exchange makes increasing order sufficient}
+
+\begin{lemma}[Adjacent exchange]
+\label{lem:exchange}
+Suppose a valid portion of a ladder applies $c$ and then $d$ to a function $h$, with $c>d$. Replacing those two steps by $d$ and then $c$ preserves every anchor inequality and the function after the two steps.
+\end{lemma}
+\begin{proof}
+Write $a=h(0)\ge0$ and $b=(T_ch)(0)\ge0$. The new intermediate anchor is
+\[
+ (T_dh)(0)=(T_ch)(0)+(c-d)h(0)=b+(c-d)a\ge0.
+\]
+The two-step result is unchanged because $T_cT_d=T_dT_c$. All preceding and subsequent functions are therefore unchanged, except for the single intermediate function whose anchor was just checked.
+\end{proof}
+
+\begin{corollary}[Sorted feasibility]
+\label{cor:sorted}
+For a fixed multiset of cofactors, if any ordering yields an accepted ladder, the increasing ordering does too.
+\end{corollary}
+\begin{proof}
+Repeatedly exchange adjacent inversions. The terminal function is unchanged by every exchange.
+\end{proof}
+
+Notice that the result is one-sided. A decreasing ordering can fail even though increasing order succeeds. It is not correct to conclude that commutation makes the \emph{intermediate anchors} order-independent. Only the final operator is order-independent; the inequality in the exchange lemma is the missing argument.
+
+\begin{lemma}[Completion to the full annihilator]
+\label{lem:complete}
+Every accepted ladder in $\mathcal G(f)$ extends to an accepted ladder using the full multiset in \eqref{eq:annihilator}.
+\end{lemma}
+\begin{proof}
+Let the current terminal be $q\in\Cplus$. Append all unused negative cofactors first. For $c<0$, $T_cq=q'+|c|q$ still belongs to $\Cplus$. Append the unused zero cofactors next. If a zero mode existed initially, the current polynomial degree is no larger than its original degree minus the number of zero factors already used. The remaining $m_0$ factors, accounting for those already used, therefore annihilate it. If no zero mode existed, the ordinary-polynomial terminal is already zero: none of the permitted operators creates a zero-rate mode. Finally append the unused positive cofactors, which act on zero. Every new anchor is nonnegative.
+\end{proof}
+
+\begin{theorem}[A deterministic feasibility test]
+\label{thm:canonical}
+A ladder in $\mathcal G(f)$ exists if and only if every intermediate anchor in the full increasing-order annihilator chain is nonnegative. Thus a negative anchor in that canonical chain is a certificate that $\mathcal G(f)$ contains no accepted ladder.
+\end{theorem}
+\begin{proof}
+For the forward direction, complete a valid ladder by Lemma~\ref{lem:complete}, then sort it by Corollary~\ref{cor:sorted}. For the reverse direction, the full chain has zero terminal by \eqref{eq:annihilator}; if all anchors are nonnegative, it is an accepted ladder.
+\end{proof}
+
+A production pass may stop earlier when it reaches $\Cplus$. This does not weaken the theorem: such a prefix itself is a valid certificate. A failure receipt contains the negative anchor's index and its exact rational value. The replay path reconstructs the canonical chain up to that index.
+
+\textbf{The negative result is about the language.} It says neither that $f$ is negative somewhere nor that Lean cannot prove $f\ge0$. Section~\ref{sec:evidence} includes true functions for which the negative grammar result is the expected and correct outcome.
+
+\subsection{Nonzero modes force their complete multiplicities}
+
+The remaining question is whether a shorter ladder can be obtained by stopping before using every factor. This is where the special terminal cone gives a much stronger result.
+
+\begin{lemma}[Forced nonzero factors]
+\label{lem:forced}
+Every ladder in $\mathcal G(f)$ with an ordinary-polynomial terminal uses exactly $m_\lambda$ copies of each nonzero input rate $\lambda$.
+\end{lemma}
+\begin{proof}
+Consider its action on a single nonzero mode $P_\lambda e^{\lambda x}$. Applying $T_c$ with $c\ne\lambda$ replaces $P$ by $P'+(\lambda-c)P$. If $P$ has degree $d$ and leading coefficient $a\ne0$, the new polynomial has the same degree and leading coefficient $(\lambda-c)a\ne0$. Such a step cannot eliminate the mode. The factors with $c=\lambda$ differentiate its polynomial. By commutation, $k$ such factors leave a nonzero polynomial precisely when $k\le\deg P_\lambda$. Therefore eliminating the mode requires at least $\deg P_\lambda+1=m_\lambda$ copies. The grammar permits no more than this number.
+\end{proof}
+
+Here ``ordinary-polynomial terminal'' is the normal-form condition used by the checker: all nonzero rates must be absent. The argument does not depend on deciding equality of arbitrary analytic expressions by sampling.
+
+Consequently the only remaining choice is an integer
+\[
+ z\in\{0,1,\ldots,m_0\},
+\]
+the number of zero cofactors. For each $z$, form the sorted list consisting of all mandatory nonzero factors and $z$ zeros. Let $\Phi(z)$ mean that its anchors pass and its terminal lies in $\Cplus$.
+
+\begin{lemma}[Monotonicity in the zero count]
+\label{lem:zeros}
+For $0\le z<m_0$, $\Phi(z)$ implies $\Phi(z+1)$.
+\end{lemma}
+\begin{proof}
+Append one zero cofactor to the accepted chain at $z$. Its terminal $q\in\Cplus$ becomes $q'\in\Cplus$, whose anchor is nonnegative. Sort the enlarged cofactor list by the exchange lemma. The result is exactly the candidate tested by $\Phi(z+1)$.
+\end{proof}
+
+\begin{theorem}[Shortest-ladder compiler]
+\label{thm:optimal}
+After a successful canonical feasibility pass, binary search for the least $z$ such that $\Phi(z)$ holds produces a shortest ladder in $\mathcal G(f)$. Its number of steps is
+\begin{equation}
+ \sum_{\lambda\ne0}m_\lambda+z_{\min}.
+ \label{eq:min-length}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Canonical success guarantees $\Phi(m_0)$ by Theorem~\ref{thm:canonical}. Lemma~\ref{lem:zeros} makes $\Phi$ monotone. Any accepted ladder must use the mandatory nonzero factors by Lemma~\ref{lem:forced}; sorting preserves its acceptance, so its zero count is a feasible value of $\Phi$. Conversely, the candidate at $z_{\min}$ is an accepted ladder. Formula~\eqref{eq:min-length} is therefore both a lower bound and an attained length.
+\end{proof}
+
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+optimalLadder(f):
+  result := increasingAnnihilatorPass(f)
+  if result contains a negative canonical anchor:
+    return NoCertificateInThisGrammar(result.obstruction)
+
+  lo := 0
+  hi := multiplicityOfZeroRate(f)
+  while lo < hi:
+    mid := floor((lo + hi) / 2)
+    if sortedMandatoryFactorsAndZeros(f, mid) passes:
+      hi := mid
+    else:
+      lo := mid + 1
+
+  ladder := checkableCandidate(f, lo)
+  if lo = 0:
+    minimumReceipt := {zeros: 0, previousFailure: none}
+  else:
+    failure := exactFailureOfCandidate(f, lo - 1)
+    minimumReceipt := {zeros: lo, previousFailure: failure}
+  return ladder, minimumReceipt
+\end{lstlisting}
+\end{minipage}\par
+
+\subsection{A checkable minimality receipt}
+
+A success certificate need not be trusted to be short. Minimality is a separate claim, checked through a separate receipt. The replay path first checks the ladder's mathematical validity. It then verifies that its multiset is precisely the mandatory nonzero factors plus the reported number of zeros. If that number is positive, it reconstructs the preceding candidate and checks one of two exact failure kinds: a negative anchor, or a negative coefficient in its ordinary-polynomial terminal. Monotonicity and the forced-factor lemma give the lower bound.
+
+The minimum receipt never changes whether the theorem is true. Rejecting an incorrect minimum receipt need not discard an otherwise valid proof certificate; the two claims should remain separate in Forge's interface. The experiment runner requires both because it is testing the optimizer as well as the prover.
+
+\subsection{Complexity and the correct sense of optimality}
+
+The dense coefficient count is $N=\sum m_\lambda$. A cofactor step visits at most $N$ coefficients. A full candidate has at most $N$ steps and costs $O(N^2)$ rational arithmetic operations. Canonical feasibility costs $O(N^2)$, and binary search uses $O(\log(m_0+2))$ candidate checks. Hence a straightforward implementation uses
+\[
+ O\bigl(N^2\log(m_0+2)\bigr)
+\]
+rational operations, rather than exploring \eqref{eq:grid}. One candidate can be evaluated with $O(N)$ working coefficient storage, in addition to the input and output. Numerators and denominators may grow: these are arithmetic-operation bounds, not unit-cost bit-complexity bounds.
+
+``Shortest'' means the number of $T_c$ steps under Definition~\ref{def:grammar}. It does not mean minimum coefficient bit length, shortest rendered proof term, minimum Lean checking time, or shortest proof in a richer calculus. A terminal polynomial proved positive by Forge's SOS worker might allow a different shorter certificate. That richer checker remains sound, but the minimum theorem above would no longer describe it. An implementation should attach the grammar identifier to every optimality claim.
+
+The initial bounded breadth-first routine is retained as a reference implementation. When its state cap is reached, it reports budget exhaustion if it finds no proof; a proof found after resource pruning need not be globally shortest. The experiments use a cap above the complete tested grids, and the production minimality claim comes from the new theorem and receipt, not from a bounded-search assumption.

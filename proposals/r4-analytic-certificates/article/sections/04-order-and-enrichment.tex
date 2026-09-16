@@ -1,0 +1,204 @@
+\section{Canonical factor order and an enrichment hierarchy}
+\label{sec:enrichment}
+
+\subsection{Factorial search is unnecessary}
+
+The annihilator of an exponential polynomial supplies a multiset of factors,
+but initially seems to leave their order to search. The initial coordinates
+change with the order, so arbitrary ordering can indeed fail. Fortunately,
+there is a best order in the relevant sense.
+
+\begin{theorem}[Ascending-order dominance]
+\label{thm:order}
+Fix a function, an anchor, and a multiset of constant real differential factors
+whose product annihilates the function. If any ordering of these factors gives
+nonnegative ladder initial values, then their nondecreasing ordering does too.
+\end{theorem}
+\begin{proof}
+Consider an adjacent inversion $\alpha>\beta$ after a common prefix has produced
+$q$. In the original order the intermediate function is
+$u=(\D-\alpha)q$. In the swapped order it is
+\[
+ \widetilde u=(\D-\beta)q=u+(\alpha-\beta)q.
+\]
+The original successful ladder gives $q(a)\ge0$ and $u(a)\ge0$, hence
+$\widetilde u(a)\ge0$. After both factors the functions are exactly equal,
+since $(\D-\alpha)$ and $(\D-\beta)$ commute. Every earlier and later initial
+value is unchanged, as is the terminal zero. Each adjacent inversion can
+therefore be removed without losing acceptance. Bubble sorting finishes.
+\end{proof}
+
+\begin{corollary}
+For the native multiset containing each rate $\lambda$ exactly $d_\lambda+1$
+times, checking one ascending ladder decides whether any permutation of that
+multiset admits a ladder certificate, provided the initial signs are determined
+exactly.
+\end{corollary}
+
+The qualification is important. This is completeness for a \emph{certificate
+class}, not for positivity of exponential polynomials. At the origin, the
+prototype's rational signs are exact, so it implements precisely that
+fixed-multiset test. At other anchors, its fixed-precision enclosures can fail
+to establish a true nonnegative initial value. The ordering theorem remains
+true, but bounded numerical sign discovery is an additional source of
+\unknown{}.
+
+With $N$ native factors and at most $S\le N$ coefficients in the corresponding
+dense block representation, a straightforward implementation uses $O(NS)$
+rational arithmetic operations. Sorting rates costs $O(|\Lambda|\log|\Lambda|)$
+comparisons; repeated rates need not actually be sorted one copy at a time.
+Numerator and denominator growth must be accounted for separately. This is
+not a bit-complexity or timing claim.
+
+The implementation should therefore never offer a large permutation budget for
+this lane. A failed ascending test is a reason to enrich the language, move the
+anchor, split the domain, factor the target, or route elsewhere. Reordering the
+same factors cannot reveal a successful certificate that ascending order missed
+at exact signs.
+
+\subsection{Adding factors without changing the source function}
+
+A fixed multiset can be too weak. Consider
+\begin{equation}
+ f_\varepsilon(x)=e^{2x}-4e^x+4+\varepsilon,
+ \qquad \varepsilon>0.
+ \label{eq:epsilon-family}
+\end{equation}
+The native factors are $(0,1,2)$. The first step tests $f_\varepsilon(0)=1+\varepsilon>0$,
+but its successor has value $f_\varepsilon'(0)=-2$. Thus the native ladder
+fails, regardless of factor order by Theorem~\ref{thm:order}. Nevertheless
+$f_\varepsilon=(e^x-2)^2+\varepsilon$ is strictly positive.
+
+If $A(\D)f=0$, then $(\D-\beta)A(\D)f=0$ for every real $\beta$.
+We can therefore add factors without changing the input function. They change
+the coordinates used to establish positivity, not the theorem to be proved.
+
+\begin{proposition}[Monotonicity under multiset extension]
+\label{prop:extension}
+If a function has an accepted ascending ladder for a multiset $M$, then it has
+an accepted ascending ladder for every finite multiset containing $M$.
+\end{proposition}
+\begin{proof}
+Append the additional factors after the existing terminal zero. Every new
+intermediate function and initial value is zero, so the extended unsorted
+ladder is accepted. Apply Theorem~\ref{thm:order} to sort the full multiset.
+\end{proof}
+
+The enlarged cones can be strictly larger. For $f_1=e^{2x}-4e^x+5$, four
+additional factors equal to $-4$ give
+\[
+ (-4,-4,-4,-4,0,1,2),
+\]
+with initial vector
+\[
+ (2,6,16,36,76,92,2592).
+\]
+Every entry is positive and the final function is zero. This is a completely
+rational certificate of strict positivity on $[0,\infty)$.
+
+The prototype calls these \emph{ghost factors}; the article generally calls
+them auxiliary factors. They are not additional program variables or new
+continuous state variables. In particular, the term is not a claim that this
+construction implements the differential-ghost rule of a general dynamic
+logic~\cite{differential-invariance}.
+
+\subsection{A bounded but useful search strategy}
+
+For a native minimum rate $\lambda_{\min}$, try
+\[
+ \beta\in\{\lambda_{\min}-1,\lambda_{\min}-2,
+           \lambda_{\min}-4,\ldots,\lambda_{\min}-64\}.
+\]
+For each $\beta$, append repeated copies \emph{before} the native ascending
+suffix. Because $\beta$ is below the native spectrum, the combined order is
+already ascending. At each depth compute the next prefix function once and try
+the native suffix on it. If the current prefix initial value is negative,
+stop extending that particular prefix: every longer ladder contains the same
+failed test.
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+enrichedLadder(f, maxExtra):
+    if nativeLadder(f) succeeds: return it
+    native := ascendingNativeFactors(f)
+    for beta in selectedRatesBelow(min(native)):
+        q := f
+        prefix := []
+        repeat at most maxExtra times:
+            if q(0) < 0: break
+            prefix.append(beta)
+            q := (D - beta) q
+            if nativeLadder(q) succeeds:
+                return checkLadder(f, 0, prefix ++ native)
+    return Unknown
+\end{lstlisting}
+\end{minipage}\par
+
+The experiment used at most 96 auxiliary factors per selected rate. Its
+results for \eqref{eq:epsilon-family} are:
+
+\begin{center}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+$\varepsilon$ & Native result & $\beta$ & Extra factors & Total factors\\
+\midrule
+$1$    & unknown & $-4$  & 4  & 7\\
+$1/2$  & unknown & $-8$  & 7  & 10\\
+$1/4$  & unknown & $-16$ & 13 & 16\\
+$1/16$ & unknown & $-64$ & 46 & 49\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These rows demonstrate a strict increase in the expressive power of the ladder
+language. They are \emph{not} a superiority result over Forge's whole arithmetic
+portfolio: an algebraic worker can establish the displayed square-plus-constant
+identity immediately after introducing $u=e^x$. This family deliberately has a
+known proof, making it a clean control for the enrichment mechanism.
+
+The present search is not claimed complete for strictly positive functions on
+a ray. The monotonicity proposition does not by itself show that the union of
+all auxiliary-factor cones exhausts the strictly positive cone. Establishing
+such a theorem, under explicit spectral and endpoint hypotheses, would be a
+separate mathematical result. It must not be inferred from four successful
+rows.
+
+\subsection{An obstruction that no larger auxiliary budget repairs}
+
+Set $\varepsilon=0$. The function $(e^x-2)^2$ is nonnegative on $[0,\infty)$,
+is not identically zero, and vanishes at $x=\log2>0$. By
+Theorem~\ref{thm:strict}, no finite ladder of the accepted form can establish
+its nonnegativity on that entire ray, even with arbitrary real auxiliary
+factors.
+
+This is a structural failure, not evidence that the theorem is false. The
+correct route is to preserve or discover the square factor and use algebraic
+positivity. More generally, if the target factors as $h(x)^2r(x)$ and the
+algebraic identity is proved, send $r$ to the analytic worker and keep the
+square in the algebraic layer. The zeros of $h$ need not be located to prove
+nonnegativity. To prove strict positivity, however, the source goal must also
+supply or establish $h\ne0$ on the requested domain.
+
+Another route is domain splitting at a known zero, but it needs a certified
+split point and new initial-value arguments on each piece. A numerical root
+approximation cannot be used as an exact domain boundary. Factoring is therefore
+often substantially cheaper than asking a transcendental root isolator to
+solve a problem that a square identity already settles.
+
+\subsection{Towards better enrichment, without changing the checker}
+
+The simple search exposes several concrete optimisations. Cache the prefix
+polynomials so that increasing the number of copies does not recompute them.
+Evaluate native-suffix initial values directly from jets before constructing
+all suffix polynomials. Reject a proposed factor family using its earliest
+negative coordinate. Use the coefficient norm and the minimum observed
+positive coordinate to rank alternative $\beta$ values, but do not make that
+heuristic part of acceptance.
+
+A more general search can insert several distinct auxiliary rates. Theorem
+\ref{thm:order} still removes their ordering dimension. What remains is a search
+over multisets and their multiplicities. An LP relaxation could propose
+candidate coordinates, but the nonlinear dependence on unknown rates must not
+be described as a linear system. A conservative first implementation should
+keep the exact discrete rate grid used here and extend it only when measured
+misses justify the complexity.

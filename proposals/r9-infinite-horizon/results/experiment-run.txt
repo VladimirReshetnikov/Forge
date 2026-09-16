@@ -1,0 +1,91 @@
+{
+  "case_counts": {
+    "games_exhaustive": 22100,
+    "games_random": 200,
+    "mc_acyclic": 200,
+    "mc_arbitrary": 300,
+    "mc_cyclic_cramer": 150,
+    "mc_geometric": 60,
+    "mc_traps": 60,
+    "pds_compressed": 31,
+    "pds_general": 250,
+    "pds_non_growing": 500,
+    "pds_regular_target": 100
+  },
+  "certificate_outcomes": {
+    "games_exhaustive": {
+      "losing": 11260,
+      "winning": 15388
+    },
+    "games_random": {
+      "losing": 114,
+      "winning": 153
+    },
+    "mc_acyclic": {
+      "almost_sure": 200
+    },
+    "mc_arbitrary": {
+      "almost_sure": 250,
+      "not_almost_sure": 50
+    },
+    "mc_cyclic_cramer": {
+      "almost_sure": 150
+    },
+    "mc_geometric": {
+      "almost_sure": 60
+    },
+    "mc_traps": {
+      "not_almost_sure": 60
+    },
+    "pds_compressed": {
+      "reachable": 31
+    },
+    "pds_general": {
+      "reachable": 70,
+      "unreachable": 180
+    },
+    "pds_non_growing": {
+      "reachable": 199,
+      "unreachable": 301
+    },
+    "pds_regular_target": {
+      "reachable": 56,
+      "unreachable": 44
+    }
+  },
+  "lean_status": "NOT_RUN: Lean executable unavailable; no tactic comparison",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "quick": false,
+  "record_count": 28566,
+  "scope": "Python prototype results, not formal verification; timing excludes file serialization.",
+  "seed": 20260915,
+  "stats": {
+    "compressed_depth30": {
+      "dag_nodes": 31,
+      "expanded_steps": 2147483647,
+      "outcome": "reachable"
+    },
+    "game_start_outcomes": {
+      "losing": 27010,
+      "winning": 40250
+    },
+    "game_start_replays": 67260,
+    "pds_general_bounded_oracle": {
+      "complete_negative": 141,
+      "found": 70,
+      "truncated_unknown": 39
+    }
+  },
+  "timings_seconds": {
+    "game_check": 0.37901611700510784,
+    "game_oracle": 0.5807753039956651,
+    "game_search": 0.24873848400420684,
+    "mc_check": 0.06615062899948043,
+    "mc_search": 0.0782091330025878,
+    "pds_check": 0.009938426999497096,
+    "pds_search": 0.02079107100098554
+  },
+  "total_wall_seconds": 1.6158371310000348
+}
+

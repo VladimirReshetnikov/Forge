@@ -1,0 +1,197 @@
+\section{Experiments, replay, and what the evidence does not say}
+\label{sec:experiments}
+
+\subsection{Execution protocol}
+The recorded run used Python 3.13.5 on Linux, with seed \code{20260915}. All
+commands ran with \code{python -S}, which disables automatic site-package
+loading. The implementation imports only standard-library modules. The source
+and complete generated certificates are included in the archive, together with
+the run's summary and console logs.
+
+The experiments distinguish a \emph{model case}, a \emph{start-state check},
+and a \emph{stored certificate record}. A game may have both a nonempty winning
+region and a nonempty losing region, producing two stored records for one
+arena. Every vertex is checked as an initial vertex during the experiment, but
+replay stores one representative start per region. Thus the record count is
+not a count of distinct theorem problems and certainly not a count of
+Lean-kernel proofs.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Family & Model cases & Positive records & Negative records \\
+\midrule
+Pushdown: non-growing & 500 & 199 & 301 \\
+Pushdown: general normalized & 250 & 70 & 180 \\
+Pushdown: regular targets & 100 & 56 & 44 \\
+Pushdown: compressed runs & 31 & 31 & 0 \\
+\midrule
+Games: exhaustive sizes 1--3 & 22,100 & 15,388 & 11,260 \\
+Games: random sizes 4--7 & 200 & 153 & 114 \\
+\midrule
+Chains: acyclic & 200 & 200 & 0 \\
+Chains: cyclic/Cramer oracle & 150 & 150 & 0 \\
+Chains: geometric & 60 & 60 & 0 \\
+Chains: reachable traps & 60 & 0 & 60 \\
+Chains: arbitrary four-state & 300 & 250 & 50 \\
+\bottomrule
+\end{tabular}
+\caption{Recorded cases and certificate outcomes. A negative record is an
+expected mathematical result, not a failed solver invocation. Game records
+count nonempty regions, not arenas.}
+\label{tab:counts}
+\end{table}
+
+Across these datasets the archive contains 28,566 certificate records:
+881 pushdown records, 26,915 game-region records, and 770 chain records. All
+replay successfully. This total describes the archive's transport workload;
+it is not a pooled success-rate statistic. No results from the repository's
+eighteen historical proposals are included in these numbers.
+
+\subsection{Pushdown reference computations and their limits}
+The 500 non-growing systems use rules of replacement length at most one. Their
+reachable configuration spaces are finite, so concrete breadth-first search
+from the initial stack is a complete oracle. Its verdict agrees with the
+summary solver in every case; positive certificates are also expanded into
+actual runs and checked against the original rules.
+
+The 250 general systems allow pushes of length two. A separate breadth-first
+search with maximum stack height six finds 70 positive instances and completely
+exhausts 141 negative instances. In 39 further cases it encounters transitions
+that exceed its height limit and must report \emph{unknown}. The summary worker
+returns exclusion certificates for those cases. They pass the independent
+closure audit, but the bounded concrete oracle does not independently settle
+them. The run records this limitation rather than counting truncated searches
+as corroborating negative answers.
+
+The regular-target suite generates non-growing original systems and random
+three-state target DFAs. It compares a direct predicate-on-stack breadth-first
+search with the compiled empty-stack query. All 100 verdicts agree. The stored
+certificate records concern the compiled systems; reproduction of the
+experiment reconstructs the original target fixtures and performs the
+source/compiled comparison. Certificate replay alone does not re-prove the
+compiler bridge.
+
+The compressed family covers depths zero through thirty. All represented
+lengths equal $2^{d+1}-1$ and all positive DAGs have $d+1$ nodes. Cases through
+depth ten are expanded and replayed as concrete traces. Larger cases validate
+the shared certificate and its length recurrence without materializing the
+trace. The maximum example's length is therefore \emph{represented}, not an
+observed count of executed program steps.
+
+\subsection{An exhaustive finite-game corpus}
+For each $n\in\{1,2,3\}$, the experiment enumerates every nonempty successor
+subset at each labelled vertex, every binary ownership map, and every accepting
+subset. The number of arenas is
+\[
+ \sum_{n=1}^{3}(2^n-1)^n\,2^n\,2^n
+   =4+144+21,952=22,100.
+\]
+Self-loops are allowed. Isomorphic labelled arenas are not deduplicated; the
+claim is exhaustive coverage of this explicit finite input domain, not a count
+of nonisomorphic games. An additional 200 arenas have four to seven vertices
+and at most three distinct outgoing edges per vertex.
+
+The reference oracle does not use attractors or the solver's rank construction.
+For each player's positional policy, it fixes that player's choices and leaves
+all opposing choices available. It computes transitive closure by a separate
+Floyd-style routine. For a protagonist policy it detects reachable cycles in
+the nonaccepting subgraph. For an antagonist policy it detects reachable cycles
+containing an accepting vertex. It unions the respective winning sets over
+all positional policies and checks that they partition the arena. The search's
+winning and losing regions agree with this oracle on every arena.
+
+The experiment additionally checks every initial vertex with its region
+certificate: 67,260 start-state replays, comprising 40,250 winning and 27,010
+losing starts. The persistent artifact stores only one representative start
+per nonempty region. This difference explains why game checks, records, and
+arenas have different counts.
+
+This is substantially stronger evidence than a handful of successful examples,
+but it is still finite testing. It shares the standard positional-strategy
+semantics with the solver and does not replace the soundness and completeness
+arguments or their future Lean formalization.
+
+\subsection{Exact-chain oracles}
+The 200 acyclic chains are evaluated by backward finite-path dynamic
+programming. The 150 small cyclic chains have values checked by Cramer's rule,
+with determinants computed by Laplace expansion rather than elimination. The
+60 geometric chains are checked against the closed forms $\E\tau=d$,
+expected cost $3d/2$, and terminal value one for exit probability $1/d$.
+Thus 410 positive cases have numerical values compared against a genuinely
+different computation or analytic formula.
+
+The 60 explicit trap examples have a known entry probability $1/d$, and the
+returned lower bound agrees exactly. The 300 arbitrary four-state chains use
+an oracle that enumerates nonempty closed subsets of reachable nonterminal
+states rather than computing SCCs. It verifies the almost-sure classification,
+not every numerical field of the positive certificate. All 250 positive and
+50 negative classifications agree. Their numerical residuals and path/closure
+conditions are still checked by the replay module.
+
+This separation is intentional. ``Independent oracle'' should identify the
+claim independently checked: exact values in the first three groups,
+closed-class probability in the fourth, and almost-sure classification in the
+fifth. It should not be stretched into a statement that every output field was
+computed twice by unrelated implementations.
+
+\subsection{Negative controls and transport tests}
+The 36 named unit tests all pass. They include successful examples as well as
+invalid-input and certificate mutations, so 36 is not a count of rejected
+corruptions. Representative controls reject a self-referential pop proof,
+missing pop bases or binary closure consequences, the wrong pushdown target,
+an old policy under changed ownership, an omitted opponent self-loop, and a
+counterrank that cannot pay for an accepting visit.
+
+Probability controls reject nonunit rows, floats, changed transition
+probabilities, omitted positive-mass successors, a path through a zero-mass
+edge, a purported trap containing a terminal, and an arbitrary harmonic value
+with no properness potential. The tests also confirm that an unreachable
+nonterminal trap does not invalidate absorption from the actual start.
+Transport controls reject duplicate JSON keys, zero rational denominators, and
+Python booleans used as integer state identifiers.
+
+These tests exercise real boundaries in the implemented formats. They are not
+a security audit. The research decoder has an input-size cap, duplicate-key
+rejection, and rational integer-size checks, but it has not been hardened
+against every hostile nesting pattern, pathological dimension, or resource
+exhaustion attack. Unexpected malformed shapes may raise ordinary Python
+exceptions. A service implementation needs a separately bounded, total decoder
+and process isolation; none of those are claimed as delivered here.
+
+\subsection{Search-free replay and performance interpretation}
+The replay command loads the separately encoded problem, decodes its
+certificate, calls the appropriate checker, and compares the result with the
+recorded expected outcome. The checker's own conclusion is recomputed; the
+\code{expected} field is only a regression assertion. Before and after the
+run, the script checks that the three search modules have not been imported.
+It prints:
+\begin{lstlisting}
+Replayed 28566 records; no search modules imported.
+reachable: 356             unreachable: 525
+winning: 15541             losing: 11374
+almost_sure: 660           not_almost_sure: 110
+\end{lstlisting}
+
+Search and replay still share the input model definitions, the codec, and
+Python's rational arithmetic implementation. This is more separation than
+calling the search again during replay, but less than an independently
+verified checker. Likewise, excluding site packages proves that these runs did
+not require an installed numerical solver; it does not prove that the code is
+correct or malicious-input safe.
+
+The summary records internal search, check, and game-oracle timings. The
+complete experiment loop took approximately 1.62 seconds in the recorded run,
+excluding JSON serialization, process startup, unit tests, and the later
+standalone replay. This is a single small-model run, with different numbers of
+search and replay calls, not a statistical performance study. The timings are
+retained for reproducibility and troubleshooting, not as a speed claim.
+
+No Lean executable was available in this environment. No Lean source from this
+package was elaborated, no model theorem was checked by the Lean kernel, and no
+comparison with \code{grind}, Aesop, LeanHammer, or another tactic was run.
+The historical core Lean elaborations in Forge's README belong to that
+repository and are not credited to this work. An end-to-end capability gain in
+Lean remains a future measurement, although the Python workers already decide
+their explicitly specified model-level fragments.

@@ -1,0 +1,102 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsthm}
+\usepackage{newpxtext,newpxmath}
+\usepackage[margin=24mm,headheight=15pt]{geometry}
+\usepackage{microtype,mathtools,bm}
+\usepackage{booktabs,longtable,array,enumitem,listings,xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{titlesec,fancyhdr,xurl}
+\usepackage[colorlinks=true,linkcolor=accent,citecolor=accent,urlcolor=accent]{hyperref}
+\definecolor{accent}{HTML}{4E5940}
+\definecolor{pale}{HTML}{F3F4EE}
+\definecolor{ink}{HTML}{252725}
+\definecolor{muted}{HTML}{62685E}
+\color{ink}
+\titleformat{\section}{\Large\bfseries\color{accent}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{2.0ex plus 1ex}{1ex}
+\titlespacing*{\subsection}{0pt}{1.6ex plus 0.6ex}{0.6ex}
+\setlength{\parskip}{0.42em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\setcounter{tocdepth}{2}
+\setlist{nosep,leftmargin=1.5em}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\sffamily FORGE / THREE NEW ENGINES}
+\fancyhead[R]{\small\sffamily 15 SEPTEMBER 2026}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,
+ breaklines=true,breakatwhitespace=false,showstringspaces=false,
+ frame=single,rulecolor=\color{muted!30},backgroundcolor=\color{pale},
+ xleftmargin=0.4em,xrightmargin=0.4em,aboveskip=0.9em,belowskip=0.7em}
+\newtcolorbox{focusbox}{colback=pale,colframe=accent!40,boxrule=0.4pt,arc=0pt,
+ left=9pt,right=9pt,top=6pt,bottom=6pt,breakable}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb{Q}}\newcommand{\R}{\mathbb{R}}\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\unknown}{\textsc{unknown}}
+\newcommand{\eval}[1]{\llbracket #1\rrbracket}
+\newcommand{\forge}{\code{forge}}
+\newcommand{\grind}{\code{grind}}
+\newcommand{\status}[1]{\textbf{Evidence status.} #1}
+\DeclareMathOperator{\LM}{LM}
+\DeclareMathOperator{\supp}{supp}
+\hypersetup{pdftitle={Three New Engines for Forge},pdfauthor={OpenAI, prepared for Vladimir Reshetnikov},pdfsubject={Constructive polyhedral projection, noncommutative completion, and zero-aware analytic certificates}}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+{\sffamily\color{accent}\large LEAN AUTOMATION / TECHNICAL EXTENSION STUDY}\par
+\vspace{1.4cm}
+{\fontsize{34}{39}\selectfont\bfseries Three New Engines\\for Forge}\par
+\vspace{0.8cm}
+{\Large Constructive polyhedral projection,\\noncommutative completion, and\\zero-aware analytic certificates}\par
+\vspace{1.0cm}
+{\large A delta design with exact Python prototypes}\par
+\vspace{1.2cm}
+\begin{align*}
+ z(x,y)&=\max(0,x+y-1),\\[0.4em]
+ p&=\sum_j c_j\,u_jr_{i_j}v_j,\\[0.4em]
+ f(x)&=\frac{f^{(m)}(\xi)}{m!}(x-a)^m.
+\end{align*}
+\vfill
+\begin{focusbox}
+\textbf{What is delivered.} Three implemented research workers, separately implemented exact checkers, replayable certificates, adversarial controls, mathematical soundness arguments, and a concrete Lean integration plan.\par
+\textbf{What has not been measured.} No Lean compiler was available in this execution environment. The Lean specimens are uncompiled, and no comparison with \grind{} or another Lean tactic was run.
+\end{focusbox}
+\vspace{0.6cm}
+Prepared for \textbf{Vladimir Reshetnikov}\hfill 15 September 2026\par
+\small Source baseline: Forge \code{c98e47c5f804}; Leant \code{6bf05ad78c46}; Djex \code{e8778f4ebd63}.
+\end{titlepage}
+\begin{abstract}
+Forge already has a substantial design for certificate-producing proof planning above Lean's \grind{}: induction and invariant synthesis, arithmetic witnesses, polynomial certificates, finite closures, and several external proof-search interfaces. Recommending these again would not significantly extend it. This study instead develops three comparatively independent additions.
+
+The first turns exact polyhedral projection into a constructive procedure for universally quantified parameters and multiple existential real outputs. It accepts mixed strict and non-strict affine constraints and extracts a shared min--max expression rather than searching a fixed affine template. A four-corner example proves a strict expressiveness separation from affine witnesses. The second operates in a free associative algebra: a bounded, traced completion procedure discovers missing noncommutative lemmas, while a much smaller checker verifies only a two-sided ideal identity in the original relations. The third supplies rational enclosures for elementary functions and combines them with exact vanishing-jet certificates, so a non-strict inequality with an interior zero need not be defeated by numerical uncertainty at that zero.
+
+All three workers were prototyped and exercised. Their separate workloads contain 110 polyhedral cases, 85 noncommutative cases, and 44 analytic cases. Expected negative and resource-limited outcomes are retained rather than counted as failures or silently discarded. Replay is performed with search imports blocked and site packages disabled. Additional evidence comprises an exact vertex-enumeration oracle, polynomial-action checks, witness evaluations, mutation rejection, and optional numerical sanity checks. None of this is reported as a Lean-kernel proof. The final sections specify the source reification obligations, checker theorems, library reuse, and release gates required to turn these prototypes into actual Forge capabilities.
+\end{abstract}
+{\small\setlength{\parskip}{0pt}\tableofcontents}
+\clearpage
+\input{sections/01-delta}
+\input{sections/02-polyhedral}
+\input{sections/03-noncommutative}
+\input{sections/04-analytic}
+\input{sections/05-integration}
+\input{sections/06-evidence}
+\input{sections/07-roadmap}
+\appendix
+\input{sections/A-artifacts}
+\input{references}
+\end{document}

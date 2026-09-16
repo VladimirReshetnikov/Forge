@@ -1,0 +1,157 @@
+\section{Executed experiments and what they establish}
+\label{sec:experiments}
+
+\subsection{Environment, inputs, and receipts}
+
+The experiments ran with Python 3.13.5 on Linux x86-64, using the standard
+library only. Commands were invoked with \code{python -S}, which disables
+site-package initialisation. The seed for the recorded experiment bundle is
+\code{20260915}. Full interpreter and platform strings are retained in
+\pathline{results/experiment-summary.json}.
+
+The original canonical problems and requested goal types are stored in
+\pathline{results/problems.json}.
+The separate receipt stream in
+\pathline{results/certificates.json}
+references those problems by identifier. The replay program reopens both files
+and calls \code{verify_goal}; it does not trust a polynomial or domain supplied
+only by the receipt. All 284 stored receipts are accepted against their recorded
+requests.
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.29\linewidth}rX@{}}
+\toprule
+Family & Receipts & Actual certified request\\
+\midrule
+Taylor boundary zeros & 25 & Strict positivity on $x>0$, with equality at zero\\
+Named exponential/chart examples & 8 & Strict positivity of the recorded chart polynomial on $x>0$\\
+Auxiliary-factor examples & 4 & Strict positivity on the closed nonnegative ray\\
+Reference compact covers & 4 & Nonnegativity on $[0,2]$\\
+Random eventual signs & 240 & Explicit eventual sign, positive or negative according to the source\\
+Growth witnesses & 2 & One eventual-sign receipt; one strict ray receipt at anchor 32\\
+Negative point & 1 & A counterexample in the requested interval\\
+\midrule
+Total stored receipts & 284 & A count of receipts, not 284 Lean theorems\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+This total is internal to one bundle. It is not added to the eighteen older
+Forge runs. Moreover, some receipts intentionally concern the same function
+with different domains or result types. They are not independent discoveries
+or a solved-goal percentage on a theorem corpus.
+
+The eight named cases include the reflected exponential tangent remainder,
+quadratic and cubic hyperbolic remainders, both entropy charts, the two
+logarithmic bounds, and a damped positive square. The random eventual-sign
+generator creates canonical sums from eight random monomial proposals, rates
+with denominator three, degrees below six, and small signed integer
+coefficients. It tests the total tail constructor on varied exact inputs;
+it is not sampled evidence of the universal theorem, whose proof is in
+Section~\ref{sec:tails}.
+
+\subsection{An ablation with an exhaustive finite oracle}
+
+The most informative algorithmic ablation tests the factor-order theorem.
+For each of 200 independently generated inputs with rates drawn from
+$\{-2,1,3\}$ and degrees at most one per block, the experiment enumerates every
+distinct permutation of the native multiset. Across the cases it checks 14,409
+orders. Forty-four inputs have an accepted ascending ladder, and in every case
+\[
+ \text{ascending ladder accepts}
+ \quad\Longleftrightarrow\quad
+ \text{some enumerated order accepts}.
+\]
+There are zero mismatches. The records retain the number of accepting orders
+per case, so the ablation is reproducible rather than merely an assertion that
+both code paths ``usually agree.''
+
+This checks a finite consequence of Theorem~\ref{thm:order} against exhaustive
+search. It does not replace the proof and it does not establish that every
+positive input among the other 156 cases lacks some richer certificate. The
+counterpart in the unit tests uses two rates and a separate seed.
+
+\subsection{Independent calculations and mutation tests}
+
+The test suite contains 18 test methods. Several methods contain hundreds of
+cases; the method count is not the case count. Important checks are:
+
+\paragraph{Differentiation through three representations.}
+Two hundred random inputs are differentiated through six random factors.
+The producer's termwise loop is compared against the checker's coefficient
+stencil. Initial values are also compared with a direct jet oracle:
+\[
+ \D^m(x^ke^{\lambda x})\big|_{x=0}
+ =\begin{cases}
+ \dfrac{m!}{(m-k)!}\lambda^{m-k},&m\ge k,\\
+ 0,&m<k.
+ \end{cases}
+\]
+The oracle multiplies the scalar characteristic polynomials
+$\prod_j(z-\rho_j)$ and applies their coefficients to these ordinary jets.
+It does not generate the same ladder by calling the producer again.
+
+\paragraph{Annihilation and tail checks.}
+One hundred random native annihilators are checked to kill their inputs.
+Three hundred additional random tail receipts and the zero input are replayed
+in the unit suite. These cases are separate from the 240 retained random tail
+records; their counts are not pooled into an inflated certificate count.
+
+\paragraph{Enclosure diagnostics.}
+Two hundred rational exponential arguments are compared against
+\code{Decimal.exp} at 160-digit precision. This is a high-precision diagnostic
+oracle, not a proof of the enclosure theorem. Precision-refinement cases,
+negative arguments, zero arguments, and resource-parameter validation are also
+exercised. The mathematical enclosure proof is
+\eqref{eq:exp-bounds} and directed rounding.
+
+\paragraph{Corruption and source substitution.}
+Tests change a differential factor, an initial lower bound, a polynomial
+coefficient, a terminal length, a source polynomial, an anchor, a sign, a
+cutoff, a tail order, an interval endpoint, and a split point. They also try
+floating-point and Boolean values where exact numbers are required. The
+specified corruptions are rejected. The tests expressly reject using an
+anchor-one proof at anchor zero, a tail as a whole-ray proof, and a negative
+point as a successful nonnegativity proof.
+
+These tests are evidence of the tested invariants. They are not a security
+audit of a hostile-input service. Input-size, coefficient-bit-length, recursion,
+and allocation limits still need production engineering.
+
+\subsection{Unknown results retained deliberately}
+
+Two instructive misses are retained in the summary. The interior-zero case
+$(e^x-2)^2$ remains unknown under the bounded auxiliary-factor search; its
+stronger all-factor obstruction is proved in Theorem~\ref{thm:strict}. The
+natural-interval attempt on $e^x-1-x$ over $[0,1]$ remains unknown at subdivision
+depth 14; the ladder certifies the same nonnegativity statement directly.
+
+These misses are not hidden by counting only returned receipts. Conversely,
+an unknown result is never recorded as falsity of the target. A failed local
+certificate search and a checked negative point are different outcomes in both
+the experiment harness and the proposed worker API.
+
+\subsection{Replay separation and its limits}
+
+The replay process checks that the search module is not imported. It verifies
+stored receipts without regenerating them. Derivative replay uses a distinct
+calculation, and tail replay checks sufficient inequalities rather than
+recomputing the proposed cutoff.
+
+There is an important shared component: point and interval enclosure arithmetic
+is used by both the corresponding searches and replay. A common error there
+could survive producer/checker agreement. The independent high-precision
+checks and elementary mathematical proof reduce that risk but do not eliminate
+it. A Lean soundness theorem for that component, or replacement by a proved
+library adapter, is the intended resolution.
+
+The stored certificate JSON contributes 154,227 bytes when each individual
+receipt is serialised compactly and their sizes are summed. This excludes
+problem data, pretty-printing whitespace, indices, and other files. The largest
+single receipt in that measure is 14,694 bytes. These figures characterise the
+reference format, not compiled Lean proof sizes or memory consumption.
+
+A single elapsed time is retained as environment metadata, but no timing claim
+is made against another prover or another backend. No Lean compilation,
+\code{grind} comparison, or corpus success-rate evaluation was performed in
+this environment.

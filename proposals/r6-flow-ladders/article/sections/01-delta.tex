@@ -1,0 +1,112 @@
+\section{The capability delta, not another architecture}
+\label{sec:delta}
+
+\subsection{What is already in Forge}
+
+The baseline is Forge commit \forgecommit. Its README describes a merged design from eighteen proposals, not an installed tactic. Its status ledger includes exact polynomial-cone certificates, Bernstein subdivision, univariate Sturm-based reasoning, structural induction, arithmetic witness synthesis, observable-space and ideal closures, finite-algebra covers, Kripke countermodels, boundary-safe telescoping, and Ore recurrence transport. Its merge also records elaboration of sixteen core-only Lean files; this does not mean that its complete proposed tactic or its Mathlib-dependent certificate checkers have been implemented~\cite{forge,forge-status,forge-provenance}.
+
+Those contributions are prerequisites here. In particular, merely suggesting ``add invariants,'' ``use a certificate checker,'' ``synthesize an auxiliary lemma,'' or ``consult Leant and Djex'' would duplicate the current repository. The baseline nonlinear chapter targets polynomial expressions over $\R$; nonpolynomial real subexpressions can be treated as opaque variables, but additional relations about them must arrive as proved constraints~\cite{forge-nonlinear}. This is the opening addressed by \emph{Forge Flow}.
+
+For example, treating $y=e^x$ as an unconstrained real variable cannot establish
+\[
+ e^{2x}-(2+x^2)e^x+1\ge0\qquad(x\ge0).
+\]
+A polynomial worker may eventually solve the goal after suitable analytic lemmas are supplied. Flow's job is to produce those lemmas from exact differential structure, rather than hope that the appropriate inequality is already in the context.
+
+\subsection{Three additions and their precise boundaries}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.21\textwidth}XX@{}}
+\toprule
+Addition & Concrete mechanism & Not a claim made here\\
+\midrule
+Cofactor compiler & Rational exponential-polynomial normalization; exact $\D-c$ ladders; increasing-order feasibility; binary-search minimum & A decision procedure for all nonnegative exponential polynomials\\
+Coupled residual worker & Enumerate rational matrix rows; check a Metzler differential system and coefficient-positive forcing & Unrestricted invariant synthesis or general ODE solving\\
+Analytic witness worker & Exact Taylor-tail enclosures; rational point refutations; interval endpoint signs plus derivative coverage & A rational value of a transcendental root, or global uniqueness from a local bracket\\
+\bottomrule
+\end{tabularx}
+\caption{The new lane has three distinct outputs, with different mathematical meanings.}
+\end{table}
+
+The most substantial algorithmic result is the shortest-ladder compiler in Section~\ref{sec:optimal}. It replaces an initially implemented breadth-first search over a multiplicity grid by a deterministic feasibility pass and a binary search. The grid search remains in the package as a small-instance oracle and an ablation, not as the proposed production algorithm.
+
+\subsection{What ``new'' means in this article}
+
+The novelty claim is a \emph{delta against the reviewed Forge materials}: the README, implementation-status ledger, nonlinear chapter, provenance map, and the neighboring-project transfer document at the pinned revision. This was not a line-by-line audit of every archived submission. A GitHub code-search response was explicitly marked incomplete and was not treated as proof of absence. The package records this review boundary in \code{docs/PROVENANCE.md}.
+
+Nor is analytic proof automation itself new. Rocq's Interval package already supports elementary functions, automatic differentiation, Taylor models, and specialized root reasoning. MetiTarski combines resolution with real-algebraic reasoning to prove inequalities involving elementary functions~\cite{interval,metitarski}. Differential invariants and differential ghosts provide a much broader logical context for reasoning from differential equations~\cite{platzer-tan}. Positivity and derivative constructions for exponential-polynomial spaces also belong to the established extended-Chebyshev literature~\cite{aldaz}.
+
+The contribution here is a particular small certificate language, a complete and optimal compiler \emph{for that language}, executable checking paths, and a concrete Lean integration plan. The exchange and minimality arguments are derived in full rather than asserted to be a previously unknown theorem. No worldwide priority claim is needed for them to be useful to Forge.
+
+\subsection{Evidence levels}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.37\textwidth}X@{}}
+\toprule
+Component & Status in this delivery\\
+\midrule
+Dense arithmetic, sparse replay, optimal ladders & Implemented and executed in Python\\
+Constant-matrix residual synthesis & Implemented and executed for supplied residual vectors\\
+Rational enclosures and root certificates & Implemented and executed in the stated bounded numerical fragment\\
+Soundness, exchange, minimality, and positive-system results & Mathematical proofs in this article; not formalized here\\
+Lean normalizer, reflected checker, and source bridge & Specified, not implemented\\
+Lean acceptance targets & Supplied as proposition definitions, not proofs; uncompiled\\
+Comparison with \code{grind}, Aesop, or other tactics & Not run\\
+\bottomrule
+\end{tabularx}
+\caption{Python success is not silently promoted to Lean acceptance.}
+\end{table}
+
+\section{The exact analytic fragment}
+\label{sec:fragment}
+
+\subsection{A representation closed under all required operations}
+
+Let $\E$ be the ring of real functions represented by
+\begin{equation}
+ f(x)=\sum_{\lambda\in\Lambda}P_\lambda(x)e^{\lambda x},
+ \qquad \Lambda\subset\Q\text{ finite},\quad P_\lambda\in\Q[x].
+ \label{eq:exp-poly}
+\end{equation}
+Zero coefficient polynomials are removed and the remaining rates are stored in strictly increasing order. Within each polynomial, coefficients are ascending by degree. The empty sum is the zero function. Products are normalized by adding rates, multiplying polynomial coefficients, and collecting equal rates. Thus products of $\sinh(rx)$ and $\cosh(rx)$ reduce to this representation using their exponential definitions.
+
+For a rational cofactor $c$, define
+\begin{equation}
+ T_c f=(\D-c)f
+ =\sum_{\lambda\in\Lambda}
+ \bigl(P'_\lambda+(\lambda-c)P_\lambda\bigr)e^{\lambda x}.
+ \label{eq:cofactor}
+\end{equation}
+No transcendental arithmetic is required to compute this representation. The anchor is also rational:
+\begin{equation}
+ a(f):=f(0)=\sum_{\lambda\in\Lambda}P_\lambda(0).
+ \label{eq:anchor}
+\end{equation}
+Every denotation is smooth on all of $\R$. Exact rational arithmetic is used for normalization, derivatives, anchor signs, equality tests, and terminal tests.
+
+The terminal cone is intentionally elementary:
+\[
+ \Cplus=\left\{\sum_{j=0}^{d}b_jx^j:b_j\in\Q_{\ge0}\right\}.
+\]
+Every member is nonnegative on $[0,\infty)$. Testing membership is a coefficient check. This is \emph{not} the full cone of nonnegative polynomials: $(x-1)^2$ is nonnegative but not in $\Cplus$ in the monomial basis. Keeping this terminal test fixed is essential to the exact shortest-certificate theorem.
+
+\subsection{Why the origin and right ray are part of the problem}
+
+The implemented positivity problem is
+\begin{equation}
+ \forall x\in\R,\quad 0\le x\Longrightarrow0\le f(x).
+ \label{eq:goal}
+\end{equation}
+Its serialization includes the anchor $0$ and the direction \code{right}. A checker rejects an altered anchor or direction; it does not accept a certificate for an easier domain selected by the producer.
+
+The origin is not a cosmetic choice. At a general rational anchor $a$, the values $e^{\lambda a}$ need not be rational, so a coefficient-only initial-value check would be wrong. A left-ray theorem can be reduced to the implemented problem by the exact substitution $x=-t$, accompanied by a Lean proof of the substitution. A general translation needs either symbolic initial-value proofs or analytic enclosures, and has not been implemented as a positivity front end here.
+
+There is nevertheless a useful large application surface without generalizing the normal form. Once Lean has established $\forall t\ge0,\ f(t)\ge0$, it may specialize the theorem at any expression $t=u$ for which $0\le u$ is proved. For instance, $u=(\log y)^2$ does not require a logarithm differentiation engine: the square supplies the domain proof, and the theorem is instantiated. This is ordinary theorem application with an opaque argument, not a claim that logarithms have been added to the reifier.
+
+\subsection{Input expansion and its resource boundary}
+
+A source normalizer should recognize rational constants, one selected real expression, addition, multiplication, nonnegative integer powers, and exponentials with rational multiples of that selected expression as arguments. Hyperbolic functions are a proved preprocessing layer. It must refuse an unsupported expression rather than assign it an unintended meaning.
+
+Expansion can be expensive even though each later ladder step is cheap. If the input is a product of sums of exponentials, distinct rate sums can produce many modes. The front end therefore needs separate limits on source-expression size, number of modes, polynomial degree, total coefficient count, and coefficient bit length. These are not interchangeable with the number of cofactor steps. The Python checker currently limits rate entries to 512, degree to 256, and ladder length to 512; these are engineering caps, not mathematical bounds on the theory.

@@ -1,0 +1,58 @@
+{
+  "seed": 20260915,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "counters": {
+    "anchored": 62,
+    "unanchored_same_order": 8,
+    "ladder": 43,
+    "barrier": 81,
+    "divergence": 60,
+    "mutation_rejections": 738,
+    "finite_tail_comparisons": 4800,
+    "modulus_checks": 240,
+    "harmonic_comparisons": 2400,
+    "optimized_barriers": 21
+  },
+  "controls": [
+    {
+      "id": "false_exp",
+      "outcome": "unknown",
+      "order_cap": 14
+    },
+    {
+      "id": "false_sin",
+      "outcome": "unknown",
+      "order_cap": 14
+    },
+    {
+      "id": "false_log",
+      "outcome": "unknown",
+      "order_cap": 14
+    },
+    {
+      "id": "false_atan",
+      "outcome": "unknown",
+      "order_cap": 14
+    },
+    {
+      "id": "log_domain",
+      "outcome": "unknown",
+      "order_cap": 14
+    },
+    {
+      "id": "true_trig_identity",
+      "outcome": "unknown",
+      "order_cap": 14
+    },
+    {
+      "id": "true_even_root_global_square",
+      "outcome": "unknown",
+      "depth_cap": 8
+    }
+  ],
+  "certificate_records": 246,
+  "lean_status": "NOT_RUN: no Lean executable available",
+  "scope": "Synthetic component experiments; no Lean tactic or LeanCert comparison",
+  "failures": []
+}

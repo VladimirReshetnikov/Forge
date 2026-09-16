@@ -1,0 +1,142 @@
+\section{Implementation sequence and acceptance gates}
+\label{sec:development}
+
+\subsection{First ship a probability bridge, not four new tactic names}
+
+Forge's existing recommendation to obtain one narrow end-to-end checked lane
+remains sensible~\cite{forge-conclusion}. The proposed additions should not
+interrupt that baseline work. Within this extension, the smallest useful first
+milestone is a \emph{positive finite transport certificate connected to an
+actual source distribution}. It needs finite sums, nonnegativity, and an
+explicit source equality; it does not need infinite plays, a greatest fixed
+point, or probability measures on infinite paths.
+
+The first source theorem should be the two-coins/binomial relation from
+Section~\ref{sec:transport}, written using genuine probability distributions.
+The input marginals must be derived from the source expressions by checked
+\code{pure}/\code{bind} equations. The accepted theorem must mention those
+original expressions. A theorem saying merely that a literal rational matrix
+has matching row sums does not close this milestone.
+
+\subsection{Six concrete delivery gates}
+
+\paragraph{Gate 1: finite rational reflection.}
+Implement validated tables, exact sum checking, and a theorem that accepted
+tables denote probability distributions. Establish an equivalence between the
+source finite type and its index set. Test zero mass, duplicate indices,
+incorrect normalization, and a source enumeration missing one constructor.
+Acceptance requires both a successful source theorem and rejection of the
+same certificate against an altered marginal.
+
+\paragraph{Gate 2: transport and composition.}
+Prove the full-marginal checker sound, then the Hall lower bound, then the
+finite \code{bind} composition rule. Check a positive example, a positive-defect
+obstruction, and a two-step composition whose second coupling depends on the
+first state pair. The last test prevents an implementation from supporting
+only constant transition kernels while claiming compositional reasoning.
+
+\paragraph{Gate 3: simulation witnesses.}
+Implement source-owned dependent action tables and replay of the ordered
+deletion trace. Prove greatestness, not only post-fixedness. The acceptance
+corpus must include the $\forall a\exists b$ example, a removed initial pair,
+an empty base relation, and a deliberately incomplete target-action obstruction
+list. A simulation exclusion must not be rendered as a source trace-inequality
+proof.
+
+\paragraph{Gate 4: expected duration.}
+Prove the finite-horizon Bellman bound, the tight-policy result, and the
+path/trap result. Connect the finite-horizon definition to the chosen source
+expectation semantics. Required source tests include the two-action retry
+example, an unreachable trap, a reachable trap, an initially terminal state,
+and a finite exact expectation that exceeds a proposed user budget. Checking
+only stationary schedulers is insufficient for the stated universal theorem.
+
+\paragraph{Gate 5: parity.}
+Prove strategy closure and the threshold-rank theorem for infinite sequences.
+Transfer an explicit finite source arena to its table. Check an infinite even
+cycle, a favorable priority appearing only once, two adversarial strategies,
+and a source-state renaming. Temporal formula translation is a separate gate;
+accepting an automaton as input is not an LTL synthesis implementation.
+
+\paragraph{Gate 6: scale and composition.}
+Add untrusted Oink and Storm adapters, sparse encodings, cancellation, and
+incremental search only after the semantic gates pass. Compare the adapters
+on identical reified source problems and identical checker versions. An
+adapter must be removable without changing the meaning of retained proofs.
+Add a composite example where a relational simulation supplies a state
+invariant used by a Bellman worker, or a synthesized finite strategy changes
+the nondeterministic model subsequently analyzed for expected cost.
+
+\subsection{A useful composite target}
+
+Consider an implementation that retries a randomized operation using one of
+several equivalent sampling routines. The specification uses a simpler sampler.
+A transport certificate can establish each routine's distributional relation;
+a simulation certificate can justify matching every implementation choice by
+a specification transition; and a Bellman potential on the resulting source
+model can establish a uniform expected number of retries.
+
+The composition must record exactly which property transfers. Simulation by
+itself need not preserve a particular cost unless the base relation and the
+transition theorem include that cost. For expected duration, a relation that
+matches one implementation step with one specification step and preserves the
+terminal predicate is a suitable initial target. Stuttering or asynchronous
+simulation would require an additional accounting potential. This is a concrete
+place to combine the workers without silently converting one theorem into
+another.
+
+\subsection{Evaluation after Lean integration}
+
+The first empirical comparison should not ask whether \grind{} is a parity
+solver. It should ask whether adding a worker closes natural source-level goals
+that the same Forge controller, premise set, and local tactics leave open.
+Hold constant the source bridge, retrieved lemmas, proof budget, and definitions.
+For each family, compare the full worker with an intentionally restricted
+alternative on the same goals: independent-product couplings, non-alternating
+action matching, or pointwise instead of expected drift. Record failure as
+\status{UNKNOWN} unless the restricted method has a checked obstruction for
+its own exact fragment.
+
+Measure search time, source reification time, certificate size, elaboration
+time, kernel checking time, and ordinary recompilation separately. Include
+false goals, malformed certificates, and equivalent source programs with
+renamed constructors. Keep theorem families disjoint between tuning and
+measurement. A tiny generated model accepted by a Python checker is not a
+replacement for any row of this source-level evaluation.
+
+\subsection{Research directions after the implemented fragment}
+
+Three expansions have especially clear certificate paths. First, min-cost
+couplings and dual potentials can replace Boolean relations by quantitative
+distances without changing the marginal checker. Second, symbolic drift can
+reuse Forge's existing exact polynomial machinery after a proved expected
+substitution. Third, probabilistic games can combine adversarial strategy
+choices with stochastic transitions; local inequalities become nested
+minimum/maximum expectation conditions, and qualitative recurrence requires
+its own end-component analysis. The third extension is \emph{not} implemented
+by merely combining the current parity and MDP parsers.
+
+Another practical direction is policy compression. A finite table can be
+synthesized into a small source-level decision tree using Leant/Djex or Forge's
+existing witness facilities, then proved extensionally equal to the certified
+table. This can improve the readability and executable size of extracted
+controllers without forcing the game solver to search directly in a
+higher-order term language. Compression is an optional post-pass: failure
+leaves the original checked table usable.
+
+\subsection{Assessment}
+
+The proposed increase in capability is specific. Forge gains finite witnesses
+for infinite adversarial behavior, exact relational correlations, quantified
+matching of probabilistic actions, and expected termination in the presence of
+cycles. These are proof shapes its existing universal-closure and pathwise-rank
+workers do not supply by themselves.
+
+The four implementations demonstrate the certificate computations and reject
+important semantic corruptions. The formalization obligation is equally
+specific: prove the local checker theorems and connect exact finite models to
+original Lean expressions. The delivered evidence supports the former as a
+mathematical design and an executed Python prototype, not yet as a Lean
+implementation. A successful next contribution should make that missing bridge
+small, checked, and reusable rather than enlarge the planner's unverified
+surface.

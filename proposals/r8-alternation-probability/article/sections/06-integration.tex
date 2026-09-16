@@ -1,0 +1,226 @@
+\section{Integration into Forge and Lean}
+\label{sec:integration}
+
+\subsection{Extend the workers, not the architecture}
+
+Forge already separates problem representation, proposed evidence, checking,
+and publication into a source proof. Its \code{CertificateSpec} contract
+contains a denotation, a Boolean check, and a theorem that accepted certificates
+imply that denotation~\cite{forge-contract}. None of the new algorithms requires
+a replacement scheduler or a second general-purpose proof search framework.
+They should become workers under that existing interface.
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 11mm,
+ every node/.style={font=\small,align=center},
+ box/.style={draw=accent,rounded corners=2pt,fill=soft,
+ minimum width=38mm,minimum height=11mm},
+ arr/.style={-{Latex[length=2mm]},thick,draw=accent}]
+\node[box] (goal) {Original Lean goal\\and scoped context};
+\node[box,right=of goal] (bridge) {Proved finite-model\\or relational bridge};
+\node[box,right=of bridge] (model) {Exact model\\and quantifier profile};
+\node[box,below=of model] (search) {Untrusted search\\Python / Oink / Storm};
+\node[box,left=of search] (check) {Local certificate checker\\and soundness theorem};
+\node[box,left=of check] (proof) {Kernel-checked proof\\of the original goal};
+\draw[arr] (goal)--(bridge);\draw[arr] (bridge)--(model);
+\draw[arr] (model)--(search);\draw[arr] (search)--(check);
+\draw[arr] (check)--(proof);\draw[arr] (bridge)--(check);
+\end{tikzpicture}
+\end{center}
+
+The diagram is an intended integration architecture. Only the exact-model,
+Python-search, and Python-checker portions were executed here. The bridge and
+kernel arrows remain implementation obligations, not boxes made trustworthy by
+being drawn next to one another.
+
+\subsection{A small neutral problem language}
+
+Use four first-order input forms matching the delivered dataclasses. Each has
+an explicit semantic version, supplied by the eventual enclosing protocol.
+The Python research format discriminates by \code{kind}; it does not yet
+implement Forge's full versioned worker transport.
+
+\begin{longtable}{@{}L{0.19\linewidth}L{0.42\linewidth}L{0.32\linewidth}@{}}
+\toprule
+Problem & Required source data & Semantic choices to preserve \\
+\midrule
+\endhead
+Parity arena & Owners, priorities, total legal-successor relation, queried
+initial state or full-region query & Max recurrent priority; strategy
+observations; legal adversary moves \\
+Transport & Two normalized rational distributions and a relation matrix & Full
+marginals; defect event; equality or budget requested \\
+Simulation & Source and target action distributions; observation relation &
+$\forall a\exists b$ before sampling; actions as source-owned identities \\
+Expected time & Actions, absorbing terminals, initial state & Unit cost before
+termination; supremum over all schedulers \\
+\bottomrule
+\end{longtable}
+
+Do not erase a terminal predicate, an action owner, or a probabilistic choice
+into an uninterpreted label and then infer its semantics from the solver's
+answer. In particular, a parameterized probability can be reified as a rational
+only after the source term has been proved equal to that rational. Substituting
+a decimal approximation is a different theorem.
+
+The source language can begin with finite enumerated states and commands
+\code{pure}, finite rational \code{sample}, \code{bind}, and an explicit
+finite action choice. Reification produces a transition table \emph{and} a
+proof of its meaning, by compositional equations for these commands. This is
+much smaller than translating arbitrary Lean programs or arbitrary recursive
+functions to a probabilistic model.
+
+\subsection{Source bridges as the critical new obligations}
+
+\paragraph{Enumeration.}
+For a finite source state type $\alpha$, use a proved equivalence
+$e:\alpha\simeq\mathrm{Fin}\,n$, or a supplied finite cover with the appropriate
+semantic theorem. A list of distinct sample states is not a proof that the
+state space has been covered. For dependent actions, enumeration is per source
+state, not a single untyped action number reused across unrelated states.
+
+\paragraph{Transition interpretation.}
+For a probabilistic command $K:\alpha\to\mathrm{PMF}\,\alpha$, the bridge must
+establish the equality between its point masses and the rational table lifted
+to nonnegative extended reals. Nonnegativity and total mass one are proved
+before the lift. At the pinned Mathlib revision,
+\code{Mathlib.Probability.ProbabilityMassFunction.Monad} defines
+\code{PMF.pure}, \code{PMF.bind}, and \code{PMF.bind_apply}; these are actual
+inspected declarations, not speculative API names~\cite{mathlib-pmf}.
+The corresponding \code{Basic}, \code{Constructions}, and \code{Integrals}
+modules are present in the same directory. The first bridge should stay on
+finite types so that its essential algebra reduces to finite sums.
+
+\paragraph{Strategies.}
+Reconstruct a policy as a dependent function selecting a legal action, not as a
+list of integers whose legality is assumed. A winning-region theorem should
+state its universal environment quantifier explicitly. Any available-information
+restriction on the strategy is part of the source type. The prototype has
+perfect state information; it is not a solver for partially observable games.
+
+\paragraph{Path and stopping semantics.}
+The first expected-time theorem can use finite stopped execution trees.
+Define $H_0(h)=0$ for each history $h$. If its last state is terminal, define
+$H_{N+1}(h)=0$; otherwise take one plus the finite weighted average of
+$H_N$ over the next action and state. Induction gives
+$H_N(h)\le V(\operatorname{last}(h))$ under the Bellman inequalities, even when
+the action weights depend on all of $h$. The theorem equating the increasing
+limit of these quantities with $\E[T]$ can then use the established probability
+library. A result about $H_{100}$ alone is not an unbounded termination proof.
+
+\subsection{Proposed module boundaries}
+
+The following names are a proposed addition, not files already present in
+Forge:
+\begin{lstlisting}
+Forge/Finite/Distribution.lean
+  normalized finite rational tables; interpretation and exact sums
+Forge/Relational/Transport.lean
+  coupling checker; marginal soundness; Hall lower bound; bind rule
+Forge/Game/Parity.lean
+  strategy closure; threshold-rank checker; infinite-play theorem
+Forge/Probabilistic/Simulation.lean
+  supported matches; deletion-trace soundness; greatestness theorem
+Forge/Probabilistic/Bellman.lean
+  finite-horizon bound; exact tight-policy result; trap refutation
+Forge/Reify/FinitePrograms.lean
+  source enumerations, command semantics, action identities
+\end{lstlisting}
+
+Keep the mathematical theorems separate from reflection. For example, prove
+that \emph{any} matrix with the specified marginals is a coupling, then prove
+that the Boolean matrix checker establishes those equations. Likewise, prove
+Theorem~\ref{thm:bellman-upper} about a semantic transition kernel once, rather
+than generating a new optional-stopping proof for each certificate.
+
+The emitted source proof should consist of a checked certificate application
+followed by the source bridge. It must not rerun search during ordinary
+recompilation. Large data can be represented as shared arrays or a compact
+certificate declaration, but a compact representation still needs a theorem
+connecting its decoded entries to the denotation.
+
+\subsection{Result types should name their authority}
+
+Each lane needs more than a Boolean success flag. The following are suggested
+semantic outcomes, translated into Forge's existing publication mechanism:
+\begin{lstlisting}
+Parity:
+  WinningStrategy(player, region, checked witness)
+Transport:
+  OptimalDefect(value, coupling, Hall witness)
+Simulation:
+  GreatestSimulation(relation, matches, exclusion trace)
+Expected time:
+  ExactWorstExpectation(value, tight policy, Bellman witness)
+  PositiveNonterminationProbability(prefix, trap, lower bound)
+Common:
+  Unsupported(fragment reason) | Unknown(resource reason)
+\end{lstlisting}
+
+A transport optimum above zero refutes perfect $R$-couplability, not equality in
+distribution for every relation. A simulation exclusion refutes membership in
+that specified simulation. An exact worst expectation above a budget supplies
+a policy violating the budget even when all policies still terminate. An
+MDP trap proves nontermination with positive probability, not merely a large
+expected duration.
+
+For a source proposition $G$, only the existing certificate-soundness theorem
+and a proved bridge may construct a \code{CheckedOutcome.closed} proof.
+Model-level negative evidence with no reverse bridge is a diagnostic or a new
+model theorem, not a proof of $\neg G$. This reuses Forge's distinction between
+authority and search guidance without repeating its general security design.
+
+\subsection{Concrete library choices}
+
+\begin{longtable}{@{}L{0.17\linewidth}L{0.35\linewidth}L{0.41\linewidth}@{}}
+\toprule
+Component & Concrete choice & Integration contract \\
+\midrule
+\endhead
+Current exact prototype & Python standard library: \code{fractions},
+\code{collections}, \code{dataclasses}, \code{unittest} & All four searches,
+checkers, and small oracles run with site packages disabled. No native solver
+or array library is required. \\
+Parity scale-up & Oink~\cite{oink} & Read its winning strategy, re-extract
+threshold ranks, and run the local checker. Solver preprocessing requires
+state-map reconstruction before source publication. \\
+Temporal front end & Spot~\cite{spot} & Useful for proposing automata and game
+products. A separate theorem must relate the automaton to the source formula;
+strategy checking alone does not verify the translation. \\
+Probabilistic scale-up & Storm / stormpy~\cite{storm} & Propose policy and model
+structure for finite MDPs. Re-evaluate the policy rationally and check every
+Bellman inequality, rather than trusting a reported optimum. \\
+Lean probability semantics & Mathlib \code{ProbabilityMassFunction}
+modules at the pinned commit~\cite{mathlib-pmf} & Prove a finite rational-table
+interpretation and compositional \code{bind} bridge. Infinite-horizon results
+require their own semantic connection. \\
+Symbolic drift obligations & Existing Forge polynomial/cone workers
+\cite{forge-status} & Apply to exact expected substitutions and nonnegativity
+conditions; do not rebuild the existing nonlinear backend. \\
+Typed policy terms & Leant/Djex source-owned synthesis surfaces
+\cite{leant,djex} & Preserve dependent action types and exact provider choices;
+attach the new behavioral certificates without broadening the synthesis
+fragment's negative claims. \\
+\bottomrule
+\end{longtable}
+
+As verified on 15 September 2026, Storm's official site lists version 1.14.0
+(released 20 August 2026), and Spot lists version 2.16 (released 3 September
+2026)~\cite{storm,spot}. These are candidate integration versions, not packages
+installed or executed in this work. The Python results do not depend on either
+version. Oink is cited as an algorithmic library choice without an unverified
+claim about its latest release.
+
+\subsection{How to use \grind{} without treating it as a model checker}
+
+The surrounding proof can still use \grind{} for equalities, bounds on indices,
+case normalization, and local logical consequences~\cite{grind}. For instance,
+a source invariant may reduce a parameterized transition probability to one of
+a few rational values. A certificate worker should be requested after that
+normalization has produced a proved finite problem, not before.
+
+Conversely, the worker can return a proved quantitative fact to the local
+solver: an optimal defect is zero, a bound is at most the user's budget, or an
+initial state belongs to a winning region. This is genuine theory cooperation.
+It does not require exposing the whole max-flow residual network or the entire
+policy iteration history to \grind{}.

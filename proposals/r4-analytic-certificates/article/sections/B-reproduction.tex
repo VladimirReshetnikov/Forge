@@ -1,0 +1,85 @@
+\section{Reproduction and archive map}
+
+\subsection{Run the executable evidence}
+
+No third-party Python packages are needed. From the archive's
+\code{prototype} directory:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+python -S -m unittest discover -s tests -v
+python -S replay.py
+python -S run_experiments.py
+python -S emit_lean.py
+\end{lstlisting}
+\end{minipage}\par
+
+By default, the experiment generator writes to \code{reproduced-results} rather
+than overwriting the retained \code{results}. The replay command defaults to
+the retained results. The original generation command explicitly selected the
+recorded output directory. Source, receipt, index, and order-ablation data are
+deterministic for the recorded seed; elapsed time and environment metadata are
+not expected to be identical across machines.
+
+A small API example constructs and checks a Taylor certificate:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=Python]
+from forge_analytic.core import taylor_remainder, encode
+from forge_analytic.search import ladder
+from forge_analytic.check import verify_goal
+
+p = taylor_remainder(8)
+request = {
+    "polynomial": encode(p),
+    "goal": {"kind": "positive_open_ray", "anchor": "0"},
+}
+receipt = ladder(p)
+assert receipt is not None
+assert verify_goal(request, receipt)
+\end{lstlisting}
+\end{minipage}\par
+
+The same interface can be used with \code{make}, \code{ghost_search},
+\code{tail}, and \code{compact_cover}; their docstrings state the exact input
+and result conventions. These are algorithmic prototypes, not a call to a Lean
+kernel through Python.
+
+\subsection{Build the article and inspect the candidates}
+
+The article uses ordinary pdfLaTeX and stock TeX packages:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+cd article
+pdflatex -interaction=nonstopmode -halt-on-error forge-analytic-certificates.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-analytic-certificates.tex
+pdflatex -interaction=nonstopmode -halt-on-error forge-analytic-certificates.tex
+\end{lstlisting}
+\end{minipage}\par
+
+The Lean directory includes its own status and intended compilation commands.
+It does not include a vendored Mathlib checkout or a claim that an unchecked
+candidate is a finished proof. The baseline reported by the audited Forge
+snapshot is Lean \code{v4.34.0} and Mathlib
+\pathline{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}~\cite{forge-readme}.
+
+\subsection{Files worth opening first}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.38\linewidth}X@{}}
+\toprule
+Path & Purpose\\
+\midrule
+\path{article/} & Editable article, section sources, references, and rendered PDF\\
+\path{prototype/forge_analytic/} & Exact algebra, search, enclosures, and separate replay checks\\
+\path{prototype/tests/} & Unit tests, independent jet oracle, and corruption controls\\
+\path{results/experiment-summary.json} & Counts, ablations, unknown controls, and environment\\
+\path{results/problems.json} & Independently supplied canonical source requests\\
+\path{results/certificates.json} & Recorded receipts linked to those requests\\
+\path{lean/} & Candidate analytic bridge, four emitted replays, and explicit status\\
+\path{docs/} & Repository audit, scope, and capability ledger\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+No original Forge proposal, third-party implementation, binary toolchain, or
+font file is redistributed. The archive is an independent extension package;
+it does not modify the user's repository.

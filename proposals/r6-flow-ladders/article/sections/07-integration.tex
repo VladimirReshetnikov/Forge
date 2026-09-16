@@ -1,0 +1,136 @@
+\section{A concrete Lean implementation plan}
+\label{sec:lean}
+
+\subsection{Keep discovery outside the trusted mathematics}
+
+Flow should be a new worker family below Forge's existing obligation controller, not a replacement for it. It recognizes a selected analytic fragment, produces a certificate, and exports a theorem about the original Lean expression after reconstruction. The current \code{grind} documentation remains the baseline for the local saturation engine~\cite{grind}; this proposal does not depend on changing its internals.
+
+The shortest-ladder algorithm can remain an untrusted program. To accept a positive theorem, Lean needs the soundness of the certificate checker and the source-to-normal-form bridge, not a proof that the compiler found the shortest certificate or searched completely. Canonical obstruction and minimality are separate diagnostic claims. Formalizing their theorems is valuable, but it should not delay the first useful positive-proof path.
+
+\subsection{Suggested module boundaries}
+
+The following are proposed module names, not modules claimed to exist in the current repository.
+
+\begin{longtable}{@{}p{0.34\textwidth}p{0.60\textwidth}@{}}
+\toprule
+Module & Responsibilities and exact acceptance target\\
+\midrule\endhead
+\code{Forge/Flow/ExpPoly.lean} & Rational mode representation; denotation in $\R$; normalization; exact addition, multiplication, derivative, and anchor. Prove that each operation preserves its denotation.\\
+\code{Forge/Flow/Cofactor.lean} & Prove the scalar integrating-factor rule and coefficient-positive polynomial evaluation. No search logic.\\
+\code{Forge/Flow/Ladder.lean} & Executable checker and theorem: a true check implies nonnegativity of the denotation on the right ray.\\
+\code{Forge/Flow/Reify.lean} & Construct normal-form data together with equality to the selected source expression. Preserve the selected real argument and all local hypotheses.\\
+\code{Forge/Flow/Compile.lean} & Optional native implementation of increasing-order feasibility and binary-search shortening. Positive acceptance still goes through \code{Ladder}.\\
+\code{Forge/Flow/Optimality.lean} & Optional formalization of exchange, forced multiplicities, zero-count monotonicity, and grammar-relative minimum receipts.\\
+\code{Forge/Flow/PositiveSystem.lean} & A single vector positivity theorem plus checking of constant rational matrices, forcing, and anchors.\\
+\code{Forge/Flow/ExpBounds.lean} & Rational interval operations, geometric exponential tail, scaling, squaring, reciprocal, and denotation enclosure theorem.\\
+\code{Forge/Flow/Roots.lean} & Checked inherited-interval coverage; endpoint and derivative signs; application of IVT and strict monotonicity.\\
+\code{Forge/Flow/Adapter.lean} & Convert only supported goals; discharge domain and normalization obligations; return ordinary Lean proof terms to Forge.\\
+\bottomrule
+\caption{A small mathematical kernel can be implemented before any sophisticated analytic search.}
+\end{longtable}
+
+Use a simple specification representation first, such as a list of rational rates and rational polynomials. For example, denotation can be defined by a finite sum of $P_\lambda$ evaluated in $\R$ and multiplied by $\operatorname{Real.exp}((\lambda:\R)x)$. Arrays, maps, and optimized rational arithmetic can be refinements of this model. An optimized container should not be mixed into the first proof of the analytic theorem unless it demonstrably simplifies the development.
+
+\subsection{The first four formal theorems}
+
+The following signatures describe the obligations semantically; the names beginning with \code{Flow.} are proposed API names, not verified declarations.
+
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+Flow.derivative_sound(p, x):
+  HasDerivAt (denote p) (denote (derive p) x) x
+
+Flow.anchor_sound(p):
+  denote p 0 = castToReal (anchor p)
+
+Flow.terminal_sound(p):
+  coefficientPositivePolynomial p = true ->
+  forall x, 0 <= x -> 0 <= denote p x
+
+Flow.ladder_sound(p, certificate):
+  checkLadder p certificate = true ->
+  forall x, 0 <= x -> 0 <= denote p x
+\end{lstlisting}
+\end{minipage}\par
+
+The derivative proof is by finite-sum and polynomial induction, using the product rule and the real exponential derivative. The cofactor identity is a rational-algebra consequence. The terminal theorem is induction over nonnegative monomials. The ladder theorem is induction over the certificate chain, using the scalar rule backwards.
+
+A direct proof-producing implementation is also viable before reflection: construct each derivative identity as an ordinary Lean proof, normalize its polynomial coefficients, establish the rational seed, then apply the scalar theorem. This avoids trusting a new Boolean checker while the front end is being stabilized. Reflection becomes attractive when per-step proof-term overhead is measured, rather than assumed to dominate.
+
+\subsection{Concrete Mathlib targets inspected}
+
+The current generated API documentation was inspected for the following ingredients~\cite{mathlib-exp,mathlib-mvt,mathlib-ivt}. These are library targets, not evidence that the proposed modules compile against Forge's pin.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+\toprule
+Import family & Relevant declarations or role\\
+\midrule
+\code{Mathlib.Analysis.SpecialFunctions.ExpDeriv} & \code{Real.hasDerivAt_exp}, \code{HasDerivAt.exp}, \code{Real.deriv_exp}, and smoothness of the exponential.\\
+\code{Mathlib.Analysis.Calculus.Deriv.MeanValue} & \code{monotoneOn_of_deriv_nonneg}, \code{monotoneOn_of_hasDerivWithinAt_nonneg}, and \code{strictMonoOn_of_deriv_pos}.\\
+\code{Mathlib.Topology.Order.IntermediateValue} & \code{intermediate_value_Icc} and its reversed-endpoint variant.\\
+Rational and polynomial infrastructure & Exact casts, polynomial evaluation, finite sums, rational order, and ring normalization; prove the denotation bridge before optimizing representation.\\
+\bottomrule
+\end{tabularx}
+\caption{Analytic proof infrastructure to reuse rather than reimplement.}
+\end{table}
+
+For the scalar rule, apply the monotonicity theorem to $x\mapsto e^{-cx}g(x)$ on the convex set $[0,\infty)$. Supply continuity on the set and differentiability on its interior, deriving the latter from explicit \code{HasDerivAt} proofs. The product derivative becomes $e^{-cx}(g'-cg)$ after algebraic normalization. This avoids introducing an explicit improper integral or an ODE existence theorem.
+
+For a root bracket, obtain zero in the image of $[a,b]$ through \code{intermediate_value_Icc}, using the endpoint sign bounds. Derivative-sign coverage gives strict monotonicity; injectivity on the interval supplies uniqueness. The exponential-tail theorem requires formalizing Lemma~\ref{lem:exp-bound} from the exponential series and a geometric-series bound. No existing Mathlib theorem with exactly that checker signature is claimed here.
+
+Forge's README pins Lean \code{v4.34.0} and Mathlib revision \code{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}~\cite{forge}. The first implementation task is to compile these ingredients against those versions and record the actual dependencies. Current documentation and a repository pin are not interchangeable evidence of API compatibility.
+
+\subsection{The source bridge is part of the proof}
+
+Suppose the current local goal is $0\le F(u)$, and the worker proves $0\le\operatorname{denote}(p)(t)$ whenever $t\ge0$. A correct adapter needs all of
+\begin{equation}
+ 0\le u,\qquad F(u)=\operatorname{denote}(p)(u),\qquad
+ \forall t\ge0,\ 0\le\operatorname{denote}(p)(t).
+ \label{eq:bridge}
+\end{equation}
+The final proof is then equality transport and specialization. A mathematically valid certificate for the wrong $p$ is useless. The prototype tests altered original problems, but it does not build the Lean equalities in \eqref{eq:bridge}.
+
+The bridge should normalize products of exponentials using proved addition laws and reduce hyperbolic functions using their proved definitions. It should carry division-sign obligations explicitly. For example, converting the second inequality after Table~\ref{tab:hyperbolic} to its residual requires $x>0$ and $\cosh x>0$. The worker's proof of the expanded residual does not establish those guards. A failed guard means the original goal remains open.
+
+The simplest front end should select one real expression as its scalar argument rather than treating every free variable as an independent coordinate. Other parameters must be concrete rational data, or be specialized through a separately proved family theorem. A symbolic parameter $r>0$ does not fit a representation whose rate field is \code{Rat}; pretending otherwise would turn a concrete instance checker into an unsupported parametric solver.
+
+\subsection{Routing and result types specific to this lane}
+
+The following result variants prevent a particularly dangerous analytic confusion:
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+FlowResult =
+    PositiveLadder(certificate, optionalMinimumReceipt)
+  | PositiveSystem(certificate)
+  | NegativePoint(originalProblem, certificate)
+  | UniqueRoot(originalIntervalProblem, certificate)
+  | NoLadderInGrammar(grammarId, obstruction)
+  | Unknown(reason)
+\end{lstlisting}
+\end{minipage}\par
+
+A positive ladder can contribute a theorem about the original expression. A grammar obstruction can only stop this compiler branch or inform routing. A negative point can support a refutation after verified enclosure replay. A unique root supplies an existential theorem restricted to the externally bound interval. These permissions are local mathematical consequences of the certificate families, not a redesign of Forge's already specified trust architecture.
+
+A reasonable dispatch policy is: try existing cheap algebra first; recognize the exponential-polynomial fragment; run the optimal ladder compiler; use a supplied small residual bank for the positive-system worker; and use bounded enclosures for strict local goals, diagnostics, or root requests. If a ladder fails at a negative anchor, route to algebraic factorization or the existing polynomial sign engine before attempting expensive numeric subdivision. No new global scheduler is required.
+
+\subsection{How Leant and Djex would use the new worker}
+
+Leant's pinned README describes a Djex-backed synthesis REPL that re-elaborates candidates in Lean. Djex combines an LJT-based propositional engine with a ranked heuristic expression synthesizer and scoped support for richer types. Both projects explicitly distinguish accepted fragments from bounded inconclusive searches~\cite{leant,djex}. Forge has already incorporated many of their verification-boundary lessons~\cite{forge-neighbors}; those lessons are not presented as new here.
+
+The analytic addition is a concrete provider of \emph{specification evidence}. Consider a synthesized candidate expression whose required property is
+\[
+ \forall x\ge0,\quad q(x)\le e^x.
+\]
+If $q$ is a rational polynomial, the remaining property is directly a Flow problem. The term synthesizer proposes the candidate; Flow produces a theorem about that exact candidate; Lean connects the theorem to the original specification. A rational point counterexample can reject the candidate without claiming that no other term can satisfy the type.
+
+For existential specifications, the root lane is a provider of an IVT proof plan, not a fabricated data value. A synthesis request that merely needs an inhabitant of an existence proposition can use it after reconstruction. A request for executable numeric code needs a separate approximation specification. Keeping those interfaces separate is more useful than making the analytic worker appear stronger by conflating them.
+
+Nothing in this proposal closes the neighboring projects' outstanding original integer-indexing or simultaneous two-universe composition queries. Their current ledgers keep those goals open~\cite{leant,djex}. Flow addresses a different kind of missing capability: analytic correctness obligations that arise after or during term construction.
+
+\subsection{Trust and performance gates}
+
+The first trustworthy milestone is not a large benchmark. It is one original source goal, one exact certificate, a proved reification equality, and a kernel-checked proof with the intended axiom dependencies. Then repeat with a deliberately altered cofactor, anchor, source expression, and domain; all must fail in the appropriate layer.
+
+After that, measure normalization, certificate construction, reconstruction, and kernel checking separately. A 76\% reduction in cofactor count need not yield a 76\% reduction in runtime, because normalization or rational coefficient growth may dominate. The compiler should record both its arithmetic dimensions and proof-checking cost once the Lean backend exists. The current Python elapsed times do not answer that question.

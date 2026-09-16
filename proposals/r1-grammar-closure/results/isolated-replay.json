@@ -1,0 +1,100 @@
+[
+  {
+    "fixture": "tree_identity",
+    "replay": {
+      "accepted": true,
+      "claim": "universal_zero",
+      "closure_identities": 5,
+      "frontend_checks": 10
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "balanced_dyck",
+    "replay": {
+      "accepted": true,
+      "claim": "universal_zero",
+      "closure_identities": 3,
+      "frontend_checks": 21
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "bad_return",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 2,
+      "expanded_tree_nodes": "2",
+      "frontend_checks": 21,
+      "value": "1",
+      "word_length": "2"
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "noncommuting_order",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 1,
+      "expanded_tree_nodes": "1",
+      "frontend_checks": 1,
+      "value": "-1",
+      "word_length": "2"
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "exponential_60",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 61,
+      "expanded_tree_nodes": "2305843009213693951",
+      "frontend_checks": 61,
+      "value": "1",
+      "word_length": "1152921504606846976"
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "noisy_tree_quotient",
+    "replay": {
+      "accepted": true,
+      "claim": "all_observations_preserved",
+      "closure_identities": 19,
+      "frontend_checks": 28,
+      "quotient_dimensions": {
+        "T": 2
+      }
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "zero_observation_quotient",
+    "replay": {
+      "accepted": true,
+      "claim": "all_observations_preserved",
+      "closure_identities": 5,
+      "frontend_checks": 10,
+      "quotient_dimensions": {
+        "T": 0
+      }
+    },
+    "returncode": 0
+  },
+  {
+    "fixture": "drop_language_restriction",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 2,
+      "expanded_tree_nodes": "2",
+      "frontend_checks": 9,
+      "value": "1",
+      "word_length": "1"
+    },
+    "returncode": 0
+  }
+]

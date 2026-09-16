@@ -1,0 +1,53 @@
+{
+  "access_date_local": "2026-09-15",
+  "timezone": "America/Los_Angeles",
+  "Forge": {
+    "repository": "VladimirReshetnikov/Forge",
+    "revision": "c98e47c5f804e92880fc1d0e378c1b95832b685c",
+    "paths_read": [
+      "README.md",
+      "article/sections/02-baseline.tex",
+      "article/sections/07-nonlinear.tex (lines 460-820)",
+      "article/sections/12-conclusion.tex",
+      "article/sections/B-provenance.tex (beginning and ledger)",
+      "docs/IDEAS-FROM-LEANT-DJEX.md"
+    ],
+    "scope": "Selected merged material; not every line of all 18 original proposals"
+  },
+  "Leant": {
+    "repository": "VladimirReshetnikov/Leant",
+    "paths_read": [
+      "README.md (opening and overview)"
+    ],
+    "read_ref": "default branch; no stronger whole-repository pin claimed"
+  },
+  "Djex": {
+    "repository": "VladimirReshetnikov/Djex",
+    "paths_read": [
+      "docs/source-typed-evidence-graph.md (lines 1-170)"
+    ],
+    "source_blob": "7c1dca61d49f6e113c44fb9aba73d3203296cd5d"
+  },
+  "LeanCert": {
+    "repository": "alerad/leancert",
+    "read_ref": "default branch",
+    "blobs": {
+      "README.md": "8a65c45afc1763a36d5d406692779daff401b92f",
+      "lean-toolchain": "a8afa7d1b02d96f0671eba854a8dc4b416beb473",
+      "lakefile.toml": "a46bb382e2c85c84e5004268cff8759293e84086",
+      "LeanCert/CertifiedBounds/Li2.lean": "5833f2515cbb42d1a2bd21fcdaedc5362be7cbaf"
+    },
+    "observed_toolchain": "leanprover/lean4:v4.33.1",
+    "observed_mathlib_ref": "v4.33.1"
+  },
+  "primary_web_sources": [
+    "https://arxiv.org/abs/2212.11429",
+    "https://arxiv.org/abs/0708.3721",
+    "https://docs.leancert.io/architecture/trust-model/",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/Calculus/Taylor.html",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/Calculus/MeanValue.html",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Topology/Algebra/InfiniteSum/Order.html",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/SumIntegralComparisons.html",
+    "https://lean-lang.org/doc/reference/latest/The--grind--tactic/"
+  ]
+}

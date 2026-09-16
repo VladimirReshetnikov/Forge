@@ -1,0 +1,140 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsthm,mathtools}
+\usepackage{newtxtext,newtxmath}
+\usepackage[margin=1in,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[most]{tcolorbox}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+\hypersetup{pdftitle={Analytic Proof Certificates for Forge},pdfauthor={OpenAI},pdfsubject={Differential ladders and exact eventual bounds for Lean automation}}
+\definecolor{Ink}{HTML}{203844}
+\definecolor{Pale}{HTML}{F1F5F5}
+\definecolor{CodeGray}{HTML}{F5F5F2}
+\titleformat{\section}{\Large\bfseries\color{Ink}}{\thesection}{0.65em}{}
+\titleformat{\subsection}{\large\bfseries\color{Ink}}{\thesubsection}{0.65em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0.65em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.48em}
+\setlength{\emergencystretch}{2.5em}
+\setlist{nosep,leftmargin=1.5em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Analytic Proof Certificates for Forge}
+\fancyhead[R]{\small Technical extension}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{CodeGray},
+ columns=fullflexible,keepspaces=true,breaklines=true,frame=single,
+ rulecolor=\color{black!15},xleftmargin=0.4em,xrightmargin=0.4em,
+ showstringspaces=false,tabsize=2,aboveskip=0.8em,belowskip=0.8em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\D}{\mathrm D}
+\newcommand{\ep}{\mathcal E}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\unknown}{\textsc{Unknown}}
+\newcommand{\status}[1]{\begin{tcolorbox}[colback=Pale,colframe=Ink!40,boxrule=0.4pt,arc=0pt]#1\end{tcolorbox}}
+\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\pathline}[1]{{\small\path{#1}}}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\vspace*{0.45in}
+{\small\sffamily\bfseries\color{Ink} FORGE / ALGORITHMIC EXTENSION}\par
+\vspace{0.35in}
+{\Huge\bfseries Analytic Proof\par Certificates for Forge}\par
+\vspace{0.22in}
+{\Large Canonical differential ladders, auxiliary factors,\par and explicit eventual bounds}\par
+\vspace{0.35in}
+{\large A technical article with executable exact-arithmetic prototypes}\par
+\vspace{0.15in}
+Prepared for Vladimir Reshetnikov\par
+September 15, 2026\par
+\vspace{0.3in}
+\begin{tcolorbox}[colback=Pale,colframe=Ink!40,boxrule=0.4pt,arc=0pt]
+\textbf{The proposed extension.} Turn inequalities involving exponentials, logarithms,
+and polynomial factors into small certificates whose analytic content is a
+single integrating-factor lemma. Add a total eventual-sign procedure that
+constructs explicit rational cutoffs rather than merely asserting domination.
+\end{tcolorbox}
+\vspace{0.15in}
+\textbf{Principal results}\par
+A nondecreasing factor order dominates every permutation of the same differential
+factors. Extra factors form a monotone hierarchy of stronger positivity
+certificates. An interior-zero obstruction identifies when that hierarchy
+cannot help. Explicit tail bounds complement the ray certificates.
+\vfill
+\textbf{Evidence boundary}\par
+284 separately bound certificate receipts replay under standard-library-only
+Python; 18 unit-test methods pass. The factor-order ablation checks 14,409
+permutations on 200 inputs. Lean bridge and replay sources are supplied as
+\emph{uncompiled candidates}; this archive does not contain an implemented
+\forge{} tactic or a comparison against \code{grind}.
+\vspace{0.15in}
+{\small Audited Forge snapshot: \path{c98e47c5f804e92880fc1d0e378c1b95832b685c}.}
+\end{titlepage}
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\begin{abstract}
+The existing Forge design already contains extensive polynomial arithmetic,
+structural induction, witness synthesis, and finite certificates for unbounded
+discrete behaviour. This article develops a complementary analytic capability:
+exact sign certificates for rational exponential polynomials and for source
+expressions reducible to them by proved changes of variable.
+
+The central object is a differential ladder
+$q_{j+1}=(\D-\rho_j)q_j$ with a zero terminal function and nonnegative initial
+values. Its soundness follows from an integrating factor. A swapping argument
+eliminates factorial search over factor order: ascending order succeeds whenever
+any ordering of the same multiset can succeed. Additional factors enlarge the
+accepted cone, but a strict-positivity theorem shows that nonzero ladders cannot
+certify an interior zero. This gives a mathematical routing criterion rather
+than another budget heuristic. A second worker computes a certified eventual
+sign and explicit cutoff for every nonzero member of the exact fragment.
+
+The article supplies proofs, sparse representations, certificate formats,
+source-translation obligations, an implementation sequence, reproducible
+experiments, adversarial checks, and candidate Lean proof emission. It separates
+new algorithms from existing libraries to reuse, and mathematical guarantees
+from the narrower properties actually established by the accompanying code.
+\end{abstract}
+\begingroup
+\small
+\setlength{\parskip}{0pt}
+\tableofcontents
+\endgroup
+\clearpage
+\pagenumbering{arabic}
+\input{sections/01-scope}
+\input{sections/02-representation}
+\input{sections/03-ladders}
+\input{sections/04-order-and-enrichment}
+\input{sections/05-tails}
+\input{sections/06-enclosures}
+\input{sections/07-source-and-lean}
+\input{sections/08-experiments}
+\input{sections/09-implementation}
+\appendix
+\input{sections/A-formats}
+\input{sections/B-reproduction}
+\input{references}
+\end{document}

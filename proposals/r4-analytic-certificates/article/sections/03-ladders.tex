@@ -1,0 +1,167 @@
+\section{Differential ladders as positivity certificates}
+\label{sec:ladders}
+
+\subsection{The analytic lemma}
+
+\begin{lemma}[One integrating-factor step]
+\label{lem:step}
+Let $f,g$ be real functions on $[a,\infty)$, with $f$ continuously
+differentiable and $g$ continuous. Suppose
+\[
+ f'(x)=\rho f(x)+g(x),\qquad f(a)\ge0,\qquad
+ g(x)\ge0\quad(x\ge a),
+\]
+where $\rho\in\R$. Then $f(x)\ge0$ on $[a,\infty)$.
+\end{lemma}
+\begin{proof}
+For $w(x)=e^{-\rho x}f(x)$, the product and chain rules give
+$w'(x)=e^{-\rho x}g(x)\ge0$. Hence $w(x)\ge w(a)\ge0$ for $x\ge a$.
+Multiplication by the positive number $e^{\rho x}$ gives the conclusion.
+Equivalently, the exact identity
+\begin{equation}
+ f(x)=e^{\rho(x-a)}f(a)+
+       \int_a^x e^{\rho(x-t)}g(t)\,dt
+ \label{eq:integrating-factor}
+\end{equation}
+expresses both terms as nonnegative.
+\end{proof}
+
+The derivative proof is preferable for a first Lean bridge. It needs only
+explicit derivative witnesses, continuity, and monotonicity on a convex ray;
+it does not require construction of an integral expression or a separate
+integrability proof for every emitted step. Mathlib exposes these ingredients
+through \code{HasDerivAt}, exponential derivative lemmas, and the
+\code{monotoneOn_of_hasDerivWithinAt_nonneg} theorem~\cite{mathlib-meanvalue,mathlib-expderiv}.
+
+\subsection{The certificate and its soundness}
+
+\begin{definition}
+A differential-ladder certificate for $f$ at $a$ consists of real numbers
+$\rho_0,\ldots,\rho_{n-1}$ and functions $q_0,\ldots,q_n$ such that
+\begin{equation}
+ q_0=f,\qquad q_{j+1}=q_j'-\rho_jq_j,\qquad
+ q_n=0,\qquad q_j(a)\ge0\quad(0\le j<n).
+ \label{eq:ladder}
+\end{equation}
+In the executable fragment, all $q_j$ are canonical rational exponential
+polynomials and all $\rho_j,a$ are rational.
+\end{definition}
+
+\begin{theorem}[Ladder soundness]
+\label{thm:ladder}
+A certificate satisfying \eqref{eq:ladder} proves $f(x)\ge0$ for every $x\ge a$.
+\end{theorem}
+\begin{proof}
+The terminal function is nonnegative. Descend from $q_n$ to $q_0$ using
+Lemma~\ref{lem:step}, with $f=q_j$ and $g=q_{j+1}$ at each step.
+Every required smoothness condition holds for exponential polynomials.
+\end{proof}
+
+The checker does not need to know why the factors were chosen or whether they
+are minimal. In particular, it need not trust a spectral calculation. It
+checks the derivative identities, the initial inequalities, and the zero
+terminal object directly. An unnecessarily long but correct ladder is still a
+proof certificate.
+
+\begin{theorem}[Strictness and zero obstruction]
+\label{thm:strict}
+Suppose a ladder is accepted. If some $q_j(a)>0$, then $f(x)>0$ for every $x>a$.
+If $q_0(a)>0$, positivity holds on the closed ray. If every $q_j(a)=0$, then
+$f$ is zero throughout the ray. Consequently a nonzero function represented by
+an accepted ladder has no zero in $(a,\infty)$.
+\end{theorem}
+\begin{proof}
+If $q_j(a)>0$, equation~\eqref{eq:integrating-factor} shows that $q_j(x)>0$
+for $x\ge a$. For any $x>a$, its contribution to the next integral down is
+strictly positive. Repeating the argument gives $q_0(x)>0$. When $q_0(a)>0$
+the endpoint is positive too. If every initial value is zero, descend from
+$q_n=0$ in the same identity to obtain $q_{n-1}=\cdots=q_0=0$.
+\end{proof}
+
+This theorem provides more than a strictness flag. It proves that there are
+true nonnegativity goals for which \emph{no amount of ladder search} can work.
+Section~\ref{sec:enrichment} uses that fact to choose another worker.
+
+\subsection{A certificate which tolerates arbitrarily high boundary contact}
+
+Let
+\[
+ R_m(x)=e^x-\sum_{k=0}^m\frac{x^k}{k!},\qquad m\ge0.
+\]
+Take $m+1$ zero factors followed by one factor equal to one. Successive ordinary
+derivatives reduce the polynomial degree; after $m+1$ steps the function is
+$e^x$, and the final $(\D-1)$ kills it. The initial values are
+\[
+ \underbrace{0,\ldots,0}_{m+1\text{ values}},1.
+\]
+Thus $R_m(x)\ge0$ for $x\ge0$ and $R_m(x)>0$ for $x>0$. The certificate grows
+linearly in $m$ in its number of steps. Its correctness does not become a
+numerical conditioning problem as the contact order increases.
+
+For $m=4$ the exact ladder is
+\[
+ (0,0,0,0,0,1),\qquad\text{initial vector }(0,0,0,0,0,1).
+\]
+The delivered experiments exercise $m=0,\ldots,24$. A strict closed-ray request
+is deliberately rejected because $R_m(0)=0$; an open-ray request is accepted.
+
+\subsection{The linear-algebra interpretation}
+
+Fix a multiset of $n$ real factors and the space $V$ of solutions of the
+associated homogeneous constant-coefficient equation. The map
+\[
+ f\longmapsto
+ \bigl(f(a), (\D-\rho_0)f(a),\ldots,
+       (\D-\rho_{n-2})\cdots(\D-\rho_0)f(a)\bigr)
+\]
+is a coordinate system on $V$. Its coordinates are triangular combinations of
+ordinary derivatives at $a$, with diagonal coefficients one. Equivalently,
+the first-order triangular system in \eqref{eq:ladder} reconstructs a unique
+function from those initial data.
+
+Nonnegative coordinates define a simplicial cone in $V$. Its basis functions
+can be constructed backwards from unit initial vectors using
+\eqref{eq:integrating-factor}; they are positive on the open ray. Therefore
+ladder search is not an unstructured search through arbitrary inequalities.
+It is membership testing in a particular positive cone, with a particularly
+simple change of coordinates.
+
+This also explains both strengths and weaknesses. The cone is adapted to
+boundary zeros, since early coordinates may vanish exactly. But none of its
+nonzero elements can have an interior zero, because every nonzero nonnegative
+combination of its basis functions is strictly positive there. Adding more
+coordinates can enlarge the accepted cone without eliminating that obstruction.
+
+\subsection{A minimal checker loop}
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+checkLadder(source, anchor, factors, receipt):
+    q := source
+    strictSeen := false
+    for each factor rho and corresponding receipt step:
+        require step.polynomial == q
+        [lo, hi] := certifiedPointBounds(q, anchor)
+        require step.bounds == [lo, hi] and lo >= 0
+        strictSeen := strictSeen or (lo > 0)
+        q := independentlyComputedShiftedDerivative(q, rho)
+    require q == 0
+    return NonnegativeRay(anchor, strictSeen)
+\end{lstlisting}
+\end{minipage}\par
+
+The independently computed derivative in the prototype uses a coefficient
+stencil rather than the producer's termwise differentiation loop:
+\begin{equation}
+ \widetilde c_{\lambda,k}
+ = (\lambda-\rho)c_{\lambda,k}+(k+1)c_{\lambda,k+1}.
+ \label{eq:stencil}
+\end{equation}
+This is algorithmic diversity, not a formal verification of either Python
+implementation. The separately tested initial-jet oracle uses a third
+calculation, described in Section~\ref{sec:experiments}.
+
+A production receipt need not retain every intermediate polynomial: the checker
+can reconstruct them from the source and factors. The reference format keeps
+them for diagnosis, mutation tests, and readable emitted proofs. Omitting those
+fields is a later certificate-size optimisation, not a change in the theorem.

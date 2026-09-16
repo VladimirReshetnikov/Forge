@@ -1,0 +1,145 @@
+\section{Artifact guide and reproducibility}
+\label{app:artifacts}
+
+\subsection{Archive layout}
+
+\begin{lstlisting}
+article/
+  forge-alternation-probability.tex   Main editable source
+  forge-alternation-probability.pdf   Rendered article
+  sections/*.tex, references.tex     Complete included sources
+  build.sh, build.ps1                pdfLaTeX build commands
+prototype/
+  forge_ap/models.py                 Exact validated representations
+  forge_ap/search.py                 Four untrusted proposers
+  forge_ap/check.py                  Local checkers, no solver imports
+  tests/oracles.py                   Independent tiny-model computations
+  tests/test_regressions.py          Fourteen focused regression tests
+  run_experiments.py                 Deterministic differential suite
+  replay.py                         Search-forbidden certificate replay
+  examples.py                       Worked examples and certificates
+results/
+  full/                             Full corpus, report, replay receipt
+  smoke/                            Separate initial smoke run
+  examples/                         Worked-example records and summary
+lean/
+  RankTelescoping.lean               Uncompiled arithmetic lowering lemma
+  CouplingAlgebra.lean               Uncompiled finite marginal lemmas
+  README.md                         Exact status and remaining obligations
+docs/
+  STATUS.md, AUDIT.md                Evidence and non-duplication boundary
+  sources.json                      Repository pins and reviewed paths
+README.md, LICENSE
+\end{lstlisting}
+
+The own-authored code and article use MIT-0. No third-party source trees,
+published paper PDFs, or font files are included. The archive does not modify
+or replace the user's repository.
+
+\subsection{Run the experiments}
+
+The code uses Python 3.10 or newer syntax; the recorded execution used 3.13.5.
+It requires no installed packages. From the archive root:
+\begin{lstlisting}
+cd prototype
+python -S -m unittest discover -s tests -v
+python -S run_experiments.py --output ../reproduced-results/full
+python -S replay.py ../results/full/corpus.json
+python -S examples.py --output ../reproduced-results/examples
+\end{lstlisting}
+
+The experiment harness refuses to overwrite an existing report in its chosen
+output directory. Use a new path for each run. If an experiment fails, its
+partial corpus, a failure status, and a traceback are retained. The recorded
+smoke run is a separate workload and must not be pooled with the full run.
+
+Search-free replay proves only that this Python checker accepted these records
+without importing the search or oracle modules. It does not establish that
+an arbitrary untrusted execution environment would enforce the import hook,
+or that the parser is secure against hostile resource exhaustion.
+
+\subsection{Build the PDF}
+
+The article uses stock pdfLaTeX packages, Latin Modern, and TikZ. No system font
+installation, shell escape, bibliography program, or network access is needed.
+From \code{article/}, run \code{bash build.sh}, or run the following command
+three times:
+\begin{lstlisting}
+pdflatex -interaction=nonstopmode -halt-on-error \
+  forge-alternation-probability.tex
+\end{lstlisting}
+A PowerShell equivalent is included as \code{build.ps1}. The main source includes
+all sections and its bibliography; no external repository checkout is required.
+
+\subsection{Reviewed source snapshots}
+
+\begin{longtable}{@{}L{0.15\linewidth}L{0.78\linewidth}@{}}
+\toprule
+Source & Exact snapshot / reviewed surface \\
+\midrule
+\endhead
+Forge & \nolinkurl{c98e47c5f804e92880fc1d0e378c1b95832b685c}. README;
+\code{docs/STATUS.md}; \code{docs/IDEAS-FROM-LEANT-DJEX.md};
+\code{article/sections/B-provenance.tex};
+\code{article/sections/12-conclusion.tex};
+\code{lean/Forge/Design/Contracts.lean}; recursive tree metadata. \\
+Leant & \nolinkurl{6bf05ad78c467989e68290f2d08bbed40802d485}.
+README capability summary, source-owned synthesis description, and current
+scope limitations. \\
+Djex & \nolinkurl{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5}.
+README engine and typed-provider capability summary. \\
+Mathlib & \nolinkurl{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}.
+ProbabilityMassFunction directory and the definitions/theorems in
+\code{Monad.lean}. \\
+\bottomrule
+\end{longtable}
+
+The Forge comparison uses the canonical inventory and provenance, not a claim
+that every historical file was read. Leant and Djex were consulted for
+integration fit, not comprehensively re-audited. Sources are pinned where
+possible because a proposal that is genuinely additional at one snapshot may
+be merged into the repository later.
+
+\subsection{Certificate fields and checker costs}
+
+\begin{longtable}{@{}L{0.17\linewidth}L{0.44\linewidth}L{0.32\linewidth}@{}}
+\toprule
+Family & Principal certificate data & Local verification \\
+\midrule
+\endhead
+Parity & Partition; one own move per region vertex; rank arrays indexed by
+unfavorable priority & Region closure and threshold-edge inequalities; no
+recursive game solving \\
+Transport & Full rational joint matrix; exact bad mass; Hall subset & Marginals,
+nonnegative entries, defect sum, primal--dual equality \\
+Simulation & Ordered pair removals with one Hall obstruction per target action;
+complete survivor matching table & Replay relation deletions; check strict
+obstructions and every surviving action coupling \\
+Expected time & Universally closed region, nonnegative potential, tight policy;
+or reachable trap plus positive prefix & All-action Bellman inequalities and
+policy equalities; or positive path product and selected-action trap closure \\
+\bottomrule
+\end{longtable}
+
+Rationals use canonical integer pairs \code{[numerator, denominator]} with a
+positive denominator. JSON floats, duplicate keys, nonfinite values, Boolean
+values used as integers, and unreduced fractions are rejected. State sets are
+sorted distinct index lists. All matrix dimensions are checked against the
+external problem representation. These are reproducibility conventions, not
+proofs that the implementation has no parser bugs.
+
+\subsection{The included Lean specimens}
+
+\code{RankTelescoping.lean} gives a natural-number prefix-sum telescoping lemma:
+if $r(n+1)+w(n)\le r(n)$, then
+$r(n)+\sum_{k<n}w(k)\le r(0)$. It isolates the arithmetic used after a parity
+play has entered a fixed threshold tail. It does not formalize the arena,
+infinite recurrence, or the threshold checker.
+
+\code{CouplingAlgebra.lean} states a rational finite coupling structure and
+proves the direct marginal consequences used in a future finite-sum bridge.
+It does not implement the Boolean transport checker, Hall duality, or a
+\code{PMF} interpretation. Both files are supplied with proof scripts but were
+\textbf{not compiled}. No axiom inventory is reported; the included
+\texttt{\#print axioms} commands are instructions for a subsequent actual Lean
+execution, not recorded output.

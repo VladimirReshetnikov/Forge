@@ -1,0 +1,185 @@
+\section{What is added, and what is deliberately not repeated}
+
+\subsection{A revision-pinned boundary}
+
+This report was prepared against Forge commit
+\code{c98e47c5f804e92880fc1d0e378c1b95832b685c}, not the earlier
+\code{6745210} design-round snapshot. The current README describes a 111-page
+merged article and eighteen contributing proposals, including an extension
+round. Its later merge records elaboration of sixteen core-only Lean files;
+that progress must not be erased by repeating the original proposals' older
+``Lean unavailable'' status. It still does not install a Forge tactic or report
+comparative tactic performance~\cite{forge}.
+
+The review used the current README, merged provenance ledger, baseline section,
+scalar nonlinear section, the principal closure sections, and the
+Leant/Djex review. It also inspected the current Leant and Djex entry documents
+at the revisions in Table~\ref{tab:pins}. This was a targeted source audit,
+not an exhaustive line-by-line review of every frozen submission. ``Additional
+to Forge'' below means additional to the mechanisms identified in that inspected
+merged baseline. It is not a claim of new mathematics or a priority claim over
+the noncommutative-algebra literature.
+
+\begin{table}[ht]
+\small\centering
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule Project & Inspected revision \\\midrule
+Forge & \code{c98e47c5f804e92880fc1d0e378c1b95832b685c} \\
+Leant & \code{6bf05ad78c467989e68290f2d08bbed40802d485} \\
+Djex & \code{e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5} \\
+\bottomrule
+\end{tabularx}
+\caption{Repository read snapshots. Mathlib documentation was consulted live;
+this is not a tested joint dependency lockfile.}\label{tab:pins}
+\end{table}
+
+\subsection{The capability delta}
+
+\begin{longtable}{@{}p{0.28\textwidth}p{0.32\textwidth}p{0.33\textwidth}@{}}
+\toprule Existing ingredient & Not a new contribution here & Actual addition \\\midrule\endhead
+Commutative ideal certificates & Tracking polynomial multipliers and checking
+an expanded identity & Two-sided word contexts $u r v$; exact degree-complete
+homogeneous consequences and matrix witnesses. \\
+Scalar quadratic positivity & Exact rational $LDL^{\mathsf T}$ as a numerical
+linear-algebra method & The unique word Gram matrix for homogeneous degree
+$2d$, with $m^d$ words and no commutative coefficient collisions. \\
+Scalar cone certificates & Nonnegative combinations of preselected squares &
+Adjoint sandwiches $q^*gq$, equality-space projection, and a structural ray
+generator for involutive operators. \\
+Ore transport & Noncommutativity itself & General free-word relations, not a
+single prescribed shift/coefficient commutation law. \\
+Matrix observables and tensor lifts & Matrices as finite state-transition data &
+Symbolic matrix/operator inequalities valid independently of matrix dimension. \\
+General certificate architecture & Opaque receipts, process separation, exact
+source identity, and status distinctions & Interpretation-specific replay:
+algebra equality, operator positivity, trace positivity, and algebra countermodel. \\
+\bottomrule
+\end{longtable}
+
+The previous scalar acceptance language uses commuting real indeterminates and
+products of nonnegative constraints; the existing closure and Ore mechanisms
+have their own explicit semantic fragments~\cite{forge-nonlinear,forge-closure}.
+Neither interface should be silently widened to the new one. In particular,
+positive semidefinite matrices cannot be multiplied as though they were
+nonnegative real numbers.
+
+\subsection{A stronger baseline than bare normalization}
+
+Mathlib already has \code{noncomm\_ring}. It expands noncommutative ring
+expressions using simplification and additive normalization, accepts supplied
+rewrite lemmas and local hypotheses, and documents limitations around fully
+expanded powers~\cite{noncomm-ring}. Therefore this proposal is not ``add a
+noncommutative normalizer.'' Its search constructs \emph{new combinations of
+hypotheses in left and right contexts}, and its other outputs include
+countermodels and positivity receipts. Some worked equalities may already be
+easy for \code{noncomm\_ring [*]}, \code{simp}, or \code{grind}. They are
+replay and integration examples, not evidence that existing tactics fail.
+
+The current \code{grind} remains a cooperating collection of proof-producing
+engines, not a trivial baseline~\cite{grind}. A fair later evaluation needs
+\code{grind}, \code{noncomm\_ring}, \code{noncomm\_ring [*]}, well-chosen
+\code{simp} rules, and the same workers without information sharing. None of
+those comparisons was executed here.
+
+\subsection{Why this addition is useful}
+
+Matrices, endomorphisms, projections, and operator expressions produce the same
+obstruction: one knows equations about products, but the useful occurrence of a
+relation is buried inside a larger product. For instance,
+\[
+ UA=1,\qquad BV=1
+ \quad\Longrightarrow\quad
+ U-V=U(B-A)V.
+\]
+An equality worker should find the two surrounding contexts instead of asking a
+human to insert them. Likewise, $G\succeq0$ naturally proves $Q^*GQ\succeq0$,
+not $GQ\succeq0$. And $\tr([A,B])=0$ is a scalar trace fact, not the assertion
+$[A,B]=0$.
+
+These are useful new outputs for a planner: an equality for local saturation,
+a proved positive operator for an analytic subgoal, a scalar trace inequality,
+or a concrete diagnostic against an over-general algebraic conjecture. They
+need not replace any existing Forge worker.
+
+\section{The object language and its exact interpretations}
+
+\subsection{Words instead of exponent vectors}
+
+Let $X=\{x_0,\ldots,x_{m-1}\}$ and let $X^*$ be its finite words, including
+the empty word $\epsilon$. A polynomial in the free associative unital algebra
+\[
+ \F=\Q\langle x_0,\ldots,x_{m-1}\rangle
+\]
+is a finitely supported map $X^*\to\Q$. Multiplication concatenates words;
+$xy$ and $yx$ remain distinct. The empty word represents $1$.
+
+The implementation stores a word as a tuple of atom indices and a polynomial as
+an exact sparse dictionary. Serialization uses sorted triples
+\code{[word, numerator, denominator]}, with nonzero reduced coefficients and
+positive denominators. The checker implements its own accumulation and product
+routines; it does not import the producer's polynomial arithmetic or elimination
+code. The representation and wire schema remain shared design choices, so this
+is algorithmic separation, not protection against every common-mode mistake.
+
+Rational coefficients are \emph{central}. A Lean source translation must target
+an associative $\Q$-algebra, not an arbitrary ring. The implication $2x=0
+\Rightarrow x=0$ admits the rational receipt $x=\tfrac12(2x)$ but is false in
+characteristic two. Merely changing a pretty-printed scalar type would invalidate
+the interface. Integer-coefficient receipts can be reconstructed more generally,
+as several of the supplied Lean targets illustrate.
+
+\subsection{Four meanings, not four names for the same object}
+
+The problem and certificate schemas distinguish the following cases.
+
+\begin{description}[style=nextline,leftmargin=0pt,labelwidth=0pt,labelsep=0pt]
+\item[Algebra equality.]
+For every associative unital $\Q$-algebra and every tuple satisfying the listed
+relations $r_j=0$, the target $p$ is zero. The prototype schema intentionally
+has no additional domain restrictions.
+\item[Algebra countermodel.]
+Concrete rational square matrices satisfy every listed relation as a whole
+matrix, and a supplied vector is separated by $p$. This disproves the preceding
+universal algebra equality. It does not refute a goal about a particular matrix
+size, self-adjoint matrices, or a restricted algebra unless those extra
+conditions are separately checked.
+\item[Operator positivity.]
+For real square matrices of arbitrary finite dimension, satisfying the declared
+transpose involution on atoms, the relations, and the positive semidefinite
+premises $g_i\succeq0$, the target satisfies $p\succeq0$.
+\item[Trace positivity.]
+Under the same matrix assumptions, $\tr(p)\ge0$. This is strictly weaker than
+operator positivity and accepts a different residual language.
+\end{description}
+
+The checker requires the certificate kind to agree with the original problem,
+except for the explicitly permitted equality/countermodel alternative. Unknown
+fields such as an unsupported fixed matrix dimension or finite-field tag are
+rejected rather than ignored. This does not solve the Lean source-translation
+problem: a future reifier must first prove that the source goal has the
+interpretation being requested.
+
+\subsection{Involution and matrix semantics}
+
+An involution on atom indices is a permutation $i\mapsto i^*$ with
+$(i^*)^*=i$. Extend it by
+\[
+ (x_{i_1}\cdots x_{i_k})^*
+   =x_{i_k^*}\cdots x_{i_1^*},\qquad c^*=c\quad(c\in\Q).
+\]
+Fixed atoms represent self-adjoint matrices. A two-cycle can represent a matrix
+and its transpose. Both the reversal and the index map are indispensable. The
+executed positivity corpus mostly uses fixed atoms; a separate unit test covers
+paired atoms. The finite-ray producer currently assumes fixed atoms, whereas
+the homogeneous Gram producer accepts either kind.
+
+The operator and trace schemas require a formally self-adjoint target and
+formally self-adjoint positive premises. Self-adjointness that follows only
+\emph{modulo relations} requires an extra equality obligation or a rewritten
+self-adjoint expression. This conservative entrance restriction caused a real
+failed experiment in Section~\ref{sec:chsh}; it was preserved, not bypassed.
+
+Complex matrices and abstract ordered star algebras are natural extensions of
+the same mathematical proof rules. The delivered schema fixes real matrix
+semantics; a larger interpretation deserves its own proved adapter rather than
+an undocumented change of scope.

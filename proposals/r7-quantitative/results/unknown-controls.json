@@ -1,0 +1,129 @@
+[
+  {
+    "permits_semantic_rejection": false,
+    "problem": {
+      "actions": [
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "target": [
+        1
+      ]
+    },
+    "result": {
+      "kind": "unknown",
+      "reason": "policy budget"
+    },
+    "worker": "reach"
+  },
+  {
+    "permits_semantic_rejection": false,
+    "problem": {
+      "actions": [
+        [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "target": [
+        1
+      ]
+    },
+    "result": {
+      "kind": "unknown",
+      "reason": "no uniform runtime certificate"
+    },
+    "worker": "runtime"
+  },
+  {
+    "permits_semantic_rejection": false,
+    "problem": {
+      "cost": [
+        1
+      ],
+      "jumps": [
+        -1,
+        1
+      ],
+      "probabilities": [
+        "1/2",
+        "1/2"
+      ]
+    },
+    "result": {
+      "kind": "unknown",
+      "reason": "negative drift fragment required"
+    },
+    "worker": "polynomial_cost"
+  },
+  {
+    "permits_semantic_rejection": false,
+    "problem": {
+      "cost": [
+        1
+      ],
+      "jumps": [
+        -1,
+        1
+      ],
+      "probabilities": [
+        "2/3",
+        "1/3"
+      ]
+    },
+    "result": {
+      "kind": "unknown",
+      "reason": "degree budget"
+    },
+    "worker": "polynomial_cost"
+  },
+  {
+    "permits_semantic_rejection": false,
+    "problem": {
+      "allowed": [
+        [
+          0,
+          0
+        ]
+      ],
+      "cost": [
+        [
+          "0"
+        ]
+      ],
+      "left": [
+        1
+      ],
+      "right": [
+        1
+      ]
+    },
+    "result": {
+      "kind": "unknown",
+      "reason": "augmentation budget"
+    },
+    "worker": "transport"
+  }
+]

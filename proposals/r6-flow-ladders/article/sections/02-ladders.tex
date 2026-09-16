@@ -1,0 +1,92 @@
+\section{Anchored cofactor ladders}
+\label{sec:ladders}
+
+\subsection{The one-step rule}
+
+A common obstacle in inequality proofs is that $g'$ is not nonnegative even when $g$ is. The more flexible condition is $g'-cg\ge0$: multiplying $g$ by a positive exponential removes the unwanted multiple of $g$.
+
+\begin{lemma}[Scalar cofactor rule]
+\label{lem:scalar}
+Let $g:[0,\infty)\to\R$ be continuously differentiable and $c\in\R$. If
+\[
+ g(0)\ge0,\qquad g'(x)-cg(x)\ge0\quad(x\ge0),
+\]
+then $g(x)\ge0$ for every $x\ge0$.
+\end{lemma}
+\begin{proof}
+For every $x\ge0$,
+\[
+ \frac{d}{dx}\bigl(e^{-cx}g(x)\bigr)
+   =e^{-cx}\bigl(g'(x)-cg(x)\bigr)\ge0.
+\]
+On any compact interval $[0,X]$, the mean value theorem implies that $e^{-cx}g(x)$ is nondecreasing. Its value at zero is nonnegative. Since $e^{-cx}>0$, so is $g(x)$. The argument applies to every finite $X$.
+\end{proof}
+
+This is a theorem about the whole half-line, not a numerical test of a sampled trajectory. It also imposes no sign condition on $c$. In particular, negative cofactors are mathematically legitimate and important for expressions containing $e^{-x}$.
+
+\begin{definition}[Ladder certificate]
+A ladder for $f\in\E$ consists of rational cofactors $c_0,\ldots,c_{k-1}$ and the implicitly defined chain
+\[
+ g_0=f,\qquad g_{i+1}=T_{c_i}g_i.
+\]
+It is accepted when $g_i(0)\ge0$ for $0\le i\le k$ and $g_k\in\Cplus$.
+\end{definition}
+
+\begin{theorem}[Ladder soundness]
+\label{thm:ladder}
+Every accepted ladder establishes \eqref{eq:goal}.
+\end{theorem}
+\begin{proof}
+The terminal polynomial is nonnegative on the right ray. If $g_{i+1}$ is nonnegative, the identity $g_i'-c_i g_i=g_{i+1}$ and the checked anchor permit Lemma~\ref{lem:scalar}. Apply the lemma backwards for $i=k-1,\ldots,0$.
+\end{proof}
+
+\subsection{What the checker actually recomputes}
+
+The producer need not supply intermediate functions. A compact certificate stores the cofactors, all rational anchors, and the terminal normal form. The checker starts from the \emph{externally provided problem}, recomputes each $T_c$ transition, and verifies that each stored anchor is exactly the anchor it recomputed. It finally requires exact equality with the claimed terminal normal form and coefficient nonnegativity.
+
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+checkLadder(problem, certificate):
+  g := decodeOriginalExpPolynomial(problem)
+  require problem.anchor = 0 and problem.direction = right
+  require numberOfAnchors = numberOfCofactors + 1
+  for i = 0 .. numberOfCofactors:
+    require certificate.anchor[i] = exactValueAtZero(g)
+    require certificate.anchor[i] >= 0
+    if i < numberOfCofactors:
+      g := exactDerivative(g) - certificate.cofactor[i] * g
+  require g = decode(certificate.terminal)
+  require every remaining rate is zero
+  require every polynomial coefficient is nonnegative
+  accept
+\end{lstlisting}
+\end{minipage}\par
+
+The rational anchors are redundant from a mathematical standpoint, but useful as auditable receipts and corruption targets. They cannot replace the recomputation. A certificate with all anchors edited to zero is rejected whenever those are not the actual values.
+
+The Python discovery implementation stores a dense coefficient array for each exponential mode. The ladder checker stores a separate sparse map keyed by $(\lambda,j)$ and implements its own derivative and linear-combination arithmetic. It imports neither the discovery module nor the dense model. This separation catches more than replaying the producer's own transition routine, although both implementations still depend on Python and its rational-number library. Neither has a formal correctness proof.
+
+\subsection{Strict positivity and zeros}
+
+\begin{proposition}[A useful semantic limitation]
+\label{prop:strict}
+If a ladder is accepted, then either its denoted function is identically zero or it is strictly positive at every $x>0$.
+\end{proposition}
+\begin{proof}
+A nonzero member of $\Cplus$ is strictly positive for $x>0$. For a step $g'-cg=h$, variation of constants gives
+\begin{equation}
+ g(x)=e^{cx}\left(g(0)+\int_0^x e^{-ct}h(t)\,dt\right).
+ \label{eq:variation}
+\end{equation}
+If $h$ is strictly positive on $(0,\infty)$, the integral is strictly positive for every $x>0$. If $h$ is identically zero, then $g(x)=g(0)e^{cx}$, which is either identically zero or strictly positive. Starting at the terminal polynomial and applying this dichotomy backwards proves the statement.
+\end{proof}
+
+This proposition explains a real limitation, not a bug. A nonzero function with an interior zero, such as $(e^x-2)^2$, cannot have a certificate in this ladder language, even if arbitrary rational cofactors were allowed. An existing square or polynomial-cone worker can prove its nonnegativity immediately after setting $y=e^x$. Flow should send such a problem to that worker, not relax the anchor checks.
+
+The prototype's accepted output is a nonnegativity certificate. The proposition supplies a mathematically justified strictness extension, but a Lean strictness-producing adapter would still need its own formal theorem and a checked nonzero condition. The current output does not silently advertise that stronger interface.
+
+\subsection{High-order contact is not a numerical singularity}
+
+Suppose $f(0)=f'(0)=\cdots=f^{(m-1)}(0)=0$. Natural interval evaluation of a difference of nearly equal exponentials may be inconclusive near zero, and a proof based on strict positivity margins can struggle with the boundary. A ladder records these zeros exactly. They cost rational equalities, not additional numerical precision. The hyperbolic examples below have sixth- and seventh-order contact and remain short exact certificates.
+
+This is one reason to keep the symbolic ladder worker and the numerical enclosure worker separate. The former is especially attractive at exact contacts and on unbounded rays. The latter is useful for strict inequalities on bounded intervals, concrete counterexamples, and root brackets. Neither should be forced to emulate the other's strengths.

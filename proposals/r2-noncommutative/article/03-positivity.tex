@@ -1,0 +1,426 @@
+\section{Operator positivity through adjoint sandwiches}
+\label{sec:operator}
+\status{Independent operator replay, an automatic homogeneous Gram producer,
+and a bounded finite-ray producer are implemented. General SDP discovery and
+Lean positivity reconstruction are integration work, not executed features.}
+
+\subsection{The correct replacement for scalar constraint products}
+
+For real symmetric positive semidefinite $G$ and any real matrix $Q$,
+\[
+ z^{\mathsf T}(Q^{\mathsf T}GQ)z=(Qz)^{\mathsf T}G(Qz)\ge0.
+\]
+Thus congruence preserves positivity. In contrast, let
+\[
+ A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ B=\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+\]
+Both are positive semidefinite, but $AB$ is not symmetric. Even the symmetric
+product $AB+BA$ is not positive semidefinite: at $z=(1,-2)^{\mathsf T}$ its
+quadratic form is $-2$. This exact arithmetic example is an executed regression
+test, not just a caution in the prose.
+
+The operator receipt therefore has the form
+\begin{equation}\label{eq:operator-cert}
+ p=\sum_{k=1}^{t} d_k q_k^*g_{i_k}q_k
+    +\sum_{\ell=1}^{u}c_\ell a_\ell r_{j_\ell}b_\ell,
+ \qquad d_k\in\Q_{\ge0},\quad g_0=1.
+\end{equation}
+The original problem supplies $g_i\succeq0$ and $r_j=0$. The equality terms have
+no sign restrictions and preserve their left/right word contexts. Here the
+$q_k$ are polynomials, whereas $a_\ell,b_\ell$ are words; polynomial equality
+multipliers can be expanded into finitely many such word contexts.
+
+\begin{theorem}[Operator receipt soundness]\label{thm:operator}
+A checked identity~\eqref{eq:operator-cert} implies $p(X)\succeq0$ for every
+matrix tuple satisfying the original involution, equality, and positivity
+assumptions.
+\end{theorem}
+\begin{proof}
+The equality contribution evaluates to zero by the same argument as
+Theorem~\ref{thm:ideal-sound}. Each remaining summand is positive semidefinite
+by congruence and nonnegative scalar multiplication. Their sum is positive
+semidefinite. The involution contract makes the formal $q_k^*$ evaluate to the
+transpose of the evaluated $q_k$.
+\end{proof}
+
+The proof does not assert that this certificate language expresses every valid
+conditional matrix inequality. In particular, a finite dictionary of $q_k$ is a
+further restriction. Failure of that search is not a mathematical counterexample.
+
+\subsection{A projection example that requires equality cooperation}
+
+Suppose $x^*=x$ and $x^2=x$. Then
+\[
+ x=x^*x-(x^2-x)
+\]
+is a one-square operator receipt. The target has degree one, so it is not in the
+free homogeneous-square fragment below. The equalities are what make it
+positive. The implemented finite-ray worker finds the weight and the ideal
+residual rather than trying to treat the premise $x^2-x=0$ as a positivity
+constraint.
+
+Similarly, from $x\succeq0$ the target $yxy$ with self-adjoint $y$ is certified
+by the sandwich $y^*xy$. Deleting the positive premise makes the exact same
+receipt invalid. Both cases are covered by the stored worked examples and
+boundary tests.
+
+\section{Automatic homogeneous squares at arbitrary even degree}
+\label{sec:gram}
+
+\subsection{Why the noncommutative Gram matrix is unique}
+
+Fix $d\ge0$ and list all words of length $d$ as
+$W_d=(w_1,\ldots,w_N)^{\mathsf T}$, where $N=m^d$. A homogeneous polynomial
+$p$ of degree $2d$ has a unique expansion
+\begin{equation}\label{eq:gram}
+ p=W_d^* Q W_d=\sum_{i,j}Q_{ij}w_i^*w_j.
+\end{equation}
+Indeed, every word of length $2d$ has a unique split into its first and last
+$d$ letters; the first half uniquely determines $w_i$ by reversing and applying
+the atom involution. There are $m^{2d}=N^2$ words and $N^2$ ordered matrix entries.
+Formal self-adjointness of $p$ is exactly symmetry of the rational matrix $Q$.
+
+This is a decisive difference from ordinary commuting multivariate polynomials,
+where different products of monomials can have the same exponent vector and
+Gram representations need not be unique. The existing scalar quadratic $LDL$
+mechanism does not, by itself, expose this arbitrary-even-degree free-word
+fragment. The new step is the word splitting and its exact coefficient
+correspondence, not the invention of $LDL$ factorization.
+
+\begin{theorem}[Complete homogeneous-square fragment]\label{thm:gram}
+For a rational homogeneous formally self-adjoint $p$ of degree $2d$, the
+following are equivalent:
+\begin{enumerate}[label=(\roman*),nosep]
+\item Its unique word Gram matrix $Q$ is positive semidefinite.
+\item $p=\sum_k d_k q_k^*q_k$, with rational $d_k\ge0$ and rational
+homogeneous $q_k$ of degree $d$.
+\item $p$ has a sum-of-Hermitian-squares representation using real homogeneous
+polynomials of degree $d$.
+\end{enumerate}
+The rational representation can be found by exact pivoted $LDL^{\mathsf T}$
+elimination, without numerical semidefinite optimization.
+\end{theorem}
+\begin{proof}
+A representation in (iii) expresses $Q$ as a sum of real outer products by
+uniqueness in~\eqref{eq:gram}, proving (i). Condition (ii) immediately implies
+(iii), absorbing $\sqrt{d_k}$ into the real polynomials.
+
+For (i) to (ii), work entirely over $\Q$. If a diagonal entry $Q_{kk}=a$ is
+positive, complete the square using the row
+\[
+ \ell=e_k+\sum_{j\ne k}\frac{Q_{kj}}{a}e_j.
+\]
+Subtract $a\ell\ell^{\mathsf T}$ and recurse on the remaining Schur complement.
+It is positive semidefinite and rational. If all remaining diagonal entries are
+zero, positive semidefiniteness forces every off-diagonal entry to be zero: a
+nonzero $Q_{ij}$ would give a negative quadratic form on a suitable vector
+supported on $i,j$. Thus the process terminates with
+$Q=\sum_k d_k\ell_k\ell_k^{\mathsf T}$, $d_k\in\Q_{>0}$. Set
+$q_k=\sum_i(\ell_k)_i w_i$ and use~\eqref{eq:gram}.
+\end{proof}
+
+The zero polynomial is accepted with an empty square list. A nonzero polynomial
+of odd homogeneous degree is outside this entrance fragment. The matrix test is
+exact: an off-diagonal nonzero entry with zero diagonal is a rejection, not an
+invitation to add a numerical tolerance.
+
+\subsection{Relation to matrix positivity, without overstating the software}
+
+Helton's theorem identifies matrix-positive free polynomials in self-adjoint
+variables with sums of Hermitian squares~\cite{helton}. It supplies relevant
+mathematical context; the present report does not claim that theorem as new.
+For a homogeneous target, square factors can be taken homogeneous of half the
+degree. To see the degree restriction, consider the highest homogeneous pieces
+of putative factors: their sum of squares cannot cancel, because the unique
+word Gram matrix is a sum of outer products and is nonzero if any piece is
+nonzero. Apply the same argument to the lowest nonzero pieces. A pure
+ degree-$2d$ sum therefore has no factor degrees above or below $d$.
+
+Consequently, for self-adjoint free variables and all finite matrix dimensions,
+the exact Gram criterion also characterizes homogeneous matrix positivity.
+That mathematical corollary does \emph{not} mean the delivered negative output is
+a Lean proof of nonpositivity. The routine returns no certificate when $Q$ is
+not positive semidefinite. It does not construct a self-adjoint matrix tuple
+violating the inequality, and the checker never accepts a Gram failure as such
+a countermodel. The separately implemented quotient-matrix construction is an
+\emph{equality} countermodel mechanism with a different scope.
+
+\subsection{An automatic degree-six example}
+
+Let self-adjoint $x,y$ be free and set
+\[
+ q=x^2y+2yx^2-3y^3,\qquad p=q^*q.
+\]
+The experiment supplies only the expanded target $p$ to
+\code{homogeneous\_sos}. There is no supplied factor or dictionary. The
+producer builds an $8\times8$ Gram matrix, factors it rationally, and emits a
+square receipt which independent replay expands back to $p$. The recovered
+factor need not have the same normalization as the generating $q$; the
+nonnegative rational weight accounts for that harmless freedom.
+
+The cost is $O(m^{3d})$ dense rational field operations in the worst case, with
+an $m^{2d}$-entry Gram matrix. Sparse word support and block decomposition may
+reduce that cost; a six-variable degree-twelve goal is not made small merely by
+being in a decidable fragment. A production implementation needs explicit word,
+coefficient-bit, and factor-size budgets.
+
+\section{Mixed-degree search modulo equalities}
+\label{sec:finite-rays}
+
+\subsection{Quotient the equality span before solving for positive weights}
+
+Fix a context bound $D$, form the equality column span $M_D$ from
+Section~\ref{sec:ideal}, and choose a finite family of candidate rays
+\[
+ a_k=q_k^*g_{i_k}q_k.
+\]
+Let $\pi_D$ be the linear remainder map of the exact echelon basis. Search for
+\begin{equation}\label{eq:ray}
+ \pi_D(p)=\sum_k d_k\pi_D(a_k),\qquad d_k\ge0.
+\end{equation}
+After obtaining the weights, reduce the \emph{original} residual
+$p-\sum_kd_ka_k$ to recover its two-sided ideal receipt. This avoids presenting
+all equality coefficients as free signed variables in the positive feasibility
+problem.
+
+\begin{proposition}[Equality projection loses no fixed-language solution]
+For the fixed equality span and fixed rays, equation~\eqref{eq:ray} is feasible
+if and only if there exists a receipt~\eqref{eq:operator-cert} using those rays
+and equality contexts in $M_D$.
+\end{proposition}
+\begin{proof}
+The kernel of the linear remainder map is precisely $M_D$. Thus the projected
+identity holds exactly when the difference of target and weighted rays belongs
+to $M_D$, which is exactly what the equality terms express.
+\end{proof}
+
+It would be incorrect to run positivity directly on the possibly
+non-self-adjoint-looking remainder and forget the target. A normal-form map is
+only a linear coordinate device; the final replay always checks the original
+self-adjoint target, the original positive premises, and the original relations.
+
+\subsection{What the implemented support search guarantees}
+
+The standard-library producer enumerates supports of size one through a given
+cap, solves the corresponding exact linear systems, and accepts a representation
+only if every recovered coefficient is nonnegative. It defaults to support
+size at most four and at most 10,000 attempted supports. It is not an SDP solver.
+
+There is a precise completeness statement for an uncapped finite-ray version.
+If a vector lies in the cone generated by finitely many vectors in a rational
+space of dimension $r$, it has a representation on a linearly independent
+support of size at most $r$. Starting with a nonnegative representation, a
+linear dependence of its positive-support vectors allows movement along a
+coefficient null vector until a positive coefficient first becomes zero,
+without making any coefficient negative. Repeat until the support is independent.
+An independent rational support has unique rational coefficients for a rational
+target. Hence exhaustive support enumeration through $r$ finds a solution when
+one exists. With a smaller support or attempt cap, failure remains \unknown{}.
+
+Dependent supports are not a loophole in this argument: their feasible
+representations can be reduced to an independent support, which is eventually
+visited by the uncapped enumerator. The result is completeness for this
+\emph{fixed cone}, not for conditional noncommutative positivity.
+
+\subsection{Automatic proposals from involution and commutation relations}
+\label{sec:graph-dictionary}
+
+The delivered function \code{involution\_dictionary} adds a concrete source of
+rays rather than leaving every $q_k$ to a user. It recognizes nonzero scalar
+multiples of
+\[
+ x_i^2-1,\qquad x_ix_j-x_jx_i
+\]
+in the supplied relation list. These identify involutive atoms and explicitly
+known commuting pairs. For two involutive atoms not explicitly marked commuting,
+it proposes both their commutator and their anticommutator. For two disjoint
+pairs whose cross-pairs are explicitly commuting, it also proposes the sum and
+difference of their commutators.
+
+\begin{lstlisting}
+U := atoms with a recognized relation x_i*x_i - 1 = 0
+E := pairs with a recognized relation x_i*x_j - x_j*x_i = 0
+P := pairs in U not already in E
+propose x_i*x_j + x_j*x_i and x_i*x_j - x_j*x_i for each pair in P
+for disjoint pairs p,q with every cross-pair in E:
+    propose comm(p) + comm(q) and comm(p) - comm(q)
+deduplicate nonzero scalar multiples in the SEARCH dictionary
+send every resulting square proposal through exact weight and identity replay
+\end{lstlisting}
+
+Absence of a commutation relation is not used as a proof of noncommutation. It
+only makes a pair eligible for proposals. The dictionary does not learn an
+unproved relation, and a missed syntactic pattern only reduces search power.
+Indirectly derivable involution or commutation facts would have to be supplied
+as previously proved lemmas to this entrance. There is no completeness claim
+for the ray generator.
+
+At most $P$ eligible pairs give $2P+2\binom P2$ candidates before filtering and
+deduplication. The current pair cap is twenty. The algorithm is small enough to
+port directly into a Lean-side proposal worker; its correctness need not be
+trusted because every eventual receipt is independently replayed.
+
+\section{A worked operator bound: the CHSH expression}
+\label{sec:chsh}
+
+\subsection{The mathematical identity}
+
+Let $A,D,B,C$ be self-adjoint involutions and assume every member of $\{A,D\}$
+commutes with every member of $\{B,C\}$. Write
+\[
+ S=A(B+C)+D(B-C),\qquad P=AD-DA,\quad Q=BC-CB,
+\]
+\[
+ T_A=AD+DA,\qquad T_B=BC+CB.
+\]
+The cross-commutations imply $S^*=S$ and $PQ=QP$. Expanding with the involution
+relations gives
+\[
+ S^2=4I-PQ,\qquad T_A^2-P^2=4I,\qquad T_B^2-Q^2=4I.
+\]
+Since $P^*=-P$ and $Q^*=-Q$,
+\begin{align}
+ \tfrac12(P-Q)^*(P-Q)+\tfrac12T_A^*T_A+\tfrac12T_B^*T_B
+ &=\tfrac12(-P^2+2PQ-Q^2)+\tfrac12T_A^2+\tfrac12T_B^2\\
+ &=4I+PQ=8I-S^2.\label{eq:chsh-sos}
+\end{align}
+This proves $S^2\preceq8I$, and hence $\|S\|\le2\sqrt2$ in the usual
+finite-dimensional Euclidean operator norm. The norm implication follows by
+applying $S^*S\preceq8I$ to each vector and taking the supremum over unit
+vectors. The recorded artifact certifies the polynomial inequality and a
+separate self-adjointness identity; it contains no Lean norm theorem.
+
+This is a worked application of known operator mathematics, not a new physical
+bound. Its value here is that a noncommutative receipt can simultaneously use
+operator involution, selectively commuting groups, and a positive-square
+identity without pretending all four operators commute.
+
+\subsection{What the producer actually discovers}
+
+The source problem supplies four involution relations and four cross-commutation
+relations. From those relations the graph rule of
+Section~\ref{sec:graph-dictionary} generates six candidate polynomials. The
+finite-ray worker searches their nonnegative combinations modulo degree-four
+equality contexts. It finds a three-square receipt with rational weights, then
+recovers a two-sided ideal residual. Neither the weights nor the list of three
+chosen factors is supplied to that search. This is a bounded structurally guided
+search, not a general discovery procedure for quantum inequalities.
+
+The unit suite repeats the same construction under all twenty-four permutations
+of the atom names. Those are \emph{metamorphic checks of one family}, not
+twenty-four independent mathematical discoveries or a twenty-four-goal tactic
+benchmark. They test whether pattern recognition or reconstruction accidentally
+depends on the particular ordering $A,D,B,C$.
+
+\subsection{The failed first run and its correction}
+
+The first authoring run used the target $8I-S^2$. As a \emph{free} word polynomial,
+that expression is not syntactically self-adjoint: $S$ becomes self-adjoint only
+through the cross-commutation hypotheses. The conservative operator producer
+correctly refused the input. The initial failing log is retained as
+\code{results/initial-failure.log}.
+
+The repair was not to turn off the self-adjointness check. The executed operator
+target is
+\[
+ 8I-S^*S,
+\]
+which is formally self-adjoint. A separate exact equality receipt proves
+$S-S^*=0$ using the cross-commutation relations. Substitution then gives the
+stated squared bound. This is an example of a useful Forge obligation exchange:
+an algebra worker proves the missing structural fact while the positivity
+worker retains its simpler, safer input language.
+
+For this particular norm bound there is also a simpler discovery opportunity:
+if $U=A(B+C)$ and $V=D(B-C)$, then $U^*U+V^*V=4I$ already follows from the
+involution relations, and the parallelogram identity gives
+$8I-(U+V)^*(U+V)=(U-V)^*(U-V)$. The graph-based three-square certificate is not
+minimal. A source-expression-aware sign-flip proposal could find the one-square
+version, but that alternative proposer was not implemented or counted in the
+recorded run. Retaining the distinction prevents a successful demonstration
+from being mislabeled a proof-size optimum.
+
+\section{Trace positivity and explicit cyclic remainders}
+\label{sec:trace}
+
+\subsection{A genuinely different certificate kind}
+
+For square matrices, $\tr(AB-BA)=0$. Consequently trace positivity permits
+\begin{equation}\label{eq:trace}
+ p=\sum_k d_k q_k^*g_{i_k}q_k
+   +\sum_\ell c_\ell a_\ell r_{j_\ell}b_\ell
+   +\sum_t e_t(u_tv_t-v_tu_t),\qquad d_k\ge0.
+\end{equation}
+The final sum need not vanish as an operator. Its coefficients can have either
+sign. The checker expands every commutator exactly; it does not trust a flag
+saying that a residual is ``cyclically zero.''
+
+\begin{theorem}[Trace receipt soundness]
+A checked identity~\eqref{eq:trace}, under the original matrix assumptions,
+implies $\tr(p)\ge0$.
+\end{theorem}
+\begin{proof}
+The equality terms vanish, the commutator traces vanish by cyclicity, and the
+trace of each positive semidefinite sandwich is nonnegative. For real matrices
+the last claim follows directly by summing its nonnegative diagonal quadratic
+forms against the standard basis.
+\end{proof}
+
+\subsection{A finite, constructive cyclic normal form}
+
+Associate each word with the lexicographically least of its cyclic rotations.
+The cyclic normal form of a polynomial collects coefficients at these canonical
+words. If this normal form is zero, then
+\[
+ p=\sum_w c_w\bigl(w-\operatorname{cyc}(w)\bigr),
+\]
+since the coefficients of each rotation class sum to zero. Choose a split
+$w=uv$ whose rotation $vu$ is canonical; its contribution is the explicit
+commutator $c_w(uv-vu)$. This proves that cyclic reduction to zero can be
+converted into the final receipt language without relying on a normalizer's
+unexplained verdict.
+
+The implemented search in trace mode uses this linear cyclic map in place of
+the equality remainder map. It currently accepts \emph{no equality relations
+in its trace-search input}. The independent trace checker can replay equality
+terms if a future producer supplies them, but that larger search was not
+implemented. This producer/checker asymmetry is intentional and recorded.
+
+The elementary implementation enumerates rotations and costs quadratic time in
+a word's length. More sophisticated minimal-rotation and necklace indexing can
+be an optimization later; it would not alter the explicit commutator receipt.
+
+\subsection{An exact separation between operator and trace conclusions}
+
+For self-adjoint $x,y$, let
+\[
+ h=[x,[x,y]]=x^2y-2xyx+yx^2,\qquad p=I+2h.
+\]
+The polynomial $h$ is self-adjoint and has zero trace, so $\tr(p)=n\ge0$ for
+$n\times n$ matrices. The trace producer certifies it using the single square
+$1^*1$ and explicit cyclic residuals.
+
+Take
+\[
+ x=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ y=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+\]
+Then $h=y$ and
+\[
+ p=\begin{pmatrix}1&2\\2&1\end{pmatrix},\qquad
+ \tr(p)=2,\qquad (1,-1)p(1,-1)^{\mathsf T}=-2.
+\]
+It is not positive semidefinite. Changing the receipt kind from trace to
+operator must not convert this successful trace proof into a matrix inequality.
+The strict kind/field checks and an exact quadratic-form test enforce this
+boundary in the delivered suite.
+
+\subsection{Why not turn cyclic equivalence into rewriting everywhere?}
+
+Cyclic rotation is legitimate under a trace, but not under arbitrary matrix
+contexts. From $\tr(AB)=\tr(BA)$ one cannot conclude
+$Q^*ABQ=Q^*BAQ$, or cancel a trace wrapper and return an equality to
+\code{grind}. Therefore the trace worker exports only a scalar trace theorem.
+A future typed frontend should preserve the observation wrapper as part of the
+obligation identity, rather than treating it as irrelevant syntax.

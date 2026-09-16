@@ -1,0 +1,92 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=26mm,top=24mm,bottom=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,tabularx,array}
+\usepackage{enumitem,xcolor,listings,fancyhdr}
+\usepackage[colorlinks=true,linkcolor=blue!40!black,citecolor=blue!40!black,urlcolor=blue!40!black]{hyperref}
+\usepackage{bookmark,xurl}
+\hypersetup{pdftitle={Forge Flow: Differential Certificates and Optimal Cofactor Ladders},pdfauthor={Research proposal prepared for Vladimir Reshetnikov},pdfsubject={Concrete analytic extensions to the Forge Lean tactic design}}
+\urlstyle{same}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\emergencystretch}{2em}
+\setcounter{tocdepth}{2}
+\setlist{nosep,leftmargin=1.6em}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,breaklines=true,frame=single,framerule=0.25pt,rulecolor=\color{black!25},backgroundcolor=\color{black!2},showstringspaces=false,aboveskip=9pt,belowskip=9pt,xleftmargin=3pt,xrightmargin=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily Forge Flow}
+\fancyhead[R]{\small\sffamily Analytic certificates}
+\fancyfoot[C]{\small\thepage}
+\setlength{\headheight}{14pt}
+\renewcommand{\headrulewidth}{0.3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\D}{\mathrm D}
+\newcommand{\E}{\mathcal E}
+\newcommand{\Cplus}{\mathcal C_+}
+\newcommand{\code}[1]{{\urlstyle{tt}\nolinkurl{#1}}}
+\newcommand{\status}[1]{\textbf{Evidence status:} #1.}
+\newcommand{\forgecommit}{\code{c98e47c5f804e92880fc1d0e378c1b95832b685c}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\begin{document}
+\begin{titlepage}
+\vspace*{12mm}
+{\sffamily\small RESEARCH PROPOSAL AND REPRODUCIBLE PROTOTYPE\par}
+\vspace{13mm}
+{\sffamily\bfseries\Huge Forge Flow\par}
+\vspace{5mm}
+{\sffamily\LARGE Differential certificates, optimal cofactor ladders, and exact analytic witnesses\par}
+\vspace{9mm}
+{\large A substantive analytic extension to the Forge Lean tactic design\par}
+\vspace{10mm}
+\rule{\textwidth}{0.5pt}\par
+\vspace{5mm}
+\textbf{Central result.} In a precisely specified exponential-polynomial certificate language, feasibility does not require a permutation search, and a shortest certificate can be constructed by a binary search over one integer. The resulting certificates contain rational arithmetic, exact derivative identities, and nonnegative initial values---not floating-point evidence.\par
+\vspace{5mm}
+
+\textbf{Additional workers.} Coupled differential-inequality certificates, exact rational exponential enclosures, point counterexamples, and existence-and-uniqueness certificates for roots in an externally specified interval.\par
+\vspace{5mm}
+
+\textbf{Delivered evidence.} Executed Python implementations, separate dense and sparse algebra paths, replay without site packages, finite exhaustive and symbolic cross-checks, corruption tests, and recorded certificates. No Lean compilation or tactic benchmark was performed in this environment.
+\vfill
+Prepared for Vladimir Reshetnikov\\
+15 September 2026\\[3mm]
+Repository baseline: \forgecommit
+\end{titlepage}
+\pagenumbering{roman}
+\begin{abstract}
+Forge already proposes structural proof planning, arithmetic witnesses, finite closure certificates, nonlinear polynomial reasoning, and several external-solver interfaces. This article does not propose those mechanisms again. It develops an analytic lane for statements involving real exponentials and hyperbolic functions, with three concrete certificate families.
+
+The first family is an anchored cofactor ladder: repeated application of $\D-c$ transforms an exponential polynomial into an ordinary polynomial with nonnegative coefficients, while every intermediate value at zero is nonnegative. A scalar integrating-factor theorem proves soundness. An adjacent-exchange argument proves that increasing cofactor order is sufficient for feasibility within an input-spectrum grammar. A multiplicity argument then reduces shortest-certificate construction to the number of zero cofactors, a monotone one-dimensional feasibility problem. The prototype implements this deterministic compiler and a checkable minimality receipt.
+
+The second family certifies coupled residuals through a positive differential system with a rational Metzler matrix. The third supplies exact rational enclosures, point counterexamples, and root brackets whose derivative-sign covers prove uniqueness in the stated interval. These workers have deliberately different logical outputs.
+
+The recorded corpus contains 196 positive ladder cases, 40 coupled-system cases, 44 negative-point cases, 8 true functions rejected by the ladder grammar, and 16 isolated-root cases. The optimal compiler reduces the total number of cofactor steps from 1,212 to 288 on the same 196 positive inputs. All 624 targeted invalid mutations are rejected. Finite independent checks cover 200 random small permutation problems and 200 symbolic derivatives. These are research-code results, not Lean-kernel proofs and not evidence of superiority over any existing tactic. The article gives the mathematical proofs, algorithms, concrete library targets, source-to-goal obligations, limitations, and acceptance gates needed to turn the lane into a genuine Forge extension.
+\end{abstract}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\input{sections/01-delta}
+\input{sections/02-ladders}
+\input{sections/03-optimal}
+\input{sections/04-examples}
+\input{sections/05-systems}
+\input{sections/06-enclosures}
+\input{sections/07-integration}
+\input{sections/08-evidence}
+\input{sections/09-delivery}
+\input{references}
+\end{document}

@@ -1,0 +1,262 @@
+[
+  {
+    "certificate_bytes": 384,
+    "name": "tree_identity",
+    "producer_seconds_single_run": 0.00042993600004592736,
+    "producer_stats": {
+      "candidate_evaluations": 5,
+      "ranks": {
+        "T": 2
+      },
+      "scheduled": 5,
+      "seconds": 0.0004238260000875016,
+      "witness_nodes": 2
+    },
+    "producer_status": "PROVED",
+    "replay": {
+      "accepted": true,
+      "claim": "universal_zero",
+      "closure_identities": 5,
+      "frontend_checks": 10
+    },
+    "replay_seconds_single_run": 0.0006675320000795182
+  },
+  {
+    "certificate_bytes": 247,
+    "name": "balanced_dyck",
+    "producer_seconds_single_run": 0.00022839300004307006,
+    "producer_stats": {
+      "candidate_evaluations": 3,
+      "ranks": {
+        "S": 1
+      },
+      "scheduled": 3,
+      "seconds": 0.00020949400004610652,
+      "witness_nodes": 1
+    },
+    "producer_status": "PROVED",
+    "replay": {
+      "accepted": true,
+      "claim": "universal_zero",
+      "closure_identities": 3,
+      "frontend_checks": 21
+    },
+    "replay_seconds_single_run": 0.0012217850000979524
+  },
+  {
+    "certificate_bytes": 176,
+    "name": "bad_return",
+    "producer_seconds_single_run": 0.0008784689998719841,
+    "producer_stats": {
+      "candidate_evaluations": 2,
+      "ranks": {
+        "S": 1
+      },
+      "scheduled": 3,
+      "seconds": 0.0008722089999082527,
+      "witness_nodes": 2
+    },
+    "producer_status": "REFUTED",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 2,
+      "expanded_tree_nodes": "2",
+      "frontend_checks": 21,
+      "value": "1",
+      "word_length": "2"
+    },
+    "replay_seconds_single_run": 0.0018304380000699894
+  },
+  {
+    "certificate_bytes": 149,
+    "name": "noncommuting_order",
+    "producer_seconds_single_run": 4.464700009521039e-05,
+    "producer_stats": {
+      "candidate_evaluations": 1,
+      "ranks": {
+        "S": 0
+      },
+      "scheduled": 1,
+      "seconds": 4.13319999097439e-05,
+      "witness_nodes": 1
+    },
+    "producer_status": "REFUTED",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 1,
+      "expanded_tree_nodes": "1",
+      "frontend_checks": 1,
+      "value": "-1",
+      "word_length": "2"
+    },
+    "replay_seconds_single_run": 0.0002243270000690245
+  },
+  {
+    "certificate_bytes": 2160,
+    "name": "exponential_60",
+    "producer_seconds_single_run": 0.002040213000100266,
+    "producer_stats": {
+      "candidate_evaluations": 61,
+      "ranks": {
+        "N0": 1,
+        "N1": 1,
+        "N10": 1,
+        "N11": 1,
+        "N12": 1,
+        "N13": 1,
+        "N14": 1,
+        "N15": 1,
+        "N16": 1,
+        "N17": 1,
+        "N18": 1,
+        "N19": 1,
+        "N2": 1,
+        "N20": 1,
+        "N21": 1,
+        "N22": 1,
+        "N23": 1,
+        "N24": 1,
+        "N25": 1,
+        "N26": 1,
+        "N27": 1,
+        "N28": 1,
+        "N29": 1,
+        "N3": 1,
+        "N30": 1,
+        "N31": 1,
+        "N32": 1,
+        "N33": 1,
+        "N34": 1,
+        "N35": 1,
+        "N36": 1,
+        "N37": 1,
+        "N38": 1,
+        "N39": 1,
+        "N4": 1,
+        "N40": 1,
+        "N41": 1,
+        "N42": 1,
+        "N43": 1,
+        "N44": 1,
+        "N45": 1,
+        "N46": 1,
+        "N47": 1,
+        "N48": 1,
+        "N49": 1,
+        "N5": 1,
+        "N50": 1,
+        "N51": 1,
+        "N52": 1,
+        "N53": 1,
+        "N54": 1,
+        "N55": 1,
+        "N56": 1,
+        "N57": 1,
+        "N58": 1,
+        "N59": 1,
+        "N6": 1,
+        "N60": 0,
+        "N7": 1,
+        "N8": 1,
+        "N9": 1
+      },
+      "scheduled": 61,
+      "seconds": 0.0020217449998654047,
+      "witness_nodes": 61
+    },
+    "producer_status": "REFUTED",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 61,
+      "expanded_tree_nodes": "2305843009213693951",
+      "frontend_checks": 61,
+      "value": "1",
+      "word_length": "1152921504606846976"
+    },
+    "replay_seconds_single_run": 0.0015632470001492038
+  },
+  {
+    "certificate_bytes": 2451,
+    "name": "noisy_tree_quotient",
+    "producer_seconds_single_run": 0.00294962799989662,
+    "producer_stats": {
+      "ambient_dimensions": {
+        "T": 5
+      },
+      "context_candidates": 16,
+      "quotient_dimensions": {
+        "T": 2
+      },
+      "reachable_dimensions": {
+        "T": 4
+      }
+    },
+    "producer_status": "QUOTIENT",
+    "replay": {
+      "accepted": true,
+      "claim": "all_observations_preserved",
+      "closure_identities": 19,
+      "frontend_checks": 28,
+      "quotient_dimensions": {
+        "T": 2
+      }
+    },
+    "replay_seconds_single_run": 0.003844050999987303
+  },
+  {
+    "certificate_bytes": 778,
+    "name": "zero_observation_quotient",
+    "producer_seconds_single_run": 0.0004229649998706009,
+    "producer_stats": {
+      "ambient_dimensions": {
+        "T": 3
+      },
+      "context_candidates": 0,
+      "quotient_dimensions": {
+        "T": 0
+      },
+      "reachable_dimensions": {
+        "T": 2
+      }
+    },
+    "producer_status": "QUOTIENT",
+    "replay": {
+      "accepted": true,
+      "claim": "all_observations_preserved",
+      "closure_identities": 5,
+      "frontend_checks": 10,
+      "quotient_dimensions": {
+        "T": 0
+      }
+    },
+    "replay_seconds_single_run": 0.0005942820000655047
+  },
+  {
+    "certificate_bytes": 176,
+    "name": "drop_language_restriction",
+    "producer_seconds_single_run": 0.00011113699997622462,
+    "producer_stats": {
+      "candidate_evaluations": 2,
+      "ranks": {
+        "S": 1
+      },
+      "scheduled": 3,
+      "seconds": 0.00010510799984331243,
+      "witness_nodes": 2
+    },
+    "producer_status": "REFUTED",
+    "replay": {
+      "accepted": true,
+      "claim": "nonzero_derivation",
+      "dag_nodes": 2,
+      "expanded_tree_nodes": "2",
+      "frontend_checks": 9,
+      "value": "1",
+      "word_length": "1"
+    },
+    "replay_seconds_single_run": 0.0004546919999484089
+  }
+]

@@ -1,0 +1,43 @@
+\section{The contribution relative to the repository}
+\label{sec:delta}
+
+\subsection{The baseline is already large}
+The reviewed Forge snapshot is a design with prototype workers, not an installed Lean tactic. Its consolidated article merges eighteen contributions in two rounds. The implementation ledger separates executed Python experiments, generated Lean source, and designs that have not been implemented. In particular, the absence of an integrated tactic is not the absence of useful algorithms: the repository already contains a considerable collection of them~\cite{forge-status,forge-provenance}.
+
+This report takes those designs as prerequisites. It does not propose a new scheduler, another global ``untrusted search, trusted checker'' architecture, a renamed polynomial cone, or another generic call to an SMT solver. The audit covered the current README and status ledger, the provenance map, the consolidated witness and nonlinear sections, the Leant/Djex transfer document, and the runtime contract. Leant's README and Djex's rank-N account were also inspected at the revisions recorded in Appendix~\ref{app:artifacts}. The detailed witness and nonlinear accounts and the existing transfer ledger were treated as prior work~\cite{forge-witness,forge-nonlinear,forge-transfer}. This is a targeted audit of the consolidated baseline, not a claim to have independently reviewed every line of all eighteen archived submissions.
+
+\begin{longtable}{@{}p{0.21\textwidth}p{0.34\textwidth}p{0.38\textwidth}@{}}
+\toprule
+Area & Already in the reviewed baseline & Added here \\
+\midrule\endhead
+Real witnesses & Fixed affine templates with Farkas multipliers; a general allowance for proved piecewise branches & An exact projection-and-lifting algorithm for all outputs in a mixed affine conjunction, with an explicit min--max witness DAG and complete pair coverage \\
+Integer witnesses & Lattice elimination, residue witnesses, and one-output integer projection with B\'ezout/CRT evidence & Not reimplemented. The new worker is over ordered fields, not integers; midpoint reconstruction is not an integer operation \\
+Algebra & Commutative polynomial ideal certificates; specialized Ore-operator transport for recurrences & General free-associative word polynomials, traced overlap/inclusion completion, and two-sided original-relation certificates \\
+Inequalities & Polynomial cones, quadratics, Bernstein subdivision, square factors, and Sturm reasoning & Elementary-function enclosures, exact analytic domain obligations, and vanishing-jet certificates for non-strict zeros \\
+System integration & Scope-aware obligations, candidate admission, trust policies, and worker isolation & Three concrete adapters with new semantic contracts; the existing controller remains in place \\
+\bottomrule
+\end{longtable}
+
+The comparison is with the reviewed Forge design, not with the whole literature. Fourier--Motzkin elimination, noncommutative completion, and verified Taylor approximation are established techniques. Their value here is that they can be turned into small, auditable, composable Forge workers, with precise capability boundaries. The specific certificate contracts, separation examples, implementation choices, and experiments are this report's contribution.
+
+\subsection{Three different kinds of increased capability}
+The polyhedral worker increases \emph{witness expressiveness}: some valid linear specifications have no affine witness at all. Spending more time on the existing affine coefficient template cannot repair that mismatch.
+
+The noncommutative worker increases \emph{lemma discovery}: a supplied orientation of the hypotheses can be terminating yet incomplete for the target. Critical pairs expose consequences that no direct reduction of that target initially uses.
+
+The analytic worker increases \emph{semantic coverage}: a polynomial engine cannot infer the defining properties of an opaque \(\exp(x)\) atom without additional theorems. Furthermore, even valid rational enclosures can be insufficient at a zero of the desired inequality. Exact vanishing information addresses that obstruction rather than merely increasing numerical precision.
+
+These distinctions determine the tests. We use an impossibility proof for affine witnesses, a completion-on/off experiment on identical relations, and interval-versus-jet experiments on identical elementary expressions. These are mechanism-level comparisons. They are not claims that stock \grind{}, Mathlib's \code{noncomm\_ring}, or another existing tactic fails on the examples. The official \grind{} manual and Mathlib tactic documentation remain the right starting points for an actual Lean baseline~\cite{grind-manual,noncomm-ring}.
+
+\subsection{One common interface, without a new global architecture}
+Each worker consumes a sealed, typed problem and returns an untrusted object. The existing Forge admission boundary must still relate that object to the original Lean expression. What differs is the proposition its checker should establish:
+\begin{align*}
+\text{Polyhedral:}\quad &D(x)\Longrightarrow R(x,W(x));\\
+\text{Noncommutative:}\quad &r_1=\cdots=r_s=0\Longrightarrow p=0;\\
+\text{Analytic:}\quad &x\in B\Longrightarrow f(x)\ge0.
+\end{align*}
+For the polyhedral worker there is also a genuine negative object: a rational parameter value satisfying the domain but admitting no existential output. The other two prototypes do not emit semantic refutations. A nonzero noncommutative remainder or an inconclusive interval is only \unknown{}.
+
+\begin{focusbox}
+\textbf{A useful implementation order.} First add constructive polyhedral projection, because its completeness statement is clean and its Lean proof obligations are elementary. Next add noncommutative certificates, whose positive checker is particularly small. Add the analytic worker after the rational arithmetic and source-domain infrastructure have been stabilized; its search is simple, but its proof bridge is substantially richer.
+\end{focusbox}

@@ -1,0 +1,170 @@
+{
+  "name": "leaf_count",
+  "operations": [
+    {
+      "inputs": [],
+      "name": "leaf",
+      "out": "T",
+      "terms": [
+        {
+          "in": [],
+          "out": 0,
+          "q": "1"
+        },
+        {
+          "in": [],
+          "out": 1,
+          "q": "1"
+        }
+      ]
+    },
+    {
+      "inputs": [
+        "T",
+        "T"
+      ],
+      "name": "node",
+      "out": "T",
+      "terms": [
+        {
+          "in": [
+            0,
+            0
+          ],
+          "out": 0,
+          "q": "1"
+        },
+        {
+          "in": [
+            0,
+            1
+          ],
+          "out": 1,
+          "q": "1"
+        },
+        {
+          "in": [
+            1,
+            0
+          ],
+          "out": 1,
+          "q": "1"
+        },
+        {
+          "in": [
+            0,
+            0
+          ],
+          "out": 2,
+          "q": "1"
+        },
+        {
+          "in": [
+            0,
+            2
+          ],
+          "out": 2,
+          "q": "1"
+        },
+        {
+          "in": [
+            2,
+            0
+          ],
+          "out": 2,
+          "q": "1"
+        }
+      ]
+    }
+  ],
+  "schema": "forge.mlc.problem.v1",
+  "sorts": {
+    "T": 3
+  },
+  "source": {
+    "kind": "multiaffine",
+    "operations": [
+      {
+        "inputs": [],
+        "name": "leaf",
+        "out": "T",
+        "polynomials": [
+          [
+            {
+              "factors": [],
+              "q": "1"
+            }
+          ],
+          []
+        ]
+      },
+      {
+        "inputs": [
+          "T",
+          "T"
+        ],
+        "name": "node",
+        "out": "T",
+        "polynomials": [
+          [
+            {
+              "factors": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "q": "1"
+            },
+            {
+              "factors": [
+                [
+                  1,
+                  0
+                ]
+              ],
+              "q": "1"
+            }
+          ],
+          [
+            {
+              "factors": [],
+              "q": "1"
+            },
+            {
+              "factors": [
+                [
+                  0,
+                  1
+                ]
+              ],
+              "q": "1"
+            },
+            {
+              "factors": [
+                [
+                  1,
+                  1
+                ]
+              ],
+              "q": "1"
+            }
+          ]
+        ]
+      }
+    ],
+    "raw_dimensions": {
+      "T": 2
+    }
+  },
+  "targets": [
+    {
+      "q": [
+        "-1",
+        "1",
+        "-1"
+      ],
+      "sort": "T"
+    }
+  ]
+}

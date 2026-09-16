@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Fixture & Certificate bytes & Identities / DAG nodes & Result\\
+\midrule
+Tree-count identity & 384 & 5 & \proved \\
+Balanced traces & 247 & 3 & \proved \\
+Changed return matrix & 176 & 2 & \refuted \\
+Noncommuting order control & 149 & 1 & \refuted \\
+Exponential-length witness & 2,160 & 61 & \refuted \\
+Noisy-tree quotient & 2,451 & 19 & preserved \\
+Zero-observation quotient & 778 & 5 & preserved \\
+Language restriction removed & 176 & 2 & \refuted \\
+\bottomrule
+\end{tabular}
+\caption{Recorded fixture certificates. Positive and quotient rows count constructor identities; negative rows count stored witness DAG nodes.}
+\end{table}

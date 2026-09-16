@@ -1,0 +1,316 @@
+\section{Exact probabilistic termination and values}
+\label{sec:markov}
+
+\status{Finite rational-chain search, exact arithmetic replay, and closed-class
+countercertificates are implemented in Python. The probability-space bridge and
+its Lean formalization remain proposed.}
+
+\subsection{The input semantics must include probability mass}
+Let $S$ be a finite nonempty state set and let
+$P\in\Q^{S\times S}$ satisfy
+\[
+ P_{st}\geq0,\qquad \sum_tP_{st}=1.
+\]
+The input specifies an initial state $s_0$, a terminal set $T\subseteq S$, a
+nonnegative rational cost $c(s)$ per nonterminal visit, and a terminal payoff
+$g(t)\in[0,1]\cap\Q$. Every terminal state is absorbing; its cost is zero.
+The implementation stores $g(s)=0$ off $T$.
+
+Write $X_n$ for the Markov chain and
+$\tau=\inf\{n\geq0:X_n\in T\}$. The positive output means
+\begin{equation}
+ \Prob_{s_0}(\tau<\infty)=1,
+ \quad h(s_0)=\E_{s_0}\tau,
+ \quad v(s_0)=\E_{s_0}\sum_{k=0}^{\tau-1}c(X_k),
+ \quad u(s_0)=\E_{s_0}g(X_\tau).
+ \label{eq:mc-goals}
+\end{equation}
+If $g$ is the indicator of a successful terminal subset, $u$ is the success
+probability. With arbitrary fractional terminal payoffs it is an expected
+payoff, not automatically the probability of a specified event. The returned
+field is therefore named \code{expected_terminal_payoff}; a regression test
+uses payoff $1/3$ to preserve this distinction.
+
+The validator rejects floating probabilities, negative entries, nonunit row
+sums, nonabsorbing terminals, and nonzero terminal costs. There is no tolerance
+parameter and no automatic normalization. These checks are part of the source
+semantics. Multiplying a stochastic row by a normalizing factor after export
+would change the problem unless that normalization were itself justified.
+
+The worker's complete decision question is almost-sure absorption in $T$.
+Exact costs and terminal values accompany positive answers. On a negative
+answer it supplies a certified positive lower bound for nontermination, not
+necessarily the exact nontermination probability or an exact total cost.
+This scope matters when some nonterminating behavior has zero running cost.
+
+\subsection{Why a harmonic equation is insufficient}
+A tempting certificate for a probability is a vector $u$ satisfying $u=Pu$
+with the intended boundary values. This is insufficient without a condition
+that makes the boundary reachable in the appropriate probabilistic sense.
+For the one-state nonterminal self-loop $P=[1]$, every scalar $u$ satisfies
+$u=Pu$. No such scalar by itself proves that the process ever reaches a
+terminal state; there is no terminal state at all.
+
+Likewise, an exact solution of a floating-point-derived linear system is exact
+only for the rounded model. A weighted-word identity concerns products along
+finite words. Neither kind of evidence establishes that an infinite-horizon
+limit has the claimed boundary values. The missing ingredient is a
+\emph{properness witness}: a finite nonnegative potential that pays at least
+one unit for every nonterminal step.
+
+\subsection{The certificate and its local checker}
+The certificate supplies a set $R\subseteq S$ containing $s_0$, closed under
+all positive-probability successors, and three rational vectors $h,v,u$ on
+$R$. The support need not be the smallest reachable set; it only has to be
+forward closed. Outside $R$, the serialized vectors contain no values.
+
+The checker verifies $h,v\geq0$, $0\leq u\leq1$, the terminal conditions
+\[
+ h(t)=v(t)=0,\qquad u(t)=g(t)\qquad(t\in R\cap T),
+\]
+and, for every $s\in R\setminus T$,
+\begin{align}
+ h(s)&=1+\sum_{t\in R}P_{st}h(t),\label{eq:h}\\
+ v(s)&=c(s)+\sum_{t\in R}P_{st}v(t),\label{eq:v}\\
+ u(s)&=\sum_{t\in R}P_{st}u(t).\label{eq:u}
+\end{align}
+All equalities are exact rational identities. The checker performs
+matrix--vector products; it does not call Gaussian elimination, compute
+strongly connected components, or trust a solver-supplied residual norm.
+
+\begin{theorem}[Properness and exact values]
+\label{thm:mc}
+If the positive checker accepts these data, then \eqref{eq:mc-goals} holds.
+Moreover the same claims hold from every state in $R$ with that state's
+certificate values.
+\end{theorem}
+\begin{proof}
+Forward closure ensures that a chain started in $R$ stays there. Extend the
+nonterminal indicator by zero on $T$. Iterating \eqref{eq:h} for a finite
+number $N$ of steps gives the exact identity
+\begin{equation}
+ h(s)=\sum_{k=0}^{N-1}\Prob_s(\tau>k)+\E_s[h(X_N)].
+ \label{eq:finite-h}
+\end{equation}
+The sum is $\E_s[\min(\tau,N)]$. Its terms and the residual are nonnegative.
+Letting $N$ increase shows $\E_s\tau\leq h(s)<\infty$, and hence
+$\Prob_s(\tau=\infty)=0$. One can avoid this first limit by observing directly
+that
+\[
+ (N+1)\Prob_s(\tau>N)
+ \leq \sum_{k=0}^{N}\Prob_s(\tau>k)
+ \leq h(s).
+\]
+Thus the survival probability tends to zero.
+
+Since $R$ is finite, $H=\max_{t\in R}h(t)$ is finite. The residual in
+\eqref{eq:finite-h} is at most $H\Prob_s(\tau>N)$, because $h$ vanishes
+on terminals. It tends to zero. Therefore the finite sums converge exactly to
+$h(s)$, proving the expected-time equality rather than only an upper bound.
+
+Similarly, iterating \eqref{eq:v} yields
+\[
+ v(s)=\E_s\sum_{k=0}^{N-1}c(X_k)+\E_s[v(X_N)].
+\]
+The residual is at most $V\Prob_s(\tau>N)$, where
+$V=\max_{t\in R}v(t)$. Terminal costs vanish and costs are nonnegative, so
+monotone convergence identifies the limit with the total pretermination cost.
+Its value is $v(s)$.
+
+Finally, \eqref{eq:u} also holds at terminals, because they are absorbing.
+Thus $u(s)=\E_s[u(X_N)]$ for every $N$. On $\{\tau\leq N\}$ this
+random variable equals $g(X_\tau)$; on its complement it lies in $[0,1]$.
+The complement's probability tends to zero, giving
+$u(s)=\E_s[g(X_\tau)]$. No assertion that an arbitrary harmonic solution is
+unique has been used without first proving properness.
+\end{proof}
+
+\subsection{A finite-horizon proof interface with explicit error bounds}
+The preceding proof offers a particularly small first Lean target. Let
+$\mu_N$ be the exact finite distribution after $N$ steps, defined recursively
+by $\mu_0=\delta_s$ and $\mu_{N+1}=\mu_NP$. Put
+\[
+ t_N=\sum_{x\notin T}\mu_N(x),\quad
+ C_N=\sum_{k=0}^{N-1}\sum_x\mu_k(x)c(x),\quad
+ G_N=\sum_{x\in T}\mu_N(x)g(x).
+\]
+The checker theorem can first establish, entirely through finite sums and
+induction on $N$,
+\begin{align}
+ t_N&\leq\frac{h(s)}{N+1},\label{eq:tail-bound}\\
+ 0\leq h(s)-\sum_{k=0}^{N-1}t_k
+       &\leq\frac{Hh(s)}{N+1},\label{eq:time-bound}\\
+ 0\leq v(s)-C_N&\leq\frac{Vh(s)}{N+1},\label{eq:cost-bound}\\
+ 0\leq u(s)-G_N&\leq\frac{h(s)}{N+1}.\label{eq:payoff-bound}
+\end{align}
+These are rational inequalities for each natural $N$, not numerical
+experiments. Terminal absorption makes $t_N$ nonincreasing; the exact finite
+identities then give the bounds as in the proof. In particular,
+$u(s)-G_N=\sum_{x\notin T}\mu_N(x)u(x)$, so its sign and bound are explicit.
+
+A formalization can prove these finite-sum identities before introducing an
+infinite path measure. It can then identify $t_N$ with the probability of a
+hitting-time event using the standard probability semantics, or use the
+sequences directly for a source language whose denotation is given as the
+limit of finite execution distributions. The latter interface still needs a
+source theorem; it must not call a finite-vector recurrence an operational
+probability statement without that link.
+
+The bounds are conservative. Geometric examples have exponentially decaying
+tails, whereas \eqref{eq:tail-bound} is only inverse-linear. Its advantages are
+that it follows from the same small certificate and makes every limiting step
+explicit. A later worker can certify geometric drift or multi-step
+contraction for sharper rates without changing the basic absorption checker.
+
+\subsection{Search: graph structure first, rational solving second}
+The algorithm first computes the states reachable from $s_0$ in the support
+graph, whose edges are exactly the entries $P_{st}>0$. It decomposes this graph
+into strongly connected components and looks for a reachable bottom component
+containing no terminal state. If one exists, search returns the negative
+certificate below. Unreachable traps are irrelevant to this query and are not
+allowed to spoil a positive answer.
+
+Otherwise let $U=R\setminus T$, let $Q=P_{U,U}$, and form
+\[
+ A=I-Q,
+ \qquad b_h=\one,
+ \qquad b_v=c|_U,
+ \qquad b_u(s)=\sum_{t\in T}P_{st}g(t).
+\]
+The search solves the three right-hand sides simultaneously:
+\begin{equation}
+ A\,[h\ v\ u]=[b_h\ b_v\ b_u].
+ \label{eq:matrix-solve}
+\end{equation}
+The prototype uses exact Gauss--Jordan elimination with rational pivots. It sets
+terminal values from the original input and returns the full vectors on $R$.
+The checker validates their signs and all original-model equations afresh.
+
+Why is $A$ invertible in the positive case? Every reachable nonterminal state
+has a support path to a terminal; otherwise its reachable subgraph would
+contain a nonterminal bottom component. Choose one such path from each state.
+Finiteness gives a common length bound $m$ and a positive minimum path
+probability $\delta$. Conditional on not having terminated, the chain has
+probability at least $\delta$ to terminate within the next $m$ steps. Hence
+\[
+ \Prob_s(\tau>km)\leq(1-\delta)^k.
+\]
+The transient matrix powers tend to zero, the series
+$\sum_{k\geq0}Q^k$ converges, and it is the inverse of $I-Q$. This also shows
+that absorption in a finite chain entails finite expected absorption time.
+The corresponding assertion is not automatic for infinite-state chains.
+
+A dense solve has $O(|U|^3)$ rational field-operation cost. Exact bit complexity
+can be much larger because intermediate numerators and denominators grow.
+The graph phase is linear in the explicit support graph, although the shipped
+matrix representation also scans zero entries. Replay uses $O(|R|^2)$ exact
+arithmetic operations in the dense representation and never factors or
+inverts a matrix.
+
+For larger instances, \code{fmpq_mat_solve} in FLINT is a concrete rational
+linear-algebra backend \cite{flint}; modular or fraction-free methods can
+replace the prototype solve without enlarging the checker. Storm is another
+candidate search backend for richer probabilistic models \cite{storm}. Its
+model export must preserve exact probabilities. In particular, Storm's
+explicit transition-file interface is documented as using floating input and
+not supporting the same exact mode as suitable symbolic-model inputs. Merely
+passing \code{--exact} through a wrapper is not a proof that the original
+probability model was retained.
+
+\subsection{Negative certificate: a reachable closed nonterminal class}
+A negative certificate is a nonempty set $C\subseteq S\setminus T$ and a
+finite path $s_0,s_1,\ldots,s_k$ ending in $C$. The checker verifies
+\begin{equation}
+ P_{s_i s_{i+1}}>0\quad(i<k),\qquad
+ P_{xy}>0\Longrightarrow y\in C\quad(x\in C).
+ \label{eq:trap}
+\end{equation}
+It returns the exact rational
+\[
+ \delta=\prod_{i=0}^{k-1}P_{s_i s_{i+1}}>0.
+\]
+For a path of length zero, this product is one. The checker need not verify
+that $C$ is strongly connected or minimal; closedness and nonterminality are
+sufficient. Those stronger properties help the search find a small object,
+but are not obligations of the certificate.
+
+\begin{theorem}[Closed-class refutation]
+\label{thm:trap}
+An accepted negative certificate proves
+$\Prob_{s_0}(\tau=\infty)\geq\delta>0$. Thus absorption is not almost sure.
+\end{theorem}
+\begin{proof}
+The specified finite path has probability $\delta$. After it enters $C$, the
+row-sum and closure conditions imply that all subsequent transitions stay in
+$C$ with probability one. Since $C$ contains no terminal, the chain never
+terminates on that event. A terminal cannot have appeared earlier on the path:
+it is absorbing and could not be left to reach $C$.
+\end{proof}
+
+Every negative instance of the finite-chain almost-sure question has such a
+certificate: some reachable bottom component is nonterminal. Together with
+Theorem~\ref{thm:mc}, this makes the search a decision procedure on the stated
+finite rational fragment, subject only to implementation resources. The
+checker handles an intentionally simpler object than the SCC algorithm used
+by search.
+
+The negative verdict alone does not imply that total expected \emph{cost} is
+infinite: a nonterminal closed class can have zero costs. It does imply that
+expected hitting time is infinite, because $\tau=\infty$ has positive
+probability. A source-level report must keep these two quantities separate.
+
+\subsection{Worked examples and adversarial distinctions}
+For a two-state chain with a retry state $r$ and successful terminal $t$, let
+\[
+ P=\begin{pmatrix}3/4&1/4\\0&1\end{pmatrix},
+ \qquad c(r)=3/2,
+ \qquad g(t)=1.
+\]
+The certificate is
+\[
+ h=(4,0),\qquad v=(6,0),\qquad u=(1,1).
+\]
+For example $4=1+(3/4)4$ and $6=3/2+(3/4)6$. The checker therefore proves
+almost-sure termination, expected time four, expected cost six, and terminal
+success probability one. The infinite sequence that remains at $r$ forever is
+still a syntactically possible path, but it has probability zero. Replacing
+the probabilistic choice by an antagonist that can choose the self-loop makes
+universal eventual termination false. This example is shared with the game
+demonstration precisely to expose the difference in quantifiers.
+
+Now let a start state go to a successful terminal with probability $2/3$ and
+to a nonterminal absorbing state with probability $1/3$. The singleton trap
+and the one-edge path to it certify nontermination probability at least
+$1/3$. No linear solve is needed. Changing that edge to probability zero must
+invalidate the path certificate, even if the same vertices remain in the
+serialized model.
+
+A very small positive exit probability can also have a very large expected
+waiting time. For exit probability $1/2^{40}$, the exact expected time is
+$2^{40}$. A tolerance that rounds the exit probability to zero changes an
+almost-surely terminating chain into a nonterminating one. Conversely,
+rounding a truly zero edge upward can erase a trap. The exact input and exact
+residual discipline address this semantic discontinuity; floating residual
+size alone does not.
+
+\subsection{Extensions that require additional certificates}
+For a Markov decision process, graph SCCs must be replaced by the relevant
+end-component analysis, and a policy becomes part of the certificate. A
+properness equation for \emph{one} policy proves neither almost-sure
+termination under every policy nor an optimum among policies. One concrete
+sufficient certificate for a universal time bound is a potential satisfying
+\[
+ h(s)\geq1+\sum_tP(s,a,t)h(t)
+\]
+for every enabled action at every nonterminal state. Exact optimal values need
+Bellman inequalities for all alternatives and an attaining policy, together
+with the appropriate properness conditions. These are specific next steps,
+not claims that the present chain solver handles nondeterministic scheduling.
+
+Similarly, exact reachability probabilities in a chain that is not almost
+surely absorbed in the original $T$ can be reduced by making nonterminal bottom
+classes explicit failure terminals. That reduction preserves the reachability
+event but not the original expected hitting time or total running cost. A
+future adapter must state which quantity it preserves. The current negative
+result deliberately returns only its proved lower bound rather than making an
+unchecked reduction or overstating the available value information.

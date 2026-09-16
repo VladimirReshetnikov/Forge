@@ -1,0 +1,148 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\definecolor{ink}{HTML}{18354A}
+\definecolor{muted}{HTML}{52636F}
+\definecolor{papergray}{HTML}{F3F5F6}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,
+  pdftitle={Forge Beyond Finite Horizons},
+  pdfauthor={OpenAI},
+  pdfsubject={Pushdown summaries, recurrent strategies, and exact probabilistic termination for Lean}}
+\urlstyle{same}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily Forge / Infinite-horizon workers}
+\fancyhead[R]{\small\sffamily Research proposal}
+\fancyfoot[L]{\small\sffamily 15 September 2026}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parskip}{0.34em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\setcounter{tocdepth}{2}
+\setlist{itemsep=0.15em,topsep=0.35em,leftmargin=1.5em}
+\lstset{basicstyle=\small\ttfamily,columns=fullflexible,keepspaces=true,
+  breaklines=true,breakatwhitespace=false,showstringspaces=false,
+  backgroundcolor=\color{papergray},frame=single,rulecolor=\color{papergray},
+  xleftmargin=0.3em,xrightmargin=0.3em,framesep=0.5em,aboveskip=0.8em,belowskip=0.8em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\forge}{\texttt{forge}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\Attr}{\operatorname{Attr}}
+\newcommand{\Post}{\operatorname{Post}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Reach}{\operatorname{Reach}}
+\newcommand{\GF}{\mathsf{GF}}
+\newcommand{\FG}{\mathsf{FG}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\status}[1]{\par\smallskip\noindent\textbf{Evidence status.} #1\par\smallskip}
+\begin{document}
+\begin{titlepage}
+\vspace*{0.35in}
+{\sffamily\color{muted}\large FORGE DEVELOPMENT PROPOSAL\par}
+\vspace{0.35in}
+{\sffamily\bfseries\color{ink}\fontsize{32}{37}\selectfont Forge Beyond\par Finite Horizons\par}
+\vspace{0.28in}
+{\sffamily\Large Unbounded-stack summaries, recurrent strategies,\par and exact probabilistic termination\par}
+\vspace{0.42in}
+{\large Concrete algorithms, dual certificates, source bridges,\par and a reproducible Python implementation\par}
+\vspace{0.4in}
+{\sffamily Prepared for Vladimir Reshetnikov\par
+15 September 2026\par}
+\vfill
+\begin{minipage}{0.95\textwidth}
+\hrule\vspace{0.15in}
+\textbf{Scope.} An additive proposal against Forge commit
+\code{c98e47c5f804}. It does not repeat the existing proof planner,
+invariant-closure portfolio, nonlinear workers, or verification architecture.
+
+\textbf{Executed.} Three search engines; separate replay code; 36 unit tests;
+22,100 exhaustive small game arenas; 28,566 stored certificate records.
+
+\textbf{Not executed.} Lean elaboration, Lean checker soundness, source-to-model
+reification, and comparisons with existing tactics. This package does not install
+an implemented Lean tactic.
+\vspace{0.15in}\hrule
+\end{minipage}
+\end{titlepage}
+\pagenumbering{roman}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+Forge already proposes a substantial collection of structural, algebraic, and
+finite-closure workers. The next useful contribution should therefore be a new
+class of obligations, rather than another description of its controller. This
+article develops three such classes: reachability and safety of systems with an
+unbounded stack; synthesis of a strategy that meets an obligation infinitely
+often against an adversary; and exact absorption probabilities and expected
+costs of rational finite-state probabilistic programs.
+
+Each class receives an explicit finite certificate language, a positive and a
+negative outcome, a terminating search algorithm on a stated fragment, and a
+separate replay computation. Pushdown reachability uses productive pop-summary
+DAGs, while nonreachability uses closed exclusion relations. B\"uchi games use
+positional policies with either a rank that resets at accepting vertices or a
+co-B\"uchi rank that bounds the total number of accepting visits. Markov chains
+use exact Bellman residuals together with a properness potential; a positive
+path into a closed nonterminal class certifies failure of almost-sure
+termination. The mathematical kernels are classical. The contribution is their
+precise packaging as new Forge capabilities, including source bridges that
+preserve stack suffixes, ownership and temporal progress, or probability mass.
+
+A dependency-free Python package implements all three workers. Its experiments
+include 881 pushdown cases, 22,300 game arenas, and 770 Markov chains. All 28,566
+stored certificate records replay without importing a search module. The game
+suite exhausts every total arena with at most three vertices, every ownership
+map, and every accepting set. A 31-node pushdown certificate describes a run of
+$2,147,483,647$ steps without expanding it. These are prototype results, not Lean
+proofs or evidence of an advantage over another tactic. The article gives
+soundness arguments, concrete Lean module contracts, implementation priorities,
+and explicit acceptance gates for closing that remaining gap.
+
+\section*{How to read this package}
+The mathematical proposal is in Sections~\ref{sec:delta}--\ref{sec:bridges}.
+Implementation contracts and libraries follow in Section~\ref{sec:implementation}.
+The measurements and their units are in Section~\ref{sec:experiments}.
+Appendices describe the wire format and reproduction commands. The accompanying
+Python files, rather than pseudocode in this article, are the executable
+reference. Read \code{results/summary.json} for the machine-readable evidence
+and \code{docs/STATUS.md} before interpreting any result as a formal proof.
+\clearpage
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\input{sections/01-delta}
+\input{sections/02-pushdown}
+\input{sections/03-games}
+\input{sections/04-markov}
+\input{sections/05-bridges}
+\input{sections/06-implementation}
+\input{sections/07-experiments}
+\input{sections/08-roadmap}
+\appendix
+\input{sections/09-appendices}
+\input{references}
+\end{document}

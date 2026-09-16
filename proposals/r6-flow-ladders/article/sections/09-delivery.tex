@@ -1,0 +1,105 @@
+\section{Implementation sequence and acceptance gates}
+\label{sec:gates}
+
+The most useful first delivery to the repository is the scalar proof path, not a large collection of uncompiled interfaces. Its mathematics is short and it already handles the strongest worked examples.
+
+\textbf{Gate 1: analytic foundation.} Compile a proof of the scalar cofactor rule and the derivative and anchor semantics for a simple exponential-polynomial representation. The acceptance test is the four-step certificate for \eqref{eq:symmetric}, proved about the original Lean expression. A theorem merely about a list of coefficients does not close this gate.
+
+\textbf{Gate 2: source-bound replay.} Implement the restricted reifier, the exact ladder checker, and the equality bridge. Replay all 196 positive records from externally supplied original goals. Mutate source rate, coefficient, scalar argument, domain, and cofactor separately. A passing reflected check without a proved source equality does not close this gate.
+
+\textbf{Gate 3: coupled residuals.} Formalize the constant-matrix positive-system theorem and check the 40 paired residual inputs. A pair of circular assumptions does not close this gate; the vector theorem must be the source of the simultaneous conclusion.
+
+\textbf{Gate 4: exact enclosures.} Formalize rational interval operations and Lemma~\ref{lem:exp-bound}; verify all 44 point certificates against their original expressions. Floating-point agreement or a Decimal oracle is not a substitute for this proof.
+
+\textbf{Gate 5: roots and existential specifications.} Reconstruct the 16 root certificates as existence-and-uniqueness theorems on their stated intervals. Include the two separate brackets for $e^x=3x$ and an endpoint-root rejection. A rational approximation of a root does not close this gate.
+
+\textbf{Gate 6: diagnostics and optimization.} Formalize the exchange and minimum theorems if grammar-negative or optimality claims are to be exposed as checked results. Positive theorem acceptance does not depend on this milestone. After the earlier gates, perform the controlled Lean corpus comparison described above.
+
+These gates are acceptance conditions, not time estimates. They name the exact theorem or integration artifact that is still missing and prevent a nearby easier result from being presented as completion.
+
+\section{Reproduction and package guide}
+\label{sec:reproduce}
+
+\subsection{Files}
+
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+article/forge-flow.tex       main LaTeX source
+article/sections/            mathematical and implementation chapters
+article/references.tex       source bibliography
+article/forge-flow.pdf       compiled article
+prototype/forge_flow/        exact model, compiler, checkers, witnesses
+prototype/corpus.py          deterministic fixture generators
+prototype/run_experiments.py experiment and mutation runner
+prototype/replay.py          search-free replay entry point
+prototype/oracle.py          optional independent finite diagnostics
+prototype/tests/             unit and regression tests
+results/accepted/            original accepted certificate run
+results/oracle-results.json  exhaustive and symbolic cross-check counts
+results/unit-tests.log       recorded unit-test output
+lean/FlowTargets.lean        unproved acceptance-target propositions
+lean/README.md               exact scope of the Lean artifact
+docs/                       provenance, status, history, integration notes
+README.md                   commands and entry points
+reproduce.sh                standard-library reproduction script
+build_article.sh            pdfLaTeX build script
+LICENSE                     terms for the new original material
+\end{lstlisting}
+\end{minipage}\par
+
+\subsection{Commands}
+
+The core package has no third-party dependency. From its root:
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+./reproduce.sh
+\end{lstlisting}
+\end{minipage}\par
+This runs the unit suite, replays the accepted records without site packages, creates a fresh \code{reproduced-results} directory, generates the corpus there, and replays it. Reusing an already existing output directory is an error, preserving the distinction between accepted and newly generated evidence.
+
+The optional oracle can be run with SymPy available:
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+cd prototype
+python oracle.py --out ../oracle-reproduced.json
+\end{lstlisting}
+\end{minipage}\par
+Without SymPy it records that part as not run while retaining the other diagnostics. Do not run the test scripts with Python's assertion-eliminating optimization option. The acceptance checker functions themselves return Booleans; the experiment harness intentionally uses assertions to stop on disagreement.
+
+To compile the article:
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+./build_article.sh
+\end{lstlisting}
+\end{minipage}\par
+The source uses pdfLaTeX and standard TeX packages, without shell escape, external bibliography tooling, or bundled fonts. All URLs in the bibliography identify sources inspected for this proposal; third-party code and papers are not redistributed in the archive.
+
+\subsection{Small direct API example}
+
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[language=Python]
+from forge_flow.model import ExpPoly
+from forge_flow.search import optimal_ladder
+from forge_flow.check import check_ladder, check_minimality
+
+# exp(2*x) - (2 + x*x)*exp(x) + 1
+f = ExpPoly.make({0: [1], 1: [-2, 0, -1], 2: [1]})
+result = optimal_ladder(f)
+assert result["status"] == "certificate"
+assert check_ladder(f.problem(), result["certificate"])
+assert check_minimality(f.problem(), result["certificate"],
+                        result["minimality"])
+print(result["certificate"]["cofactors"])
+# [[1, 1], [1, 1], [1, 1], [2, 1]]
+\end{lstlisting}
+\end{minipage}\par
+
+Each cofactor is a reduced integer pair representing a rational number. The direct API expects integers or \code{Fraction} coefficients, not floating-point approximations or arbitrary computer-algebra scalar classes. A development display script initially supplied a SymPy scalar and was rejected by this boundary; converting the already exact value to a standard-library rational fixed that script. No mathematical checker condition was weakened.
+
+\section{Conclusion}
+
+Forge can acquire a substantial analytic capability without becoming a general-purpose transcendental solver. The proposed lane has a narrow, explicit representation; a short analytic soundness theorem; an exact compiler whose feasibility and minimum-length behavior are proved for its certificate grammar; a vector extension for coupled residuals; and separate numerical certificates for counterexamples and root existence.
+
+The strongest result is not simply that a bounded search found several inequalities. It is that the apparent cofactor-order search has a canonical solution, and the remaining shortest-certificate problem reduces to a monotone choice of one integer. That observation turns a potentially exponential exploratory worker into a predictable exact compiler for a useful fragment.
+
+The delivered code establishes that these algorithms execute and their stored certificates replay under the stated tests. The mathematical proofs explain what the certificates mean. A verified Lean source bridge and checker are the remaining steps that would turn this research lane into accepted Forge proofs. Keeping those three levels distinct makes the proposal usable: the next implementer receives algorithms, data, proofs, failure controls, and explicit gates rather than another architecture sketch.

@@ -1,0 +1,173 @@
+\section{The source bridges are the integration, not a footnote}
+\label{sec:bridges}
+
+\subsection{A checked finite model is not yet a proof of the original goal}
+Forge's existing design already separates source identity, search guidance,
+certificate acceptance, and theorem authority \cite{forge-leant}. Those
+mechanisms should be reused, not redesigned here. The new obligation is more
+specific: each worker has a different \emph{semantic direction} and therefore
+needs a different translation theorem.
+
+The initial implementation should take an explicit model and a proved bridge.
+Only after this route works should a reifier infer the model from arbitrary
+Lean definitions. That order gives an end-to-end theorem sooner and prevents
+an attractive front-end demo from concealing an unproved encoding.
+A useful worker result is thus conceptually a dependent pair
+\[
+   \bigl(\text{model certificate},\ \text{proof of the model proposition}\bigr),
+\]
+which is then consumed by the source bridge. The model proposition is not
+allowed to change when proof search is inconvenient.
+
+\subsection{Reachability: forward simulation and witness lifting differ}
+Let $\mathcal C$ be a source transition system, let $\mathcal A$ be the
+pushdown model, and let $\mathcal R(c,a)$ relate source and abstract
+configurations. To transfer an abstract safety result, it is sufficient to
+prove an initial relation, preservation of the relation along every source
+step by a finite abstract run, and a target mapping
+\[
+ \operatorname{Bad}_{\mathcal C}(c)\wedge\mathcal R(c,a)
+ \Longrightarrow\operatorname{Target}_{\mathcal A}(a).
+\]
+An abstract nonreachability theorem then rules out a source error. Abstract
+behavior may be an over-approximation; extra abstract paths weaken the ability
+to prove safety but do not invalidate a proved safety result.
+
+A positive abstract run is different. It requires a lifting theorem that
+constructs a related source run, or an exact operational correspondence. A
+spurious abstract path cannot establish a source witness. A practical first
+adapter should use an equivalence of the two reachability propositions, with
+both directions proved once for its recognized syntax.
+
+For regular stack targets, the target DFA is also part of the bridge. The
+compiler theorem must connect \emph{the original stack predicate} to the DFA
+language, then to the monitor phase, then to the empty-stack query. A proof that
+the compiled automaton empties its stack does not by itself identify what that
+stack meant in the source program. Top-first order and the fresh bottom symbol
+must occur in the theorem, not only in a comment in the exporter.
+
+\subsection{Games need alternating, ownership-aware refinement}
+A forward simulation of unlabelled graphs is not sufficient for strategy
+synthesis. The source may distinguish actions the program controls from
+outcomes controlled by an environment. At a source state $x$, an abstract
+protagonist move must have a legal \emph{uniformly realizable} implementation;
+every possible environment outcome of that implementation must be accounted
+for.
+
+A precise first interface uses a turn-based source arena with an abstraction
+$\alpha:X\to V$. For a positive policy $\sigma$ on $W$, require a source
+invariant $I$, the initial condition $I(x_0)$ and $\alpha(x_0)\in W$, and the
+following obligations:
+\begin{enumerate}
+\item Ownership is preserved. At a protagonist state satisfying $I$, a
+  checked realizer chooses a legal source successor mapping to
+  $\sigma(\alpha(x))$ and preserving $I$.
+\item At an antagonist state satisfying $I$, \emph{every} legal source
+  successor preserves $I$ and maps to a successor of $\alpha(x)$ in the
+  original abstract arena.
+\item Abstract acceptance implies source acceptance:
+  $I(x)\wedge\alpha(x)\in B\Rightarrow B_{\rm src}(x)$.
+  Source plays are infinite under the relevant strategy, or the source's
+  treatment of termination is explicitly reflected in the arena.
+\end{enumerate}
+Under these conditions the abstract policy lifts to a source policy, every
+consistent source play maps stepwise to a consistent abstract play, and
+Theorem~\ref{thm:buchi-rank} transfers. The realizer is a typed function whose
+correctness is quantified over all source states satisfying $I$, not a lookup
+that was tested on one representative of each abstract block.
+
+When a source action has several possible outcomes, selecting the action is
+not the same as selecting an outcome. A concrete encoding inserts an
+intermediate antagonist-owned action vertex: the protagonist chooses the
+vertex for the action, then the antagonist chooses its outcome. Labels on
+these intermediate vertices and the two-step-to-one-step correspondence must
+be fixed in the bridge. Simply turning every possible action outcome into a
+protagonist edge would overstate the program's power.
+
+A negative game certificate reverses the controlled side. To conclude that
+\emph{no source strategy} succeeds, the abstract antagonist policy must lift,
+all protagonist choices must be represented, and source accepting visits must
+imply the relevant abstract accepting visits. The positive label implication
+alone is not enough for this direction. The implementation should expose
+separate positive and negative bridge types rather than a single vaguely named
+``simulation'' field.
+
+\subsection{Stuttering can destroy liveness even when it preserves safety}
+Suppose the abstract system takes $a\to b$, with $b$ accepting forever. Suppose
+the source can perform infinitely many internal steps that all abstract to
+$a$. A weak simulation that ignores internal steps may still relate every
+finite source prefix to the abstract initial prefix. It does not establish
+that the source ever reaches an accepting state.
+
+There are two suitable first implementations. The simpler one requires each
+source step to map to an abstract step, as above. The more flexible one allows
+stuttering only when supplied with a well-founded rank that strictly decreases
+during internal steps and is reset only when an abstract step occurs. An
+infinite source play must then contain infinitely many abstract steps. If
+acceptance transfer is also aligned with those steps, abstract B\"uchi
+recurrence implies source recurrence. This use of a stuttering rank complements
+the new reset-at-acceptance rank; the two ranks certify different things.
+
+Quantitative recurrence-gap bounds do not transfer through this more flexible
+bridge without a bound on the number or duration of internal steps. Qualitative
+liveness and bounded response time should remain distinct result types.
+
+\subsection{Probability requires exact pushforward, not support simulation}
+Let a source probabilistic program have transition distribution $K(x)$ and let
+$\alpha:X\to S$ map source states to the finite chain. A sufficient exact
+quotient condition is
+\begin{equation}
+ \alpha_*K(x)=P_{\alpha(x),\cdot}
+ \qquad\text{for every source state satisfying the invariant.}
+ \label{eq:lumpability}
+\end{equation}
+Also require invariant preservation with probability one, the initial-state
+mapping, and exact correspondence of terminals, running costs, and terminal
+payoffs:
+\begin{align*}
+ x\in T_{\rm src}&\Longleftrightarrow\alpha(x)\in T,\\
+ c_{\rm src}(x)&=c(\alpha(x)),\\
+ g_{\rm src}(x)&=g(\alpha(x))\quad(x\in T_{\rm src}).
+\end{align*}
+Induction on finite horizons then equates the abstract distributions with the
+pushforwards of the source distributions. The finite-horizon identities and
+limits from Section~\ref{sec:markov} transfer to the source.
+
+This is a strong but useful condition: the source state space can be infinite
+provided the finite quotient is exact. It is not enough that source and
+abstract transitions have the same possible endpoints. Two source states with
+exit probabilities $1/4$ and $1/2$ cannot generally be merged into one abstract
+state with a single transition row. An average row has no justification merely
+because it falls between the two probabilities. Formula~\eqref{eq:lumpability}
+asks for mass equality for every abstract block, not an empirical average.
+
+Mathlib's probability mass functions and probability kernels provide the
+appropriate semantic objects \cite{mathlib-pmf,mathlib-kernel}. For discrete
+source programs, the intended equation is a distribution-map equality; for a
+measure-theoretic kernel it is the corresponding pushforward equality. The
+finite rational matrix must be linked to that object with proofs of
+nonnegativity and unit mass. No claim is made that importing the probability
+library supplies this application-specific quotient theorem automatically.
+
+\subsection{What to borrow from Leant and Djex, without repeating their work}
+Leant and Djex already preserve source-owned typed candidates, universe and
+binder selections, and scoped provider evidence, and Leant re-elaborates
+candidate terms \cite{leant,djex}. The new use is to ask their synthesis layer
+for the \emph{realizer} or \emph{policy implementation} demanded by an accepted
+behavioral certificate.
+
+For example, the game solver can propose a finite abstract policy while the
+typed synthesizer builds a source action-selection function from available
+providers. Forge then proves the universal realization and refinement
+conditions. A syntactically different function of the same type is not an
+acceptable substitute if its behavior differs. Conversely, a well-typed source
+function does not receive the temporal theorem merely because its finite
+observations agree with the policy on a sample.
+
+The semantic proof belongs to the exact retained candidate, with its lexical
+providers and dictionaries. This is an application of the neighboring
+projects' existing ownership discipline, not a new discipline claimed by this
+article. It also does not resolve their separate open Church-encoding or
+higher-universe synthesis cases. The proposed integration adds temporal
+contracts to selected typed candidates; it does not assert a complete
+higher-order program synthesizer.

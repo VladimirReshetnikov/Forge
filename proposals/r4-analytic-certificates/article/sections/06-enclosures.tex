@@ -1,0 +1,124 @@
+\section{Exact initial values and bounded-domain coverage}
+\label{sec:enclosures}
+
+\subsection{Rational bounds for an exponential}
+
+The origin case is rational and should stay purely symbolic. For other rational
+anchors, a small enclosure procedure is sufficient. Let $z\in\Q$ and choose
+$s\ge0$ so that $r=|z|/2^s\le1/2$. For an integer $n\ge1$, set
+\[
+ S_n(r)=\sum_{k=0}^{n}\frac{r^k}{k!},\qquad
+ T_n(r)=\frac{r^{n+1}}{(n+1)!}
+             \frac{1}{1-r/(n+2)}.
+\]
+All denominators are strictly positive. The successive terms of the tail
+starting at degree $n+1$ have ratios at most $r/(n+2)$, so
+\begin{equation}
+ S_n(r)\le e^r\le S_n(r)+T_n(r).
+ \label{eq:exp-bounds}
+\end{equation}
+For $z<0$, invert this interval before the repeated squaring:
+\[
+ \frac{1}{S_n+T_n}\le e^{-r}\le\frac{1}{S_n}.
+\]
+Squaring a nonnegative interval is monotone. Repeating it $s$ times produces
+bounds on $e^z$.
+
+The implementation rounds lower endpoints down and upper endpoints up to a
+fixed dyadic grid after arithmetic stages. If the denominator is $2^b$, the
+rounding operations are exact integer floor and ceiling operations, not
+floating-point conversions. Repeated squaring of a very small interval can
+therefore produce a lower endpoint zero; this loses precision but remains
+sound. It never converts an uncertain lower sign into a positive claim.
+
+\subsection{Normalising an entire point evaluation}
+
+Direct evaluation at a large positive anchor can create enormous intermediate
+numbers even when the sign is easy. First evaluate every polynomial block
+$P_\lambda(a)$ exactly, deleting zero values, and choose
+\[
+ M=\max_{P_\lambda(a)\ne0}(\lambda a).
+\]
+Then
+\begin{equation}
+ f(a)=e^M\sum_\lambda P_\lambda(a)e^{\lambda a-M}.
+ \label{eq:normalised-evaluation}
+\end{equation}
+Every remaining exponential argument is nonpositive. The normalised sum has
+the same sign as the original value and avoids computing an enormous common
+positive scale. Its enclosure is what the receipt records.
+
+This distinction matters when reading the JSON: the recorded lower and upper
+numbers at a nonzero anchor bound a \emph{positively normalised} value, not
+necessarily $f(a)$ itself. The checker recomputes that same mathematical
+normalisation. An integration layer which exports those numbers as bounds on
+$f(a)$ without multiplying by the common factor would be wrong.
+
+When the normalised coefficients cancel exactly before enclosure, the result
+is exact. When the enclosure straddles zero, the producer returns unknown at
+its current precision. The prototype does not use a decimal tolerance, a
+``nearly zero'' test, or an oracle's numerical sign as a proof.
+
+\subsection{A reference interval cover, not a new interval tactic}
+
+For experiments combining compact and unbounded domains, the archive includes
+a simple natural-interval worker. It evaluates polynomial blocks by interval
+Horner arithmetic, bounds each exponential using monotonicity and
+\eqref{eq:exp-bounds}, sums the resulting intervals, and bisects when the lower
+bound is negative.
+
+Each leaf records its rational endpoints and its recomputed enclosure. An
+internal node records a rational split point and two child nodes. The checker
+requires that the split lie strictly inside the parent's interval and that the
+children cover exactly its left and right pieces. A collection of individually
+valid positive boxes is insufficient without this coverage proof.
+
+Normalisation on an interval uses one common positive constant for the
+\emph{whole leaf}. The chosen scale bounds every rate times every point in the
+leaf, so the remaining exponential arguments are nonpositive. Normalising each
+summand by a different factor would alter their relative magnitudes and would
+be unsound. The implementation comments call out this specific failure mode.
+
+This cover is deliberately not presented as a contribution competing with
+Forge's existing polynomial Bernstein worker or with Lean interval libraries.
+Its purpose is to exercise the new analytic interface, certify finite patches,
+and retain exact counterpoints. Production should reuse proved interval
+infrastructure rather than adopting a second unverified interval stack.
+
+\subsection{Why subdivision cannot replace the ladder}
+
+For $f(x)=e^x-1-x$ on $[0,h]$, natural interval evaluation contains the range
+\[
+ [1,e^h]-1-[0,h]=[-h,e^h-1].
+\]
+Every $h>0$ gives a negative lower endpoint, even though $f$ is nonnegative.
+Splitting the interval leaves a first piece containing zero, and the same
+obstruction persists. The problem is lost correlation between $e^x$ and $x$,
+not insufficient effort on a remote part of the domain.
+
+The differential ladder establishes the exact second-order contact at the
+endpoint with rational initial values. This comparison is not a claim that
+all sophisticated Taylor-model or symbolic interval methods must fail; a
+method which explicitly factors the contact or uses the same derivative
+information can succeed. It is a precise explanation of why this delivered
+natural-interval worker returns unknown while the ladder succeeds.
+
+Conversely, interval subdivision certifies strictly positive patches of
+functions whose native ladder fails. In the experiment, the four instances
+of $f_\varepsilon$ on $[0,2]$ use respectively 14, 21, 31, and 66 leaves as
+$\varepsilon$ decreases through $1,1/2,1/4,1/16$. The proof obligations are
+bounded-domain statements, unlike the auxiliary ladders' whole-ray statements.
+Their counts must not be compared as though the workers solved the same goal.
+
+\subsection{Negative points are useful, but have a different type}
+
+A failed enclosure is not a counterexample. The worker records a rational
+counterpoint only when a point enclosure has \emph{strictly negative upper
+bound}. For $e^x-2$ on $[0,1]$, it finds such a point and the independent replay
+checks its membership in the original interval and the negative upper bound.
+
+A counterpoint receipt answers a refutation request. It does not make a
+nonnegativity goal successful. Likewise a tail with negative eventual sign
+provides valuable information about an impossible requested positive tail, but
+its logical polarity must remain explicit. The JSON goal type and
+\code{verify_goal} enforce these distinctions.

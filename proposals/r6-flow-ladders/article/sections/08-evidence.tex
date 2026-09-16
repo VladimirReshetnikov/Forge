@@ -1,0 +1,114 @@
+\section{Executed evidence and its limits}
+\label{sec:evidence}
+
+\subsection{Environment and record locations}
+
+The accepted run used Python 3.13.5 on Linux x86-64. All proof-producing and replay decisions use \code{fractions.Fraction}; floating-point numbers appear only in elapsed-time measurements. The rational library represents numerator and denominator exactly~\cite{fractions}. No Lean or Lake executable was available in this environment, and no Lean compilation, axiom audit, or comparison with a Lean tactic was performed.
+
+The full problem and certificate records are in \code{results/accepted/certificates.json}; the environment, counts, mutation totals, and timings are in \code{results/accepted/summary.json}. Every record retains its lane and original problem. Re-running the generator requires a new output directory so that it does not silently overwrite the accepted record.
+
+The principal corpus is deterministic and intentionally structured. It is a functionality corpus built for this new fragment, not a representative sample of Mathlib. Its parameterized families were chosen to test exact cancellation, negative rates, nontrivial ordering, terminal compression, and the distinction between theorem truth and language membership.
+
+\subsection{Results by logical output}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\textwidth}{@{}Xrr@{}}
+\toprule
+Lane and expected outcome & Cases & Correct recorded outcomes\\
+\midrule
+Nonnegative exponential-polynomial ladders & 196 & 196\\
+Coupled positive-system certificates & 40 & 40\\
+Negative rational-point certificates & 44 & 44\\
+True functions outside the ladder grammar & 8 & 8\\
+Unique roots in supplied rational brackets & 16 & 16\\
+\bottomrule
+\end{tabularx}
+\caption{The fourth row is a checked grammar rejection of true functions, not a theorem refutation. The counts are different kinds of evidence and are not a Lean success rate.}
+\end{table}
+
+The 196 positive cases comprise 64 positive-exponential Taylor remainders, 64 alternating negative-exponential remainders, 48 binomial majorants, and 20 scaled special examples. The four scales are $1/3,1,3/2,2$. The 40 system cases are two-component hyperbolic truncation systems. The 44 false cases combine twelve exaggerated tangent lower bounds with 32 reversed Taylor inequalities. The eight grammar controls are \eqref{eq:outside}. The sixteen root cases are described in Section~\ref{sec:roots}.
+
+Each positive record was checked through the sparse ladder verifier and the minimum-receipt verifier. The canonical and breadth-first solutions were also obtained on the same inputs, with the latter serving as an independent algorithmic cross-check of length. All breadth-first searches here fit inside the configured 50,000-state budget.
+
+\subsection{The cofactor-order and compression ablation}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\textwidth}{@{}Xr@{}}
+\toprule
+Measurement on the same 196 positive problems & Result\\
+\midrule
+Increasing-order feasibility successes & 196\\
+Decreasing-order feasibility successes & 188\\
+Inputs strictly shortened by the optimal compiler & 124\\
+Total steps in increasing-order, early-stopping certificates & 1,212\\
+Total steps in minimum certificates & 288\\
+Reduction in total cofactor steps & 76.24\%\\
+\bottomrule
+\end{tabularx}
+\caption{This is an ablation of Python certificate algorithms, not a comparison with \code{grind}.}
+\label{tab:ablation}
+\end{table}
+
+The numerator in the percentage is $1212-288=924$. The denominator is the total initial cofactor count on the same inputs. It is not the number of theorem statements, bytes, CPU seconds, or Lean kernel reductions. Many Taylor-family improvements have the same algebraic explanation, so the result should not be described as 124 independently discovered proof strategies.
+
+The accepted suite's recorded elapsed time was approximately 1.15 seconds in this environment, including its searches, checks, and mutations. That is a single aggregate observation on this small corpus. It is not a throughput guarantee, a controlled microbenchmark, or an estimate of an eventual Lean implementation. Per-input timings are retained for inspection rather than used to assert a speedup.
+
+\subsection{Targeted invalid certificates}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\textwidth}{@{}Xrr@{}}
+\toprule
+Mutation family & Attempted & Rejected\\
+\midrule
+Increase one ladder anchor by exactly $1$ & 484 & 484\\
+Increase one system anchor by exactly $1$ & 80 & 80\\
+Increase a reported negative-point upper bound by $1$ & 44 & 44\\
+Reverse the root certificate's direction & 16 & 16\\
+\midrule
+Total targeted invalid mutations & 624 & 624\\
+\bottomrule
+\end{tabularx}
+\caption{Each mutation is intentionally invalid under the exact receipt format. This is not an exhaustive adversarial-input test.}
+\end{table}
+
+Increasing an anchor can preserve its nonnegative sign, so rejection demonstrates that the checker enforces equality to the recomputed value, not merely positivity of whatever the producer wrote. Similarly, the point checker recomputes the enclosure rather than trusting its sign. A changed direction cannot reuse unchanged endpoint or derivative receipts.
+
+The unit suite adds 22 test methods covering reduced rational encoding, Boolean and float rejection at rational inputs, duplicate modes, wrong anchors and domains, terminal corruption, external target substitution, false minimality receipts, budget preservation, negative off-diagonal matrix entries, interval edge cases, malformed certificates, and invalid coverage. Those 22 methods include multiple assertions and a 120-case random comparison; the number of test methods is not another count of proved theorems.
+
+\subsection{Independent finite checks}
+
+The optional \code{oracle.py} script uses seed 20260915 and generates 200 small exponential polynomials with rates drawn from $\{-1,0,1\}$, degree at most one per mode, and coefficients in $\{-3,\ldots,3\}$. It performs the following distinct comparisons:
+
+\begin{enumerate}
+\item Enumerate every distinct full-annihilator permutation and compare the existence of a valid anchor chain with canonical increasing-order feasibility.
+\item Compare the optimal compiler with exhaustive-grid breadth-first search, including the accepted minimum length.
+\item Compare dense symbolic derivatives with SymPy 1.14.0, then compare the separate sparse derivative implementation with the same exact normal forms.
+\end{enumerate}
+
+All 200 cases passed each comparison. The exhaustive permutation check shares the dense transition arithmetic with discovery, so it is an independent \emph{search strategy}, not an independent arithmetic implementation. The SymPy comparison is the additional arithmetic cross-check. These tests support the implementation; the general conclusions about ordering and optimality rest on the proofs in Section~\ref{sec:optimal}.
+
+A further 161 rational arguments $k/8$, $-80\le k\le80$, were checked against Python Decimal exponentiation at 100-digit working precision. The values lay in the computed rational enclosures. This is numerical sanity evidence only. A finite-precision exponential computation is not the authority for Lemma~\ref{lem:exp-bound}, and its successful comparison does not establish a formal error bound for every argument.
+
+The oracle summary is stored in \code{results/oracle-results.json}. The optional SymPy dependency is not used by any acceptance checker or by the standard-library experiment run.
+
+\subsection{Replay without discovery or site packages}
+
+The stored certificates replay under
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+cd prototype
+python -S replay.py
+\end{lstlisting}
+\end{minipage}\par
+The replay script imports the sparse algebra checker and the enclosure checker, but not the dense model, search module, witness proposer, corpus generator, or SymPy. It reports 196 positive, 40 system, 44 point, 8 obstruction, and 16 root records accepted, with discovery modules absent from the loaded module inventory.
+
+There are still two different separation levels. The scalar and vector algebra is recomputed through a separate sparse representation. The numerical interval proposer and its checker share the same enclosure implementation. The latter replay demonstrates independence from point and bracket \emph{search}, not independence of the numerical kernel. A formally verified Lean enclosure theorem is the required next step, not an extra label saying ``independent'' on the current Python function.
+
+\subsection{What remains unmeasured}
+
+No head-to-head test against \code{grind}, \code{nlinarith}, \code{positivity}, Aesop, or external analytic provers was run. Existing tactics may already solve some examples after suitable lemmas or preprocessing; no opposite claim is made. The observed gain is a new executed certificate mechanism relative to the reviewed Forge design, with a proved compiler result and concrete examples.
+
+A future comparison should separate raw source goals from goals supplied with analytic lemmas, use the same exact Lean and Mathlib versions, include false and out-of-grammar controls, record all preprocessing, and time source normalization, search, reconstruction, and checking independently. It should report unique theorem families as well as parameter instances to avoid inflating coverage through repeated scaling.

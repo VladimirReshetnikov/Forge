@@ -1,0 +1,266 @@
+\section{Quantitative liveness: expected termination under every scheduler}
+\label{sec:bellman}
+
+\subsection{A graph cycle need not prevent probabilistic termination}
+
+A retry loop that succeeds with probability $1/4$ on each iteration has a
+self-loop. There is an infinite path consisting entirely of retries, so no
+natural-valued function can strictly decrease on every possible transition.
+Nevertheless, the probability of that infinite path is zero and the expected
+number of iterations is 4. Forge's existing pathwise ranking mechanisms cannot
+certify this merely by searching for more elaborate deterministic ranks.
+The needed local operator is expectation.
+
+We consider a finite Markov decision process (MDP). Every state $s$ has at least
+one action; action $a$ induces a rational distribution $P_{s,a}$ over states.
+The designated terminal states are absorbing in the input itself. The stopping
+time $T$ is the first time a terminal state is entered, with $T=\infty$ if
+this never happens. Each nonterminal step has cost 1. A scheduler may depend
+on the complete finite history and may randomize among available actions.
+The goal is an upper bound valid for \emph{every} such scheduler.
+
+The terminal and cost conventions matter. A zero-cost loop can have expected
+cost zero while never terminating. A checker that omits the unit cost from its
+inequality would prove the wrong property. Likewise, rewriting a nonabsorbing
+state into a terminal self-loop changes the model unless the source stopping
+semantics explicitly justifies that transformation.
+
+\subsection{A local Bellman certificate}
+
+A positive certificate supplies a state region $W$ containing the initial
+state, closed under every action, and a rational function $V:W\to\Q_{\ge0}$.
+The values at terminal states are zero. For each nonterminal $s\in W$ and
+\emph{every} available action $a$, the checker requires
+\begin{equation}
+ V(s)\ \ge\ 1+\sum_tP_{s,a}(t)V(t).
+ \label{eq:bellman-upper}
+\end{equation}
+Closure ensures that no mass escapes to an unrepresented potential value.
+The delivered certificate also supplies a deterministic positional policy
+$\pi$ attaining equality at every nonterminal state in $W$.
+
+\begin{theorem}[Uniform expected-time upper bound]
+\label{thm:bellman-upper}
+If \eqref{eq:bellman-upper} holds on a universally closed region containing
+$s_0$, then for every history-dependent randomized scheduler,
+\[
+ \E_{s_0}[T]\le V(s_0),\qquad \Prob_{s_0}(T=\infty)=0.
+\]
+For every positive integer $N$, it also gives
+$\Prob_{s_0}(T>N)\le V(s_0)/N$.
+\end{theorem}
+\begin{proof}
+Condition on a finite execution history that has not yet terminated.
+The scheduler chooses a distribution over actions. Since
+\eqref{eq:bellman-upper} holds for each action, it also holds for their
+convex combination. Thus the conditional expected change in the potential is
+at most $-1$. Once terminal, both the additional cost and the potential change
+are zero.
+
+Apply this inequality for exactly $N$ steps to the stopped process. Finite
+induction and iterated expectation give
+\begin{equation}
+ \E[\min(T,N)] + \E[V(X_{\min(T,N)})]\le V(s_0).
+ \label{eq:stopped-bound}
+\end{equation}
+Dropping the nonnegative second term and increasing $N$ proves the expected-time
+bound by monotone convergence. A positive mass at $T=\infty$ would force
+$\E[\min(T,N)]$ to grow without bound, so that mass is zero. Finally
+$N\Prob(T>N)\le\E[T]$ gives the tail estimate.
+\end{proof}
+
+The proof uses a finite-horizon inequality before taking a limit. A Lean
+implementation need not begin by invoking an optional-stopping theorem whose
+integrability side conditions it has not yet established. It can first define
+finite execution-tree expectations by recursion and prove
+\eqref{eq:stopped-bound}. The measure-theoretic interpretation is a separate,
+reusable bridge.
+
+\begin{theorem}[Exact worst-case expectation]
+\label{thm:bellman-tight}
+If a positional policy $\pi$ makes \eqref{eq:bellman-upper} an equality at
+every nonterminal state of $W$, then
+\[
+ \sup_{\text{all schedulers }\sigma}\E^\sigma_{s_0}[T]
+   =\E^\pi_{s_0}[T]=V(s_0).
+\]
+\end{theorem}
+\begin{proof}
+For policy $\pi$, the finite telescoping argument yields equality in
+\eqref{eq:stopped-bound}. The upper-bound theorem already establishes almost-sure
+termination under this policy. Since $W$ is finite, $V$ is bounded by a finite
+constant $M$, and the remaining-potential term is at most
+$M\Prob(T>N)$, which tends to zero. The equality therefore converges to
+$\E^\pi[T]=V(s_0)$. The upper-bound theorem bounds all other schedulers by
+the same number.
+\end{proof}
+
+A certificate intended only to prove a budget could omit the tight policy and
+accept any valid super-solution. The prototype uses the stronger exact-optimum
+contract to make differential testing against exhaustive policy evaluation
+possible. A budget query compares $V(s_0)$ to the original budget only after
+this certificate is checked.
+
+\subsection{A finite certificate of nontermination}
+
+A negative certificate supplies a nonempty set $U$ of nonterminal states and
+one action $\rho(s)$ at each $s\in U$, such that
+\begin{equation}
+ \supp(P_{s,\rho(s)})\subseteq U.
+ \label{eq:trap}
+\end{equation}
+It also supplies a finite path from $s_0$ to $U$, labeling each edge with a
+legal action and a strictly positive transition probability. The checker
+multiplies these probabilities and verifies the claimed positive product
+$\alpha$.
+
+\begin{proposition}[Reachable-trap soundness]
+\label{prop:trap}
+A valid path-and-trap certificate establishes a scheduler with
+$\Prob(T=\infty)\ge\alpha>0$, hence infinite expected termination time.
+\end{proposition}
+\begin{proof}
+Use a history-dependent scheduler that tries the listed path and, when that
+path has been followed, switches to $\rho$ in $U$. The probability of following
+the entire finite path is $\alpha$. Conditional on that event, all subsequent
+transitions stay in $U$ with probability one and no terminal state is reached.
+A nonnegative random variable that is infinite on a positive-probability event
+has infinite expectation.
+\end{proof}
+
+The witness scheduler may use finite memory during the prefix; it need not be
+a single stationary table compatible with every occurrence along the path.
+The universal upper-bound goal allows all history-dependent schedulers, so
+this is a valid counterexample. An unreachable nonterminal trap is not a
+counterexample from $s_0$, which is why the path cannot be omitted.
+
+\subsection{A complete algorithm on the stated finite fragment}
+
+First compute $W$, the states reachable from $s_0$ under the union of all
+positive-probability action edges. Let $U_0=W\setminus\mathrm{Terminal}$ and
+iterate
+\begin{equation}
+ U_{k+1}=\{s\in U_k:\exists a,\ \supp(P_{s,a})\subseteq U_k\}.
+ \label{eq:trap-fp}
+\end{equation}
+The sequence decreases and stabilizes after at most $|W|$ strict rounds.
+If its limit is nonempty, select one staying action at each surviving state
+and recover a reachability path from the initial search. This yields
+Proposition~\ref{prop:trap}.
+
+Suppose instead that the limit is empty. Assign each nonterminal state the
+round in which it is removed. At removal, \emph{every} action has some positive
+probability of moving to a terminal state or a state removed earlier. Let
+$\eta>0$ be the smallest positive transition probability in the reachable
+finite model. Under any scheduler and after any history, there is probability
+at least $\eta^{|W|}$ of following rank-decreasing successors to termination
+within $|W|$ steps. Repeating the argument in blocks gives a uniform geometric
+tail and a finite expected-time bound. This establishes that all stationary
+policies are proper before any policy matrix is inverted.
+
+Now perform maximizing policy iteration. For a deterministic stationary policy
+$\pi$, let $Q_\pi$ be its transition matrix restricted to reachable nonterminal
+states. Evaluate it exactly by
+\begin{equation}
+ (I-Q_\pi)v_\pi=\boldsymbol 1.
+ \label{eq:policy-eval}
+\end{equation}
+At each state, compute $1+P_{s,a}\cdot v_\pi$ for all actions. Switch only when
+an action is strictly greater than the current value. Re-evaluate and repeat.
+The prototype uses exact Gauss--Jordan elimination, not rounded matrix
+inversion.
+
+\begin{lemma}[Policy improvement after the trap test]
+\label{lem:policy-improve}
+When the trap fixed point is empty, every policy evaluation is nonsingular,
+and a strictly improving switch cannot cause a policy cycle.
+\end{lemma}
+\begin{proof}
+Properness and the uniform geometric tail imply
+$(I-Q_\pi)^{-1}=\sum_{k\ge0}Q_\pi^k$, a finite-entry nonnegative matrix.
+For a switched policy $\pi'$, let
+$d=\boldsymbol1+Q_{\pi'}v_\pi-v_\pi$. The switching rule makes $d\ge0$ and
+at least one component positive. Then
+\[
+ v_{\pi'}-v_\pi=(I-Q_{\pi'})^{-1}d\ge0.
+\]
+Because the inverse includes its identity summand, at least one component
+strictly increases. A return to an earlier policy would return to its unique
+value vector, contradicting monotone strict progress. There are finitely many
+stationary policies, so iteration terminates.
+\end{proof}
+
+At termination, the current policy has equality in its evaluation equations and
+no action exceeds its value. The vector and policy therefore satisfy both
+Bellman certificate checks.
+
+\begin{theorem}[Finite-fragment decision result]
+\label{thm:mdp-complete}
+For a finite total MDP with exact rational probabilities and absorbing terminal
+states, the algorithm terminates with either an exact worst-case expected-time
+certificate or a reachable nonterminal trap certificate. The former proves
+finite expected time under every scheduler; the latter refutes that property.
+\end{theorem}
+\begin{proof}
+The finite trap iteration terminates. A nonempty result gives the negative
+certificate. An empty result establishes uniform properness, after which
+Lemma~\ref{lem:policy-improve} guarantees termination of policy iteration.
+The final local equations give the positive certificate and its correctness by
+Theorems~\ref{thm:bellman-upper} and~\ref{thm:bellman-tight}.
+\end{proof}
+
+The dichotomy relies essentially on finiteness. It does not assert that every
+almost-surely terminating infinite-state program has finite expected time. Nor
+does failure to find a symbolic polynomial potential refute termination.
+
+\subsection{Worked scheduler examples}
+
+\paragraph{Geometric retry with an adversary.}
+There are two states: retry $r$ and terminal $z$. At $r$, an adversary chooses
+between success probabilities $1/2$ and $1/4$; unsuccessful trials return to
+$r$. Let $V(r)=4$ and $V(z)=0$. The two Bellman right-hand sides are
+\[
+ 1+\tfrac12\cdot4=3,\qquad
+ 1+\tfrac34\cdot4=4.
+\]
+Thus every scheduler has expected duration at most 4, and always selecting the
+slower action attains 4. No graph edge has been removed: the retry self-loop
+is present in both the model and the proof.
+
+\paragraph{A good policy does not prove a universal bound.}
+At $r$, one action terminates immediately and another stays at $r$ with
+probability one. An existential controller can terminate in one step, but the
+universal scheduler statement is false. The trap $\{r\}$ with the staying
+action and the empty prefix has $\alpha=1$. The prototype checks that it returns
+this negative outcome rather than the expected duration of the convenient
+terminating policy.
+
+\paragraph{An unreachable trap is irrelevant.}
+Add a separate absorbing nonterminal state $u$ with no path from $s_0$. The
+reachability slice removes it before the trap test. A hand-written negative
+certificate naming $u$ without a valid path is rejected. This demonstrates a
+necessary source of root dependence: changing the initial state can change
+the theorem even when every transition table remains identical.
+
+\subsection{A symbolic extension that reuses existing Forge machinery}
+
+For an infinite-state probabilistic loop, let the update be $x'=F(x,\xi)$
+with a finitely supported random choice $\xi$. Given a polynomial potential
+$V$, the local drift obligation is
+\[
+ V(x)-\sum_{\xi}p_\xi V(F(x,\xi))\ge\varepsilon>0
+\]
+on the nonterminal invariant, together with $V\ge0$. Forge's existing exact
+polynomial and cone workers can discharge this obligation once the expected
+substitution is reified. They should not demand the stronger and often false
+condition $V(x)-V(F(x,\xi))\ge\varepsilon$ for each outcome.
+
+For example, a walk on positive integers moves down with probability $p$ and
+up with probability $q=1-p$, with $p>q$, and stops at zero. Taking
+$V(n)=n/(p-q)$ gives expected drift exactly 1 at every positive state. The
+finite-horizon telescoping argument gives $\E[T]\le V(n)$ without a pointwise
+rank. This is a designed composition with existing Forge certificates, not a
+symbolic-search feature executed by the delivered finite-state prototype.
+State-dependent probabilities require their own nonnegativity and normalization
+proofs; clearing a denominator without proving its sign is not an acceptable
+translation.

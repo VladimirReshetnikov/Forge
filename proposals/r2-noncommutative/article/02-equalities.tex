@@ -1,0 +1,256 @@
+\section{Two-sided ideal receipts}
+\label{sec:ideal}
+\status{Producer, independent Python replay, exact oracle comparisons, and
+adversarial tests are implemented. Lean source reification is not implemented.}
+
+\subsection{The receipt and its soundness}
+
+For supplied relations $r_1,\ldots,r_s$ and target $p$, a receipt consists of a
+finite list of rational coefficients, relation indices, and two words:
+\begin{equation}\label{eq:ideal}
+ p=\sum_{\ell=1}^{t} c_\ell u_\ell r_{j_\ell}v_\ell.
+\end{equation}
+The left and right words are separately represented fields. The original
+relations and target are arguments to replay, not assertions made by the receipt.
+
+\begin{theorem}[Two-sided receipt soundness]\label{thm:ideal-sound}
+If identity~\eqref{eq:ideal} holds in $\F$, then under every evaluation into an
+associative unital $\Q$-algebra satisfying $r_j=0$, the evaluated target is zero.
+\end{theorem}
+\begin{proof}
+Evaluation is an algebra homomorphism, so it preserves the finite sum and each
+product in~\eqref{eq:ideal}. Every summand has the factor $r_{j_\ell}=0$.
+No commutation, division by an operator, or cancellation of a nonzero element is
+used. Rational coefficients act through the central scalar map.
+\end{proof}
+
+A receipt need not mention a Gr\"obner basis, a monomial ordering, or a minimal
+derivation. Those are possible discovery mechanisms, not facts needed for this
+conclusion. Compared with the existing commutative multiplier format, the
+essential change is not replacing an implementation name: it is preserving both
+sides of each relation occurrence.
+
+\subsection{A concrete bounded producer}
+
+Choose a degree bound $D\ge\deg p$. For each relation of degree $d_j$, enumerate
+all pairs of words $(u,v)$ with $|u|+|v|\le D-d_j$ and expand the column
+$u r_jv$. A sparse exact elimination basis tracks each admitted row as a rational
+combination of these original columns. Reducing $p$ against that basis either
+returns the coefficients in~\eqref{eq:ideal} or a nonzero remainder.
+
+\begin{lstlisting}
+columns := [(j,u,v, expand(u * relation[j] * v))
+            for j,u,v with len(u)+degree(relation[j])+len(v) <= D]
+selected := incidenceComponent(target.support, columns)
+basis := empty sparse exact echelon basis with provenance
+for column in selected:
+    insert(column, original_column_index)
+(coefficients, remainder) := reduce(target, basis)
+if remainder != 0:
+    return UNKNOWN_OUTSIDE_BOUNDED_CONTEXT_SPAN
+receipt := original-context terms selected by coefficients
+return receipt only after independent expansion succeeds
+\end{lstlisting}
+
+The prototype performs Gaussian elimination over \code{fractions.Fraction}.
+A production backend can replace it by sparse fraction-free or modular exact
+linear algebra without changing the receipt format. The relevant finite
+feasibility problem is linear; there are no unknown generators being multiplied
+by unknown multipliers.
+
+\paragraph{Complexity.}
+There are at most
+\begin{equation}\label{eq:counts}
+ R_D=\sum_{k=0}^{D}m^k\quad\hbox{word rows},\qquad
+ C_D=\sum_{j=1}^{s}\sum_{\ell=0}^{D-d_j}(\ell+1)m^\ell
+ \quad\hbox{context columns}.
+\end{equation}
+An upper sum with $D-d_j<0$ is empty. The factor $\ell+1$ counts the possible
+split between the two contexts of a length-$\ell$ word. Dense elimination costs
+$O(R_D C_D\min(R_D,C_D))$ field operations; sparse behavior and rational bit
+growth determine the practical cost. These counts are exponential in $D$, not
+a claim of a generally efficient noncommutative theorem prover. The implemented
+column cap is 20,000; exceeding it raises an explicit budget exception that a
+controller must map to \unknown{}.
+
+\subsection{Exact incidence slicing before elimination}
+
+Construct a bipartite graph with word rows on one side and context columns on
+the other; an edge means the coefficient of that word in that column is nonzero.
+Keep every connected component that meets the target's support. This is more
+precise than merely keeping all columns mentioning one of the target's variables.
+
+\begin{proposition}[Component slicing is exact]\label{prop:slicing}
+The target lies in the span of all columns if and only if it lies in the span of
+the retained columns.
+\end{proposition}
+\begin{proof}
+One implication is immediate. For the other, partition a hypothetical solution
+into graph components. Distinct components have disjoint row supports. Every
+component disjoint from the target must sum to zero on its own rows, independently
+of the components meeting the target. Removing all such contributions leaves a
+solution for the target using only retained columns.
+\end{proof}
+
+No heuristic premise deletion is hidden in this argument. Conversely, slicing
+only one hop from the target would be wrong: a column may introduce another word
+whose cancellation requires a further column. The prototype uses a worklist
+until the whole incidence component is exhausted.
+
+The executed implementation assembles \emph{all} columns before constructing
+the graph. Its measured benefit is reduced elimination, not avoidance of the
+exponential column-assembly cost. A future lazy context index may improve that
+cost, but it needs a completeness argument for enumerating every incident
+column. The current result must not be described as such a lazy algorithm.
+
+\subsection{Why an unsuccessful bounded search is not a refutation}
+
+Set
+\[
+ r_U=U(1-AB)-1,\qquad r_V=(1-BA)V-1,\qquad p=UA-AV.
+\]
+The following exact identity holds in the free algebra:
+\begin{equation}\label{eq:push}
+ p=r_UAV-UA r_V.
+\end{equation}
+The target has degree two, but the displayed context products have degree five.
+In the delivered experiment, context bounds two, three, and four all return
+\unknown{}, whereas bound five returns a receipt. This is a direct operational
+control against equating ``target degree'' with a sufficient proof degree for
+inhomogeneous presentations.
+
+There is a sharper semantic warning. The relation $xy=1$ does not imply $yx=1$
+in every algebra: left and right shifts on the countably generated vector space
+provide a counterexample. If $S e_i=e_{i+1}$ and $L e_0=0$, $L e_{i+1}=e_i$,
+then $LS=1$ but $SL\ne1$. Yet square matrices over a field with $XY=I$ also
+satisfy $YX=I$, since a right inverse in finite dimension is an inverse. Thus a
+finite-matrix search is not complete for arbitrary inhomogeneous algebra
+counterexamples. The homogeneous restriction in the next section is doing
+substantial work.
+
+\section{A complete homogeneous fragment with matrix witnesses}
+\label{sec:homogeneous}
+
+Let $\F_k$ be the rational span of words of length $k$. A relation is homogeneous
+when all its nonzero monomials have the same degree. Different relations may
+have different degrees; zero relations are harmless. Let $I$ be their two-sided
+ideal and set
+\[
+ \F_{\le D}=\bigoplus_{k=0}^{D}\F_k,\qquad
+ \F_{>D}=\bigoplus_{k>D}\F_k.
+\]
+The second space is a two-sided ideal: multiplying a word of length greater
+than $D$ by any word cannot shorten it.
+
+\subsection{Why degree \texorpdfstring{$D$}{D} suffices}
+
+\begin{lemma}[Degree-bounded membership]\label{lem:graded-membership}
+For homogeneous relations and $p\in\F_{\le D}$, membership $p\in I$ is equivalent
+to membership in the finite span
+\[
+ \Span_\Q\{u r_jv:\ |u|+d_j+|v|\le D\}.
+\]
+\end{lemma}
+\begin{proof}
+The reverse implication follows from the definition of an ideal. For the forward
+implication, write a finite ideal representation of $p$ and expand both
+polynomial multipliers into words. Each resulting context product is
+homogeneous. Group these products by total degree. Every group of degree greater
+than $D$ sums to zero, since $p$ has no component in that degree. Delete those
+groups. The remaining products satisfy the asserted degree bound.
+\end{proof}
+
+This proof does not appeal to termination of noncommutative completion or to a
+Noetherian property. It isolates a finite-dimensional vector-space problem at
+the exact required degree. It needs no global completion result for the presented algebra.
+
+\begin{theorem}[Exact graded alternative]\label{thm:graded-alternative}
+Given finitely many homogeneous rational relations and a target of degree at
+most $D$, exact elimination with all contexts of total degree at most $D$
+returns either a receipt~\eqref{eq:ideal}, or rational square matrices
+$X_0,\ldots,X_{m-1}$ and a rational vector $v$ such that
+\[
+ r_j(X_0,\ldots,X_{m-1})=0\quad\hbox{for every }j,
+ \qquad p(X_0,\ldots,X_{m-1})v\ne0.
+\]
+A witness dimension no larger than $R_D$ in~\eqref{eq:counts} suffices.
+\end{theorem}
+\begin{proof}
+If elimination succeeds, Theorem~\ref{thm:ideal-sound} applies. Otherwise
+Lemma~\ref{lem:graded-membership} gives $p\notin I$. Because $I$ is graded,
+\[
+ p\notin I+\F_{>D}.
+\]
+Indeed, the degree-at-most-$D$ part of any element of $I$ is again in $I$.
+Consider the finite-dimensional quotient algebra
+\[
+ A_D=\F/(I+\F_{>D}).
+\]
+Its dimension is at most $R_D$. The image of $p$ is nonzero, so this quotient is
+not the zero algebra and its identity is nonzero. Let $X_i$ be the matrix of
+left multiplication by the image of $x_i$ in any rational basis of $A_D$, and
+let $v$ represent its identity. Left multiplication is a unital algebra
+homomorphism. Consequently all input relations evaluate to the zero matrix,
+whereas $p(X)v$ is exactly the nonzero coordinate vector of the image of $p$.
+\end{proof}
+
+\subsection{An executable construction, not an existence-only argument}
+
+The producer forms the full degree-bounded echelon basis. Nonpivot words form a
+basis of $A_D$. To construct column $j$ of $X_i$, prepend $x_i$ to the $j$th
+basis word and reduce it; a word longer than $D$ reduces to zero by truncation.
+Reduce the empty word to construct $v$.
+
+\begin{lstlisting}
+E := exact basis of all relation contexts through degree D
+B := all nonpivot words of length at most D
+for atom i:
+    for basis word B[j]:
+        X[i][:,j] := coordinates(normal_form(i :: B[j]))
+v := coordinates(normal_form(empty_word))
+return X,v only after matrix replay on the ORIGINAL relations
+\end{lstlisting}
+
+Unlike the equality receipt, this producer must use the \emph{full} relation
+space, not just the target's incidence component. A sliced equality proof is
+sound; a quotient that omits unrelated relations need not model the whole
+presentation. The implementation uses full elimination here deliberately.
+
+The checker does not reconstruct a quotient, inspect pivots, verify a basis, or
+trust the producer's homogeneity assertion. It multiplies the supplied rational
+matrices and verifies every complete relation matrix, then the separating target
+vector. An accidentally inapplicable construction cannot pass merely because it
+looks like a quotient. The producer rejects inhomogeneous input before attempting
+this construction; the matrix checker itself can accept a directly valid
+countermodel for any equality-schema relation list.
+
+\paragraph{A crucial independent test.}
+Take the purported relation $X=0$, the matrix $X=\operatorname{diag}(0,1)$,
+target $1$, and vector $e_1$. Then $Xe_1=0$ and $1e_1\ne0$, but $X\ne0$.
+Checking the relation only on the witness vector would accept a false
+countermodel. The supplied unit suite rejects exactly this object.
+
+\subsection{What the completeness statement does and does not imply}
+
+For homogeneous presentations, the theorem decides the universal algebra
+consequence and, equivalently, the consequence over rational matrices of all
+finite sizes. It does not decide the corresponding consequence in one selected
+algebra, nor with omitted positivity, involution, or invertibility assumptions.
+The quotient matrices need not be symmetric, and their dimension is whatever
+the quotient needs. They are not automatic counterexamples to a goal about
+$2\times2$ Hermitian matrices.
+
+Operational caps are a separate boundary. The implemented producer refuses an
+ambient word count above 4,000 or a quotient dimension above 100. Such a refusal
+is \unknown{} under a resource limit, even though the uncapped mathematical
+procedure terminates. No matrix witness is promised below an arbitrarily chosen
+user cap.
+
+\subsection{The algorithmic consequence for Forge}
+
+This worker has an unusually clean escalation policy. Homogeneous equalities
+need only one degree level, followed by either identity replay or matrix replay.
+Inhomogeneous equalities use increasing context bounds and never turn a
+nonzero bounded remainder into a source-level refutation. This distinction is
+available syntactically before the expensive search begins. It is more useful
+than a generic instruction to ``try a bigger algebra solver.''

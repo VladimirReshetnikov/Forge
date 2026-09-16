@@ -1,0 +1,167 @@
+\section{An implementation sequence for Forge}
+\label{sec:implementation}
+
+\subsection{The first useful end-to-end slice}
+
+Implement an origin-anchored native ladder before auxiliary factors, interval
+subdivision, or new user syntax. This slice has no transcendental numerical
+initial values: its boundary conditions are rational. The only analytic theorem
+needed is the integrating-factor step, and the only source language needed is
+literal real exponential polynomials.
+
+A proposed source layout is:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+Forge/Analytic/ExpPoly.lean      -- exact representation and evaluation
+Forge/Analytic/Deriv.lean        -- evaluation of shifted differentiation
+Forge/Analytic/Ladder.lean       -- analytic step and ladder soundness
+Forge/Analytic/Reify.lean        -- source expression plus equality proof
+Forge/Analytic/Search.lean       -- native and auxiliary-factor producers
+Forge/Analytic/PointBounds.lean  -- checked library adapter, not a new solver
+Forge/Analytic/Tail.lean         -- explicit domination certificate
+Forge/Analytic/Charts.lean       -- reflection, log chart, positive factors
+Forge/Analytic/Worker.lean       -- Forge obligation/result adapter
+Forge/Analytic/Tests.lean        -- source goals, failures, strictness
+\end{lstlisting}
+\end{minipage}\par
+
+These are proposed additions, not existing repository paths. The meaningful
+milestone is a theorem in an independent file, compiled from the original
+expression, whose proof can be replayed without the search process. A test that
+only applies the generic ladder theorem to assumed derivative equalities does
+not meet that milestone; it bypasses the source bridge that must be exercised.
+
+\subsection{Milestones with exact acceptance conditions}
+
+\paragraph{M1: compile the analytic bridge and reference replays.}
+Compile \code{LadderBridge.lean} and all four emitted modules against a fixed
+Lean/Mathlib pair. Retain compiler output and axiom inventories. Every stated
+theorem must remain unchanged. This establishes the analytic proof skeleton,
+not an automatic tactic.
+
+\paragraph{M2: certify the sparse algebra and reifier.}
+Prove evaluation correctness for addition, multiplication, reflection, trimming,
+and \eqref{eq:stencil}. Reify original Lean expressions containing rational
+casts and expanded products. Require proofs of exact source equality; include
+intentionally permuted variables and differently scoped local identifiers in
+negative tests. A theorem about a manually entered canonical polynomial does
+not close the reifier milestone.
+
+\paragraph{M3: close native origin-anchored source goals automatically.}
+Generate the ascending spectrum, build a receipt, replay it, and reconstruct
+nonnegative or strict source conclusions. Add a minimal worker registration to
+Forge's eventual controller, or a separate experimental tactic while that
+controller is unavailable. Do not claim an integrated \forge{} command until
+one actually exists. Test both reflected rays and exact high-order boundary
+zeros.
+
+\paragraph{M4: add bounded auxiliary-factor search.}
+Reuse the same checker and record the first failed coordinate on each attempted
+multiset. Accept the four enrichment fixtures and retain the interior-zero
+control as unknown. Also run the existing algebraic worker on those fixtures:
+the goal is an improved portfolio, not forced use of the new analytic lane.
+
+\paragraph{M5: add checked endpoints and explicit tails.}
+Compile a point-bound adapter, choosing a kernel-only proof path explicitly.
+Prove Theorem~\ref{thm:tail} for the representation and emit its rational
+witness. Demonstrate that the tail of $e^x-1000x^5$ is accepted while a request
+for positivity starting at zero is not closed by that receipt. Then add the
+bounded-plus-tail gluing lemma.
+
+\paragraph{M6: add proved source charts and evaluate the portfolio.}
+Close the original entropy and logarithm source theorems, not merely their
+chart polynomials. Evaluate on held-out expressions and user developments,
+including elaboration time, search time, replay time, proof size, and axiom
+inventory. Preserve baseline imports, hypotheses, and resource limits across
+compared tactics.
+
+\subsection{Routing should exploit the theorems}
+
+A deterministic initial policy can be expressed without designing another
+whole-system scheduler:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+solveAnalytic(obligation):
+    inspect the exact source type, relation, and domain
+    try a proved positive-factor or one-dimensional chart reduction
+    if outside the supported fragment: return NotApplicable
+    if an algebraic factorisation already proves the goal: use it
+    if the requested anchor is zero: try the native ascending ladder
+    if unsuccessful and the budget permits: try auxiliary multisets
+    if the request is eventual: construct the exact tail certificate
+    if the domain is compact: ask the checked interval/bounds adapter
+    if a ray can be split: combine a compact receipt with a tail receipt
+    return Unknown with the first unresolved obligation and diagnostics
+\end{lstlisting}
+\end{minipage}\par
+
+The core mathematical routing rules are sharper than this pseudocode's order.
+Never search permutations after an exact ascending failure. Do not expect an
+auxiliary budget to repair an interior zero. Do not endlessly subdivide a
+boundary contact that has a cheap exact derivative ladder. Do not invoke a
+root solver merely to establish nonnegativity of a visible square.
+
+The first failed ladder coordinate is diagnostic data, not necessarily a
+counterexample to the original inequality. A negative $q_j(a)$ for $j>0$ can
+coexist with $f>0$ everywhere. The user-facing trace should identify it as a
+certificate obstruction and show the transformed function that failed.
+
+\subsection{Proof-cost controls}
+
+Rational arithmetic can grow rapidly with auxiliary multiplicity. Enforce
+limits on the number of rates, largest polynomial degree, number of factors,
+and total coefficient bit length. Charge the budget to both synthesis and
+reconstruction, so that a cheap search cannot return a receipt whose proof
+exceeds the entire tactic budget.
+
+Keep exact caches keyed by the source polynomial, anchor, factor prefix,
+precision settings, and proof environment. A cache entry for a positively
+normalised point sign must not be misused as an unnormalised numerical bound.
+At the Lean level, include local context and universe identity in cache keys;
+the prototype's first-order JSON identifiers are not a substitute for those
+runtime identities.
+
+Native ladders are small enough for proof emission. Longer ladders favour
+reflected checking and shared coefficient arrays. One can retain only factors
+and point receipts in the on-disk certificate and recompute intermediate
+polynomials in the checker. The independent reference emitter should remain
+available for differential tests of the reflected path.
+
+\subsection{A benchmark plan that would support real capability claims}
+
+Partition test families by their mathematical difficulty: boundary contact,
+non-native positive coordinates, interior zeros, eventual domination, source
+charts, and denominator side conditions. Include both factored and expanded
+presentations of the same functions. Randomly rename variables and reorder
+commutative source expressions to prevent success from depending on one
+surface spelling.
+
+Compare the same original Lean goal against the baseline tactic configuration,
+the baseline plus the new worker, and the new worker with native-only,
+auxiliary-only, tail-only, and interval-adapter ablations. Existing library
+lemmas must be available equally to both sides. Do not include the target
+theorem itself in a retrieval or simplification set for either side.
+
+Report success only after the final source statement compiles and its proof
+meets the selected trust policy. Separate theorem counts from certificate
+counts, and separate a counterexample result from a solved positive goal.
+Measure kernel-only replay separately from search and from any native
+certificate evaluation. The current Python bundle provides useful fixtures
+for this experiment, not results of that experiment.
+
+\subsection{What would constitute a significant gain}
+
+The gain is not that Forge can rediscover $e^x\ge1+x$ once more. It is that
+expanded analytic expressions can be routed to a finite exact certificate,
+that a false start in one coordinate system can be repaired by an explicitly
+stronger one, and that eventual statements acquire exact witnesses through a
+total constructor. These mechanisms produce information that the existing
+polynomial and discrete workers can consume without becoming analytic solvers
+themselves.
+
+The most valuable first implementation is therefore compact: a proved source
+bridge, a native ascending ladder, and one checked analytic step. The
+auxiliary-factor and tail workers extend that same trusted core rather than
+requiring a new prover at each stage. The archive supplies enough executable
+search and replay evidence to make those stages concrete, while leaving the
+unperformed Lean integration clearly visible.

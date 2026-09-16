@@ -1,0 +1,187 @@
+\section{Implementation and experimental evidence}
+\label{sec:experiments}
+
+\subsection{Execution conditions and units}
+
+The full run used Python 3.13.5 on
+\code{Linux-6.18.44-x86_64-with-glibc2.41}, with seed \code{20260915}. It was
+invoked with \code{python -S}, which disables site packages. Every generated
+problem and its accepted certificate is retained in
+\path{results/full/corpus.json}. The run conditions and counts appear in
+\path{results/full/report.json}. A smaller smoke run is retained separately
+and is not added to the full-run totals.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Worker & Problems & Independent comparisons & Invalid mutations rejected \\
+\midrule
+Parity arenas & 884 & 884 & 1,128 \\
+Transport & 400 & 400 & 723 \\
+Expected time & 180 & 180 & 180 \\
+Simulation & 100 & 100 & 86 \\
+\bottomrule
+\end{tabular}
+\caption{Executed finite-model tests. Each problem produced an accepted Python
+certificate agreeing with its oracle. Rows are different workloads, not a
+pooled theorem-proving success rate.}
+\label{tab:tests}
+\end{table}
+
+Fourteen focused regression tests also passed with no failures or errors.
+Mutation counts differ because a second semantic mutation is generated only
+when its precondition exists, such as a positive transport defect or an
+applicable strict parity-rank edge. They are counts of deliberately invalid
+certificates, not of uniformly random bit flips. No tactic baseline, proof
+elaboration time, kernel-checking time, or user-theorem solve rate was measured.
+
+\subsection{Parity: exhaustive small arenas and random larger ones}
+
+The exhaustive part includes every total arena on one or two vertices, with
+both owner choices and priorities from $\{0,1,2,3\}$. There are 8 one-vertex
+arenas and 576 two-vertex arenas, hence 584 in total. A further 300 seeded
+arenas have 3--8 vertices, one or two successors per vertex, random owners,
+and priorities from $\{0,\ldots,5\}$.
+
+The oracle does not call Zielonka or check threshold ranks. It enumerates
+positional strategies of both players and follows the resulting deterministic
+run to its eventual cycle. A player wins a start vertex when it has a strategy
+winning against every positional strategy of the opponent. Finite positional
+determinacy makes this an independent small-arena decision computation.
+Every returned winning partition agreed with this oracle.
+
+The mutations remove a vertex from the required partition, or deliberately
+violate one applicable strict threshold inequality. The semantic regressions
+also test a one-time favorable priority, an infinite favorable cycle, and
+an omitted adversarial edge. These controls target the certificate theorem,
+not merely the solver's ability to reproduce its own partition.
+
+\subsection{Transport: exact optima and an actual ablation}
+
+The 400 instances use marginal dimensions independently chosen from 1--6.
+Unnormalized integer weights are chosen from 0--4, with an all-zero vector
+repaired by assigning positive weight to one coordinate, then normalized
+exactly. Relation entries are seeded Boolean choices.
+
+The oracle enumerates every subset $A$ of the left support and computes
+$\max_A h(A)$ directly. It never constructs a residual network. Each
+max-flow proposal's exact defect agreed with this maximum.
+Of the 400 optima, 77 were zero and 323 were positive. Both are valid completed
+answers because the certificate proves the optimum, not merely feasibility.
+
+For the same input, the experiment also evaluates the defect of the independent
+product $\mu\otimes\nu$. On \textbf{211 of 400 instances}, the synthesized
+coupling has strictly smaller defect. On the others it ties; it is never
+worse. This is a genuine paired ablation of a weaker relational method, not a
+comparison with another Lean tactic. It establishes that optimizing correlation
+matters in these generated cases; it does not establish a population success
+rate for source-level verification problems.
+
+One mutation corrupts a joint entry, violating a marginal. When the optimum is
+positive, another erases the Hall subset, creating a nonzero primal--dual gap.
+All are rejected. Separate regressions reject missing probability mass,
+noncanonical rational numbers, and independent-product data masquerading as a
+zero-defect correlation certificate.
+
+\subsection{Expected time: a structurally different oracle}
+
+The 180 MDPs have 2--4 states, one or two actions per nonterminal state, a single
+absorbing terminal state, and initial state 0. Marginals use the same exact
+integer-weight generator. In every even-indexed case, each nonterminal action
+is modified to put at least probability $1/2$ directly on the terminal state;
+these are controlled positive fixtures embedded in the random workload.
+Odd-indexed cases have no such guarantee.
+
+The oracle enumerates stationary deterministic policies. For each policy it
+uses graph reachability to detect a reachable closed nonterminal class. When
+none exists, it computes the finite expected duration by determinant expansion
+and Cramer's rule on the reachable nonterminal subsystem. This deliberately
+avoids the proposer's Gauss--Jordan routine. It then takes the worst policy
+value, or reports nontermination when an appropriate policy exists.
+
+The proposer returned \textbf{164 exact finite worst-expectation certificates}.
+The remaining \textbf{16 cases} returned positive-probability nontermination
+certificates. Every
+outcome and every finite initial-state value agreed with the oracle. The
+negative certificate's positive path probability was separately rechecked.
+Mutating a positive result's initial potential to zero or a negative result's
+probability lower bound to zero was rejected in every case.
+
+The tiny sizes are intentional: exhaustive policy enumeration and determinant
+expansion provide a transparent differential check, not a competitive
+large-MDP solver. A follow-up performance evaluation should retain these
+oracles for small cases while separately studying larger models; it should not
+replace exact small-case validation with agreement between two wrappers around
+the same numerical solver.
+
+\subsection{Simulation: enumerate relations, not elimination traces}
+
+The 100 pairs of systems have 1--2 states on the left and 1--3 on the right,
+one or two actions per state, and a seeded Boolean base relation. The oracle
+enumerates every subrelation of that base and checks its post-fixed property
+using exhaustive Hall-subset tests. The union of all post-fixed relations is
+then the greatest simulation. This is a different computation from the
+proposer's ordered pair-removal loop.
+
+The resulting greatest relations agreed on every problem. Across this workload,
+77 pair deletions and 81 surviving pairs were recorded; these are
+\emph{pair counts}, not problem counts or solved theorems. Invalid tests erase
+a strict Hall witness or remove a required action match when such data exists.
+The quantifier-order regression explicitly requires different target actions
+for different source actions.
+
+\subsection{Replay without search or test oracles}
+
+The command
+\begin{lstlisting}
+cd prototype
+python -S replay.py ../results/full/corpus.json \
+  --receipt ../results/full/replay.json
+\end{lstlisting}
+was executed. The replay process installs an import hook that rejects imports
+of \code{forge_ap.search} and the entire \code{tests} namespace, then imports
+only representations and the checker. It accepted all stored records:
+884 parity, 400 transport, 180 MDP, and 100 simulation records. The receipt
+records \code{search_imports = FORBIDDEN} and
+\code{site_packages_enabled = false}.
+
+This is an operational separation test, not a formal proof of software
+independence. The search, checker, and oracle still share input dataclasses,
+normalization rules, Python integers, and rational arithmetic. A defect in a
+shared representation or an incorrect mathematical model could affect every
+computation. The independence claim is specifically that the checking
+algorithm does not invoke the search algorithms or the finite test oracles.
+
+\subsection{What the measured timings do and do not mean}
+
+The recorded full test run took approximately 0.414 seconds and the replay
+approximately 0.070 seconds in this environment. These figures are retained
+as raw execution metadata, not as performance evidence. They combine tiny
+synthetic cases, local arithmetic, serialization, and test bookkeeping; they
+are not repeated measurements and have no Lean baseline. No speedup or
+throughput claim should be derived from their ratio.
+
+The algorithm counters are similarly diagnostic: the parity proposer made
+2,884 recursive calls, the transport workload used 1,219 augmentations, the
+MDP workload used 383 trap-iteration passes and 231 policy evaluations, and
+the simulation workload invoked transport search 386 times. These counters
+have different units and are deliberately not combined into a scalar
+``proof effort'' score.
+
+\subsection{Remaining implementation weaknesses}
+
+The research parser rejects duplicate keys, floating-point and nonfinite JSON
+numbers, noncanonical rational pairs, out-of-range indices, and malformed
+array shapes. Its bounds are not a hostile-input security design. In
+particular, it bounds individual arrays but does not enforce one global budget
+for all matrix cells or intermediate rational arithmetic. Resource-limit
+rejections must be distinguished from malformed input at a production adapter;
+neither implies that a mathematical proposition is false.
+
+The code is small and intentionally dense in places. Its searches are not
+interruptible Forge workers; they do not yet receive cancellation tokens,
+subprocess resource quotas, or snapshot handles. The Python checker is not
+formally verified, and the Lean specimens do not implement a decoder or source
+reifier. These are concrete remaining tasks, not hidden assumptions behind the
+passing tests.

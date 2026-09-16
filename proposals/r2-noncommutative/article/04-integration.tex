@@ -1,0 +1,334 @@
+\section{Integrating the worker into Lean and Forge}
+\label{sec:integration}
+\status{The module layout, source bridge, routing rules, and acceptance gates
+below are proposed. Only the Python components listed in Section~\ref{sec:evidence}
+were executed. The six small Lean reconstruction targets are explicitly uncompiled.}
+
+\subsection{Reuse the host architecture, not its scalar representation}
+
+Forge's existing review of Leant and Djex already covers exact source ownership,
+status distinctions, opaque receipts, and the separation of discovery from
+verification~\cite{forge-leant}. Repeating that architecture as a contribution
+would add little. Here its important consequence is concrete: a noncommutative
+atom must retain its actual multiplication instance, scalar action, adjoint,
+and matrix index type.
+
+Leant's documented candidates retain source-level selections and are checked
+again by Lean; Djex distinguishes complete propositional search from bounded
+higher-rank synthesis~\cite{leant,djex}. The useful transfer is to treat an
+operator expression proposed by those systems as a typed \emph{candidate}, not
+as an algebraic theorem. Its semantics must still be established by the new
+receipt or an existing proof. Neither project was built or invoked in these
+experiments, and their historical test counts are not added to this report's
+numbers.
+
+The implementation should begin as an isolated \code{Forge.NC} worker at the
+existing tactic/obligation boundary. It need not reach into \code{grind}'s
+internal solver interfaces to test whether its new certificates help. Once a
+reconstructed equality is available, return an ordinary Lean theorem to the
+host's existing assertion mechanism. Operator and trace results should likewise
+return the exact original proposition, not an untyped Boolean success flag.
+
+\subsection{A proposed module split with narrow responsibilities}
+
+\begin{longtable}{@{}p{0.29\textwidth}p{0.64\textwidth}@{}}
+\toprule Module & Required responsibility \\\midrule\endhead
+\code{Forge.NC.WordPoly} & Canonical finite rational word polynomials; addition,
+concatenation, star, and evaluation theorems. No search state. \\
+\code{Forge.NC.Reify} & Extract a supported expression and a proof that evaluating
+the object polynomial gives the original Lean expression. Preserve atom types
+and operation instances. \\
+\code{Forge.NC.Receipt} & Typed equality, operator, trace, and matrix-witness
+formats. Source problem is a separate argument. \\
+\code{Forge.NC.Check} & Executable identity checks and their soundness theorems.
+Use theorem-producing normalization first; reflection can replace it later. \\
+\code{Forge.NC.Graded} & Optional formal account of homogeneous degree completeness
+and finite quotient witnesses. Not required for accepting a positive equality
+receipt. \\
+\code{Forge.NC.Matrix} & Matrix evaluation, adjoint correspondence, congruence
+positivity, and trace-specific reconstruction. \\
+\code{Forge.NC.Search} & Untrusted context enumeration, slicing, Gram factorization,
+ray proposal, and external backend adapters. \\
+\code{Forge.NC.Worker} & Route supported obligations, enforce resource limits, and
+return either reconstructed proofs or appropriately scoped diagnostics. \\
+\bottomrule
+\end{longtable}
+
+A practical entrance vocabulary is:
+\begin{lstlisting}
+needEquality(sourceGoal, sourceRelations, algebraProfile)
+needOperatorPositive(sourceGoal, sourceRelations, positiveFacts, starProfile)
+needTracePositive(sourceGoal, sourceRelations, positiveFacts, traceProfile)
+needAlgebraCountermodel(objectProblem, homogeneousEvidence, dimensionBudget)
+\end{lstlisting}
+These are interface sketches, not names of functions already present in Forge.
+The last request must not receive authority to close an arbitrary Lean goal.
+
+\subsection{A proof-producing source bridge}
+
+For an expression $e$ over an algebra $A$, reification should return an object
+polynomial $p$, an atom environment $\rho:X\to A$, and a Lean proof
+\[
+ \operatorname{eval}_{\rho}(p)=e.
+\]
+For every relation, it must return the analogous equation together with the
+actual local proof that the source relation is zero. The atom map is indexed
+by elaborated expressions in the exact context, not by display names.
+
+The simplest supported grammar is literals, atoms, addition, subtraction,
+negation, multiplication, natural powers, and a certified central rational
+scalar action. For a nonrecognized subexpression, two safe choices exist:
+retain it as an opaque atom of the same algebra, or decline the problem. An
+opaque inverse is not supplied an inverse law automatically. For the
+push-through example, the source must prove or explicitly supply the two inverse
+relations; the worker never invents them from notation.
+
+The bridge should establish its evaluation equations recursively. Atoms and
+constants are immediate; the add and multiply cases use the corresponding
+evaluation lemmas; a power follows by natural induction or a proved evaluation
+homomorphism. Star uses the declared involution agreement for every atom. This
+turns the search's word identity into a theorem about the original expression
+without trusting serialization or pretty-printing.
+
+Mathlib already provides \code{FreeAlgebra}, its universal lifting interface,
+and an equivalence with a monoid algebra on the free monoid~\cite{free-algebra}.
+These are useful semantic foundations. For executable checking, a canonical
+array/list representation is likely more convenient than reducing a quotient
+implementation directly. Prove its evaluation correspondence to the existing
+semantic object once; do not formalize a second abstract free-algebra theory
+merely to run sparse arithmetic.
+
+\paragraph{Typed rectangular products.}
+The delivered word language has one object: all atoms multiply in the same
+algebra. Rectangular matrix products need typed words with a source and target
+index type, and concatenation only when the middle types match. That extension
+can use paths in a finite typed graph, but it is not part of the current
+implementation. A preliminary adapter should reject mixed shapes rather than
+pad matrices or forget indices. A trace rotation for rectangular factors also
+moves between different matrix spaces; it needs the actual typed trace theorem,
+not a same-size word permutation.
+
+\subsection{Two reconstruction stages, with measurable gates}
+
+\paragraph{Stage one: theorem-producing replay.}
+Decode a small receipt, reconstruct each word as a source expression, and ask
+existing normalization to prove the advertised free-algebra identity. For
+integer-coefficient identities, \code{noncomm\_ring} is an immediate baseline
+reconstructor. Prove the zero contribution of each relation by congruence,
+multiplication by zero, and the supplied hypothesis. Sum the resulting
+proofs. This route avoids formalizing the search or a Gr\"obner algorithm, while
+allowing real kernel-checked examples early.
+
+Rational coefficients need explicit scalar-action normalization. A tempting
+shortcut is multiplying through by a common denominator. That also creates a
+cancellation obligation: cancellation of a positive integer scalar is not valid
+in every ring. On a $\Q$-algebra the scalar is invertible; the bridge must use
+that structure explicitly. On an integer-only ring receipt, retain integer
+coefficients and use the simpler reconstruction instead.
+
+\paragraph{Stage two: reflected replay.}
+When proof terms from expanded identities become the bottleneck, define a
+computational checker over canonical word polynomials and prove
+\[
+ \operatorname{checkEq}(p,r,c)=\mathrm{true}
+ \quad\Longrightarrow\quad
+ \bigl(\forall j,\operatorname{eval}(r_j)=0\bigr)
+ \Rightarrow\operatorname{eval}(p)=0.
+\]
+Analogous theorems interpret operator and trace receipts. The implementation
+must connect checked object evaluation to source reification before assigning a
+metavariable. A proved checker theorem still does not justify a mistranslated
+source goal.
+
+The supplied \code{lean/CertificatePrinciples.lean} contains six small targets
+for this path: a sandwich-zero lemma, a finite-sum certificate principle, a
+commuted square, the resolvent and push-through identities, and positivity under
+matrix congruence. It does not implement the computational checker, certify all
+119 JSON objects, or expose a new tactic. The compiler gate records
+\code{NOT\_RUN} because no Lean executable was available.
+
+\subsection{Concrete matrix library dependencies}
+
+The matrix reconstruction should target \code{Matrix.PosSemidef} directly,
+avoiding an ambiguous generic \code{0 <= M}. Mathlib documents the needed
+operations: \code{Matrix.PosSemidef.conjTranspose\_mul\_mul\_same},\par
+\code{Matrix.PosSemidef.add}, \code{Matrix.PosSemidef.smul},\par
+\code{Matrix.posSemidef\_sum}, and
+\code{Matrix.PosSemidef.trace\_nonneg}~\cite{matrix-posdef}.
+The Loewner-order API can be introduced in the surface layer after confirming
+its scoped instance; the certificate core need not depend on that notation.
+
+For a sandwich receipt, instantiate the congruence theorem at the decoded $Q$
+and the actual proof of $G$'s positive semidefiniteness. Use exact rational sign
+proofs for $d_k\ge0$, scalar multiplication, and finite sums. The final word
+identity replaces the positive sum by the source target. For trace receipts,
+apply trace linearity and a proved cyclicity identity to the decoded
+commutators; the resulting theorem is scalar-valued and stays scalar-valued
+when returned to the host.
+
+\subsection{Concrete optional search backends}
+
+\begin{longtable}{@{}p{0.22\textwidth}p{0.32\textwidth}p{0.38\textwidth}@{}}
+\toprule Backend & Useful existing facility & Adapter obligation and limitation \\\midrule\endhead
+Python standard library & Exact fractions, dictionaries, deterministic worklists &
+The only executed producer/replayer substrate in this package. Suitable as a
+reference, not a production performance claim. \\
+FLINT / python-flint & Rational matrix row reduction and solving, including
+\code{fmpq\_mat.rref()} and \code{solve()}~\cite{flint} &
+Convert exact numerators/denominators, retain column labels, and re-expand returned
+solutions. Backend matrix conventions do not define receipt semantics. \\
+NCAlgebra & \code{NCPoly}, \code{NCGBX}, and bounded
+\code{NCPolyGroebner}; symbolic/numeric SDP support through
+\code{NCSDP}~\cite{ncalgebra} &
+Useful untrusted Wolfram Language search. Export original two-sided context
+multipliers, not just a zero remainder. Requires a separate installed host;
+not invoked here. \\
+Ncpol2sdpa & Sparse moment/SDP relaxations for noncommutative polynomial
+optimization~\cite{ncpol2sdpa,wittek} &
+Use for candidate Gram data or supports. A moment relaxation bound or floating
+solver verdict is not an accepted certificate. The appropriate primal/dual
+conversion must be implemented and checked. \\
+Mathlib & Free-algebra semantics, existing normalization, matrix positivity
+lemmas~\cite{free-algebra,noncomm-ring,matrix-posdef} &
+Proof reconstruction and final authority. Neither an installed compatible
+package set nor a successful build is claimed by this dependency table. \\
+\bottomrule
+\end{longtable}
+
+For mixed-degree SDP search, let $W$ contain the chosen words, introduce a
+symmetric Gram matrix for each positive premise, and impose coefficient
+equalities modulo the equality span. A numerical solve suggests supports or
+approximate matrices. Reconstruct rational entries by solving the exact affine
+coefficient equations on that support; then test each rational matrix by exact
+$LDL$. If repair fails, reject the proposal. Merely rounding entries and checking
+that a numerical eigenvalue is ``almost nonnegative'' is not a repair algorithm.
+
+This is a proposed backend path. It extends the coefficient language in the
+same way as the executed finite-ray search, but does not inherit that routine's
+finite support completeness claim. Exact rational repair on a chosen numerical
+support can miss feasible solutions. It must remain an untrusted candidate
+producer with a distinct status.
+
+For NCAlgebra, the current documentation recommends the pure-Wolfram
+\code{NCGBX} route rather than the old C++ component~\cite{ncalgebra}. Even a
+successful noncommutative completion is only a discovery mechanism here; a
+nonterminating or iteration-limited completion yields \unknown{}. The
+homogeneous degree procedure supplies a simpler exact alternative when its
+entrance conditions hold.
+
+\subsection{A routing algorithm the planner can implement}
+
+\begin{lstlisting}
+route(problem):
+    reject unsupported scalar domain, source operations, or shape erasure
+    try cheap existing normalization and proved local rewrites first
+    if algebra equality:
+        if all relations homogeneous:
+            run context search at target degree
+            replay identity if found
+            otherwise construct and replay quotient matrices within budget
+        else:
+            run bounded context levels; all failures stay UNKNOWN
+    if operator positivity:
+        discharge or expose missing source self-adjointness obligations
+        if free homogeneous even-degree target and no needed constraints:
+            try unique-Gram exact LDL
+        try relation-derived rays plus explicit source-supplied rays
+        optionally request an external candidate Gram certificate
+    if trace positivity:
+        keep the trace wrapper
+        use cyclic residual search in the implemented fragment
+    export only a proof of the original proposition, or a scoped diagnostic
+\end{lstlisting}
+
+The homogeneous Gram fast path can safely ignore additional assumptions when it
+proves the target unconditionally, but a failure on that weaker unconstrained
+problem must not refute the constrained goal. Similarly, equality receipts may
+use a subset of available relations for positive proof; algebra countermodels
+must satisfy every relation included in the claimed universal object problem.
+The original source context may be richer still, which is why a source-level
+negative verdict needs a stronger translation gate.
+
+A useful exchange with Leant-style typed synthesis is to request candidate
+operator expressions $q$ from an exact local inventory, then pass those
+expressions to the positive-ray search. A useful exchange in the other direction
+is to return an equality that simplifies the behavioral specification of a
+candidate. The first implementation need not support unrestricted higher-rank
+synthesis: the executed involution dictionary already exercises the
+proposal/verification split with fully explicit algorithms.
+
+\subsection{Proof size and cache discipline specific to this worker}
+
+Equality elimination provenance can become large even when the final target
+has a short proof. Prefer a shared directed acyclic graph for repeated context
+multiplications, followed by dead-term removal and exact coefficient collection.
+The current JSON format expands the final list and does not implement DAG
+compression. The slicing experiment shows a different benefit: a three-term
+receipt can be found without building an elimination basis of rank 1,345.
+
+Memoizing the equality remainder basis is useful across repeated demands from
+one presentation. Its cache key must include the exact ordered atom meanings,
+coefficient domain, complete relation list, context bound, and involution when
+used for positivity. A cache may provide \emph{search guidance} after a looser
+match; it may not provide an accepted proof. The graph dictionary can be cached
+separately as proposals, but a cached square still needs its source typing and
+current receipt replay.
+
+The supplied checker imposes finite input sizes and product counts, rejects
+booleans as integers, requires canonical rational encodings, rejects duplicate
+JSON keys, and fails closed on malformed evidence. These are useful research
+checks, not a claim of a hardened parser for hostile internet workloads. A
+production process boundary also needs byte limits before JSON decoding,
+cooperative cancellation, wall-clock and memory limits, and failure isolation.
+
+\section{An incremental implementation plan with acceptance tests}
+\label{sec:roadmap}
+
+\subsection{Gate A: one real source-level equality}
+
+Implement rational-word reification and theorem-producing equality replay.
+Accept a Lean goal only after producing a proof of its exact source expression.
+Run the resolvent and push-through examples in a fresh Lean process, record
+compiler/toolchain and Mathlib revisions, and inspect the actual axiom
+inventories. Include changed-target, changed-multiplication-instance, and
+characteristic-two controls. The delivered prototype is not a substitute for
+this gate.
+
+\subsection{Gate B: reusable equality search}
+
+Add exact context enumeration and incidence slicing. Compare the two paths on
+identical Lean goals with the same reconstruction and resource limits. Measure
+search time, reconstruction time, kernel time, peak memory, and proof size
+separately. A small Python elimination time is not a prediction of Lean
+elaboration time. Add multiple demands sharing a relation basis, but preserve
+source-level context identities between demands.
+
+\subsection{Gate C: operator and trace proof reconstruction}
+
+Port the star correspondence and sandwich/trace interpretation theorems.
+Require the self-adjoint projection and positive congruence examples to close
+source goals. Then replay the homogeneous degree-six result and the two-stage
+CHSH derivation. Reject the trace/operator confusion example as an operator
+proof. No external SDP integration should precede these positive and negative
+controls: the hard boundary is reconstruction, not sophisticated discovery.
+
+\subsection{Gate D: exact-fragment diagnostics}
+
+The first production countermodel feature can be a diagnostic for an explicitly
+reified universal-algebra query. Verify whole relation matrices and the target
+vector in Lean or a separately verified matrix checker. Only then consider
+connecting it to source-goal refutation, with fixed dimensions and all local
+assumptions accounted for. A proved impossibility result for the object language
+must never become a proof of arbitrary Lean non-inhabitation.
+
+\subsection{Gate E: broader search and a fair comparative corpus}
+
+Only after the earlier gates should the project integrate a numerical SDP or
+noncommutative completion backend. Construct a held-out corpus of symbolic
+matrix, endomorphism, projection, and trace goals. Include failed goals and true
+goals outside the worker's fragments, not just generated certificates.
+Compare existing tactics, a noncommunicating portfolio, and the integrated
+worker. Report solved original goals under a fixed budget, not counts of
+internal algebra subgoals or generated receipt terms. The intended milestone
+is a measured increase in kernel-checked source goals, not a larger Python
+certificate corpus.

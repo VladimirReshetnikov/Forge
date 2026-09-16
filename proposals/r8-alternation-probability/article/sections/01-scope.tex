@@ -1,0 +1,135 @@
+\section{The extension boundary}
+\label{sec:scope}
+
+\subsection{What the inspected repository already contains}
+
+The inspected Forge snapshot is not an empty proposal. Its merged article is
+111 pages, draws on eighteen preserved submissions, and already contains the
+usual candidates for a stronger proof planner. Its canonical status ledger,
+provenance appendix, conclusion, and Leant/Djex review were used to delimit this
+work~\cite{forge,forge-status,forge-provenance,forge-ideas}. In particular,
+induction with generalization, arithmetic witness programs, ideal closure,
+finite-algebra covers, observable-space closure, Kripke countermodels,
+nonlinear certificates, boundary-safe telescoping, and cyclic descent are
+\emph{prerequisites}, not contributions of this article.
+
+The merge also records successful elaboration of sixteen core-only Lean files.
+It would therefore be wrong to say that nothing in Forge has ever compiled.
+The relevant remaining gap is narrower: the canonical ledger does not claim an
+implemented \forge{} tactic or a Lean-verified certificate checker for its
+workers~\cite{forge-status}. This article does not close that gap merely by
+adding Python experiments.
+
+The non-duplication claim here is scoped to the canonical merged design and
+capability inventory at the pinned commit. It is not a claim that every line of
+every historical submission has been exhaustively searched, nor that the
+algorithms below are new to the literature. The repository itself encourages a
+small checked implementation over another repetition of its architecture; the
+proposal below keeps that architecture and changes the kinds of obligations its
+workers can settle.
+
+\begin{longtable}{@{}L{0.25\linewidth}L{0.32\linewidth}L{0.36\linewidth}@{}}
+\toprule
+Existing mechanism & What it does not itself provide & Addition in this article \\
+\midrule
+\endhead
+Universal word/observable closure & A controller's choices against an adversary,
+with an infinite recurrence condition & Winning positional strategies plus
+threshold-local parity ranks \\
+Finite-state or finite-algebra closure & Correlated executions with prescribed
+probability marginals & Full rational couplings and optimal unsupported-mass
+certificates \\
+Closure under all transitions & The alternating order ``for every source action,
+there exists a matching target action'' & Greatest probabilistic simulation with
+replayable elimination evidence \\
+Well-founded cyclic descent & A loop that may repeat forever as a graph path,
+but terminates almost surely & Bellman drift certificates for expected time,
+or a reachable controlled trap \\
+Typed witness synthesis & Behavioral correctness of a strategy or a coupled
+transition table & Source-owned strategy tables and probabilistic witnesses,
+with separate semantic proof obligations \\
+\bottomrule
+\end{longtable}
+
+\subsection{Why these are related capabilities}
+
+A useful way to view the extension is to distinguish three transition
+operators. For a predicate $P$, a demonic step requires every successor to
+satisfy $P$, whereas an angelic step requires a selectable successor. For a
+nonnegative numerical potential $V$, a probabilistic step transports $V$ by an
+expectation. The same proof-planning mistake can occur in all three settings:
+the operator is silently changed to an easier one.
+
+Replacing $\forall a\,\exists b$ by $\exists b\,\forall a$ loses valid strategy
+witnesses; replacing it by $\exists a\,\exists b$ accepts invalid ones. Replacing
+an expectation by pointwise decrease loses randomized termination proofs.
+Replacing a coupling by an independent product loses valid relational proofs.
+Treating a finite occurrence of a good priority as recurring accepts a false
+liveness claim. Each worker below carries enough information for its checker
+to distinguish precisely these cases.
+
+The shared design principle is consequently more specific than ``use another
+solver'': \emph{reify the transition quantifier, propose a finite witness, and
+check its local obligations under the original operator}. Probability mass,
+choice ownership, terminal semantics, and the observation interface are part of
+the problem, not conveniences for a solver to reconstruct.
+
+\subsection{A concrete target workload}
+
+Four kinds of Lean goals motivate the workers. The following is schematic
+notation, not syntax installed by the accompanying package:
+\begin{lstlisting}
+-- A controller exists against every legal environment strategy.
+exists controller, forall environment,
+  parityWins (run arena controller environment start)
+
+-- Two probabilistic computations admit a relational joint execution.
+exists joint, marginals joint = (law left, law right)
+  and probability joint (not relation) <= epsilon
+
+-- Every implementation action admits a matching specification action.
+probabilisticSimulation source specification initialPair
+
+-- Every scheduler has bounded expected termination time.
+forall scheduler, expectedSteps program scheduler start <= budget
+\end{lstlisting}
+
+These are not four names for a finite reachability computation. The first is an
+infinite-game statement. The second has a joint-distribution witness. The third
+has alternating choices before sampling. The fourth quantifies over schedulers
+and estimates a numerical random variable. The finite input fragments let each
+worker return a small certificate even though the semantic claim concerns
+arbitrarily long executions.
+
+\subsection{What was actually built}
+
+The archive contains a new package, \code{forge_ap}, rather than a modified copy
+of Forge. Its search module implements recursive Zielonka solving, rational
+max-flow, a greatest-simulation elimination loop, and exact policy iteration.
+Its checker module performs only local graph, sum, and inequality checks; it
+imports no search algorithm. Separate tiny-model oracles use strategy
+enumeration, Hall-subset enumeration, exhaustive subrelations, and determinant
+expansion. This is stronger separation than replacing a solver entry point with
+an exception while retaining the solver's arithmetic assembler, although the
+implementations still share representations and Python's arithmetic runtime.
+
+No compiler was available for the Lean part of this execution. Accordingly,
+\code{lean/} contains small, explicitly uncompiled lowering specimens; the
+experiment ledger records \status{NOT\_RUN}. The mathematical proofs in the
+article explain what a future Lean checker must establish. They do not turn
+Python execution into kernel acceptance.
+
+\subsection{Pinned context and scope of external tools}
+
+The inspected repository revisions are recorded in Appendix~\ref{app:artifacts}.
+Forge's pinned Lean baseline is v4.34.0 with Mathlib revision
+\texttt{1cf325a0cf67aca2b04d76b5380ff6a9e410aefa}. Leant and Djex were consulted
+for the current source-owned synthesis and provider-selection surface, not to
+re-present the verification-boundary review Forge already
+contains~\cite{leant,djex,forge-ideas}.
+
+Oink, Spot, and Storm are concrete candidates for scaling search, not dependencies
+of the delivered Python code. The mathematics of coupling-based relational
+verification and parity solving is established prior work~\cite{oink,coupling}.
+All adaptations and proofs below are stated directly so that neither an external
+solver's verdict nor a citation is needed to check an individual certificate.

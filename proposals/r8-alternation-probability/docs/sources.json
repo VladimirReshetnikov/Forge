@@ -1,0 +1,72 @@
+{
+  "inspected_on": "2026-09-15",
+  "review_scope": "Canonical inventory and selected interfaces, not exhaustive all-file audit",
+  "repositories": [
+    {
+      "repository": "VladimirReshetnikov/Forge",
+      "commit": "c98e47c5f804e92880fc1d0e378c1b95832b685c",
+      "paths": [
+        "README.md",
+        "docs/STATUS.md",
+        "docs/IDEAS-FROM-LEANT-DJEX.md",
+        "article/sections/B-provenance.tex",
+        "article/sections/12-conclusion.tex",
+        "lean/Forge/Design/Contracts.lean"
+      ]
+    },
+    {
+      "repository": "VladimirReshetnikov/Leant",
+      "commit": "6bf05ad78c467989e68290f2d08bbed40802d485",
+      "paths": [
+        "README.md"
+      ]
+    },
+    {
+      "repository": "VladimirReshetnikov/Djex",
+      "commit": "e8778f4ebd63e1f9b9b410fa4de8d14a8a04c9e5",
+      "paths": [
+        "README.md"
+      ]
+    },
+    {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa",
+      "paths": [
+        "Mathlib/Probability/ProbabilityMassFunction/Monad.lean"
+      ],
+      "directory_verified": "Mathlib/Probability/ProbabilityMassFunction"
+    }
+  ],
+  "external_sources": [
+    {
+      "title": "Oink",
+      "url": "https://arxiv.org/abs/1801.03859"
+    },
+    {
+      "title": "Coupling proofs are probabilistic product programs",
+      "url": "https://arxiv.org/abs/1607.03455"
+    },
+    {
+      "title": "Spot",
+      "url": "https://spot.lre.epita.fr/",
+      "observed_version": "2.16",
+      "release_date": "2026-09-03"
+    },
+    {
+      "title": "Storm",
+      "url": "https://www.stormchecker.org/",
+      "observed_version": "1.14.0",
+      "release_date": "2026-08-20"
+    },
+    {
+      "title": "Lean grind reference",
+      "url": "https://lean-lang.org/doc/reference/latest/The--grind--tactic/"
+    }
+  ],
+  "execution": {
+    "python": "3.13.5",
+    "third_party_python_dependencies": [],
+    "lean": "NOT_RUN",
+    "external_solver_adapters": "NOT_IMPLEMENTED"
+  }
+}

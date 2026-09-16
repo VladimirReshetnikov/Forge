@@ -1,0 +1,106 @@
+\section{Coupled differential certificates}
+\label{sec:systems}
+
+\status{The constant-rational-matrix fragment is implemented and tested for supplied residual vectors. The general theorem is proved below; its Lean formalization and automatic residual discovery are not implemented}
+
+\subsection{Why a vector rule is useful}
+
+Some useful inequalities naturally prove one another's derivatives. For example, with
+\[
+ H_0(x)=\sinh x-x,\qquad H_1(x)=\cosh x-1,
+\]
+one has
+\[
+ H_0'=H_1,\qquad H_1'=H_0+x,
+ \qquad H_0(0)=H_1(0)=0.
+\]
+Trying to prove $H_0\ge0$ by assuming $H_1\ge0$, and then proving $H_1\ge0$ by assuming $H_0\ge0$, is circular. The correct object is a single vector theorem whose hypotheses license both dependencies simultaneously.
+
+A real matrix is \emph{Metzler} if its off-diagonal entries are nonnegative. Its diagonal entries may have either sign. The distinction matters: at a boundary where component $i$ is zero, the term $A_{ii}H_i$ vanishes, so the sign of the diagonal is irrelevant to the inward-pointing condition.
+
+\begin{theorem}[Positive-system certificate]
+\label{thm:system}
+Let $H:[0,\infty)\to\R^d$ be continuously differentiable, let $A:[0,\infty)\to\R^{d\times d}$ and $b:[0,\infty)\to\R^d$ be continuous, and suppose
+\begin{equation}
+ H'(x)=A(x)H(x)+b(x).
+ \label{eq:system}
+\end{equation}
+Assume $H_i(0)\ge0$, $b_i(x)\ge0$, and $A_{ij}(x)\ge0$ for $i\ne j$, on the whole right ray. Then $H_i(x)\ge0$ for every component and every $x\ge0$.
+\end{theorem}
+\begin{proof}
+Fix $T>0$. Continuity and compactness give a real number $K$ strictly larger than every row sum $\sum_jA_{ij}(x)$ for $x\in[0,T]$. For $\varepsilon>0$, define
+\[
+ w_i(x)=H_i(x)+\varepsilon e^{Kx}.
+\]
+Then $w_i(0)>0$, and
+\[
+ w_i'=(Aw)_i+b_i+
+ \varepsilon e^{Kx}\left(K-\sum_jA_{ij}(x)\right).
+\]
+If some component first reached zero at $t\in(0,T]$, all components of $w(t)$ would be nonnegative. At a zero component $i$, its diagonal contribution vanishes; the off-diagonal contributions and $b_i$ are nonnegative, and the last term is strictly positive. Thus $w_i'(t)>0$. But a differentiable function positive immediately to the left of its first zero has derivative at that zero at most zero, a contradiction. Therefore all $w_i$ stay positive on $[0,T]$. Letting $\varepsilon$ decrease to zero gives $H_i\ge0$ there. Since $T$ was arbitrary, the conclusion holds on the right ray.
+\end{proof}
+
+The proof does not assume the conclusion during any individual row check. The matrix sign conditions and a single general theorem are what make the feedback sound. In a Lean implementation, the scalar ladder theorem is a particularly simple triangular instance; a separate vector theorem is needed for genuine cycles.
+
+\subsection{The implemented certificate and row algorithm}
+
+The prototype restricts $A$ to a constant rational matrix and requires each forcing component $b_i$ to belong to $\Cplus$. The problem provides the residual functions $H_i\in\E$. A certificate contains $A$, the forcing polynomials, and the rational anchors. Replay verifies
+\[
+ H_i'-\sum_jA_{ij}H_j=b_i
+\]
+by exact sparse exponential-polynomial equality, checks $A_{ij}\ge0$ off the diagonal, checks coefficient positivity of every $b_i$, and recomputes every anchor.
+
+The search chooses a row of $A$ at a time. For fixed residuals, each row is independent of the others as an algebraic synthesis problem. For each tuple of candidate coefficients, it forms
+\[
+ b_i=H_i'-\sum_j a_jH_j
+\]
+and accepts the first tuple whose residual is in $\Cplus$. A finite row-attempt budget bounds this enumeration. The tested dictionaries at scale $r$ are
+\[
+ a_i\in\{-2r,-r,0,r,2r\},\qquad
+ a_j\in\{0,r,2r\}\quad(j\ne i).
+\]
+At most 10,000 row attempts are allowed. Exhausting that budget or the dictionary yields unknown for this synthesis request, not a proof that no positive-system certificate exists.
+
+\par\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}
+searchPositiveSystem(H, diagonalDictionary, offDiagonalDictionary):
+  reject this search path if any exact anchor H[i](0) is negative
+  for each row i:
+    for each bounded coefficient tuple a:
+      b := derivative(H[i]) - sum_j a[j] * H[j]
+      if b has only rate zero and nonnegative coefficients:
+        retain row a and forcing b
+        continue with next row
+    if no row retained: return Unknown
+  return the matrix, forcing, and anchor certificate
+\end{lstlisting}
+\end{minipage}\par
+
+This is concrete but intentionally modest. It does not search for the residual vector itself. A useful production extension is to form a small residual bank from differences in the original goal, already proved approximants, and cofactor derivatives. That proposal should be evaluated separately; it is not part of the recorded 40-case success count.
+
+\subsection{A parametric family behind the 40 tests}
+
+For $r>0$ and $n\ge0$, define
+\begin{align*}
+ H_S(x)&=\sinh(rx)-\sum_{j=0}^{n}\frac{(rx)^{2j+1}}{(2j+1)!},\\
+ H_C(x)&=\cosh(rx)-\sum_{j=0}^{n}\frac{(rx)^{2j}}{(2j)!}.
+\end{align*}
+Then
+\[
+ \begin{pmatrix}H_S\\H_C\end{pmatrix}'
+ =\begin{pmatrix}0&r\\r&0\end{pmatrix}
+  \begin{pmatrix}H_S\\H_C\end{pmatrix}
+ +\begin{pmatrix}0\\ r(rx)^{2n+1}/(2n+1)!\end{pmatrix},
+ \qquad H_S(0)=H_C(0)=0.
+\]
+The coefficient matrix is Metzler and the forcing is coefficient-positive. The tested corpus instantiates this at four rational rates and $n=0,\ldots,9$. The enumerator finds the rows from the residuals rather than receiving the matrix as its answer.
+
+These examples can also be tackled by scalar ladders. Their role is to validate an additional certificate representation that can export several inequalities together and express feedback without spurious circular proof edges. The results do not establish that the vector worker solves a larger tested set than the scalar worker.
+
+\subsection{A scalable replacement for coefficient enumeration}
+
+For fixed $H_i$, synthesis of a constant matrix row is a rational linear feasibility problem. Coefficients of all nonzero exponential modes in $H_i'-\sum_j a_jH_j$ must vanish. Coefficients of its zero mode must be nonnegative, as must the off-diagonal $a_j$. The diagonal variable is unrestricted. These are linear equations and inequalities in the row entries.
+
+A production search can therefore use an exact rational feasibility solver, or a numerical solver only to propose a support followed by an exact feasibility check. SymPy's rational polynomial domains are a concrete development option for coefficient extraction and exact linear algebra~\cite{sympy}. No such solver is required for the delivered package: row enumeration and all checking run with the Python standard library. The certificate format does not change when the proposer is replaced.
+
+For variable matrices $A(x)$ with polynomial entries, a fixed degree bound produces a similar coefficient-matching problem, but off-diagonal positivity then needs a certificate rather than a scalar sign. Forge's existing polynomial sign workers can supply those premises. This is an explicitly designed extension of the vector theorem, not an executed result. Nonpolynomial entries, domain guards, and nonzero anchors must likewise have their own proof obligations.

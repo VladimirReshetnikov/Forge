@@ -1,0 +1,109 @@
+{
+  "dependencies": "Python standard library only; invoked with -S",
+  "lean_kernel_proofs": 0,
+  "negative_bisim_with_nonempty_trace": 80,
+  "note": "Times are single-process local measurements, not Lean tactic benchmarks.",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "polynomial_finite_horizon_checks": 600,
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "reach_records_with_fractional_state": 53,
+  "records": 520,
+  "rejected_mutations": 520,
+  "seed": 20260915,
+  "unknown_controls": 5,
+  "workers": [
+    {
+      "certificate_bytes_max": 117,
+      "check_ms_max": 0.261385,
+      "check_ms_median": 0.1443925,
+      "distinct_problems": 57,
+      "independent_oracle_agreements": 60,
+      "kinds": {
+        "reach_max": 60
+      },
+      "mutations_rejected": 60,
+      "records": 60,
+      "search_ms_max": 0.358441,
+      "search_ms_median": 0.1262705,
+      "worker": "reach"
+    },
+    {
+      "certificate_bytes_max": 74,
+      "check_ms_max": 1.880988,
+      "check_ms_median": 0.1339975,
+      "distinct_problems": 49,
+      "independent_oracle_agreements": 50,
+      "kinds": {
+        "runtime_upper": 50
+      },
+      "mutations_rejected": 50,
+      "records": 50,
+      "search_ms_max": 1.927629,
+      "search_ms_median": 0.17050749999999998,
+      "worker": "runtime"
+    },
+    {
+      "certificate_bytes_max": 148,
+      "check_ms_max": 0.203347,
+      "check_ms_median": 0.04638,
+      "distinct_problems": 173,
+      "independent_oracle_agreements": 180,
+      "kinds": {
+        "hall": 83,
+        "transport": 97
+      },
+      "mutations_rejected": 180,
+      "records": 180,
+      "search_ms_max": 3.297015,
+      "search_ms_median": 0.19866499999999998,
+      "worker": "transport"
+    },
+    {
+      "certificate_bytes_max": 799,
+      "check_ms_max": 0.794169,
+      "check_ms_median": 0.16258,
+      "distinct_problems": 120,
+      "independent_oracle_agreements": 120,
+      "kinds": {
+        "bisimulation": 40,
+        "no_bisimulation": 80
+      },
+      "mutations_rejected": 120,
+      "records": 120,
+      "search_ms_max": 21.624367,
+      "search_ms_median": 0.8863125000000001,
+      "worker": "bisimulation"
+    },
+    {
+      "certificate_bytes_max": 3294,
+      "check_ms_max": 4.616866,
+      "check_ms_median": 0.6769365,
+      "distinct_problems": 59,
+      "independent_oracle_agreements": 60,
+      "kinds": {
+        "contraction": 40,
+        "rate_obstruction": 20
+      },
+      "mutations_rejected": 60,
+      "records": 60,
+      "search_ms_max": 70.551429,
+      "search_ms_median": 4.9030024999999995,
+      "worker": "contraction"
+    },
+    {
+      "certificate_bytes_max": 126,
+      "check_ms_max": 0.334264,
+      "check_ms_median": 0.153096,
+      "distinct_problems": 50,
+      "independent_oracle_agreements": 50,
+      "kinds": {
+        "polynomial_cost": 50
+      },
+      "mutations_rejected": 50,
+      "records": 50,
+      "search_ms_max": 0.413915,
+      "search_ms_median": 0.113932,
+      "worker": "polynomial_cost"
+    }
+  ]
+}

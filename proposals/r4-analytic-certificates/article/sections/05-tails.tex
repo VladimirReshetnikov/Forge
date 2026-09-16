@@ -1,0 +1,195 @@
+\section{A total eventual-sign worker with explicit witnesses}
+\label{sec:tails}
+
+\subsection{Why eventual goals deserve their own certificate}
+
+A positivity certificate on $[a,\infty)$ answers a different question from
+``there is some $a$ beyond which the function is positive.'' The second query
+should not be handled by guessing a large number until a bounded search happens
+to succeed. For \eqref{eq:fragment}, a direct exact algorithm constructs a
+cutoff for every nonzero canonical input.
+
+This worker is particularly useful for existential goals. It returns a rational
+witness $X$ together with a proof obligation that is uniform over every
+$x\ge X$. It can also supply the tail component of a proof whose bounded
+component is discharged by another worker. A tail receipt alone must never be
+silently promoted to a proof over the original entire domain.
+
+\subsection{An explicit domination theorem}
+
+Let $f\ne0$, let $\lambda_*$ be its largest rate, and let $d$ be the degree of
+$P_{\lambda_*}$. Multiply the target by a sign $\sigma\in\{-1,1\}$ so that the
+leading coefficient of $\sigma P_{\lambda_*}$ is $a>0$. Define
+\begin{align*}
+ L&=\sum_{k<d}|[x^k]P_{\lambda_*}|,\\
+ C_\lambda&=\sum_k|[x^k]P_\lambda|,\qquad
+ d_\lambda=\deg P_\lambda,\qquad
+ \delta_\lambda=\lambda_*-\lambda>0,\\
+ k_\lambda&=\max(d_\lambda-d,0)+1,\\
+ B&=\sum_{\lambda<\lambda_*}
+       \frac{C_\lambda k_\lambda!}{\delta_\lambda^{k_\lambda}}.
+\end{align*}
+Empty sums are zero. All these quantities are rational except for the integer
+degrees and orders.
+
+\begin{theorem}[Exact eventual-sign certificate]
+\label{thm:tail}
+For
+\begin{equation}
+ X=\max\left(1,\frac{2L}{a},\frac{4B}{a}\right),
+ \label{eq:cutoff}
+\end{equation}
+one has
+\begin{equation}
+ \sigma f(x)\ \ge\ \frac{a}{4}x^d e^{\lambda_*x}>0
+ \qquad\text{for every }x\ge X.
+ \label{eq:tail-lower}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For $x\ge1$, the lower-degree terms of the leading block have total magnitude
+at most $Lx^{d-1}$; when $d=0$, there are no such terms and $L=0$. Hence
+\[
+ \sigma P_{\lambda_*}(x)
+ \ge ax^d-Lx^{d-1}\ge\frac{a}{2}x^d
+\]
+when $x\ge2L/a$.
+
+For a lower-rate block, $|P_\lambda(x)|\le C_\lambda x^{d_\lambda}$.
+The exponential series, or the Taylor-remainder ladder of Section
+\ref{sec:ladders}, gives $e^t\ge t^k/k!$ for $t\ge0$ and $k\in\N$.
+Since $\delta_\lambda x>0$,
+\begin{align*}
+ |P_\lambda(x)|e^{-\delta_\lambda x}
+ &\le\frac{C_\lambda k_\lambda!}
+             {\delta_\lambda^{k_\lambda}}
+       x^{d_\lambda-k_\lambda}\\
+ &\le\frac{C_\lambda k_\lambda!}
+             {\delta_\lambda^{k_\lambda}}
+       x^{d-1}.
+\end{align*}
+The last step uses $d_\lambda-k_\lambda\le d-1$ and $x\ge1$.
+Summing yields a lower-rate contribution of magnitude at most
+$Bx^{d-1}\le(a/4)x^d$ when $x\ge4B/a$. Factoring out
+$e^{\lambda_*x}>0$ now gives \eqref{eq:tail-lower}. Strictness follows from
+$a>0$ and $x\ge1$.
+\end{proof}
+
+\begin{corollary}[Eventual sign and identity are decidable in the exact fragment]
+The eventual sign of a nonzero canonical exponential polynomial is the sign
+of the leading coefficient in its largest-rate block. The zero canonical
+object is identically zero. Conversely, a nonzero canonical object cannot
+represent the zero function, by Theorem~\ref{thm:tail}.
+\end{corollary}
+
+This is a genuine completeness statement for the eventual-sign problem in the
+specified rational fragment, subject only to the practical limits of exact
+computation. It does not decide where the sign changes, whether the function
+is nonnegative on an earlier compact interval, or whether its minimum is zero.
+Those are different problems.
+
+\subsection{The search and the checker}
+
+The producer extracts the largest rate, leading degree and sign, computes the
+norms above, selects the displayed $k_\lambda$, and emits $X$ with those orders.
+The checker independently requires
+\[
+ X\ge1,\quad a>0,\quad aX\ge2L,\quad aX\ge4B,
+\]
+and verifies for every lower block that its supplied integer $k_\lambda$ is
+positive and satisfies $k_\lambda\ge d_\lambda-d+1$.
+It does not require the producer's exact order choice or its exact minimum
+cutoff. A different search can choose larger orders or a larger cutoff without
+changing the acceptance theorem.
+
+The deliberately elementary cutoff may be quite conservative. For
+\[
+ f(x)=e^x-1000x^5
+\]
+one has $a=1$, $L=0$, $k=6$, $B=1000\cdot6!=720000$; thus $X=2880000$ is
+an immediate certificate. This is not a useful numerical estimate of the last
+zero. It is a total, exact fallback that makes no root-isolation assumption.
+
+A cheap refinement tries the native ladder at increasing anchors. On this
+example the tested sequence $0,1,2,4,8,16,32$ first obtains a certificate at
+$32$. That certificate proves strict positivity for all $x\ge32$ using exact
+rational enclosures of its initial values. The experiment establishes neither
+that $32$ is the optimal cutoff nor that this anchor search always stays cheap.
+Its role is to improve a witness whose existence is already established by a
+different total algorithm.
+
+\subsection{Why sufficiently large native anchors work mathematically}
+
+There is a useful bridge between the two workers. Suppose the eventual leading
+sign is positive and use the native ascending factors. Every nonzero prefix
+function also has positive eventual leading sign. Before factors for the
+largest rate are reached, each lower factor $(\D-\rho)$ multiplies the leading
+coefficient of the largest-rate block by the positive quantity
+$\lambda_*-\rho$. Once the largest-rate factors are reached, all lower-rate
+blocks are already dead; the remaining factors differentiate its polynomial,
+preserving a positive leading coefficient until the function vanishes.
+
+There are finitely many prefixes. Apply Theorem~\ref{thm:tail} to each nonzero
+one and choose an anchor larger than all resulting cutoffs. Every initial
+coordinate is then positive, and the native ladder succeeds. Thus a sufficiently
+large anchor exists without any auxiliary factors.
+
+This argument distinguishes mathematical termination from the delivered bounded
+search. A fair search over unbounded anchors and increasing enclosure precision
+can eventually establish all the strictly positive initial values. The actual
+experiment tries a finite sequence at fixed precision, with the explicit tail
+certificate as its fallback. It makes no universal runtime claim.
+
+\subsection{Quantitative asymptotics available from the same proof}
+
+The estimates also give, for $x\ge1$,
+\begin{equation}
+ \left|\sigma e^{-\lambda_*x}x^{-d}f(x)-a\right|
+ \le\frac{L+B}{x}.
+ \label{eq:relative-modulus}
+\end{equation}
+Consequently, for any rational $\eta>0$, the rational witness
+\[
+ X_\eta=\max\left(1,\frac{L+B}{a\eta}\right)
+\]
+ensures relative error at most $\eta$ with respect to the leading term.
+The proof is the same triangle-inequality estimate, without splitting the
+budget into halves and quarters.
+
+This corollary suggests an additional Forge contract:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+leadingTermWithModulus(f, eta) ->
+    (sign, rate, degree, coefficient, cutoff, proof)
+\end{lstlisting}
+\end{minipage}\par
+Such a result can feed ratio comparisons, limits, and eventual denominator
+nonvanishing. The archive implements the eventual-sign contract, not this
+separate modulus API; the mathematical corollary is stated explicitly so that
+the next implementation does not need to discover another method.
+
+If the source variable is restricted to naturals, replacing a rational cutoff
+by its ceiling gives an integer witness after a proved coercion step. If the
+source is a logarithmic chart $x=e^t$, a rational cutoff in $t$ corresponds to
+the real witness $e^X$ in $x$. The witness need not itself be rational. These
+transport steps belong to source reconstruction, not to rational rounding in
+the search process.
+
+\subsection{Combining a tail with a bounded-domain proof}
+
+For a requested ray $[a,\infty)$ and a tail cutoff $X\ge a$, produce two
+separate subgoals:
+\[
+ \forall x\in[a,X],\ f(x)\ge0,
+ \qquad
+ \forall x\ge X,\ f(x)\ge0.
+\]
+The source proof uses the elementary dichotomy $x\le X$ or $X\le x$.
+The shared endpoint must be covered; there is no half-open gap. If the target
+is strict, both component contracts must carry enough strict information.
+
+This decomposition is especially attractive for a function that decreases
+initially and then becomes positive. It is not by itself a universal
+nonnegativity procedure: a compact component containing a zero can still defeat
+a simple interval worker. The derivative and factorisation routes are needed
+precisely at those contacts.

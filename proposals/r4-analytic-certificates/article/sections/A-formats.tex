@@ -1,0 +1,111 @@
+\section{Certificate formats and API contracts}
+\label{app:formats}
+
+\subsection{Canonical source objects}
+
+A polynomial is a sorted array of triples
+\code{[rate, degree, coefficient]}. Rates and coefficients are strings in the
+canonical syntax of Python \code{Fraction}: an integer or a reduced fraction
+with a positive denominator. Examples are \code{"-2"}, \code{"1/2"}, and
+\code{"0"}. Inputs such as \code{"2/2"}, \code{"01"}, floats, and Boolean
+values are rejected by the decoder; a Boolean must not pass merely because
+Python treats it as an integer subtype. Zero coefficients, repeated keys, and
+unsorted rows are rejected at the encoded boundary.
+
+For example, $e^x-1-x$ has the source polynomial
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+[["0", 0, "-1"], ["0", 1, "-1"], ["1", 0, "1"]]
+\end{lstlisting}
+\end{minipage}\par
+and a source request can be
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+{
+  "polynomial": [["0",0,"-1"], ["0",1,"-1"], ["1",0,"1"]],
+  "goal": {"kind": "positive_open_ray", "anchor": "0"}
+}
+\end{lstlisting}
+\end{minipage}\par
+
+These JSON objects are the prototype's independently supplied source problems.
+They are not a serialization of arbitrary Lean expressions. A Lean implementation
+must retain the separate source-evaluation equality discussed in Section
+\ref{sec:lean}.
+
+\subsection{Ladder receipts}
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+{
+  "kind": "ladder-v1",
+  "anchor": "0",
+  "bits": 96,
+  "order": 32,
+  "steps": [
+    {
+      "rho": "0",
+      "polynomial": [["0",0,"-1"], ["0",1,"-1"], ["1",0,"1"]],
+      "lower": "0", "upper": "0"
+    },
+    {
+      "rho": "0",
+      "polynomial": [["0",0,"-1"], ["1",0,"1"]],
+      "lower": "0", "upper": "0"
+    },
+    {
+      "rho": "1", "polynomial": [["1",0,"1"]],
+      "lower": "1", "upper": "1"
+    }
+  ]
+}
+\end{lstlisting}
+\end{minipage}\par
+
+The terminal zero is implicit and must be computed after the final factor.
+The precision parameters select a reproducible enclosure calculation, not a
+numerical trust tolerance. At a nonzero anchor the stored endpoints concern
+the positively normalised value of equation~\eqref{eq:normalised-evaluation}.
+
+\subsection{Tail receipts}
+
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+{
+  "kind": "tail-v1",
+  "sign": 1,
+  "cutoff": "2880000",
+  "orders": [["0", 6]]
+}
+\end{lstlisting}
+\end{minipage}\par
+
+For the separately supplied input $e^x-1000x^5$, this is the certificate from
+Theorem~\ref{thm:tail}. The checker extracts the leading rate, degree, coefficient,
+and all block norms from the source; it does not accept those facts merely
+because the receipt states them. The zero source admits a separate sign-zero
+receipt with no lower-rate orders.
+
+\subsection{The accepted source request types}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.34\linewidth}X@{}}
+\toprule
+Request & Required receipt conclusion\\
+\midrule
+\code{nonnegative_ray} & A ladder with the identical anchor\\
+\code{positive_open_ray} & Identical anchor and at least one strictly positive initial lower bound\\
+\code{positive_closed_ray} & Identical anchor and strictly positive first initial lower bound\\
+\code{eventual_sign} & A tail receipt with the requested sign; cutoff is an explicit witness\\
+\code{nonnegative_interval} & A complete cover of exactly the requested interval\\
+\code{counterexample_interval} & A certified negative point in exactly that interval\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The public functions \code{verify(sourcePolynomial, receipt)} and
+\code{verify_goal(sourceProblem, receipt)} answer different questions. The
+former establishes the receipt's own conclusion against an independent
+polynomial; the latter also checks that this conclusion answers the actual
+request. Code invoking only the first function has not implemented the complete
+source-goal contract.

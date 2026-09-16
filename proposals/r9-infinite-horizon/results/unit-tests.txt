@@ -1,0 +1,41 @@
+test_changed_owner_rejects_policy (test_horizon.GameTests.test_changed_owner_rejects_policy) ... ok
+test_deadlock_is_not_silently_totalized (test_horizon.GameTests.test_deadlock_is_not_silently_totalized) ... ok
+test_negative_rank_mutation (test_horizon.GameTests.test_negative_rank_mutation) ... ok
+test_opponent_cannot_be_omitted (test_horizon.GameTests.test_opponent_cannot_be_omitted) ... ok
+test_owner_changes_answer (test_horizon.GameTests.test_owner_changes_answer) ... ok
+test_rank_reset_at_acceptance (test_horizon.GameTests.test_rank_reset_at_acceptance) ... ok
+test_reachability_is_not_buchi (test_horizon.GameTests.test_reachability_is_not_buchi) ... ok
+test_spurious_accepting_negative_rejected (test_horizon.GameTests.test_spurious_accepting_negative_rejected) ... ok
+test_spurious_nonaccepting_selfloop_rejected (test_horizon.GameTests.test_spurious_nonaccepting_selfloop_rejected) ... ok
+test_all_terminal_start (test_horizon.MarkovTests.test_all_terminal_start) ... ok
+test_changed_probability_rejected (test_horizon.MarkovTests.test_changed_probability_rejected) ... ok
+test_cyclic_harmonic_only_not_proof (test_horizon.MarkovTests.test_cyclic_harmonic_only_not_proof) ... ok
+test_each_numeric_vector_mutation_rejected (test_horizon.MarkovTests.test_each_numeric_vector_mutation_rejected) ... ok
+test_floats_rejected (test_horizon.MarkovTests.test_floats_rejected) ... ok
+test_fractional_payoff_is_expectation_not_event (test_horizon.MarkovTests.test_fractional_payoff_is_expectation_not_event) ... ok
+test_geometric_exact_values (test_horizon.MarkovTests.test_geometric_exact_values) ... ok
+test_no_terminal (test_horizon.MarkovTests.test_no_terminal) ... ok
+test_normalization_rejected (test_horizon.MarkovTests.test_normalization_rejected) ... ok
+test_omit_positive_probability_successor (test_horizon.MarkovTests.test_omit_positive_probability_successor) ... ok
+test_trap_contains_no_terminal (test_horizon.MarkovTests.test_trap_contains_no_terminal) ... ok
+test_trap_needs_positive_path (test_horizon.MarkovTests.test_trap_needs_positive_path) ... ok
+test_unreachable_trap_does_not_invalidate_start (test_horizon.MarkovTests.test_unreachable_trap_does_not_invalidate_start) ... ok
+test_circular_positive_rejected (test_horizon.PushdownTests.test_circular_positive_rejected) ... ok
+test_dag_is_compressed (test_horizon.PushdownTests.test_dag_is_compressed) ... ok
+test_duplicate_summary_rejected (test_horizon.PushdownTests.test_duplicate_summary_rejected) ... ok
+test_empty_stack_and_monitor (test_horizon.PushdownTests.test_empty_stack_and_monitor) ... ok
+test_false_infinite_stack_negative_detected (test_horizon.PushdownTests.test_false_infinite_stack_negative_detected) ... ok
+test_illegal_symbol_rejected (test_horizon.PushdownTests.test_illegal_symbol_rejected) ... ok
+test_missing_base_rejected (test_horizon.PushdownTests.test_missing_base_rejected) ... ok
+test_missing_binary_consequence_rejected (test_horizon.PushdownTests.test_missing_binary_consequence_rejected) ... ok
+test_top_first_monitor_orientation (test_horizon.PushdownTests.test_top_first_monitor_orientation) ... ok
+test_wrong_target_rejected (test_horizon.PushdownTests.test_wrong_target_rejected) ... ok
+test_bool_not_a_state (test_horizon.TransportTests.test_bool_not_a_state) ... ok
+test_duplicate_json_keys_rejected (test_horizon.TransportTests.test_duplicate_json_keys_rejected) ... ok
+test_roundtrip_fraction (test_horizon.TransportTests.test_roundtrip_fraction) ... ok
+test_zero_denominator_rejected (test_horizon.TransportTests.test_zero_denominator_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.002s
+
+OK

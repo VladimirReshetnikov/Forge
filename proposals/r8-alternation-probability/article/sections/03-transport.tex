@@ -1,0 +1,220 @@
+\section{Relational probability: exact couplings with an optimality dual}
+\label{sec:transport}
+
+\subsection{Why independent execution is the wrong default}
+
+Let two programs return fair bits. Their output distributions are equal, but
+two \emph{independent} runs agree only with probability $1/2$. A proof of equality
+in distribution must not require independent executions to return equal values.
+Instead, it can exhibit a joint distribution with the required marginals that
+puts both bits on the diagonal. Couplings are a standard foundation for such
+relational proofs~\cite{coupling}. The new worker computes them exactly and
+also explains when a perfect coupling is impossible.
+
+\begin{definition}[Finite coupling and defect]
+Let $\mu:X\to\Q_{\ge0}$ and $\nu:Y\to\Q_{\ge0}$ be probability distributions on
+nonempty finite sets. A coupling is a matrix $\gamma:X\times Y\to\Q_{\ge0}$
+with row sums $\mu$ and column sums $\nu$. For a relation $R\subseteq X\times Y$,
+its defect is
+\[
+ \delta_R(\gamma)=\sum_{(x,y)\notin R}\gamma(x,y).
+\]
+A zero-defect coupling is supported by $R$.
+\end{definition}
+
+The problem supplied externally to the checker consists of the two complete
+marginals and the relation. The certificate supplies the \emph{full} coupling,
+not only its favorable entries. Otherwise a proposer could hide missing mass
+and report a zero defect for two incompatible distributions.
+
+\subsection{The Hall lower bound}
+
+For $A\subseteq X$, put $R(A)=\{y:\exists x\in A,\ R(x,y)\}$ and define
+\[
+ h(A)=\mu(A)-\nu(R(A)).
+\]
+The empty subset gives $h(\varnothing)=0$.
+
+\begin{lemma}[Weighted Hall obstruction]
+\label{lem:hall}
+For every coupling $\gamma$ and every $A\subseteq X$,
+$\delta_R(\gamma)\ge h(A)$.
+\end{lemma}
+\begin{proof}
+The mass in rows $A$ is $\mu(A)$. At most $\nu(R(A))$ of this mass can lie in
+columns $R(A)$, by the column marginal equations and nonnegativity. Every entry
+in $A\times(Y\setminus R(A))$ is outside $R$. Its total mass is therefore a
+lower bound on the defect, proving the inequality.
+\end{proof}
+
+A certificate contains a coupling $\gamma$, a claimed defect $\delta$, and one
+subset $A$. The checker verifies nonnegativity, both marginals, the actual sum
+outside $R$, and
+\begin{equation}
+ \delta_R(\gamma)=\delta=h(A).
+ \label{eq:transport-dual}
+\end{equation}
+No flow network is reconstructed by the checker.
+
+\begin{theorem}[Optimality from a primal--dual equality]
+\label{thm:transport}
+If the transport certificate is accepted, $\gamma$ minimizes defect among all
+couplings of $\mu$ and $\nu$, and $\delta$ is the exact minimum. In particular,
+$\delta>0$ proves that no coupling supported by $R$ exists.
+\end{theorem}
+\begin{proof}
+The supplied matrix attains $\delta$, while Lemma~\ref{lem:hall} gives the same
+lower bound for every other coupling.
+\end{proof}
+
+This lower-bound evidence is stronger than ``the flow search failed to find a
+perfect matching.'' It is also narrower than a claim about arbitrary source
+programs: it proves an obstruction for these marginals and this relation. The
+source bridge must establish that those are the ones in the original goal.
+
+\subsection{An exact proposer}
+
+Build a bipartite flow network with source $s$, sink $t$, an edge
+$s\to x$ of capacity $\mu(x)$, an edge $y\to t$ of capacity $\nu(y)$, and
+$x\to y$ of capacity 1 exactly when $R(x,y)$. A maximum flow has value $f$ and
+produces a partial supported coupling $g$. The prototype uses Edmonds--Karp
+augmenting paths with Python \code{Fraction}; there is no scaling to an
+approximate integer grid.
+
+Let residual row masses and column masses be
+\[
+ r_x=\mu(x)-\sum_y g(x,y),\qquad
+ c_y=\nu(y)-\sum_x g(x,y),\qquad
+ \delta=\sum_xr_x=\sum_yc_y=1-f.
+\]
+If $\delta=0$, take $\gamma=g$ and $A=\varnothing$. Otherwise complete the
+partial coupling by
+\begin{equation}
+ \gamma(x,y)=g(x,y)+\frac{r_xc_y}{\delta}.
+ \label{eq:residual-coupling}
+\end{equation}
+The added matrix has the missing marginals. Moreover, $r_xc_y>0$ implies
+$\neg R(x,y)$: an admissible such pair would permit another positive
+augmentation. Since $f<1$, its capacity-1 edge cannot already be saturated by
+a total flow of size less than 1. Hence the completion adds exactly $\delta$
+unsupported mass.
+
+Let $A$ be the left vertices reachable from $s$ in the residual network. The
+standard residual cut, written in terms of row and column masses, yields
+$\mu(A)-\nu(R(A))=1-f$. The checker verifies this equality directly, so an
+error in cut extraction is harmless to acceptance. This proves that every
+finite rational transport input has a certificate of the specified form.
+
+\begin{lstlisting}
+proposeTransport(mu, nu, R):
+  g, residual := exactMaxFlow(bipartiteNetwork(mu, nu, R))
+  r := missing row masses of g
+  c := missing column masses of g
+  delta := sum(r)
+  joint := g if delta = 0 else g + outer(r,c)/delta
+  A := empty if delta = 0 else residualReachableLeftVertices
+  return joint, delta, A
+
+checkTransport(problem, certificate):
+  check joint >= 0, rowSums(joint) = mu, columnSums(joint) = nu
+  bad := sum of joint entries outside R
+  check bad = claimedDelta = mu(A) - nu(R(A))
+\end{lstlisting}
+
+The dense checker takes $O(|X||Y|)$ rational arithmetic operations. The
+Edmonds--Karp combinatorial bound is $O(VE^2)$ with
+$V=|X|+|Y|+2$; the delivered dense residual representation is intended for
+small instances, not high-throughput graph processing. Rational bit complexity
+is additional. Production search may use a faster exact flow library or a
+numerical proposal followed by exact repair, but acceptance remains
+\eqref{eq:transport-dual}.
+
+\subsection{Worked examples}
+
+\paragraph{Monotone Bernoulli coupling.}
+Let $X\sim\operatorname{Bernoulli}(1/3)$,
+$Y\sim\operatorname{Bernoulli}(2/3)$, and let $R(x,y)$ mean $x\le y$. With rows
+and columns ordered $0,1$, a perfect coupling is
+\[
+ \gamma=\begin{pmatrix}1/3&1/3\\0&1/3\end{pmatrix}.
+\]
+The independent product has positive mass at $(1,0)$, so it cannot prove the
+same almost-sure relation. The distinction is the choice of a joint law, not
+an improvement in numerical precision.
+
+\paragraph{A proof that no perfect monotone coupling exists.}
+Reverse the parameters. Rows have masses $(1/3,2/3)$, columns have masses
+$(2/3,1/3)$, and the same order relation is requested. Taking $A=\{1\}$ gives
+$R(A)=\{1\}$ and $h(A)=1/3$. The matrix
+\[
+ \gamma=\begin{pmatrix}1/3&0\\1/3&1/3\end{pmatrix}
+\]
+has defect exactly $1/3$, so its optimality is settled by three short sum
+checks. A positive optimal defect is a successful answer, not a failed search.
+
+\paragraph{Two coins versus one binomial sample.}
+Let $X$ be the uniformly distributed pair $(a,b)\in\{0,1\}^2$, let
+$Y\sim\operatorname{Binomial}(2,1/2)$, and require $a+b=Y$. Coupling each pair
+with its sum gives defect zero. Under independent execution, agreement has
+probability
+\[
+ (1/4)^2+(1/2)^2+(1/4)^2=3/8,
+\]
+so the defect is $5/8$. This is an explicit distributional-refinement target
+that independent product execution cannot certify. A runnable example exports
+both the witness and the independently computed defect.
+
+\subsection{Composition with finite probabilistic programs}
+
+For finite distributions, define
+\[
+ (\mu\mathbin{\gg=}K)(x')=\sum_x\mu(x)K(x,x').
+\]
+Suppose $\gamma$ couples $\mu$ and $\nu$, and for each pair $(x,y)$ of positive
+joint mass, $\Gamma_{x,y}$ couples $K_x$ and $L_y$. Then
+\begin{equation}
+ \gamma'(x',y')=\sum_{x,y}\gamma(x,y)\Gamma_{x,y}(x',y')
+ \label{eq:bind-coupling}
+\end{equation}
+is a coupling of the two bound distributions. The first marginal follows by
+summing over $y'$, substituting the first marginal of each $\Gamma_{x,y}$,
+and then substituting the first marginal of $\gamma$; the second is symmetric.
+This finite-sum identity is the initial Lean composition theorem to prove.
+It corresponds to the existing \code{PMF.bind} semantics, whose pointwise
+formula and associativity law are present at the inspected Mathlib
+pin~\cite{mathlib-pmf}.
+
+For related state pairs, suppose each proposed transition coupling leaves the
+relation with probability at most $\varepsilon\in[0,1]$. Starting in the
+relation, the probability of leaving it within $k$ steps is at most
+\[
+ 1-(1-\varepsilon)^k\le k\varepsilon.
+\]
+This follows by conditioning on the first $j$ steps all remaining related and
+induction on $j$. Once outside the relation, any coupling of the marginals may
+be used. The argument concerns a finite synchronous horizon; it does not claim
+an asynchronous product-program theorem or a general infinite-path measure
+construction. Those are valuable extensions, but a finite marginal checker
+should not inherit their names without their proofs.
+
+\subsection{A precise next extension: transport costs}
+
+The defect problem is a special case of minimizing
+$\sum_{x,y}c(x,y)\gamma(x,y)$, with cost $c=\one{\neg R}$. A general
+rational-cost worker can retain the full coupling and replace the Hall subset
+by potentials $u_x,v_y$ satisfying
+\[
+ u_x+v_y\le c(x,y),\qquad
+ \sum_xu_x\mu(x)+\sum_yv_y\nu(y)
+   =\sum_{x,y}c(x,y)\gamma(x,y).
+\]
+The inequality gives a lower bound after multiplication by $\gamma$ and
+summation; equality proves optimality. This is a concrete certificate format
+for min-cost transport, not an implemented feature in this archive.
+
+With a distance cost, a family of witnesses satisfying
+$\E[d(X',Y')]\le\kappa d(x,y)$ gives a finite-horizon contraction theorem by
+iterated expectation. It would let Forge route an approximate relational goal
+to exact transport duality rather than enumerate candidate algebraic
+inequalities. The first implementation gate should be the cost certificate
+and finite composition theorem, before any claim about mixing times.

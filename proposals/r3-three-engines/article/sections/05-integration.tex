@@ -1,0 +1,126 @@
+\section{Integration into Forge, Leant, and Djex}
+\label{sec:integration}
+
+\subsection{Keep the existing controller; add three typed adapters}
+Forge's reviewed runtime contract already distinguishes a candidate, a conditional candidate with premises, and a no-result outcome. It also carries a scope key and resource limits. The new workers should attach to that design rather than define a competing global proof state~\cite{forge-runtime}.
+
+The following proposed module layout is deliberately local:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+Forge/Polyhedral/Reify.lean
+Forge/Polyhedral/Rows.lean
+Forge/Polyhedral/ProjectionCheck.lean
+Forge/Polyhedral/Lift.lean
+Forge/Polyhedral/Replay.lean
+
+Forge/Noncomm/Reify.lean
+Forge/Noncomm/WordPoly.lean
+Forge/Noncomm/IdentityCheck.lean
+Forge/Noncomm/Replay.lean
+
+Forge/Analytic/Expr.lean
+Forge/Analytic/Domain.lean
+Forge/Analytic/Interval.lean
+Forge/Analytic/ElementaryBounds.lean
+Forge/Analytic/Derivative.lean
+Forge/Analytic/Jet.lean
+Forge/Analytic/Replay.lean
+\end{lstlisting}
+\end{minipage}\par
+These are proposed paths, not files that already exist in the source repository or in the supplied Lean specimens. The corresponding Python modules are real and are listed in Appendix~\ref{app:artifacts}.
+
+A worker should be triggered by a semantic classifier, not only by a visible token. An existential real-valued tuple with affine constraints is a polyhedral job. An equality over a recognized associative algebra with useful local polynomial relations is a noncommutative job. A real inequality containing admitted elementary atoms and a proved bounded domain is an analytic job. Unsupported pieces remain separate obligations or cause a refusal of the fragment.
+
+\subsection{The polyhedral source bridge}
+The source bridge must record the correspondence between each parameter/output coordinate and its Lean local expression, as well as a proof of every affine normalization. It should first target \(\R\), with rationals embedded by their exact casts. Equalities are translated to two rows only with the elementary equivalence theorem. A strict inequality must never be normalized to a non-strict row merely to fit an existing data type.
+
+The principal theorem needed for replay has the shape
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+checkProjection problem certificate = true ->
+  forall x, domain problem x ->
+    relation problem x (extractWitness problem certificate x)
+\end{lstlisting}
+\end{minipage}\par
+The exact Lean representation can use vectors or finite functions. The certificate's output order and the witness extractor's dependency order must be one and the same checked schedule.
+
+The resulting witness is an explicit mathematical term, not an appeal to an unspecified choice operator. That does not imply that arbitrary real-number comparison and arithmetic become executable machine operations. A Lean term over \(\R\) may be noncomputable in the code-generation sense. A corresponding \(\Q\) instance of the same ordered-field construction is a natural executable specialization, but the source type must not silently change from reals to rationals.
+
+Negative replay needs a stronger source bridge than positive replay. Suppose the reifier treats \(\sin t\) and \(\cos t\) as independent real parameters. A proof valid for all independent values is safe to instantiate back into the source. A counterexample using impossible independent values is not a counterexample to the source theorem. Similarly, dropping some local hypotheses is safe for a positive proof from the remaining hypotheses, but unsafe for a refutation that ignores them.
+
+Therefore the polyhedral counterexample constructor should initially be exposed only when all parameter coordinates are actual independent real binders and the reified domain contains the full relevant premise. Otherwise its negative receipt is a diagnostic about the abstraction, not a source-level disproof. The Python problem format has exact independent coordinates; this qualification arises when connecting it to Lean expressions.
+
+\subsection{The noncommutative source bridge}
+The reifier starts by selecting one multiplication carrier and one interpretation environment for its atoms. Rational scalar casts, numeral powers, multiplication order, and subtraction are normalized into word polynomials with accompanying interpretation lemmas. A hypothesis is registered as a relation only when its normalized polynomial is proved to evaluate to zero.
+
+The checker theorem should quantify over the interpretation rather than hard-code matrices or operators:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}
+checkIdentity relations target certificate = true ->
+  (forall i, eval relations[i] rho = 0) ->
+  eval target rho = 0
+\end{lstlisting}
+\end{minipage}\par
+This makes the same certificate usable in different algebras while keeping its original source hypotheses explicit. A new relation discovered by completion is not inserted into the local context until its original-relation receipt has been replayed.
+
+The first implementation can emit source-level contextual equalities and rely on Mathlib normalization. That is a useful bring-up path, particularly for the short critical-pair example. It should not be mistaken for a scalable reflected checker: a long sum of contextual hypotheses can create enormous elaboration and normalization work. The sparse coefficient checker and its general interpretation theorem are the appropriate second step.
+
+\subsection{The analytic source bridge}
+Analytic replay needs four proved layers, each with a narrower responsibility than a general tactic:
+\begin{enumerate}
+\item An AST denotation and a theorem connecting it to the original Lean expression.
+\item Exact interval-operation and elementary-atom enclosure theorems, including denominator and logarithm domains.
+\item A symbolic derivative theorem and an exact anchor-evaluation theorem.
+\item Coverage-tree and jet soundness theorems that compose those local facts.
+\end{enumerate}
+The proof of a jet certificate cannot consist only of checking a list of rational values. It must establish that the differentiated AST denotes the derivative of the original function, and that the original function has the required smoothness on the interval. This is why the analytic port is a larger formalization task than its short Python search routine suggests.
+
+The real-variable Taylor results in Mathlib are an existing bridge for the last layer. Their documented formulation uses real intervals and iterated derivatives; generalization to higher-dimensional domains is not something this report assumes already solved by the same API~\cite{mathlib-taylor}. For the initial univariate worker, prove reusable corollaries with the exact interval orientation and vanishing hypotheses needed by Theorem~\ref{thm:jet}, so later certificates do not reconstruct the analytic argument from scratch.
+
+\subsection{Concrete cooperation: a witness plus an analytic guarantee}
+Consider strengthening the four-corner problem to
+\[
+ \exists z,\quad
+ \max(0,x+y-1)\le z\le\min(x,y)
+ \quad\land\quad e^z\ge1+z,
+\]
+under \(0\le x,y\le1\). A useful plan has three proof steps. The polyhedral worker constructs \(z\) for the linear part. Its output bounds imply \(0\le z\le1\). The analytic worker supplies a theorem for \(e^t-1-t\ge0\) on \([0,1]\), which is instantiated at the constructed witness. The existing local engine then assembles the conjunction.
+
+The analytic conjunct is not simply omitted while solving the existential. The controller must retain it as an obligation and use a proved implication from the linear postcondition to that obligation. Abstractly, the composition rule is
+\[
+ \bigl[D(x)\Rightarrow L(x,W(x))\bigr]
+ \;\land\;
+ \bigl[D(x)\land L(x,y)\Rightarrow A(x,y)\bigr]
+ \quad\Longrightarrow\quad
+ D(x)\Rightarrow\exists y,\ L(x,y)\land A(x,y).
+\]
+This plan is mathematically justified here but has not been run through a Lean obligation broker. It is a concrete integration test to add after the individual replay theorems exist.
+
+\subsection{A longer-term operator application with an explicit bound}
+The algebraic and analytic workers can also cooperate on operator approximations, but an additional norm/series bridge is needed. A precise target illustrates both the opportunity and the missing work.
+
+Let \(A,B\) lie in a unital real or complex Banach algebra, let \(h\ge0\), and put \(s=h(\lVert A\rVert+\lVert B\rVert)\). Comparing terms of total degree at most two gives the exact noncommutative identity
+\[
+ [e^{hA}e^{hB}]_{\le2}-[e^{h(A+B)}]_{\le2}
+ =\frac{h^2}{2}(AB-BA),
+\]
+where the brackets mean truncation of the power series, not an equality of full exponentials. Bounding the tails by submultiplicativity yields
+\begin{align}\label{eq:operator-bound}
+ &\left\|e^{hA}e^{hB}-e^{h(A+B)}
+       -\frac{h^2}{2}(AB-BA)\right\|\notag\\
+ &\hspace{2em}\le
+ 2\left(e^s-1-s-\frac{s^2}{2}\right)
+ \le \frac{e^s s^3}{3}.
+\end{align}
+Indeed, the absolute scalar sum of the product-series terms of total degree at least three is bounded by the tail of \(e^{h\|A\|+h\|B\|}\); the single exponential has the same upper tail bound because \(\|A+B\|\le\|A\|+\|B\|\). The scalar Taylor remainder is at most \(e^ss^3/6\), giving the last inequality after adding the two tails.
+
+The finite-degree cancellation is a word-polynomial job; the scalar tail bound is an analytic job. What is not yet supplied is the Lean theorem transporting scalar majorants through normed-algebra power series. Thus \eqref{eq:operator-bound} is a concrete future composition target, not a tested capability of this prototype. It provides a more useful destination than an unspecified promise to ``support physics''.
+
+\subsection{How Leant and Djex benefit without changing their type theories}
+Leant already reconstructs synthesized candidates in Lean, while Djex retains source-owned type information and carefully scopes the positive-only search families added beyond its complete structural core~\cite{leant,djex}. Forge has already absorbed many of their general verification-boundary lessons. The relevant new transfer is more specific: these workers can become \emph{contract-solving providers} for scalar or algebraic subproblems inside a synthesized candidate.
+
+For example, a typed sketch may require a real-valued function \(w\) satisfying a mixed affine relation. Once the input/output binder telescope is fixed, the polyhedral worker can synthesize the function body and its postcondition together. This avoids enumerating many affine functions when the correct body needs \(\max\). The provider returns a term graph associated with that exact source selection, not an untyped expression string.
+
+For a candidate implementation over an algebra, the noncommutative worker can discharge an equational contract using the source's exact local relations. For a scalar elementary implementation, the analytic worker can discharge a bounded inequality contract. These are behavioral proof obligations; none licenses a typeclass dictionary to be erased or a universe selection to be changed.
+
+The scope is first-order within an already selected source context. This report does not claim to solve Leant's remaining Church-indexing composition or simultaneous universe-selection tasks. Nor can a counterexample to one fixed arithmetic implementation be turned into a proof that no term of the entire higher-order type exists. Candidate validation and global inhabitation remain distinct questions, as they are in the reviewed projects.

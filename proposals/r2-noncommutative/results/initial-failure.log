@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/mnt/data/Forge_Noncommutative_Extensions/prototype/experiments.py", line 208, in <module>
+    run(ap.parse_args().output)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/Forge_Noncommutative_Extensions/prototype/experiments.py", line 176, in run
+    start=time.perf_counter(); ex=examples()
+                                  ~~~~~~~~^^
+  File "/mnt/data/Forge_Noncommutative_Extensions/prototype/experiments.py", line 111, in examples
+    if c is None: raise AssertionError('CHSH three-ray reconstruction failed')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CHSH three-ray reconstruction failed
