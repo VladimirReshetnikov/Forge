@@ -54,7 +54,7 @@ Extension round:
 | e8 | `lean/status.json` | `status` | `NOT_RUN`, "Lean executable absent" |
 | e9 | `results/artifact-qa.json` | `lean_compilation` | `NOT_RUN` |
 
-e4's entry is the most precise of the eighteen and the one worth copying: it
+e4's entry is the most precise of the twenty-seven and the one worth copying: it
 distinguishes *generated* from *compiled*, counts what was generated, and
 records separately that the bridge from the generated statements back to the
 original source semantics does not exist.

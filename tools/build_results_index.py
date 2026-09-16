@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """Regenerate the derived cross-run views under results/.
 
-Reads the eighteen recorded runs under proposals/<slug>/results/ -- the design
-round p1..p9 and the extension round e1..e9 -- and writes:
+Reads the twenty-seven recorded runs under proposals/<slug>/results/ -- the
+design round p1..p9, the extension round e1..e9, and the third round r1..r9 --
+and writes:
 
     results/manifest.json          one row per run
     results/certificate-counts.csv per run, per family
 
 Nothing here edits a recorded run. The derived files always carry `run` and
 `round` columns, and certificate-counts.csv deliberately emits no grand total:
-the eighteen runs used different seeds, generators, case sets and units, their
-counts are not commensurable within a round, and the two rounds attack
-overlapping problems so a cross-round total would double-count. See
+the twenty-seven runs used different seeds, generators, case sets and units,
+their counts are not commensurable within a round, and the rounds attack
+overlapping problems so a cross-round total would double-count. Worse, the
+shared seed value 20260915 now appears in two different rounds over unrelated
+generators, so matching seeds are not even evidence of a shared corpus. See
 results/README.md.
 
 The `outcome` column matters as much as the counts. A row whose expected
@@ -407,6 +410,180 @@ EXTENSION_RUNS: list[dict] = [
     },
 ]
 
+THIRD_RUNS: list[dict] = [
+    {
+        "run": "r1",
+        "slug": "r1-grammar-closure",
+        "emphasis": "many-sorted multilinear closure; observable quotients",
+        "seed": "ranges 10000-10239 and 20000-20039",
+        "test_framework": "unittest",
+        "test_count": 18,
+        "test_unit": "test methods",
+        "certificates": 8,
+        "certificate_layout": "named fixtures with per-fixture records",
+        "replay": "8/8 in isolated processes containing only the checker",
+        "pdf_pages": None,
+        "families": [
+            ("differential_finite_language", "mixed", 240, 240, None),
+            ("quotient", "certified", 40, 40, None),
+            ("invalid_objects", "refuted", 20, 20, None),
+            ("resource_cutoff", "unknown", 3, 0, None),
+        ],
+    },
+    {
+        "run": "r2",
+        "slug": "r2-noncommutative",
+        "emphasis": "two-sided receipts without completion; word Gram matrices",
+        "seed": 2026091503,
+        "test_framework": "unittest",
+        "test_count": 57,
+        "test_unit": "test methods (one holding 24 subtests)",
+        "certificates": 119,
+        "certificate_layout": "one certificates.json",
+        "replay": "119/119, producer imports blocked, site packages disabled",
+        "pdf_pages": None,
+        "families": [
+            ("object_language_queries", "mixed", 90, 90, None),
+            ("countermodels", "refuted", 20, 20, None),
+            ("further_records", "certified", 9, 9, None),
+        ],
+    },
+    {
+        "run": "r3",
+        "slug": "r3-three-engines",
+        "emphasis": "polyhedral projection; bounded completion; analytic jets",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 12,
+        "test_unit": "test methods",
+        "certificates": 228,
+        "certificate_layout": "one certificates.json, three lanes",
+        "replay": "228 accepted; 11 unknowns correctly not accepted",
+        "pdf_pages": None,
+        "families": [
+            ("polyhedral", "mixed", 110, 109, None),
+            ("noncommutative", "certified", 85, 82, None),
+            ("analytic", "certified", 44, 37, None),
+        ],
+    },
+    {
+        "run": "r4",
+        "slug": "r4-analytic-certificates",
+        "emphasis": "ladders with ghost rates; ascending-order dominance",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 18,
+        "test_unit": "test methods",
+        "certificates": 284,
+        "certificate_layout": "one certificates.json plus an index",
+        "replay": "284/284, search not imported, site packages disabled",
+        "pdf_pages": None,
+        "families": [
+            ("random_eventual_sign", "certified", 240, 240, None),
+            ("boundary_zero", "certified", 25, 25, None),
+            ("named", "certified", 8, 8, None),
+            ("auxiliary_factors", "certified", 4, 4, None),
+            ("compact_cover", "certified", 4, 4, None),
+            ("growth_witness", "certified", 2, 2, None),
+            ("counterexample", "refuted", 1, 1, None),
+        ],
+    },
+    {
+        "run": "r5",
+        "slug": "r5-analytic-extensions",
+        "emphasis": "anchored remainders; series barriers and divergence",
+        "seed": None,
+        "test_framework": "unittest",
+        "test_count": 25,
+        "test_unit": "test methods",
+        "certificates": 246,
+        "certificate_layout": "run-01 directory, four record kinds",
+        "replay": "246/246 over 230 distinct subjects, search blocked",
+        "pdf_pages": None,
+        "families": [
+            ("barrier", "certified", 81, 81, None),
+            ("anchored", "certified", 62, 62, None),
+            ("divergence", "certified", 60, 60, None),
+            ("ladder", "certified", 43, 43, None),
+        ],
+    },
+    {
+        "run": "r6",
+        "slug": "r6-flow-ladders",
+        "emphasis": "fixed-alphabet ladders; shortest-ladder minimality receipts",
+        "seed": None,
+        "test_framework": "unittest",
+        "test_count": 22,
+        "test_unit": "test methods",
+        "certificates": 304,
+        "certificate_layout": "accepted/ directory",
+        "replay": "304/304, discovery modules not loaded",
+        "pdf_pages": None,
+        "families": [
+            ("positive", "certified", 196, 196, None),
+            ("negative_point", "refuted", 44, 44, None),
+            ("system", "certified", 40, 40, None),
+            ("root", "certified", 16, 16, None),
+            ("grammar_obstruction", "refuted", 8, 8, None),
+        ],
+    },
+    {
+        "run": "r7",
+        "slug": "r7-quantitative",
+        "emphasis": "six exact quantitative workers; the moment-transfer correction",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 24,
+        "test_unit": "test methods (also run under -O -S)",
+        "certificates": 520,
+        "certificate_layout": "one certificates.json, six workers",
+        "replay": "520 accepted, 520 mutations rejected, oracles forbidden",
+        "pdf_pages": None,
+        "families": [
+            ("quantitative_workers", "certified", 520, 520, None),
+        ],
+    },
+    {
+        "run": "r8",
+        "slug": "r8-alternation-probability",
+        "emphasis": "parity games; couplings with Hall and Farkas duals",
+        "seed": None,
+        "test_framework": "unittest",
+        "test_count": 14,
+        "test_unit": "regression methods",
+        "certificates": 1564,
+        "certificate_layout": "full/ and smoke/ corpora, kept separate",
+        "replay": "1,564 records, search imports forbidden",
+        "pdf_pages": 31,
+        "families": [
+            ("parity", "mixed", 884, 884, None),
+            ("transport", "certified", 400, 400, None),
+            ("mdp", "mixed", 180, 180, None),
+            ("simulation", "mixed", 100, 100, None),
+        ],
+    },
+    {
+        "run": "r9",
+        "slug": "r9-infinite-horizon",
+        "emphasis": "pushdown summaries; Buchi duals; properness potentials",
+        "seed": 20260915,
+        "test_framework": "unittest",
+        "test_count": 36,
+        "test_unit": "test methods",
+        "certificates": 28566,
+        "certificate_layout": "one certificates.json",
+        "replay": "28,566 records, no search module imported",
+        "pdf_pages": None,
+        "families": [
+            # 39 of the 250 pds_general cases were left UNSETTLED by a bounded
+            # oracle. They are recorded, not counted as corroboration.
+            ("games", "mixed", 22300, 22300, None),
+            ("markov_chains", "mixed", 970, 970, None),
+            ("pushdown", "mixed", 881, 842, None),
+        ],
+    },
+]
+
 COMMON_ENVIRONMENT = {
     "date": "2026-09-14",
     "python": "3.13.5",
@@ -440,6 +617,31 @@ EXTENSION_ENVIRONMENT = {
 }
 
 
+THIRD_ENVIRONMENT = {
+    "date": "2026-09-15",
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "prepared_against_forge_revision": (
+        "c98e47c5f804e92880fc1d0e378c1b95832b685c"
+    ),
+    "note": (
+        "Four of these nine recorded the seed value 20260915 -- which is also "
+        "the extension round's shared value. The same integer now labels runs "
+        "in two different rounds over unrelated generators, so a matching seed "
+        "is not even evidence of a shared corpus."
+    ),
+    "rerun_in_merge_environment": "results/round-three-suites-rerun.json",
+    "traps_documented_in_article_section_13": [
+        "r7 pilot and final summaries report identical records/mutations/seed "
+        "but are different runs",
+        "r8 smoke and full reports both state exhaustive_parity_arenas: 584; "
+        "it is the same 584",
+        "r9 distinguishes arenas (22,300), region records (26,915) and "
+        "start-state replays (67,260)",
+    ],
+}
+
+
 def lean_status(slug: str) -> dict:
     """Find whatever that run recorded about Lean, under any of its filenames."""
     directory = PROPOSALS / slug / "results"
@@ -449,6 +651,7 @@ def lean_status(slug: str) -> dict:
         directory,
         PROPOSALS / slug,
         PROPOSALS / slug / "lean",
+        PROPOSALS / slug / "docs",
     )
     for name in (
         "lean_status.json",
@@ -463,6 +666,13 @@ def lean_status(slug: str) -> dict:
         "artifact-qa.json",
         "ARTIFACT_STATUS.json",
         "results.json",
+        "environment.json",
+        "experiment-summary.json",
+        "LEAN-STATUS.json",
+        "run-01/summary.json",
+        "accepted/summary.json",
+        "examples/summary.json",
+        "full/report.json",
     ):
         for root in search_roots:
             path = root / name
@@ -475,6 +685,15 @@ def lean_status(slug: str) -> dict:
         except (ValueError, OSError):
             continue
         name = path.relative_to(PROPOSALS / slug).as_posix()
+        # r7 records one row per lane rather than a single object.
+        if isinstance(data, list):
+            statuses = sorted({
+                r.get("status") for r in data
+                if isinstance(r, dict) and r.get("status")
+            })
+            if statuses:
+                return {"file": name, "field": "[].status", "value": statuses}
+            continue
         # Lean-specific keys first: several files carry a generic "status"
         # describing the whole run, which is not what this function reports.
         for key in (
@@ -484,7 +703,11 @@ def lean_status(slug: str) -> dict:
             "lean_examples_compiled",
             "lean_core_specimens",
             "lean_executed",
+            "lean",
+            "lean_kernel_checks",
             "status",
+            # Last resort: r3 states it in a prose "evidence" field.
+            "evidence",
         ):
             if key in data:
                 return {"file": name, "field": key, "value": data[key]}
@@ -520,22 +743,31 @@ def main() -> int:
 
     manifest = {
         "note": (
-            "Derived index over the eighteen recorded runs. The runs themselves "
-            "are under proposals/<slug>/results/ and are never modified. Counts "
-            "are per run and are not commensurable across runs, nor across the "
-            "two rounds."
+            "Derived index over the twenty-seven recorded runs. The runs "
+            "themselves are under proposals/<slug>/results/ and are never "
+            "modified. Counts are per run and are not commensurable across "
+            "runs, nor across the three rounds."
         ),
         "design_round_environment": COMMON_ENVIRONMENT,
         "extension_round_environment": EXTENSION_ENVIRONMENT,
+        "third_round_environment": THIRD_ENVIRONMENT,
         "lean": {
-            "all_eighteen_runs": "NOT_RUN -- no lean/lake executable available",
+            "all_twenty_seven_runs": (
+                "NOT_RUN -- no lean/lake executable available"
+            ),
             "this_merge_merged_tree": "results/lean-core-elaboration.json",
             "this_merge_extensions": "results/lean-extensions-elaboration.json",
+            "this_merge_third_round": (
+                "results/lean-round-three-elaboration.json -- 2 elaborated, "
+                "1 failed to parse"
+            ),
         },
         "runs": [],
     }
 
-    for round_name, entries in (("design", RUNS), ("extension", EXTENSION_RUNS)):
+    for round_name, entries in (("design", RUNS),
+                                ("extension", EXTENSION_RUNS),
+                                ("third", THIRD_RUNS)):
         for entry in entries:
             record = {"round": round_name}
             record.update({k: v for k, v in entry.items() if k != "families"})
@@ -584,6 +816,20 @@ def main() -> int:
                     [
                         entry["run"],
                         "extension",
+                        entry["slug"],
+                        family,
+                        outcome,
+                        cases,
+                        ok,
+                        "" if ablation is None else ablation,
+                    ]
+                )
+        for entry in THIRD_RUNS:
+            for family, outcome, cases, ok, ablation in entry["families"]:
+                writer.writerow(
+                    [
+                        entry["run"],
+                        "third",
                         entry["slug"],
                         family,
                         outcome,

@@ -166,7 +166,7 @@ can only be cancelled if it polls, can take the server down on a crash or OOM,
 and has to keep sessions alive across commands — fighting incremental
 recompilation for exactly the persistent obligation graph Forge wants.
 
-→ Article §8: controller / worker / optional solver, with the controller
+→ Article §12: controller / worker / optional solver, with the controller
 holding *"no authority to declare a candidate well-typed, a goal unprovable, or
 a solver observation valid."*
 
@@ -219,11 +219,11 @@ downstream must respect.
 | Two tiers: a fast in-session gate (~100–300 ms) and a slow out-of-session replay in a fresh process with an empty axiom inventory | §4 |
 | Verification cost is architectural: if it dominates, lazy best-first with a quota *is* the design | §4 |
 | A verification budget distinct from the search budget | §4 |
-| Snapshot = opaque artefact + fingerprint + **tooling ABI**, rather than enumerating fields that will be incomplete at the next release | §8 |
-| Invalidate every derived cache *atomically* with the snapshot | §8 |
-| Environment **generation tokens**: undo restores an older environment while issuing a *new* token, so stale capabilities fail closed | §8 |
-| Three levels of identity: Lean / neutral / presentation, the last "never sufficient to recover an authority" | §8 |
-| The origin table never leaves the worker | §8 |
+| Snapshot = opaque artefact + fingerprint + **tooling ABI**, rather than enumerating fields that will be incomplete at the next release | §12 |
+| Invalidate every derived cache *atomically* with the snapshot | §12 |
+| Environment **generation tokens**: undo restores an older environment while issuing a *new* token, so stale capabilities fail closed | §12 |
+| Three levels of identity: Lean / neutral / presentation, the last "never sufficient to recover an authority" | §12 |
+| The origin table never leaves the worker | §12 |
 | One function for search-pruning and final-checking, parameterised by policy | §7 |
 | Termination work at admission time (Paterson condition, superclass acyclicity, overlap rejection) | §7 |
 | `Either error (Maybe receipt)` — budget-exhausted ≠ no-instance | §7 |
@@ -284,9 +284,9 @@ impossible.
 | Neighbouring tactics (`exact?`, `itauto`, `decide`, `omega`) | §2 |
 | Negative verdicts; LJT; Glivenko; completeness ledger | §5 |
 | Kripke countermodels — the refutation object §5 asked for, built by `e4` | §5, §6 |
-| Instance obligations during synthesis | §7 |
-| Tactic-as-interface / worker-as-executor | §8 |
-| Three levels of identity; generation tokens | §8 |
-| Do not search in `Expr` | §8 |
+| Instance obligations during synthesis | §11 |
+| Tactic-as-interface / worker-as-executor | §12 |
+| Three levels of identity; generation tokens | §12 |
+| Do not search in `Expr` | §12 |
 | Accounting rules (dedup, dropped branches) | §3 |
 | Three-valued ledger | `STATUS.md` |

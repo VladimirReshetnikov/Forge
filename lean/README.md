@@ -1,6 +1,6 @@
 # Lean sources
 
-Merged from the eighteen proposals' `lean/` directories. Every file carries a
+Merged from the proposals' `lean/` directories. Every file carries a
 header recording which proposal it came from and why that version was chosen
 over the others; [`INTEGRATION.md`](INTEGRATION.md) has the module plan and the inspected
 `grind` API surface.
@@ -13,12 +13,15 @@ over the others; [`INTEGRATION.md`](INTEGRATION.md) has the module plan and the 
 | `Forge` | **Not compiled.** Every file imports Mathlib and needs a built project. |
 | A `forge` tactic | **Does not exist.** Nothing here implements one. |
 
-None of the eighteen proposals compiled any Lean at all — each recorded
+None of the twenty-seven proposals compiled any Lean at all — each recorded
 `NOT_RUN` with the same reason, no toolchain in the authoring environment. The
 `ForgeCore` result above is this project's compilation evidence, and it covers
-six of the twenty-one files here. Ten more elaborate in place under
-`proposals/e*/lean/`; see
-[`../results/lean-extensions-elaboration.json`](../results/lean-extensions-elaboration.json).
+six of the twenty-one files here. Twelve more elaborate in place under
+`proposals/e*/lean/` and `proposals/r*/lean/`, and one third-round file does
+**not** — it defines `prefix`, a reserved keyword. See
+[`../results/lean-extensions-elaboration.json`](../results/lean-extensions-elaboration.json)
+and
+[`../results/lean-round-three-elaboration.json`](../results/lean-round-three-elaboration.json).
 
 Successful elaboration is not a transitive axiom audit, and it is not a
 comparison against any tactic. A hand-written example that type-checks proves

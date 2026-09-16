@@ -1,5 +1,5 @@
 {
-  "note": "Derived index over the eighteen recorded runs. The runs themselves are under proposals/<slug>/results/ and are never modified. Counts are per run and are not commensurable across runs, nor across the two rounds.",
+  "note": "Derived index over the twenty-seven recorded runs. The runs themselves are under proposals/<slug>/results/ and are never modified. Counts are per run and are not commensurable across runs, nor across the three rounds.",
   "design_round_environment": {
     "date": "2026-09-14",
     "python": "3.13.5",
@@ -18,10 +18,24 @@
     "note": "Five of these nine recorded the seed value 20260915, one day after the design round's shared 20260914. The coincidence means as little as it did the first time: the same seed drives different generators over different case sets.",
     "rerun_in_merge_environment": "results/extension-suites-rerun.json"
   },
+  "third_round_environment": {
+    "date": "2026-09-15",
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "prepared_against_forge_revision": "c98e47c5f804e92880fc1d0e378c1b95832b685c",
+    "note": "Four of these nine recorded the seed value 20260915 -- which is also the extension round's shared value. The same integer now labels runs in two different rounds over unrelated generators, so a matching seed is not even evidence of a shared corpus.",
+    "rerun_in_merge_environment": "results/round-three-suites-rerun.json",
+    "traps_documented_in_article_section_13": [
+      "r7 pilot and final summaries report identical records/mutations/seed but are different runs",
+      "r8 smoke and full reports both state exhaustive_parity_arenas: 584; it is the same 584",
+      "r9 distinguishes arenas (22,300), region records (26,915) and start-state replays (67,260)"
+    ]
+  },
   "lean": {
-    "all_eighteen_runs": "NOT_RUN -- no lean/lake executable available",
+    "all_twenty_seven_runs": "NOT_RUN -- no lean/lake executable available",
     "this_merge_merged_tree": "results/lean-core-elaboration.json",
-    "this_merge_extensions": "results/lean-extensions-elaboration.json"
+    "this_merge_extensions": "results/lean-extensions-elaboration.json",
+    "this_merge_third_round": "results/lean-round-three-elaboration.json -- 2 elaborated, 1 failed to parse"
   },
   "runs": [
     {
@@ -403,6 +417,197 @@
         "value": "NOT_RUN"
       },
       "family_count": 5
+    },
+    {
+      "round": "third",
+      "run": "r1",
+      "slug": "r1-grammar-closure",
+      "emphasis": "many-sorted multilinear closure; observable quotients",
+      "seed": "ranges 10000-10239 and 20000-20039",
+      "test_framework": "unittest",
+      "test_count": 18,
+      "test_unit": "test methods",
+      "certificates": 8,
+      "certificate_layout": "named fixtures with per-fixture records",
+      "replay": "8/8 in isolated processes containing only the checker",
+      "pdf_pages": null,
+      "results_path": "proposals/r1-grammar-closure/results",
+      "lean_status_recorded": {
+        "file": "docs/lean-status.json",
+        "field": "status",
+        "value": "NOT_RUN"
+      },
+      "family_count": 4
+    },
+    {
+      "round": "third",
+      "run": "r2",
+      "slug": "r2-noncommutative",
+      "emphasis": "two-sided receipts without completion; word Gram matrices",
+      "seed": 2026091503,
+      "test_framework": "unittest",
+      "test_count": 57,
+      "test_unit": "test methods (one holding 24 subtests)",
+      "certificates": 119,
+      "certificate_layout": "one certificates.json",
+      "replay": "119/119, producer imports blocked, site packages disabled",
+      "pdf_pages": null,
+      "results_path": "proposals/r2-noncommutative/results",
+      "lean_status_recorded": {
+        "file": "results/lean-status.json",
+        "field": "status",
+        "value": "NOT_RUN"
+      },
+      "family_count": 3
+    },
+    {
+      "round": "third",
+      "run": "r3",
+      "slug": "r3-three-engines",
+      "emphasis": "polyhedral projection; bounded completion; analytic jets",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 12,
+      "test_unit": "test methods",
+      "certificates": 228,
+      "certificate_layout": "one certificates.json, three lanes",
+      "replay": "228 accepted; 11 unknowns correctly not accepted",
+      "pdf_pages": null,
+      "results_path": "proposals/r3-three-engines/results",
+      "lean_status_recorded": {
+        "file": "results/summary.json",
+        "field": "evidence",
+        "value": "Python exact replay only; no Lean compilation or tactic comparison"
+      },
+      "family_count": 3
+    },
+    {
+      "round": "third",
+      "run": "r4",
+      "slug": "r4-analytic-certificates",
+      "emphasis": "ladders with ghost rates; ascending-order dominance",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 18,
+      "test_unit": "test methods",
+      "certificates": 284,
+      "certificate_layout": "one certificates.json plus an index",
+      "replay": "284/284, search not imported, site packages disabled",
+      "pdf_pages": null,
+      "results_path": "proposals/r4-analytic-certificates/results",
+      "lean_status_recorded": {
+        "file": "results/experiment-summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean executable installed in execution environment"
+      },
+      "family_count": 7
+    },
+    {
+      "round": "third",
+      "run": "r5",
+      "slug": "r5-analytic-extensions",
+      "emphasis": "anchored remainders; series barriers and divergence",
+      "seed": null,
+      "test_framework": "unittest",
+      "test_count": 25,
+      "test_unit": "test methods",
+      "certificates": 246,
+      "certificate_layout": "run-01 directory, four record kinds",
+      "replay": "246/246 over 230 distinct subjects, search blocked",
+      "pdf_pages": null,
+      "results_path": "proposals/r5-analytic-extensions/results",
+      "lean_status_recorded": {
+        "file": "results/run-01/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: no Lean executable available"
+      },
+      "family_count": 4
+    },
+    {
+      "round": "third",
+      "run": "r6",
+      "slug": "r6-flow-ladders",
+      "emphasis": "fixed-alphabet ladders; shortest-ladder minimality receipts",
+      "seed": null,
+      "test_framework": "unittest",
+      "test_count": 22,
+      "test_unit": "test methods",
+      "certificates": 304,
+      "certificate_layout": "accepted/ directory",
+      "replay": "304/304, discovery modules not loaded",
+      "pdf_pages": null,
+      "results_path": "proposals/r6-flow-ladders/results",
+      "lean_status_recorded": {
+        "file": "results/accepted/summary.json",
+        "field": "lean",
+        "value": "NOT_RUN"
+      },
+      "family_count": 5
+    },
+    {
+      "round": "third",
+      "run": "r7",
+      "slug": "r7-quantitative",
+      "emphasis": "six exact quantitative workers; the moment-transfer correction",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 24,
+      "test_unit": "test methods (also run under -O -S)",
+      "certificates": 520,
+      "certificate_layout": "one certificates.json, six workers",
+      "replay": "520 accepted, 520 mutations rejected, oracles forbidden",
+      "pdf_pages": null,
+      "results_path": "proposals/r7-quantitative/results",
+      "lean_status_recorded": {
+        "file": "results/lean-status.json",
+        "field": "[].status",
+        "value": [
+          "NOT_RUN"
+        ]
+      },
+      "family_count": 1
+    },
+    {
+      "round": "third",
+      "run": "r8",
+      "slug": "r8-alternation-probability",
+      "emphasis": "parity games; couplings with Hall and Farkas duals",
+      "seed": null,
+      "test_framework": "unittest",
+      "test_count": 14,
+      "test_unit": "regression methods",
+      "certificates": 1564,
+      "certificate_layout": "full/ and smoke/ corpora, kept separate",
+      "replay": "1,564 records, search imports forbidden",
+      "pdf_pages": 31,
+      "results_path": "proposals/r8-alternation-probability/results",
+      "lean_status_recorded": {
+        "file": "results/examples/summary.json",
+        "field": "lean",
+        "value": "NOT_RUN"
+      },
+      "family_count": 4
+    },
+    {
+      "round": "third",
+      "run": "r9",
+      "slug": "r9-infinite-horizon",
+      "emphasis": "pushdown summaries; Buchi duals; properness potentials",
+      "seed": 20260915,
+      "test_framework": "unittest",
+      "test_count": 36,
+      "test_unit": "test methods",
+      "certificates": 28566,
+      "certificate_layout": "one certificates.json",
+      "replay": "28,566 records, no search module imported",
+      "pdf_pages": null,
+      "results_path": "proposals/r9-infinite-horizon/results",
+      "lean_status_recorded": {
+        "file": "results/summary.json",
+        "field": "lean_status",
+        "value": "NOT_RUN: Lean executable unavailable; no tactic comparison"
+      },
+      "family_count": 3
     }
   ]
 }

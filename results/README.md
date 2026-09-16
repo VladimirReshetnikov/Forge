@@ -96,7 +96,7 @@ standard-library-only checker, verified with site packages disabled.
 
 Both properties hold in the extension round too, with one qualification that
 belongs here rather than in a footnote. "Replays without the search" means three
-different things across these eighteen packages, and they are not equivalent:
+different things across these packages, and they are not equivalent:
 
 | Strength | What replay actually does | Where |
 | --- | --- | --- |
