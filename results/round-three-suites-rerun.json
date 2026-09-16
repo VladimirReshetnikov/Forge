@@ -1,0 +1,246 @@
+{
+  "note": "Independent re-run of all nine round-three proposals in the merge environment. As with the extension round, every suite could be executed here and every recorded count could be checked. The nine design-round suites still cannot be: their authoring environments were never available.",
+  "date": "2026-09-15",
+  "round": "three (r1..r9)",
+  "prepared_against_forge_revision": "c98e47c5f804e92880fc1d0e378c1b95832b685c",
+  "environment": {
+    "python": "3.14.4",
+    "platform": "Windows",
+    "note": "every suite and every replay was invoked exactly as its README specifies, including the -S flag where the proposal uses one"
+  },
+  "authoring_environment_reported_by_the_proposals": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41"
+  },
+  "caveat": "The interpreter differs from the authoring environment, so a match reproduces the recorded count on a different version rather than replaying it bit-identically. No timing was compared and no timing claim is made.",
+  "suites": [
+    {
+      "run": "r1",
+      "slug": "r1-grammar-closure",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "18 unit-test methods (results/summary.json)",
+      "observed": "Ran 18 tests in 0.941s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r2",
+      "slug": "r2-noncommutative",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "57 unittest methods (README)",
+      "observed": "Ran 57 tests in 1.279s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r3",
+      "slug": "r3-three-engines",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "12 test methods (prototype/tests)",
+      "observed": "Ran 12 tests in 0.089s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r4",
+      "slug": "r4-analytic-certificates",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "18 test methods (prototype/tests)",
+      "observed": "Ran 18 tests in 0.750s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r5",
+      "slug": "r5-analytic-extensions",
+      "cwd": ".",
+      "command": "python -m unittest discover -s tests",
+      "recorded": "25 test methods (tests/)",
+      "observed": "Ran 25 tests in 0.162s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r6",
+      "slug": "r6-flow-ladders",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "22 unittest methods (README)",
+      "observed": "Ran 22 tests in 0.153s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r7",
+      "slug": "r7-quantitative",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "24 test methods (prototype/tests)",
+      "observed": "Ran 24 tests in 0.354s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r8",
+      "slug": "r8-alternation-probability",
+      "cwd": "prototype",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "14 regression methods (results/release-validation.json)",
+      "observed": "Ran 14 tests in 0.002s",
+      "result": "OK",
+      "match": true
+    },
+    {
+      "run": "r9",
+      "slug": "r9-infinite-horizon",
+      "cwd": ".",
+      "command": "python -S -m unittest discover -s tests",
+      "recorded": "36 unit tests (MANIFEST.json)",
+      "observed": "Ran 36 tests in 0.002s",
+      "result": "OK",
+      "match": true
+    }
+  ],
+  "replays": [
+    {
+      "run": "r2",
+      "slug": "r2-noncommutative",
+      "command": "python -S replay.py ../results/certificates.json",
+      "returncode": 0,
+      "summary": {
+        "objects_replayed": 119,
+        "failures": [],
+        "producer_imports_blocked": true,
+        "site_packages_disabled": true
+      }
+    },
+    {
+      "run": "r3",
+      "slug": "r3-three-engines",
+      "command": "python -S verify.py",
+      "returncode": 0,
+      "summary": {
+        "poly": {
+          "accepted": 109,
+          "unknown-not-accepted": 1
+        },
+        "nc": {
+          "unknown-not-accepted": 3,
+          "accepted": 82
+        },
+        "analytic": {
+          "accepted": 37,
+          "unknown-not-accepted": 7
+        }
+      }
+    },
+    {
+      "run": "r4",
+      "slug": "r4-analytic-certificates",
+      "command": "python -S replay.py",
+      "returncode": 0,
+      "summary": {
+        "accepted": 284,
+        "search_imported": false,
+        "site_packages_disabled": true,
+        "kernel_checked": false
+      }
+    },
+    {
+      "run": "r5",
+      "slug": "r5-analytic-extensions",
+      "command": "python -S tools/verify.py",
+      "returncode": 0,
+      "summary": {
+        "accepted_records": 246,
+        "kinds": {
+          "anchored": 62,
+          "ladder": 43,
+          "divergence": 60,
+          "barrier": 81
+        },
+        "site_disabled": true,
+        "search_imports_blocked": true,
+        "evidence": "Python certificate replay; not a Lean-kernel proof"
+      }
+    },
+    {
+      "run": "r6",
+      "slug": "r6-flow-ladders",
+      "command": "python -S replay.py",
+      "returncode": 0,
+      "summary": {
+        "replayed": {
+          "positive": 196,
+          "system": 40,
+          "negative_point": 44,
+          "grammar_obstruction": 8,
+          "root": 16
+        },
+        "discovery_modules_loaded": false
+      }
+    },
+    {
+      "run": "r7",
+      "slug": "r7-quantitative",
+      "command": "python -S replay.py",
+      "returncode": 0,
+      "summary": {
+        "accepted_certificates": 520,
+        "rejected_mutations": 520,
+        "producer_and_oracle_imports": "forbidden",
+        "site_packages": false,
+        "kernel_proof_claim": false
+      }
+    },
+    {
+      "run": "r8",
+      "slug": "r8-alternation-probability",
+      "command": "python -S replay.py ../results/full/corpus.json",
+      "returncode": 0,
+      "summary": {
+        "status": "PASS",
+        "records_by_kind": {
+          "parity": 884,
+          "transport": 400,
+          "mdp": 180,
+          "simulation": 100
+        },
+        "search_imports": "FORBIDDEN",
+        "site_packages_enabled": false,
+        "elapsed_seconds": 0.07960739999998623,
+        "lean_kernel_checked": false
+      }
+    },
+    {
+      "run": "r9",
+      "slug": "r9-infinite-horizon",
+      "command": "python -S prototype/verify.py",
+      "returncode": 0,
+      "summary": {
+        "raw_tail": [
+          "Replayed 28566 records; no search modules imported.",
+          "{'reachable': 356, 'unreachable': 525, 'losing': 11374, 'winning': 15541, 'almost_sure': 660, 'not_almost_sure': 110}"
+        ]
+      }
+    }
+  ],
+  "r1_replay_note": "r1 ships no standalone replay entry point; its solve.py replays every certificate it returns, and results/isolated-replay.json records all 8 named fixtures replayed in separate processes containing only the checker. That record was read, not re-executed.",
+  "summary": {
+    "suites_run": 9,
+    "suites_passing": 9,
+    "replays_run": 8,
+    "replays_returning_zero": 8,
+    "failures": 0
+  },
+  "notes": [
+    "Seven of the nine invoke their own suites under `python -S`, and every replay above ran with site packages disabled; several also block their own search modules from being imported during replay and report that they did.",
+    "r5 is the exception on the suite side: its README specifies a plain `python -m unittest`, so that is what was run.",
+    "Counts are per suite and are NOT poolable across proposals, nor across the three rounds, for the reasons set out in results/README.md.",
+    "This establishes that the suites pass, that the recorded counts are accurate, and that the stored certificates replay. It does not establish that any checker is correct, and it is not a Lean result."
+  ]
+}
