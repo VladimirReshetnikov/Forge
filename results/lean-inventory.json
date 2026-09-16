@@ -1,0 +1,648 @@
+{
+  "what": "Authoritative inventory of every .lean file in this repository.",
+  "dependency_counting": "TRANSITIVE. A file importing a sibling that is itself Mathlib-free is Mathlib-free.",
+  "verdict_rule": "Elaboration success is the process EXIT CODE. A file's output is never the verdict: r8's file fails with ten errors and still prints 'does not depend on any axioms' on its last line.",
+  "sorry_rule": "Lean comments are stripped, with a depth counter because block comments nest, before a word-boundary search. A token appearing only in prose is recorded separately and is not a defect.",
+  "elaboration_run": false,
+  "counts": {
+    "files_total": 90,
+    "mathlib_free": 29,
+    "mathlib_dependent": 58,
+    "lakefiles": 3,
+    "unresolved": 0,
+    "real_sorry_or_sorryAx": 0,
+    "sorry_token_in_comments_only": 26
+  },
+  "files": [
+    {
+      "file": "lean/Forge/Checker/Bench.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 1450
+    },
+    {
+      "file": "lean/Forge/Checker/Cone.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 183
+    },
+    {
+      "file": "lean/Forge/Checker/Corpus.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 166
+    },
+    {
+      "file": "lean/Forge/Checker/Poly.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 212
+    },
+    {
+      "file": "lean/Forge/Closure/Covers.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 61
+    },
+    {
+      "file": "lean/Forge/Closure/Indexing.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 75
+    },
+    {
+      "file": "lean/Forge/Closure/Principles.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 154
+    },
+    {
+      "file": "lean/Forge/Design/Contracts.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 50
+    },
+    {
+      "file": "lean/Forge/Design/Runtime.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 76
+    },
+    {
+      "file": "lean/Forge/Examples/Accumulator.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 62
+    },
+    {
+      "file": "lean/Forge/Examples/Arithmetic.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 72
+    },
+    {
+      "file": "lean/Forge/Examples/Basic.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 46
+    },
+    {
+      "file": "lean/Forge/Examples/CrossTheory.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 54
+    },
+    {
+      "file": "lean/Forge/Examples/Lattice.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 33
+    },
+    {
+      "file": "lean/Forge/Examples/Mixed.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 64
+    },
+    {
+      "file": "lean/Forge/Examples/Residue.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 92
+    },
+    {
+      "file": "lean/Forge/Examples/Structural.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 72
+    },
+    {
+      "file": "lean/Forge/Generated/Bernstein.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 1108
+    },
+    {
+      "file": "lean/Forge/Generated/Induction.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 155
+    },
+    {
+      "file": "lean/Forge/Generated/Invariants.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 669
+    },
+    {
+      "file": "lean/Forge/Generated/SOS.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 130
+    },
+    {
+      "file": "lean/Forge/Generated/SOSExtra.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 164
+    },
+    {
+      "file": "lean/Forge/Generated/Witnesses.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 116
+    },
+    {
+      "file": "lean/Forge.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 35
+    },
+    {
+      "file": "lean/ForgeCore.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 31
+    },
+    {
+      "file": "proposals/e1-relational-closure/lean/Core.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 38
+    },
+    {
+      "file": "proposals/e1-relational-closure/lean/GeneratedIdentities.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 1279
+    },
+    {
+      "file": "proposals/e1-relational-closure/lean/IntegrationSpecimens.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 59
+    },
+    {
+      "file": "proposals/e2-algorithmic-extensions/lean/ForgeExtensions/GeneratedNC.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 25
+    },
+    {
+      "file": "proposals/e2-algorithmic-extensions/lean/ForgeExtensions/Reachability.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 28
+    },
+    {
+      "file": "proposals/e2-algorithmic-extensions/lean/ForgeExtensions/ReplayExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 50
+    },
+    {
+      "file": "proposals/e2-algorithmic-extensions/lean/ForgeExtensions.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 4
+    },
+    {
+      "file": "proposals/e2-algorithmic-extensions/lean/lakefile.lean",
+      "depends_on": "lakefile",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 8
+    },
+    {
+      "file": "proposals/e3-closure-extensions/lean/BridgeSpec.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 68
+    },
+    {
+      "file": "proposals/e4-delta-countermodels/lean/GeneratedIdentities.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 1117
+    },
+    {
+      "file": "proposals/e4-delta-countermodels/lean/Reachability.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 48
+    },
+    {
+      "file": "proposals/e4-delta-countermodels/lean/WorkedFold.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 35
+    },
+    {
+      "file": "proposals/e5-finite-certificates/lean/ForgeExtension/Core.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 27
+    },
+    {
+      "file": "proposals/e5-finite-certificates/lean/ForgeExtension/Worked.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 61
+    },
+    {
+      "file": "proposals/e5-finite-certificates/lean/ForgeExtension.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 3
+    },
+    {
+      "file": "proposals/e5-finite-certificates/lean/lakefile.lean",
+      "depends_on": "lakefile",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 8
+    },
+    {
+      "file": "proposals/e6-finite-certificates-b/lean/ProofPrinciples.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 53
+    },
+    {
+      "file": "proposals/e6-finite-certificates-b/lean/ReplayTargets.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 46
+    },
+    {
+      "file": "proposals/e7-capability-extensions/lean/Specimens.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 73
+    },
+    {
+      "file": "proposals/e8-invariant-ideals/lean/CoreSoundness.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 57
+    },
+    {
+      "file": "proposals/e8-invariant-ideals/lean/IndexingSketch.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 34
+    },
+    {
+      "file": "proposals/e9-finite-summaries/lean/WordSimulation.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 45
+    },
+    {
+      "file": "proposals/p1-structural-search/lean/BernsteinReplay.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 1097
+    },
+    {
+      "file": "proposals/p1-structural-search/lean/ForgeReplay.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 4
+    },
+    {
+      "file": "proposals/p1-structural-search/lean/GeneratedReplay.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 105
+    },
+    {
+      "file": "proposals/p1-structural-search/lean/lakefile.lean",
+      "depends_on": "lakefile",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 11
+    },
+    {
+      "file": "proposals/p1-structural-search/lean/StructuralReplay.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 43
+    },
+    {
+      "file": "proposals/p2-obligation-controller/lean/ReplayExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 85
+    },
+    {
+      "file": "proposals/p3-planner-certificate-layer/lean/ConeExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 116
+    },
+    {
+      "file": "proposals/p3-planner-certificate-layer/lean/DesignAPI.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 65
+    },
+    {
+      "file": "proposals/p3-planner-certificate-layer/lean/InductionExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 51
+    },
+    {
+      "file": "proposals/p3-planner-certificate-layer/lean/QuadraticExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 40
+    },
+    {
+      "file": "proposals/p4-theory-cooperation/lean/ReplayExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 82
+    },
+    {
+      "file": "proposals/p5-certificate-first/lean/Forge/Certificates.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 119
+    },
+    {
+      "file": "proposals/p5-certificate-first/lean/Forge/Invariants.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 658
+    },
+    {
+      "file": "proposals/p5-certificate-first/lean/Forge.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 3
+    },
+    {
+      "file": "proposals/p6-proof-logging-cdcl/lean/Contracts.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 38
+    },
+    {
+      "file": "proposals/p6-proof-logging-cdcl/lean/Examples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 60
+    },
+    {
+      "file": "proposals/p7-successor-architecture/lean/GeneratedInduction.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 144
+    },
+    {
+      "file": "proposals/p7-successor-architecture/lean/GeneratedSOS.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 153
+    },
+    {
+      "file": "proposals/p7-successor-architecture/lean/WitnessExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 22
+    },
+    {
+      "file": "proposals/p8-obligation-broker/lean/ReplayExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 53
+    },
+    {
+      "file": "proposals/p9-proof-planner/lean/CertificateExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 35
+    },
+    {
+      "file": "proposals/p9-proof-planner/lean/Structural.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 60
+    },
+    {
+      "file": "proposals/r1-grammar-closure/lean/ReplayLeafCount.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 74
+    },
+    {
+      "file": "proposals/r2-noncommutative/lean/CertificatePrinciples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 67
+    },
+    {
+      "file": "proposals/r3-three-engines/lean/CoreComposition.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 26
+    },
+    {
+      "file": "proposals/r3-three-engines/lean/SourceExamples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 29
+    },
+    {
+      "file": "proposals/r4-analytic-certificates/lean/entropy_positive_chart.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 45
+    },
+    {
+      "file": "proposals/r4-analytic-certificates/lean/ghost_eps_1.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 85
+    },
+    {
+      "file": "proposals/r4-analytic-certificates/lean/LadderBridge.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 44
+    },
+    {
+      "file": "proposals/r4-analytic-certificates/lean/log_lower_rational_chart.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 55
+    },
+    {
+      "file": "proposals/r4-analytic-certificates/lean/taylor_04.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 75
+    },
+    {
+      "file": "proposals/r5-analytic-extensions/lean/SemanticBridges.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 42
+    },
+    {
+      "file": "proposals/r6-flow-ladders/lean/FlowTargets.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 57
+    },
+    {
+      "file": "proposals/r7-quantitative/lean/ForgeQ/FiniteHorizon.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 57
+    },
+    {
+      "file": "proposals/r7-quantitative/lean/ForgeQ/Monotone.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 28
+    },
+    {
+      "file": "proposals/r7-quantitative/lean/ForgeQ.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 3
+    },
+    {
+      "file": "proposals/r8-alternation-probability/lean/CouplingAlgebra.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 46
+    },
+    {
+      "file": "proposals/r8-alternation-probability/lean/RankTelescoping.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 38
+    },
+    {
+      "file": "proposals/s3-infinite-state-workers/lean/CounterLemmas.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 65
+    },
+    {
+      "file": "proposals/s5-witness-atlases/lean/AtlasQuantifiers.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 35
+    },
+    {
+      "file": "prototype/results/lean/Bernstein.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 44
+    },
+    {
+      "file": "prototype/results/lean/Certificates.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 41
+    },
+    {
+      "file": "prototype/results/lean/Invariants.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": true,
+      "lines": 51
+    }
+  ]
+}
