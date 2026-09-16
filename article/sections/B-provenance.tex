@@ -1,20 +1,26 @@
 \section{Provenance: what came from where}
 \label{app:provenance}
 
-This document is a merge of eighteen independently prepared proposals for the
-same system, in two rounds. The \emph{design round} \src{p1}--\src{p9} was
-merged first. The \emph{extension round} \src{e1}--\src{e9} was then prepared
-against that merged draft, at commit
-\texttt{674521027d968d59f7b83220ed52304a85cb55e2}, and merged in turn. All
-eighteen are retained verbatim under \code{proposals/} so that every claim here
-can be audited against its source. Almost nothing in this article is new
-mathematics: each statement is carried over from at least one of the eighteen,
-or from the two external sources named in \S\ref{sec:external-sources}, and
-this appendix records which.
+This document is a merge of twenty-seven independently prepared proposals for
+the same system, in three rounds. The \emph{design round} \src{p1}--\src{p9}
+was merged first. The \emph{extension round} \src{e1}--\src{e9} was then
+prepared against that merged draft, at commit
+\texttt{674521027d968d59f7b83220ed52304a85cb55e2}, and merged in turn. The
+\emph{third round} \src{r1}--\src{r9} was prepared against \emph{that}
+result, at commit \texttt{c98e47c5f804e92880fc1d0e378c1b95832b685c}, and is
+merged here. All twenty-seven are retained verbatim under \code{proposals/} so
+that every claim here can be audited against its source. Almost nothing in this article is new
+mathematics: each statement is carried over from at least one of the
+twenty-seven, or from the two external sources named in
+\S\ref{sec:external-sources}, and this appendix records which.
 
-The second round is not a second opinion on the first. Its proposals read the
-merged draft, took its capabilities as prerequisites rather than contributions,
-and several of them say so in their opening pages. Where this appendix records
+Neither later round is a second opinion on the one before it. Their proposals
+read the merged draft, took its capabilities as prerequisites rather than
+contributions, and several of them say so in their opening pages. The third
+round read this document closely enough to correct its status ledger: one of
+them notes that the merge ``records successful elaboration of sixteen core-only
+Lean files'' and that ``it would therefore be wrong to say that nothing in
+Forge has ever compiled''. Where this appendix records
 an extension-round item, it is normally an addition to a section the design
 round had already written, and occasionally a correction to it.
 
@@ -110,6 +116,49 @@ package that ships its failed runs as evidence. \\
 \bottomrule
 \end{longtable}
 
+\subsection{The nine third-round sources}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.56\textwidth}@{}}
+\toprule
+Label & Directory & Distinguishing emphasis \\
+\midrule
+\endhead
+\src{r1} & \code{r1-grammar-closure} &
+Many-sorted multilinear reachable-span closure over derivation trees; a
+context-free trace compiler; the collection's first quotient construction. \\
+\src{r2} & \code{r2-noncommutative} &
+Two-sided free-algebra receipts by bounded context elimination, explicitly
+without completion; degree-complete homogeneous refutation by matrix
+countermodel; unique word Gram matrices with exact $LDL^{\mathsf T}$. \\
+\src{r3} & \code{r3-three-engines} &
+Three lanes at once: mixed-strictness polyhedral projection with a $\min/\max$
+witness DAG, bounded Gr\"obner--Shirshov completion, and rational
+elementary-function enclosures with vanishing jets. \\
+\src{r4} & \code{r4-analytic-certificates} &
+Integrating-factor ladders with auxiliary rates below the input spectrum, a
+terminal-zero condition, and an ascending-order dominance theorem. \\
+\src{r5} & \code{r5-analytic-extensions} &
+Anchored remainders preserving the order of vanishing, over $\sin$, $\cos$,
+$\log(1+ax)$ and $\arctan$ as well as $\exp$; convergence and divergence
+certificates for rational series. \\
+\src{r6} & \code{r6-flow-ladders} &
+The same ladder with the alphabet fixed to the input spectrum: an iff
+feasibility criterion, forced multiplicities, and a shortest-ladder compiler
+with a separately checkable minimality receipt. \\
+\src{r7} & \code{r7-quantitative} &
+Six exact-rational quantitative workers; the expectation-is-not-a-homomorphism
+correction and its type-level remedy; symbolic polynomial potentials on an
+infinite numeric state space. \\
+\src{r8} & \code{r8-alternation-probability} &
+Parity games with threshold-local ranks; alternating probabilistic simulation;
+the finite-MDP dichotomy; exact optimal couplings with Hall and Farkas duals. \\
+\src{r9} & \code{r9-infinite-horizon} &
+Unbounded-stack pushdown summaries with proof-sharing DAGs; B\"uchi and
+co-B\"uchi dual ranks; one properness certificate yielding three exact values;
+the only package that ships no Lean and says why. \\
+\bottomrule
+\end{longtable}
+
 \subsection{Where each section's material came from}
 
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
@@ -177,22 +226,46 @@ theorem from \src{p1}, with \src{p3}'s quantitative form; the completeness
 sketch from \src{p2} and \src{p3}; square-factor and Sturm certificates from
 \src{p1} alone; product envelopes from \src{p1}; the reuse-the-existing-backend
 argument from \src{p9} and \src{p5}. \\
-\S8 Boolean and external &
+\S8 Noncommutative &
+Entirely third round. The two-sided certificate and its soundness theorem from
+\src{r2} and \src{r3} independently --- stated once here; context elimination
+and the degree-complete refutation from \src{r2}; bounded completion from
+\src{r3}; word Gram matrices, $LDL^{\mathsf T}$, adjoint sandwiches and
+involution rays from \src{r2}; the centrality remark from both. \\
+
+\S9 Analytic &
+Entirely third round. The integrating-factor lemma from \src{r4}, \src{r5} and
+\src{r6} independently --- stated once here; ghost rates and ascending-order
+dominance from \src{r4}; the fixed-alphabet feasibility criterion and
+minimality receipt from \src{r6}; anchored remainders and series certificates
+from \src{r5}; vanishing jets from \src{r3}; the rate-field boundary from
+\src{r4}, the anchor-value form from \src{r6}. \\
+
+\S10 Quantitative &
+Entirely third round. The properness witness from \src{r9} and the rank-vector
+form from \src{r7}; Invariant~\ref{inv:moment} and its type remedy from
+\src{r7}; parity with threshold-local ranks from \src{r8}, B\"uchi and
+co-B\"uchi duals from \src{r9}; couplings and duals from \src{r7} and
+\src{r8}; pushdown summaries from \src{r9}; the drift obligation specified by
+\src{r8} and implemented by \src{r7}. \\
+
+\S11 Boolean and external &
 The SAT/theory loop from \src{p7}; CDCL(T), RUP replay and the negation trap
 from \src{p6}; the resolution-DAG format, \code{verify\_sat} and the exhaustive
 oracle from \src{p4}; extraction cost vectors from \src{p7}; solver islands and
 translation ledgers from \src{p5}; the reconstruction preference order from
 \src{p7}; the no-blanket-combination warning from \src{p5} and \src{p9}. \\
-\S9 Integration &
+\S12 Integration &
 \code{Params}/\code{assertExtra}/\code{mkGoalCore} from \src{p2} and \src{p9};
 the solver-extension callbacks from \src{p4}; the rollback-is-not-enough point
 from \src{p6}; three reconstruction levels from \src{p2}; the module layout
 merged from \src{p1}, \src{p2}, \src{p3}, \src{p5} and \src{p9}; the acceptance
 contract table from \src{p5}; the deployment pattern from \src{p9}; the gates
 merged from all nine. \\
-\S10 Experiments & Each run reports itself. The re-run table and the Lean
-elaboration tables are the merge's own work, not any proposal's. \\
-\S11 Evaluation &
+\S13 Experiments & Each run reports itself. The re-run tables, the Lean
+elaboration tables, and the three pooling traps in
+\S\ref{sec:round-three-runs} are the merge's own work, not any proposal's. \\
+\S14 Evaluation &
 Leakage control from \src{p1}, \src{p5} and \src{p9}; the three input conditions
 from \src{p2}; the two tracks from \src{p4}; the non-communicating portfolio
 from \src{p1} and \src{p6}; metric discipline from \src{p4} and \src{p9}; the
@@ -274,6 +347,37 @@ From the extension round:
   proved.
 \end{itemize}
 
+From the third round:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{The expectation/homomorphism correction} (\src{r7}) --- the only
+  claim in twenty-seven proposals that a rule already in this document would
+  prove something false if extended in the obvious way, together with a type
+  distinction that makes the unsound step unwritable.
+\item \textbf{Degree-complete noncommutative refutation} (\src{r2}) --- a
+  third species of checkable negative object, refuting an algebra identity by
+  exhibiting an algebra.
+\item \textbf{The observable quotient} (\src{r1}) --- the only construction
+  anywhere here that changes the state space rather than describing it.
+\item \textbf{Ghost rates} (\src{r4}) and \textbf{the minimality receipt}
+  (\src{r6}) --- two different ways to be better than a plain ladder, one
+  widening the accepted language and one shortening the certificate.
+\item \textbf{Anchored remainders that preserve the order of vanishing}
+  (\src{r5}) --- the property that makes them composable with a jet certificate
+  instead of destroying the information it needs.
+\item \textbf{Pop summaries with proof sharing} (\src{r9}) --- a finite
+  certificate for an unbounded stack, and the only certificate format in the
+  collection with shared subproofs.
+\item \textbf{The properness potential} (\src{r9}) --- one witness yielding
+  three exact values, and the ingredient without which a closure identity does
+  not reach an infinite horizon.
+\item \textbf{Threshold-local and resetting ranks} (\src{r8}, \src{r9}) ---
+  the repair for a descent criterion that rejects correct recurrent behaviour.
+\item \textbf{Shipping no Lean, deliberately} (\src{r9}) --- the only
+  proposal to refuse the practice the other twenty-six follow, and the only one
+  vindicated by a compiler.
+\end{itemize}
+
 \subsection{Disagreements, and how they were resolved}
 
 The nine did not agree on everything. Where they conflicted, this document took
@@ -353,6 +457,27 @@ What the checker's independence is worth &
 claims replacement of search entry points for two lanes and \emph{discloses} a
 shared assembler for the third. The strongest available claim was not applied
 uniformly: \S\ref{sec:experiments} states the three levels separately. \\
+Whether noncommutative completion is needed at all &
+\src{r2} refuses it --- ``It needs no global completion result for the
+presented algebra'' --- and solves one finite-dimensional problem at the target
+degree. \src{r3} runs it, and states that the process ``need not terminate''.
+Both are right within their fragments: homogeneous relations live at one known
+degree, inhomogeneous ones need the critical pairs. Kept as two routing lanes
+rather than resolved (\S\ref{sec:noncommutative}). \\
+Where an analytic ladder should stop &
+\src{r4} drives to the zero function and admits rates outside the input
+spectrum; \src{r6} stops at a nonnegative-coefficient polynomial and fixes the
+alphabet. By \src{r6}'s own completeness lemma these accept the same functions
+on the common domain, so the early stop is a certificate-length optimisation
+and the strength increase is \src{r4}'s ghosts. Stated in
+\S\ref{sec:analytic} rather than settled by preference. \\
+Shipping uncompiled Lean at all &
+Twenty-six proposals ship \code{.lean} files with unexecuted
+\code{\#print axioms} commands. \src{r9} refuses, ``deliberately'' shipping
+none. The merge sided with \src{r9} on the evidentiary question after
+compiling the three round-three files that could be compiled and finding that
+one of them does not parse --- see \S\ref{sec:experiments}. The files are
+still archived as delivered. \\
 \bottomrule
 \end{longtable}
 
@@ -475,19 +600,21 @@ Third, the build is plain pdf\LaTeX{} with stock packages. The nine used four
 engines and nine font families between them, and every one of their READMEs had
 to explain what to do when a font was missing.
 
-Fourth, and the only new evidence: sixteen Lean files were compiled
-(Tables~\ref{tab:lean}, \ref{tab:lean-extensions} and~\ref{tab:lean-closure}),
-and all nine extension suites were re-run and reproduced their recorded counts
-(Table~\ref{tab:extension-rerun}). Every one of the eighteen sources recorded
+Fourth, and the only new evidence: eighteen Lean files were compiled
+(Tables~\ref{tab:lean}, \ref{tab:lean-extensions}, \ref{tab:lean-closure}
+and~\ref{tab:lean-round-three}), and all eighteen later suites were re-run and
+reproduced their recorded counts (Tables~\ref{tab:extension-rerun}
+and~\ref{tab:round-three-runs}). Every one of the twenty-seven sources recorded
 \code{NOT\_RUN} for Lean. That is now narrower --- six of the twenty-one files
-in the merged tree and ten of the twenty extension-round source files elaborate
-under Lean v4.34.0, ten of the sixteen with no axiom dependencies at all --- and
-the limits of what it shows are stated where the result appears. Three of those
+in the merged tree, ten of the twenty extension-round source files, and two of
+the third round's three core-only files elaborate under Lean v4.34.0, eleven of
+the eighteen with no axiom dependencies at all --- and the limits of what it
+shows are stated where the result appears. Three of those
 six are the merge's own: the ten extension specimens contained six spellings of
 one reachability theorem and five of one word-fold theorem, so deduplicating
 them was itself a merge decision rather than a transcription.
 
-Fifth, and specific to the second round: the extension proposals were prepared
+Fifth, and specific to the later rounds: those proposals were prepared
 independently and overlap heavily, so the merge had to decide in each case
 whether two similar-looking results are the same result. Several are not. Three
 different greatest-fixed-point theorems, three different certificate namespaces,
@@ -495,10 +622,30 @@ two identically named PDFs, and three different strengths of producer/checker
 separation are all recorded above as distinctions rather than flattened into
 agreement.
 
+The third round needed the same judgement three more times, and in two of them
+the answer went the other way. Its two noncommutative soundness theorems
+\emph{are} the same theorem with the same proof, and its three
+integrating-factor lemmas are the same lemma --- two stated identically, the
+third generalised to an arbitrary anchor. Those are stated once each, in
+\S\ref{sec:noncommutative} and \S\ref{sec:analytic}. What is \emph{not}
+the same, despite appearances, is \src{r1}'s closure and the closure already
+in \S\ref{sec:closure}: one closes functionals under pullback, the other
+values under pushforward, and they are dual rather than identical. Getting that
+backwards would have merged away the only quotient construction in the
+document.
+
+Sixth, and new to this round: the merge compiled delivered Lean and found it
+broken. That had not been possible before, because every proposal in the first
+two rounds recorded \code{NOT\_RUN}. The failure, its one-line cause, and the
+tested repair are recorded together in
+\texttt{results/lean-round-three-elaboration.json}, and the archived source is
+left exactly as delivered.
+
 \subsection{Conventions used in this document}
 
 \code{\textbackslash status\{...\}} banners, inherited from several of the
 sources, mark whether a mechanism was implemented and executed, specified only,
-or proposed for production. \src{pN} and \src{eN} labels attribute a result to
-the design-round or extension-round run that produced it. \unknown{} always means a bounded search found nothing; it never
+or proposed for production. \src{pN}, \src{eN} and \src{rN} labels attribute a
+result to the design-round, extension-round or third-round run that produced
+it. \unknown{} always means a bounded search found nothing; it never
 means a statement is false.
