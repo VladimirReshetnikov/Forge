@@ -13,7 +13,7 @@ over the others; [`INTEGRATION.md`](INTEGRATION.md) has the module plan and the 
 | `Forge` | **Not compiled.** Every file imports Mathlib and needs a built project. |
 | A `forge` tactic | **Does not exist.** Nothing here implements one. |
 
-None of the twenty-seven proposals compiled any Lean at all — each recorded
+None of the thirty-six proposals compiled any Lean at all — each recorded
 `NOT_RUN` with the same reason, no toolchain in the authoring environment. The
 `ForgeCore` result above is this project's compilation evidence, and it covers
 six of the twenty-one files here. Twelve more elaborate in place under

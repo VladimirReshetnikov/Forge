@@ -67,10 +67,14 @@ cannot be summed, and four of them ship no standalone test suite at all --- thre
 of the design-round nine and `s2` — their assertions live inside the experiment driver, so
 `pytest` would pass vacuously on those modules.
 
-**Eighteen of the twenty-seven were re-run here**, in a different environment,
-and every recorded count was reproduced. Eight of the third round's nine also
-ship a replay entry point, and all eight return zero. See
-[`../results/round-three-suites-rerun.json`](../results/round-three-suites-rerun.json).
+**Twenty-six of the thirty-six were re-run here**, in a different environment,
+and every recorded count was reproduced. The design round's nine authoring
+environments were unavailable, so their counts could only be read. Eight of the
+third round's nine and seven of the fourth round's nine also ship a replay
+entry point, and every one of them returns zero. See
+[`../results/round-three-suites-rerun.json`](../results/round-three-suites-rerun.json)
+and
+[`../results/round-four-suites-rerun.json`](../results/round-four-suites-rerun.json).
 
 Unlike the design round, **every extension suite was re-run here**, in a
 different environment, and every recorded count was reproduced. See
