@@ -1,17 +1,20 @@
 \section{Provenance: what came from where}
 \label{app:provenance}
 
-This document is a merge of twenty-seven independently prepared proposals for
-the same system, in three rounds. The \emph{design round} \src{p1}--\src{p9}
+This document is a merge of thirty-six independently prepared proposals for
+the same system, in four rounds. The \emph{design round} \src{p1}--\src{p9}
 was merged first. The \emph{extension round} \src{e1}--\src{e9} was then
 prepared against that merged draft, at commit
 \texttt{674521027d968d59f7b83220ed52304a85cb55e2}, and merged in turn. The
 \emph{third round} \src{r1}--\src{r9} was prepared against \emph{that}
-result, at commit \texttt{c98e47c5f804e92880fc1d0e378c1b95832b685c}, and is
-merged here. All twenty-seven are retained verbatim under \code{proposals/} so
-that every claim here can be audited against its source. Almost nothing in this article is new
+result, at commit \texttt{c98e47c5f804e92880fc1d0e378c1b95832b685c}. The
+\emph{fourth round} \src{s1}--\src{s9} was prepared against the result of
+\emph{that} merge, at commit
+\texttt{58ea206bd7ad501b930add568151217bcc7f82a2}, and is merged here. All
+thirty-six are retained verbatim under \code{proposals/} so that every claim
+here can be audited against its source. Almost nothing in this article is new
 mathematics: each statement is carried over from at least one of the
-twenty-seven, or from the two external sources named in
+thirty-six, or from the two external sources named in
 \S\ref{sec:external-sources}, and this appendix records which.
 
 Neither later round is a second opinion on the one before it. Their proposals
@@ -159,6 +162,49 @@ the only package that ships no Lean and says why. \\
 \bottomrule
 \end{longtable}
 
+\subsection{The nine fourth-round sources}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.10\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.56\textwidth}@{}}
+\toprule
+Label & Directory & Distinguishing emphasis \\
+\midrule
+\endhead
+\src{s1} & \code{s1-resource-frontiers} &
+Exact minimal coverability frontiers for \emph{all} initial markings, with
+positive runs; a guard-sensitive summary algebra; certified population and
+Pareto thresholds; the only proof of Dickson's lemma in the cluster. \\
+\src{s2} & \code{s2-unbounded-certificates} &
+Coverability bound to one initial marking, plus the round's one correction to
+the merged design: exact rational enclosures of irrational least fixed points,
+inverse-free Newton certificates, critical extinction. \\
+\src{s3} & \code{s3-infinite-state-workers} &
+Finite-control counter systems with multi-ray initial families; equality-register
+transducer equivalence whose finiteness comes from a Bell-number bound rather
+than a well-quasi-order; the round's only Lean file that elaborates. \\
+\src{s4} & \code{s4-ordered-certificates} &
+The widest transition rule --- matrix updates giving resets, transfers and
+duplication --- plus lossy FIFO under Higman's order, and a certificate tag
+that compresses a $26$-billion-element predecessor set into one leaf. \\
+\src{s5} & \code{s5-witness-atlases} &
+Bivariate real quantification by fibre decomposition, with witnesses returned
+as \emph{root indices} rather than numbers. \\
+\src{s6} & \code{s6-real-fibers} &
+The same cover of the line, with counts instead of witnesses: Hermite
+quadratic forms and Descartes-exact circuits evaluated per cell. \\
+\src{s7} & \code{s7-automatic-arithmetic} &
+First-order arithmetic on unbounded naturals by automata, with zero-tail
+saturation and regular least-witness graphs evaluated at $10^{100}+37$. \\
+\src{s8} & \code{s8-certified-symmetry} &
+Stabiliser chains with complete Schreier checking, canonical images by coset
+cover, Burnside inventories, and a Reynolds reduction for the existing cone
+worker. \\
+\src{s9} & \code{s9-constructive-exactness} &
+Integral homology with compatible coordinates, certified reductions with
+witness transport, and an adjoint obstruction to chain homotopy that homology
+cannot see. \\
+\bottomrule
+\end{longtable}
+
 \subsection{Where each section's material came from}
 
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
@@ -249,23 +295,53 @@ co-B\"uchi duals from \src{r9}; couplings and duals from \src{r7} and
 \src{r8}; pushdown summaries from \src{r9}; the drift obligation specified by
 \src{r8} and implemented by \src{r7}. \\
 
-\S11 Boolean and external &
+\S11 Unbounded resources &
+Entirely fourth round. Dickson's lemma from \src{s1}; the predecessor lemma
+from all four, stated once; the exact frontier theorem and
+Invariant~\ref{inv:frontier} from \src{s1}, with \src{s2} identifying the
+same theorem as work it had not done; the matrix transition rule and lossy
+FIFO from \src{s4}; control locations and multi-ray families from \src{s3};
+acceleration from \src{s1} and separation from \src{s4}; the equality-register
+worker and its Bell-number finiteness from \src{s3}. \\
+
+\S12 Real algebra &
+Entirely fourth round. The cover of the line and its three-part completeness
+check from \src{s5} and \src{s6} independently --- stated once; fibre
+decomposition and root-index witnesses from \src{s5}; count circuits from
+\src{s6}; the exceptional-cell trap from both; the three impossibility results
+from \src{s5}, \src{s6} and \src{s7}, kept as three. \\
+
+\S13 Automatic structures &
+Entirely \src{s7}: the encoding, zero-tail saturation, least-witness graphs,
+and the growth obstruction. \\
+
+\S14 Symmetry &
+Entirely \src{s8}: stabiliser chains, the complete-chain theorem, canonical
+covers, the alternating-image rule, Burnside inventories, family recognition,
+Reynolds projection, and the \code{cycleType} hazard. \\
+
+\S15 Chain complexes &
+Entirely \src{s9}: compatible coordinates, the cycle-restricted exactness
+scope condition, certified reductions and the transport formula, and the
+adjoint no-homotopy obstruction. \\
+
+\S16 Boolean and external &
 The SAT/theory loop from \src{p7}; CDCL(T), RUP replay and the negation trap
 from \src{p6}; the resolution-DAG format, \code{verify\_sat} and the exhaustive
 oracle from \src{p4}; extraction cost vectors from \src{p7}; solver islands and
 translation ledgers from \src{p5}; the reconstruction preference order from
 \src{p7}; the no-blanket-combination warning from \src{p5} and \src{p9}. \\
-\S12 Integration &
+\S17 Integration &
 \code{Params}/\code{assertExtra}/\code{mkGoalCore} from \src{p2} and \src{p9};
 the solver-extension callbacks from \src{p4}; the rollback-is-not-enough point
 from \src{p6}; three reconstruction levels from \src{p2}; the module layout
 merged from \src{p1}, \src{p2}, \src{p3}, \src{p5} and \src{p9}; the acceptance
 contract table from \src{p5}; the deployment pattern from \src{p9}; the gates
 merged from all nine. \\
-\S13 Experiments & Each run reports itself. The re-run tables, the Lean
+\S18 Experiments & Each run reports itself. The re-run tables, the Lean
 elaboration tables, and the three pooling traps in
 \S\ref{sec:round-three-runs} are the merge's own work, not any proposal's. \\
-\S14 Evaluation &
+\S19 Evaluation &
 Leakage control from \src{p1}, \src{p5} and \src{p9}; the three input conditions
 from \src{p2}; the two tracks from \src{p4}; the non-communicating portfolio
 from \src{p1} and \src{p6}; metric discipline from \src{p4} and \src{p9}; the
@@ -378,6 +454,38 @@ From the third round:
   vindicated by a compiler.
 \end{itemize}
 
+From the fourth round:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \textbf{The two-sided frontier} (\src{s1}) --- the only coverability
+  certificate that proves exactness and minimality rather than safety, and the
+  only one carrying a positive run per basis element.
+\item \textbf{The direct-cover receipt} (\src{s4}) --- the only certificate
+  format anywhere here that avoids materialising an object it reasons about,
+  turning $26{,}075{,}972{,}546$ minimal predecessors into a one-leaf tree.
+\item \textbf{Bell-number finiteness} (\src{s3}) --- a finite certificate for
+  an infinite alphabet that owes nothing to a well-quasi-order, and the
+  discipline that an integer used as an atom name is not an integer the
+  modelled program may compare.
+\item \textbf{Root-index witnesses} (\src{s5}) --- an existential answered by
+  a position in an ordered root list, which is checkable where a closed form
+  does not exist.
+\item \textbf{Zero-tail saturation} (\src{s7}) --- the repair for a projection
+  that silently loses witnesses needing more digits than any visible input.
+\item \textbf{Certified non-membership in a group} (\src{s8}) --- finite
+  because a chain's completeness is a finite check, not because a search was
+  bounded.
+\item \textbf{The Reynolds reduction} (\src{s8}) --- the only worker here that
+  accelerates an \emph{existing} worker of this document without touching its
+  trust boundary.
+\item \textbf{An obstruction to chain homotopy} (\src{s9}) --- the collection's
+  fourth species of negative evidence, and the only one that reports the
+  computed invariant as too coarse rather than the statement as false.
+\item \textbf{Certified reductions with witness transport} (\src{s9}) --- a
+  simplify-then-lift contract whose middle term is deliberately exercised by a
+  fixture, rather than left to vanish untested.
+\end{itemize}
+
 \subsection{Disagreements, and how they were resolved}
 
 The nine did not agree on everything. Where they conflicted, this document took
@@ -477,7 +585,28 @@ Twenty-six proposals ship \code{.lean} files with unexecuted
 none. The merge sided with \src{r9} on the evidentiary question after
 compiling the three round-three files that could be compiled and finding that
 one of them does not parse --- see \S\ref{sec:experiments}. The files are
-still archived as delivered. \\
+still archived as delivered. The fourth round settled the question without
+being asked to: seven of its nine ship no theorem file, three of them in
+\src{r9}'s words. \\
+One initial state, or all of them &
+\src{s2} binds its coverability receipt to a single initial marking and drops
+minimality, then states that the stronger all-initial-states theorem is
+``hiding in this certificate'' and leaves it to a future Lean port. \src{s1}
+delivers exactly that theorem, checked, with the positive runs the stronger
+statement needs. The merge states the strong form
+(Theorem~\ref{thm:wsts-exact}) and records the weaker one as a distinct
+certificate kind rather than an inferior version of it. \\
+Accelerate the search or change the certificate &
+\src{s1} adds a \code{repeat} witness node and leaves the checker untouched;
+\src{s4} adds a receipt tag that lets a leaf point at a global basis index.
+Each is unable to express the other's hard case, and their own corpora show it
+--- $10^{100}$ in three nodes against $334$. Both are kept
+(\S\ref{sec:wsts}). \\
+Where the boundary of exact certification lies &
+Section~\ref{sec:quantitative} excluded the fragments whose values are
+irrational. \src{s2} argues that this confuses an implementation boundary with
+a certification boundary, since a rational enclosure certifies an irrational
+value. The correction is adopted in \S\ref{sec:quantitative}. \\
 \bottomrule
 \end{longtable}
 
@@ -647,7 +776,7 @@ left exactly as delivered.
 
 \code{\textbackslash status\{...\}} banners, inherited from several of the
 sources, mark whether a mechanism was implemented and executed, specified only,
-or proposed for production. \src{pN}, \src{eN} and \src{rN} labels attribute a
-result to the design-round, extension-round or third-round run that produced
-it. \unknown{} always means a bounded search found nothing; it never
+or proposed for production. \src{pN}, \src{eN}, \src{rN} and \src{sN} labels
+attribute a result to the design-round, extension-round, third-round or
+fourth-round run that produced it. \unknown{} always means a bounded search found nothing; it never
 means a statement is false.

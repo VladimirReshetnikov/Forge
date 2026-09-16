@@ -5,10 +5,13 @@ arithmetic infrastructure. It is to surround that infrastructure with
 proof-structure search and to feed it new, independently validated mathematical
 consequences.
 
-Five complementary kinds of progress are available: discovering a certificate,
+Six complementary kinds of progress are available: discovering a certificate,
 discovering an invariant, constructing a witness, computing a \emph{closure}
-that makes an unbounded family finite, and --- the third round's addition ---
-returning a \emph{quantity} rather than a verdict. Each of them changes what
+that makes an unbounded family finite, returning a \emph{quantity} rather than
+a verdict, and --- the fourth round's addition --- exhibiting a \emph{finite
+basis} for an infinite set of states, which is a different move again: not a
+summary of behaviour but a description of every input from which behaviour goes
+wrong. Each of them changes what
 is being proved rather than deriving more consequences of a fixed local state,
 and that is the distinction the whole architecture rests on. A constructor case
 split and an induction principle are not interchangeable --- the former says a
@@ -60,9 +63,14 @@ would be the second unaudited wrapper, not a contribution
 certificate, \emph{how} to bind it to the source problem, and \emph{what} to do
 with the proved consequence afterwards.
 
-The recommendation below is unchanged by the third round, and that is itself
-worth recording: nine more proposals, three new subject areas, and the cheapest
-end-to-end target is still the one the extension round identified. The
+The recommendation below is unchanged by the third and fourth rounds, and that
+is itself worth recording: eighteen more proposals, eight new subject areas,
+and the cheapest end-to-end target is still the one the extension round
+identified. The fourth round adds a second candidate of comparable size ---
+the stabiliser-chain checker, whose acceptance condition is a finite
+enumeration of Schreier residues and whose soundness theorem is three
+paragraphs --- and a third, the coverability checker, whose positive
+certificate is a list of vectors and a table of indices. The
 extension round supplies a smaller and more specific first target than the
 design round did, and the recommendation here follows it. The finite-algebra
 cover of Section~\ref{sec:covers} has the cheapest checker in this document ---
@@ -92,7 +100,7 @@ on whether it ships a narrow correct thing rather than a wide leaky one.
 
 \subsection{What this document has established, and what it has not}
 
-Established: twenty-seven prototype runs synthesise certificates in fragments
+Established: thirty-six prototype runs synthesise certificates in fragments
 spanning exact polynomial cones, quadratic decomposition, Bernstein subdivision,
 univariate Sturm certificates, polynomial and accumulator invariants, affine,
 lattice, residue and polynomial witnesses, straight-line integer witness
@@ -103,12 +111,16 @@ finite-algebra covers, boundary-safe summation, operator transport, finite
 Kripke countermodels, two-sided free-algebra receipts and word Gram matrices,
 integrating-factor ladders and anchored analytic remainders, and exact
 quantitative certificates for Markov decision processes, parity and B\"uchi
-games, optimal transport and unbounded stacks; every stored certificate replays
-without the search libraries; the specified mutation and corruption tests are
-rejected; several mechanisms solve problems their own restricted precursors
-cannot; all eighteen later suites re-run in a different environment and
-reproduce their recorded counts; and eighteen Lean artefacts elaborate under the
-pinned v4.34.0 toolchain, eleven of them with no axiom dependencies.
+games, optimal transport and unbounded stacks, coverability frontiers over
+well-quasi-ordered state spaces, real quantifier decisions by certified cell
+covers, automatic predicates over unbounded naturals, stabiliser chains with
+certified non-membership, and integral homology with obstructions to chain
+homotopy; every stored certificate replays without the search libraries; the
+specified mutation and corruption tests are rejected; several mechanisms solve
+problems their own restricted precursors cannot; all twenty-seven later suites
+re-run in a different environment and reproduce their recorded counts; and
+twenty Lean artefacts elaborate under the pinned v4.34.0 toolchain, twelve of
+them with no axiom dependencies.
 
 Not established: that \forge{} is implemented as a Lean tactic; that the
 thirty-four Mathlib-dependent candidate scripts compile; that any certificate
@@ -134,16 +146,38 @@ Lean --- \code{\#print axioms} commands and all --- had never been in a
 position to be wrong, and that one of the twenty-seven declined to ship any for
 exactly that reason.
 
+The fourth round is the sequel, and it is the one genuinely encouraging
+movement in this document. Its nine proposals ship two Lean files between them,
+where the first round shipped twenty-one. Four ship no \code{lean/} directory;
+three ship one holding only a statement of the obligations a Lean port would
+have to discharge. Three of those say, in nearly the same words, that the
+directory deliberately contains no uncompiled theorem file presented as a
+completed implementation. Nobody instructed them to. The argument was made once
+by one proposal, a compiler agreed with it, and the practice changed.
+
+The merge's own tooling also turned out to be wrong in the same area, and in
+the more embarrassing direction: its \code{sorry} scan reported a defect in a
+file whose only occurrence of the word was a sentence saying there were none.
+Fixing the scan and re-auditing all eighty-eight Lean files in the repository
+establishes something better than anything claimed --- not one of them contains
+a real \code{sorry} --- and establishes it for the first time, because the
+unfixed scanner could not have told.
+
 The gap between those two lists is the project. It is not a gap that more
-prototype experiments can close, and two further rounds are the evidence for
-that: eighteen more independent efforts, more certificates, more mutations,
-more proved theorems on paper --- and the Lean column still reads
-\code{NOT\_RUN} in every one of the twenty-seven source packages. Three rounds
-have now produced roughly seven thousand lines of candidate Lean and eighteen
-compiled files, all of which were compiled here rather than by any author. The
-gap closes only by writing the Lean implementation described in
-Section~\ref{sec:integration} and running the evaluation described in
-Section~\ref{sec:evaluation}.
+prototype experiments can close, and three further rounds are the evidence for
+that: twenty-seven more independent efforts, more certificates, more mutations,
+more proved theorems on paper --- and the Lean column reads \code{NOT\_RUN} in
+every one of the thirty-six source packages. Four rounds have produced roughly
+seven thousand lines of candidate Lean and twenty compiled files, every one of
+which was compiled here rather than by any author. The gap closes only by
+writing the Lean implementation described in Section~\ref{sec:integration} and
+running the evaluation described in Section~\ref{sec:evaluation}.
+
+What has changed across the rounds is not the gap but the honesty about it. The
+first round shipped three thousand lines of Lean that had never met a compiler
+and said little about that. The fourth shipped ninety-eight lines and a set of
+documents explaining precisely what would have to be proved. The second
+document is worth more, and the collection worked that out for itself.
 
 \subsection{The intended end state}
 
