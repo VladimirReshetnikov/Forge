@@ -11,32 +11,115 @@
     "guard_product": "0 <= a*b, given 0 <= a and 0 <= b"
   },
   "measurements": [
-    {"goal": "hidden_quadratic", "tactic": "grind", "result": "FAIL", "detail": "`grind` failed"},
-    {"goal": "hidden_quadratic", "tactic": "omega", "result": "FAIL", "detail": "nonlinear; reports the squares as unrelated atoms"},
-    {"goal": "hidden_quadratic", "tactic": "nlinarith", "result": "FAIL", "detail": "linarith failed to find a contradiction", "ms": 922},
-    {"goal": "hidden_quadratic", "tactic": "positivity", "result": "FAIL", "ms": 496},
-    {"goal": "hidden_quadratic", "tactic": "nlinarith + the certificate's 3 squares", "result": "PASS", "ms": 1030},
-    {"goal": "hidden_quadratic", "tactic": "linarith + the certificate's 3 squares", "result": "PASS", "ms": 1010,
-     "significance": "The certificate is LINEAR in its squares, so no nonlinear search is needed at all once they are supplied."},
-    {"goal": "hidden_quadratic", "tactic": "nlinarith + only 2 of the 3 squares", "result": "PASS", "ms": 826,
-     "significance": "The measured gap is 'some of the squares' vs 'none', not 'exactly this certificate' vs 'none'. nlinarith manufactures the missing b^2 term itself."},
-    {"goal": "equality_constrained", "tactic": "grind", "result": "FAIL"},
-    {"goal": "equality_constrained", "tactic": "nlinarith", "result": "FAIL", "ms": 493},
-    {"goal": "equality_constrained", "tactic": "positivity", "result": "FAIL", "ms": 448},
-    {"goal": "equality_constrained", "tactic": "nlinarith + sq_nonneg (b-a)", "result": "PASS", "ms": 605},
-    {"goal": "equality_constrained", "tactic": "linarith + sq_nonneg (b-a)", "result": "FAIL", "ms": 418,
-     "detail": "linarith cannot multiply the equality hypothesis by the non-constant multiplier"},
-    {"goal": "equality_constrained", "tactic": "linarith + the square AND the multiplier product", "result": "PASS", "ms": 346,
-     "significance": "Supplying the full certificate makes it linear again."},
-    {"goal": "guard_product", "tactic": "grind", "result": "FAIL",
-     "detail": "cutsat returns a := 0, b := 0 and never applies multiplication monotonicity"},
-    {"goal": "guard_product", "tactic": "nlinarith", "result": "PASS", "ms": 305},
-    {"goal": "guard_product", "tactic": "positivity", "result": "PASS", "ms": 161},
-    {"goal": "guard_product", "tactic": "exact mul_nonneg ha hb", "result": "PASS"}
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "grind",
+      "result": "FAIL",
+      "detail": "`grind` failed"
+    },
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "omega",
+      "result": "FAIL",
+      "detail": "nonlinear; reports the squares as unrelated atoms"
+    },
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "nlinarith",
+      "result": "FAIL",
+      "detail": "linarith failed to find a contradiction",
+      "ms": 922
+    },
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "positivity",
+      "result": "FAIL",
+      "ms": 496
+    },
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "nlinarith + the certificate's 3 squares",
+      "result": "PASS",
+      "ms": 1030
+    },
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "linarith + the certificate's 3 squares",
+      "result": "PASS",
+      "ms": 1010,
+      "significance": "The certificate is LINEAR in its squares, so no nonlinear search is needed at all once they are supplied."
+    },
+    {
+      "goal": "hidden_quadratic",
+      "tactic": "nlinarith + only 2 of the 3 squares",
+      "result": "PASS",
+      "ms": 826,
+      "significance": "The measured gap is 'some of the squares' vs 'none', not 'exactly this certificate' vs 'none'. nlinarith manufactures the missing b^2 term itself."
+    },
+    {
+      "goal": "equality_constrained",
+      "tactic": "grind",
+      "result": "FAIL"
+    },
+    {
+      "goal": "equality_constrained",
+      "tactic": "nlinarith",
+      "result": "FAIL",
+      "ms": 493
+    },
+    {
+      "goal": "equality_constrained",
+      "tactic": "positivity",
+      "result": "FAIL",
+      "ms": 448
+    },
+    {
+      "goal": "equality_constrained",
+      "tactic": "nlinarith + sq_nonneg (b-a)",
+      "result": "PASS",
+      "ms": 605
+    },
+    {
+      "goal": "equality_constrained",
+      "tactic": "linarith + sq_nonneg (b-a)",
+      "result": "FAIL",
+      "ms": 418,
+      "detail": "linarith cannot multiply the equality hypothesis by the non-constant multiplier"
+    },
+    {
+      "goal": "equality_constrained",
+      "tactic": "linarith + the square AND the multiplier product",
+      "result": "PASS",
+      "ms": 346,
+      "significance": "Supplying the full certificate makes it linear again."
+    },
+    {
+      "goal": "guard_product",
+      "tactic": "grind",
+      "result": "FAIL",
+      "detail": "cutsat returns a := 0, b := 0 and never applies multiplication monotonicity"
+    },
+    {
+      "goal": "guard_product",
+      "tactic": "nlinarith",
+      "result": "PASS",
+      "ms": 305
+    },
+    {
+      "goal": "guard_product",
+      "tactic": "positivity",
+      "result": "PASS",
+      "ms": 161
+    },
+    {
+      "goal": "guard_product",
+      "tactic": "exact mul_nonneg ha hb",
+      "result": "PASS"
+    }
   ],
   "headline": "On two of the three goals, every tactic tried fails without the certificate and succeeds with it. On hidden_quadratic, plain linarith suffices once the squares are supplied.",
   "qualifications": [
-    "grind is a WEAK baseline: it fails all three, including 0 <= a*b from 0 <= a and 0 <= b. Beating it is not evidence of much.",
+    "grind is NOT A BASELINE for this at all. Calibration probes: it cannot prove 0 <= x^2, nor 0 <= x*x, nor 0 <= 3*x^2+1, nor 0 <= x*y from 0 <= x and 0 <= y -- while proving a linear control immediately. Its cutsat model treats x^2 as an unconstrained atom and assigns it zero. Every 'grind fails' row below therefore measures its scope, not the difficulty of the goal, and must not be quoted as Forge outperforming it.",
     "guard_product is not evidence at all: bare nlinarith and positivity get it unaided, and its certificate is trivial. It is listed so the table is not filtered.",
     "The gap is smaller than 'with the certificate versus without': two of hidden_quadratic's three squares suffice for nlinarith.",
     "Two informative goals is a small sample. This is not a benchmark.",
@@ -54,5 +137,17 @@
     "anything about the other ten Python certificate families",
     "anything over the reals",
     "any statement about problems outside these three"
-  ]
+  ],
+  "calibration_probes": {
+    "why": "A 0-for-N score is uninterpretable without knowing whether the easiest member of the family is reachable. It is not.",
+    "results": {
+      "0 <= x^2": "grind FAILS, omega FAILS",
+      "0 <= x*x": "grind FAILS, omega FAILS",
+      "0 <= 3*x^2 + 1": "grind FAILS, omega FAILS",
+      "0 <= x*y given 0 <= x, 0 <= y": "grind FAILS",
+      "0 <= 2*x + 5 - 2*x (linear control)": "grind PROVES"
+    },
+    "verified_independently": true,
+    "conclusion": "No problem in the cone family was ever reachable by grind. The tactics that do address this territory -- positivity, nlinarith, polyrith -- are in Mathlib, which the checker deliberately does not import."
+  }
 }

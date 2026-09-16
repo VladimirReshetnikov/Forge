@@ -2,7 +2,7 @@
 
 **A certificate-producing proof-planning layer above Lean's `grind`.**
 
-Start with **[`article/forge.pdf`](article/forge.pdf)** (149 pages). Its editable
+Start with **[`article/forge.pdf`](article/forge.pdf)** (150 pages). Its editable
 source is in [`article/`](article/).
 
 ---

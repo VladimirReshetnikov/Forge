@@ -1408,7 +1408,105 @@ still succeeds: it manufactures the missing $b^2$ term through its own product
 heuristics. So what was measured is ``some of the certificate's squares'' against
 ``none of them'', not ``exactly this certificate'' against ``none''.
 
-\emph{Two goals out of three is a small sample.} Nothing here is a benchmark.
+\emph{Two goals out of three is a small sample.} Nothing there is a benchmark.
+
+\subsubsection*{Thirty-six more, and what the zero actually means}
+
+So a benchmark was built: thirty positive problems with certificates
+constructed rather than searched for --- one to three variables, degrees two
+through six, two to four squares, targets of three to twenty-six terms, and
+coefficients spanning eight orders of magnitude --- together with six negative
+controls. The controls matter more than the positives: a benchmark on which
+everything passes has measured nothing. Between them they exercise all five
+conjuncts of \code{Cert.check}, and two of them satisfy the polynomial identity
+\emph{exactly} while negating the target and a weight, so each would certify
+$0 \le -p$ for a positive-definite $p$ if its guard were removed.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Measurement & \\
+\midrule
+Positive problems verified by the checker & 30/30 \\
+Negative controls correctly rejected & 6/6 \\
+Proved unaided by core \code{grind} & \textbf{0/30} \\
+Proved unaided by core \code{omega} & \textbf{0/30} \\
+Whole-file elaboration & 11.7\,s \\
+Axioms, across all 96 theorems & \code{propext}, \code{Quot.sound} \\
+\bottomrule
+\end{tabular}
+\caption{Lean v4.34.0, core only. No timeouts: every tactic failure was
+reported in one to three seconds.}
+\label{tab:bench}
+\end{table}
+
+\textbf{The zero is not what it looks like, and the calibration probes are the
+real result.} Before reading 0/30 as a gap, ask what \code{grind} can do on the
+easiest possible member of the family:
+
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Goal & \code{grind} \\
+\midrule
+$0 \le x^2$ & fails \\
+$0 \le x \cdot x$ & fails \\
+$0 \le 3x^2 + 1$ & fails \\
+$0 \le xy$ given $0 \le x$, $0 \le y$ & fails \\
+$0 \le 2x + 5 - 2x$ & \emph{proves} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\code{grind} cannot prove that a square is nonnegative. Its own diagnostics say
+why: cutsat treats $x^2$ as an unconstrained atom and assigns it zero, and no
+e-matching pattern supplies the missing fact. No problem in this family was ever
+reachable, so the 0/30 is a statement about \code{grind}'s scope and not about
+the difficulty of the problems. The same applies to \code{omega}, which is
+documented as linear. Neither is a defect in those tactics, and neither result
+should be quoted as Forge outperforming them. The tactics that \emph{do} address
+this territory --- \code{positivity}, \code{nlinarith}, \code{polyrith} --- live
+in Mathlib, which this development deliberately does not import.
+
+\textbf{Kernel cost is driven by polynomial size, not coefficient size.} Three
+matched pairs differing only in coefficient magnitude, by factors up to
+$2.4\times10^{8}$, show net elaboration times of $0.202 \to 0.139$\,s,
+$0.137 \to 0.136$\,s and $0.079 \to 0.070$\,s: no cost at all, because
+\code{Int} bottoms out in GMP-backed literals and the kernel never sees a large
+integer as large. What does drive cost is the number of terms, and
+superlinearly: three terms in 0.02--0.04\,s, six in 0.07--0.14\,s, thirteen in
+0.18--0.28\,s, twenty in 0.46\,s, twenty-six in 0.73\,s. Roughly nine times the
+terms for twenty-four times the time, which is what the quadratic
+\code{insertTerm} in \code{collect} predicts. The scaling limit of this checker
+is polynomial size --- variables $\times$ degree $\times$ squares --- and a
+better \code{collect} is the obvious first optimisation if one is ever needed.
+
+\begin{remark}[The benchmark found a bug in the exporter]
+Three-variable problems exposed a defect that the two-variable corpus could not.
+\code{lean\_concrete} emitted a monomial's factors left-associated,
+\code{(x0 * x1 * x2)}, while \code{monoEvalFrom} recurses on the tail and builds
+\code{x0 * (x1 * x2)}. \code{omega} atomises both, sees two unrelated terms, and
+rejects a true goal. A monomial with at most two factors associates the same way
+in either direction, so every certificate in \code{Corpus.lean} sits exactly on
+the blind spot.
+
+It is fixed at the source and the benchmark's local workaround removed. The
+general point is the one worth keeping: the corpus that was available could not
+have found this, and the defect was in the \emph{bridge} rather than in the
+checker or its soundness proof --- the part that translates a verified statement
+into the goal someone actually wants, which is the part with no theorem
+attached to it.
+\end{remark}
+
+\emph{What the benchmark does not establish.} The certificates were constructed,
+not found, so nothing here measures search cost --- and search is the expensive
+half. Random sums of squares are generically strictly positive, so no hard
+instance sits near the boundary of the cone and nothing Motzkin-like is present.
+The timings are single runs on one machine and two runs of identical work
+differed by up to 30\%, so the ratios carry the argument and the absolute
+figures do not.
+
 
 \begin{remark}[The comparison found an error, and it was in the prompt]
 Setting this up, the equality-constrained certificate was transcribed with its

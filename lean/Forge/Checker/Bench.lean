@@ -35,7 +35,7 @@ This certificate was built by construction, not found by search. `sos_1v_d2_tiny
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_1v_d2_tiny_target : Poly := [([0], 18), ([1], (-12)), ([2], 2)]
+def sos_1v_d2_tiny_target : Poly := [([0], 6), ([1], (-6)), ([2], 39)]
 
 def sos_1v_d2_tiny_ineqs : List Poly := []
 
@@ -44,8 +44,8 @@ def sos_1v_d2_tiny_eqs : List Poly := []
 def sos_1v_d2_tiny_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1], (-1)), ([0], 3)] },
-    { weight := 1, powers := [], poly := [([1], (-1)), ([0], 3)] } ]
+    { weight := 3, powers := [], poly := [([1], 3), ([0], (-1))] },
+    { weight := 3, powers := [], poly := [([1], (-2)), ([0], (-1))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -64,7 +64,7 @@ theorem sos_1v_d2_tiny_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_1v_d2_tiny_concrete (x0 : Int)
-    : 0 ≤ 18 + (-12) * x0 + 2 * x0^2 := by
+    : 0 ≤ 6 + (-6) * x0 + 39 * x0^2 := by
   have h := sos_1v_d2_tiny_nonneg (fun i => if i = 0 then x0 else 0) 
   simp [sos_1v_d2_tiny_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -75,7 +75,7 @@ This certificate was built by construction, not found by search. `sos_1v_d2_smal
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_1v_d2_small_target : Poly := [([0], 166), ([1], (-82)), ([2], 210)]
+def sos_1v_d2_small_target : Poly := [([0], 496), ([1], (-452)), ([2], 427)]
 
 def sos_1v_d2_small_ineqs : List Poly := []
 
@@ -84,9 +84,9 @@ def sos_1v_d2_small_eqs : List Poly := []
 def sos_1v_d2_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1], 5), ([0], (-7))] },
-    { weight := 1, powers := [], poly := [([1], (-11)), ([0], (-6))] },
-    { weight := 1, powers := [], poly := [([1], 8), ([0], (-9))] } ]
+    { weight := 3, powers := [], poly := [([1], 4), ([0], 5)] },
+    { weight := 1, powers := [], poly := [([1], (-4)), ([0], (-11))] },
+    { weight := 3, powers := [], poly := [([1], 11), ([0], (-10))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -105,7 +105,7 @@ theorem sos_1v_d2_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_1v_d2_small_concrete (x0 : Int)
-    : 0 ≤ 166 + (-82) * x0 + 210 * x0^2 := by
+    : 0 ≤ 496 + (-452) * x0 + 427 * x0^2 := by
   have h := sos_1v_d2_small_nonneg (fun i => if i = 0 then x0 else 0) 
   simp [sos_1v_d2_small_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -116,7 +116,7 @@ This certificate was built by construction, not found by search. `sos_1v_d4_smal
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_1v_d4_small_target : Poly := [([0], 45), ([1], 18), ([2], (-42)), ([3], 6), ([4], 25)]
+def sos_1v_d4_small_target : Poly := [([0], 36), ([1], 12), ([2], 13), ([3], (-46)), ([4], 17)]
 
 def sos_1v_d4_small_ineqs : List Poly := []
 
@@ -125,8 +125,8 @@ def sos_1v_d4_small_eqs : List Poly := []
 def sos_1v_d4_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([2], (-4)), ([1], (-3)), ([0], 3)] },
-    { weight := 1, powers := [], poly := [([2], (-3)), ([1], 3), ([0], 6)] } ]
+    { weight := 1, powers := [], poly := [([2], (-3)), ([0], (-2)), ([1], 5)] },
+    { weight := 2, powers := [], poly := [([2], (-2)), ([1], 2), ([0], 4)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -145,7 +145,7 @@ theorem sos_1v_d4_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_1v_d4_small_concrete (x0 : Int)
-    : 0 ≤ 45 + 18 * x0 + (-42) * x0^2 + 6 * x0^3 + 25 * x0^4 := by
+    : 0 ≤ 36 + 12 * x0 + 13 * x0^2 + (-46) * x0^3 + 17 * x0^4 := by
   have h := sos_1v_d4_small_nonneg (fun i => if i = 0 then x0 else 0) 
   simp [sos_1v_d4_small_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -156,7 +156,7 @@ This certificate was built by construction, not found by search. `sos_1v_d4_big_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_1v_d4_big_target : Poly := [([0], 22546349), ([1], (-28059122)), ([2], (-749799)), ([3], 40892908), ([4], 16996528)]
+def sos_1v_d4_big_target : Poly := [([0], 117476668), ([1], (-12673608)), ([2], (-68780984)), ([3], 24202584), ([4], 51805148)]
 
 def sos_1v_d4_big_ineqs : List Poly := []
 
@@ -165,9 +165,9 @@ def sos_1v_d4_big_eqs : List Poly := []
 def sos_1v_d4_big_cert : Cert where
   scale := 1
   squares := [
-    { weight := 22, powers := [], poly := [([2], (-610)), ([1], (-677)), ([0], 581)] },
-    { weight := 39, powers := [], poly := [([2], 418), ([1], 516), ([0], (-504))] },
-    { weight := 7, powers := [], poly := [([2], (-534)), ([0], (-863)), ([1], (-789))] } ]
+    { weight := 95, powers := [], poly := [([2], 470), ([1], 822), ([0], (-610))] },
+    { weight := 48, powers := [], poly := [([2], (-328)), ([0], 704), ([1], 418)] },
+    { weight := 101, powers := [], poly := [([2], (-504)), ([1], 354), ([0], 760)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -186,7 +186,7 @@ theorem sos_1v_d4_big_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_1v_d4_big_concrete (x0 : Int)
-    : 0 ≤ 22546349 + (-28059122) * x0 + (-749799) * x0^2 + 40892908 * x0^3 + 16996528 * x0^4 := by
+    : 0 ≤ 117476668 + (-12673608) * x0 + (-68780984) * x0^2 + 24202584 * x0^3 + 51805148 * x0^4 := by
   have h := sos_1v_d4_big_nonneg (fun i => if i = 0 then x0 else 0) 
   simp [sos_1v_d4_big_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -197,7 +197,7 @@ This certificate was built by construction, not found by search. `sos_2v_d2_tiny
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d2_tiny_target : Poly := [([0, 0], 10), ([0, 1], (-14)), ([0, 2], 5), ([1, 0], 20), ([1, 1], (-12)), ([2, 0], 20)]
+def sos_2v_d2_tiny_target : Poly := [([0, 0], 15), ([0, 1], 60), ([0, 2], 75), ([1, 0], (-36)), ([1, 1], (-24)), ([2, 0], 60)]
 
 def sos_2v_d2_tiny_ineqs : List Poly := []
 
@@ -206,8 +206,8 @@ def sos_2v_d2_tiny_eqs : List Poly := []
 def sos_2v_d2_tiny_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([0, 1], (-1)), ([0, 0], 1), ([1, 0], (-2))] },
-    { weight := 1, powers := [], poly := [([0, 1], 2), ([1, 0], (-4)), ([0, 0], (-3))] } ]
+    { weight := 3, powers := [], poly := [([1, 0], (-4)), ([0, 0], 2), ([0, 1], 3)] },
+    { weight := 3, powers := [], poly := [([1, 0], 2), ([0, 1], 4), ([0, 0], 1)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -226,7 +226,7 @@ theorem sos_2v_d2_tiny_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d2_tiny_concrete (x0 x1 : Int)
-    : 0 ≤ 10 + (-14) * x1 + 5 * x1^2 + 20 * x0 + (-12) * (x0 * x1) + 20 * x0^2 := by
+    : 0 ≤ 15 + 60 * x1 + 75 * x1^2 + (-36) * x0 + (-24) * (x0 * x1) + 60 * x0^2 := by
   have h := sos_2v_d2_tiny_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d2_tiny_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -237,7 +237,7 @@ This certificate was built by construction, not found by search. `sos_2v_d2_smal
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d2_small_target : Poly := [([0, 0], 425), ([0, 1], 390), ([0, 2], 314), ([1, 0], (-160)), ([1, 1], (-40)), ([2, 0], 97)]
+def sos_2v_d2_small_target : Poly := [([0, 0], 650), ([0, 1], (-440)), ([0, 2], 642), ([1, 0], 740), ([1, 1], (-1200)), ([2, 0], 682)]
 
 def sos_2v_d2_small_ineqs : List Poly := []
 
@@ -246,9 +246,9 @@ def sos_2v_d2_small_eqs : List Poly := []
 def sos_2v_d2_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1, 0], 6), ([0, 1], (-15)), ([0, 0], (-15))] },
-    { weight := 1, powers := [], poly := [([1, 0], (-6)), ([0, 1], (-5)), ([0, 0], (-10))] },
-    { weight := 1, powers := [], poly := [([1, 0], (-5)), ([0, 0], 10), ([0, 1], (-8))] } ]
+    { weight := 1, powers := [], poly := [([0, 1], (-15)), ([0, 0], (-10)), ([1, 0], 14)] },
+    { weight := 2, powers := [], poly := [([0, 1], 14), ([1, 0], (-15)), ([0, 0], (-15))] },
+    { weight := 1, powers := [], poly := [([1, 0], (-6)), ([0, 1], (-5)), ([0, 0], (-10))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -267,7 +267,7 @@ theorem sos_2v_d2_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d2_small_concrete (x0 x1 : Int)
-    : 0 ≤ 425 + 390 * x1 + 314 * x1^2 + (-160) * x0 + (-40) * (x0 * x1) + 97 * x0^2 := by
+    : 0 ≤ 650 + (-440) * x1 + 642 * x1^2 + 740 * x0 + (-1200) * (x0 * x1) + 682 * x0^2 := by
   have h := sos_2v_d2_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d2_small_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -278,7 +278,7 @@ This certificate was built by construction, not found by search. `sos_2v_d2_mid_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d2_mid_target : Poly := [([0, 0], 5635), ([0, 1], 7956), ([0, 2], 5594), ([1, 0], (-772)), ([1, 1], (-976)), ([2, 0], 6494)]
+def sos_2v_d2_mid_target : Poly := [([0, 0], 5870), ([0, 1], 1382), ([0, 2], 3789), ([1, 0], (-4334)), ([1, 1], (-2078)), ([2, 0], 6423)]
 
 def sos_2v_d2_mid_ineqs : List Poly := []
 
@@ -287,10 +287,10 @@ def sos_2v_d2_mid_eqs : List Poly := []
 def sos_2v_d2_mid_cert : Cert where
   scale := 1
   squares := [
+    { weight := 3, powers := [], poly := [([1, 0], (-13)), ([0, 0], 23), ([0, 1], (-19))] },
     { weight := 1, powers := [], poly := [([1, 0], 28), ([0, 1], 34), ([0, 0], 36)] },
     { weight := 3, powers := [], poly := [([0, 1], (-18)), ([1, 0], 38), ([0, 0], (-27))] },
-    { weight := 2, powers := [], poly := [([0, 1], (-17)), ([1, 0], 20), ([0, 0], 20)] },
-    { weight := 2, powers := [], poly := [([1, 0], (-17)), ([0, 0], (-26)), ([0, 1], (-38))] } ]
+    { weight := 2, powers := [], poly := [([0, 1], (-17)), ([1, 0], 20), ([0, 0], 20)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -309,7 +309,7 @@ theorem sos_2v_d2_mid_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d2_mid_concrete (x0 x1 : Int)
-    : 0 ≤ 5635 + 7956 * x1 + 5594 * x1^2 + (-772) * x0 + (-976) * (x0 * x1) + 6494 * x0^2 := by
+    : 0 ≤ 5870 + 1382 * x1 + 3789 * x1^2 + (-4334) * x0 + (-2078) * (x0 * x1) + 6423 * x0^2 := by
   have h := sos_2v_d2_mid_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d2_mid_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -320,7 +320,7 @@ This certificate was built by construction, not found by search. `sos_2v_d4_smal
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d4_small_target : Poly := [([0, 0], 41), ([0, 1], 20), ([0, 2], 88), ([0, 3], 24), ([0, 4], 45), ([1, 0], (-66)), ([1, 1], (-44)), ([1, 2], (-72)), ([1, 3], (-18)), ([2, 0], 29), ([2, 1], 12), ([2, 2], 9)]
+def sos_2v_d4_small_target : Poly := [([0, 0], 120), ([0, 1], (-168)), ([0, 2], (-42)), ([0, 3], 72), ([0, 4], 48), ([1, 1], (-120)), ([1, 2], (-60)), ([1, 3], 120), ([2, 0], 72), ([2, 1], (-180)), ([2, 2], 150), ([3, 1], 180), ([4, 0], 108)]
 
 def sos_2v_d4_small_ineqs : List Poly := []
 
@@ -329,8 +329,8 @@ def sos_2v_d4_small_eqs : List Poly := []
 def sos_2v_d4_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([0, 2], 6), ([0, 0], 5), ([1, 0], (-5)), ([0, 1], 2)] },
-    { weight := 1, powers := [], poly := [([1, 1], 3), ([0, 2], (-3)), ([1, 0], 2), ([0, 0], (-4))] } ]
+    { weight := 3, powers := [], poly := [([0, 2], (-4)), ([1, 1], (-5)), ([0, 0], 6), ([0, 1], (-3))] },
+    { weight := 3, powers := [], poly := [([1, 1], 5), ([0, 1], (-5)), ([0, 0], 2), ([2, 0], 6)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -349,7 +349,7 @@ theorem sos_2v_d4_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d4_small_concrete (x0 x1 : Int)
-    : 0 ≤ 41 + 20 * x1 + 88 * x1^2 + 24 * x1^3 + 45 * x1^4 + (-66) * x0 + (-44) * (x0 * x1) + (-72) * (x0 * x1^2) + (-18) * (x0 * x1^3) + 29 * x0^2 + 12 * (x0^2 * x1) + 9 * (x0^2 * x1^2) := by
+    : 0 ≤ 120 + (-168) * x1 + (-42) * x1^2 + 72 * x1^3 + 48 * x1^4 + (-120) * (x0 * x1) + (-60) * (x0 * x1^2) + 120 * (x0 * x1^3) + 72 * x0^2 + (-180) * (x0^2 * x1) + 150 * (x0^2 * x1^2) + 180 * (x0^3 * x1) + 108 * x0^4 := by
   have h := sos_2v_d4_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d4_small_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -360,7 +360,7 @@ This certificate was built by construction, not found by search. `sos_2v_d4_mid_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d4_mid_target : Poly := [([0, 0], 256), ([0, 1], (-768)), ([0, 2], 200), ([0, 3], 536), ([0, 4], 939), ([1, 2], 356), ([1, 3], (-1012)), ([2, 0], 1092), ([2, 1], 632), ([2, 2], (-646)), ([3, 0], (-440)), ([3, 1], 580), ([4, 0], 911)]
+def sos_2v_d4_mid_target : Poly := [([0, 0], 1595), ([0, 1], 1710), ([0, 2], (-797)), ([0, 3], (-1152)), ([0, 4], 2654), ([1, 0], (-576)), ([1, 1], (-1440)), ([1, 2], (-2148)), ([2, 0], 1784), ([2, 1], 1710), ([2, 2], (-1420)), ([3, 0], (-732)), ([4, 0], 1001)]
 
 def sos_2v_d4_mid_ineqs : List Poly := []
 
@@ -369,9 +369,9 @@ def sos_2v_d4_mid_eqs : List Poly := []
 def sos_2v_d4_mid_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([2, 0], (-10)), ([1, 1], 16), ([0, 2], (-11)), ([1, 0], 22)] },
-    { weight := 1, powers := [], poly := [([2, 0], (-19)), ([0, 2], 24), ([0, 1], 24), ([0, 0], (-16))] },
-    { weight := 2, powers := [], poly := [([2, 0], (-15)), ([0, 2], 11), ([0, 1], (-14)), ([1, 1], (-15))] } ]
+    { weight := 2, powers := [], poly := [([2, 0], 13), ([0, 2], (-13)), ([1, 0], 9), ([0, 0], (-16))] },
+    { weight := 3, powers := [], poly := [([2, 0], 10), ([0, 1], 12), ([1, 0], (-20)), ([0, 2], 14)] },
+    { weight := 3, powers := [], poly := [([2, 0], (-11)), ([0, 1], (-15)), ([0, 0], (-19)), ([0, 2], 24)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -390,7 +390,7 @@ theorem sos_2v_d4_mid_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d4_mid_concrete (x0 x1 : Int)
-    : 0 ≤ 256 + (-768) * x1 + 200 * x1^2 + 536 * x1^3 + 939 * x1^4 + 356 * (x0 * x1^2) + (-1012) * (x0 * x1^3) + 1092 * x0^2 + 632 * (x0^2 * x1) + (-646) * (x0^2 * x1^2) + (-440) * x0^3 + 580 * (x0^3 * x1) + 911 * x0^4 := by
+    : 0 ≤ 1595 + 1710 * x1 + (-797) * x1^2 + (-1152) * x1^3 + 2654 * x1^4 + (-576) * x0 + (-1440) * (x0 * x1) + (-2148) * (x0 * x1^2) + 1784 * x0^2 + 1710 * (x0^2 * x1) + (-1420) * (x0^2 * x1^2) + (-732) * x0^3 + 1001 * x0^4 := by
   have h := sos_2v_d4_mid_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d4_mid_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -401,7 +401,7 @@ This certificate was built by construction, not found by search. `sos_2v_d4_big_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d4_big_target : Poly := [([0, 0], 94590832), ([0, 1], 194122208), ([0, 2], 126865644), ([0, 3], 28136984), ([0, 4], 19658678), ([1, 1], (-154392000)), ([1, 2], (-128040308)), ([1, 3], 49816256), ([2, 0], 206679424), ([2, 1], 190339432), ([2, 2], 41060397), ([3, 1], (-239545000)), ([4, 0], 153966182)]
+def sos_2v_d4_big_target : Poly := [([0, 0], 201528880), ([0, 1], (-139372800)), ([0, 2], (-91382480)), ([0, 3], 126092400), ([0, 4], 162968844), ([1, 1], (-339830136)), ([1, 2], 85667142), ([1, 3], 194276852), ([2, 0], (-75207807)), ([2, 1], (-58299294)), ([2, 2], 79890470), ([3, 0], 28190124), ([3, 1], 38965674), ([4, 0], 43511847)]
 
 def sos_2v_d4_big_ineqs : List Poly := []
 
@@ -410,9 +410,9 @@ def sos_2v_d4_big_eqs : List Poly := []
 def sos_2v_d4_big_cert : Cert where
   scale := 1
   squares := [
-    { weight := 17, powers := [], poly := [([1, 1], 841), ([2, 0], (-1188)), ([0, 2], 560), ([0, 1], (-458))] },
-    { weight := 22, powers := [], poly := [([0, 2], 807), ([2, 0], (-881)), ([0, 1], 1038), ([1, 1], 952)] },
-    { weight := 112, powers := [], poly := [([2, 0], (-1004)), ([0, 1], (-943)), ([0, 0], (-919)), ([1, 1], 750)] } ]
+    { weight := 136, powers := [], poly := [([0, 2], 883), ([1, 1], 909), ([0, 0], (-976)), ([0, 1], 525)] },
+    { weight := 51, powers := [], poly := [([1, 1], 813), ([0, 2], (-871)), ([2, 0], 841), ([0, 0], (-1188))] },
+    { weight := 41, powers := [], poly := [([2, 0], 426), ([0, 2], (-667)), ([1, 0], 807), ([1, 1], (-881))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -431,7 +431,7 @@ theorem sos_2v_d4_big_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d4_big_concrete (x0 x1 : Int)
-    : 0 ≤ 94590832 + 194122208 * x1 + 126865644 * x1^2 + 28136984 * x1^3 + 19658678 * x1^4 + (-154392000) * (x0 * x1) + (-128040308) * (x0 * x1^2) + 49816256 * (x0 * x1^3) + 206679424 * x0^2 + 190339432 * (x0^2 * x1) + 41060397 * (x0^2 * x1^2) + (-239545000) * (x0^3 * x1) + 153966182 * x0^4 := by
+    : 0 ≤ 201528880 + (-139372800) * x1 + (-91382480) * x1^2 + 126092400 * x1^3 + 162968844 * x1^4 + (-339830136) * (x0 * x1) + 85667142 * (x0 * x1^2) + 194276852 * (x0 * x1^3) + (-75207807) * x0^2 + (-58299294) * (x0^2 * x1) + 79890470 * (x0^2 * x1^2) + 28190124 * x0^3 + 38965674 * (x0^3 * x1) + 43511847 * x0^4 := by
   have h := sos_2v_d4_big_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d4_big_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -442,7 +442,7 @@ This certificate was built by construction, not found by search. `sos_2v_d2_huge
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d2_huge_target : Poly := [([0, 0], 8397270548), ([0, 1], 8056836284), ([0, 2], 11771501005), ([1, 0], (-7265739360)), ([1, 1], (-26620179392)), ([2, 0], 15823909388)]
+def sos_2v_d2_huge_target : Poly := [([0, 0], 7183745349), ([0, 1], (-9772768414)), ([0, 2], 3476223781), ([1, 0], (-15088743860)), ([1, 1], 9177100060), ([2, 0], 13899669020)]
 
 def sos_2v_d2_huge_ineqs : List Poly := []
 
@@ -451,9 +451,9 @@ def sos_2v_d2_huge_eqs : List Poly := []
 def sos_2v_d2_huge_cert : Cert where
   scale := 1
   squares := [
-    { weight := 446, powers := [], poly := [([1, 0], 2207), ([0, 0], (-1812)), ([0, 1], (-2902))] },
-    { weight := 434, powers := [], poly := [([1, 0], (-3621)), ([0, 1], 2653), ([0, 0], (-2506))] },
-    { weight := 435, powers := [], poly := [([0, 1], 3377), ([1, 0], (-4278)), ([0, 0], 3110)] } ]
+    { weight := 56, powers := [], poly := [([0, 1], 2837), ([0, 0], (-4084)), ([1, 0], (-3840))] },
+    { weight := 520, powers := [], poly := [([1, 0], 4931), ([0, 0], (-3405)), ([0, 1], 2207)] },
+    { weight := 37, powers := [], poly := [([1, 0], (-3410)), ([0, 0], (-2443)), ([0, 1], 3649)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -472,7 +472,7 @@ theorem sos_2v_d2_huge_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d2_huge_concrete (x0 x1 : Int)
-    : 0 ≤ 8397270548 + 8056836284 * x1 + 11771501005 * x1^2 + (-7265739360) * x0 + (-26620179392) * (x0 * x1) + 15823909388 * x0^2 := by
+    : 0 ≤ 7183745349 + (-9772768414) * x1 + 3476223781 * x1^2 + (-15088743860) * x0 + 9177100060 * (x0 * x1) + 13899669020 * x0^2 := by
   have h := sos_2v_d2_huge_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d2_huge_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -483,7 +483,7 @@ This certificate was built by construction, not found by search. `sos_2v_d4_huge
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_2v_d4_huge_target : Poly := [([0, 0], 51580302735), ([0, 1], (-24282579096)), ([0, 2], 23265911259), ([1, 0], 65662087008), ([1, 1], 51253828134), ([1, 2], 22909894002), ([2, 0], (-40649613634)), ([2, 1], 100334060568), ([2, 2], 27716711538), ([3, 0], (-26158914208)), ([3, 1], 1634987382), ([4, 0], 39058487279)]
+def sos_2v_d4_huge_target : Poly := [([0, 0], 9606448917), ([0, 2], 43481753832), ([0, 4], 11424057268), ([1, 0], (-22116528174)), ([1, 1], 17793633060), ([1, 2], 17055737788), ([2, 0], (-10591369490)), ([2, 1], (-3566030076)), ([2, 2], (-10451206892)), ([3, 0], 23060798216), ([3, 1], (-18115473096)), ([4, 0], 23100499888)]
 
 def sos_2v_d4_huge_ineqs : List Poly := []
 
@@ -492,8 +492,8 @@ def sos_2v_d4_huge_eqs : List Poly := []
 def sos_2v_d4_huge_cert : Cert where
   scale := 1
   squares := [
-    { weight := 791, powers := [], poly := [([1, 1], 5283), ([1, 0], 5488), ([0, 0], 7563), ([2, 0], (-3013))] },
-    { weight := 579, powers := [], poly := [([2, 0], 7420), ([0, 0], (-3308)), ([0, 1], 6339), ([1, 1], 3121)] } ]
+    { weight := 277, powers := [], poly := [([0, 2], 6422), ([2, 0], (-8225)), ([0, 0], 5889), ([1, 0], (-6779))] },
+    { weight := 387, powers := [], poly := [([2, 0], 3357), ([1, 0], (-3013)), ([0, 1], (-7630)), ([1, 1], (-6972))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -512,7 +512,7 @@ theorem sos_2v_d4_huge_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_2v_d4_huge_concrete (x0 x1 : Int)
-    : 0 ≤ 51580302735 + (-24282579096) * x1 + 23265911259 * x1^2 + 65662087008 * x0 + 51253828134 * (x0 * x1) + 22909894002 * (x0 * x1^2) + (-40649613634) * x0^2 + 100334060568 * (x0^2 * x1) + 27716711538 * (x0^2 * x1^2) + (-26158914208) * x0^3 + 1634987382 * (x0^3 * x1) + 39058487279 * x0^4 := by
+    : 0 ≤ 9606448917 + 43481753832 * x1^2 + 11424057268 * x1^4 + (-22116528174) * x0 + 17793633060 * (x0 * x1) + 17055737788 * (x0 * x1^2) + (-10591369490) * x0^2 + (-3566030076) * (x0^2 * x1) + (-10451206892) * (x0^2 * x1^2) + 23060798216 * x0^3 + (-18115473096) * (x0^3 * x1) + 23100499888 * x0^4 := by
   have h := sos_2v_d4_huge_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [sos_2v_d4_huge_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -523,7 +523,7 @@ This certificate was built by construction, not found by search. `sos_3v_d2_tiny
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_3v_d2_tiny_target : Poly := [([0, 0, 0], 1), ([0, 0, 2], 1), ([0, 1, 0], (-4)), ([0, 1, 1], (-6)), ([0, 2, 0], 13), ([1, 0, 0], (-4)), ([1, 0, 1], 6), ([1, 1, 0], (-10)), ([2, 0, 0], 13)]
+def sos_3v_d2_tiny_target : Poly := [([0, 0, 0], 9), ([0, 0, 1], (-18)), ([0, 0, 2], 21), ([0, 1, 1], (-36)), ([0, 2, 0], 27), ([1, 0, 0], (-18)), ([1, 0, 1], 30), ([1, 1, 0], (-18)), ([2, 0, 0], 12)]
 
 def sos_3v_d2_tiny_ineqs : List Poly := []
 
@@ -532,8 +532,8 @@ def sos_3v_d2_tiny_eqs : List Poly := []
 def sos_3v_d2_tiny_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([0, 0, 1], 1), ([1, 0, 0], 3), ([0, 1, 0], (-3))] },
-    { weight := 1, powers := [], poly := [([1, 0, 0], 2), ([0, 0, 0], (-1)), ([0, 1, 0], 2)] } ]
+    { weight := 3, powers := [], poly := [([0, 0, 1], 2), ([1, 0, 0], 1), ([0, 1, 0], (-3))] },
+    { weight := 1, powers := [], poly := [([0, 0, 1], 3), ([1, 0, 0], 3), ([0, 0, 0], (-3))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -552,7 +552,7 @@ theorem sos_3v_d2_tiny_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_3v_d2_tiny_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 1 + 1 * x2^2 + (-4) * x1 + (-6) * (x1 * x2) + 13 * x1^2 + (-4) * x0 + 6 * (x0 * x2) + (-10) * (x0 * x1) + 13 * x0^2 := by
+    : 0 ≤ 9 + (-18) * x2 + 21 * x2^2 + (-36) * (x1 * x2) + 27 * x1^2 + (-18) * x0 + 30 * (x0 * x2) + (-18) * (x0 * x1) + 12 * x0^2 := by
   have h := sos_3v_d2_tiny_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [sos_3v_d2_tiny_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -563,7 +563,7 @@ This certificate was built by construction, not found by search. `sos_3v_d2_smal
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_3v_d2_small_target : Poly := [([0, 0, 0], 868), ([0, 0, 1], 552), ([0, 0, 2], 839), ([0, 1, 0], (-632)), ([0, 1, 1], (-80)), ([0, 2, 0], 556), ([1, 0, 0], 1192), ([1, 0, 1], 852), ([1, 1, 0], (-736)), ([2, 0, 0], 550)]
+def sos_3v_d2_small_target : Poly := [([0, 0, 0], 742), ([0, 0, 1], 96), ([0, 0, 2], 461), ([0, 1, 0], (-800)), ([0, 1, 1], (-120)), ([0, 2, 0], 1004), ([1, 0, 0], (-176)), ([1, 0, 1], (-888)), ([1, 1, 0], 1160), ([2, 0, 0], 748)]
 
 def sos_3v_d2_small_ineqs : List Poly := []
 
@@ -572,9 +572,9 @@ def sos_3v_d2_small_eqs : List Poly := []
 def sos_3v_d2_small_cert : Cert where
   scale := 1
   squares := [
+    { weight := 2, powers := [], poly := [([1, 0, 0], (-18)), ([0, 0, 0], 9), ([0, 1, 0], (-18)), ([0, 0, 1], 10)] },
     { weight := 1, powers := [], poly := [([1, 0, 0], 8), ([0, 1, 0], (-16)), ([0, 0, 1], (-15)), ([0, 0, 0], 16)] },
-    { weight := 1, powers := [], poly := [([1, 0, 0], 6), ([0, 0, 0], 18), ([0, 1, 0], 10), ([0, 0, 1], 6)] },
-    { weight := 2, powers := [], poly := [([1, 0, 0], (-15)), ([0, 0, 1], (-17)), ([0, 0, 0], (-12)), ([0, 1, 0], 10)] } ]
+    { weight := 1, powers := [], poly := [([1, 0, 0], 6), ([0, 0, 0], 18), ([0, 1, 0], 10), ([0, 0, 1], 6)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -593,7 +593,7 @@ theorem sos_3v_d2_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_3v_d2_small_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 868 + 552 * x2 + 839 * x2^2 + (-632) * x1 + (-80) * (x1 * x2) + 556 * x1^2 + 1192 * x0 + 852 * (x0 * x2) + (-736) * (x0 * x1) + 550 * x0^2 := by
+    : 0 ≤ 742 + 96 * x2 + 461 * x2^2 + (-800) * x1 + (-120) * (x1 * x2) + 1004 * x1^2 + (-176) * x0 + (-888) * (x0 * x2) + 1160 * (x0 * x1) + 748 * x0^2 := by
   have h := sos_3v_d2_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [sos_3v_d2_small_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -604,7 +604,7 @@ This certificate was built by construction, not found by search. `sos_3v_d2_mid_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_3v_d2_mid_target : Poly := [([0, 0, 0], 26700), ([0, 0, 1], (-18024)), ([0, 0, 2], 9837), ([0, 1, 0], 17534), ([0, 1, 1], (-16310)), ([0, 2, 0], 18036), ([1, 0, 0], 27316), ([1, 0, 1], (-14474)), ([1, 1, 0], 30456), ([2, 0, 0], 23231)]
+def sos_3v_d2_mid_target : Poly := [([0, 0, 0], 49408), ([0, 0, 1], (-30762)), ([0, 0, 2], 28944), ([0, 1, 0], 52542), ([0, 1, 1], (-63572)), ([0, 2, 0], 37456), ([1, 0, 0], 67218), ([1, 0, 1], (-21954)), ([1, 1, 0], 38018), ([2, 0, 0], 33549)]
 
 def sos_3v_d2_mid_ineqs : List Poly := []
 
@@ -613,10 +613,10 @@ def sos_3v_d2_mid_eqs : List Poly := []
 def sos_3v_d2_mid_cert : Cert where
   scale := 1
   squares := [
+    { weight := 3, powers := [], poly := [([1, 0, 0], (-59)), ([0, 0, 1], (-48)), ([0, 0, 0], (-60)), ([0, 1, 0], 36)] },
     { weight := 1, powers := [], poly := [([0, 1, 0], (-30)), ([0, 0, 0], 49), ([1, 0, 0], (-57)), ([0, 0, 1], 42)] },
     { weight := 5, powers := [], poly := [([0, 1, 0], (-51)), ([0, 0, 1], 31), ([1, 0, 0], (-55)), ([0, 0, 0], (-60))] },
-    { weight := 1, powers := [], poly := [([0, 1, 0], (-47)), ([0, 0, 1], 26), ([0, 0, 0], 51), ([1, 0, 0], 53)] },
-    { weight := 2, powers := [], poly := [([0, 1, 0], (-31)), ([0, 0, 0], 43), ([1, 0, 0], (-32)), ([0, 0, 1], (-36))] } ]
+    { weight := 7, powers := [], poly := [([0, 0, 1], (-47)), ([1, 0, 0], 26), ([0, 0, 0], 51), ([0, 1, 0], 53)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -635,7 +635,7 @@ theorem sos_3v_d2_mid_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_3v_d2_mid_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 26700 + (-18024) * x2 + 9837 * x2^2 + 17534 * x1 + (-16310) * (x1 * x2) + 18036 * x1^2 + 27316 * x0 + (-14474) * (x0 * x2) + 30456 * (x0 * x1) + 23231 * x0^2 := by
+    : 0 ≤ 49408 + (-30762) * x2 + 28944 * x2^2 + 52542 * x1 + (-63572) * (x1 * x2) + 37456 * x1^2 + 67218 * x0 + (-21954) * (x0 * x2) + 38018 * (x0 * x1) + 33549 * x0^2 := by
   have h := sos_3v_d2_mid_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [sos_3v_d2_mid_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -646,7 +646,7 @@ This certificate was built by construction, not found by search. `sos_3v_d4_smal
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_3v_d4_small_target : Poly := [([0, 0, 0], 4), ([0, 0, 2], 36), ([0, 1, 2], (-84)), ([0, 2, 0], 24), ([0, 2, 2], 49), ([0, 4, 0], 36), ([1, 0, 0], (-24)), ([1, 0, 1], (-100)), ([1, 0, 2], 60), ([1, 1, 1], 84), ([1, 1, 2], (-70)), ([1, 2, 0], (-72)), ([1, 2, 1], (-84)), ([2, 0, 0], 72), ([2, 0, 1], 24), ([2, 0, 2], 74)]
+def sos_3v_d4_small_target : Poly := [([0, 0, 0], 91), ([0, 1, 0], 64), ([0, 2, 0], 97), ([1, 0, 1], (-204)), ([1, 1, 0], 220), ([1, 1, 1], (-102)), ([1, 2, 0], 74), ([2, 0, 2], 117), ([2, 1, 1], (-246)), ([2, 2, 0], 133)]
 
 def sos_3v_d4_small_ineqs : List Poly := []
 
@@ -655,8 +655,8 @@ def sos_3v_d4_small_eqs : List Poly := []
 def sos_3v_d4_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1, 0, 1], 7), ([0, 0, 0], (-2)), ([0, 2, 0], (-6)), ([1, 0, 0], 6)] },
-    { weight := 1, powers := [], poly := [([0, 1, 1], 7), ([0, 0, 1], (-6)), ([1, 0, 0], 6), ([1, 0, 1], (-5))] } ]
+    { weight := 1, powers := [], poly := [([1, 0, 1], (-3)), ([0, 1, 0], (-7)), ([0, 0, 0], 4), ([1, 1, 0], 5)] },
+    { weight := 3, powers := [], poly := [([1, 0, 1], (-6)), ([1, 1, 0], 6), ([0, 1, 0], 4), ([0, 0, 0], 5)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -675,7 +675,7 @@ theorem sos_3v_d4_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_3v_d4_small_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 4 + 36 * x2^2 + (-84) * (x1 * x2^2) + 24 * x1^2 + 49 * (x1^2 * x2^2) + 36 * x1^4 + (-24) * x0 + (-100) * (x0 * x2) + 60 * (x0 * x2^2) + 84 * (x0 * x1 * x2) + (-70) * (x0 * x1 * x2^2) + (-72) * (x0 * x1^2) + (-84) * (x0 * x1^2 * x2) + 72 * x0^2 + 24 * (x0^2 * x2) + 74 * (x0^2 * x2^2) := by
+    : 0 ≤ 91 + 64 * x1 + 97 * x1^2 + (-204) * (x0 * x2) + 220 * (x0 * x1) + (-102) * (x0 * (x1 * x2)) + 74 * (x0 * x1^2) + 117 * (x0^2 * x2^2) + (-246) * (x0^2 * (x1 * x2)) + 133 * (x0^2 * x1^2) := by
   have h := sos_3v_d4_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [sos_3v_d4_small_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -686,7 +686,7 @@ This certificate was built by construction, not found by search. `sos_3v_d4_mid_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_3v_d4_mid_target : Poly := [([0, 0, 4], 361), ([0, 1, 2], 1064), ([0, 1, 3], 1102), ([0, 2, 0], 4659), ([0, 2, 1], (-144)), ([0, 2, 2], 1419), ([0, 3, 0], 1048), ([0, 3, 1], 680), ([0, 4, 0], 632), ([1, 0, 3], (-798)), ([1, 1, 0], (-5216)), ([1, 1, 1], 1244), ([1, 1, 2], (-1218)), ([1, 2, 0], (-6374)), ([1, 2, 1], 720), ([1, 3, 0], (-2088)), ([2, 0, 0], 1928), ([2, 0, 1], (-1440)), ([2, 0, 2], 285), ([2, 1, 0], 1320), ([2, 1, 1], (-1008)), ([2, 2, 0], 3363), ([3, 0, 0], 840), ([3, 0, 1], 504), ([4, 0, 0], 1026)]
+def sos_3v_d4_mid_target : Poly := [([0, 0, 2], 3199), ([0, 0, 3], (-1292)), ([0, 0, 4], 1241), ([0, 1, 2], (-4580)), ([0, 1, 3], 208), ([0, 2, 0], 361), ([0, 2, 1], 1948), ([0, 2, 2], 2840), ([0, 3, 1], (-510)), ([0, 4, 0], 289), ([1, 0, 2], (-4176)), ([1, 0, 3], 1444), ([1, 1, 1], (-384)), ([1, 1, 2], 4572), ([1, 2, 0], 988), ([1, 2, 1], 2296), ([1, 3, 0], 340), ([2, 0, 2], 2212), ([2, 1, 1], 2584), ([2, 2, 0], 1076)]
 
 def sos_3v_d4_mid_ineqs : List Poly := []
 
@@ -695,9 +695,9 @@ def sos_3v_d4_mid_eqs : List Poly := []
 def sos_3v_d4_mid_cert : Cert where
   scale := 1
   squares := [
-    { weight := 3, powers := [], poly := [([1, 0, 1], (-10)), ([0, 2, 0], (-12)), ([1, 1, 0], 29), ([1, 0, 0], 24), ([0, 1, 0], (-29))] },
-    { weight := 2, powers := [], poly := [([0, 1, 1], (-17)), ([0, 2, 0], (-10)), ([0, 1, 0], 26), ([2, 0, 0], (-21)), ([1, 0, 0], (-10))] },
-    { weight := 1, powers := [], poly := [([1, 0, 1], (-21)), ([2, 0, 0], (-12)), ([0, 0, 2], 19), ([0, 1, 1], 29), ([0, 1, 0], 28)] } ]
+    { weight := 1, powers := [], poly := [([1, 0, 1], (-22)), ([1, 1, 0], (-26)), ([0, 1, 1], (-28)), ([0, 1, 0], (-19)), ([0, 0, 2], 13)] },
+    { weight := 3, powers := [], poly := [([1, 0, 1], 24), ([0, 0, 1], (-29)), ([0, 1, 1], 19), ([0, 0, 2], 14), ([1, 1, 0], 10)] },
+    { weight := 1, powers := [], poly := [([1, 1, 0], (-10)), ([0, 2, 0], (-17)), ([0, 0, 2], (-22)), ([0, 1, 1], 15), ([0, 0, 1], (-26))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -716,7 +716,7 @@ theorem sos_3v_d4_mid_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_3v_d4_mid_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 361 * x2^4 + 1064 * (x1 * x2^2) + 1102 * (x1 * x2^3) + 4659 * x1^2 + (-144) * (x1^2 * x2) + 1419 * (x1^2 * x2^2) + 1048 * x1^3 + 680 * (x1^3 * x2) + 632 * x1^4 + (-798) * (x0 * x2^3) + (-5216) * (x0 * x1) + 1244 * (x0 * x1 * x2) + (-1218) * (x0 * x1 * x2^2) + (-6374) * (x0 * x1^2) + 720 * (x0 * x1^2 * x2) + (-2088) * (x0 * x1^3) + 1928 * x0^2 + (-1440) * (x0^2 * x2) + 285 * (x0^2 * x2^2) + 1320 * (x0^2 * x1) + (-1008) * (x0^2 * x1 * x2) + 3363 * (x0^2 * x1^2) + 840 * x0^3 + 504 * (x0^3 * x2) + 1026 * x0^4 := by
+    : 0 ≤ 3199 * x2^2 + (-1292) * x2^3 + 1241 * x2^4 + (-4580) * (x1 * x2^2) + 208 * (x1 * x2^3) + 361 * x1^2 + 1948 * (x1^2 * x2) + 2840 * (x1^2 * x2^2) + (-510) * (x1^3 * x2) + 289 * x1^4 + (-4176) * (x0 * x2^2) + 1444 * (x0 * x2^3) + (-384) * (x0 * (x1 * x2)) + 4572 * (x0 * (x1 * x2^2)) + 988 * (x0 * x1^2) + 2296 * (x0 * (x1^2 * x2)) + 340 * (x0 * x1^3) + 2212 * (x0^2 * x2^2) + 2584 * (x0^2 * (x1 * x2)) + 1076 * (x0^2 * x1^2) := by
   have h := sos_3v_d4_mid_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [sos_3v_d4_mid_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -727,7 +727,7 @@ This certificate was built by construction, not found by search. `sos_3v_d4_big_
 the original `p`, whose coefficients were already integers.
 -/
 
-def sos_3v_d4_big_target : Poly := [([0, 0, 0], 20048580), ([0, 0, 1], 19933438), ([0, 0, 2], 15541011), ([0, 0, 3], 84692), ([0, 0, 4], 23007164), ([0, 1, 0], (-30213534)), ([0, 1, 1], (-12884584)), ([0, 2, 0], (-6624673)), ([0, 2, 1], (-15048752)), ([0, 2, 2], (-25622576)), ([0, 3, 0], 23766834), ([0, 3, 1], 10135384), ([0, 4, 0], 24380911), ([1, 0, 1], 25628706), ([1, 0, 2], 44683506), ([1, 0, 3], (-33726996)), ([1, 1, 0], (-17736690)), ([1, 1, 1], (-40400400)), ([1, 1, 2], (-40243200)), ([1, 2, 0], 18695430), ([1, 2, 1], 7972680), ([1, 3, 0], 57732390), ([2, 0, 0], 14450680), ([2, 0, 1], (-2509920)), ([2, 0, 2], (-17888569)), ([2, 2, 0], 66399625), ([3, 0, 1], 32393160), ([3, 1, 0], 42365400), ([4, 0, 0], 23658450)]
+def sos_3v_d4_big_target : Poly := [([0, 0, 0], 7294238), ([0, 0, 2], 39461398), ([0, 0, 3], 2166920), ([0, 0, 4], 32578125), ([0, 1, 0], 15396584), ([0, 1, 1], 47005776), ([0, 1, 2], (-1511292)), ([0, 1, 3], 68090880), ([0, 2, 0], 41282164), ([0, 2, 1], 6831624), ([0, 2, 2], 131283184), ([0, 3, 0], 27965224), ([0, 3, 1], 59329536), ([0, 4, 0], 26459573), ([1, 0, 2], (-22727464)), ([1, 0, 3], 2902480), ([1, 1, 1], 7178444), ([1, 1, 2], 57224200), ([1, 2, 0], 29348400), ([1, 2, 1], (-63990124)), ([2, 0, 1], 2356144), ([2, 0, 2], 26690812), ([2, 1, 1], (-53805400)), ([2, 2, 0], 35493494), ([3, 0, 1], 3155936), ([4, 0, 0], 1042972)]
 
 def sos_3v_d4_big_ineqs : List Poly := []
 
@@ -736,9 +736,9 @@ def sos_3v_d4_big_eqs : List Poly := []
 def sos_3v_d4_big_cert : Cert where
   scale := 1
   squares := [
-    { weight := 29, powers := [], poly := [([1, 1, 0], (-435)), ([0, 2, 0], (-553)), ([0, 1, 1], (-316)), ([0, 1, 0], (-741)), ([0, 0, 0], 703)] },
-    { weight := 50, powers := [], poly := [([2, 0, 0], (-539)), ([1, 1, 0], (-786)), ([0, 0, 1], 514), ([0, 2, 0], (-557)), ([0, 0, 2], 512)] },
-    { weight := 79, powers := [], poly := [([0, 0, 2], 354), ([1, 0, 1], (-603)), ([2, 0, 0], (-340)), ([0, 0, 0], (-269)), ([0, 0, 1], (-469))] } ]
+    { weight := 7, powers := [], poly := [([0, 0, 2], 355), ([2, 0, 0], 386), ([1, 0, 1], 584), ([0, 2, 0], 585), ([0, 0, 1], 436)] },
+    { weight := 74, powers := [], poly := [([0, 1, 1], 703), ([1, 1, 0], (-661)), ([0, 1, 0], (-300)), ([0, 0, 1], (-323)), ([1, 0, 1], 550)] },
+    { weight := 62, powers := [], poly := [([0, 2, 0], 623), ([0, 1, 0], 362), ([0, 1, 1], 768), ([0, 0, 2], 715), ([0, 0, 0], 343)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -757,7 +757,7 @@ theorem sos_3v_d4_big_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem sos_3v_d4_big_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 20048580 + 19933438 * x2 + 15541011 * x2^2 + 84692 * x2^3 + 23007164 * x2^4 + (-30213534) * x1 + (-12884584) * (x1 * x2) + (-6624673) * x1^2 + (-15048752) * (x1^2 * x2) + (-25622576) * (x1^2 * x2^2) + 23766834 * x1^3 + 10135384 * (x1^3 * x2) + 24380911 * x1^4 + 25628706 * (x0 * x2) + 44683506 * (x0 * x2^2) + (-33726996) * (x0 * x2^3) + (-17736690) * (x0 * x1) + (-40400400) * (x0 * x1 * x2) + (-40243200) * (x0 * x1 * x2^2) + 18695430 * (x0 * x1^2) + 7972680 * (x0 * x1^2 * x2) + 57732390 * (x0 * x1^3) + 14450680 * x0^2 + (-2509920) * (x0^2 * x2) + (-17888569) * (x0^2 * x2^2) + 66399625 * (x0^2 * x1^2) + 32393160 * (x0^3 * x2) + 42365400 * (x0^3 * x1) + 23658450 * x0^4 := by
+    : 0 ≤ 7294238 + 39461398 * x2^2 + 2166920 * x2^3 + 32578125 * x2^4 + 15396584 * x1 + 47005776 * (x1 * x2) + (-1511292) * (x1 * x2^2) + 68090880 * (x1 * x2^3) + 41282164 * x1^2 + 6831624 * (x1^2 * x2) + 131283184 * (x1^2 * x2^2) + 27965224 * x1^3 + 59329536 * (x1^3 * x2) + 26459573 * x1^4 + (-22727464) * (x0 * x2^2) + 2902480 * (x0 * x2^3) + 7178444 * (x0 * (x1 * x2)) + 57224200 * (x0 * (x1 * x2^2)) + 29348400 * (x0 * x1^2) + (-63990124) * (x0 * (x1^2 * x2)) + 2356144 * (x0^2 * x2) + 26690812 * (x0^2 * x2^2) + (-53805400) * (x0^2 * (x1 * x2)) + 35493494 * (x0^2 * x1^2) + 3155936 * (x0^3 * x2) + 1042972 * x0^4 := by
   have h := sos_3v_d4_big_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [sos_3v_d4_big_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -772,18 +772,18 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def eq_2v_d2_small_target : Poly := [([0, 0], 84), ([0, 1], (-136)), ([0, 2], 84), ([1, 0], 102), ([1, 1], (-30)), ([2, 0], 55)]
+def eq_2v_d2_small_target : Poly := [([0, 0], 116), ([0, 1], (-163)), ([0, 2], 179), ([1, 0], (-140)), ([1, 1], (-5)), ([2, 0], 65)]
 
 def eq_2v_d2_small_ineqs : List Poly := []
 
-def eq_2v_d2_small_eqs : List Poly := [[([0, 1], (-2)), ([0, 0], 2), ([1, 0], 1)]]
+def eq_2v_d2_small_eqs : List Poly := [[([0, 1], (-2)), ([1, 0], (-1)), ([0, 0], (-1))]]
 
 def eq_2v_d2_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1, 0], 7), ([0, 0], 8), ([0, 1], (-4))] },
-    { weight := 1, powers := [], poly := [([0, 1], (-8)), ([1, 0], (-2)), ([0, 0], 4)] } ]
-  multipliers := [[([1, 0], 2), ([0, 1], (-2)), ([0, 0], 2)]]
+    { weight := 1, powers := [], poly := [([0, 1], 7), ([0, 0], 4), ([1, 0], (-7))] },
+    { weight := 2, powers := [], poly := [([1, 0], (-3)), ([0, 1], (-8)), ([0, 0], 7)] } ]
+  multipliers := [[([0, 1], (-1)), ([0, 0], (-2)), ([1, 0], 2)]]
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
@@ -802,8 +802,8 @@ theorem eq_2v_d2_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem eq_2v_d2_small_concrete (x0 x1 : Int)
-    (hf0 : (-2) * x1 + 2 + 1 * x0 = 0)
-    : 0 ≤ 84 + (-136) * x1 + 84 * x1^2 + 102 * x0 + (-30) * (x0 * x1) + 55 * x0^2 := by
+    (hf0 : (-2) * x1 + (-1) * x0 + (-1) = 0)
+    : 0 ≤ 116 + (-163) * x1 + 179 * x1^2 + (-140) * x0 + (-5) * (x0 * x1) + 65 * x0^2 := by
   have h := eq_2v_d2_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
     intro f hf
     simp [eq_2v_d2_small_eqs] at hf
@@ -823,19 +823,19 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def eq_2v_d2_mid_target : Poly := [([0, 0], 3731), ([0, 1], (-3976)), ([0, 2], 1362), ([1, 0], (-893)), ([1, 1], (-1243)), ([2, 0], 2619)]
+def eq_2v_d2_mid_target : Poly := [([0, 0], 892), ([0, 1], 1079), ([0, 2], 2306), ([1, 0], 1120), ([1, 1], (-13)), ([2, 0], 1767)]
 
 def eq_2v_d2_mid_ineqs : List Poly := []
 
-def eq_2v_d2_mid_eqs : List Poly := [[([0, 1], 1), ([1, 0], 2), ([0, 0], (-3))]]
+def eq_2v_d2_mid_eqs : List Poly := [[([0, 1], (-3)), ([0, 0], 1), ([1, 0], (-1))]]
 
 def eq_2v_d2_mid_cert : Cert where
   scale := 1
   squares := [
-    { weight := 3, powers := [], poly := [([0, 1], 10), ([1, 0], 20), ([0, 0], (-29))] },
-    { weight := 1, powers := [], poly := [([1, 0], (-24)), ([0, 0], (-19)), ([0, 1], 22)] },
-    { weight := 1, powers := [], poly := [([0, 1], 24), ([1, 0], (-29)), ([0, 0], (-29))] } ]
-  multipliers := [[([1, 0], 1), ([0, 1], 2), ([0, 0], (-2))]]
+    { weight := 2, powers := [], poly := [([0, 1], 25), ([0, 0], 11), ([1, 0], 20)] },
+    { weight := 2, powers := [], poly := [([1, 0], 14), ([0, 1], (-17)), ([0, 0], (-12))] },
+    { weight := 1, powers := [], poly := [([1, 0], (-24)), ([0, 0], (-19)), ([0, 1], 22)] } ]
+  multipliers := [[([0, 1], 2), ([0, 0], 1), ([1, 0], 1)]]
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
@@ -854,8 +854,8 @@ theorem eq_2v_d2_mid_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem eq_2v_d2_mid_concrete (x0 x1 : Int)
-    (hf0 : 1 * x1 + 2 * x0 + (-3) = 0)
-    : 0 ≤ 3731 + (-3976) * x1 + 1362 * x1^2 + (-893) * x0 + (-1243) * (x0 * x1) + 2619 * x0^2 := by
+    (hf0 : (-3) * x1 + 1 + (-1) * x0 = 0)
+    : 0 ≤ 892 + 1079 * x1 + 2306 * x1^2 + 1120 * x0 + (-13) * (x0 * x1) + 1767 * x0^2 := by
   have h := eq_2v_d2_mid_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
     intro f hf
     simp [eq_2v_d2_mid_eqs] at hf
@@ -875,18 +875,18 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def eq_3v_d2_small_target : Poly := [([0, 0, 0], 35), ([0, 0, 1], (-108)), ([0, 0, 2], 131), ([0, 1, 0], (-39)), ([0, 1, 1], 125), ([0, 2, 0], 32), ([1, 0, 0], (-1)), ([1, 0, 1], 43), ([1, 1, 0], 29), ([2, 0, 0], 9)]
+def eq_3v_d2_small_target : Poly := [([0, 0, 0], 83), ([0, 0, 1], 1), ([0, 0, 2], 48), ([0, 1, 0], (-159)), ([0, 1, 1], (-119)), ([0, 2, 0], 157), ([1, 0, 0], 139), ([1, 0, 1], (-122)), ([1, 1, 0], 3), ([2, 0, 0], 141)]
 
 def eq_3v_d2_small_ineqs : List Poly := []
 
-def eq_3v_d2_small_eqs : List Poly := [[([1, 0, 0], (-1)), ([0, 1, 0], (-2)), ([0, 0, 0], (-1)), ([0, 0, 1], (-1))]]
+def eq_3v_d2_small_eqs : List Poly := [[([0, 0, 1], (-1)), ([0, 1, 0], (-1)), ([0, 0, 0], (-2)), ([1, 0, 0], 1)]]
 
 def eq_3v_d2_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([0, 1, 0], (-5)), ([1, 0, 0], (-3)), ([0, 0, 1], (-7))] },
-    { weight := 1, powers := [], poly := [([0, 0, 1], (-9)), ([0, 0, 0], 6), ([0, 1, 0], (-3))] } ]
-  multipliers := [[([0, 1, 0], 1), ([0, 0, 1], (-1)), ([0, 0, 0], 1)]]
+    { weight := 3, powers := [], poly := [([1, 0, 0], (-5)), ([0, 0, 1], 4), ([0, 1, 0], (-5))] },
+    { weight := 1, powers := [], poly := [([1, 0, 0], 8), ([0, 1, 0], (-9)), ([0, 0, 0], 9)] } ]
+  multipliers := [[([0, 1, 0], (-1)), ([0, 0, 0], (-1)), ([1, 0, 0], 2)]]
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
@@ -905,8 +905,8 @@ theorem eq_3v_d2_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem eq_3v_d2_small_concrete (x0 x1 x2 : Int)
-    (hf0 : (-1) * x0 + (-2) * x1 + (-1) + (-1) * x2 = 0)
-    : 0 ≤ 35 + (-108) * x2 + 131 * x2^2 + (-39) * x1 + 125 * (x1 * x2) + 32 * x1^2 + (-1) * x0 + 43 * (x0 * x2) + 29 * (x0 * x1) + 9 * x0^2 := by
+    (hf0 : (-1) * x2 + (-1) * x1 + (-2) + 1 * x0 = 0)
+    : 0 ≤ 83 + 1 * x2 + 48 * x2^2 + (-159) * x1 + (-119) * (x1 * x2) + 157 * x1^2 + 139 * x0 + (-122) * (x0 * x2) + 3 * (x0 * x1) + 141 * x0^2 := by
   have h := eq_3v_d2_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) (by
     intro f hf
     simp [eq_3v_d2_small_eqs] at hf
@@ -926,18 +926,18 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def eq_2v_d4_small_target : Poly := [([0, 1], 1), ([0, 2], 42), ([0, 3], (-80)), ([0, 4], 64), ([1, 1], 2), ([1, 2], (-64)), ([2, 0], (-2)), ([2, 1], 7), ([2, 2], 1), ([3, 0], (-4)), ([3, 1], 66), ([4, 0], 32)]
+def eq_2v_d4_small_target : Poly := [([0, 0], 163), ([0, 1], (-2)), ([0, 2], (-61)), ([0, 3], 2), ([0, 4], 64), ([1, 0], 168), ([1, 1], 2), ([1, 2], 1), ([2, 0], 448), ([2, 2], (-128)), ([3, 0], 194), ([3, 1], (-4)), ([4, 0], 254)]
 
 def eq_2v_d4_small_ineqs : List Poly := []
 
-def eq_2v_d4_small_eqs : List Poly := [[([1, 0], (-2)), ([0, 0], (-1)), ([0, 1], (-1))]]
+def eq_2v_d4_small_eqs : List Poly := [[([0, 1], (-2)), ([0, 0], 1), ([1, 0], (-1))]]
 
 def eq_2v_d4_small_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1, 1], (-8)), ([0, 1], 4), ([2, 0], (-4))] },
-    { weight := 1, powers := [], poly := [([0, 2], 8), ([0, 1], (-5)), ([2, 0], (-4))] } ]
-  multipliers := [[([2, 1], (-1)), ([0, 1], (-1)), ([2, 0], 2)]]
+    { weight := 3, powers := [], poly := [([2, 0], (-8)), ([1, 0], (-4)), ([0, 0], (-7))] },
+    { weight := 1, powers := [], poly := [([2, 0], 8), ([0, 2], (-8)), ([0, 0], 4)] } ]
+  multipliers := [[([3, 0], 2), ([0, 2], (-1)), ([0, 1], (-2))]]
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
@@ -956,8 +956,8 @@ theorem eq_2v_d4_small_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem eq_2v_d4_small_concrete (x0 x1 : Int)
-    (hf0 : (-2) * x0 + (-1) + (-1) * x1 = 0)
-    : 0 ≤ 1 * x1 + 42 * x1^2 + (-80) * x1^3 + 64 * x1^4 + 2 * (x0 * x1) + (-64) * (x0 * x1^2) + (-2) * x0^2 + 7 * (x0^2 * x1) + 1 * (x0^2 * x1^2) + (-4) * x0^3 + 66 * (x0^3 * x1) + 32 * x0^4 := by
+    (hf0 : (-2) * x1 + 1 + (-1) * x0 = 0)
+    : 0 ≤ 163 + (-2) * x1 + (-61) * x1^2 + 2 * x1^3 + 64 * x1^4 + 168 * x0 + 2 * (x0 * x1) + 1 * (x0 * x1^2) + 448 * x0^2 + (-128) * (x0^2 * x1^2) + 194 * x0^3 + (-4) * (x0^3 * x1) + 254 * x0^4 := by
   have h := eq_2v_d4_small_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
     intro f hf
     simp [eq_2v_d4_small_eqs] at hf
@@ -977,18 +977,18 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def eq_2v_d2_big_target : Poly := [([0, 0], 35679649), ([0, 1], 113023378), ([0, 2], 93507506), ([1, 0], 106905999), ([1, 1], 205613509), ([2, 0], 164900844)]
+def eq_2v_d2_big_target : Poly := [([0, 0], 263166847), ([0, 1], (-60225344)), ([0, 2], 190817114), ([1, 0], (-512367440)), ([1, 1], 132933660), ([2, 0], 256751841)]
 
 def eq_2v_d2_big_ineqs : List Poly := []
 
-def eq_2v_d2_big_eqs : List Poly := [[([0, 1], (-79)), ([0, 0], 187), ([1, 0], 128)]]
+def eq_2v_d2_big_eqs : List Poly := [[([0, 1], 142), ([0, 0], (-64)), ([1, 0], 75)]]
 
 def eq_2v_d2_big_cert : Cert where
   scale := 1
   squares := [
-    { weight := 79, powers := [], poly := [([0, 1], (-1059)), ([0, 0], (-609)), ([1, 0], (-1350))] },
-    { weight := 13, powers := [], poly := [([0, 1], 614), ([1, 0], (-1268)), ([0, 0], 699)] } ]
-  multipliers := [[([0, 1], (-121)), ([0, 0], 151), ([1, 0], 169)]]
+    { weight := 70, powers := [], poly := [([0, 1], 1267), ([0, 0], 1032), ([1, 0], (-730))] },
+    { weight := 119, powers := [], poly := [([1, 0], 1358), ([0, 1], 812), ([0, 0], (-1259))] } ]
+  multipliers := [[([0, 1], (-106)), ([1, 0], (-89)), ([0, 0], 148)]]
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
@@ -1007,8 +1007,8 @@ theorem eq_2v_d2_big_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem eq_2v_d2_big_concrete (x0 x1 : Int)
-    (hf0 : (-79) * x1 + 187 + 128 * x0 = 0)
-    : 0 ≤ 35679649 + 113023378 * x1 + 93507506 * x1^2 + 106905999 * x0 + 205613509 * (x0 * x1) + 164900844 * x0^2 := by
+    (hf0 : 142 * x1 + (-64) + 75 * x0 = 0)
+    : 0 ≤ 263166847 + (-60225344) * x1 + 190817114 * x1^2 + (-512367440) * x0 + 132933660 * (x0 * x1) + 256751841 * x0^2 := by
   have h := eq_2v_d2_big_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
     intro f hf
     simp [eq_2v_d2_big_eqs] at hf
@@ -1018,9 +1018,9 @@ theorem eq_2v_d2_big_concrete (x0 x1 : Int)
   simp [eq_2v_d2_big_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
 
-/-! ### `guard_2v_d2` --- bench cone (guards), 2 variables
+/-! ### `guard_2v_lin` --- bench cone (guards), 2 variables
 
-This certificate was built by construction, not found by search. `guard_2v_d2_target` is
+This certificate was built by construction, not found by search. `guard_2v_lin_target` is
 the original `p`, whose coefficients were already integers.
 
 The constraints are cleared the same way and by positive
@@ -1028,51 +1028,51 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def guard_2v_d2_target : Poly := [([0, 0], 4), ([0, 2], 16), ([1, 0], (-24)), ([1, 1], 24), ([2, 0], 45), ([2, 2], 36), ([3, 1], 48), ([4, 0], 16)]
+def guard_2v_lin_target : Poly := [([0, 0], 48), ([0, 1], (-72)), ([0, 2], 39), ([1, 1], (-60)), ([1, 4], 8), ([2, 0], 75), ([2, 3], 16), ([3, 2], 8)]
 
-def guard_2v_d2_ineqs : List Poly := [[([1, 0], 1)], [([0, 1], 1)]]
+def guard_2v_lin_ineqs : List Poly := [[([1, 0], 1)], [([0, 1], 1)]]
 
-def guard_2v_d2_eqs : List Poly := []
+def guard_2v_lin_eqs : List Poly := []
 
-def guard_2v_d2_cert : Cert where
+def guard_2v_lin_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [0, 0], poly := [([1, 0], (-6)), ([0, 0], 2)] },
-    { weight := 1, powers := [0, 0], poly := [([0, 1], 4), ([1, 0], 3)] },
-    { weight := 1, powers := [2, 0], poly := [([1, 0], 4), ([0, 1], 6)] } ]
+    { weight := 3, powers := [0, 0], poly := [([1, 0], (-5)), ([0, 1], 2)] },
+    { weight := 3, powers := [0, 0], poly := [([0, 1], 3), ([0, 0], (-4))] },
+    { weight := 2, powers := [1, 2], poly := [([0, 1], 2), ([1, 0], 2)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
-theorem guard_2v_d2_checks :
-    guard_2v_d2_cert.check guard_2v_d2_target guard_2v_d2_ineqs guard_2v_d2_eqs = true := by decide
+theorem guard_2v_lin_checks :
+    guard_2v_lin_cert.check guard_2v_lin_target guard_2v_lin_ineqs guard_2v_lin_eqs = true := by decide
 
 /-- Nonnegativity at every assignment satisfying the constraints.
 Follows from the check by `Cert.sound`; no arithmetic is repeated
 here and no property of the search is assumed. -/
-theorem guard_2v_d2_nonneg (x : Env)
-    (hg : ∀ g ∈ guard_2v_d2_ineqs, 0 ≤ eval x g)
-    : 0 ≤ eval x guard_2v_d2_target :=
-  guard_2v_d2_cert.sound _ _ _ guard_2v_d2_checks x hg (by simp [guard_2v_d2_eqs])
+theorem guard_2v_lin_nonneg (x : Env)
+    (hg : ∀ g ∈ guard_2v_lin_ineqs, 0 ≤ eval x g)
+    : 0 ≤ eval x guard_2v_lin_target :=
+  guard_2v_lin_cert.sound _ _ _ guard_2v_lin_checks x hg (by simp [guard_2v_lin_eqs])
 
-/-- The same fact as `guard_2v_d2_nonneg`, stated in ordinary arithmetic.
+/-- The same fact as `guard_2v_lin_nonneg`, stated in ordinary arithmetic.
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
-theorem guard_2v_d2_concrete (x0 x1 : Int)
+theorem guard_2v_lin_concrete (x0 x1 : Int)
     (hg0 : 0 ≤ 1 * x0)
     (hg1 : 0 ≤ 1 * x1)
-    : 0 ≤ 4 + 16 * x1^2 + (-24) * x0 + 24 * (x0 * x1) + 45 * x0^2 + 36 * (x0^2 * x1^2) + 48 * (x0^3 * x1) + 16 * x0^4 := by
-  have h := guard_2v_d2_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
+    : 0 ≤ 48 + (-72) * x1 + 39 * x1^2 + (-60) * (x0 * x1) + 8 * (x0 * x1^4) + 75 * x0^2 + 16 * (x0^2 * x1^3) + 8 * (x0^3 * x1^2) := by
+  have h := guard_2v_lin_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
     intro g hg
-    simp [guard_2v_d2_ineqs] at hg
+    simp [guard_2v_lin_ineqs] at hg
     rcases hg with rfl | rfl <;>
       simp [eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] <;> omega)
-  simp [guard_2v_d2_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
+  simp [guard_2v_lin_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
 
-/-! ### `guard_2v_d4` --- bench cone (guards), 2 variables
+/-! ### `guard_2v_quad` --- bench cone (guards), 2 variables
 
-This certificate was built by construction, not found by search. `guard_2v_d4_target` is
+This certificate was built by construction, not found by search. `guard_2v_quad_target` is
 the original `p`, whose coefficients were already integers.
 
 The constraints are cleared the same way and by positive
@@ -1080,51 +1080,51 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def guard_2v_d4_target : Poly := [([0, 4], 144), ([1, 2], (-96)), ([1, 3], 144), ([2, 0], 32), ([2, 1], (-96)), ([2, 2], 72), ([2, 4], 121), ([3, 0], (-40)), ([3, 1], 60), ([3, 2], (-220)), ([3, 3], 110), ([4, 0], 125), ([4, 1], (-100)), ([4, 2], 25)]
+def guard_2v_quad_target : Poly := [([0, 2], 147), ([0, 3], (-504)), ([0, 4], 576), ([1, 2], (-96)), ([1, 3], 144), ([2, 0], 16), ([2, 1], 162), ([2, 2], (-308)), ([2, 3], (-40)), ([2, 4], 25), ([3, 2], (-48)), ([3, 3], 60), ([4, 0], 75), ([4, 2], 36)]
 
-def guard_2v_d4_ineqs : List Poly := [[([1, 0], 1)], [([0, 1], 1)]]
+def guard_2v_quad_ineqs : List Poly := [[([1, 0], 1)], [([0, 1], 1)]]
 
-def guard_2v_d4_eqs : List Poly := []
+def guard_2v_quad_eqs : List Poly := []
 
-def guard_2v_d4_cert : Cert where
+def guard_2v_quad_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [0, 0], poly := [([2, 0], 5), ([1, 1], 6), ([1, 0], (-4))] },
-    { weight := 1, powers := [0, 0], poly := [([1, 1], 6), ([1, 0], (-4)), ([0, 2], 12)] },
-    { weight := 1, powers := [2, 0], poly := [([1, 1], (-5)), ([0, 2], (-11)), ([1, 0], 10)] } ]
+    { weight := 3, powers := [0, 0], poly := [([0, 2], 12), ([0, 1], (-7)), ([2, 0], (-5))] },
+    { weight := 1, powers := [0, 2], poly := [([1, 1], 5), ([2, 0], 6), ([1, 0], (-4))] },
+    { weight := 1, powers := [0, 0], poly := [([1, 1], 6), ([1, 0], (-4)), ([0, 2], 12)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
-theorem guard_2v_d4_checks :
-    guard_2v_d4_cert.check guard_2v_d4_target guard_2v_d4_ineqs guard_2v_d4_eqs = true := by decide
+theorem guard_2v_quad_checks :
+    guard_2v_quad_cert.check guard_2v_quad_target guard_2v_quad_ineqs guard_2v_quad_eqs = true := by decide
 
 /-- Nonnegativity at every assignment satisfying the constraints.
 Follows from the check by `Cert.sound`; no arithmetic is repeated
 here and no property of the search is assumed. -/
-theorem guard_2v_d4_nonneg (x : Env)
-    (hg : ∀ g ∈ guard_2v_d4_ineqs, 0 ≤ eval x g)
-    : 0 ≤ eval x guard_2v_d4_target :=
-  guard_2v_d4_cert.sound _ _ _ guard_2v_d4_checks x hg (by simp [guard_2v_d4_eqs])
+theorem guard_2v_quad_nonneg (x : Env)
+    (hg : ∀ g ∈ guard_2v_quad_ineqs, 0 ≤ eval x g)
+    : 0 ≤ eval x guard_2v_quad_target :=
+  guard_2v_quad_cert.sound _ _ _ guard_2v_quad_checks x hg (by simp [guard_2v_quad_eqs])
 
-/-- The same fact as `guard_2v_d4_nonneg`, stated in ordinary arithmetic.
+/-- The same fact as `guard_2v_quad_nonneg`, stated in ordinary arithmetic.
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
-theorem guard_2v_d4_concrete (x0 x1 : Int)
+theorem guard_2v_quad_concrete (x0 x1 : Int)
     (hg0 : 0 ≤ 1 * x0)
     (hg1 : 0 ≤ 1 * x1)
-    : 0 ≤ 144 * x1^4 + (-96) * (x0 * x1^2) + 144 * (x0 * x1^3) + 32 * x0^2 + (-96) * (x0^2 * x1) + 72 * (x0^2 * x1^2) + 121 * (x0^2 * x1^4) + (-40) * x0^3 + 60 * (x0^3 * x1) + (-220) * (x0^3 * x1^2) + 110 * (x0^3 * x1^3) + 125 * x0^4 + (-100) * (x0^4 * x1) + 25 * (x0^4 * x1^2) := by
-  have h := guard_2v_d4_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
+    : 0 ≤ 147 * x1^2 + (-504) * x1^3 + 576 * x1^4 + (-96) * (x0 * x1^2) + 144 * (x0 * x1^3) + 16 * x0^2 + 162 * (x0^2 * x1) + (-308) * (x0^2 * x1^2) + (-40) * (x0^2 * x1^3) + 25 * (x0^2 * x1^4) + (-48) * (x0^3 * x1^2) + 60 * (x0^3 * x1^3) + 75 * x0^4 + 36 * (x0^4 * x1^2) := by
+  have h := guard_2v_quad_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) (by
     intro g hg
-    simp [guard_2v_d4_ineqs] at hg
+    simp [guard_2v_quad_ineqs] at hg
     rcases hg with rfl | rfl <;>
       simp [eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] <;> omega)
-  simp [guard_2v_d4_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
+  simp [guard_2v_quad_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
 
-/-! ### `guard_3v_d2` --- bench cone (guards), 3 variables
+/-! ### `guard_3v_lin` --- bench cone (guards), 3 variables
 
-This certificate was built by construction, not found by search. `guard_3v_d2_target` is
+This certificate was built by construction, not found by search. `guard_3v_lin_target` is
 the original `p`, whose coefficients were already integers.
 
 The constraints are cleared the same way and by positive
@@ -1132,68 +1132,68 @@ multipliers, so the hypotheses below say exactly what the
 original constraints say.
 -/
 
-def guard_3v_d2_target : Poly := [([0, 0, 0], 49), ([0, 0, 1], 98), ([0, 0, 2], 49), ([0, 1, 0], (-70)), ([0, 1, 1], (-70)), ([0, 2, 0], 25), ([1, 0, 3], 9), ([1, 1, 2], 57), ([1, 2, 1], 16), ([1, 2, 2], 108), ([1, 3, 2], 36), ([2, 0, 2], 24), ([2, 1, 1], (-32)), ([2, 1, 2], (-90)), ([2, 2, 2], (-60)), ([3, 0, 1], 16), ([3, 1, 2], 25)]
+def guard_3v_lin_target : Poly := [([0, 0, 0], 48), ([0, 0, 1], 120), ([0, 0, 2], 75), ([0, 1, 0], 144), ([0, 1, 1], 180), ([0, 2, 0], 108), ([1, 1, 3], 75), ([1, 2, 2], 270), ([1, 3, 1], 243), ([2, 0, 2], 25), ([2, 1, 2], (-150)), ([2, 2, 1], (-432)), ([2, 2, 2], 81), ([3, 0, 2], 70), ([3, 1, 1], 192), ([3, 1, 2], 126), ([4, 0, 2], 49)]
 
-def guard_3v_d2_ineqs : List Poly := [[([1, 0, 0], 1)], [([0, 1, 0], 1)], [([0, 0, 1], 1)]]
+def guard_3v_lin_ineqs : List Poly := [[([1, 0, 0], 1)], [([0, 1, 0], 1)], [([0, 0, 1], 1)]]
 
-def guard_3v_d2_eqs : List Poly := []
+def guard_3v_lin_eqs : List Poly := []
 
-def guard_3v_d2_cert : Cert where
+def guard_3v_lin_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [0, 0, 0], poly := [([0, 1, 0], (-5)), ([0, 0, 1], 7), ([0, 0, 0], 7)] },
-    { weight := 1, powers := [1, 1, 2], poly := [([1, 0, 0], (-5)), ([0, 0, 0], 9), ([0, 1, 0], 6)] },
-    { weight := 1, powers := [1, 0, 1], poly := [([0, 1, 0], 4), ([0, 0, 1], (-3)), ([1, 0, 0], (-4))] } ]
+    { weight := 3, powers := [0, 0, 0], poly := [([0, 0, 1], 5), ([0, 0, 0], 4), ([0, 1, 0], 6)] },
+    { weight := 3, powers := [1, 1, 1], poly := [([0, 1, 0], (-9)), ([1, 0, 0], 8), ([0, 0, 1], (-5))] },
+    { weight := 1, powers := [2, 0, 2], poly := [([0, 1, 0], (-9)), ([1, 0, 0], (-7)), ([0, 0, 0], (-5))] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
 kernel replays the reduction, so this rests on the kernel alone. -/
-theorem guard_3v_d2_checks :
-    guard_3v_d2_cert.check guard_3v_d2_target guard_3v_d2_ineqs guard_3v_d2_eqs = true := by decide
+theorem guard_3v_lin_checks :
+    guard_3v_lin_cert.check guard_3v_lin_target guard_3v_lin_ineqs guard_3v_lin_eqs = true := by decide
 
 /-- Nonnegativity at every assignment satisfying the constraints.
 Follows from the check by `Cert.sound`; no arithmetic is repeated
 here and no property of the search is assumed. -/
-theorem guard_3v_d2_nonneg (x : Env)
-    (hg : ∀ g ∈ guard_3v_d2_ineqs, 0 ≤ eval x g)
-    : 0 ≤ eval x guard_3v_d2_target :=
-  guard_3v_d2_cert.sound _ _ _ guard_3v_d2_checks x hg (by simp [guard_3v_d2_eqs])
+theorem guard_3v_lin_nonneg (x : Env)
+    (hg : ∀ g ∈ guard_3v_lin_ineqs, 0 ≤ eval x g)
+    : 0 ≤ eval x guard_3v_lin_target :=
+  guard_3v_lin_cert.sound _ _ _ guard_3v_lin_checks x hg (by simp [guard_3v_lin_eqs])
 
-/-- The same fact as `guard_3v_d2_nonneg`, stated in ordinary arithmetic.
+/-- The same fact as `guard_3v_lin_nonneg`, stated in ordinary arithmetic.
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
-theorem guard_3v_d2_concrete (x0 x1 x2 : Int)
+theorem guard_3v_lin_concrete (x0 x1 x2 : Int)
     (hg0 : 0 ≤ 1 * x0)
     (hg1 : 0 ≤ 1 * x1)
     (hg2 : 0 ≤ 1 * x2)
-    : 0 ≤ 49 + 98 * x2 + 49 * x2^2 + (-70) * x1 + (-70) * (x1 * x2) + 25 * x1^2 + 9 * (x0 * x2^3) + 57 * (x0 * x1 * x2^2) + 16 * (x0 * x1^2 * x2) + 108 * (x0 * x1^2 * x2^2) + 36 * (x0 * x1^3 * x2^2) + 24 * (x0^2 * x2^2) + (-32) * (x0^2 * x1 * x2) + (-90) * (x0^2 * x1 * x2^2) + (-60) * (x0^2 * x1^2 * x2^2) + 16 * (x0^3 * x2) + 25 * (x0^3 * x1 * x2^2) := by
-  have h := guard_3v_d2_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) (by
+    : 0 ≤ 48 + 120 * x2 + 75 * x2^2 + 144 * x1 + 180 * (x1 * x2) + 108 * x1^2 + 75 * (x0 * (x1 * x2^3)) + 270 * (x0 * (x1^2 * x2^2)) + 243 * (x0 * (x1^3 * x2)) + 25 * (x0^2 * x2^2) + (-150) * (x0^2 * (x1 * x2^2)) + (-432) * (x0^2 * (x1^2 * x2)) + 81 * (x0^2 * (x1^2 * x2^2)) + 70 * (x0^3 * x2^2) + 192 * (x0^3 * (x1 * x2)) + 126 * (x0^3 * (x1 * x2^2)) + 49 * (x0^4 * x2^2) := by
+  have h := guard_3v_lin_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) (by
     intro g hg
-    simp [guard_3v_d2_ineqs] at hg
+    simp [guard_3v_lin_ineqs] at hg
     rcases hg with rfl | rfl | rfl <;>
       simp [eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] <;> omega)
-  simp [guard_3v_d2_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
+  simp [guard_3v_lin_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
 
 /-! ### `rat_2v_d2` --- bench SOS (rational), 2 variables
 
 This certificate was built by construction, not found by search. `rat_2v_d2_target` is
-`24 * p`, the least positive integer multiple of the original
-`p`. Since 24 > 0, the target is nonnegative exactly where `p` is.
+`3 * p`, the least positive integer multiple of the original
+`p`. Since 3 > 0, the target is nonnegative exactly where `p` is.
 -/
 
-def rat_2v_d2_target : Poly := [([0, 0], 2672), ([0, 1], (-176)), ([0, 2], 467), ([1, 0], 1992), ([1, 1], 906), ([2, 0], 1230)]
+def rat_2v_d2_target : Poly := [([0, 0], 253), ([0, 1], (-426)), ([0, 2], 273), ([1, 0], 430), ([1, 1], (-150)), ([2, 0], 325)]
 
 def rat_2v_d2_ineqs : List Poly := []
 
 def rat_2v_d2_eqs : List Poly := []
 
 def rat_2v_d2_cert : Cert where
-  scale := 2
+  scale := 1
   squares := [
-    { weight := 3, powers := [], poly := [([1, 0], (-14)), ([0, 0], (-36)), ([0, 1], (-5))] },
-    { weight := 16, powers := [], poly := [([0, 1], (-7)), ([1, 0], (-3)), ([0, 0], 8)] },
-    { weight := 3, powers := [], poly := [([0, 1], 5), ([0, 0], 12), ([1, 0], 24)] } ]
+    { weight := 3, powers := [], poly := [([1, 0], 5), ([0, 1], 4), ([0, 0], 1)] },
+    { weight := 1, powers := [], poly := [([1, 0], (-5)), ([0, 0], 5), ([0, 1], (-9))] },
+    { weight := 9, powers := [], poly := [([1, 0], (-5)), ([0, 0], (-5)), ([0, 1], 4)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -1212,7 +1212,7 @@ theorem rat_2v_d2_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem rat_2v_d2_concrete (x0 x1 : Int)
-    : 0 ≤ 2672 + (-176) * x1 + 467 * x1^2 + 1992 * x0 + 906 * (x0 * x1) + 1230 * x0^2 := by
+    : 0 ≤ 253 + (-426) * x1 + 273 * x1^2 + 430 * x0 + (-150) * (x0 * x1) + 325 * x0^2 := by
   have h := rat_2v_d2_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
   simp [rat_2v_d2_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
@@ -1220,11 +1220,11 @@ theorem rat_2v_d2_concrete (x0 x1 : Int)
 /-! ### `rat_3v_d4` --- bench SOS (rational), 3 variables
 
 This certificate was built by construction, not found by search. `rat_3v_d4_target` is
-`36 * p`, the least positive integer multiple of the original
-`p`. Since 36 > 0, the target is nonnegative exactly where `p` is.
+`48 * p`, the least positive integer multiple of the original
+`p`. Since 48 > 0, the target is nonnegative exactly where `p` is.
 -/
 
-def rat_3v_d4_target : Poly := [([0, 0, 2], 2304), ([0, 0, 4], 1200), ([0, 1, 3], 1440), ([0, 2, 1], (-768)), ([0, 2, 2], 432), ([0, 4, 0], 64), ([1, 0, 1], (-1440)), ([1, 0, 2], (-1440)), ([1, 0, 3], 1440), ([1, 1, 1], (-864)), ([1, 1, 2], 864), ([1, 2, 0], 240), ([2, 0, 0], 657), ([2, 0, 1], 4320), ([2, 0, 2], 432), ([2, 2, 0], (-864)), ([3, 0, 0], (-1620)), ([4, 0, 0], 2916)]
+def rat_3v_d4_target : Poly := [([0, 0, 2], 3200), ([0, 1, 1], 3200), ([0, 1, 2], (-3840)), ([0, 2, 0], 800), ([0, 2, 1], (-1920)), ([0, 2, 2], 2880), ([1, 0, 2], (-6400)), ([1, 1, 1], (-4928)), ([1, 1, 2], 3840), ([1, 2, 1], (-2880)), ([2, 0, 0], 432), ([2, 0, 2], 3200), ([2, 1, 0], 1440), ([2, 1, 1], (-1584)), ([2, 2, 0], 1200), ([3, 0, 0], 792), ([3, 1, 0], 1320), ([4, 0, 0], 363)]
 
 def rat_3v_d4_ineqs : List Poly := []
 
@@ -1233,8 +1233,8 @@ def rat_3v_d4_eqs : List Poly := []
 def rat_3v_d4_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([2, 0, 0], 54), ([0, 2, 0], (-8)), ([1, 0, 0], (-15)), ([0, 0, 1], 48)] },
-    { weight := 12, powers := [], poly := [([1, 0, 1], 6), ([0, 0, 2], 10), ([1, 0, 0], (-6)), ([0, 1, 1], 6)] } ]
+    { weight := 3, powers := [], poly := [([1, 1, 0], 20), ([0, 1, 1], (-24)), ([1, 0, 0], 12), ([2, 0, 0], 11)] },
+    { weight := 32, powers := [], poly := [([1, 0, 1], 10), ([0, 0, 1], (-10)), ([0, 1, 0], (-5)), ([0, 1, 1], 6)] } ]
   multipliers := []
 
 /-- The checker accepts. `decide` elaborates the `Bool` and the
@@ -1253,9 +1253,91 @@ theorem rat_3v_d4_nonneg (x : Env)
 This is the form a goal actually arrives in; the encoding above is
 an implementation detail of the checker, not something to state. -/
 theorem rat_3v_d4_concrete (x0 x1 x2 : Int)
-    : 0 ≤ 2304 * x2^2 + 1200 * x2^4 + 1440 * (x1 * x2^3) + (-768) * (x1^2 * x2) + 432 * (x1^2 * x2^2) + 64 * x1^4 + (-1440) * (x0 * x2) + (-1440) * (x0 * x2^2) + 1440 * (x0 * x2^3) + (-864) * (x0 * x1 * x2) + 864 * (x0 * x1 * x2^2) + 240 * (x0 * x1^2) + 657 * x0^2 + 4320 * (x0^2 * x2) + 432 * (x0^2 * x2^2) + (-864) * (x0^2 * x1^2) + (-1620) * x0^3 + 2916 * x0^4 := by
+    : 0 ≤ 3200 * x2^2 + 3200 * (x1 * x2) + (-3840) * (x1 * x2^2) + 800 * x1^2 + (-1920) * (x1^2 * x2) + 2880 * (x1^2 * x2^2) + (-6400) * (x0 * x2^2) + (-4928) * (x0 * (x1 * x2)) + 3840 * (x0 * (x1 * x2^2)) + (-2880) * (x0 * (x1^2 * x2)) + 432 * x0^2 + 3200 * (x0^2 * x2^2) + 1440 * (x0^2 * x1) + (-1584) * (x0^2 * (x1 * x2)) + 1200 * (x0^2 * x1^2) + 792 * x0^3 + 1320 * (x0^3 * x1) + 363 * x0^4 := by
   have h := rat_3v_d4_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else if i = 2 then x2 else 0) 
   simp [rat_3v_d4_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
+  omega
+
+/-! ### `scaled_2v_d2` --- bench SOS (scaled), 2 variables
+
+This certificate was built by construction, not found by search. `scaled_2v_d2_target` is
+the original `p`, whose coefficients were already integers.
+-/
+
+def scaled_2v_d2_target : Poly := [([0, 0], 281), ([0, 1], (-42)), ([0, 2], 193), ([1, 0], 114), ([1, 1], (-298)), ([2, 0], 121)]
+
+def scaled_2v_d2_ineqs : List Poly := []
+
+def scaled_2v_d2_eqs : List Poly := []
+
+def scaled_2v_d2_cert : Cert where
+  scale := 2
+  squares := [
+    { weight := 1, powers := [], poly := [([0, 1], 11), ([0, 0], 9), ([1, 0], (-7))] },
+    { weight := 1, powers := [], poly := [([0, 1], 11), ([0, 0], 9), ([1, 0], (-7))] },
+    { weight := 4, powers := [], poly := [([0, 1], (-6)), ([1, 0], 6), ([0, 0], 10)] } ]
+  multipliers := []
+
+/-- The checker accepts. `decide` elaborates the `Bool` and the
+kernel replays the reduction, so this rests on the kernel alone. -/
+theorem scaled_2v_d2_checks :
+    scaled_2v_d2_cert.check scaled_2v_d2_target scaled_2v_d2_ineqs scaled_2v_d2_eqs = true := by decide
+
+/-- Nonnegativity at every assignment satisfying the constraints.
+Follows from the check by `Cert.sound`; no arithmetic is repeated
+here and no property of the search is assumed. -/
+theorem scaled_2v_d2_nonneg (x : Env)
+    : 0 ≤ eval x scaled_2v_d2_target :=
+  scaled_2v_d2_cert.sound _ _ _ scaled_2v_d2_checks x (by simp [scaled_2v_d2_ineqs]) (by simp [scaled_2v_d2_eqs])
+
+/-- The same fact as `scaled_2v_d2_nonneg`, stated in ordinary arithmetic.
+This is the form a goal actually arrives in; the encoding above is
+an implementation detail of the checker, not something to state. -/
+theorem scaled_2v_d2_concrete (x0 x1 : Int)
+    : 0 ≤ 281 + (-42) * x1 + 193 * x1^2 + 114 * x0 + (-298) * (x0 * x1) + 121 * x0^2 := by
+  have h := scaled_2v_d2_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
+  simp [scaled_2v_d2_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
+  omega
+
+/-! ### `scaled_2v_d4` --- bench SOS (scaled), 2 variables
+
+This certificate was built by construction, not found by search. `scaled_2v_d4_target` is
+the original `p`, whose coefficients were already integers.
+-/
+
+def scaled_2v_d4_target : Poly := [([0, 0], 392), ([1, 1], 560), ([2, 0], (-528)), ([2, 1], 192), ([2, 2], 236), ([3, 0], (-448)), ([3, 1], (-728)), ([4, 0], 588)]
+
+def scaled_2v_d4_ineqs : List Poly := []
+
+def scaled_2v_d4_eqs : List Poly := []
+
+def scaled_2v_d4_cert : Cert where
+  scale := 2
+  squares := [
+    { weight := 1, powers := [], poly := [([2, 0], (-14)), ([1, 0], 16), ([1, 1], 6)] },
+    { weight := 1, powers := [], poly := [([2, 0], (-14)), ([1, 0], 16), ([1, 1], 6)] },
+    { weight := 4, powers := [], poly := [([2, 0], (-14)), ([1, 1], 10), ([0, 0], 14)] } ]
+  multipliers := []
+
+/-- The checker accepts. `decide` elaborates the `Bool` and the
+kernel replays the reduction, so this rests on the kernel alone. -/
+theorem scaled_2v_d4_checks :
+    scaled_2v_d4_cert.check scaled_2v_d4_target scaled_2v_d4_ineqs scaled_2v_d4_eqs = true := by decide
+
+/-- Nonnegativity at every assignment satisfying the constraints.
+Follows from the check by `Cert.sound`; no arithmetic is repeated
+here and no property of the search is assumed. -/
+theorem scaled_2v_d4_nonneg (x : Env)
+    : 0 ≤ eval x scaled_2v_d4_target :=
+  scaled_2v_d4_cert.sound _ _ _ scaled_2v_d4_checks x (by simp [scaled_2v_d4_ineqs]) (by simp [scaled_2v_d4_eqs])
+
+/-- The same fact as `scaled_2v_d4_nonneg`, stated in ordinary arithmetic.
+This is the form a goal actually arrives in; the encoding above is
+an implementation detail of the checker, not something to state. -/
+theorem scaled_2v_d4_concrete (x0 x1 : Int)
+    : 0 ≤ 392 + 560 * (x0 * x1) + (-528) * x0^2 + 192 * (x0^2 * x1) + 236 * (x0^2 * x1^2) + (-448) * x0^3 + (-728) * (x0^3 * x1) + 588 * x0^4 := by
+  have h := scaled_2v_d4_nonneg (fun i => if i = 0 then x0 else if i = 1 then x1 else 0) 
+  simp [scaled_2v_d4_target, eval, monoEval, monoEvalFrom, Int.pow_one, Int.pow_zero] at h
   omega
 
 /-! ### `neg_perturbed_target` --- NEGATIVE CONTROL
@@ -1265,7 +1347,7 @@ theorem rat_3v_d4_concrete (x0 x1 x2 : Int)
 Failing conjuncts of `Cert.check`, as predicted in Python: `the polynomial identity`.
 -/
 
-def neg_perturbed_target_target : Poly := [([0, 0], 426), ([0, 1], 390), ([0, 2], 314), ([1, 0], (-160)), ([1, 1], (-40)), ([2, 0], 97)]
+def neg_perturbed_target_target : Poly := [([0, 0], 651), ([0, 1], (-440)), ([0, 2], 642), ([1, 0], 740), ([1, 1], (-1200)), ([2, 0], 682)]
 
 def neg_perturbed_target_ineqs : List Poly := []
 
@@ -1274,17 +1356,19 @@ def neg_perturbed_target_eqs : List Poly := []
 def neg_perturbed_target_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1, 0], 6), ([0, 1], (-15)), ([0, 0], (-15))] },
-    { weight := 1, powers := [], poly := [([1, 0], (-6)), ([0, 1], (-5)), ([0, 0], (-10))] },
-    { weight := 1, powers := [], poly := [([1, 0], (-5)), ([0, 0], 10), ([0, 1], (-8))] } ]
+    { weight := 1, powers := [], poly := [([0, 1], (-15)), ([0, 0], (-10)), ([1, 0], 14)] },
+    { weight := 2, powers := [], poly := [([0, 1], 14), ([1, 0], (-15)), ([0, 0], (-15))] },
+    { weight := 1, powers := [], poly := [([1, 0], (-6)), ([0, 1], (-5)), ([0, 0], (-10))] } ]
   multipliers := []
+
+/- The elaborator's own evaluation of the check, which fails the
+   file if it is not `false`. -/
+#guard neg_perturbed_target_cert.check neg_perturbed_target_target neg_perturbed_target_ineqs neg_perturbed_target_eqs = false
 
 /-- The checker REJECTS. The same kernel reduction as an
 acceptance, read the other way: this is the half of the
 measurement that a benchmark of only-passing examples cannot
 supply. -/
-#guard neg_perturbed_target_cert.check neg_perturbed_target_target neg_perturbed_target_ineqs neg_perturbed_target_eqs = false
-
 theorem neg_perturbed_target_rejected :
     neg_perturbed_target_cert.check neg_perturbed_target_target neg_perturbed_target_ineqs neg_perturbed_target_eqs = false := by decide
 
@@ -1295,7 +1379,7 @@ theorem neg_perturbed_target_rejected :
 Failing conjuncts of `Cert.check`, as predicted in Python: `the polynomial identity`.
 -/
 
-def neg_perturbed_square_target : Poly := [([0, 0], 256), ([0, 1], (-768)), ([0, 2], 200), ([0, 3], 536), ([0, 4], 939), ([1, 2], 356), ([1, 3], (-1012)), ([2, 0], 1092), ([2, 1], 632), ([2, 2], (-646)), ([3, 0], (-440)), ([3, 1], 580), ([4, 0], 911)]
+def neg_perturbed_square_target : Poly := [([0, 0], 1595), ([0, 1], 1710), ([0, 2], (-797)), ([0, 3], (-1152)), ([0, 4], 2654), ([1, 0], (-576)), ([1, 1], (-1440)), ([1, 2], (-2148)), ([2, 0], 1784), ([2, 1], 1710), ([2, 2], (-1420)), ([3, 0], (-732)), ([4, 0], 1001)]
 
 def neg_perturbed_square_ineqs : List Poly := []
 
@@ -1304,17 +1388,19 @@ def neg_perturbed_square_eqs : List Poly := []
 def neg_perturbed_square_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([2, 0], (-9)), ([1, 1], 16), ([0, 2], (-11)), ([1, 0], 22)] },
-    { weight := 1, powers := [], poly := [([2, 0], (-19)), ([0, 2], 24), ([0, 1], 24), ([0, 0], (-16))] },
-    { weight := 2, powers := [], poly := [([2, 0], (-15)), ([0, 2], 11), ([0, 1], (-14)), ([1, 1], (-15))] } ]
+    { weight := 2, powers := [], poly := [([2, 0], 14), ([0, 2], (-13)), ([1, 0], 9), ([0, 0], (-16))] },
+    { weight := 3, powers := [], poly := [([2, 0], 10), ([0, 1], 12), ([1, 0], (-20)), ([0, 2], 14)] },
+    { weight := 3, powers := [], poly := [([2, 0], (-11)), ([0, 1], (-15)), ([0, 0], (-19)), ([0, 2], 24)] } ]
   multipliers := []
+
+/- The elaborator's own evaluation of the check, which fails the
+   file if it is not `false`. -/
+#guard neg_perturbed_square_cert.check neg_perturbed_square_target neg_perturbed_square_ineqs neg_perturbed_square_eqs = false
 
 /-- The checker REJECTS. The same kernel reduction as an
 acceptance, read the other way: this is the half of the
 measurement that a benchmark of only-passing examples cannot
 supply. -/
-#guard neg_perturbed_square_cert.check neg_perturbed_square_target neg_perturbed_square_ineqs neg_perturbed_square_eqs = false
-
 theorem neg_perturbed_square_rejected :
     neg_perturbed_square_cert.check neg_perturbed_square_target neg_perturbed_square_ineqs neg_perturbed_square_eqs = false := by decide
 
@@ -1325,7 +1411,7 @@ The NEGATION of `sos_1v_d2_tiny`'s target, with every weight negated too. The po
 Failing conjuncts of `Cert.check`, as predicted in Python: `every weight >= 0`.
 -/
 
-def neg_negative_weight_target : Poly := [([0], (-18)), ([1], 12), ([2], (-2))]
+def neg_negative_weight_target : Poly := [([0], (-6)), ([1], 6), ([2], (-39))]
 
 def neg_negative_weight_ineqs : List Poly := []
 
@@ -1334,16 +1420,18 @@ def neg_negative_weight_eqs : List Poly := []
 def neg_negative_weight_cert : Cert where
   scale := 1
   squares := [
-    { weight := (-1), powers := [], poly := [([1], (-1)), ([0], 3)] },
-    { weight := (-1), powers := [], poly := [([1], (-1)), ([0], 3)] } ]
+    { weight := (-3), powers := [], poly := [([1], 3), ([0], (-1))] },
+    { weight := (-3), powers := [], poly := [([1], (-2)), ([0], (-1))] } ]
   multipliers := []
+
+/- The elaborator's own evaluation of the check, which fails the
+   file if it is not `false`. -/
+#guard neg_negative_weight_cert.check neg_negative_weight_target neg_negative_weight_ineqs neg_negative_weight_eqs = false
 
 /-- The checker REJECTS. The same kernel reduction as an
 acceptance, read the other way: this is the half of the
 measurement that a benchmark of only-passing examples cannot
 supply. -/
-#guard neg_negative_weight_cert.check neg_negative_weight_target neg_negative_weight_ineqs neg_negative_weight_eqs = false
-
 theorem neg_negative_weight_rejected :
     neg_negative_weight_cert.check neg_negative_weight_target neg_negative_weight_ineqs neg_negative_weight_eqs = false := by decide
 
@@ -1354,7 +1442,7 @@ The NEGATION of `sos_2v_d2_tiny`'s target with the scale negated. `scale * p = s
 Failing conjuncts of `Cert.check`, as predicted in Python: `0 < scale`.
 -/
 
-def neg_negative_scale_target : Poly := [([0, 0], (-10)), ([0, 1], 14), ([0, 2], (-5)), ([1, 0], (-20)), ([1, 1], 12), ([2, 0], (-20))]
+def neg_negative_scale_target : Poly := [([0, 0], (-15)), ([0, 1], (-60)), ([0, 2], (-75)), ([1, 0], 36), ([1, 1], 24), ([2, 0], (-60))]
 
 def neg_negative_scale_ineqs : List Poly := []
 
@@ -1363,16 +1451,18 @@ def neg_negative_scale_eqs : List Poly := []
 def neg_negative_scale_cert : Cert where
   scale := (-1)
   squares := [
-    { weight := 1, powers := [], poly := [([0, 1], (-1)), ([0, 0], 1), ([1, 0], (-2))] },
-    { weight := 1, powers := [], poly := [([0, 1], 2), ([1, 0], (-4)), ([0, 0], (-3))] } ]
+    { weight := 3, powers := [], poly := [([1, 0], (-4)), ([0, 0], 2), ([0, 1], 3)] },
+    { weight := 3, powers := [], poly := [([1, 0], 2), ([0, 1], 4), ([0, 0], 1)] } ]
   multipliers := []
+
+/- The elaborator's own evaluation of the check, which fails the
+   file if it is not `false`. -/
+#guard neg_negative_scale_cert.check neg_negative_scale_target neg_negative_scale_ineqs neg_negative_scale_eqs = false
 
 /-- The checker REJECTS. The same kernel reduction as an
 acceptance, read the other way: this is the half of the
 measurement that a benchmark of only-passing examples cannot
 supply. -/
-#guard neg_negative_scale_cert.check neg_negative_scale_target neg_negative_scale_ineqs neg_negative_scale_eqs = false
-
 theorem neg_negative_scale_rejected :
     neg_negative_scale_cert.check neg_negative_scale_target neg_negative_scale_ineqs neg_negative_scale_eqs = false := by decide
 
@@ -1383,36 +1473,38 @@ theorem neg_negative_scale_rejected :
 Failing conjuncts of `Cert.check`, as predicted in Python: `multipliers length == eqs length`.
 -/
 
-def neg_multiplier_count_target : Poly := [([0, 0], 84), ([0, 1], (-136)), ([0, 2], 84), ([1, 0], 102), ([1, 1], (-30)), ([2, 0], 55)]
+def neg_multiplier_count_target : Poly := [([0, 0], 116), ([0, 1], (-163)), ([0, 2], 179), ([1, 0], (-140)), ([1, 1], (-5)), ([2, 0], 65)]
 
 def neg_multiplier_count_ineqs : List Poly := []
 
-def neg_multiplier_count_eqs : List Poly := [[([0, 1], (-2)), ([0, 0], 2), ([1, 0], 1)]]
+def neg_multiplier_count_eqs : List Poly := [[([0, 1], (-2)), ([1, 0], (-1)), ([0, 0], (-1))]]
 
 def neg_multiplier_count_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [], poly := [([1, 0], 7), ([0, 0], 8), ([0, 1], (-4))] },
-    { weight := 1, powers := [], poly := [([0, 1], (-8)), ([1, 0], (-2)), ([0, 0], 4)] } ]
-  multipliers := [[([1, 0], 2), ([0, 1], (-2)), ([0, 0], 2)], [([0, 0], 7)]]
+    { weight := 1, powers := [], poly := [([0, 1], 7), ([0, 0], 4), ([1, 0], (-7))] },
+    { weight := 2, powers := [], poly := [([1, 0], (-3)), ([0, 1], (-8)), ([0, 0], 7)] } ]
+  multipliers := [[([0, 1], (-1)), ([0, 0], (-2)), ([1, 0], 2)], [([0, 0], 7)]]
+
+/- The elaborator's own evaluation of the check, which fails the
+   file if it is not `false`. -/
+#guard neg_multiplier_count_cert.check neg_multiplier_count_target neg_multiplier_count_ineqs neg_multiplier_count_eqs = false
 
 /-- The checker REJECTS. The same kernel reduction as an
 acceptance, read the other way: this is the half of the
 measurement that a benchmark of only-passing examples cannot
 supply. -/
-#guard neg_multiplier_count_cert.check neg_multiplier_count_target neg_multiplier_count_ineqs neg_multiplier_count_eqs = false
-
 theorem neg_multiplier_count_rejected :
     neg_multiplier_count_cert.check neg_multiplier_count_target neg_multiplier_count_ineqs neg_multiplier_count_eqs = false := by decide
 
 /-! ### `neg_powers_length` --- NEGATIVE CONTROL
 
-`guard_2v_d2` with one square's exponent list truncated. `powerProduct` would silently stop at the shorter list, which is exactly why the arity check exists; the truncated square carried a zero exponent, so the identity is untouched and the arity check alone rejects it.
+`guard_2v_lin` with one square's exponent list truncated. `powerProduct` would silently stop at the shorter list, which is exactly why the arity check exists; the truncated square carried a zero exponent, so the identity is untouched and the arity check alone rejects it.
 
 Failing conjuncts of `Cert.check`, as predicted in Python: `powers length == ineqs length`.
 -/
 
-def neg_powers_length_target : Poly := [([0, 0], 4), ([0, 2], 16), ([1, 0], (-24)), ([1, 1], 24), ([2, 0], 45), ([2, 2], 36), ([3, 1], 48), ([4, 0], 16)]
+def neg_powers_length_target : Poly := [([0, 0], 48), ([0, 1], (-72)), ([0, 2], 39), ([1, 1], (-60)), ([1, 4], 8), ([2, 0], 75), ([2, 3], 16), ([3, 2], 8)]
 
 def neg_powers_length_ineqs : List Poly := [[([1, 0], 1)], [([0, 1], 1)]]
 
@@ -1421,17 +1513,19 @@ def neg_powers_length_eqs : List Poly := []
 def neg_powers_length_cert : Cert where
   scale := 1
   squares := [
-    { weight := 1, powers := [0], poly := [([1, 0], (-6)), ([0, 0], 2)] },
-    { weight := 1, powers := [0, 0], poly := [([0, 1], 4), ([1, 0], 3)] },
-    { weight := 1, powers := [2, 0], poly := [([1, 0], 4), ([0, 1], 6)] } ]
+    { weight := 3, powers := [0], poly := [([1, 0], (-5)), ([0, 1], 2)] },
+    { weight := 3, powers := [0, 0], poly := [([0, 1], 3), ([0, 0], (-4))] },
+    { weight := 2, powers := [1, 2], poly := [([0, 1], 2), ([1, 0], 2)] } ]
   multipliers := []
+
+/- The elaborator's own evaluation of the check, which fails the
+   file if it is not `false`. -/
+#guard neg_powers_length_cert.check neg_powers_length_target neg_powers_length_ineqs neg_powers_length_eqs = false
 
 /-- The checker REJECTS. The same kernel reduction as an
 acceptance, read the other way: this is the half of the
 measurement that a benchmark of only-passing examples cannot
 supply. -/
-#guard neg_powers_length_cert.check neg_powers_length_target neg_powers_length_ineqs neg_powers_length_eqs = false
-
 theorem neg_powers_length_rejected :
     neg_powers_length_cert.check neg_powers_length_target neg_powers_length_ineqs neg_powers_length_eqs = false := by decide
 end Forge.Checker

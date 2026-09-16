@@ -214,10 +214,20 @@ def lean_poly(p: IntPoly) -> str:
 def lean_concrete(poly: IntPoly) -> str:
     """An integer polynomial as ordinary Lean arithmetic over `x0, x1, ...`.
 
-    The factors of a monomial are grouped, so `(-26) * (x0 * x1)` rather than
+    Two association details, both of which cost a failed compile to find.
+
+    The factors of a monomial are GROUPED: `(-26) * (x0 * x1)` and not
     `(-26) * x0 * x1`. The ungrouped form parses as `((-26) * x0) * x1`, which
     `omega` sees as an atom unrelated to the `x0 * x1` in the unfolded
-    hypothesis, and the bridge proof then fails.
+    hypothesis.
+
+    And within the group they are associated to the RIGHT: `x0 * (x1 * x2)`
+    and not `x0 * x1 * x2`. `monoEvalFrom` recurses on the tail, so it builds
+    `x i ^ e * (rest)`, right-associated; the flat form parses to the left and
+    `omega` again sees two unrelated atoms. This is invisible for monomials of
+    at most two factors, where the two associations coincide -- which is every
+    monomial in the current corpus, and is why it went unnoticed until a
+    three-variable benchmark hit it.
     """
     if not poly:
         return "0"
@@ -234,7 +244,11 @@ def lean_concrete(poly: IntPoly) -> str:
         elif len(factors) == 1:
             parts.append("%s * %s" % (coeff, factors[0]))
         else:
-            parts.append("%s * (%s)" % (coeff, " * ".join(factors)))
+            # Right-associated, to match monoEvalFrom's recursion on the tail.
+            grouped = factors[-1]
+            for f in reversed(factors[:-1]):
+                grouped = "%s * (%s)" % (f, grouped) if " " in grouped                     else "%s * %s" % (f, grouped)
+            parts.append("%s * (%s)" % (coeff, grouped))
     return " + ".join(parts)
 
 

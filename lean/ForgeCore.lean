@@ -28,3 +28,4 @@ import Forge.Closure.Indexing
 import Forge.Checker.Poly
 import Forge.Checker.Cone
 import Forge.Checker.Corpus
+import Forge.Checker.Bench

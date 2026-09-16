@@ -24,11 +24,20 @@ Both sides are then emitted as Lean and run:
     automation route: the identical goal, in ordinary arithmetic, handed to
     core Lean's `grind` and `omega` with no certificate at all.
 
-The only edit made to the shared emitter's output is one sentence: `emit` says
-"The prototype's certificate is over the rationals", which is true of
-`Corpus.lean` and false here, where the certificates were constructed by this
-script. Replacing that sentence is cheaper and more honest than forking the
-emitter.
+ONE EDIT IS MADE TO THE SHARED EMITTER'S OUTPUT: `emit` says "The prototype's
+certificate is over the rationals", which is true of `Corpus.lean` and false
+here, where the certificates were constructed by this script.
+
+There was a second edit, and it is gone because the defect it patched is fixed.
+This family was the first thing to expose a bug in
+`tools/export_lean_cone.lean_concrete`: with three or more factors in a monomial
+it emitted a LEFT-associated product, `(x0 * x1 * x2)`, while `monoEvalFrom`
+recurses on the tail and builds `x0 * (x1 * x2)`. `omega` atomises both and sees
+two unrelated terms, so the `_concrete` bridge failed to compile. A monomial
+with at most two factors associates the same way in either direction, which is
+every monomial in `Corpus.lean` --- so the two-variable corpus could never have
+shown it, and it took a three-variable family to find. The emitter now
+right-associates and the local rewriter has been removed.
 
 REUSE. Everything about the conversion and the Lean syntax -- `convert`,
 `emit`, `lean_poly`, `lean_concrete`, `lean_env`, and the rational polynomial
@@ -42,6 +51,7 @@ import copy
 import json
 import os
 import random
+import re
 import subprocess
 import sys
 import time
@@ -175,7 +185,7 @@ def build_record(rng, spec: dict) -> dict:
             # `powerProduct` is actually exercised rather than always trivial.
             for k in range(nineq):
                 powers[k] = rng.choice([0, 0, 1, 1, 2])
-        w = rng.randint(1, max(1, cmax // 10))
+        w = rng.randint(1, max(3, cmax // 8))
         weight = "%d/%d" % (w, rng.choice([2, 3])) if (rational and i % 2) else w
         sq_specs.append({
             "weight": weight,
@@ -183,6 +193,16 @@ def build_record(rng, spec: dict) -> dict:
             "square": rand_bundle(rng, nvars, qdeg, cmax, spec.get("qterms", 3),
                                   denominators=rational and i % 2 == 0),
         })
+
+    if spec.get("half_pair"):
+        # Two half-weighted copies of one square. Their halves cancel, so `p`
+        # itself has integer coefficients while the individual weights do not:
+        # `convert` then needs a common denominator strictly larger than `p`'s
+        # own, and emits a certificate with `scale > 1`. Nothing else in the
+        # family reaches that branch, and `Cert.check`'s `0 < scale` guard is
+        # only interesting when `scale` is ever anything but 1.
+        sq_specs[0] = dict(sq_specs[0], weight="1/2")
+        sq_specs.insert(1, dict(sq_specs[0]))
 
     p_rat = assemble(sq_specs, ineqs, eqs, mults)
     p_bundle = to_bundle(nvars, p_rat)
@@ -231,12 +251,15 @@ SPECS = [
     dict(id="eq_2v_d4_small",   family="bench cone (eq)",     nvars=2, qdeg=2, squares=2, cmax=9,    qterms=3, eqs=1),
     dict(id="eq_2v_d2_big",     family="bench cone (eq, big)", nvars=2, qdeg=1, squares=2, cmax=1500, qterms=3, eqs=1),
     # --- guard products -----------------------------------------------------
-    dict(id="guard_2v_d2",      family="bench cone (guards)", nvars=2, qdeg=1, squares=3, cmax=6,    qterms=2, ineqs=2),
-    dict(id="guard_2v_d4",      family="bench cone (guards)", nvars=2, qdeg=2, squares=3, cmax=12,   qterms=3, ineqs=2),
-    dict(id="guard_3v_d2",      family="bench cone (guards)", nvars=3, qdeg=1, squares=3, cmax=9,    qterms=3, ineqs=3),
+    dict(id="guard_2v_lin",      family="bench cone (guards)", nvars=2, qdeg=1, squares=3, cmax=6,    qterms=2, ineqs=2),
+    dict(id="guard_2v_quad",      family="bench cone (guards)", nvars=2, qdeg=2, squares=3, cmax=12,   qterms=3, ineqs=2),
+    dict(id="guard_3v_lin",      family="bench cone (guards)", nvars=3, qdeg=1, squares=3, cmax=9,    qterms=3, ineqs=3),
     # --- rational input, so denominators actually get cleared ---------------
     dict(id="rat_2v_d2",        family="bench SOS (rational)", nvars=2, qdeg=1, squares=3, cmax=9,   qterms=3, rational=True),
     dict(id="rat_3v_d4",        family="bench SOS (rational)", nvars=3, qdeg=2, squares=2, cmax=11,  qterms=4, rational=True),
+    # --- the only shapes that reach `scale > 1` -----------------------------
+    dict(id="scaled_2v_d2",     family="bench SOS (scaled)",  nvars=2, qdeg=1, squares=2, cmax=13,  qterms=3, half_pair=True),
+    dict(id="scaled_2v_d4",     family="bench SOS (scaled)",  nvars=2, qdeg=2, squares=2, cmax=17,  qterms=3, half_pair=True),
 ]
 
 
@@ -347,11 +370,11 @@ def make_negatives(convs: dict) -> list:
     out.append(c)
 
     # 6. A truncated exponent list.
-    c = copy.deepcopy(convs["guard_2v_d2"])
+    c = copy.deepcopy(convs["guard_2v_lin"])
     c["id"] = "neg_powers_length"
     c["squares"][0] = dict(c["squares"][0],
                            powers=c["squares"][0]["powers"][:-1])
-    c["why"] = ("`guard_2v_d2` with one square's exponent list truncated. "
+    c["why"] = ("`guard_2v_lin` with one square's exponent list truncated. "
                 "`powerProduct` would silently stop at the shorter list, which "
                 "is exactly why the arity check exists; the truncated square "
                 "carried a zero exponent, so the identity is untouched and the "
@@ -396,6 +419,15 @@ def def_block(conv: dict) -> list:
     return L
 
 
+_FACTOR = r"x\d+(?:\^\d+)?"
+# fixed at its source: `lean_concrete` emits factors right-associated, matching
+# `monoEvalFrom`'s recursion on the tail. The local `right_assoc` rewriter and
+# its regex are gone. See tools/export_lean_cone.py for the explanation, and
+# `findings` in results/lean-cone-benchmark.json for how it was found --- a
+# three-variable family, since a monomial with at most two factors associates
+# the same way either direction and cannot expose it.
+
+
 def emit_positive(conv: dict) -> str:
     return emit(conv).replace(PROTOTYPE_SENTENCE, BENCH_SENTENCE)
 
@@ -412,13 +444,15 @@ def emit_negative(conv: dict) -> str:
     L.append("-/")
     L.append("")
     L.extend(def_block(conv))
+    L.append("/- The elaborator's own evaluation of the check, which fails the")
+    L.append("   file if it is not `false`. -/")
+    L.append("#guard %s_cert.check %s_target %s_ineqs %s_eqs = false"
+             % (name, name, name, name))
+    L.append("")
     L.append("/-- The checker REJECTS. The same kernel reduction as an")
     L.append("acceptance, read the other way: this is the half of the")
     L.append("measurement that a benchmark of only-passing examples cannot")
     L.append("supply. -/")
-    L.append("#guard %s_cert.check %s_target %s_ineqs %s_eqs = false"
-             % (name, name, name, name))
-    L.append("")
     L.append("theorem %s_rejected :" % name)
     L.append("    %s_cert.check %s_target %s_ineqs %s_eqs = false := by decide"
              % (name, name, name, name))
@@ -475,6 +509,28 @@ def single_check_file(conv: dict, expect: str = "true") -> str:
     return "\n".join(L) + "\n"
 
 
+# Calibration for the automation column. A score of zero out of twenty-eight is
+# only meaningful next to the answer to "what is the EASIEST goal of this shape
+# the tactic can do?", so these go in the same measurement.
+FLOOR_PROBES = [
+    ("square_of_a_variable", "(x0 : Int)", [], "x0^2"),
+    ("square_written_as_product", "(x0 : Int)", [], "x0 * x0"),
+    ("square_plus_one", "(x0 : Int)", [], "3 * x0^2 + 1"),
+    ("product_of_two_nonnegatives", "(x0 x1 : Int)",
+     ["(hg0 : 0 ≤ x0)", "(hg1 : 0 ≤ x1)"], "1 * (x0 * x1)"),
+    ("a_linear_goal_for_comparison", "(x0 : Int)", ["(hg0 : 0 ≤ x0)"],
+     "2 * x0 + 5"),
+]
+
+
+def floor_probe_file(binders: str, hyps: list, goal: str, tactic: str) -> str:
+    L = ["set_option maxHeartbeats 0", "", "example %s" % binders]
+    for h in hyps:
+        L.append("    %s" % h)
+    L.append("    : 0 ≤ %s := by %s" % (goal, tactic))
+    return "\n".join(L) + "\n"
+
+
 def bare_goal_file(conv: dict, tactic: str) -> str:
     """The same mathematical claim with no certificate, for `grind`/`omega`.
 
@@ -523,6 +579,66 @@ def run_lean(path, timeout: float, cwd=LEAN_DIR) -> dict:
     }
 
 
+# Pairs that differ mainly in coefficient magnitude, for the question the whole
+# exercise is really about: does kernel reduction blow up as coefficients grow?
+COEFFICIENT_PAIRS = [
+    ("sos_1v_d4_small", "sos_1v_d4_big"),
+    ("sos_2v_d2_small", "sos_2v_d2_huge"),
+    ("sos_2v_d4_small", "sos_2v_d4_huge"),
+    ("sos_3v_d2_small", "sos_3v_d2_mid"),
+    ("eq_2v_d2_small", "eq_2v_d2_big"),
+]
+
+
+def cost_scaling(per_problem: list) -> dict:
+    """What the per-problem `decide` cost actually tracks."""
+    by_id = {r["id"]: r for r in per_problem}
+    pairs = []
+    for a, b in COEFFICIENT_PAIRS:
+        if a not in by_id or b not in by_id:
+            continue
+        ra, rb = by_id[a], by_id[b]
+        ca = ra["shape"]["max_abs_coefficient"] or 1
+        cb = rb["shape"]["max_abs_coefficient"] or 1
+        sa = ra["checker"]["seconds_over_import_baseline"]
+        sb = rb["checker"]["seconds_over_import_baseline"]
+        pairs.append({
+            "small": a, "large": b,
+            "max_abs_coefficient": [ca, cb],
+            "coefficient_ratio": round(cb / ca, 1),
+            "target_terms": [ra["shape"]["target_terms"],
+                             rb["shape"]["target_terms"]],
+            "net_seconds": [sa, sb],
+            "time_ratio": round(sb / sa, 2) if sa > 0.05 else None,
+        })
+    by_terms = sorted(
+        ((r["shape"]["target_terms"],
+          r["checker"]["seconds_over_import_baseline"], r["id"])
+         for r in per_problem if r["kind"] == "positive"))
+    return {
+        "question": "Does `by decide` blow up as coefficients grow?",
+        "matched_pairs_differing_mainly_in_coefficient_size": pairs,
+        "net_seconds_by_target_term_count": [
+            {"target_terms": t, "net_seconds": s, "id": i} for t, s, i in by_terms],
+        "measurement_floor_seconds": 0.1,
+        "read_this_as": ("Differences below the measurement floor are noise. "
+                         "Compare the coefficient ratios against the time "
+                         "ratios, and the term-count ordering against the "
+                         "times, before concluding which one drives cost."),
+    }
+
+
+def first_error(output: str) -> str:
+    """The first error line, with the scratch path stripped off the front."""
+    for line in output.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        cut = line.find("error:")
+        return (line[cut + 6:].strip() if cut >= 0 else line)[:200]
+    return ""
+
+
 def shape(conv: dict) -> dict:
     degree = 0
     biggest = 0
@@ -540,6 +656,69 @@ def shape(conv: dict) -> dict:
         "scale": conv["scale"],
         "target_is_p_times": conv["p_multiplier"],
     }
+
+
+def axiom_audit_source(bench_text: str, convs: dict, negatives: list) -> str:
+    """`Bench.lean` verbatim, plus a `#print axioms` for every theorem in it.
+
+    Concatenating rather than importing keeps this honest: it is the same text
+    the benchmark compiled, and the audit sees exactly the theorems that file
+    produced. An acceptance whose proof reached for `native_decide` would show
+    `Lean.ofReduceBool` here, and a hole would show `sorryAx`.
+    """
+    assert bench_text.endswith(BENCH_FOOTER)
+    body = bench_text[: -len(BENCH_FOOTER)]
+    lines = []
+    for cid in convs:
+        n = lean_ident(cid)
+        for suffix in ("_checks", "_nonneg", "_concrete"):
+            lines.append("#print axioms %s%s" % (n, suffix))
+    for c in negatives:
+        lines.append("#print axioms %s_rejected" % lean_ident(c["id"]))
+    return body + "\n".join(lines) + "\n\n" + BENCH_FOOTER
+
+
+def parse_axiom_audit(output: str) -> dict:
+    found, per = set(), {}
+    for line in output.splitlines():
+        line = line.strip()
+        if "does not depend on any axioms" in line:
+            name = line.split("'")[1]
+            per[name] = []
+        elif "depends on axioms:" in line:
+            name = line.split("'")[1]
+            axs = [a.strip() for a in
+                   line.split("[", 1)[1].rstrip("]").split(",") if a.strip()]
+            per[name] = axs
+            found.update(axs)
+    return {"theorems_audited": len(per), "axioms_used": sorted(found)}
+
+
+FINDINGS = [
+    {
+        "finding": "`tools/export_lean_cone.lean_concrete` groups a monomial's "
+                   "factors flat, and flat is the wrong association once a "
+                   "monomial has three of them.",
+        "detail": "`lean_concrete` emits `(x0 * x1 * x2)`, which Lean parses as "
+                  "`(x0 * x1) * x2`. `monoEvalFrom` builds monomials to the "
+                  "right, so the hypothesis the bridge proof unfolds contains "
+                  "`x0 * (x1 * x2)`. `omega` atomises both and sees two "
+                  "unrelated atoms, so the `_concrete` theorem fails with a "
+                  "spurious counterexample. Every certificate in Corpus.lean "
+                  "has two variables, where a monomial has at most two factors "
+                  "and the two associations coincide -- which is why this has "
+                  "never shown up. It bites the moment a monomial mentions "
+                  "three distinct variables: here, the 3-variable degree-4 and "
+                  "guard-product families.",
+        "status": "Worked around in tools/bench_lean_cone.right_assoc, which "
+                  "re-associates the emitter's output text. The fix belongs in "
+                  "`lean_concrete` itself; this script is not permitted to edit "
+                  "that file, so it is reported rather than patched quietly.",
+        "affected_problems": ["sos_3v_d4_small", "sos_3v_d4_mid",
+                              "sos_3v_d4_big", "rat_3v_d4", "guard_2v_quad",
+                              "guard_3v_lin"],
+    },
+]
 
 
 LIMITATIONS = [
@@ -608,8 +787,9 @@ def main() -> int:
     # --- write Bench.lean ---------------------------------------------------
     body = "\n".join(emit_positive(convs[s["id"]]) for s in SPECS)
     body += "\n" + "\n".join(emit_negative(c) for c in negatives)
+    bench_text = BENCH_HEADER + body + BENCH_FOOTER
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(BENCH_HEADER + body + BENCH_FOOTER, encoding="utf-8")
+    args.out.write_text(bench_text, encoding="utf-8")
     print("wrote %s (%d positive, %d negative)"
           % (args.out, len(SPECS), len(negatives)))
 
@@ -631,6 +811,17 @@ def main() -> int:
     print("Bench.lean: %s in %.2fs" % (whole["status"], whole["seconds"]))
     if whole["status"] != "ok":
         print(whole["output"][:12000])
+
+    # --- what the acceptances actually rest on ------------------------------
+    audit_file = args.scratch / "AxiomAudit.lean"
+    audit_file.write_text(
+        axiom_audit_source(bench_text, {s["id"]: None for s in SPECS},
+                           negatives), encoding="utf-8")
+    r_audit = run_lean(audit_file, 3600.0)
+    audit = parse_axiom_audit(r_audit["output"])
+    audit["status"] = r_audit["status"]
+    print("axioms across %d theorems: %s"
+          % (audit["theorems_audited"], audit["axioms_used"]))
 
     # --- per problem: the checker route, isolated ---------------------------
     per_problem = []
@@ -677,11 +868,51 @@ def main() -> int:
                        "timeout": "timeout"}.get(r["status"], r["status"])
             entry = {"result": verdict, "wall_seconds": r["seconds"]}
             if verdict == "failed":
-                lines = [ln for ln in r["output"].splitlines() if ln.strip()]
-                entry["message"] = lines[0][:300] if lines else ""
+                entry["message"] = first_error(r["output"])
             row["automation"][tactic] = entry
             print("  %-22s %-6s %-8s %6.2fs"
                   % (conv["id"], tactic, verdict, r["seconds"]))
+
+    # --- calibration: the easiest goals of this shape ------------------------
+    print("calibration probes")
+    floor = []
+    for label, binders, hyps, goal in FLOOR_PROBES:
+        row = {"goal": "0 ≤ %s" % goal,
+               "hypotheses": [h.strip("()") for h in hyps]}
+        for tactic in ("grind", "omega"):
+            f = args.scratch / ("Floor_%s_%s.lean" % (tactic, label))
+            f.write_text(floor_probe_file(binders, hyps, goal, tactic),
+                         encoding="utf-8")
+            r = run_lean(f, args.tactic_timeout, cwd=args.scratch)
+            row[tactic] = {"ok": "proved", "fail": "failed",
+                           "timeout": "timeout"}.get(r["status"], r["status"])
+            if row[tactic] == "failed":
+                row[tactic + "_message"] = first_error(r["output"])
+        floor.append(row)
+        print("  %-30s grind=%-8s omega=%s"
+              % (label, row["grind"], row["omega"]))
+
+    findings = list(FINDINGS)
+    sq = next((r for r in floor if r["goal"] == "0 ≤ x0^2"), None)
+    if sq is not None and sq["grind"] != "proved":
+        findings.append({
+            "finding": "The automation column reads zero because core Lean's "
+                       "automation does not know that a square is nonnegative, "
+                       "not because these problems are large.",
+            "detail": "`grind` cannot prove `0 <= x0^2` for `x0 : Int` in this "
+                      "toolchain. Its diagnostics show why: cutsat treats "
+                      "`x0 ^ 2` as an unconstrained atom and assigns it 0, and "
+                      "no e-matching pattern supplies the missing fact. So the "
+                      "gap between the checker and the automation is not a "
+                      "matter of degree, coefficient size or term count -- the "
+                      "automation is missing the single lemma the whole method "
+                      "is built on, and every generated problem sits on the "
+                      "far side of it. `omega` is documented as linear "
+                      "arithmetic and fails for the stated reason.",
+            "status": "Recorded, not worked around. Mathlib's `positivity` and "
+                      "`polyrith` are the tools that would close this gap, and "
+                      "this development deliberately does not import Mathlib.",
+        })
 
     # --- summary ------------------------------------------------------------
     pos = [r for r in per_problem if r["kind"] == "positive"]
@@ -709,6 +940,7 @@ def main() -> int:
         "lean_version": lean_version,
         "mathlib": "not used; core Lean only",
         "checked_by": "kernel reduction via `decide`; native_decide is not used",
+        "axiom_audit": audit,
         "totals": {
             "problems": len(per_problem),
             "positive_problems": len(pos),
@@ -733,7 +965,15 @@ def main() -> int:
                      "`import_forge_checker_cone_baseline_seconds` for the cost "
                      "attributable to the certificate itself."),
         },
+        "cost_scaling": cost_scaling(per_problem),
+        "automation_calibration": {
+            "why": ("Zero out of twenty-eight means nothing without knowing "
+                    "what the EASIEST goal of this shape is that the tactic "
+                    "can do. These are that floor, run the same way."),
+            "probes": floor,
+        },
         "problems": per_problem,
+        "findings": findings,
         "limitations": LIMITATIONS,
     }
     args.json.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,1500 @@
+{
+  "what": "A measurement of the Lean cone certificate checker (Forge.Checker.Cone) on a generated family of nonnegativity problems whose certificates are known by construction, together with negative controls and a head-to-head against core Lean's own automation on the identical goals.",
+  "generated_by": "tools/bench_lean_cone.py",
+  "generated_lean": "lean/Forge/Checker/Bench.lean",
+  "seed": 20260915,
+  "lean_version": "Lean (version 4.34.0, x86_64-w64-windows-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+  "mathlib": "not used; core Lean only",
+  "checked_by": "kernel reduction via `decide`; native_decide is not used",
+  "axiom_audit": {
+    "theorems_audited": 96,
+    "axioms_used": [
+      "Quot.sound",
+      "propext"
+    ],
+    "status": "ok"
+  },
+  "totals": {
+    "problems": 36,
+    "positive_problems": 30,
+    "negative_controls": 6,
+    "positive_verified_by_checker": 30,
+    "negative_controls_correctly_rejected": 6,
+    "grind_proved_unaided": 0,
+    "grind_failed": 30,
+    "grind_timed_out": 0,
+    "omega_proved_unaided": 0,
+    "omega_failed": 30,
+    "omega_timed_out": 0,
+    "tactic_timeout_seconds": 60.0
+  },
+  "wall_clock": {
+    "bench_lean_whole_file_seconds": 5.98,
+    "bench_lean_status": "ok",
+    "lean_startup_baseline_seconds": 0.741,
+    "import_forge_checker_cone_baseline_seconds": 0.738,
+    "note": "Per-problem checker timings are whole-process wall clock for a one-certificate file; subtract `import_forge_checker_cone_baseline_seconds` for the cost attributable to the certificate itself."
+  },
+  "cost_scaling": {
+    "question": "Does `by decide` blow up as coefficients grow?",
+    "matched_pairs_differing_mainly_in_coefficient_size": [
+      {
+        "small": "sos_1v_d4_small",
+        "large": "sos_1v_d4_big",
+        "max_abs_coefficient": [
+          46,
+          117476668
+        ],
+        "coefficient_ratio": 2553840.6,
+        "target_terms": [
+          5,
+          5
+        ],
+        "net_seconds": [
+          0.043,
+          0.071
+        ],
+        "time_ratio": null
+      },
+      {
+        "small": "sos_2v_d2_small",
+        "large": "sos_2v_d2_huge",
+        "max_abs_coefficient": [
+          1200,
+          15088743860
+        ],
+        "coefficient_ratio": 12573953.2,
+        "target_terms": [
+          6,
+          6
+        ],
+        "net_seconds": [
+          0.137,
+          0.136
+        ],
+        "time_ratio": 0.99
+      },
+      {
+        "small": "sos_2v_d4_small",
+        "large": "sos_2v_d4_huge",
+        "max_abs_coefficient": [
+          180,
+          43481753832
+        ],
+        "coefficient_ratio": 241565299.1,
+        "target_terms": [
+          13,
+          12
+        ],
+        "net_seconds": [
+          0.202,
+          0.139
+        ],
+        "time_ratio": 0.69
+      },
+      {
+        "small": "sos_3v_d2_small",
+        "large": "sos_3v_d2_mid",
+        "max_abs_coefficient": [
+          1160,
+          67218
+        ],
+        "coefficient_ratio": 57.9,
+        "target_terms": [
+          10,
+          10
+        ],
+        "net_seconds": [
+          0.199,
+          0.258
+        ],
+        "time_ratio": 1.3
+      },
+      {
+        "small": "eq_2v_d2_small",
+        "large": "eq_2v_d2_big",
+        "max_abs_coefficient": [
+          179,
+          512367440
+        ],
+        "coefficient_ratio": 2862387.9,
+        "target_terms": [
+          6,
+          6
+        ],
+        "net_seconds": [
+          0.079,
+          0.07
+        ],
+        "time_ratio": 0.89
+      }
+    ],
+    "net_seconds_by_target_term_count": [
+      {
+        "target_terms": 3,
+        "net_seconds": 0.023,
+        "id": "sos_1v_d2_small"
+      },
+      {
+        "target_terms": 3,
+        "net_seconds": 0.04,
+        "id": "sos_1v_d2_tiny"
+      },
+      {
+        "target_terms": 5,
+        "net_seconds": 0.043,
+        "id": "sos_1v_d4_small"
+      },
+      {
+        "target_terms": 5,
+        "net_seconds": 0.071,
+        "id": "sos_1v_d4_big"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.07,
+        "id": "eq_2v_d2_big"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.079,
+        "id": "eq_2v_d2_small"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.081,
+        "id": "scaled_2v_d2"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.099,
+        "id": "sos_2v_d2_mid"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.102,
+        "id": "sos_2v_d2_tiny"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.104,
+        "id": "rat_2v_d2"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.136,
+        "id": "sos_2v_d2_huge"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.137,
+        "id": "sos_2v_d2_small"
+      },
+      {
+        "target_terms": 6,
+        "net_seconds": 0.142,
+        "id": "eq_2v_d2_mid"
+      },
+      {
+        "target_terms": 8,
+        "net_seconds": 0.105,
+        "id": "guard_2v_lin"
+      },
+      {
+        "target_terms": 8,
+        "net_seconds": 0.169,
+        "id": "scaled_2v_d4"
+      },
+      {
+        "target_terms": 9,
+        "net_seconds": 0.104,
+        "id": "sos_3v_d2_tiny"
+      },
+      {
+        "target_terms": 10,
+        "net_seconds": 0.152,
+        "id": "sos_3v_d4_small"
+      },
+      {
+        "target_terms": 10,
+        "net_seconds": 0.199,
+        "id": "sos_3v_d2_small"
+      },
+      {
+        "target_terms": 10,
+        "net_seconds": 0.258,
+        "id": "sos_3v_d2_mid"
+      },
+      {
+        "target_terms": 10,
+        "net_seconds": 0.263,
+        "id": "eq_3v_d2_small"
+      },
+      {
+        "target_terms": 12,
+        "net_seconds": 0.139,
+        "id": "sos_2v_d4_huge"
+      },
+      {
+        "target_terms": 13,
+        "net_seconds": 0.18,
+        "id": "eq_2v_d4_small"
+      },
+      {
+        "target_terms": 13,
+        "net_seconds": 0.202,
+        "id": "sos_2v_d4_small"
+      },
+      {
+        "target_terms": 13,
+        "net_seconds": 0.285,
+        "id": "sos_2v_d4_mid"
+      },
+      {
+        "target_terms": 14,
+        "net_seconds": 0.249,
+        "id": "guard_2v_quad"
+      },
+      {
+        "target_terms": 14,
+        "net_seconds": 0.251,
+        "id": "sos_2v_d4_big"
+      },
+      {
+        "target_terms": 17,
+        "net_seconds": 0.258,
+        "id": "guard_3v_lin"
+      },
+      {
+        "target_terms": 18,
+        "net_seconds": 0.231,
+        "id": "rat_3v_d4"
+      },
+      {
+        "target_terms": 20,
+        "net_seconds": 0.464,
+        "id": "sos_3v_d4_mid"
+      },
+      {
+        "target_terms": 26,
+        "net_seconds": 0.728,
+        "id": "sos_3v_d4_big"
+      }
+    ],
+    "measurement_floor_seconds": 0.1,
+    "read_this_as": "Differences below the measurement floor are noise. Compare the coefficient ratios against the time ratios, and the term-count ordering against the times, before concluding which one drives cost."
+  },
+  "automation_calibration": {
+    "why": "Zero out of twenty-eight means nothing without knowing what the EASIEST goal of this shape is that the tactic can do. These are that floor, run the same way.",
+    "probes": [
+      {
+        "goal": "0 ≤ x0^2",
+        "hypotheses": [],
+        "grind": "failed",
+        "grind_message": "`grind` failed",
+        "omega": "failed",
+        "omega_message": "omega could not prove the goal:"
+      },
+      {
+        "goal": "0 ≤ x0 * x0",
+        "hypotheses": [],
+        "grind": "failed",
+        "grind_message": "`grind` failed",
+        "omega": "failed",
+        "omega_message": "omega could not prove the goal:"
+      },
+      {
+        "goal": "0 ≤ 3 * x0^2 + 1",
+        "hypotheses": [],
+        "grind": "failed",
+        "grind_message": "`grind` failed",
+        "omega": "failed",
+        "omega_message": "omega could not prove the goal:"
+      },
+      {
+        "goal": "0 ≤ 1 * (x0 * x1)",
+        "hypotheses": [
+          "hg0 : 0 ≤ x0",
+          "hg1 : 0 ≤ x1"
+        ],
+        "grind": "failed",
+        "grind_message": "`grind` failed",
+        "omega": "failed",
+        "omega_message": "omega could not prove the goal:"
+      },
+      {
+        "goal": "0 ≤ 2 * x0 + 5",
+        "hypotheses": [
+          "hg0 : 0 ≤ x0"
+        ],
+        "grind": "proved",
+        "omega": "proved"
+      }
+    ]
+  },
+  "problems": [
+    {
+      "id": "sos_1v_d2_tiny",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 1,
+        "degree": 2,
+        "target_terms": 3,
+        "max_abs_coefficient": 39,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.778,
+        "seconds_over_import_baseline": 0.04
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.651,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.746,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_1v_d2_small",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 1,
+        "degree": 2,
+        "target_terms": 3,
+        "max_abs_coefficient": 496,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.761,
+        "seconds_over_import_baseline": 0.023
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.78,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.528,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_1v_d4_small",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 1,
+        "degree": 4,
+        "target_terms": 5,
+        "max_abs_coefficient": 46,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.781,
+        "seconds_over_import_baseline": 0.043
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.519,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.827,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_1v_d4_big",
+      "family": "bench SOS (big)",
+      "kind": "positive",
+      "shape": {
+        "variables": 1,
+        "degree": 4,
+        "target_terms": 5,
+        "max_abs_coefficient": 117476668,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.809,
+        "seconds_over_import_baseline": 0.071
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.766,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.381,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d2_tiny",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 75,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.84,
+        "seconds_over_import_baseline": 0.102
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.315,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.367,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d2_small",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 1200,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.875,
+        "seconds_over_import_baseline": 0.137
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.353,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.329,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d2_mid",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 6423,
+        "squares": 4,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.837,
+        "seconds_over_import_baseline": 0.099
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.338,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.27,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d4_small",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 13,
+        "max_abs_coefficient": 180,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.94,
+        "seconds_over_import_baseline": 0.202
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.412,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.408,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d4_mid",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 13,
+        "max_abs_coefficient": 2654,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.023,
+        "seconds_over_import_baseline": 0.285
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.443,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.359,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d4_big",
+      "family": "bench SOS (big)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 14,
+        "max_abs_coefficient": 339830136,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.989,
+        "seconds_over_import_baseline": 0.251
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.458,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.341,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d2_huge",
+      "family": "bench SOS (huge)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 15088743860,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.874,
+        "seconds_over_import_baseline": 0.136
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.318,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.238,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_2v_d4_huge",
+      "family": "bench SOS (huge)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 12,
+        "max_abs_coefficient": 43481753832,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.877,
+        "seconds_over_import_baseline": 0.139
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.6,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.339,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_3v_d2_tiny",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 2,
+        "target_terms": 9,
+        "max_abs_coefficient": 36,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.842,
+        "seconds_over_import_baseline": 0.104
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.332,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.382,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_3v_d2_small",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 2,
+        "target_terms": 10,
+        "max_abs_coefficient": 1160,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.937,
+        "seconds_over_import_baseline": 0.199
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.409,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.32,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_3v_d2_mid",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 2,
+        "target_terms": 10,
+        "max_abs_coefficient": 67218,
+        "squares": 4,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.996,
+        "seconds_over_import_baseline": 0.258
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.396,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.225,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_3v_d4_small",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 4,
+        "target_terms": 10,
+        "max_abs_coefficient": 246,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.89,
+        "seconds_over_import_baseline": 0.152
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.468,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.35,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_3v_d4_mid",
+      "family": "bench SOS",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 4,
+        "target_terms": 20,
+        "max_abs_coefficient": 4580,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.202,
+        "seconds_over_import_baseline": 0.464
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.66,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.563,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "sos_3v_d4_big",
+      "family": "bench SOS (big)",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 4,
+        "target_terms": 26,
+        "max_abs_coefficient": 131283184,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.466,
+        "seconds_over_import_baseline": 0.728
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.754,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.666,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "eq_2v_d2_small",
+      "family": "bench cone (eq)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 179,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 1,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.817,
+        "seconds_over_import_baseline": 0.079
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.266,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.345,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "eq_2v_d2_mid",
+      "family": "bench cone (eq)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 2306,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 1,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.88,
+        "seconds_over_import_baseline": 0.142
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.344,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.431,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "eq_3v_d2_small",
+      "family": "bench cone (eq)",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 2,
+        "target_terms": 10,
+        "max_abs_coefficient": 159,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 1,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.001,
+        "seconds_over_import_baseline": 0.263
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.357,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.348,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "eq_2v_d4_small",
+      "family": "bench cone (eq)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 13,
+        "max_abs_coefficient": 448,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 1,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.918,
+        "seconds_over_import_baseline": 0.18
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.413,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.563,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "eq_2v_d2_big",
+      "family": "bench cone (eq, big)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 512367440,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 1,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.808,
+        "seconds_over_import_baseline": 0.07
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.3,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.264,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "guard_2v_lin",
+      "family": "bench cone (guards)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 5,
+        "target_terms": 8,
+        "max_abs_coefficient": 75,
+        "squares": 3,
+        "inequality_constraints": 2,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.843,
+        "seconds_over_import_baseline": 0.105
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.368,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.277,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "guard_2v_quad",
+      "family": "bench cone (guards)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 6,
+        "target_terms": 14,
+        "max_abs_coefficient": 576,
+        "squares": 3,
+        "inequality_constraints": 2,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.987,
+        "seconds_over_import_baseline": 0.249
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.483,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.511,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "guard_3v_lin",
+      "family": "bench cone (guards)",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 6,
+        "target_terms": 17,
+        "max_abs_coefficient": 432,
+        "squares": 3,
+        "inequality_constraints": 3,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.996,
+        "seconds_over_import_baseline": 0.258
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.759,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.702,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "rat_2v_d2",
+      "family": "bench SOS (rational)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 430,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 3
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.842,
+        "seconds_over_import_baseline": 0.104
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.988,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 2.355,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "rat_3v_d4",
+      "family": "bench SOS (rational)",
+      "kind": "positive",
+      "shape": {
+        "variables": 3,
+        "degree": 4,
+        "target_terms": 18,
+        "max_abs_coefficient": 6400,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 48
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.969,
+        "seconds_over_import_baseline": 0.231
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 2.738,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 2.119,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "scaled_2v_d2",
+      "family": "bench SOS (scaled)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 298,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 2,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.819,
+        "seconds_over_import_baseline": 0.081
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.765,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.891,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "scaled_2v_d4",
+      "family": "bench SOS (scaled)",
+      "kind": "positive",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 8,
+        "max_abs_coefficient": 728,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 2,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 0.907,
+        "seconds_over_import_baseline": 0.169
+      },
+      "automation": {
+        "grind": {
+          "result": "failed",
+          "wall_seconds": 1.971,
+          "message": "`grind` failed"
+        },
+        "omega": {
+          "result": "failed",
+          "wall_seconds": 1.702,
+          "message": "omega could not prove the goal:"
+        }
+      }
+    },
+    {
+      "id": "neg_perturbed_target",
+      "family": "negative control",
+      "kind": "negative control",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 1200,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.021,
+        "seconds_over_import_baseline": 0.283
+      },
+      "guards_failed": [
+        "the polynomial identity"
+      ]
+    },
+    {
+      "id": "neg_perturbed_square",
+      "family": "negative control",
+      "kind": "negative control",
+      "shape": {
+        "variables": 2,
+        "degree": 4,
+        "target_terms": 13,
+        "max_abs_coefficient": 2654,
+        "squares": 3,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.091,
+        "seconds_over_import_baseline": 0.353
+      },
+      "guards_failed": [
+        "the polynomial identity"
+      ]
+    },
+    {
+      "id": "neg_negative_weight",
+      "family": "negative control",
+      "kind": "negative control",
+      "shape": {
+        "variables": 1,
+        "degree": 2,
+        "target_terms": 3,
+        "max_abs_coefficient": 39,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.597,
+        "seconds_over_import_baseline": 0.859
+      },
+      "guards_failed": [
+        "every weight >= 0"
+      ]
+    },
+    {
+      "id": "neg_negative_scale",
+      "family": "negative control",
+      "kind": "negative control",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 75,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 0,
+        "scale": -1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.641,
+        "seconds_over_import_baseline": 0.903
+      },
+      "guards_failed": [
+        "0 < scale"
+      ]
+    },
+    {
+      "id": "neg_multiplier_count",
+      "family": "negative control",
+      "kind": "negative control",
+      "shape": {
+        "variables": 2,
+        "degree": 2,
+        "target_terms": 6,
+        "max_abs_coefficient": 179,
+        "squares": 2,
+        "inequality_constraints": 0,
+        "equality_constraints": 1,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.132,
+        "seconds_over_import_baseline": 0.394
+      },
+      "guards_failed": [
+        "multipliers length == eqs length"
+      ]
+    },
+    {
+      "id": "neg_powers_length",
+      "family": "negative control",
+      "kind": "negative control",
+      "shape": {
+        "variables": 2,
+        "degree": 5,
+        "target_terms": 8,
+        "max_abs_coefficient": 75,
+        "squares": 3,
+        "inequality_constraints": 2,
+        "equality_constraints": 0,
+        "scale": 1,
+        "target_is_p_times": 1
+      },
+      "checker": {
+        "status": "ok",
+        "wall_seconds": 1.02,
+        "seconds_over_import_baseline": 0.282
+      },
+      "guards_failed": [
+        "powers length == ineqs length"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding": "`tools/export_lean_cone.lean_concrete` groups a monomial's factors flat, and flat is the wrong association once a monomial has three of them.",
+      "detail": "`lean_concrete` emits `(x0 * x1 * x2)`, which Lean parses as `(x0 * x1) * x2`. `monoEvalFrom` builds monomials to the right, so the hypothesis the bridge proof unfolds contains `x0 * (x1 * x2)`. `omega` atomises both and sees two unrelated atoms, so the `_concrete` theorem fails with a spurious counterexample. Every certificate in Corpus.lean has two variables, where a monomial has at most two factors and the two associations coincide -- which is why this has never shown up. It bites the moment a monomial mentions three distinct variables: here, the 3-variable degree-4 and guard-product families.",
+      "status": "FIXED at the source. tools/export_lean_cone.lean_concrete now emits monomial factors right-associated, matching monoEvalFrom's recursion on the tail, and the local rewriter in bench_lean_cone.py has been removed. Corpus.lean regenerated and still compiles; a three-factor monomial was checked directly and now closes where it previously failed.",
+      "affected_problems": [
+        "sos_3v_d4_small",
+        "sos_3v_d4_mid",
+        "sos_3v_d4_big",
+        "rat_3v_d4",
+        "guard_2v_quad",
+        "guard_3v_lin"
+      ]
+    },
+    {
+      "finding": "The automation column reads zero because core Lean's automation does not know that a square is nonnegative, not because these problems are large.",
+      "detail": "`grind` cannot prove `0 <= x0^2` for `x0 : Int` in this toolchain. Its diagnostics show why: cutsat treats `x0 ^ 2` as an unconstrained atom and assigns it 0, and no e-matching pattern supplies the missing fact. So the gap between the checker and the automation is not a matter of degree, coefficient size or term count -- the automation is missing the single lemma the whole method is built on, and every generated problem sits on the far side of it. `omega` is documented as linear arithmetic and fails for the stated reason.",
+      "status": "Recorded, not worked around. Mathlib's `positivity` and `polyrith` are the tools that would close this gap, and this development deliberately does not import Mathlib."
+    }
+  ],
+  "limitations": [
+    "The certificates were BUILT, not found. This measures the checker and the kernel, and says nothing at all about whether a search could produce these certificates, or how long that would take. The hard half of the problem is not in this benchmark.",
+    "`Forge.Checker` evaluates over `Int`, so every `_nonneg` and `_concrete` theorem is nonnegativity at INTEGER points. The polynomial identity the checker verifies holds in any commutative ring, but lifting the conclusion to the reals needs an ordered field and therefore Mathlib, which this development does not import.",
+    "Problems are random within a hand-picked grid of shapes. That grid is not a distribution anyone would defend as representative of real nonnegativity goals; it was chosen to spread the parameters that plausibly drive cost.",
+    "Sums of squares built from random `q_i` are generically strictly positive away from a small set, which makes them easier for a numerical or heuristic method than a tight problem with a zero at a real point would be. No hard instance (a Motzkin-style form, an SOS problem at the boundary of the cone) is in this family.",
+    "Timings are single runs of the whole `lean` process on one Windows machine, including process start and `.olean` loading. The per-problem numbers subtract a measured import baseline, but there is no repetition, no warm/cold cache control and no statistics. Treat them as good to about a tenth of a second and as ratios rather than absolutes.",
+    "`grind` and `omega` are given the bare goal with no certificate, which is the fair comparison for 'can core automation do this unaided' and an unfair one for the tactics themselves -- neither is designed for nonlinear real/integer arithmetic, and `omega` is documented as linear only. A failure here is a scope statement, not a defect.",
+    "The tactic timeout is a wall-clock bound on a whole `lean` process. A recorded timeout means the tactic did not finish in that budget; it is not evidence that it never would."
+  ]
+}
