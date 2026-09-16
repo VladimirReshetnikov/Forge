@@ -1,0 +1,72 @@
+{
+  "status": "RUN",
+  "scope": "Core-Lean-only files from the nine round-three proposals (r1..r9). Of their 16 Lean sources, 13 import Mathlib and were not checked; r9 ships no Lean at all, only a status note saying an implementation is not claimed.",
+  "mode": "elaborate",
+  "lean_version": "Lean (version 4.34.0, x86_64-w64-windows-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+  "platform": "Windows-11-10.0.26340-SP0",
+  "counts": {
+    "elaborated": 2,
+    "failed": 1
+  },
+  "files": [
+    {
+      "file": "proposals/r3-three-engines/lean/CoreComposition.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 34.052
+    },
+    {
+      "file": "proposals/r7-quantitative/lean/ForgeQ/Monotone.lean",
+      "status": "elaborated",
+      "exit_code": 0,
+      "elapsed_seconds": 106.743,
+      "axioms_printed": [
+        "'ForgeQ.iterate_preserves_bound' does not depend on any axioms"
+      ]
+    },
+    {
+      "file": "proposals/r8-alternation-probability/lean/RankTelescoping.lean",
+      "status": "failed",
+      "exit_code": 1,
+      "elapsed_seconds": 3.598,
+      "axioms_printed": [
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:11:3: error: unexpected token 'prefix'; expected identifier",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:13:12: error: unexpected token 'prefix'; expected term",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:13:19: error: unexpected identifier; expected ':'",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:20:14: error: unexpected token 'prefix'; expected term",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:20:21: error: unexpected identifier; expected ':'",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:23:24: error: unexpected token ']'; expected ':'",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:26:23: error: unexpected token ']'; expected ':'",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:30:51: error: unexpected token 'prefix'; expected term",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:31:10: error: unexpected identifier; expected ':'",
+        "C:\\Forge\\proposals\\r8-alternation-probability\\lean\\RankTelescoping.lean:35:14: error(lean.unknownIdentifier): Unknown constant `rank_telescoping`",
+        "'ForgeAP.prefix_bounded' does not depend on any axioms"
+      ]
+    }
+  ],
+  "inventory": {
+    "lean_files_total": 16,
+    "lines_total": 755,
+    "core_only": 3,
+    "mathlib_dependent": 13,
+    "proposals_shipping_no_lean": [
+      "r9-infinite-horizon"
+    ]
+  },
+  "failure_diagnosis": {
+    "file": "proposals/r8-alternation-probability/lean/RankTelescoping.lean",
+    "cause": "the file defines `prefix`, which is a reserved command keyword in Lean 4; every one of the ten reported errors cascades from that single identifier collision",
+    "is_the_mathematics_wrong": false,
+    "repair": "rename the definition (tested here as `prefixSum`)",
+    "after_repair": {
+      "status": "elaborated",
+      "elapsed_seconds": 82.808,
+      "axioms_printed": [
+        "'ForgeAP.rank_telescoping' depends on axioms: [propext, Quot.sound]",
+        "'ForgeAP.prefix_bounded' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    "note": "The repair was tested on a scratch copy outside the repository. The proposal is frozen as delivered; the fix belongs in the merged tree if and when the lemma is adopted, not in the archived source."
+  },
+  "note": "Successful elaboration is not a transitive axiom audit and is not a comparison against any Lean tactic. This is also the first time in twenty-seven proposals that a Lean file was compiled and found to be broken -- every earlier proposal recorded NOT_RUN, so nothing they shipped had ever been contradicted by a compiler."
+}
