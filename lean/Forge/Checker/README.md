@@ -98,3 +98,38 @@ python tools/export_lean_cone.py
 ```bash
 cd lean && LEAN_PATH=.lake/build/lib lean Forge/Checker/Corpus.lean
 ```
+
+## Does Lean already do this?
+
+The first comparison this project has run. Full data in
+[`results/lean-tactic-comparison.json`](../../../results/lean-tactic-comparison.json).
+
+| Tactic | `hidden_quadratic` | `equality_constrained` | `guard_product` |
+| --- | --- | --- | --- |
+| `grind` (core) | fails | fails | fails |
+| `omega` (core) | fails | — | — |
+| `positivity` | fails | fails | **passes** |
+| `nlinarith`, bare | fails | fails | **passes** |
+| `nlinarith` + the certificate's squares | **passes** | **passes** | passes |
+| `linarith` + the certificate's squares | **passes** | fails | — |
+
+The sharpest row is the last: for `hidden_quadratic`, once the squares are
+supplied, plain `linarith` closes it. The certificate is *linear in its
+squares*, so no nonlinear search is needed at all.
+
+**Four qualifications, which matter more than the table.**
+
+1. **`grind` is a weak baseline.** It fails all three, including `0 ≤ a*b` from
+   `0 ≤ a` and `0 ≤ b` — its cutsat model returns `a := 0, b := 0` and never
+   applies multiplication monotonicity. Beating it is not evidence of much.
+2. **`guard_product` is not evidence.** Bare `nlinarith` and `positivity` get
+   it unaided and its certificate is trivial. It is listed so the table is not
+   filtered.
+3. **The gap is smaller than "with the certificate versus without".** Given
+   only *two* of `hidden_quadratic`'s three squares, `nlinarith` still succeeds:
+   it manufactures the missing `b²` itself. What was measured is "some of the
+   squares" against "none", not "exactly this certificate" against "none".
+4. **Two informative goals is a small sample.** This is not a benchmark.
+
+Mathlib measurements are on a v4.32.0 build, the only one available here; the
+rest of this repository is v4.34.0.

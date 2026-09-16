@@ -1,0 +1,58 @@
+{
+  "what": "The first comparison in this project's history between a Forge certificate and existing Lean tactics, on the three goals the prototype's cone certificates settle. Section 19 of the article asks for exactly this; none of the thirty-six proposals ran one.",
+  "environments": {
+    "core_tactics": "leanprover/lean4:v4.34.0 (grind, omega)",
+    "mathlib_tactics": "leanprover/lean4:v4.32.0 with a built Mathlib (nlinarith, linarith, positivity)",
+    "note": "The Mathlib toolchain differs from the v4.34.0 used everywhere else in this repository, because the only built Mathlib available here is pinned at v4.32.0. Tactic behaviour could differ between the two."
+  },
+  "goals": {
+    "hidden_quadratic": "0 <= 147 - 168*b + 99*b^2 - 126*a - 26*(a*b) + 78*a^2, unconstrained",
+    "equality_constrained": "0 <= -1 + 2*b^2 + 2*a^2, given -1 + b + a = 0",
+    "guard_product": "0 <= a*b, given 0 <= a and 0 <= b"
+  },
+  "measurements": [
+    {"goal": "hidden_quadratic", "tactic": "grind", "result": "FAIL", "detail": "`grind` failed"},
+    {"goal": "hidden_quadratic", "tactic": "omega", "result": "FAIL", "detail": "nonlinear; reports the squares as unrelated atoms"},
+    {"goal": "hidden_quadratic", "tactic": "nlinarith", "result": "FAIL", "detail": "linarith failed to find a contradiction", "ms": 922},
+    {"goal": "hidden_quadratic", "tactic": "positivity", "result": "FAIL", "ms": 496},
+    {"goal": "hidden_quadratic", "tactic": "nlinarith + the certificate's 3 squares", "result": "PASS", "ms": 1030},
+    {"goal": "hidden_quadratic", "tactic": "linarith + the certificate's 3 squares", "result": "PASS", "ms": 1010,
+     "significance": "The certificate is LINEAR in its squares, so no nonlinear search is needed at all once they are supplied."},
+    {"goal": "hidden_quadratic", "tactic": "nlinarith + only 2 of the 3 squares", "result": "PASS", "ms": 826,
+     "significance": "The measured gap is 'some of the squares' vs 'none', not 'exactly this certificate' vs 'none'. nlinarith manufactures the missing b^2 term itself."},
+    {"goal": "equality_constrained", "tactic": "grind", "result": "FAIL"},
+    {"goal": "equality_constrained", "tactic": "nlinarith", "result": "FAIL", "ms": 493},
+    {"goal": "equality_constrained", "tactic": "positivity", "result": "FAIL", "ms": 448},
+    {"goal": "equality_constrained", "tactic": "nlinarith + sq_nonneg (b-a)", "result": "PASS", "ms": 605},
+    {"goal": "equality_constrained", "tactic": "linarith + sq_nonneg (b-a)", "result": "FAIL", "ms": 418,
+     "detail": "linarith cannot multiply the equality hypothesis by the non-constant multiplier"},
+    {"goal": "equality_constrained", "tactic": "linarith + the square AND the multiplier product", "result": "PASS", "ms": 346,
+     "significance": "Supplying the full certificate makes it linear again."},
+    {"goal": "guard_product", "tactic": "grind", "result": "FAIL",
+     "detail": "cutsat returns a := 0, b := 0 and never applies multiplication monotonicity"},
+    {"goal": "guard_product", "tactic": "nlinarith", "result": "PASS", "ms": 305},
+    {"goal": "guard_product", "tactic": "positivity", "result": "PASS", "ms": 161},
+    {"goal": "guard_product", "tactic": "exact mul_nonneg ha hb", "result": "PASS"}
+  ],
+  "headline": "On two of the three goals, every tactic tried fails without the certificate and succeeds with it. On hidden_quadratic, plain linarith suffices once the squares are supplied.",
+  "qualifications": [
+    "grind is a WEAK baseline: it fails all three, including 0 <= a*b from 0 <= a and 0 <= b. Beating it is not evidence of much.",
+    "guard_product is not evidence at all: bare nlinarith and positivity get it unaided, and its certificate is trivial. It is listed so the table is not filtered.",
+    "The gap is smaller than 'with the certificate versus without': two of hidden_quadratic's three squares suffice for nlinarith.",
+    "Two informative goals is a small sample. This is not a benchmark.",
+    "The Mathlib measurements are on v4.32.0, not the v4.34.0 used elsewhere here."
+  ],
+  "an_error_this_found": {
+    "what": "The equality-constrained certificate was transcribed with its multiplier's constant term negated -- the equality polynomial copied into the multiplier slot.",
+    "consequence": "The identity fails by 2a + 2b - 2.",
+    "where_the_error_was": "the transcription, not the artifacts",
+    "verified": "The prototype bundle records the multiplier as (1/2)(1+b+a) and Corpus.lean records its cleared integer form [([0,0],1),([0,1],1),([1,0],1)]. Expanding: (1/2)(b-a)^2 + (1/2)(1+b+a)(-1+b+a) = a^2 + b^2 - 1/2, exactly p.",
+    "lesson": "A hand-copied identity is a claim. It survived until an independent tool expanded the polynomial -- the same shape as the sorry scanner and the axiom line."
+  },
+  "not_shown": [
+    "that Forge's search finds certificates faster than any tactic",
+    "anything about the other ten Python certificate families",
+    "anything over the reals",
+    "any statement about problems outside these three"
+  ]
+}

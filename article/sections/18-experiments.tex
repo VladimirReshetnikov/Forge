@@ -1322,6 +1322,110 @@ nothing beyond Lean core. The twenty-fourth is \src{r8}'s, below. Forty-eight
 more import Mathlib directly and eleven import sibling modules; nothing has
 ever checked any of those fifty-nine.
 
+\subsection{A checker, and the first tactic comparison}
+
+Every Lean file discussed above is a \emph{specimen}: a statement of what a
+checker would have to prove. \code{Forge.Checker} is a checker. It is one
+certificate family of thirteen, and reporting what it cost is more useful than
+reporting that it exists.
+
+\subsubsection*{What was built}
+
+A checker for cone certificates --- sums of squares, products of the inequality
+constraints, and equality multipliers --- with \code{Cert.check} a total
+Boolean function performing no search, and \code{Cert.sound} proving that
+acceptance implies nonnegativity at every assignment satisfying the
+constraints. Underneath, evaluation is proved to be a ring homomorphism and the
+zero test is proved to decide identical vanishing; the latter is what licenses
+quantifying over all assignments, because a certificate asserts an
+\emph{identity} and identity is stronger than agreement anywhere finite.
+
+The prototype's three cone certificates are exported by
+\code{tools/export\_lean\_cone.py}, cleared of denominators, re-checked in
+Python, and then accepted by the Lean kernel through \code{decide} rather than
+\code{native\_decide}. The axiom footprint across all three files is
+\code{propext} and \code{Quot.sound}, with no \code{Classical.choice} and no
+\code{sorryAx}. \code{ForgeCore} now builds as a library.
+
+Three constraints shaped it. It is core Lean only, because fifty-eight of this
+repository's eighty-nine Lean files depend on Mathlib and none has ever been
+checked --- a checker in that bucket would have been one more uncompiled claim.
+Coefficients are integers, because \code{Int} is in core and \code{Rat}'s
+lemmas are not; clearing denominators is a change of representation, and every
+multiplier introduced is positive, so the hypotheses transfer exactly. And each
+certificate needs a second, generated theorem in ordinary arithmetic, because
+$\code{0} \le \code{eval x target}$ for a \code{Poly} literal is not a goal anyone would
+type.
+
+\subsubsection*{The comparison, and why it is weaker than it first looks}
+
+Section~\ref{sec:evaluation} asks for a comparison against existing tactics.
+None of the thirty-six proposals ran one. Here is the first, on the three goals
+these certificates settle. Mathlib results are from a v4.32.0 build, so the
+toolchain differs from the v4.34.0 used everywhere else in this document.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Tactic & \src{hidden\_quadratic} & \src{equality\_constrained} & \src{guard\_product} \\
+\midrule
+\code{grind} (core)      & fails & fails & fails \\
+\code{omega} (core)      & fails & --- & --- \\
+\code{positivity}        & fails & fails & \textbf{passes} \\
+\code{nlinarith}, bare   & fails & fails & \textbf{passes} \\
+\code{nlinarith} + the certificate's squares & \textbf{passes} & \textbf{passes} & passes \\
+\code{linarith} + the certificate's squares  & \textbf{passes} & fails & --- \\
+\bottomrule
+\end{tabular}
+\caption{Mathlib v4.32.0; core tactics at v4.34.0. Every failure was a prompt
+refutation-search failure, not a timeout.}
+\label{tab:tactic-comparison}
+\end{table}
+
+The sharpest row is the last. For \src{hidden\_quadratic}, once the squares are
+supplied, plain \code{linarith} closes the goal --- the certificate is
+\emph{linear} in its squares, so no nonlinear search is needed at all. That is
+as clean a separation as this experiment can give between the certificate being
+the content and the search being the hard part.
+
+Four qualifications, and they matter more than the table.
+
+\emph{\code{grind} is a weak baseline.} It fails all three, including
+$0 \le a * b$ from $0 \le a$ and $0 \le b$ --- its cutsat model
+returns the assignment $a=b=0$ and it never applies multiplication
+monotonicity. Beating it is not evidence of much, and this document should not
+lean on that row.
+
+\emph{One of the three goals is not evidence at all.} \src{guard\_product} is
+$0 \le a*b$ from two nonnegativity hypotheses. Bare \code{nlinarith} and
+\code{positivity} both get it unaided, and its Forge certificate is the trivial
+one. It belongs in the table only so that the table is not filtered.
+
+\emph{The gap is smaller than ``with the certificate versus without''.} Given
+only \emph{two} of \src{hidden\_quadratic}'s three squares, \code{nlinarith}
+still succeeds: it manufactures the missing $b^2$ term through its own product
+heuristics. So what was measured is ``some of the certificate's squares'' against
+``none of them'', not ``exactly this certificate'' against ``none''.
+
+\emph{Two goals out of three is a small sample.} Nothing here is a benchmark.
+
+\begin{remark}[The comparison found an error, and it was in the prompt]
+Setting this up, the equality-constrained certificate was transcribed with its
+multiplier's constant term negated --- the equality polynomial copied into the
+multiplier slot. The identity then fails by $2a+2b-2$. Checking against the
+stored artifacts showed both of them correct: the prototype's bundle records the
+multiplier as $\tfrac12(1+b+a)$ and \code{Corpus.lean} records its cleared
+integer form, and
+$\tfrac12(b-a)^2 + \tfrac12(1+b+a)(-1+b+a) = a^2+b^2-\tfrac12$ exactly.
+
+The error was in the transcription, and it survived until an independent tool
+expanded the polynomial. This is the same lesson as the \code{sorry} scanner and
+the axiom line: a hand-copied identity is a claim, and the tools in this
+repository exist because claims of that kind are wrong at a rate that intuition
+underestimates.
+\end{remark}
+
 \subsection{What the evidence establishes}
 
 It establishes that the implementations actually synthesise certificates in the
