@@ -1,0 +1,180 @@
+\section{When order matters: certificates in a free algebra}
+\label{sec:noncommutative}
+
+Every algebraic certificate so far has been commutative. Cone and quadratic
+certificates multiply polynomials in $\Q[x_1,\ldots,x_n]$; the closure workers of
+Section~\ref{sec:closure} multiply matrices, but the \emph{coefficients} they
+manipulate commute, and the one place where order was forced to matter --- the
+Ore rule $E_n n=(n+1)E_n$ of Section~\ref{sec:ore} --- was a single prescribed
+commutation law between one shift and its coefficients.
+
+That is a narrow escape from a general problem. Operators, matrices of unknown
+dimension, quantum observables, and program effects all live in algebras where
+$ab\ne ba$ and where no commutation law is given in advance. Two contributing
+efforts take the general case: the free associative algebra $\Q\langle
+X\rangle$ on a finite alphabet, presented by relations $r_1,\ldots,r_s$, with
+the question
+\[
+ r_1=\cdots=r_s=0 \quad\Longrightarrow\quad p=0
+\]
+or, on the positivity side, whether $p$ is a sum of Hermitian squares modulo
+those relations. Neither is a new area of mathematics --- the Diamond Lemma and
+noncommutative Positivstellens\"atze are established. What is new here is that
+both are cut down to a certificate a small checker can verify against the
+\emph{original} relations.
+
+\subsection{The two-sided certificate, and one theorem for two searches}
+
+In a commutative ring an ideal member is $\sum_i u_i f_i$. In a free algebra it
+is not: a relation may be multiplied on both sides, so the certificate carries
+\emph{two-sided contexts},
+\begin{equation}\label{eq:two-sided}
+ p=\sum_{k} \alpha_k\, u_k\, r_{i_k}\, v_k,
+\end{equation}
+with words $u_k,v_k$, rational $\alpha_k$, and each $r_{i_k}$ one of the
+\emph{supplied} relations. The checker expands \eqref{eq:two-sided} in the free
+algebra and compares with $p$. It never needs a basis, a term order, a
+confluence property, or a termination argument.
+
+\begin{theorem}[Two-sided soundness]\label{thm:nc-sound}
+If \eqref{eq:two-sided} holds in $\Q\langle X\rangle$ and every $r_i$ vanishes
+in an algebra $A$ under a homomorphism fixing the generators, then $p$ vanishes
+in $A$.
+\end{theorem}
+\begin{proof}
+A homomorphism sends the right side of \eqref{eq:two-sided} to
+$\sum_k\alpha_k\,\varphi(u_k)\,\varphi(r_{i_k})\,\varphi(v_k)$, and each
+$\varphi(r_{i_k})=0$. Multiplication by $\varphi(u_k)$ on the left and
+$\varphi(v_k)$ on the right is well defined in any associative algebra, so
+every summand vanishes and $\varphi(p)=0$.
+\end{proof}
+
+Two of the contributing efforts prove this theorem independently, with the same
+proof, and it is stated once here. What differs is entirely the \emph{search}
+that produces \eqref{eq:two-sided}, and the two searches disagree about whether
+completion is needed at all.
+
+\paragraph{Lane one: eliminate contexts, do not complete.} \src{r2} fixes a
+context bound, generates the finite set of products $u r_i v$ available within
+it, and solves one exact linear system over the resulting word coefficients.
+Its own statement of why this suffices is worth quoting, because it is a
+deliberate refusal:
+
+\begin{quote}\small
+This proof does not appeal to termination of noncommutative completion or to a
+Noetherian property. It isolates a finite-dimensional vector-space problem at
+the exact required degree. It needs no global completion result for the
+presented algebra.
+\end{quote}
+
+\paragraph{Lane two: complete, under a cap.} \src{r3} runs bounded,
+target-oriented Gr\"obner--Shirshov completion, tracing each new rule back to
+the original relations so that the emitted certificate is still in the form
+\eqref{eq:two-sided}. It is equally explicit that the process it is running has
+no termination guarantee:
+
+\begin{quote}\small
+The \emph{completion process} need not terminate. \ldots{} The prototype
+therefore caps reduction steps, accumulated term/provenance size, rules, and
+examined compositions.
+\end{quote}
+
+These are not rival implementations of one algorithm and the merge does not
+pick a winner. A supplied orientation of the hypotheses can be terminating and
+still incomplete for a given target, which is exactly when critical pairs expose
+a consequence that no direct reduction of the target would reach --- lane two's
+case. Equally, when all relations are homogeneous, the answer lives at one known
+degree and completion is wasted work --- lane one's case. The routing rule is
+the obvious one and one of the efforts already states it: if every relation is
+homogeneous, solve at the target degree; otherwise try bounded contexts, and
+fall back to capped completion.
+
+\begin{remark}[Centrality is a hypothesis, not a formatting choice]
+Both efforts arrive independently at the same warning, and it is the kind of
+thing that is easy to lose in translation to Lean. The certificates use
+rational coefficients, and \eqref{eq:two-sided} implicitly assumes those
+rationals \emph{commute with everything}. In an arbitrary ring they need not.
+The source bridge therefore has to establish that the target algebra is a
+$\Q$-algebra with central rational scalars; ``the coefficients are numbers'' is
+not an argument.
+\end{remark}
+
+\subsection{A refutation object where order matters}
+
+A nonzero remainder is not a disproof: it means this search, at this bound,
+found nothing. Both efforts say so, and \src{r3} labels its completion-disabled
+control \unknown{} rather than \textsc{refuted} precisely to make the point.
+
+For \emph{homogeneous} relations, though, \src{r2} gets something better. At a
+fixed degree the consequences of the relations form a finite-dimensional
+subspace, computable exactly, so the search is \emph{degree-complete}: if $p$ is
+not in that subspace, no certificate of any size exists at that degree. The
+refutation is then a concrete matrix representation --- the truncated quotient
+algebra itself --- in which every relation vanishes and $p$ does not.
+
+That is a genuine addition to the collection's stock of negative evidence. The
+Kripke countermodels of Section~\ref{sec:structural} refute derivability in a
+propositional calculus; a separating word refutes an automaton equivalence; this
+refutes an algebra identity, by exhibiting an algebra. All three are checkable
+by re-evaluation, and none of them is an absence of proof dressed up as a
+disproof.
+
+\subsection{Positivity when the variables do not commute}
+
+The other half of the noncommutative problem is inequality rather than equality.
+For a Hermitian $p$ of degree $2d$ over an alphabet of size $m$, the object that
+replaces the commutative Gram matrix is indexed by \emph{words} of length at
+most $d$ rather than by monomials:
+\[
+ p=\sum_{u,v} G_{uv}\, u^{*}v,
+\]
+and the essential difference is that this representation is \emph{unique}. In
+the commutative case distinct monomial pairs collide --- $x\cdot y$ and $y\cdot
+x$ contribute to the same coefficient --- and recovering a Gram matrix requires
+solving for the freedom that collision creates. In the free algebra
+$u^{*}v$ determines $(u,v)$, so the matrix is read straight off the
+coefficients, over $m^d$ words with no collisions to resolve.
+
+A certificate is then an exact rational $LDL^{\mathsf T}$ decomposition of that
+matrix with nonnegative diagonal, which the checker re-multiplies. Two
+extensions matter for real targets. Constrained positivity uses adjoint
+sandwiches $q^{*}gq$ rather than plain squares, so a supplied positive element
+$g$ can be used in the middle. And when the alphabet carries an involution,
+the generator of the relevant cone is a structured ray rather than an arbitrary
+square, which keeps the search finite.
+
+\begin{remark}[Dimension-free is the point]
+These certificates are valid \emph{independently of the dimension} of any
+matrix representation. That is the reason to work in the free algebra at all,
+and it is what a numerical semidefinite solver at one fixed size cannot give.
+The recorded corpus includes a Bell-inequality (CHSH) derivation, where exactly
+this matters: the bound is wanted for every representation, not for one chosen
+Hilbert space.
+\end{remark}
+
+\subsection{What these workers do not do}
+
+The scope conditions are narrower than the machinery suggests, and the efforts
+state them.
+
+Neither lane refutes anything in the inhomogeneous case. A bound was reached; a
+larger bound may succeed; and the \unknown{} verdict carries no information
+about the goal's truth.
+
+Degree-completeness is completeness \emph{at a degree}, not completeness. A
+homogeneous target that needs consequences at a higher degree is outside the
+guarantee, and the guarantee says nothing about the inhomogeneous fragment at
+all.
+
+An $LDL^{\mathsf T}$ certificate establishes that $p$ is a sum of Hermitian
+squares in the free algebra. Transporting that to a statement about a particular
+operator algebra needs the representation, the involution and the positivity
+order to match the source, and a trace-positivity claim needs more than a
+sum-of-squares decomposition. These are separate obligations and the article
+does not fold them into one.
+
+Finally, and as everywhere in this document: none of this has been checked by
+Lean. Mathlib has a free algebra, and the two efforts cite it under two
+different module paths without either having compiled against it --- a small but
+exact illustration of why the pinned-revision discipline of
+Section~\ref{sec:trust} exists.

@@ -1,0 +1,176 @@
+\section{Quantitative certificates: probabilities, values, and adversaries}
+\label{sec:quantitative}
+
+Every worker so far returns a verdict: the property holds, or here is a
+counterexample. Three contributing efforts attach \emph{numbers} to unbounded
+behaviour instead --- an expected running time, an optimal transport cost, the
+value of a game against an adversary, the probability that a loop terminates.
+The certificates stay exact and rational throughout, and where a fragment would
+force an irrational value the efforts exclude the fragment rather than
+approximate it.
+
+\subsection{Why an invariant equation is not a value}
+
+The natural first attempt fails, and it fails the same way in two of the three
+efforts, which found it independently on the same one-state example. Suppose a
+Markov chain has transition matrix $P$ and one asks for the probability $u$ of
+eventually reaching a target. It satisfies the harmonic equation $u=Pu$ with
+the obvious boundary conditions --- and so does the constant function $1$, and
+so does a whole family of others. A single self-loop is enough to make the
+system underdetermined. Solving $u=Pu$ and reporting the answer is not a proof
+of anything.
+
+What is missing is a \emph{progress witness}, and the two efforts supply
+different ones for different reasons:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \src{r7} adds a rank vector $r$ on the non-target, non-dead states
+together with a policy-closed dead set, giving a bound on the expected time to
+leave. The rank is auxiliary --- the effort repeatedly warns that it must not
+be reported as a value --- and the conclusion is an exact supremum over
+schedulers.
+\item \src{r9} adds a \emph{properness potential} $h$ satisfying
+$h(s)=1+\sum_t P_{st}h(t)$. This does double duty: $h$ \emph{is} the expected
+absorption time, and it simultaneously licenses the reachability and cost
+solutions. One certificate yields three exact values.
+\end{itemize}
+
+The second form is the more Lean-ready of the two, because it comes with an
+explicit error ladder rather than an asymptotic remark. Where one effort proves
+$\Prob_s(\tau>k)\le r(s)/k$ and observes that it vanishes, the other gives
+$0\le v(s)-C_N\le V\,h(s)/(N+1)$ and its siblings as rational inequalities, one
+per natural $N$ --- finite statements, provable by induction, with no limit in
+the proposition.
+
+\subsection{The correction: expectation is not a homomorphism}
+
+\label{sec:moment-correction}
+This section contains the only claim anywhere in the collection that a rule
+already stated in this document would, if extended in the obvious way, prove
+something false. It is worth the space.
+
+Section~\ref{sec:closure}'s ideal-closure rule works because pullback along a
+deterministic update is a \emph{ring homomorphism}: $p\mapsto p\circ T$
+satisfies $(pq)\circ T=(p\circ T)(q\circ T)$, and that is exactly what licenses
+multiplying a certificate identity through by a polynomial multiplier.
+Expectation is not a ring homomorphism. $\E[XY]\ne\E[X]\,\E[Y]$ in general, and
+the failure is not a corner case --- it is the entire content of correlation.
+
+So a worker that keeps the shape of the ideal-closure rule while replacing
+pathwise pullback by expectation is unsound, and would certify false
+statements about products of random quantities. \src{r7}'s remedy is a type
+distinction rather than a warning comment: the transfer interface splits into
+a \code{PathwisePullback}, which carries a homomorphism field and may be used
+multiplicatively, and a \code{MomentTransfer}, which is linear and positive and
+\emph{has no homomorphism field at all}, so the multiplicative step cannot be
+written. This is the same move as
+Section~\ref{sec:trust}'s: make the unsound operation unrepresentable rather
+than forbidden by prose.
+
+\begin{invariant}[Moment transfer is linear, not multiplicative]
+\label{inv:moment}
+An expectation operator may be used to transport a linear combination of
+observables and to preserve nonnegativity. It may not be used to transport a
+product, and no interface should offer a field that would let it.
+\end{invariant}
+
+\subsection{Adversaries, and why a global descent measure is the wrong shape}
+
+Two of the efforts handle games, and between them they correct the
+cyclic-descent compiler of Section~\ref{sec:cycles} in two independent ways.
+
+\src{r8} solves parity games with arbitrary priorities, returning a positional
+strategy together with threshold-local ranks --- one rank per unfavourable
+priority rather than one global measure. \src{r9} restricts to B\"uchi and
+co-B\"uchi, which buys a simpler object: a rank that \emph{resets} on the
+accepting set for the positive side, and a nonincreasing visit budget
+$\kappa$ for the negative side, so that an accepted negative certificate
+bounds the number of accepting visits rather than merely denying them.
+
+The correction they share is this. A winning strategy in a game with a
+recurrence condition produces plays that visit the good set infinitely often.
+There is no globally strictly decreasing measure along such a play --- there
+cannot be, since the play is infinite and the behaviour is correct. A compiler
+that insists on well-founded descent everywhere therefore rejects a correct
+proof. The repair is local descent with a permitted reset, which is precisely
+what the threshold-local and resetting ranks provide.
+
+\src{r8} makes the same point about probabilistic termination from the other
+direction: a loop can terminate with probability one while having individual
+executions that increase any given measure. Demanding a pointwise decrease is
+demanding something false. The correct local obligation is a decrease
+\emph{in expectation}, and it should be routed to the polynomial machinery of
+Section~\ref{sec:nonlinear} in that form --- never as the stronger pointwise
+condition.
+
+\begin{remark}[One effort specifies what another implements]
+The drift obligation $V(x)-\sum_\xi p_\xi V(F(x,\xi))\ge\varepsilon>0$ with
+$V\ge0$ appears in \src{r8} as a designed composition, explicitly not executed
+by its finite-state prototype. It appears in \src{r7} as an implemented worker
+with a completeness theorem for the polynomial identity solve. Their worked
+examples coincide numerically: the biased walk with $p=2/3$ has potential
+$V(n)=3n$ in both. Neither effort cites the other, and this document is the
+first place the two halves appear together.
+\end{remark}
+
+\subsection{Couplings, duals, and a finite object for an infinite comparison}
+
+The third family is relational. To compare two probabilistic systems one
+exhibits a \emph{coupling}: a joint distribution whose marginals are the two
+given distributions. The certificate is the joint table, and the checker sums
+rows and columns --- there is nothing subtle in the checking, which is the
+point. Optimality, when claimed, is certified by a dual: a Farkas witness with
+matching objective value for transport cost, or a Hall-type violated set when
+no coupling exists at all.
+
+Both efforts that build couplings also build the \emph{ordered deletion trace}
+needed when a relation has to be pruned to a largest fixed point, and both are
+careful about the same trap: a negative simulation result is not a trace
+inequality. A failure to build a coupling at one pair says the relation does
+not hold; converting that into a statement about the systems' observable
+behaviour requires a separate argument, and one effort routes such a result to
+the weighted-word lane of Section~\ref{sec:closure} rather than terminating the
+search with a refutation.
+
+\subsection{A finite certificate for an unbounded stack}
+
+\src{r9} adds a model the rest of the collection does not have: a pushdown
+system, where the configuration space is infinite because the stack is. Its
+positive certificate is a set of \emph{pop summaries} --- what the system can do
+between pushing a symbol and popping it --- assembled into a proof DAG with
+shared subproofs, and its negative certificate is a closed exclusion relation.
+
+The compression this buys is the same phenomenon Section~\ref{sec:closure}'s
+multilinear lane exhibits on trees, and both are worth seeing: a DAG of
+\emph{31 nodes} represents a run of $2^{31}-1$ steps. The article states plainly
+that this length is \emph{represented, not executed} --- concrete expansion was
+checked only through depth ten --- and that distinction is the difference
+between a compression result and a fabricated benchmark.
+
+\begin{remark}[What a finite summary does and does not settle]
+\src{r9} is also the effort that states the limit of the whole approach most
+precisely, and it does so against its own interests. A weighted-word identity
+concerns products along \emph{finite} words; no amount of such evidence
+establishes that an infinite-horizon limit has the claimed boundary values.
+That is exactly why the properness witness above is not optional. And combining
+the two directions is not free: a probabilistic pushdown process can produce
+nonlinear probability equations and is not automatically a finite rational
+Markov chain. That sentence is the boundary of this entire section.
+\end{remark}
+
+\subsection{What is excluded, and what that exclusion is doing}
+
+All three efforts are exact-rational and none has a tolerance parameter. The
+fragments they exclude are, in every case, the fragments where the answer would
+stop being rational: stochastic games with nested minimum/maximum expectations,
+continuous distributions, interval-uncertain probabilities, symbolic probability
+parameters, unbounded-state chains, and probabilistic pushdown. These are not
+gaps in an implementation. They are the boundary of exactness, and drawing it
+explicitly is what lets everything inside it be checked by comparing rationals.
+
+Two further limits deserve the same visibility. Rational bit complexity is
+additional to every operation count reported anywhere in this document ---
+denominators grow, and a small matrix dimension does not imply small numbers.
+And a certificate that bounds graph steps bounds graph steps: a source adapter
+whose steps have variable duration needs its own timing argument before any of
+these numbers becomes a statement about time.

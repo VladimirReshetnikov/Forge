@@ -1,0 +1,163 @@
+\section{Analytic certificates: leaving the polynomials}
+\label{sec:analytic}
+
+Everything up to here has been polynomial or rational. Cones, quadratics,
+Bernstein trees, Sturm chains, closures, and free-algebra words all manipulate
+exact rational data, and the reason is the reason given in
+Section~\ref{sec:trust}: exact data is what a checker can re-derive without
+tolerance. An expression containing $e^x$ is not that.
+
+Four contributing efforts take the step anyway, and they converge on the same
+answer to the representation question. The input class is the \emph{rational
+exponential polynomial}
+\begin{equation}\label{eq:exppoly}
+ f(x)=\sum_{\lambda\in\Lambda}P_\lambda(x)\,e^{\lambda x},
+ \qquad \Lambda\subset\Q\ \text{finite},\quad P_\lambda\in\Q[x],
+\end{equation}
+which is exact rational data --- a finite list of rates and coefficient vectors
+--- denoting a transcendental function. The goal is $f(x)\ge0$ on a ray or an
+interval. Nothing here is approximated.
+
+\subsection{The one lemma all of them prove}
+
+The mechanism is an integrating factor. Multiplying by $e^{-cx}$ and
+differentiating kills one exponential, and the key point is that this operation
+stays inside the class \eqref{eq:exppoly}:
+
+\begin{lemma}[Integrating-factor step]\label{lem:factorstep}
+For $f$ of the form \eqref{eq:exppoly} and $c\in\Q$, set
+$T_cf=\bigl(e^{-cx}f\bigr)'e^{cx}=f'-cf$. Then $T_cf$ is again of the form
+\eqref{eq:exppoly}, with rate set contained in $\Lambda$, and if $f(a)\ge0$
+and $T_cf\ge0$ on $[a,\infty)$ then $f\ge0$ on $[a,\infty)$.
+\end{lemma}
+\begin{proof}
+The class is closed under differentiation and under scalar multiples, so
+$f'-cf$ lies in it and introduces no new rate. For the inequality, let
+$g(x)=e^{-cx}f(x)$. Then $g'(x)=e^{-cx}(T_cf)(x)\ge0$ on $[a,\infty)$, so $g$
+is nondecreasing there and $g(x)\ge g(a)=e^{-ca}f(a)\ge0$. Since $e^{cx}>0$,
+$f(x)=e^{cx}g(x)\ge0$.
+\end{proof}
+
+Three of the four efforts prove this lemma independently. Two of them state it
+in literally the same form up to the names of the variables; the third proves
+it at an arbitrary rational anchor $a$, of which the other two are the case
+$a=0$. It is stated once here. Iterating it gives a \emph{ladder}: a sequence of
+cofactors $c_1,\ldots,c_k$ reducing $f$ step by step, with one initial-value
+check per rung.
+
+That much is common ground. What the efforts do \emph{not} share is where the
+ladder stops, and that turns out to be the whole design question.
+
+\subsection{Three ladders, three terminal conditions}
+
+\paragraph{Terminate at zero, and allow new rates.} \src{r4} drives the ladder
+until the function is identically zero, and permits cofactors \emph{outside} the
+rate set of the input --- auxiliary rates below the spectrum, which it calls
+ghosts. Adding a rate enlarges the reachable language, so this accepts strictly
+more inputs than a ladder confined to $\Lambda$; the price is that the ghost
+search is a search, and its recorded ablation shows the factor count climbing as
+the ghost parameter shrinks. It also proves a dominance theorem: cofactors in
+ascending order succeed whenever any order does, which turns an apparent
+$k!$ choice into one canonical attempt.
+
+\paragraph{Terminate at a nonnegative polynomial, and fix the alphabet.}
+\src{r6} restricts cofactors to exactly the input rates with exactly the
+annihilator multiplicities, and stops as soon as the remaining function is an
+ordinary polynomial with nonnegative coefficients --- which is visibly
+nonnegative on $x\ge0$. Because the alphabet is fixed, it can go further than
+\src{r4} on the structural side: it proves an \emph{if and only if} feasibility
+criterion, a forced-multiplicity lemma, a monotone zero-count lemma, and a
+shortest-ladder compiler that emits a separately checkable minimality receipt.
+
+These two are not competing proofs of one theorem, and the relationship is worth
+stating exactly because it is easy to get backwards. \src{r6}'s own completeness
+lemma says any of its ladders extends to one whose terminal is the zero
+function. So on the common domain --- anchor $0$, cofactors drawn from the input
+spectrum --- the two accept the same functions, and \src{r6}'s early stopping is
+a \emph{certificate-length} optimisation rather than a strength increase. The
+strength increase is on \src{r4}'s side, and it comes from the ghosts, not from
+the terminal condition.
+
+\begin{remark}[Same argument, twice, for different purposes]
+The two efforts also both prove that adjacent cofactors may be exchanged, by
+the same algebra: $T_dT_ch=T_cT_dh+(c-d)\,T_ch$ evaluated at the anchor. One
+uses it to justify sorting the cofactors ascending; the other to drive a
+minimality argument. Neither cites the other. The identity is stated once in
+this document and used for both.
+\end{remark}
+
+\paragraph{Do not fix a terminal at all.} \src{r5} runs an unstructured
+breadth-first search over cofactors with a wider terminal cone and caps on depth
+and node count. It has no ordering theorem, no feasibility criterion and no
+minimality result, and it is the weakest of the three ladders --- a fact visible
+in its own corpus, where the ladder family is a small minority of the records.
+Its contribution is elsewhere, and is genuinely its own: see below.
+
+\subsection{What the ladder cannot reach}
+
+Two boundaries are worth naming, because both are sharp and both were found by
+the efforts themselves rather than by a reviewer.
+
+The first is the \emph{rate field}. Every rate in \eqref{eq:exppoly} must be
+rational. The clearest statement of the consequence is that $2^x$ has rate
+$\log 2$ and is therefore \emph{outside the fragment} --- not approximately
+inside it, outside it. A rational approximation to $\log 2$ does not give an
+exact source translation, and one of the efforts says so in exactly those
+terms. The same applies at the anchor: at a general rational $a$ the values
+$e^{\lambda a}$ need not be rational, so an initial-value check performed on
+coefficients alone would be checking the wrong thing.
+
+The second is the \emph{zero}. A ladder certifies $f\ge0$; it does not handle a
+target that touches zero in the interior, and neither does any interval
+enclosure, because an enclosure that straddles zero is inconclusive there no
+matter how tight it is. Increasing precision cannot fix this --- it is not a
+precision problem. The answer in the collection is exact vanishing information:
+a \emph{jet} certificate recording the order of vanishing and the sign of the
+first nonzero derivative, which settles the sign near the zero by an argument
+that never divides by a quantity that vanishes. \src{r3} supplies this lane and
+pairs it with a bounded automatic anchor/order selector.
+
+\subsection{Remainders that keep the order of vanishing}
+
+\src{r5}'s own contribution is a different object: anchored rational remainder
+certificates for elementary functions --- $\exp$, but also $\sin$, $\cos$,
+$\log(1+ax)$ and $\arctan$ --- which bound the tail of a truncated series while
+\emph{preserving the order at which the function vanishes}. That last property
+is what makes them composable with the jet lane instead of destroying the
+information it needs.
+
+The implementation detail that matters here is a Lean detail, and the effort
+states it as a design rule rather than discovering it later: the certificate
+never divides. A factorisation $f(x)=x^3g(x)$ is an identity that covers $x=0$
+directly, whereas rewriting $g(x)=f(x)/x^3$ would need a nonzero side condition
+that is easy to carry incorrectly into a total-division setting. The trap is
+avoided structurally rather than by remembering to discharge a guard.
+
+Alongside the remainders, the same effort supplies convergence and divergence
+certificates for rational \emph{series}: an upper barrier with a Cauchy-modulus
+witness on one side, and a harmonic-comparison divergence proof with a
+least-index witness on the other.
+
+\subsection{What the checkers actually verify, and one thing none of them says}
+
+Every certificate in this section is a list of rationals, and every checker
+re-derives the identity it claims. A ladder receipt is checked by recomputing
+each $T_cf$ from the \emph{supplied} $f$ and comparing coefficient vectors, and
+by evaluating the initial-value condition at the anchor exactly; a minimality
+receipt is checked separately from the ladder it annotates, so a false
+minimality claim cannot make an unsound ladder look sound. An enclosure is
+checked by expanding it, not by sampling it. Where the efforts run
+floating-point or high-precision numerical comparisons at all, they mark the
+output files as diagnostics and keep them off the acceptance path --- one such
+file is literally named to say so.
+
+There is, however, a gap common to all four, and it is the same gap
+Section~\ref{sec:closure}'s summation worker hit from the other side. Lean's
+division is total: $x/0=0$. None of these four efforts names that convention.
+They avoid its consequences --- by attaching positivity side conditions to
+denominators, by factoring instead of dividing, by demanding \code{HasDerivAt}
+witnesses rather than relying on a totalised \code{deriv} --- and the avoidance
+is correct in each case. But a reader assembling these workers into a Lean
+implementation should know that the discipline is being followed rather than
+stated, and that Section~\ref{sec:closure}'s remark on total division applies
+here with more force, not less.
