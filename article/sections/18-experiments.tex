@@ -975,6 +975,51 @@ They are opposite conclusions from the same observation --- that \code{assert}
 disappears under optimisation --- and the second is the safer discipline: a
 check that vanishes under a flag was never a check.
 \end{remark}
+
+\subsubsection*{Three lanes merged into the prototype}
+
+Three of this round's four antichain lanes are folded into the merged package
+as \code{forge/wsts/}: \src{s1}'s frontiers with compressed witness runs,
+\src{s3}'s finite-control counter systems with parameterised initial families,
+and \src{s4}'s matrix updates and lossy channels. All three are standard
+library only with their searches included, so they preserve the property that
+makes the package's replay evidence worth anything: the whole of it runs under
+\code{python -S}.
+
+The merge is where the duplication became visible as code rather than as prose.
+The four antichain proposals wrote one well-quasi-order, one antichain, one
+predecessor formula and one saturation loop three or four times between them.
+The merged package states each once, and a single backward loop takes the
+predecessor rule as an argument, so it does not know which of the four model
+languages it is driving. What still appears four times is what genuinely
+differs: the model languages themselves.
+
+Two distinctions were preserved rather than flattened. \src{s1}'s producer
+composes run summaries in $(	ext{need},	ext{give})$ coordinates and its
+checker recomputes them in $(	ext{need},	ext{signed delta})$ coordinates;
+the two recurrences look different and must agree through
+$	ext{give}=	ext{need}+	ext{delta}$, which is the strongest
+producer/checker separation this round contains, and it survives the merge with
+a test asserting exactly that identity. And a matrix-update transition has no
+unique least predecessor, so the merged interface returns a list where a vector
+addition would return one element --- collapsing that would have made the
+backward search unsound rather than merely incomplete.
+
+The package's own numbers, which are its own and are not a fraction of anything:
+776 tests pass, 35 stored certificates recheck, and 53 mutations are rejected.
+Before this merge the suite reported 748, and \src{s6} reports 748
+specialization evaluations; the two were never related, and the collision
+closing by accident is a reminder that a repeated number in this collection is
+not evidence of a shared quantity.
+
+Five lanes are deliberately not merged: \src{s2}'s probabilistic fixed points,
+which share the word ``coverability'' with \src{s1} and nothing else;
+\src{s3}'s equality-register transducers, which are finite by the Bell numbers
+rather than by any well-quasi-order; and \src{s5} and \src{s6}'s real cell
+covers, which need a computer-algebra producer. The third round remains
+unmerged in full, for the reasons given in \Sef{sec:noncommutative}, and in
+its analytic and quantitative sections.
+
 \subsection{Lean status}
 
 \subsubsection*{What the thirty-six runs recorded}
