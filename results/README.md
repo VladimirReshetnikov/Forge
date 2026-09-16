@@ -1,12 +1,12 @@
 # Results
 
-Recorded evidence from the eighteen prototype runs — the design round
-`p1`..`p9` and the extension round `e1`..`e9` — plus the measurements this merge
-was able to add.
+Recorded evidence from the twenty-seven prototype runs — the design round
+`p1`..`p9`, the extension round `e1`..`e9`, and the third round `r1`..`r9` —
+plus the measurements this merge was able to add.
 
 ## Where the evidence lives
 
-**The eighteen original runs stay where they were recorded**, under
+**The twenty-seven original runs stay where they were recorded**, under
 `proposals/<slug>/results/`. They are not copied here and not edited. Each run
 is a self-contained record of one execution — its own seed, its own generators,
 its own case set, its own byte-identical duplicate files — and rewriting any of
@@ -24,12 +24,16 @@ results/
   lean-closure-elaboration.json NEW: 3 merged closure files elaborated
   lean-extensions-elaboration.json  NEW: 10 extension files elaborated
   extension-suites-rerun.json   NEW: all nine extension suites re-run here
+  round-three-suites-rerun.json NEW: all nine third-round suites and eight
+                                replay corpora re-run here
+  lean-round-three-elaboration.json  NEW: 2 elaborated, 1 failed, with the
+                                diagnosis and a tested repair
 ```
 
 ## The non-pooling rule
 
-The eighteen runs are **not comparable and must never be summed** — not within a
-round, and not across the two rounds.
+The twenty-seven runs are **not comparable and must never be summed** — not
+within a round, and not across the three rounds.
 
 This needs saying loudly because they look comparable. All nine design-round
 runs ran on 2026-09-14, on Python 3.13.5 / NumPy 2.3.5 / SciPy 1.17.0 / SymPy 1.14.0 under
@@ -51,6 +55,13 @@ The extension round repeats the coincidence almost exactly: all nine ran on
 Python 3.13.5 under Linux 6.18.44, and five of them (`e1`, `e2`, `e3`, `e4`,
 `e6`) recorded the seed `20260915` — one day later, one digit different. `e5`
 used `2026091507`, `e9` used `681437`. It is the same trap for the same reason.
+
+The third round repeats it once more, and now across rounds: four of its nine
+(`r3`, `r4`, `r7`, `r9`) recorded `20260915`, which is the extension round's
+shared value. The same integer therefore labels runs in two different rounds
+over entirely unrelated generators — polyhedral cases, exponential-polynomial
+ladders, Markov decision processes and pushdown systems. It has stopped being a
+coincidence worth explaining and become a standing hazard.
 
 Across the rounds there is a second reason not to add anything up. The extension
 proposals were written *against the merged design*, and several of them

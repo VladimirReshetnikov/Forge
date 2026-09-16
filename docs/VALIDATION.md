@@ -4,7 +4,7 @@ What was checked, by whom, and what the check is worth. Merged from the
 proposals that wrote narrative validation reports and the ones that recorded
 machine-readable validation files.
 
-## Checks performed by the eighteen original runs
+## Checks performed by the twenty-seven original runs
 
 ### Test suites
 
@@ -34,10 +34,29 @@ Extension round:
 | e8 | unittest | 21 | test methods, 19 of them mutation cases |
 | e9 | unittest | 41 | tests |
 
-These are eighteen separate suites over eighteen separate codebases. They cannot
-be summed, and three of the design-round nine ship no standalone test suite at
-all — their assertions live inside the experiment driver, so `pytest` would pass
-vacuously on those modules.
+Third round:
+
+| Run | Framework | Count | Unit |
+| --- | --- | ---: | --- |
+| r1 | unittest | 18 | test methods |
+| r2 | unittest | 57 | test methods, one holding 24 subtests |
+| r3 | unittest | 12 | test methods |
+| r4 | unittest | 18 | test methods |
+| r5 | unittest | 25 | test methods |
+| r6 | unittest | 22 | test methods |
+| r7 | unittest | 24 | test methods, run under both `-S` and `-O -S` |
+| r8 | unittest | 14 | regression methods |
+| r9 | unittest | 36 | test methods |
+
+These are twenty-seven separate suites over twenty-seven separate codebases.
+They cannot be summed, and three of the design-round nine ship no standalone
+test suite at all — their assertions live inside the experiment driver, so
+`pytest` would pass vacuously on those modules.
+
+**Eighteen of the twenty-seven were re-run here**, in a different environment,
+and every recorded count was reproduced. Eight of the third round's nine also
+ship a replay entry point, and all eight return zero. See
+[`../results/round-three-suites-rerun.json`](../results/round-three-suites-rerun.json).
 
 Unlike the design round, **every extension suite was re-run here**, in a
 different environment, and every recorded count was reproduced. See
@@ -186,7 +205,9 @@ Three more from the extension round belong in the same list:
 | Merged article builds | pdfLaTeX, no errors, no undefined references or citations |
 | Core Lean elaboration, merged tree | 6 of 21 files, Lean v4.34.0, no errors |
 | Core Lean elaboration, extension round | 10 of 20 source files, no errors |
-| Theorems printing no axiom dependencies | 10 of the 16 elaborated files |
+| Core Lean elaboration, third round | 2 of 3 core-only files; **1 fails to parse** |
+| Theorems printing no axiom dependencies | 11 of the 18 elaborated files |
+| Third-round suites re-run | 9 of 9 pass; 8 of 8 replay corpora return zero |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine design-round runs; it is a timing field |
@@ -238,8 +259,15 @@ In rough order of value per unit of work:
 5. The controlled Lean evaluation described in Section 10 of the article.
 6. An external audit.
 
-One target is smaller than all of these and should come before them: prove a
-single source theorem end to end through the cheapest checker in the
+Before any of those, there is now a five-minute item that was not available
+until this round: **compile the Lean that already exists.** Thirty-four
+delivered files import Mathlib and have never been checked by anything. The one
+time a compiler was pointed at previously-unchecked delivered Lean, it found a
+file that does not parse. That is not a criticism of its author — it is a
+measurement of what an uncompiled file is worth as evidence.
+
+One further target is smaller than the rest and should come before them: prove
+a single source theorem end to end through the cheapest checker in the
 repository. The finite-algebra cover verifies a bare list of state identifiers
 by membership, distinctness, constructor closure and inclusion. Getting one Lean
 theorem out of that lane — with a recorded axiom inventory, and re-run without

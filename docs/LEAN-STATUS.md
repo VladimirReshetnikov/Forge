@@ -1,21 +1,28 @@
 # Lean status
 
-One canonical record. The eighteen proposals stated this eighteen different ways
-under a dozen filenames in several formats; those originals stay frozen under
-`proposals/<slug>/results/` and `proposals/<slug>/lean/`.
+One canonical record. The twenty-seven proposals stated this twenty-seven
+different ways under some twenty filenames in several formats; those originals
+stay frozen under `proposals/<slug>/results/` and `proposals/<slug>/lean/`.
 
 ## The short version
 
-**No proposal compiled any Lean.** All eighteen recorded `NOT_RUN` for the same
-reason: no `lean` or `lake` executable in the authoring environment.
+**No proposal compiled any Lean.** All twenty-seven recorded `NOT_RUN` for the
+same reason: no `lean` or `lake` executable in the authoring environment.
 Consequently none performed a kernel check, an axiom audit, or any comparison
-against a Lean tactic.
+against a Lean tactic. One of them — `r9` — responded by shipping no Lean at
+all, saying it "deliberately contains no placeholder theorem files presented as
+implemented proofs".
 
-**This merge compiled sixteen files.** The merge environment has `elan`, which
-installed the pinned `leanprover/lean4:v4.34.0`. Six of the twenty-one files in
-the merged tree and ten of the twenty extension-round source files import
-nothing beyond Lean core, and all sixteen elaborate with no errors. Ten of the
-sixteen print `does not depend on any axioms` for every theorem they expose.
+**This merge compiled eighteen files, and one of them failed.** The merge
+environment has `elan`, which installed the pinned
+`leanprover/lean4:v4.34.0`. Six of the twenty-one files in the merged tree, ten
+of the twenty extension-round source files, and two of the third round's three
+core-only files elaborate with no errors; eleven of the eighteen print `does not
+depend on any axioms` for every theorem they expose.
+
+The third round's remaining core-only file does **not** parse, and it is the
+only delivered Lean in twenty-seven proposals that a compiler has contradicted
+— because it is nearly the only delivered Lean a compiler has seen.
 
 ## What each run recorded
 
@@ -83,6 +90,32 @@ header.
 | `lean/Forge/Closure/Covers.lean` | e8 `CoreSoundness.lean`, tree half | elaborated; 2 theorems, none with axiom dependencies |
 | `lean/Forge/Closure/Indexing.lean` | e7 `Specimens.lean`, e8 `IndexingSketch.lean` | elaborated; 2 theorems, none with axiom dependencies |
 
+### The third round
+
+Recorded in
+[`../results/lean-round-three-elaboration.json`](../results/lean-round-three-elaboration.json).
+Of sixteen Lean sources, thirteen import Mathlib and one proposal ships none,
+leaving three.
+
+| File | Result |
+| --- | --- |
+| `r3/lean/CoreComposition.lean` | elaborated |
+| `r7/lean/ForgeQ/Monotone.lean` | elaborated; `iterate_preserves_bound` has no axiom dependencies |
+| `r8/lean/RankTelescoping.lean` | **failed**; ten errors |
+
+**The failure, in full.** The file defines `prefix`, which is a reserved
+command keyword in Lean 4. All ten errors cascade from that single identifier,
+ending in `Unknown constant 'rank_telescoping'` because the theorem above it
+never parsed. The mathematics is not wrong: renaming the definition on a
+scratch copy makes both theorems elaborate, depending on `propext` and
+`Quot.sound` by way of `omega` and `simp`.
+
+The repair was tested outside the repository and is **not** applied to the
+archived source. The proposals are frozen as delivered, and the fix belongs in
+the merged tree if and when the lemma is adopted. Recording the failure, the
+diagnosis and the tested repair together is what keeps a later reader from
+mistaking "did not compile" for "is unsound" — or for "compiles".
+
 ### The extension proposals
 
 Recorded in
@@ -120,8 +153,13 @@ empty.
 - It is not a transitive axiom audit. Where no `#print axioms` line exists, the
   file's dependencies are simply unknown; where one does, it covers that
   declaration and not the file.
-- It says nothing about the twenty-one Mathlib-dependent files across both
-  rounds.
+- It says nothing about the thirty-four Mathlib-dependent files across the
+  three rounds. Nothing has ever checked them.
+- **An uncompiled file is worth what its author's care is worth.** Twenty-six
+  proposals ship `.lean` files carrying `#print axioms` commands that were
+  never executed. Two of the three that were finally compiled were fine; one
+  was not. Before this round there was no way to tell those cases apart, and
+  for the thirty-four Mathlib-dependent files there still is not.
 - It does not establish that any certificate checker is correct. The contracts
   are *types*; a type is not a proof that an implementation satisfies it.
 - It is not a comparison against any Lean tactic. A hand-written example that
@@ -138,7 +176,8 @@ empty.
 
 ## The remaining Mathlib-dependent files
 
-Thirteen in the merged tree and eight in the extension proposals. They need a
+Thirteen in the merged tree, eight in the extension proposals, and thirteen in
+the third round. They need a
 project with Mathlib built at the pinned revision
 `1cf325a0cf67aca2b04d76b5380ff6a9e410aefa`.
 

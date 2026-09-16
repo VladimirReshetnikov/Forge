@@ -1,16 +1,16 @@
 # Implementation status
 
-Merged from the eighteen proposals' status files, which appeared under a dozen
-different names in several formats. The three-bucket model below is taken from
+Merged from the twenty-seven proposals' status files, which appeared under
+some twenty different names in several formats. The three-bucket model below is taken from
 the clearest of them.
 
 Machine-readable twin: [`status.json`](status.json).
 
 ## Executed
 
-Implemented in Python and actually run, in at least one of the eighteen runs.
-Section 10 of the article says which run, with what result, and under what
-caveat.
+Implemented in Python and actually run, in at least one of the twenty-seven
+runs. Section 13 of the article says which run, with what result, and under
+what caveat.
 
 - Exact sparse rational polynomial arithmetic, with canonical-form enforcement
   and float rejection
@@ -61,6 +61,40 @@ From the extension round:
 - Re-run of all nine extension suites in a second environment, reproducing
   every recorded count
 
+From the third round:
+
+- Many-sorted multilinear reachable-span closure over derivation trees, with a
+  context-free trace compiler and compressed derivation witnesses
+- Sibling-conditioned one-hole-context closure and exact observable quotients
+  verified by finite commuting diagrams
+- Two-sided free-algebra ideal certificates, by bounded context elimination and
+  by bounded Grobner-Shirshov completion (two lanes, one soundness theorem)
+- Degree-complete homogeneous reasoning with truncated-quotient matrix
+  countermodels
+- Unique word Gram matrices for homogeneous degree 2d with exact rational
+  LDL^T, adjoint sandwiches, and involution ray generators
+- Mixed-strictness polyhedral projection over ordered fields, with min/max
+  witness DAGs and complete pair-coverage receipts
+- Integrating-factor ladders for rational exponential polynomials, in three
+  variants: auxiliary rates below the spectrum, a fixed alphabet with a
+  minimality receipt, and an unstructured search
+- Anchored rational remainder certificates preserving the order of vanishing,
+  for exp, sin, cos, log(1+ax) and arctan
+- Rational-series upper barriers with Cauchy-modulus witnesses, and harmonic
+  divergence certificates with least-index witnesses
+- Vanishing-jet certificates for non-strict zeros, with a bounded automatic
+  anchor/order selector
+- Exact maximum MDP reachability, uniform expected hitting-time bounds, and
+  polynomial drift potentials on infinite numeric state spaces
+- Parity games with positional strategies and threshold-local ranks; Buchi and
+  co-Buchi dual ranks with a visit budget
+- Exact optimal transport with Farkas duals and Hall obstructions; alternating
+  probabilistic simulation by coupling
+- Unbounded-stack pushdown summaries with proof-sharing DAGs and closed
+  exclusion relations
+- Re-run of all nine third-round suites and eight replay corpora in a second
+  environment, reproducing every recorded count
+
 ## Generated but not compiled
 
 Produced as Lean source, never checked by a compiler — with one exception.
@@ -72,13 +106,19 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exceptions.** Sixteen files import nothing beyond Lean core and now
+**The exceptions.** Eighteen files import nothing beyond Lean core and now
 elaborate against `leanprover/lean4:v4.34.0`: six in the merged tree (the
 runtime contract, the certificate-soundness contract, the Mathlib-free
-structural proofs, and three new `Forge/Closure` files holding the induction
-principles the closure workers lower to) and ten across the extension
-proposals. Ten of the sixteen print `does not depend on any axioms` for every
-theorem they expose. See [`LEAN-STATUS.md`](LEAN-STATUS.md).
+structural proofs, and three `Forge/Closure` files holding the induction
+principles the closure workers lower to), ten across the extension proposals,
+and two of the third round's three. Eleven of the eighteen print `does not
+depend on any axioms` for every theorem they expose.
+
+**And one file that does not compile.** The third round's third core-only file
+fails to parse: it defines `prefix`, a reserved keyword. This is the only
+delivered Lean in twenty-seven proposals that a compiler has contradicted,
+because it is nearly the only delivered Lean a compiler has seen. See
+[`LEAN-STATUS.md`](LEAN-STATUS.md).
 
 Elaboration does not change what a file says. `e8/lean/IndexingSketch.lean`
 type-checks and still proves an equation between two ordinary-list definitions;
@@ -158,9 +198,19 @@ partly is.
 - The Python checkers are not formally verified, and several share
   representation code with the searches they audit.
 - Neither the checkers nor the decoders are hardened against hostile input.
-- The eighteen runs' counts are not comparable and were never pooled — not
-  within a round, and not across the two rounds, which attack overlapping
+- The twenty-seven runs' counts are not comparable and were never pooled — not
+  within a round, and not across the three rounds, which attack overlapping
   problems and would double-count.
+- Three specific pooling traps in the third round's own recorded files are
+  documented rather than silently avoided: two summaries with identical
+  headline totals from different runs, one corpus counted in two report files,
+  and three different units that look like one. See section 13 of the article.
+- A bounded oracle that reaches its limit returns no verdict. Thirty-nine such
+  cases are counted among one proposal's records; "250/250 oracle agreement"
+  would be a fabrication and the correct decomposition is 70 + 141 + 39.
+- A represented length is not an executed one. Two proposals report runs of
+  2^60 and 2^31-1 steps computed from DAGs of 61 and 31 nodes; concrete
+  expansion was checked only to small depth, and both say so.
 - The extension suites' re-run reproduces recorded counts on different
   interpreter and library versions. It is not a bit-identical replay, no
   timings were compared, and it establishes nothing about checker correctness.
