@@ -429,6 +429,16 @@ theorem cubic_accumulator_bundle_mutation_0_rejected :
     ({ scale := 4, invariant := [([0, 1], 4), ([2, 0], (-1)), ([3, 0], (-2)), ([4, 0], (-1)), ([0, 0], 4)] } : InvCert).check [0, 0]
       [[([0, 0], 1), ([1, 0], 1)], [([0, 0], 1), ([0, 1], 1), ([1, 0], 3), ([2, 0], 3), ([3, 0], 1)]] = false := by decide
 
+/-- the zero polynomial: vanishes everywhere and is preserved by every map. Breaks: `nonzero`. Prototype: cannot express. -/
+theorem cubic_accumulator_zero_invariant_rejected :
+    ({ scale := 4, invariant := [] } : InvCert).check [0, 0]
+      [[([0, 0], 1), ([1, 0], 1)], [([0, 0], 1), ([0, 1], 1), ([1, 0], 3), ([2, 0], 3), ([3, 0], 1)]] = false := by decide
+
+/-- scale 0: the invariant is unchanged, only the positivity conjunct fails. Breaks: `scale`. Prototype: cannot express. -/
+theorem cubic_accumulator_zero_scale_rejected :
+    ({ scale := 0, invariant := [([0, 1], 4), ([2, 0], (-1)), ([3, 0], (-2)), ([4, 0], (-1))] } : InvCert).check [0, 0]
+      [[([0, 0], 1), ([1, 0], 1)], [([0, 0], 1), ([0, 1], 1), ([1, 0], 3), ([2, 0], 3), ([3, 0], 1)]] = false := by decide
+
 /-- transition s' = s + (n+1)^3 + 1: not conserved. Breaks: `step`. Prototype: rejects. -/
 theorem cubic_accumulator_perturbed_transition_rejected :
     ({ scale := 4, invariant := [([0, 1], 4), ([2, 0], (-1)), ([3, 0], (-2)), ([4, 0], (-1))] } : InvCert).check [0, 0]
@@ -442,11 +452,6 @@ theorem cubic_accumulator_wrong_initial_rejected :
 /-- initial point of dimension 1 for a 2-state system. Breaks: `arity_initial`. Prototype: rejects. -/
 theorem cubic_accumulator_short_initial_rejected :
     ({ scale := 4, invariant := [([0, 1], 4), ([2, 0], (-1)), ([3, 0], (-2)), ([4, 0], (-1))] } : InvCert).check [0]
-      [[([0, 0], 1), ([1, 0], 1)], [([0, 0], 1), ([0, 1], 1), ([1, 0], 3), ([2, 0], 3), ([3, 0], 1)]] = false := by decide
-
-/-- scale 0: the invariant is unchanged, only the positivity conjunct fails. Breaks: `scale`. Prototype: cannot express. -/
-theorem cubic_accumulator_zero_scale_rejected :
-    ({ scale := 0, invariant := [([0, 1], 4), ([2, 0], (-1)), ([3, 0], (-2)), ([4, 0], (-1))] } : InvCert).check [0, 0]
       [[([0, 0], 1), ([1, 0], 1)], [([0, 0], 1), ([0, 1], 1), ([1, 0], 3), ([2, 0], 3), ([3, 0], 1)]] = false := by decide
 
 end Forge.Checker

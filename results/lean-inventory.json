@@ -5,8 +5,8 @@
   "sorry_rule": "Lean comments are stripped, with a depth counter because block comments nest, before a word-boundary search. A token appearing only in prose is recorded separately and is not a defect.",
   "elaboration_run": false,
   "counts": {
-    "files_total": 90,
-    "mathlib_free": 29,
+    "files_total": 100,
+    "mathlib_free": 39,
     "mathlib_dependent": 58,
     "lakefiles": 3,
     "unresolved": 0,
@@ -14,6 +14,20 @@
     "sorry_token_in_comments_only": 26
   },
   "files": [
+    {
+      "file": "lean/Forge/Checker/Affine.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 322
+    },
+    {
+      "file": "lean/Forge/Checker/AffineCorpus.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 171
+    },
     {
       "file": "lean/Forge/Checker/Bench.lean",
       "depends_on": "core",
@@ -36,11 +50,67 @@
       "lines": 166
     },
     {
+      "file": "lean/Forge/Checker/Farkas.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 194
+    },
+    {
+      "file": "lean/Forge/Checker/Oracle.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 422
+    },
+    {
+      "file": "lean/Forge/Checker/OracleTest.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 523
+    },
+    {
       "file": "lean/Forge/Checker/Poly.lean",
       "depends_on": "core",
       "real_sorry": false,
       "sorry_token_in_comments_only": false,
-      "lines": 212
+      "lines": 247
+    },
+    {
+      "file": "lean/Forge/Checker/Recurrence.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 279
+    },
+    {
+      "file": "lean/Forge/Checker/RecurrenceCorpus.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 458
+    },
+    {
+      "file": "lean/Forge/Checker/Reify.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 147
+    },
+    {
+      "file": "lean/Forge/Checker/Tactic.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 417
+    },
+    {
+      "file": "lean/Forge/Checker/TacticTest.lean",
+      "depends_on": "core",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 381
     },
     {
       "file": "lean/Forge/Closure/Covers.lean",
@@ -187,7 +257,7 @@
       "depends_on": "core",
       "real_sorry": false,
       "sorry_token_in_comments_only": false,
-      "lines": 32
+      "lines": 41
     },
     {
       "file": "proposals/e1-relational-closure/lean/Core.lean",

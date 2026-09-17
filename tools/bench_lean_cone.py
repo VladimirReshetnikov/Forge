@@ -75,6 +75,7 @@ from export_lean_cone import (  # noqa: E402
     poly_mul,
     poly_pow,
 )
+from lean_emit_guard import validate_ids, validate_label, write_checked  # noqa: E402
 
 LEAN_DIR = ROOT / "lean"
 LIB = LEAN_DIR / ".lake" / "build" / "lib"
@@ -789,7 +790,8 @@ def main() -> int:
     body += "\n" + "\n".join(emit_negative(c) for c in negatives)
     bench_text = BENCH_HEADER + body + BENCH_FOOTER
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(bench_text, encoding="utf-8")
+    validate_ids([convs[sp["id"]]["id"] for sp in SPECS] + [c["id"] for c in negatives])
+    write_checked(args.out, bench_text)
     print("wrote %s (%d positive, %d negative)"
           % (args.out, len(SPECS), len(negatives)))
 

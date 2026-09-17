@@ -165,6 +165,18 @@ theorem neg_width_only_width :
     comb 2 ex1_cert.mult (neg_width.map (·.coeffs)) = [0, 0]
       ∧ dot ex1_cert.mult (neg_width.map (·.bound)) = -1 := by decide
 
+/-- ALL-ZERO MULTIPLIERS. On a system that IS infeasible (`0 <= -1` and `x <= 0`),
+`[0, 0]` combines to `0 <= 0`: no contradiction, so no certificate. The genuine
+certificate `[1, 0]` is accepted. Both were observed in review; pinned here. -/
+def neg_zero : List Constraint := [⟨[0], -1⟩, ⟨[1], 0⟩]
+theorem neg_zero_rejected : (FarkasCert.mk [0, 0]).check 1 neg_zero = false := by decide
+theorem neg_zero_genuine_accepted : (FarkasCert.mk [1, 0]).check 1 neg_zero = true := by decide
+
+/-- EMPTY SYSTEM. With no constraints every point is feasible, so nothing can
+certify infeasibility -- at any arity. -/
+theorem neg_empty_rejected_0 : (FarkasCert.mk []).check 0 [] = false := by decide
+theorem neg_empty_rejected_2 : (FarkasCert.mk []).check 2 [] = false := by decide
+
 end Tests
 
 #print axioms FarkasCert.sound

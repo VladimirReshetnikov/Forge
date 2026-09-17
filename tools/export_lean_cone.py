@@ -38,6 +38,13 @@ import json
 from fractions import Fraction as Q
 from math import lcm
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lean_emit_guard import validate_ids, validate_label, write_checked  # noqa: E402
+# Ids and messages may be non-ASCII; the Windows console is not UTF-8.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -426,14 +433,17 @@ def main() -> int:
     records = json.loads(args.bundle.read_text(encoding="utf-8"))
     wanted = [r for r in records
               if r["family"] in ("Quadratic SOS", "Finite cone LP")]
+    # Ids and families are interpolated into generated Lean: refuse, never escape.
+    validate_ids([r["id"] for r in wanted])
+    for r in wanted:
+        validate_label(r["family"], {"Quadratic SOS", "Finite cone LP"}, "family")
     if not wanted:
         raise SystemExit("no cone certificates in the bundle")
 
     converted = [convert(r) for r in wanted]
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(HEADER + "\n".join(emit(c) for c in converted) + FOOTER,
-                        encoding="utf-8")
+    write_checked(args.out, HEADER + "\n".join(emit(c) for c in converted) + FOOTER)
 
     summary = []
     for c in converted:

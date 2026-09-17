@@ -51,6 +51,12 @@ import sys
 from fractions import Fraction as Q
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lean_emit_guard import validate_ids, validate_label, write_checked  # noqa: E402
+# Ids and messages may be non-ASCII; the Windows console is not UTF-8.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "prototype"))
 
@@ -347,6 +353,8 @@ def main() -> int:
 
     records = json.loads(args.bundle.read_text(encoding="utf-8"))
     wanted = [r for r in records if r["family"] == FAMILY]
+    # Ids are interpolated into generated Lean: refuse, never escape.
+    validate_ids([r["id"] for r in wanted])
     if not wanted:
         raise SystemExit("no integral affine witnesses in the bundle")
 
@@ -395,7 +403,7 @@ def main() -> int:
     names.append("integrality_no_certificate")
     text += "".join("#print axioms %s\n" % x for x in names)
     text += "\nend Forge.Checker.AffineCorpus\n"
-    args.out.write_text(text, encoding="utf-8")
+    write_checked(args.out, text)
 
     args.json.write_text(json.dumps({
         "what": ("Every integral affine witness in the prototype bundle, emitted as Int "

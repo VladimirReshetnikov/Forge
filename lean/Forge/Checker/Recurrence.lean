@@ -210,17 +210,36 @@ inductive Reachable (T : List Poly) (s0 : Env) : Env → Prop
 /-- An invariant certificate. The transition system (initial point and map)
 is NOT part of it: the checker takes those as the problem. -/
 structure InvCert where
-  /-- The positive integer the producer multiplied the invariant by. -/
+  /-- The positive integer the producer multiplied the rational invariant by.
+
+  EXPORTER METADATA, NOT A LEAN GUARANTEE. Nothing in `check` ties `scale` to
+  `invariant`: the relation `invariant = scale * I` is established by the
+  exporter's re-check in Python, not by Lean. `0 < scale` only records that the
+  multiplier the exporter claims to have used is positive, which is what a
+  reader needs to pass from `invariant = 0` back to `I = 0`. Unlike `RecCert`,
+  where a zero scale would make the certificate vacuous, here a zero scale would
+  not; the non-vacuity guard for this family is the separate `invariant` conjunct
+  below. (Adversarial review found the earlier docstrings implied otherwise.) -/
   scale : Int
   /-- `scale` times the rational invariant. -/
   invariant : Poly
   deriving Repr
 
-/-- The checker. The first four conjuncts mirror the Python checker's arity
-requirements (it raises, and so rejects, on a dimension mismatch); soundness
-needs only the last two. -/
+/-- The checker. Conjuncts, in order:
+
+  * `0 < scale` -- exporter metadata, see `InvCert.scale`.
+  * the invariant is not identically zero. Without this, the zero polynomial is
+    a "certified invariant" of every system; true, and worthless as evidence.
+    The prototype's Python checker accepts it, so Lean is stricter here, which
+    can only cost completeness. Added after adversarial review.
+  * three arity conjuncts mirroring the Python checker, which raises (and so
+    rejects) on a dimension mismatch.
+  * the invariant vanishes at the initial point, and is preserved by `T`.
+
+Soundness needs only the last two. -/
 def InvCert.check (c : InvCert) (initial : List Int) (T : List Poly) : Bool :=
   (0 < c.scale) &&
+  !(isZero c.invariant) &&
   (initial.length == T.length) &&
   c.invariant.all (fun t => t.1.length ≤ T.length) &&
   T.all (fun q => q.all (fun t => t.1.length ≤ T.length)) &&
@@ -242,12 +261,14 @@ theorem InvCert.sound (c : InvCert) (initial : List Int) (T : List Poly)
     have := eval_eq_of_sub_isZero s _ _ hid
     rw [this, ih]
 
-/-- The same, for the rational invariant: since `scale > 0`, scale * I = 0
-means I = 0. Stated for completeness of the scale argument. -/
+/-- `scale` is positive whenever the check passes. This is a fact about the
+metadata only: it lets a reader who ALSO trusts the exporter's claim that
+`invariant = scale * I` conclude `I = 0` on the orbit. Lean itself proves nothing
+connecting `scale` to `invariant`. -/
 theorem InvCert.scale_pos (c : InvCert) (initial : List Int) (T : List Poly)
     (hcheck : c.check initial T = true) : 0 < c.scale := by
   simp only [InvCert.check, Bool.and_eq_true, decide_eq_true_eq] at hcheck
-  exact hcheck.1.1.1.1.1
+  exact hcheck.1.1.1.1.1.1
 
 theorem RecCert.scale_pos (c : RecCert) (step initial : Poly)
     (hcheck : c.check step initial = true) : 0 < c.scale := by

@@ -114,6 +114,18 @@
       "prototype": "rejects"
     },
     {
+      "label": "cubic_accumulator_zero_invariant",
+      "family": "Conserved invariant",
+      "breaks": "nonzero",
+      "prototype": "not expressible"
+    },
+    {
+      "label": "cubic_accumulator_zero_scale",
+      "family": "Conserved invariant",
+      "breaks": "scale",
+      "prototype": "not expressible"
+    },
+    {
       "label": "cubic_accumulator_perturbed_transition",
       "family": "Conserved invariant",
       "breaks": "step",
@@ -130,12 +142,6 @@
       "family": "Conserved invariant",
       "breaks": "arity_initial",
       "prototype": "rejects"
-    },
-    {
-      "label": "cubic_accumulator_zero_scale",
-      "family": "Conserved invariant",
-      "breaks": "scale",
-      "prototype": "not expressible"
     }
   ]
 }

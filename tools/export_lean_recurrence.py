@@ -33,11 +33,21 @@ Conserved invariant -- check_invariant(InvariantCertificate(I, s0, T)).
   refuses otherwise (then the orbit would leave Z^d and an integer-state
   statement would not be the same claim). In the current bundle they are.
 
-  Note: the prototype's record puts the transition system INSIDE the
-  certificate ("input": {}). The Lean checker takes the system as the problem and
-  the certificate as (scale, invariant) only, and the user-facing corollary is
-  about an independently written loop, so the certificate cannot choose the
-  claim.
+  THE CERTIFICATE CHOOSES THE PROBLEM, for this family, and nothing here
+  prevents it. The prototype's record puts the transition system INSIDE the
+  certificate ("input": {}), and this exporter reads the initial point and the
+  transition map -- and hence the `_run` loop the user-facing corollary is about
+  -- from that same certificate data. The Lean `InvCert` structure does separate
+  (scale, invariant) from (initial, T), but that separation is structural only:
+  a record can name any system its invariant happens to fit, and the emitted
+  theorem will be true and about that system.
+
+  An earlier version of this docstring claimed the opposite ("the certificate
+  cannot choose the claim"). Adversarial review showed it false by exporting a
+  copy of cubic_accumulator with a different initial point that the invariant
+  also satisfies; it compiled. The theorem was true. The claim about
+  independence was not. The fix belongs in the prototype's data model: the
+  problem must live in "input", separate from the certificate.
 """
 from __future__ import annotations
 
@@ -48,6 +58,12 @@ import sys
 from fractions import Fraction as Q
 from math import lcm
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lean_emit_guard import validate_ids, validate_label, write_checked  # noqa: E402
+# Ids and messages may be non-ASCII; the Windows console is not UTF-8.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "prototype"))
@@ -179,6 +195,7 @@ def mirror_inv(scale, invariant, initial, transition) -> dict:
     ts = [[(m, Q(c)) for m, c in t] for t in transition]
     return {
         "scale": scale > 0,
+        "nonzero": bool(norm(invariant)),
         "arity_initial": len(initial) == d,
         "arity_invariant": all(len(m) <= d for m, _ in invariant),
         "arity_transition": all(len(m) <= d for t in transition for m, _ in t),
@@ -459,6 +476,17 @@ def negatives_inv(record: dict) -> list:
     for j, bad in enumerate(decode.mutations(record)):
         out.append(("%s_bundle_mutation_%d" % (record["id"], j), bad, convert_inv(bad), "base",
                     "the bundle's own mutation: constant 1 appended to the invariant (times the scale)"))
+    cv = dict(convert_inv(record), invariant=[])
+    out.append(("%s_zero_invariant" % record["id"], None, cv, "nonzero",
+                "the zero polynomial: vanishes everywhere and is preserved by every map"))
+    cv = dict(convert_inv(record), scale=0)
+    out.append(("%s_zero_scale" % record["id"], None, cv, "scale",
+                "scale 0: the invariant is unchanged, only the positivity conjunct fails"))
+    if record["id"] != "cubic_accumulator":
+        # The perturbations below are written for cubic_accumulator's shape (a
+        # 2-state system whose second transition has a constant term). Applying
+        # them to other records crashed the exporter; they are now scoped.
+        return out
     r = copy.deepcopy(record)
     r["certificate"]["transition"][1]["terms"][0][1] = "2"   # s' = s + (n+1)^3 + 1
     assert r["certificate"]["transition"][1]["terms"][0][0] == [0, 0]
@@ -472,14 +500,17 @@ def negatives_inv(record: dict) -> list:
     r["certificate"]["initial"] = ["0"]
     out.append(("%s_short_initial" % record["id"], r, convert_inv(r), "arity_initial",
                 "initial point of dimension 1 for a 2-state system"))
-    cv = dict(convert_inv(record), scale=0)
-    out.append(("%s_zero_scale" % record["id"], None, cv, "scale",
-                "scale 0: the invariant is unchanged, only the positivity conjunct fails"))
     return out
 
 
 def check_negative(kind, label, rec, cv, conjunct):
-    py = decode.verify(rec) if rec is not None else None
+    try:
+        py = decode.verify(rec) if rec is not None else None
+    except decode.DecodeError:
+        # The prototype's decoder refusing a malformed mutation IS a rejection.
+        # (Before this, a closed form with a constant term crashed the exporter:
+        # decode.mutations appends a constant monomial, which duplicates it.)
+        py = False
     if py is True:
         raise AssertionError("%s: the prototype ACCEPTS a negative control" % label)
     if kind == REC:
@@ -531,6 +562,9 @@ def main() -> int:
     args = ap.parse_args()
 
     records = json.loads(args.bundle.read_text(encoding="utf-8"))
+    # Ids are interpolated into generated Lean: refuse, never escape. This also
+    # refuses duplicates, which the dict below would otherwise collapse silently.
+    validate_ids([r["id"] for r in records if r["family"] in (REC, INV)])
     recs = {r["id"]: r for r in records if r["family"] == REC}
     invs = [r for r in records if r["family"] == INV]
     if not recs or not invs:
@@ -612,8 +646,7 @@ def main() -> int:
             negs.append({"label": label, "family": INV, "breaks": conj,
                          "prototype": "rejects" if py is False else "not expressible"})
 
-    args.out.write_text(HEADER + "\n".join(chunks) + "\n" + "\n".join(N) + "\n" + FOOTER,
-                        encoding="utf-8")
+    write_checked(args.out, HEADER + "\n".join(chunks) + "\n" + "\n".join(N) + "\n" + FOOTER)
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps({
         "what": ("Recurrence-family certificates (Polynomial recurrence, Conserved "

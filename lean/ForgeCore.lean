@@ -29,3 +29,12 @@ import Forge.Checker.Poly
 import Forge.Checker.Cone
 import Forge.Checker.Corpus
 import Forge.Checker.Bench
+import Forge.Checker.Reify
+import Forge.Checker.Tactic
+import Forge.Checker.TacticTest
+import Forge.Checker.Oracle
+import Forge.Checker.Affine
+import Forge.Checker.AffineCorpus
+import Forge.Checker.Farkas
+import Forge.Checker.Recurrence
+import Forge.Checker.RecurrenceCorpus
