@@ -51,7 +51,7 @@ Generated corpora are written only through `tools/lean_emit_guard.py`; see
 | Mutation rejection at the data boundary | **Met — after a hole was found and closed** (see below). |
 | Recorded axiom dependencies | **Met**, and enforced by `AxiomAudit.lean`. |
 | "Adds useful nonlinear facts to a stock `grind` leaf" | **Met as composition only**: `compose_with_grind` shows a goal neither `grind` nor `omega` proves alone, closed after `forge_cone` supplies one fact via `have`. Nothing calls `forge_cone` automatically. |
-| Gate 1 (trustworthy orchestration), its prerequisite | **Not started.** Gate 2 was built out of order, on the reasoning that a checked checker is useful without a planner and the planner is not useful without one. |
+| Gate 1 (trustworthy orchestration), its prerequisite | **First milestone.** `Forge/Frontend.lean`: `forge` runs decide, omega, `forge_cone?` (off in restricted mode) and grind in a fixed order with full state rollback, rejects proofs containing `sorry` or axioms outside the policy by inspecting the term, and logs a deterministic replay record. `FrontendTest.lean` pins each exit criterion: a restricted baseline with `#print axioms`, an admitted proof rejected, the choice policy enforced both ways, and a failed worker's metavariable assignment rolled back. Not built: worker contracts beyond the proof audit, source-assumption preservation, planning. Gate 2 was built first. |
 
 ## The theorem
 

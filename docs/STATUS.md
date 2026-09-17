@@ -150,7 +150,8 @@ most of Gate 2 of the design: certificate checkers with proved soundness for the
 cone, affine-witness, Farkas, recurrence and invariant families; typed
 reification with a proved bridge; the `forge_cone` tactic; and `forge_cone?`,
 which calls the prototype's search through a bounded data protocol. Gate 1, the
-orchestration layer the design puts first, has not been started.
+orchestration layer the design puts first, has its first milestone in
+`Forge.Frontend`: fixed-order workers, rollback, proof-term audit, replay record.
 
 **And two files that do not compile.** The third round's third core-only file
 defines `prefix`, a reserved keyword. And `r6`'s `FlowTargets.lean` places a

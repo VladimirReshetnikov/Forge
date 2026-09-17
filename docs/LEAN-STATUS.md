@@ -204,6 +204,7 @@ than a description of one.
 | `Forge/Checker/Reify.lean` | elaborates; `eval_toPoly` proved (`propext` only) |
 | `Forge/Checker/Tactic.lean`, `TacticTest.lean` | elaborate; `forge_cone`, `forge_reify`; review regressions pinned |
 | `Forge/Checker/Oracle.lean`, `OracleTest.lean` | elaborate; `forge_cone?`; data-boundary tests need `python` |
+| `Forge/Frontend.lean`, `FrontendTest.lean` | elaborate; `forge` (Gate 1 first milestone); exit criteria pinned with `#guard_msgs` |
 | `Forge/Checker/Affine.lean`, `AffineCorpus.lean` | elaborate; `AffineCert.sound`, `check_iff` |
 | `Forge/Checker/Farkas.lean` | elaborates; `FarkasCert.sound`; no prototype family |
 | `Forge/Checker/Recurrence.lean`, `RecurrenceCorpus.lean` | elaborate; `RecCert.sound`, `InvCert.sound` |

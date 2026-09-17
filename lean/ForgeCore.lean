@@ -15,9 +15,11 @@
   reduction. Every theorem in the three files depends on `propext` and
   `Quot.sound` and nothing else.
 
-  Still true, and worth keeping in view: elaboration is not an axiom audit, and
-  no `forge` TACTIC exists. What exists is a checker, its soundness proof, and
-  three certificates that pass it.
+  Still true, and worth keeping in view: elaboration is not an axiom audit
+  (`AxiomAudit.lean` is). `Forge.Frontend` is the first milestone of Gate 1: a
+  `forge` tactic that runs a fixed, ordered list of workers with full rollback,
+  rejects `sorry` and out-of-policy axioms by inspecting the proof term, and
+  emits a deterministic replay record. It is not the planner.
 -/
 import Forge.Design.Runtime
 import Forge.Design.Contracts
@@ -38,3 +40,5 @@ import Forge.Checker.AffineCorpus
 import Forge.Checker.Farkas
 import Forge.Checker.Recurrence
 import Forge.Checker.RecurrenceCorpus
+import Forge.Frontend
+import Forge.FrontendTest

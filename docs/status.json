@@ -633,6 +633,25 @@
       },
       "why_choice": "Mathlib's reals are built with Classical.choice; the core files avoid it",
       "not_yet": "no tactic applies certificates to real-valued goals; the real theorems are stated by hand"
+    },
+    "gate_1": {
+      "state": "first milestone",
+      "files": [
+        "lean/Forge/Frontend.lean",
+        "lean/Forge/FrontendTest.lean"
+      ],
+      "exit_criteria": {
+        "restricted_mode_pinned_baseline_without_new_axioms": "met for a three-goal suite pinned with #guard_msgs and #print axioms; grind contributes Classical.choice, which the policy allows by default and can refuse",
+        "malformed_or_admitted_proof_rejected": "met for an admitted (sorry) worker and a Classical.choice worker under forge.allowChoice false; malformed terms are left to the kernel",
+        "failed_branch_cannot_leak": "tested, not proved: a worker that assigns a metavariable and fails leaves it unassigned and the goal list restored"
+      },
+      "not_built": [
+        "planner and decomposition",
+        "worker contracts beyond the proof-term audit",
+        "checks that source assumptions are preserved",
+        "parallel workers"
+      ],
+      "axiom_audit": "AxiomAudit.lean still covers Forge.Checker (593 theorems); the frontend's tests pin their axioms themselves"
     }
   }
 }

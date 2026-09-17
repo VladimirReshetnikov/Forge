@@ -48,13 +48,17 @@ alone. The caveats matter — `nlinarith` gets no hints by design, most
 
 Three adversarial reviews made 85+ attempts to get it to accept something false
 and found none. They did find a code-injection hole in every exporter, untrue
-size bounds, and a false claim in prose; all are fixed. Gate 1 — the planner and
-orchestration the design puts first — has not been started.
+size bounds, and a false claim in prose; all are fixed. Gate 1 — the orchestration the design puts
+first — has its first milestone: a `forge` tactic that runs a fixed list of
+workers with full rollback, refuses `sorry` and out-of-policy axioms by
+inspecting the proof term, and pins a deterministic replay record
+([`lean/Forge/Frontend.lean`](lean/Forge/Frontend.lean)). It is not a planner.
 
 ## What this is not
 
-**`forge` is not an implemented Lean tactic.** Nothing here decides which kind
-of certificate a goal needs, decomposes it, or orchestrates workers. What exists
+**`forge` is not the designed tactic.** The `forge` that exists tries a fixed
+list of workers in order; nothing here decides which kind of certificate a goal
+needs, decomposes it, or plans. What exists
 is `forge_cone`, a tactic for **one** certificate family, and `forge_cone?`,
 which finds such certificates only by calling a Python search. Their proofs are
 kernel-checked; their reach is one family.
