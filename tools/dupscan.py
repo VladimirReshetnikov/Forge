@@ -64,7 +64,18 @@ def main() -> int:
     for s, fs in sorted(dups.items()):
         print(len(fs), sorted(set(fs)), "::", s[:120])
     print("--- %d repeated sentences" % len(dups))
-    return 1 if dups else 0
+    # A LaTeX command whose backslash was eaten by a shell or a string literal
+    # becomes a control character: \texttt -> TAB + "exttt", \ref -> CR + "ef",
+    # \frac -> FF + "rac". LaTeX compiles most of these silently.
+    mangled = 0
+    for f in sorted(args.dir.glob("*.tex")):
+        text = f.read_bytes().decode("utf-8").replace("\r\n", "\n")
+        for i, line in enumerate(text.split("\n"), 1):
+            for m in re.finditer(r"[\t\r\f\b\a\v](?=[a-z])", line):
+                mangled += 1
+                print("%s:%d: control character %r before %r" % (f.name, i, m.group(), line[m.end():m.end() + 8]))
+    print("--- %d control characters where a backslash was probably eaten" % mangled)
+    return 1 if dups or mangled else 0
 
 
 if __name__ == "__main__":
