@@ -473,6 +473,14 @@ and a proof from a phantom hypothesis, and show that a failed worker's
 metavariable assignment does not survive; the last is tested, not proved, and
 no planner exists.
 
+The baseline is now 76 goals: the 40 nonlinear inequalities of the head-to-head
+and 36 of other kinds, from closed arithmetic to list identities. Restricted
+mode closes 32 of them, the oracle mode 69, and both the closing worker and the
+axioms of every accepted proof are pinned and reproduced on a rerun. Running
+each worker alone on each goal measures what the fixed order costs: nothing
+measurable in time, and on 18 goals it is what keeps \code{Classical.choice}
+out of the proof, because an earlier worker closes what \grind{} would have.
+
 \paragraph{Gate 2 --- exact algebraic replay.}
 Typed reification and cone replay in Lean; the quadratic and finite-cone oracles
 called through a bounded data protocol; the affine/Farkas and recurrence

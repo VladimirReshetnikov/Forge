@@ -1,0 +1,898 @@
+{
+  "what": "The pinned forge baseline: for each goal and mode, the worker that closes it (null if none) and the axioms of the accepted proof. Written by tools/forge_baseline.py --pin; checked by --check. Times are not pinned.",
+  "pinned": {
+    "restricted": {
+      "amgm2": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "amgm3_nonneg": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "amgm4_shifted": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "cauchy_schwarz2": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "cauchy_schwarz3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "choi_lam": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "closed_add": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_bool": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_fin_all": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_int_neg": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_list_len": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_mod": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_mul_lt": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_nat_bounded": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "cube_above_one": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "cube_of_sum": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "eq_congr": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_injective_pair": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_list_cons": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_option_some": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_trans_fun": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "exists_witness": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "four_squares_cross": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "fourth_power": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "guard_product": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "induction_rev_append": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "induction_sum": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "lin_abs_free": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_div_mod": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_infeasible": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_int_chain": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_max": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_parity": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_scaled": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_sub_nat": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_succ_le": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_three_var": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "list_append_nil": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "list_length_append": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "list_reverse_reverse": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "mixed_fun_linear": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "mixed_ite": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "motzkin": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "nonlin_mod_square": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "nonlin_nat_sq_ge": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "nonneg_cubic": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "one_plus_sq": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "pairwise_products": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "product_of_nonneg3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "product_one": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "prop_and_comm": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "prop_modus": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "prop_or_elim": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "quad_form_pd": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "quartic_2": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "quartic_abc": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "quartic_sq_sum3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "schur_t1": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sextic_sos": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sextic_two_var": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "shifted_squares": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "shifted_three": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sq_plus_one": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sq_sum_cross3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "square_of_sum_of_squares": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sum_fixed_product": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sum_fixed_squares3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sum_one_squares": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sum_sq_bound": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sum_sq_bound3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "tridiagonal3": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "two_fourth_powers": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "unit_interval": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "univariate_quartic": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "univariate_square": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "weighted_quadratic": {
+        "closed_by": null,
+        "axioms": null
+      }
+    },
+    "oracle": {
+      "amgm2": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "amgm3_nonneg": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "amgm4_shifted": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "cauchy_schwarz2": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "cauchy_schwarz3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "choi_lam": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "closed_add": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_bool": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_fin_all": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_int_neg": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_list_len": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_mod": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_mul_lt": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "closed_nat_bounded": {
+        "closed_by": "decide",
+        "axioms": []
+      },
+      "cube_above_one": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "cube_of_sum": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "eq_congr": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_injective_pair": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_list_cons": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_option_some": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "eq_trans_fun": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "exists_witness": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "four_squares_cross": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "fourth_power": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "guard_product": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "induction_rev_append": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "induction_sum": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "lin_abs_free": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_div_mod": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_infeasible": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_int_chain": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_max": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_parity": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_scaled": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_sub_nat": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_succ_le": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "lin_three_var": {
+        "closed_by": "omega",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "list_append_nil": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "list_length_append": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "list_reverse_reverse": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "mixed_fun_linear": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "mixed_ite": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "motzkin": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "nonlin_mod_square": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "nonlin_nat_sq_ge": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "nonneg_cubic": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "one_plus_sq": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "pairwise_products": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "product_of_nonneg3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "product_one": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "prop_and_comm": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "prop_modus": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "prop_or_elim": {
+        "closed_by": "grind",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "quad_form_pd": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "quartic_2": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "quartic_abc": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "quartic_sq_sum3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "schur_t1": {
+        "closed_by": null,
+        "axioms": null
+      },
+      "sextic_sos": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sextic_two_var": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "shifted_squares": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "shifted_three": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sq_plus_one": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sq_sum_cross3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "square_of_sum_of_squares": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sum_fixed_product": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sum_fixed_squares3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sum_one_squares": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sum_sq_bound": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "sum_sq_bound3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "tridiagonal3": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "two_fourth_powers": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "unit_interval": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "univariate_quartic": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "univariate_square": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "weighted_quadratic": {
+        "closed_by": "forge_cone?",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ]
+      }
+    }
+  }
+}

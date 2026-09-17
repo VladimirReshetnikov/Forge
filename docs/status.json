@@ -664,23 +664,49 @@
       "not_yet": "no tactic applies certificates to real-valued goals; the real theorems are stated by hand"
     },
     "gate_1": {
-      "state": "first milestone",
+      "state": "first milestone, with a pinned 76-goal baseline",
       "files": [
         "lean/Forge/Frontend.lean",
-        "lean/Forge/FrontendTest.lean"
+        "lean/Forge/FrontendTest.lean",
+        "tools/forge_baseline.py",
+        "bench/forge/goals.json",
+        "bench/forge/expected.json"
       ],
       "exit_criteria": {
-        "restricted_mode_pinned_baseline_without_new_axioms": "met for a three-goal suite pinned with #guard_msgs and #print axioms; grind contributes Classical.choice, which the policy allows by default and can refuse",
-        "malformed_or_admitted_proof_rejected": "met for four test workers: an admitted (sorry) proof, an ill-typed term assigned without a type check, a proof from a variable outside the goal's context, and a Classical.choice proof under forge.allowChoice false; each rejection reason is pinned",
+        "restricted_mode_pinned_baseline_without_new_axioms": "met: 76 goals (40 nonlinear Int inequalities from the head-to-head, 36 other kinds), pinned per goal and mode in bench/forge/expected.json and reproduced by `tools/forge_baseline.py --check`. Restricted mode closes 32 (decide 8, omega 11, grind 13); oracle mode closes 69, 37 of them via forge_cone?. Axioms are pinned too: decide proofs use none, omega and forge_cone? proofs propext and Quot.sound, grind proofs add Classical.choice.",
+        "malformed_or_admitted_proof_rejected": "met for four test workers: an admitted proof, an ill-typed term assigned without a type check, a proof from a variable outside the goal's context, and a Classical.choice proof under forge.allowChoice false; each rejection reason is pinned",
         "failed_branch_cannot_leak": "tested, not proved: a worker that assigns a metavariable and fails leaves it unassigned and the goal list restored"
       },
       "not_built": [
         "planner and decomposition",
         "worker contracts beyond the proof-term audit",
-        "checks that source assumptions are preserved",
-        "parallel workers"
+        "parallel workers",
+        "any use of a failed worker's partial progress"
       ],
-      "axiom_audit": "AxiomAudit.lean still covers Forge.Checker (673 theorems); the frontend's tests pin their axioms themselves"
+      "axiom_audit": "AxiomAudit.lean still covers Forge.Checker (673 theorems); the frontend's tests pin their axioms themselves",
+      "worker_order": {
+        "measured": "tools/forge_baseline.py mode `each` runs every worker alone on every goal",
+        "cost": "none measurable: no goal loses more than 500 ms to workers rejected before the closer, none is closed more than 200 ms slower than by the fastest worker alone, and no goal is left open that some worker closes alone",
+        "effect": "the order changes which proof is accepted: grind alone closes 31 goals, but on 18 of them an earlier worker closes first and those proofs avoid Classical.choice",
+        "alone": {
+          "decide": 8,
+          "omega": 16,
+          "forge_cone?": 38,
+          "grind": 31
+        }
+      },
+      "open_goals": {
+        "oracle_mode": [
+          "schur_t1",
+          "motzkin",
+          "choi_lam",
+          "nonlin_nat_sq_ge",
+          "nonlin_mod_square",
+          "induction_sum",
+          "exists_witness"
+        ],
+        "note": "three are nonlinear inequalities the search misses; one is a Nat nonlinear goal (forge_cone? is Int-only); three are true goals chosen to be out of reach"
+      }
     }
   }
 }

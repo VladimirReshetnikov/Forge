@@ -199,36 +199,51 @@ def runWorker (goal : MVarId) (stx : TSyntax `tactic) : TacticM (Option String) 
     saved.restore (restoreInfo := true)
   return outcome
 
+/-- What one `forge` call did: every attempt in order, and the worker that closed
+the goal (the last attempt) if any. -/
+structure Outcome where
+  attempts : Array Attempt
+  closedBy : Option (String × TSyntax `tactic)
+
+/-- The orchestration loop, without any reporting: try each worker with rollback
+and stop at the first accepted proof. `forge` reports the outcome; a benchmark
+can read it directly instead of parsing messages. -/
+def runForge (goal : MVarId) : TacticM Outcome := do
+  let mut log : Array Attempt := #[]
+  for (name, stx) in ← workers do
+    let t0 ← IO.monoMsNow
+    let r ← runWorker goal stx
+    let ms := (← IO.monoMsNow) - t0
+    match r with
+    | none => return ⟨log.push ⟨name, true, "", ms⟩, some (name, stx)⟩
+    | some why =>
+      log := log.push ⟨name, false, (String.join ((why.splitOn "\n").intersperse " ")), ms⟩
+  return ⟨log, none⟩
+
 syntax (name := forge) "forge" : tactic
 
 elab_rules : tactic
   | `(tactic| forge) => do
     let ref ← getRef
-    let goal ← getMainGoal
-    let mut log : Array Attempt := #[]
-    for (name, stx) in ← workers do
-      let t0 ← IO.monoMsNow
-      let r ← runWorker goal stx
-      let ms := (← IO.monoMsNow) - t0
-      match r with
-      | none =>
-        log := log.push ⟨name, true, "", ms⟩
-        -- The default record is DETERMINISTIC -- worker names only -- so a
-        -- baseline suite can pin it. Times and reasons vary between runs and
-        -- machines, and are shown only with `forge.verbose`.
-        let rejected := log.pop.toList.map (·.worker)
-        if forge.verbose.get (← getOptions) then
-          let detail := log.pop.toList.map fun a => s!"{a.worker} ({a.ms} ms): {a.reason.take 120}"
-          logInfo m!"forge: closed by {name} in {ms} ms; rejected before it: {detail}"
-        else if rejected.isEmpty then
-          logInfo m!"forge: closed by {name}"
-        else
-          logInfo m!"forge: closed by {name}; rejected before it: {rejected}"
-        Meta.Tactic.TryThis.addSuggestion ref stx (origSpan? := ref)
-        return
-      | some why =>
-        log := log.push ⟨name, false, (String.join ((why.splitOn "\n").intersperse " ")), ms⟩
-    let table := log.toList.map fun a => m!"\n  {a.worker} ({a.ms} ms): {a.reason.take 160}"
-    throwError m!"forge: no worker closed the goal{MessageData.joinSep table m!""}"
+    let o ← runForge (← getMainGoal)
+    match o.closedBy with
+    | some (name, stx) =>
+      let before := o.attempts.pop
+      let ms := o.attempts.back?.map (·.ms) |>.getD 0
+      -- The default record is DETERMINISTIC -- worker names only -- so a
+      -- baseline suite can pin it. Times and reasons vary between runs and
+      -- machines, and are shown only with `forge.verbose`.
+      let rejected := before.toList.map (·.worker)
+      if forge.verbose.get (← getOptions) then
+        let detail := before.toList.map fun a => s!"{a.worker} ({a.ms} ms): {a.reason.take 120}"
+        logInfo m!"forge: closed by {name} in {ms} ms; rejected before it: {detail}"
+      else if rejected.isEmpty then
+        logInfo m!"forge: closed by {name}"
+      else
+        logInfo m!"forge: closed by {name}; rejected before it: {rejected}"
+      Meta.Tactic.TryThis.addSuggestion ref stx (origSpan? := ref)
+    | none =>
+      let table := o.attempts.toList.map fun a => m!"\n  {a.worker} ({a.ms} ms): {a.reason.take 160}"
+      throwError m!"forge: no worker closed the goal{MessageData.joinSep table m!""}"
 
 end Forge.Frontend
