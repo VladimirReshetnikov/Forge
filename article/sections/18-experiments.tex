@@ -1664,7 +1664,12 @@ on the pinned toolchain as well. Twelve passed as delivered; one declared
 real-valued functions without marking them noncomputable, which Lean rejects,
 and passed once they were. An audit that walks the environment finds the 332
 theorems of these fifteen files within \code{propext}, \code{Classical.choice}
-and \code{Quot.sound}. The proposals' own copies, 45 files, remain unchecked.
+and \code{Quot.sound}. The proposals' own copies and the prototype's emitted
+files, 44 more, were then compiled the same way: 34 pass. Of the rest, one
+places a module docstring above its import, one lacks the same
+noncomputable marking, two are proof scripts that no longer survive this
+Mathlib, and six import one of those. The prototype's emitter had the
+noncomputable defect too, and was fixed.
 
 The comparison was run to decide whether the search deserves a planner built
 around it. It does. But the same run shows the search's gaps plainly, and those

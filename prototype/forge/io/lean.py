@@ -27,9 +27,9 @@ from ..certificates import (ConeCertificate, check_cone, InvariantCertificate,
 from ..recurrence import AccumulatorCertificate, check_accumulator
 
 HEADER = '''/-
-GENERATED CANDIDATE PROOF SCRIPTS: not compiled in the authoring environment.
-No theorem here is claimed to have passed Lean until `lake build` succeeds.
-Generated from exact Python certificates; no `sorry` or oracle axioms inserted.
+GENERATED PROOF SCRIPTS from exact Python certificates; no `sorry` or oracle
+axioms inserted. Not compiled by the generator: tools/sweep_mathlib_proposals.py
+compiles them against the Mathlib Forge pins (results/lean-mathlib-sweep.json).
 -/
 import Mathlib
 
@@ -37,9 +37,12 @@ set_option maxRecDepth 4096
 set_option maxHeartbeats 4000000
 
 namespace ForgeReplay
+
+-- Real division has no executable code; these definitions are for proofs only.
+noncomputable section
 '''
 
-FOOTER = '\nend ForgeReplay\n'
+FOOTER = '\nend\n\nend ForgeReplay\n'
 
 ORBIT_PREAMBLE = '''
 def orbit {α : Type} (T : α → α) (s₀ : α) : Nat → α

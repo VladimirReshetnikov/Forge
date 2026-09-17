@@ -131,8 +131,8 @@ From the fourth round:
 
 Produced as Lean source and, until recently, never checked by a compiler. The
 thirteen Mathlib files of this kind merged into `lean/Forge` now compile on the
-pinned toolchain (`results/lean-mathlib-forge.json`); the items below remain
-unchecked in the proposals' own copies.
+pinned toolchain (`results/lean-mathlib-forge.json`), and so do 34 of the 44
+proposal copies and emitted files (`results/lean-mathlib-sweep.json`).
 
 - Cone certificate replays (two emitter styles, 18 theorems)
 - A 32-leaf Bernstein subdivision replay

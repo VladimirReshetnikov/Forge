@@ -204,19 +204,33 @@ and
 
 That is 28 of the 29 Mathlib-free files — counting transitively, so a file
 importing a sibling that is itself Mathlib-free counts as Mathlib-free. Of the
-60 that depend on Mathlib, fifteen now compile on the pinned toolchain against
-the pinned Mathlib, with no errors and no `sorry`, and pass an axiom audit that
-walks the environment ([`results/lean-mathlib-forge.json`](results/lean-mathlib-forge.json)):
-Forge's own reals layer and the thirteen delivered files merged into
-`lean/Forge/Generated` and `lean/Forge/Examples`. One of those thirteen needed a
-fix: `Invariants.lean` defines real-valued functions without `noncomputable`,
-which Lean rejects. The other 45 — the proposals' own copies and the
-prototype's emitted outputs — **nothing has checked** — and
-the one time this merge looked inside that bucket for a reason unrelated to
-Mathlib, it found a second broken file. `r6`'s `FlowTargets.lean` puts a module
-docstring above its `import`, which Lean 4 rejects at parse time whether or not
-Mathlib is present. So the count of delivered Lean a compiler has contradicted
-is two, not one.
+61 that depend on Mathlib, **every one has now been compiled** on the pinned
+toolchain against the pinned Mathlib.
+
+- **In `lean/`, 17 of 17 compile**, with no errors and no `sorry`: Forge's reals
+  layer, the thirteen delivered files merged into `lean/Forge/Generated` and
+  `lean/Forge/Examples`, the `Forge` root and the audit file, whose
+  environment-walking audit passes on 332 theorems
+  ([`results/lean-mathlib-forge.json`](results/lean-mathlib-forge.json)). One
+  merged file needed a fix: `Invariants.lean` defines real-valued functions
+  without `noncomputable`, which Lean rejects.
+- **Outside it, 34 of 44 compile**: the proposals' own copies and the
+  prototype's emitted outputs
+  ([`results/lean-mathlib-sweep.json`](results/lean-mathlib-sweep.json)). The
+  prototype's emitter had the same `noncomputable` defect and is fixed. Of the
+  proposals' files, four fail and six are skipped because they import one that
+  failed. Two failures are defects in any Lean: `r6`'s `FlowTargets.lean` puts
+  a module docstring above its `import`, and `p5`'s `Invariants.lean` lacks
+  `noncomputable`. Two are proof scripts that do not survive this Mathlib
+  (`r4`'s `LadderBridge.lean`, `r7`'s `FiniteHorizon.lean`); their statements
+  are not refuted. The proposals' files are left as delivered.
+
+So the delivered Lean a compiler has contradicted, on any version, is three
+distinct files: `r8`'s core-only `RankTelescoping.lean`, `r6`'s
+`FlowTargets.lean` and `p5`'s `Invariants.lean` (with its merged copy); two more
+proof scripts fail on this Mathlib only. That sweep is not an environment audit: the passing files print no `sorryAx`,
+contain no `native_decide` and declare no axioms, but their theorems were not
+enumerated.
 
 **And one defect in our own tooling.** The first round-four scan reported a file
 as containing a `sorry`. Its only occurrence of the token was the sentence in

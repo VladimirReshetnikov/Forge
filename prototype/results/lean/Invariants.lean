@@ -1,7 +1,7 @@
 /-
-GENERATED CANDIDATE PROOF SCRIPTS: not compiled in the authoring environment.
-No theorem here is claimed to have passed Lean until `lake build` succeeds.
-Generated from exact Python certificates; no `sorry` or oracle axioms inserted.
+GENERATED PROOF SCRIPTS from exact Python certificates; no `sorry` or oracle
+axioms inserted. Not compiled by the generator: tools/sweep_mathlib_proposals.py
+compiles them against the Mathlib Forge pins (results/lean-mathlib-sweep.json).
 -/
 import Mathlib
 
@@ -9,6 +9,9 @@ set_option maxRecDepth 4096
 set_option maxHeartbeats 4000000
 
 namespace ForgeReplay
+
+-- Real division has no executable code; these definitions are for proofs only.
+noncomputable section
 
 def orbit {α : Type} (T : α → α) (s₀ : α) : Nat → α
   | 0 => s₀
@@ -46,5 +49,7 @@ theorem invariant_square (n : ℕ) (a : ℚ) :
     rw [acc_square, ih]
     push_cast <;> ring
 
+
+end
 
 end ForgeReplay

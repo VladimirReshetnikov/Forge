@@ -77,6 +77,18 @@ present — verified by a four-line reproduction using `import Init`. `r6`'s was
 missed by every earlier scan because it imports Mathlib and so sat in the
 never-checked bucket.
 
+**That bucket is now empty.** Every Mathlib-dependent file has been compiled
+against the Mathlib the lakefile pins. In `lean/`, 17 of 17 pass
+(`results/lean-mathlib-forge.json`). Outside it, 34 of 44 pass
+(`results/lean-mathlib-sweep.json`): `r6/FlowTargets.lean` fails as above;
+`p5/Forge/Invariants.lean` defines real-valued functions without
+`noncomputable` (its merged copy passes once marked); `r4/LadderBridge.lean`
+and `r7/ForgeQ/FiniteHorizon.lean` are proof scripts that do not survive this
+Mathlib (`dsimp` making no progress; `add_le_add_left`'s changed argument
+order), with their statements not refuted; and six files are skipped because
+they import one of these. The prototype's emitter produced the same
+`noncomputable` defect and was fixed.
+
 **The candidate Lean shrank by a factor of thirty across four rounds.**
 
 | Round | Source files | Lines |

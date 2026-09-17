@@ -1,7 +1,7 @@
 /-
-GENERATED CANDIDATE PROOF SCRIPTS: not compiled in the authoring environment.
-No theorem here is claimed to have passed Lean until `lake build` succeeds.
-Generated from exact Python certificates; no `sorry` or oracle axioms inserted.
+GENERATED PROOF SCRIPTS from exact Python certificates; no `sorry` or oracle
+axioms inserted. Not compiled by the generator: tools/sweep_mathlib_proposals.py
+compiles them against the Mathlib Forge pins (results/lean-mathlib-sweep.json).
 -/
 import Mathlib
 
@@ -9,6 +9,9 @@ set_option maxRecDepth 4096
 set_option maxHeartbeats 4000000
 
 namespace ForgeReplay
+
+-- Real division has no executable code; these definitions are for proofs only.
+noncomputable section
 theorem shifted_square_box (x : ℝ) (hxl : 0 ≤ x) (hxu : x ≤ 1) :
     0 ≤ (1) * (x) ^ 2 + ((-1 / 2)) * (x) + ((33 / 400)) := by
   rcases le_total x ((1 / 2)) with hs_r | hs_r
@@ -39,5 +42,7 @@ theorem shifted_square_box (x : ℝ) (hxl : 0 ≤ x) (hxu : x ≤ 1) :
           ((233 / 100)) * (x - ((1 / 2))) ^ 2 := by positivity
       _ = (1) * (x) ^ 2 + ((-1 / 2)) * (x) + ((33 / 400)) := by ring
 
+
+end
 
 end ForgeReplay

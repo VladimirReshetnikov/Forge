@@ -1,7 +1,7 @@
 /-
-GENERATED CANDIDATE PROOF SCRIPTS: not compiled in the authoring environment.
-No theorem here is claimed to have passed Lean until `lake build` succeeds.
-Generated from exact Python certificates; no `sorry` or oracle axioms inserted.
+GENERATED PROOF SCRIPTS from exact Python certificates; no `sorry` or oracle
+axioms inserted. Not compiled by the generator: tools/sweep_mathlib_proposals.py
+compiles them against the Mathlib Forge pins (results/lean-mathlib-sweep.json).
 -/
 import Mathlib
 
@@ -9,6 +9,9 @@ set_option maxRecDepth 4096
 set_option maxHeartbeats 4000000
 
 namespace ForgeReplay
+
+-- Real division has no executable code; these definitions are for proofs only.
+noncomputable section
 theorem hidden_quadratic (x y : ℝ)
     : 0 ≤ ((21 : ℝ) + (-24 : ℝ) * (y) + ((99 : ℝ) / 7) * (y) ^ 2 + (-18 : ℝ) * (x) + ((-26 : ℝ) / 7) * (x) * (y) + ((78 : ℝ) / 7) * (x) ^ 2) := by
   have ht0 : 0 ≤ ((21 : ℝ) * (((1 : ℝ) + ((-4 : ℝ) / 7) * (y) + ((-3 : ℝ) / 7) * (x))) ^ 2) :=
@@ -36,5 +39,7 @@ theorem equality_constrained (x y : ℝ)
   rw [hid, hi, add_zero]
   exact hs
 
+
+end
 
 end ForgeReplay

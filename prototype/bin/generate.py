@@ -433,7 +433,7 @@ def main() -> int:
     (args.out / 'certificates.json').write_text(
         json.dumps(records, indent=1, sort_keys=True) + '\n', encoding='utf-8')
     files = emit_lean(args.out / 'lean')
-    print('wrote %d certificates and %d uncompiled Lean files to %s'
+    print('wrote %d certificates and %d Lean files (compiled separately) to %s'
           % (len(records), files, args.out))
     return 0
 

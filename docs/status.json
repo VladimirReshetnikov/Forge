@@ -134,7 +134,6 @@
         ],
         "axiom_audit": "lean/MathlibAudit.lean: 332 theorems within propext, Classical.choice, Quot.sound; negative-tested with a planted axiom and a sorry",
         "record": "results/lean-mathlib-forge.json",
-        "still_unchecked": "45 Mathlib-dependent files: the proposals' own copies and prototype/results/lean",
         "earlier": {
           "files": [
             "lean/Forge/Real/Cone.lean",
@@ -142,6 +141,21 @@
           ],
           "toolchain": "v4.32.0",
           "record": "results/lean-real.json"
+        },
+        "outside_lean": {
+          "files": 44,
+          "compiled": 34,
+          "failed": 4,
+          "skipped_importing_a_failure": 6,
+          "record": "results/lean-mathlib-sweep.json",
+          "failures": {
+            "proposals/r6-flow-ladders/lean/FlowTargets.lean": "module docstring above import; a parse error in any Lean 4",
+            "proposals/p5-certificate-first/lean/Forge/Invariants.lean": "real-valued defs without noncomputable",
+            "proposals/r4-analytic-certificates/lean/LadderBridge.lean": "dsimp made no progress under the pinned Mathlib; statement not refuted",
+            "proposals/r7-quantitative/lean/ForgeQ/FiniteHorizon.lean": "add_le_add_left argument order changed; statement not refuted"
+          },
+          "fixed_in_repository_tooling": "prototype/forge/io/lean.py emitted Invariants.lean without noncomputable; fixed, and all three emitted files compile",
+          "not_an_environment_audit": "passing files print no sorryAx, contain no native_decide and declare no axioms; their theorems were not enumerated"
         }
       }
     },
