@@ -46,7 +46,7 @@ Neither is complete. "unknown" is never a disproof.
 BOUNDS (input is rejected with status "error" beyond these):
   MAX_INPUT_BYTES   1_000_000 bytes of stdin
   MAX_VARIABLES     6         (n)
-  MAX_DEGREE        4         total degree of target and of every constraint
+  MAX_DEGREE        6         total degree of target and of every constraint
   MAX_TERMS         200       terms per polynomial
   MAX_CONSTRAINTS   8         inequalities, and separately equalities
   MAX_COEFF_DIGITS  60        decimal digits per input coefficient
@@ -88,11 +88,11 @@ for p in (str(TOOLS), str(PROTOTYPE)):
 
 MAX_INPUT_BYTES = 1_000_000
 MAX_VARIABLES = 6
-MAX_DEGREE = 4
+MAX_DEGREE = 6
 MAX_TERMS = 200
 MAX_CONSTRAINTS = 8
 MAX_COEFF_DIGITS = 60
-SEARCH_DEGREE_CAP = 4
+SEARCH_DEGREE_CAP = 6
 DEFAULT_TIMEOUT = 20.0
 
 # Output bounds: must not exceed the Lean decoder's (Oracle.lean).
@@ -229,6 +229,7 @@ def search(n, target, ineqs, eqs, deadline):
     """Return (ConeCertificate, width, prototype polys) or (None, reason)."""
     from forge.poly import Poly
     from forge.quadratic import quadratic_sos
+    from forge.gram import gram_sos
     from forge import cone
 
     width = max(n, 1)
@@ -247,6 +248,22 @@ def search(n, target, ineqs, eqs, deadline):
             return (cert, width, P, Gs, Fs), None
         reasons.append("quadratic_sos: not PSD or outside fragment")
 
+    # Gram-matrix SOS for unconstrained targets: finds squares with specific
+    # coefficients that no dictionary proposes, such as x^2 - 2xy + y^2 for
+    # (x - y)^4. Added after the tactic head-to-head showed the dictionary
+    # search missing exactly those. Not yet extended to constrained problems.
+    if not Gs and not Fs and P.degree >= 2 and P.degree % 2 == 0:
+        remaining = deadline - time.monotonic()
+        if remaining > 0.5:
+            try:
+                cert = gram_sos(P, timeout_seconds=min(remaining, 10.0))
+            except Exception as e:  # noqa: BLE001 -- a search failure is UNKNOWN
+                cert = None
+                reasons.append("gram_sos raised %s: %s" % (type(e).__name__, e))
+            if cert is not None:
+                return (cert, width, P, Gs, Fs), None
+            reasons.append("gram_sos: no PSD Gram matrix reconstructed")
+
     deg = max([P.degree] + [g.degree for g in Gs] + [f.degree for f in Fs] + [0])
     d0 = max(2, deg + (deg % 2))
     for d in (d0, d0 + 2):
@@ -257,7 +274,13 @@ def search(n, target, ineqs, eqs, deadline):
             reasons.append("time budget exhausted before degree %d" % d)
             break
         try:
-            res = cone.discover(P, Gs, Fs, degree=d, timeout_seconds=remaining)
+            # All binomial squares (m +/- m')^2 for monomials up to half the search
+            # degree, not only the ones goal_square_bases guesses from the target's
+            # even monomials. The head-to-head showed the difference: x+y=2 => xy<=1
+            # needs (x-y)^2, and nothing in `1 - xy` suggests it.
+            bases = cone.square_dictionary(width, d // 2, binomials=True)
+            res = cone.discover(P, Gs, Fs, degree=d, square_bases=bases,
+                                timeout_seconds=remaining)
         except Exception as e:  # noqa: BLE001 -- any search failure is UNKNOWN
             reasons.append("cone.discover(degree=%d) raised %s: %s"
                            % (d, type(e).__name__, e))
