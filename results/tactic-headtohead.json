@@ -1,0 +1,679 @@
+{
+  "what": "forge_cone? versus Mathlib and core tactics on bench/tactics/problems.json.",
+  "environment": {
+    "toolchain": "v4.32.0",
+    "mathlib_root": "C:\\ProveIt",
+    "mathlib_toolchain": "leanprover/lean4:v4.32.0",
+    "max_heartbeats": 400000,
+    "forge_pins": "leanprover/lean4:v4.34.0 (core modules compile unchanged on v4.32)"
+  },
+  "run": {
+    "exit_code": 1,
+    "seconds": 133.6,
+    "peak_rss_gb": 3.26,
+    "killed": null
+  },
+  "problems": 20,
+  "solved": {
+    "forge_cone?": 12,
+    "nlinarith": 3,
+    "positivity": 1,
+    "grind": 0,
+    "omega": 0
+  },
+  "forge_only": [
+    "amgm2",
+    "cauchy_schwarz2",
+    "quartic_sq_sum3",
+    "shifted_squares",
+    "sq_sum_cross3",
+    "sum_fixed_squares3",
+    "sum_sq_bound",
+    "tridiagonal3"
+  ],
+  "mathlib_only": [],
+  "both": [
+    "guard_product",
+    "one_plus_sq",
+    "product_of_nonneg3",
+    "quad_form_pd"
+  ],
+  "neither_forge_nor_mathlib": [
+    "fourth_power",
+    "motzkin",
+    "nonneg_cubic",
+    "quartic_2",
+    "quartic_abc",
+    "schur_t1",
+    "sextic_sos",
+    "sum_fixed_product"
+  ],
+  "forge_refused_for_size": [],
+  "attempts_without_a_result": [],
+  "results": {
+    "amgm2": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 609,
+        "heartbeats": 176428
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 475,
+        "heartbeats": 473699,
+        "reason": "linarith failed to find a contradiction x y : ℤ a✝ : x ^ 2 + y ^ 2 < 2 * (x * y) ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 17,
+        "heartbeats": 14541,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 119,
+        "heartbeats": 231027,
+        "reason": "`grind` failed case grind.1 x y : ℤ h : -2 * (x * y) + x ^ 2 + y ^ 2 + 1 ≤ 0 h_1 : x = y ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -2 * (x * y) + x ^ 2 + y ^ 2 + 1 ≤ 0     [prop] x = y   [eqc] True propositions"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 10465,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   2*a - b - c ≥ 1 where  a := x * y  b := x ^ 2  c := y ^ 2"
+      }
+    },
+    "one_plus_sq": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 258,
+        "heartbeats": 138361
+      },
+      "nlinarith": {
+        "status": "ok",
+        "ms": 612,
+        "heartbeats": 871144
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 12477,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 18,
+        "heartbeats": 181621,
+        "reason": "`grind` failed case grind x : ℤ h : -2 * x + x ^ 2 + 2 ≤ 0 ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -2 * x + x ^ 2 + 2 ≤ 0   [eqc] True propositions     [prop] -2 * x + x ^ 2 + 2 ≤ 0   [ematch] E-matching pattern"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 1,
+        "heartbeats": 7752,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   2*a - b ≥ 2 where  a := x  b := x ^ 2"
+      }
+    },
+    "sq_sum_cross3": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 299,
+        "heartbeats": 386363
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 90,
+        "heartbeats": 542559,
+        "reason": "linarith failed to find a contradiction x y z : ℤ a✝ : x ^ 2 + y ^ 2 + z ^ 2 < x * y + y * z + z * x ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 16853,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 64,
+        "heartbeats": 345782,
+        "reason": "`grind` failed case grind.1.1 x y z : ℤ h : -1 * (x * y) + -1 * (y * z) + -1 * (z * x) + x ^ 2 + y ^ 2 + z ^ 2 + 1 ≤ 0 h_1 : y = z h_2 : x = z ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -1 * (x * y) + -1 * (y * z)"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 14790,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a + b + c - d - e - f ≥ 1 where  a := x * y  b := y * z  c := z * x  d := x ^ 2  e := y ^ 2  f := z ^ 2"
+      }
+    },
+    "sum_sq_bound": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 262,
+        "heartbeats": 193423
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 53,
+        "heartbeats": 530945,
+        "reason": "linarith failed to find a contradiction x y : ℤ a✝ : 2 * (x ^ 2 + y ^ 2) < (x + y) ^ 2 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 14851,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 55,
+        "heartbeats": 295751,
+        "reason": "`grind` failed case grind.1.2 x y : ℤ h : 2 * x ^ 2 + 2 * y ^ 2 + -1 * (x + y) ^ 2 + 1 ≤ 0 h_1 : y = x + y h_2 : ¬x = x + y ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] 2 * x ^ 2 + 2 * y ^ 2 + -1 * (x + y) ^ 2 + 1 ≤"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 11534,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a - 2*b - 2*c ≥ 1 where  a := (x + y) ^ 2  b := x ^ 2  c := y ^ 2"
+      }
+    },
+    "quad_form_pd": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 265,
+        "heartbeats": 199364
+      },
+      "nlinarith": {
+        "status": "ok",
+        "ms": 110,
+        "heartbeats": 894291
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 105,
+        "heartbeats": 100267,
+        "reason": "failed to prove positivity/nonnegativity/nonzeroness"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 41,
+        "heartbeats": 232439,
+        "reason": "`grind` failed case grind.1 x y : ℤ h : -1 * (x * y) + x ^ 2 + y ^ 2 + 1 ≤ 0 h_1 : x = y ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -1 * (x * y) + x ^ 2 + y ^ 2 + 1 ≤ 0     [prop] x = y   [eqc] True propositions"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 10792,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a - b + c ≤ -1 where  a := x ^ 2  b := x * y  c := y ^ 2"
+      }
+    },
+    "shifted_squares": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 377,
+        "heartbeats": 319300
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 61,
+        "heartbeats": 469710,
+        "reason": "linarith failed to find a contradiction x y : ℤ a✝ : x ^ 2 + y ^ 2 < 2 * x + 2 * y - 2 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 15765,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 26,
+        "heartbeats": 210218,
+        "reason": "`grind` failed case grind x y : ℤ h : -2 * x + -2 * y + x ^ 2 + y ^ 2 + 3 ≤ 0 ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -2 * x + -2 * y + x ^ 2 + y ^ 2 + 3 ≤ 0   [eqc] True propositions     [prop] -2 * x + -2 * y"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 10472,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   2*a + 2*b - c - d ≥ 3 where  a := x  b := y  c := x ^ 2  d := y ^ 2"
+      }
+    },
+    "tridiagonal3": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 291,
+        "heartbeats": 362135
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 89,
+        "heartbeats": 551320,
+        "reason": "linarith failed to find a contradiction x y z : ℤ a✝ : 2 * x ^ 2 + 2 * y ^ 2 + 2 * z ^ 2 - 2 * (x * y) - 2 * (y * z) < 0 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 19,
+        "heartbeats": 95441,
+        "reason": "failed to prove positivity/nonnegativity/nonzeroness"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 61,
+        "heartbeats": 331771,
+        "reason": "`grind` failed case grind.1.1 x y z : ℤ h : -1 * (x * y) + -1 * (y * z) + x ^ 2 + y ^ 2 + z ^ 2 + 1 ≤ 0 h_1 : y = z h_2 : x = z ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -1 * (x * y) + -1 * (y * z) + x ^ 2 + y ^ 2"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 14866,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a + b + c - d - e ≤ -1 where  a := x ^ 2  b := y ^ 2  c := z ^ 2  d := x * y  e := y * z"
+      }
+    },
+    "cauchy_schwarz2": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 1896,
+        "heartbeats": 299299
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 117,
+        "heartbeats": 721719,
+        "reason": "linarith failed to find a contradiction a b c d : ℤ a✝ : (a ^ 2 + b ^ 2) * (c ^ 2 + d ^ 2) < (a * c + b * d) ^ 2 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 16004,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 169,
+        "heartbeats": 1176009,
+        "reason": "`grind` failed case grind.1.1.1.1.2.2.2.2.1.2.2.1.2.2.1.1 a b c d : ℤ h : (a ^ 2 + b ^ 2) * (c ^ 2 + d ^ 2) + -1 * (a * c + b * d) ^ 2 + 1 ≤ 0 h_1 : c ^ 2 = d ^ 2 h_2 : a ^ 2 = b ^ 2 h_3 : c ^ 2 + d ^ 2 = d ^ 2 h_4 : a ^ 2 + b ^ 2 = b ^ 2 h"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 18054,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   e - f ≥ 1 where  e := (a * c + b * d) ^ 2  f := (a ^ 2 + b ^ 2) * (c ^ 2 + d ^ 2)"
+      }
+    },
+    "quartic_2": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 1385,
+        "heartbeats": 12836,
+        "reason": "forge_cone?: the oracle returned status `unknown` (exit code 0): cone.discover(degree=4): LP found no candidate"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 100,
+        "heartbeats": 360779,
+        "reason": "linarith failed to find a contradiction a b : ℤ a✝ : a ^ 4 + b ^ 4 < a ^ 3 * b + a * b ^ 3 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 18995,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 92,
+        "heartbeats": 356735,
+        "reason": "`grind` failed case grind.1.1.1 a b : ℤ h : -1 * (a * b ^ 3) + -1 * (a ^ 3 * b) + a ^ 4 + b ^ 4 + 1 ≤ 0 h_1 : b = b ^ 3 h_2 : a = a ^ 3 h_3 : a = b ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -1 * (a * b ^ 3) + -1 *"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 6,
+        "heartbeats": 13683,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   c + d - e - f ≥ 1 where  c := a ^ 3 * b  d := a * b ^ 3  e := a ^ 4  f := b ^ 4"
+      }
+    },
+    "fourth_power": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 1480,
+        "heartbeats": 16971,
+        "reason": "forge_cone?: the oracle returned status `unknown` (exit code 0): cone.discover(degree=4): LP found no candidate"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 80,
+        "heartbeats": 510215,
+        "reason": "linarith failed to find a contradiction x y : ℤ a✝ : x ^ 4 - 4 * x ^ 3 * y + 6 * x ^ 2 * y ^ 2 - 4 * x * y ^ 3 + y ^ 4 < 0 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 19,
+        "heartbeats": 101510,
+        "reason": "failed to prove positivity/nonnegativity/nonzeroness"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 95,
+        "heartbeats": 509222,
+        "reason": "`grind` failed case grind.1.1.1 x y : ℤ h : -1 * (4 * x * y ^ 3) + -1 * (4 * x ^ 3 * y) + 6 * x ^ 2 * y ^ 2 + x ^ 4 + y ^ 4 + 1 ≤ 0 h_1 : x = y h_2 : x ^ 2 = x ^ 3 h_3 : x = x ^ 2 ⊢ False [grind] Goal diagnostics   [facts] Asserted facts"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 4,
+        "heartbeats": 21056,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a - b + c - d + e ≤ -1 where  a := x ^ 4  b := 4 * x ^ 3 * y  c := 6 * x ^ 2 * y ^ 2  d := 4 * x * y ^ 3  e := y ^ 4"
+      }
+    },
+    "quartic_sq_sum3": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 2083,
+        "heartbeats": 450863
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 140,
+        "heartbeats": 563140,
+        "reason": "linarith failed to find a contradiction x y z : ℤ a✝ : x ^ 4 + y ^ 4 + z ^ 4 < x ^ 2 * y ^ 2 + y ^ 2 * z ^ 2 + z ^ 2 * x ^ 2 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 5,
+        "heartbeats": 20747,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 204,
+        "heartbeats": 504943,
+        "reason": "`grind` failed case grind.1.1.1.1 x y z : ℤ h : -1 * (x ^ 2 * y ^ 2) + -1 * (y ^ 2 * z ^ 2) + -1 * (z ^ 2 * x ^ 2) + x ^ 4 + y ^ 4 + z ^ 4 + 1 ≤ 0 h_1 : y ^ 2 = z ^ 2 h_2 : x ^ 2 = z ^ 2 h_3 : y = z h_4 : x = z ⊢ False [grind] Goal diagnost"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 7,
+        "heartbeats": 20417,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a + b + c - d - e - f ≥ 1 where  a := x ^ 2 * y ^ 2  b := y ^ 2 * z ^ 2  c := z ^ 2 * x ^ 2  d := x ^ 4  e := y ^ 4  f := z ^ 4"
+      }
+    },
+    "quartic_abc": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 2584,
+        "heartbeats": 12455,
+        "reason": "forge_cone?: the oracle returned status `unknown` (exit code 0): cone.discover(degree=4): LP found no candidate"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 66,
+        "heartbeats": 383005,
+        "reason": "linarith failed to find a contradiction a b c : ℤ a✝ : a ^ 4 + b ^ 4 + c ^ 4 < a * b * c * (a + b + c) ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 4,
+        "heartbeats": 15376,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 125,
+        "heartbeats": 621979,
+        "reason": "`grind` failed case grind.1.1.1.1.1.2.1 a b c : ℤ h : -1 * (a * b * c * (a + b + c)) + a ^ 4 + b ^ 4 + c ^ 4 + 1 ≤ 0 h_1 : c = c ^ 2 h_2 : b = b ^ 2 h_3 : b = c h_4 : a = a ^ 2 h_5 : a = c h_6 : ¬b = a + b + c h_7 : a * b * c ^ 2 = c ^ 2 ⊢"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 4,
+        "heartbeats": 15836,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   d - e - f - g ≥ 1 where  d := a * b * c * (a + b + c)  e := a ^ 4  f := b ^ 4  g := c ^ 4"
+      }
+    },
+    "nonneg_cubic": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 1887,
+        "heartbeats": 14042,
+        "reason": "forge_cone?: the oracle returned status `unknown` (exit code 0): cone.discover(degree=4): LP found no candidate"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 112,
+        "heartbeats": 583069,
+        "reason": "linarith failed to find a contradiction x y : ℤ hx : 0 ≤ x hy : 0 ≤ y a✝ : x ^ 3 + y ^ 3 < x ^ 2 * y + x * y ^ 2 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 4,
+        "heartbeats": 19033,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 94,
+        "heartbeats": 395777,
+        "reason": "`grind` failed case grind.1.1.1 x y : ℤ hx : 0 ≤ x hy : 0 ≤ y h : -1 * (x * y ^ 2) + -1 * (x ^ 2 * y) + x ^ 3 + y ^ 3 + 1 ≤ 0 h_1 : y = y ^ 2 h_2 : x = x ^ 2 h_3 : x = y ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 6,
+        "heartbeats": 20230,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   c + d - e - f ≥ 1   b ≥ 0   a ≥ 0 where  a := x  b := y  c := x ^ 2 * y  d := x * y ^ 2  e := x ^ 3  f := y ^ 3"
+      }
+    },
+    "guard_product": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 2234,
+        "heartbeats": 171820
+      },
+      "nlinarith": {
+        "status": "ok",
+        "ms": 150,
+        "heartbeats": 501134
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 6,
+        "heartbeats": 14345,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 65,
+        "heartbeats": 196904,
+        "reason": "`grind` failed case grind x y : ℤ hx : 1 ≤ x hy : 1 ≤ y h : -1 * x + -1 * y + x * y + 2 ≤ 0 ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -1 * x + 1 ≤ 0     [prop] -1 * y + 1 ≤ 0     [prop] -1 * x + -1 * y + x * y + 2"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 11372,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   b ≥ 1   a ≥ 1   a + b - c ≥ 2 where  a := x  b := y  c := x * y"
+      }
+    },
+    "sum_fixed_product": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 2523,
+        "heartbeats": 4756,
+        "reason": "forge_cone?: the oracle returned status `unknown` (exit code 0): cone.discover(degree=2): LP found no candidate; cone.discover(degree=4): LP found no candidate"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 101,
+        "heartbeats": 379354,
+        "reason": "linarith failed to find a contradiction x y : ℤ h : x + y = 2 a✝ : 1 < x * y ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 11909,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 44,
+        "heartbeats": 171387,
+        "reason": "`grind` failed case grind x y : ℤ h : x + y = 2 h_1 : -1 * (x * y) + 2 ≤ 0 ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] x + y + -2 = 0     [prop] -1 * (x * y) + 2 ≤ 0   [eqc] True propositions     [prop] -1 * (x * y)"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 2,
+        "heartbeats": 6474,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a ≥ 2 where  a := x * y"
+      }
+    },
+    "sum_fixed_squares3": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 2869,
+        "heartbeats": 626038
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 129,
+        "heartbeats": 593310,
+        "reason": "linarith failed to find a contradiction x y z : ℤ h : x + y + z = 3 a✝ : x ^ 2 + y ^ 2 + z ^ 2 < 3 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 7202,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 60,
+        "heartbeats": 263629,
+        "reason": "`grind` failed case grind.1 x y z : ℤ h : x + y + z = 3 h_1 : x ^ 2 + y ^ 2 + z ^ 2 + -2 ≤ 0 h_2 : y = z ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] x + y + z + -3 = 0     [prop] x ^ 2 + y ^ 2 + z ^ 2 + -2 ≤ 0     ["
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 11001,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a + b + c ≤ 2 where  a := x ^ 2  b := y ^ 2  c := z ^ 2"
+      }
+    },
+    "schur_t1": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 1829,
+        "heartbeats": 8477,
+        "reason": "forge_cone?: the oracle returned status `unknown` (exit code 0): cone.discover(degree=4): LP found no candidate"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 106,
+        "heartbeats": 569114,
+        "reason": "linarith failed to find a contradiction x y z : ℤ hx : 0 ≤ x hy : 0 ≤ y hz : 0 ≤ z a✝ : x * (x - y) * (x - z) + y * (y - x) * (y - z) + z * (z - x) * (z - y) < 0 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 86,
+        "heartbeats": 228642,
+        "reason": "failed to prove positivity/nonnegativity/nonzeroness"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 324,
+        "heartbeats": 1159598,
+        "reason": "`grind` failed case grind.1.1.1.2.2.1.1 x y z : ℤ hx : 0 ≤ x hy : 0 ≤ y hz : 0 ≤ z h : x * (x - y) * (x - z) + y * (y - x) * (y - z) + z * (z - x) * (z - y) + 1 ≤ 0 h_1 : y - x = z - x h_2 : x - y = z - x h_3 : z ^ 2 = z - x h_4 : ¬z = x ^"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 7,
+        "heartbeats": 26548,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   d + e + f ≤ -1   c ≥ 0   b ≥ 0   a ≥ 0 where  a := x  b := y  c := z  d := x * (x - y) * (x - z)  e := y * (y - x) * (y - z)  f := z * (z - x) * (z - y)"
+      }
+    },
+    "product_of_nonneg3": {
+      "forge_cone?": {
+        "status": "ok",
+        "ms": 2006,
+        "heartbeats": 133911
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 84,
+        "heartbeats": 452366,
+        "reason": "linarith failed to find a contradiction x y z : ℤ hx : 0 ≤ x hy : 0 ≤ y hz : 0 ≤ z a✝ : x * y * z < 0 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "ok",
+        "ms": 74,
+        "heartbeats": 217078
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 60,
+        "heartbeats": 208414,
+        "reason": "`grind` failed case grind.1 x y z : ℤ hx : 0 ≤ x hy : 0 ≤ y hz : 0 ≤ z h : x * y * z + 1 ≤ 0 h_1 : y = z ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -1 * x ≤ 0     [prop] -1 * y ≤ 0     [prop] -1 * z ≤ 0     [prop]"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 3,
+        "heartbeats": 11181,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   d ≤ -1   c ≥ 0   b ≥ 0   a ≥ 0 where  a := x  b := y  c := z  d := x * y * z"
+      }
+    },
+    "motzkin": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 245,
+        "heartbeats": 16135,
+        "reason": "forge_cone?: the oracle returned status `error` (exit code 2): degree exceeds 4"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 85,
+        "heartbeats": 490287,
+        "reason": "linarith failed to find a contradiction x y : ℤ a✝ : x ^ 4 * y ^ 2 + x ^ 2 * y ^ 4 - 3 * (x ^ 2 * y ^ 2) + 1 < 0 ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 23,
+        "heartbeats": 100095,
+        "reason": "failed to prove positivity/nonnegativity/nonzeroness"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 96,
+        "heartbeats": 393090,
+        "reason": "`grind` failed case grind.1.1.1 x y : ℤ h : -3 * (x ^ 2 * y ^ 2) + x ^ 2 * y ^ 4 + x ^ 4 * y ^ 2 + 2 ≤ 0 h_1 : y ^ 2 = y ^ 4 h_2 : x ^ 2 = x ^ 4 h_3 : x = y ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -3 * (x ^ 2 *"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 6,
+        "heartbeats": 17003,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   a + b - 3*c ≤ -2 where  a := x ^ 4 * y ^ 2  b := x ^ 2 * y ^ 4  c := x ^ 2 * y ^ 2"
+      }
+    },
+    "sextic_sos": {
+      "forge_cone?": {
+        "status": "fail",
+        "ms": 252,
+        "heartbeats": 12181,
+        "reason": "forge_cone?: the oracle returned status `error` (exit code 2): degree exceeds 4"
+      },
+      "nlinarith": {
+        "status": "fail",
+        "ms": 137,
+        "heartbeats": 356879,
+        "reason": "linarith failed to find a contradiction x y : ℤ a✝ : x ^ 6 + y ^ 6 < 2 * (x ^ 3 * y ^ 3) ⊢ False failed"
+      },
+      "positivity": {
+        "status": "fail",
+        "ms": 7,
+        "heartbeats": 18089,
+        "reason": "not a positivity goal"
+      },
+      "grind": {
+        "status": "fail",
+        "ms": 72,
+        "heartbeats": 263914,
+        "reason": "`grind` failed case grind.1 x y : ℤ h : -2 * (x ^ 3 * y ^ 3) + x ^ 6 + y ^ 6 + 1 ≤ 0 h_1 : x = y ⊢ False [grind] Goal diagnostics   [facts] Asserted facts     [prop] -2 * (x ^ 3 * y ^ 3) + x ^ 6 + y ^ 6 + 1 ≤ 0     [prop] x = y   [eqc] True"
+      },
+      "omega": {
+        "status": "fail",
+        "ms": 4,
+        "heartbeats": 12333,
+        "reason": "omega could not prove the goal: a possible counterexample may satisfy the constraints   2*a - b - c ≥ 1 where  a := x ^ 3 * y ^ 3  b := x ^ 6  c := y ^ 6"
+      }
+    }
+  }
+}

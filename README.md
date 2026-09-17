@@ -2,7 +2,7 @@
 
 **A certificate-producing proof-planning layer above Lean's `grind`.**
 
-Start with **[`article/forge.pdf`](article/forge.pdf)** (151 pages). Its editable
+Start with **[`article/forge.pdf`](article/forge.pdf)** (152 pages). Its editable
 source is in [`article/`](article/).
 
 ---
@@ -34,6 +34,14 @@ first gate anything in this repository has reached. See
   checkers, each with soundness proved;
 - an axiom audit that fails the build if any of its 593 theorems uses an axiom
   outside `propext` and `Quot.sound` beyond one documented exemption.
+
+**Is it useful?** On 20 well-known polynomial inequalities it did not choose,
+`forge_cone?` solved 12; bare `nlinarith` solved 3, `positivity` 1, `grind` and
+`omega` none. Eight were solved by Forge alone and none by Mathlib alone. The
+comparison is small and its caveats matter — `nlinarith` gets no hints by design,
+most `positivity` failures are about goal form, and Forge's own search missed
+textbook cases such as `(x−y)⁴` — see
+[`lean/Forge/Checker/README.md`](lean/Forge/Checker/README.md).
 
 Three adversarial reviews made 85+ attempts to get it to accept something false
 and found none. They did find a code-injection hole in every exporter, untrue

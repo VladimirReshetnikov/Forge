@@ -506,6 +506,40 @@
       "kernel_check_ms_isolated": 150,
       "kernel_check_limit_expanded_terms": 1600,
       "note": "Per-call oracle times of ~4.5 s inside test files are contention from parallel elaboration."
+    },
+    "head_to_head": {
+      "record": "results/tactic-headtohead.json",
+      "problems": 20,
+      "solved": {
+        "forge_cone?": 12,
+        "nlinarith": 3,
+        "positivity": 1,
+        "grind": 0,
+        "omega": 0
+      },
+      "forge_only": [
+        "amgm2",
+        "cauchy_schwarz2",
+        "quartic_sq_sum3",
+        "shifted_squares",
+        "sq_sum_cross3",
+        "sum_fixed_squares3",
+        "sum_sq_bound",
+        "tridiagonal3"
+      ],
+      "mathlib_only": [],
+      "forge_failures": {
+        "search_found_no_candidate": 6,
+        "degree_bound": 2,
+        "size_refusal": 0
+      },
+      "caveats": [
+        "nlinarith received no hints, deliberately; with the certificate as a hint it succeeds",
+        "positivity rejects goals not of the form 0 <= e; most of its failures are about form",
+        "Forge is slower when both succeed: 0.3-2.9 s against 0.1-0.6 s",
+        "20 curated problems, Int, degree <= 4 bar two probes; Lean v4.32 with Mathlib"
+      ],
+      "decision": "Gate 1 is justified by the result, but the search missed textbook sums of squares, including (x-y)^4 and x+y=2 => xy<=1. Closing those gaps is cheaper, measurable with the same harness, and inherited by any planner, so it comes first."
     }
   }
 }

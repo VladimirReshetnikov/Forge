@@ -1600,6 +1600,60 @@ through a \code{have}. A first draft of that test included a hypothesis from
 which the fact followed linearly; \code{grind} proved it unaided, and the
 \code{fail\_if\_success} line that exposed this is kept in the test.
 
+\subsection{A head-to-head on problems Forge did not choose}
+
+Everything above shows the checker is sound. It does not show the search is
+useful: the earlier comparison ran on the prototype's own certificates, and the
+benchmark's certificates were constructed before its problems. So the search was
+run against Mathlib's nonlinear tactics on twenty well-known polynomial
+inequalities --- AM-GM, Cauchy--Schwarz in two dimensions, $a^4+b^4+c^4 \ge
+abc(a+b+c)$, Schur's inequality, constrained forms --- plus two deliberate
+probes: Motzkin's polynomial, nonnegative but not a sum of squares, and a
+degree-six sum of squares past the oracle's degree bound. Each was checked true
+on an integer grid before any Lean ran.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Tactic & Solved (of 20) \\
+\midrule
+\code{forge\_cone?} & \textbf{12} \\
+\code{nlinarith}, no hints & 3 \\
+\code{positivity} & 1 \\
+\code{grind}, \code{omega} & 0 \\
+\midrule
+Solved by \code{forge\_cone?} only & 8 \\
+Solved by a Mathlib tactic only & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Lean v4.32 with Mathlib, the only built Mathlib available; Forge's core
+compiles unchanged on it. Sequential elaboration, one heartbeat limit for every
+attempt. Data in \texttt{results/tactic-headtohead.json}.}
+\label{tab:headtohead}
+\end{table}
+
+The failure reasons were read before the table was trusted, because a harness
+defect would produce the same counts. Every \code{nlinarith} failure was a
+genuine refutation failure in well under a second, not a timeout. It received no
+hints on purpose: given the certificate's squares it succeeds, as the earlier
+comparison showed, so what is being measured is \emph{finding} a certificate.
+Fourteen of the twenty \code{positivity} failures are rejections of goal form, not attempts; on the six goals already of the form $0 \le e$ it solved one. All
+sixteen successes are real proofs: the eighty-four failures produced exactly
+eighty-four errors and there was no \code{sorry}.
+
+Forge's own failures are as informative as its successes. Six were its search
+returning no candidate, including $(x-y)^4$ written out and $x+y=2 \Rightarrow xy
+\le 1$ --- textbook sums of squares a semidefinite search would find --- and two
+were its degree bound. None was a size refusal: the kernel limit measured earlier
+did not bind here. When both succeeded, Forge was slower, because its oracle is a
+separate process.
+
+The comparison was run to decide whether the search deserves a planner built
+around it. It does. But the same run shows the search's gaps plainly, and those
+are cheaper to close, measurable with the same harness, and inherited by any
+planner --- so they come before Gate~1.
+
 \subsection{What the evidence establishes}
 
 It establishes that the implementations actually synthesise certificates in the

@@ -213,7 +213,73 @@ python tools/export_lean_cone.py
 cd lean && LEAN_PATH=.lake/build/lib lean Forge/Checker/Corpus.lean
 ```
 
+## Head-to-head on problems Forge did not choose
+
+`tools/compare_tactics.py` runs `forge_cone?`, `nlinarith`, `positivity`,
+`grind` and `omega` on the 20 well-known inequalities in
+[`bench/tactics/problems.json`](../../../bench/tactics/problems.json), each
+checked true on an integer grid before any Lean ran. Full data in
+[`results/tactic-headtohead.json`](../../../results/tactic-headtohead.json).
+
+| Problem | `forge_cone?` | `nlinarith` | `positivity` |
+| --- | --- | --- | --- |
+| AM-GM, 2 variables | **ok** 0.6 s | fails | form |
+| 1 + x² ≥ 2x | ok 0.3 s | ok 0.6 s | form |
+| x²+y²+z² ≥ xy+yz+zx | **ok** 0.3 s | fails | form |
+| (x+y)² ≤ 2(x²+y²) | **ok** 0.3 s | fails | form |
+| x² − xy + y² ≥ 0 | ok 0.3 s | ok 0.1 s | fails |
+| (x−1)²+(y−1)² ≥ 0, expanded | **ok** 0.4 s | fails | form |
+| PSD tridiagonal form, 3 vars | **ok** 0.3 s | fails | fails |
+| Cauchy–Schwarz, 2D | **ok** 1.9 s | fails | form |
+| a⁴+b⁴ ≥ a³b+ab³ | *search found none* | fails | form |
+| (x−y)⁴ ≥ 0, expanded | *search found none* | fails | fails |
+| x⁴+y⁴+z⁴ ≥ x²y²+y²z²+z²x² | **ok** 2.1 s | fails | form |
+| a⁴+b⁴+c⁴ ≥ abc(a+b+c) | *search found none* | fails | form |
+| x³+y³ ≥ x²y+xy² for x,y ≥ 0 | *search found none* | fails | form |
+| (x−1)(y−1) ≥ 0 for x,y ≥ 1 | ok 2.2 s | ok 0.2 s | form |
+| x+y = 2 ⇒ xy ≤ 1 | *search found none* | fails | form |
+| x+y+z = 3 ⇒ x²+y²+z² ≥ 3 | **ok** 2.9 s | fails | form |
+| Schur, t = 1 | *search found none* | fails | fails |
+| xyz ≥ 0 for x,y,z ≥ 0 | ok 2.0 s | fails | ok 0.1 s |
+| Motzkin (not SOS, degree 6) | *degree bound* | fails | fails |
+| (x³−y³)² expanded, degree 6 | *degree bound* | fails | form |
+| **Solved** | **12** | **3** | **1** |
+
+**Solved by `forge_cone?` and by no Mathlib tactic tried: 8.** Solved by a
+Mathlib tactic and not by `forge_cone?`: 0. `grind` and `omega` solved none,
+as the calibration probes predicted. Bold marks the eight.
+
+**Read before quoting.**
+- *Every `nlinarith` failure was genuine and fast* (50–600 ms, "linarith failed
+  to find a contradiction"), not a heartbeat timeout. It received no hints,
+  deliberately: `nlinarith [sq_nonneg (x - y)]` is handing it the certificate,
+  which is exactly what `forge_cone?` has to find. With the right hint it
+  succeeds (see the earlier comparison) — so what this measures is *finding*
+  the certificate, not *checking* it.
+- *"form" is not a capability result.* `positivity` rejects every goal not of the
+  form `0 ≤ e` as "not a positivity goal"; 14 of its 20 rows are that. On the six
+  goals that ARE of that form it genuinely tried, and solved one (`xyz ≥ 0`).
+  Those six are marked "fails" or "ok", not "form".
+- *Forge's failures are its own and are visible.* Six are its search returning
+  no candidate — including `(x−y)⁴` and `x+y=2 ⇒ xy≤1`, both textbook sums of
+  squares — and two are its degree bound of 4. None was a size refusal: the
+  kernel's ~1600-term limit did not bind on this set.
+- *Forge is slower when both succeed*: its oracle is a separate Python process,
+  0.3–2.9 s per success against 0.1–0.6 s for `nlinarith`.
+- *Twenty curated problems is a small sample*, over `Int`, degree ≤ 4 apart from
+  two deliberate probes, on Lean v4.32 with Mathlib (the only built Mathlib
+  here; Forge's core compiles unchanged on it).
+- All 16 successes were checked to be real proofs: 84 failures produced exactly
+  84 errors, and there were no `sorry` warnings.
+
+**What it decided.** The question was whether Forge's search is worth building a
+planner around. It solves problems the baselines cannot, so Gate 1 is justified.
+But the same run shows the search missing textbook sums of squares — a gap that
+is cheaper to close than Gate 1, measurable with this harness before and after,
+and one the planner would inherit. So the search's gaps come first, then Gate 1.
+
 ## Does Lean already do this?
+
 
 The first comparison this project has run. Full data in
 [`results/lean-tactic-comparison.json`](../../../results/lean-tactic-comparison.json).
