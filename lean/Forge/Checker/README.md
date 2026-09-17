@@ -6,11 +6,12 @@ that checking it establishes the mathematical claim — and, since Gate 2, a
 tactic that applies it to an ordinary goal and an oracle protocol that finds it.
 
 Everything here is **core Lean only**. No Mathlib, no `ring`, no `nlinarith`.
-That was a deliberate constraint: 58 of this repository's `.lean` files are
-delivered Mathlib-dependent files that **nothing has ever checked**, and a checker
-in that bucket would have been one more uncompiled claim. The one exception is
-`lean/Forge/Real/`, below, which lifts soundness to the reals with Mathlib and is
-itself checked.
+That was a deliberate constraint: when it was written, 58 of this repository's
+`.lean` files were delivered Mathlib-dependent files that **nothing had ever
+checked**, and a checker in that bucket would have been one more uncompiled
+claim. The Mathlib files merged into `lean/Forge` have since been compiled (see
+`results/lean-mathlib-forge.json`), and `lean/Forge/Real/`, below, lifts
+soundness to the reals with Mathlib and is itself checked.
 
 ## What is here
 
@@ -51,7 +52,7 @@ Generated corpora are written only through `tools/lean_emit_guard.py`; see
 | Mutation rejection at the data boundary | **Met — after a hole was found and closed** (see below). |
 | Recorded axiom dependencies | **Met**, and enforced by `AxiomAudit.lean`. |
 | "Adds useful nonlinear facts to a stock `grind` leaf" | **Met as composition only**: `compose_with_grind` shows a goal neither `grind` nor `omega` proves alone, closed after `forge_cone` supplies one fact via `have`. Nothing calls `forge_cone` automatically. |
-| Gate 1 (trustworthy orchestration), its prerequisite | **First milestone.** `Forge/Frontend.lean`: `forge` runs decide, omega, `forge_cone?` (off in restricted mode) and grind in a fixed order with full state rollback, rejects proofs containing `sorry` or axioms outside the policy by inspecting the term, and logs a deterministic replay record. `FrontendTest.lean` pins each exit criterion: a restricted baseline with `#print axioms`, an admitted proof rejected, the choice policy enforced both ways, and a failed worker's metavariable assignment rolled back. Not built: worker contracts beyond the proof audit, source-assumption preservation, planning. Gate 2 was built first. |
+| Gate 1 (trustworthy orchestration), its prerequisite | **First milestone.** `Forge/Frontend.lean`: `forge` runs decide, omega, `forge_cone?` (off in restricted mode) and grind in a fixed order with full state rollback, rejects proofs containing `sorry` or axioms outside the policy by inspecting the term, and logs a deterministic replay record. `FrontendTest.lean` pins each exit criterion: a restricted baseline with `#print axioms`; an admitted proof, an ill-typed proof term and a proof from a variable outside the goal's context each rejected, with the reason pinned; the choice policy enforced both ways, and a failed worker's metavariable assignment rolled back. Not built: worker contracts beyond the proof audit, source-assumption preservation, planning. Gate 2 was built first. |
 
 ## The theorem
 

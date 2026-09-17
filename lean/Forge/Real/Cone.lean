@@ -11,11 +11,11 @@ import Forge.Checker.Cone
   point satisfying the constraints. No new checker, no new certificates: the
   `_checks` theorems already in the corpus transfer as they are.
 
-  MATHLIB. This file imports Mathlib, and at the time of writing it is the first
-  Mathlib-dependent file in this repository that is actually CHECKED -- the other
-  58 have never been compiled by anything. It is compiled with Lean v4.32.0,
-  the only toolchain with a built Mathlib on the machine where it was written,
-  by `tools/build_real.py`; the core modules it imports compile unchanged there.
+  MATHLIB. This file imports Mathlib. When written it was the first
+  Mathlib-dependent file in this repository to be checked, compiled with Lean
+  v4.32.0 by `tools/build_real.py`, because that was the only built Mathlib on
+  the machine. It has since compiled unchanged on the pinned v4.34.0 toolchain
+  against the pinned Mathlib too (`tools/build_mathlib_forge.py`).
 
   AXIOMS. Mathlib's reals are built with `Classical.choice`, so the theorems here
   depend on propext, Classical.choice and Quot.sound -- unlike the core files,

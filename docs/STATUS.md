@@ -129,7 +129,10 @@ From the fourth round:
 
 ## Generated but not compiled
 
-Produced as Lean source, never checked by a compiler — with one exception.
+Produced as Lean source and, until recently, never checked by a compiler. The
+thirteen Mathlib files of this kind merged into `lean/Forge` now compile on the
+pinned toolchain (`results/lean-mathlib-forge.json`); the items below remain
+unchecked in the proposals' own copies.
 
 - Cone certificate replays (two emitter styles, 18 theorems)
 - A 32-leaf Bernstein subdivision replay

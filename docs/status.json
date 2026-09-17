@@ -122,12 +122,27 @@
       "dependency_counting": "TRANSITIVE. A file importing a sibling that is itself Mathlib-free is Mathlib-free. Earlier figures split 48 direct-Mathlib from 11 sibling-importing and filed the second group with the unchecked, which understated what is checkable.",
       "regenerate_with": "python tools/lean_inventory.py",
       "mathlib_dependent_checked": {
-        "files": [
-          "lean/Forge/Real/Cone.lean",
-          "lean/Forge/Real/Examples.lean"
+        "files": 15,
+        "groups": [
+          "lean/Forge/Generated (6)",
+          "lean/Forge/Examples (7)",
+          "lean/Forge/Real (2)"
         ],
-        "toolchain": "v4.32.0",
-        "record": "results/lean-real.json"
+        "toolchain": "v4.34.0, against the Mathlib revision pinned in lean/lakefile.toml",
+        "fixes_needed": [
+          "lean/Forge/Generated/Invariants.lean: noncomputable section (real division has no executable code)"
+        ],
+        "axiom_audit": "lean/MathlibAudit.lean: 332 theorems within propext, Classical.choice, Quot.sound; negative-tested with a planted axiom and a sorry",
+        "record": "results/lean-mathlib-forge.json",
+        "still_unchecked": "45 Mathlib-dependent files: the proposals' own copies and prototype/results/lean",
+        "earlier": {
+          "files": [
+            "lean/Forge/Real/Cone.lean",
+            "lean/Forge/Real/Examples.lean"
+          ],
+          "toolchain": "v4.32.0",
+          "record": "results/lean-real.json"
+        }
       }
     },
     "one_proposal_shipped_no_lean_deliberately": "r9-infinite-horizon",
@@ -642,7 +657,7 @@
       ],
       "exit_criteria": {
         "restricted_mode_pinned_baseline_without_new_axioms": "met for a three-goal suite pinned with #guard_msgs and #print axioms; grind contributes Classical.choice, which the policy allows by default and can refuse",
-        "malformed_or_admitted_proof_rejected": "met for an admitted (sorry) worker and a Classical.choice worker under forge.allowChoice false; malformed terms are left to the kernel",
+        "malformed_or_admitted_proof_rejected": "met for four test workers: an admitted (sorry) proof, an ill-typed term assigned without a type check, a proof from a variable outside the goal's context, and a Classical.choice proof under forge.allowChoice false; each rejection reason is pinned",
         "failed_branch_cannot_leak": "tested, not proved: a worker that assigns a metavariable and fails leaves it unassigned and the goal list restored"
       },
       "not_built": [

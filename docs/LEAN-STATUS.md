@@ -242,7 +242,12 @@ therefore exactly the kind of file this repository has never been able to check.
 on Mathlib and none of them had ever been checked by anything. A checker in that
 bucket would have been one more uncompiled claim. Since then the soundness
 theorem has been lifted to the reals in `Forge/Real/`, which imports Mathlib and
-IS checked — the first Mathlib-dependent files in this repository to be.
+IS checked — the first Mathlib-dependent files in this repository to be. And
+once `lake build` had fetched the Mathlib the lakefile pins, the thirteen
+delivered Mathlib files merged into `Forge/Generated` and `Forge/Examples`
+were compiled too: all thirteen pass, one after a fix (`Invariants.lean` lacked
+`noncomputable section`), and `MathlibAudit.lean` finds their 302 theorems, with
+the reals layer's 30, within `propext`, `Classical.choice` and `Quot.sound`.
 
 ### The fourth round
 

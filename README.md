@@ -204,9 +204,14 @@ and
 
 That is 28 of the 29 Mathlib-free files — counting transitively, so a file
 importing a sibling that is itself Mathlib-free counts as Mathlib-free. Of the
-60 that depend on Mathlib, two are Forge's own reals layer, which **is** checked
-(at Lean v4.32, the only built Mathlib here); the other 58 were delivered by the
-proposals and **nothing has ever checked any of them** — and
+60 that depend on Mathlib, fifteen now compile on the pinned toolchain against
+the pinned Mathlib, with no errors and no `sorry`, and pass an axiom audit that
+walks the environment ([`results/lean-mathlib-forge.json`](results/lean-mathlib-forge.json)):
+Forge's own reals layer and the thirteen delivered files merged into
+`lean/Forge/Generated` and `lean/Forge/Examples`. One of those thirteen needed a
+fix: `Invariants.lean` defines real-valued functions without `noncomputable`,
+which Lean rejects. The other 45 — the proposals' own copies and the
+prototype's emitted outputs — **nothing has checked** — and
 the one time this merge looked inside that bucket for a reason unrelated to
 Mathlib, it found a second broken file. `r6`'s `FlowTargets.lean` puts a module
 docstring above its `import`, which Lean 4 rejects at parse time whether or not

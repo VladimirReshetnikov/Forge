@@ -9,9 +9,11 @@ defaultTargets = ["ForgeCore", "Forge"]
 #
 # No proposal ever built this. Every file in `ForgeCore` has been elaborated
 # against Lean v4.34.0 (results/lean-core-elaboration.json and
-# results/lean-closure-elaboration.json); `Forge` has not, because it needs
-# Mathlib. There is still no lake-manifest.json here, deliberately: nothing has
-# been built, and a manifest asserting otherwise would be a fiction.
+# results/lean-closure-elaboration.json). `lake build` has since fetched this
+# revision with its prebuilt cache, and every Mathlib-dependent file in `Forge`
+# compiles against it (tools/build_mathlib_forge.py,
+# results/lean-mathlib-forge.json). lake-manifest.json records the resolved
+# dependency revisions from that fetch.
 # ---------------------------------------------------------------------------
 [[require]]
 name = "mathlib"
@@ -24,6 +26,6 @@ rev = "1cf325a0cf67aca2b04d76b5380ff6a9e410aefa"
 [[lean_lib]]
 name = "ForgeCore"
 
-# Everything else. Requires a built Mathlib.
+# Everything else. Requires a built Mathlib (see tools/build_mathlib_forge.py).
 [[lean_lib]]
 name = "Forge"

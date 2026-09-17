@@ -23,8 +23,10 @@ import Forge.Checker.Oracle
     - on ANY failure, including runtime limits, restores that state, so nothing
       the worker assigned, introduced or logged survives into the next attempt;
     - on apparent success, does NOT take the worker's word for it: it
-      instantiates the proof term itself, rejects it if it contains `sorry`, and
-      rejects it if any constant it uses depends on an axiom outside the policy
+      instantiates the proof term itself and rejects it if it contains `sorry`,
+      if it uses a free variable outside the goal's context, if it does not
+      type-check against the ORIGINAL goal, or if any constant it uses depends
+      on an axiom outside the policy
       (propext, Quot.sound, and -- unless `forge.allowChoice` is false --
       Classical.choice, which stock `grind` needs);
     - accepts the first proof that passes, and emits a replay record: which
@@ -68,13 +70,41 @@ register_option forge.verbose : Bool := {
 
 register_option forge.test.admitFirst : Bool := {
   defValue := false
-  descr := "TEST ONLY: first try a worker that closes the goal with `sorry`; the frontend must reject it"
+  descr := "TEST ONLY: first try a worker that admits the goal; the frontend must reject it"
 }
 
 register_option forge.test.choiceFirst : Bool := {
   defValue := false
   descr := "TEST ONLY: first try a worker whose proof uses Classical.choice"
 }
+
+register_option forge.test.malformedFirst : Bool := {
+  defValue := false
+  descr := "TEST ONLY: first try a worker that assigns the goal an ill-typed term"
+}
+
+register_option forge.test.escapeFirst : Bool := {
+  defValue := false
+  descr := "TEST ONLY: first try a worker whose proof mentions a variable outside the goal's context"
+}
+
+/-- TEST ONLY. Closes the main goal by assigning `True.intro` WITHOUT a type check,
+so the proof term does not prove the goal. A frontend that trusts `getUnsolvedGoals`
+would accept it; the kernel would only object later, at `theorem` time. -/
+elab "forge_test_malformed" : tactic => do
+  let g ← getMainGoal
+  g.assign (mkConst ``True.intro)
+  replaceMainGoal []
+
+/-- TEST ONLY. Closes the main goal with a local hypothesis that exists only inside
+this worker: the proof term mentions a free variable the goal's context does not
+have, so it proves the goal from an assumption the user never made. -/
+elab "forge_test_escape" : tactic => do
+  let g ← getMainGoal
+  let ty ← g.getType
+  let h ← withLocalDeclD `phantom ty pure
+  g.assign h
+  replaceMainGoal []
 
 /-- One attempt, for the replay record. -/
 structure Attempt where
@@ -113,9 +143,13 @@ def workers : TacticM (Array (String × TSyntax `tactic)) := do
   let opts ← getOptions
   let mut ws : Array (String × TSyntax `tactic) := #[]
   if forge.test.admitFirst.get opts then
-    ws := ws.push ("admit (test)", ← `(tactic| sorry))
+    ws := ws.push ("admit (test)", ← `(tactic| admit))
   if forge.test.choiceFirst.get opts then
     ws := ws.push ("choice (test)", ← `(tactic| exact Classical.byContradiction fun h => absurd trivial (by simp_all)))
+  if forge.test.malformedFirst.get opts then
+    ws := ws.push ("malformed (test)", ← `(tactic| forge_test_malformed))
+  if forge.test.escapeFirst.get opts then
+    ws := ws.push ("escape (test)", ← `(tactic| forge_test_escape))
   ws := ws.push ("decide", ← `(tactic| decide))
   ws := ws.push ("omega", ← `(tactic| omega))
   unless forge.restricted.get opts do
@@ -128,6 +162,8 @@ def workers : TacticM (Array (String × TSyntax `tactic)) := do
 or `none` if the worker's proof was accepted (and the state is kept). -/
 def runWorker (goal : MVarId) (stx : TSyntax `tactic) : TacticM (Option String) := do
   let saved ← saveState
+  let goalType ← instantiateMVars (← goal.getType)
+  let goalCtx := (← goal.getDecl).lctx
   let outcome ← tryCatchRuntimeEx
     (do
       evalTactic stx
@@ -135,9 +171,23 @@ def runWorker (goal : MVarId) (stx : TSyntax `tactic) : TacticM (Option String) 
         throwError "the worker left goals open"
       let pf ← instantiateMVars (mkMVar goal)
       if pf.hasSorry then
-        throwError "REJECTED: the proof contains `sorry`"
+        throwError "REJECTED: the proof is admitted, not proved"
       if pf.hasExprMVar then
         throwError "REJECTED: the proof still contains metavariables"
+      -- The proof may use only the goal's own hypotheses: a free variable from
+      -- anywhere else is an assumption the user never made.
+      let escaped := (collectFVars {} pf).fvarIds.filter (!goalCtx.contains ·)
+      unless escaped.isEmpty do
+        throwError "REJECTED: the proof uses {escaped.size} variable(s) outside the goal's context"
+      -- The proof must be well typed AND prove the original statement. Checked
+      -- in the goal's own context, so nothing the worker introduced is in scope.
+      let wellTyped ← withLCtx goalCtx (← goal.getDecl).localInstances do
+        try
+          Meta.check pf
+          isDefEq (← inferType pf) goalType
+        catch _ => pure false
+      unless wellTyped do
+        throwError "REJECTED: the proof term does not have the goal's type"
       let bad ← disallowedAxioms pf
       unless bad.isEmpty do
         throwError m!"REJECTED: the proof depends on axioms outside the policy: {bad}"

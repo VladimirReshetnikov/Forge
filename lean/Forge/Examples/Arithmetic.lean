@@ -5,9 +5,11 @@
   certificate result through division (divided_box_bilinear) and deliberately
   avoiding a leading-coefficient side condition (discriminant_nonnegative).
 
-  NOT COMPILED as part of this file's original proposal, and not compiled
-  here either unless it appears in results/lean-core-elaboration.json.
-  See docs/LEAN-STATUS.md for what has and has not been checked.
+  NOT COMPILED as part of this file's original proposal. Since compiled here,
+  on the pinned toolchain against the pinned Mathlib, with no errors and no
+  `sorry`, by tools/build_mathlib_forge.py (results/lean-mathlib-forge.json);
+  its theorems pass lean/MathlibAudit.lean. The status line below is the
+  original author's, kept as written.
 -/
 
 /-

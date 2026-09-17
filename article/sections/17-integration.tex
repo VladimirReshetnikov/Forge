@@ -463,11 +463,13 @@ restricted mode reproduces a pinned baseline suite without introducing new
 axioms or losing source assumptions; a deliberately malformed proof or admitted
 theorem is rejected; a failed branch provably cannot leak a local equality into
 its sibling. Only existing proof-producing leaf tactics need run at this stage.
-Status: a first milestone exists. The 	exttt{forge} tactic in
-	exttt{Forge/Frontend.lean} tries a fixed sequence of workers, restores the whole
+Status: a first milestone exists. The \texttt{forge} tactic in
+\texttt{Forge/Frontend.lean} tries a fixed sequence of workers, restores the whole
 tactic state after each failure, and accepts a proof only after checking the term
-for 	exttt{sorry} and for axioms outside the policy. Its tests pin a small
-restricted baseline, reject an admitted proof, and show that a failed worker's
+for \texttt{sorry}, for variables outside the goal's context, for its type
+against the original goal, and for axioms outside the policy. Its tests pin a
+small restricted baseline, reject an admitted proof, an ill-typed proof term
+and a proof from a phantom hypothesis, and show that a failed worker's
 metavariable assignment does not survive; the last is tested, not proved, and
 no planner exists.
 

@@ -10,7 +10,7 @@ over the others; [`INTEGRATION.md`](INTEGRATION.md) has the module plan and the 
 | | |
 | --- | --- |
 | `ForgeCore` | **Elaborates.** Verified against `leanprover/lean4:v4.34.0`; see [`../results/lean-core-elaboration.json`](../results/lean-core-elaboration.json) and [`../results/lean-closure-elaboration.json`](../results/lean-closure-elaboration.json). |
-| `Forge` | **Not compiled.** Every file imports Mathlib and needs a built project. |
+| `Forge` | **Compiled file by file** on v4.34.0 against the pinned Mathlib by `tools/build_mathlib_forge.py`; `MathlibAudit.lean` audits the axioms. |
 | A `forge` tactic | **Does not exist.** Nothing here implements one. |
 
 None of the thirty-six proposals compiled any Lean at all — each recorded
@@ -34,7 +34,7 @@ lean-toolchain            leanprover/lean4:v4.34.0
 lakefile.toml             two libraries; Mathlib pinned at 1cf325a0…
 
 ForgeCore.lean            core-Lean-only root — the part that compiles
-Forge.lean                full root — needs Mathlib
+Forge.lean                full root — needs Mathlib; compiles
 
 Forge/Design/             proposed data contracts (core Lean only)
   Runtime.lean              obligations, candidates, scope keys, budgets,
@@ -87,7 +87,7 @@ styles; the redundant re-emissions are gone, the distinct problems retained.
 Namespaces are left exactly as their authors wrote them (`ForgeExamples`,
 `ForgeReplay`, `ForgeArtifacts`, `ForgeSpecimens`, `ForgeDesign`,
 `ForgeContracts`). They do not collide, and renaming them would mean editing
-proof scripts that have never been compiled — a bad trade.
+proof scripts, which were merged without being compiled — a bad trade.
 
 The extension round's ten core-only specimens were a sharper case of the same
 duplication. Six of them defined a `Reachable` inductive and proved the same
@@ -111,18 +111,21 @@ Core only, no Mathlib needed:
 python tools/check_lean.py --mode elaborate lean/Forge/Design lean/Forge/Closure lean/Forge/Examples/Structural.lean
 ```
 
-Everything, in a project with Mathlib built:
+Everything. `lake build ForgeCore` fetches the pinned Mathlib and its prebuilt
+cache on first run (lake-manifest.json records the resolved revisions); then
+the Mathlib-dependent files are compiled one at a time, under a memory ceiling,
+followed by the axiom audit and the `Forge` root:
 
 ```bash
-cd lean
-lake update
-lake exe cache get
-lake build
+cd lean && lake build ForgeCore
 ```
 
-`lake update` will resolve Mathlib at the pinned revision. Expect this to take a
-long time on a cold cache, and expect failures: these scripts were written
-against an inspected source tree, never against a running compiler.
+```bash
+python tools/build_mathlib_forge.py
+```
+
+Each file loads Mathlib afresh, so expect minutes per file and about 3 GB of
+memory. The record is `results/lean-mathlib-forge.json`.
 
 To check individual files against a Mathlib project you already have:
 

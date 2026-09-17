@@ -4,9 +4,11 @@
   Accumulator-invariant proofs, powers 0-8 plus two further shapes. Chosen over
   the power-sum-only variant, which is this file's a = 0 specialisation.
 
-  NOT COMPILED as part of this file's original proposal, and not compiled
-  here either unless it appears in results/lean-core-elaboration.json.
-  See docs/LEAN-STATUS.md for what has and has not been checked.
+  NOT COMPILED as part of this file's original proposal. Since compiled here,
+  on the pinned toolchain against the pinned Mathlib, with no errors and no
+  `sorry`, by tools/build_mathlib_forge.py (results/lean-mathlib-forge.json);
+  its theorems pass lean/MathlibAudit.lean. The status line below is the
+  original author's, kept as written.
 -/
 
 /-

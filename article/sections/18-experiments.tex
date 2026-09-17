@@ -995,10 +995,10 @@ languages it is driving. What still appears four times is what genuinely
 differs: the model languages themselves.
 
 Two distinctions were preserved rather than flattened. \src{s1}'s producer
-composes run summaries in $(	ext{need},	ext{give})$ coordinates and its
-checker recomputes them in $(	ext{need},	ext{signed delta})$ coordinates;
+composes run summaries in $(\text{need},\text{give})$ coordinates and its
+checker recomputes them in $(\text{need},\text{signed delta})$ coordinates;
 the two recurrences look different and must agree through
-$	ext{give}=	ext{need}+	ext{delta}$, which is the strongest
+$\text{give}=\text{need}+\text{delta}$, which is the strongest
 producer/checker separation this round contains, and it survives the merge with
 a test asserting exactly that identity. And a matrix-update transition has no
 unique least predecessor, so the merged interface returns a list where a vector
@@ -1655,10 +1655,16 @@ polynomial identity, which holds in every commutative ring, so the same Boolean
 check proves the real statement. A Mathlib file proves exactly that, reusing
 every existing check unchanged, and restates the prototype's three certificates
 over the reals --- among them $x + y = 1 \Rightarrow 2x^2 + 2y^2 \ge 1$, which is
-tight at $x = y = \tfrac12$. It is the first Mathlib-dependent file in this
-repository that anything has checked, compiled with the same toolchain as the
+tight at $x = y = \tfrac12$. It was the first Mathlib-dependent file in this
+repository that anything had checked, compiled with the same toolchain as the
 head-to-head; its theorems depend on \code{Classical.choice} as well, because
-Mathlib's reals do.
+Mathlib's reals do. Once the Mathlib revision the build file pins had been
+fetched, the thirteen delivered Mathlib files merged into the tree were compiled
+on the pinned toolchain as well. Twelve passed as delivered; one declared
+real-valued functions without marking them noncomputable, which Lean rejects,
+and passed once they were. An audit that walks the environment finds the 332
+theorems of these fifteen files within \code{propext}, \code{Classical.choice}
+and \code{Quot.sound}. The proposals' own copies, 45 files, remain unchecked.
 
 The comparison was run to decide whether the search deserves a planner built
 around it. It does. But the same run shows the search's gaps plainly, and those

@@ -4,9 +4,11 @@
   The orbit/orbit_invariant transition-system framework and 49 instances.
   The only state-machine formulation of the invariant certificates.
 
-  NOT COMPILED as part of this file's original proposal, and not compiled
-  here either unless it appears in results/lean-core-elaboration.json.
-  See docs/LEAN-STATUS.md for what has and has not been checked.
+  NOT COMPILED as part of this file's original proposal. Since compiled here,
+  on the pinned toolchain against the pinned Mathlib, with no errors and no
+  `sorry`, by tools/build_mathlib_forge.py (results/lean-mathlib-forge.json);
+  its theorems pass lean/MathlibAudit.lean. The status line below is the
+  original author's, kept as written.
 -/
 
 /- Generated from exact Python certificates.
@@ -15,6 +17,9 @@
 import Mathlib
 
 namespace ForgeReplay
+
+-- Real division has no executable code; the definitions here are for proofs only.
+noncomputable section
 
 def orbit {α : Type} (T : α → α) (s₀ : α) : Nat → α
   | 0 => s₀
@@ -664,5 +669,7 @@ theorem preserved_random_39 (n : Nat) :
   · intro s
     dsimp [invariant_random_39, step_random_39]
     ring
+
+end
 
 end ForgeReplay

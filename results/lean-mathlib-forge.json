@@ -1,0 +1,373 @@
+{
+  "what": "Compilation of the Mathlib-dependent files under lean/Forge against the Mathlib revision the lakefile pins, on the toolchain Forge pins.",
+  "toolchain": "leanprover/lean4:v4.34.0",
+  "mathlib": "lean/.lake/packages/mathlib (rev pinned in lean/lakefile.toml; prebuilt cache)",
+  "compiled": 15,
+  "attempted": 15,
+  "steps": [
+    {
+      "module": "Forge.Generated.Bernstein",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 941.7,
+      "peak_rss_gb": 3.01,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {
+        "ForgeReplay.motzkin_box": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Generated.Induction",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 499.5,
+      "peak_rss_gb": 3.38,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 11,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Generated.Invariants",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 90.2,
+      "peak_rss_gb": 3.51,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Generated.SOS",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 39.5,
+      "peak_rss_gb": 3.33,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 4,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Generated.SOSExtra",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 32.3,
+      "peak_rss_gb": 3.19,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 7,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Generated.Witnesses",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 34.4,
+      "peak_rss_gb": 3.32,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 14,
+      "first_errors": [],
+      "axioms": {
+        "ForgeReplay.hidden_quadratic": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeReplay.powerSum6_formula": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.Accumulator",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 34.4,
+      "peak_rss_gb": 3.23,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {
+        "ForgeExamples.reverseAcc_spec": [
+          "propext"
+        ],
+        "ForgeExamples.lengthAcc_spec": [
+          "propext",
+          "Quot.sound"
+        ],
+        "ForgeExamples.energyAcc_ge": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.Arithmetic",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 34.4,
+      "peak_rss_gb": 3.17,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.Basic",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 45.6,
+      "peak_rss_gb": 3.33,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {
+        "ForgeExamples.quartic_nonnegative": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeExamples.polynomial_majorant": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.CrossTheory",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 50.7,
+      "peak_rss_gb": 3.34,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 2,
+      "first_errors": [],
+      "axioms": {
+        "ForgeReplay.oddAccum_eq": [
+          "propext"
+        ],
+        "ForgeReplay.cross_theory": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.Lattice",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 26.2,
+      "peak_rss_gb": 3.15,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.Mixed",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 27.2,
+      "peak_rss_gb": 3.15,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {
+        "ForgeExamples.mixed_obstruction": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeExamples.certificate_identity": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeExamples.product_bound": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeExamples.run_invariant": [
+          "propext"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Examples.Residue",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 28.2,
+      "peak_rss_gb": 3.27,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {
+        "ForgeReplay.qrev_correct": [
+          "propext"
+        ],
+        "ForgeReplay.rev_involution": [
+          "propext"
+        ],
+        "ForgeReplay.cyclic_quadratic": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeReplay.simplex_quadratic": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeReplay.box_product": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "ForgeReplay.residue_witness": [
+          "propext",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Real.Cone",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 50.6,
+      "peak_rss_gb": 3.35,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {},
+      "no_axioms": []
+    },
+    {
+      "module": "Forge.Real.Examples",
+      "compiled": true,
+      "exit_code": 0,
+      "seconds": 29.3,
+      "peak_rss_gb": 3.15,
+      "killed": null,
+      "errors": 0,
+      "sorry_warnings": 0,
+      "warnings": 0,
+      "first_errors": [],
+      "axioms": {
+        "Forge.Checker.Real.Cert.sound_real": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "Forge.Checker.Real.Examples.hidden_quadratic_real": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "Forge.Checker.Real.Examples.guard_product_real": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "Forge.Checker.Real.Examples.equality_constrained_real": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      },
+      "no_axioms": []
+    }
+  ],
+  "axioms_beyond_propext_choice_quotsound": {},
+  "axiom_audit": {
+    "file": "lean/MathlibAudit.lean",
+    "exit_code": 0,
+    "seconds": 146.5,
+    "peak_rss_gb": 3.21,
+    "killed": null,
+    "passed": true,
+    "theorems": 332,
+    "modules": 15,
+    "per_module": {
+      "Forge.Examples.Accumulator": 12,
+      "Forge.Examples.Arithmetic": 9,
+      "Forge.Examples.Basic": 3,
+      "Forge.Examples.CrossTheory": 6,
+      "Forge.Examples.Lattice": 3,
+      "Forge.Examples.Mixed": 7,
+      "Forge.Examples.Residue": 18,
+      "Forge.Generated.Bernstein": 1,
+      "Forge.Generated.Induction": 44,
+      "Forge.Generated.Invariants": 151,
+      "Forge.Generated.SOS": 9,
+      "Forge.Generated.SOSExtra": 9,
+      "Forge.Generated.Witnesses": 30,
+      "Forge.Real.Cone": 27,
+      "Forge.Real.Examples": 3
+    },
+    "first_errors": []
+  },
+  "forge_root": {
+    "file": "lean/Forge.lean",
+    "exit_code": 0,
+    "seconds": 48.4,
+    "peak_rss_gb": 3.29,
+    "killed": null,
+    "compiled": true,
+    "first_errors": []
+  }
+}

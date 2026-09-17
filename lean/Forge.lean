@@ -1,9 +1,11 @@
 /-
   Forge: generated certificate replays and illustrative specimens.
 
-  NOT COMPILED. Every file below imports Mathlib, and no proposal in this
-  project had a Lean toolchain available; this merge has elaborated only the
-  core-Lean-only files in ForgeCore. See docs/LEAN-STATUS.md.
+  COMPILED, file by file: every Mathlib-dependent file below compiles on the
+  pinned toolchain against the pinned Mathlib, with no errors and no `sorry`
+  (tools/build_mathlib_forge.py, results/lean-mathlib-forge.json), and
+  lean/MathlibAudit.lean checks their theorems' axioms. No proposal in this
+  project had a Lean toolchain available; none of this was compiled when merged.
 
   Nothing here implements a `forge` tactic. `Forge/Design/` contains proposed
   data contracts, `Forge/Generated/` contains proof scripts emitted by the

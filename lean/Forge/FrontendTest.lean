@@ -79,6 +79,51 @@ theorem admitted_rejected (x : Int) (h : 0 ≤ x) : 0 ≤ x + 1 := by forge
 /-- info: 'Forge.FrontendTest.admitted_rejected' depends on axioms: [propext, Quot.sound] -/
 #guard_msgs in #print axioms admitted_rejected
 
+/-! ## 2b. A malformed proof, and a proof from a phantom assumption, are rejected
+
+Two test workers "close" the goal without proving it. `malformed` assigns
+`True.intro` to a goal that is not `True`, bypassing the elaborator's type check;
+`escape` proves the goal from a hypothesis that exists only inside the worker.
+Neither leaves goals open and neither contains `sorry`, so only the frontend's
+own checks -- type against the original goal, variables against its context --
+stand between them and acceptance. -/
+
+/--
+info: forge: closed by omega; rejected before it: [malformed (test), decide]
+---
+info: Try this:
+  [apply] omega
+-/
+#guard_msgs in
+set_option forge.test.malformedFirst true in
+theorem malformed_rejected (x : Int) (h : 0 ≤ x) : 0 ≤ 2 * x := by forge
+
+/--
+info: forge: closed by omega; rejected before it: [escape (test), decide]
+---
+info: Try this:
+  [apply] omega
+-/
+#guard_msgs in
+set_option forge.test.escapeFirst true in
+theorem escape_rejected (x : Int) (h : 0 ≤ x) : 0 ≤ 3 * x := by forge
+
+/-- The reasons are the frontend's, not incidental failures. -/
+elab "check_rejection_reasons" : tactic => do
+  let g ← getMainGoal
+  let r1 ← Forge.Frontend.runWorker g (← `(tactic| forge_test_malformed))
+  let r2 ← Forge.Frontend.runWorker g (← `(tactic| forge_test_escape))
+  logInfo m!"malformed: {r1.getD "accepted"}{Format.line}escape: {r2.getD "accepted"}"
+
+/--
+info: malformed: REJECTED: the proof term does not have the goal's type
+escape: REJECTED: the proof uses 1 variable(s) outside the goal's context
+-/
+#guard_msgs in
+example : (2 : Nat) + 2 = 4 := by
+  check_rejection_reasons
+  decide
+
 /-! ## 3. The axiom policy is enforced, in both directions
 
 A test worker proves `True` through `Classical.byContradiction`, which depends on
