@@ -240,6 +240,7 @@ Three more from the extension round belong in the same list:
 | **Adversarial review of Gate 2** | 85+ attacks across three reviews; **0 false statements accepted**; findings fixed and pinned |
 | **Mutation rejection at the data boundary** | every `forge_cone?` corruption case rejected; the id-injection attack refused by every exporter |
 | **Head-to-head, 20 inequalities Forge did not choose** | first run: `forge_cone?` 12, `nlinarith` 3, `positivity` 1, `grind` 0, `omega` 0; after search fixes: `forge_cone?` **18**, others unchanged; 14 Forge-only, 0 Mathlib-only; see caveats in the checker README |
+| **Head-to-head, 20 HELD-OUT inequalities** (committed before any run) | `forge_cone?` **19**, `nlinarith` 3, `positivity` 0, `grind` 0, `omega` 0; 16 Forge-only, 0 Mathlib-only; the one miss (Choi–Lam) is not a sum of squares |
 | **`forge_cone` facts composed with `grind`** | a goal neither `grind` nor `omega` proves alone, closed after one `have` |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |

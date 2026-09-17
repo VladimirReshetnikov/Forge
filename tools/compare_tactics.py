@@ -191,6 +191,7 @@ def main() -> int:
     lean = toolchain_lean(args.toolchain)
     build_core(lean)
 
+    args.problems = args.problems.resolve()
     problems = json.loads(args.problems.read_text(encoding="utf-8"))["problems"]
     if args.only:
         problems = [p for p in problems if p["id"] in args.only]

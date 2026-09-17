@@ -2,7 +2,7 @@
 
 **A certificate-producing proof-planning layer above Lean's `grind`.**
 
-Start with **[`article/forge.pdf`](article/forge.pdf)** (152 pages). Its editable
+Start with **[`article/forge.pdf`](article/forge.pdf)** (153 pages). Its editable
 source is in [`article/`](article/).
 
 ---
@@ -38,10 +38,12 @@ first gate anything in this repository has reached. See
 **Is it useful?** On 20 well-known polynomial inequalities it did not choose,
 `forge_cone?` solved 12; bare `nlinarith` solved 3, `positivity` 1, `grind` and
 `omega` none. That run also showed Forge's search missing textbook cases such as
-`(x−y)⁴`; after fixing those gaps it solves **18 of 20**, fourteen of them solved
-by no Mathlib tactic tried. The caveats matter — `nlinarith` gets no hints by
-design, most `positivity` failures are about goal form, and the second run
-measures fixes made against the first run's failures on the same problems — see
+`(x−y)⁴`; after fixing those gaps it solves 18 of 20. On a **held-out** set of
+twenty new problems, committed before anything ran on them, it solves **19 of
+20** — the one miss is Choi–Lam's polynomial, which is not a sum of squares —
+against 3 for `nlinarith`, with 16 solved by Forge alone and none by Mathlib
+alone. The caveats matter — `nlinarith` gets no hints by design, most
+`positivity` failures are about goal form, and both sets are curated — see
 [`lean/Forge/Checker/README.md`](lean/Forge/Checker/README.md).
 
 Three adversarial reviews made 85+ attempts to get it to accept something false

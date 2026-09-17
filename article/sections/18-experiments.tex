@@ -1675,6 +1675,28 @@ first run's failures on these same problems, so the second run shows the fixes
 work where they were aimed, not how the search generalises. That needs a problem
 set chosen after the fixes.
 
+\subsubsection*{A held-out set}
+
+So one was written: twenty new problems chosen to differ from the first set ---
+Cauchy--Schwarz in three dimensions with six variables, products of hypotheses,
+a power of a single hypothesis, an equality with a nonlinear multiplier,
+degree-six forms, and Choi--Lam's polynomial as a second probe that is not a sum
+of squares --- committed and pushed before any tool ran on them, with the rule
+that the search would not be changed in response.
+
+\code{forge\_cone?} solved nineteen of the twenty; \code{nlinarith} solved three,
+\code{positivity}, \code{grind} and \code{omega} none. Sixteen were solved by
+Forge and by no Mathlib tactic tried, and none the other way. The single miss was
+Choi--Lam's polynomial, for the right reason: no positive semidefinite Gram
+matrix exists to reconstruct. The same checks as before held --- every
+\code{nlinarith} failure genuine, every success a kernel-checked proof.
+
+This is the strongest evidence in this document that the search is useful. It is
+bounded all the same: twenty problems, curated by the hand that wrote the search,
+over the integers, in at most six variables. It shows the fixes were not fitted
+to the first set. It does not show how the search fares on goals drawn from real
+proofs, which is where a planner would put it to work.
+
 \subsection{What the evidence establishes}
 
 It establishes that the implementations actually synthesise certificates in the

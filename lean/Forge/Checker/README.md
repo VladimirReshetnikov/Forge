@@ -275,10 +275,42 @@ and Schur's inequality needs reasoning this certificate family does not express.
 - *The problem set was fixed before either run*, but the search was improved in
   response to the first run's failures on that same set. The second run shows
   the fixes work on the problems that motivated them; it is not independent
-  evidence of how the search generalises. A fresh problem set is the way to get
-  that.
+  evidence of how the search generalises. The held-out run below is.
 - *Twenty curated problems, over `Int`, on Lean v4.32 with Mathlib* — the only
   built Mathlib here; Forge's core compiles unchanged on it.
+
+## Held-out run: does it generalise?
+
+Twenty NEW problems, [`bench/tactics/problems_heldout.json`](../../../bench/tactics/problems_heldout.json),
+written after the search fixes and **committed and pushed before any tool ran on
+them** (commit `0ba7ca4`), with the rule that the search is not changed in
+response. They differ from the first set on purpose: Cauchy–Schwarz in three
+dimensions (six variables), products of hypotheses, a power of a single
+hypothesis (`x ≥ 1 ⇒ x³ ≥ x`), an equality with a nonlinear multiplier
+(`xy = 1 ⇒ x² + y² ≥ 2`), degree-6 forms, and Choi–Lam's polynomial as a second
+not-a-sum-of-squares probe.
+
+| Tactic | Solved (of 20) |
+| --- | ---: |
+| `forge_cone?` | **19** |
+| `nlinarith`, no hints | 3 |
+| `positivity` | 0 |
+| `grind`, `omega` | 0 |
+| Solved by `forge_cone?` only | 16 |
+| Solved by a Mathlib tactic only | 0 |
+
+The one `forge_cone?` failure is Choi–Lam, and for the right reason: "no PSD Gram
+matrix reconstructed" — it is not a sum of squares. All 17 `nlinarith` failures
+are genuine refutation failures, none a timeout. `positivity` rejected 16 goals
+for their form and solved none of the 4 it attempted. The slowest Forge success
+took 2.1 s. Every success is a kernel-checked proof (78 failures, 78 errors, no
+`sorry`). Data: [`results/tactic-headtohead-heldout.json`](../../../results/tactic-headtohead-heldout.json).
+
+This is the strongest evidence in the repository that the search is useful, and
+it is still bounded: twenty problems, curated by the same hand that wrote the
+search, over `Int`, degree ≤ 6, six variables at most. It shows the fixes were
+not fitted to the first set. It does not show how the search does on problems
+drawn from real proofs, which is where Gate 1 has to operate.
 
 ## Does Lean already do this?
 
