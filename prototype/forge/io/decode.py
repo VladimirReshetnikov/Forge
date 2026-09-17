@@ -253,9 +253,16 @@ def verify(record) -> bool:
         return check_recurrence(polynomial(inp['step']), polynomial(inp['initial']),
                                 polynomial(c))
     if family == 'Conserved invariant':
+        # The problem is read from `input` ONLY. A certificate that also names an
+        # initial point or transition is refused outright rather than ignored, so
+        # a record cannot certify a system of its own choosing.
+        if set(c) != {'invariant'}:
+            raise DecodeError('a Conserved invariant certificate holds only the invariant')
+        if set(inp) != {'initial', 'transition'}:
+            raise DecodeError('a Conserved invariant problem needs initial and transition')
         return check_invariant(InvariantCertificate(
-            polynomial(c['invariant']), tuple(rational(v) for v in c['initial']),
-            tuple(polynomial(p) for p in c['transition'])))
+            polynomial(c['invariant']), tuple(rational(v) for v in inp['initial']),
+            tuple(polynomial(p) for p in inp['transition'])))
     if family == 'Integral affine witness':
         cert = AffineWitness(tuple(tuple(rational(v) for v in r) for r in c['linear']),
                              tuple(rational(v) for v in c['offset']))

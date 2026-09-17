@@ -197,8 +197,10 @@ without the fix it was meant to guard.
   that scales is Kronecker substitution (check the identity with GMP integers at
   one large point, with a proved coefficient bound); it is not implemented.
 - **Integers.** `Env` assigns integers; lifting to ℝ needs Mathlib.
-- **The prototype's data model.** A conserved-invariant record carries its
-  problem inside the certificate, so the certificate chooses what it certifies.
+- **The prototype's data model** used to let a conserved-invariant record carry
+  its problem inside the certificate, so the certificate chose what it
+  certified. Fixed: the problem now lives in `input`, and the decoder refuses a
+  certificate that names an initial point or transition.
 - **Farkas** has no prototype family, and affine has one record.
 
 ## Regenerating

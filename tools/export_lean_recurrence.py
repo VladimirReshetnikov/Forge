@@ -33,21 +33,18 @@ Conserved invariant -- check_invariant(InvariantCertificate(I, s0, T)).
   refuses otherwise (then the orbit would leave Z^d and an integer-state
   statement would not be the same claim). In the current bundle they are.
 
-  THE CERTIFICATE CHOOSES THE PROBLEM, for this family, and nothing here
-  prevents it. The prototype's record puts the transition system INSIDE the
-  certificate ("input": {}), and this exporter reads the initial point and the
-  transition map -- and hence the `_run` loop the user-facing corollary is about
-  -- from that same certificate data. The Lean `InvCert` structure does separate
-  (scale, invariant) from (initial, T), but that separation is structural only:
-  a record can name any system its invariant happens to fit, and the emitted
-  theorem will be true and about that system.
+  THE PROBLEM LIVES IN "input"; THE CERTIFICATE IS THE INVARIANT ALONE. The
+  initial point and transition map -- and hence the `_run` loop the user-facing
+  corollary is about -- are read from the record's `input`, and the prototype's
+  decoder refuses a certificate that names either.
 
-  An earlier version of this docstring claimed the opposite ("the certificate
-  cannot choose the claim"). Adversarial review showed it false by exporting a
-  copy of cubic_accumulator with a different initial point that the invariant
-  also satisfies; it compiled. The theorem was true. The claim about
-  independence was not. The fix belongs in the prototype's data model: the
-  problem must live in "input", separate from the certificate.
+  It was not always so. The prototype's record used to put the transition system
+  inside the certificate with "input": {}, so a record could name any system its
+  invariant happened to fit. An earlier version of this docstring nevertheless
+  claimed "the certificate cannot choose the claim"; adversarial review showed
+  that false by exporting a copy with a different initial point, which compiled.
+  The data model was then fixed at its source, which is where the review said
+  the fix belonged.
 """
 from __future__ import annotations
 
@@ -225,8 +222,9 @@ def convert_rec(record: dict) -> dict:
 def convert_inv(record: dict) -> dict:
     c = record["certificate"]
     d, inv = parse(c["invariant"])
-    initial = [Q(v) for v in c["initial"]]
-    transition = [parse(t) for t in c["transition"]]
+    # The problem comes from `input`; the certificate is the invariant alone.
+    initial = [Q(v) for v in record["input"]["initial"]]
+    transition = [parse(t) for t in record["input"]["transition"]]
     if any(v.denominator != 1 for v in initial):
         raise ValueError("non-integral initial point: not exportable as an Int state")
     if any(tn != d for tn, _ in transition) or any(denom(t) != 1 for _, t in transition):
@@ -488,16 +486,16 @@ def negatives_inv(record: dict) -> list:
         # them to other records crashed the exporter; they are now scoped.
         return out
     r = copy.deepcopy(record)
-    r["certificate"]["transition"][1]["terms"][0][1] = "2"   # s' = s + (n+1)^3 + 1
-    assert r["certificate"]["transition"][1]["terms"][0][0] == [0, 0]
+    r["input"]["transition"][1]["terms"][0][1] = "2"   # s' = s + (n+1)^3 + 1
+    assert r["input"]["transition"][1]["terms"][0][0] == [0, 0]
     out.append(("%s_perturbed_transition" % record["id"], r, convert_inv(r), "step",
                 "transition s' = s + (n+1)^3 + 1: not conserved"))
     r = copy.deepcopy(record)
-    r["certificate"]["initial"] = ["0", "1"]
+    r["input"]["initial"] = ["0", "1"]
     out.append(("%s_wrong_initial" % record["id"], r, convert_inv(r), "base",
                 "initial point (0, 1): invariant is -4 there, not 0"))
     r = copy.deepcopy(record)
-    r["certificate"]["initial"] = ["0"]
+    r["input"]["initial"] = ["0"]
     out.append(("%s_short_initial" % record["id"], r, convert_inv(r), "arity_initial",
                 "initial point of dimension 1 for a 2-state system"))
     return out

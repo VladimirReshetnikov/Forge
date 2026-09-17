@@ -991,10 +991,6 @@
  },
  {
   "certificate": {
-   "initial": [
-    "0",
-    "0"
-   ],
    "invariant": {
     "n": 2,
     "terms": [
@@ -1027,7 +1023,15 @@
       "-1/4"
      ]
     ]
-   },
+   }
+  },
+  "family": "Conserved invariant",
+  "id": "cubic_accumulator",
+  "input": {
+   "initial": [
+    "0",
+    "0"
+   ],
    "transition": [
     {
      "n": 2,
@@ -1089,10 +1093,7 @@
      ]
     }
    ]
-  },
-  "family": "Conserved invariant",
-  "id": "cubic_accumulator",
-  "input": {}
+  }
  },
  {
   "certificate": {

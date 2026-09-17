@@ -131,11 +131,15 @@ def build() -> list[dict]:
                         'certificate': formula.json()})
 
     invariant = additive_invariant((u + 1) ** 3)
+    # The PROBLEM (initial state, transition map) lives in `input`; the
+    # certificate is the invariant alone. The record used to carry all three in
+    # the certificate with an empty `input`, so a certificate named the system it
+    # certified -- adversarial review exported a copy with a different initial
+    # point and it compiled. A certificate must not choose its problem.
     records.append({'id': 'cubic_accumulator', 'family': 'Conserved invariant',
-                    'input': {},
-                    'certificate': {'invariant': invariant.invariant.json(),
-                                    'initial': [str(v) for v in invariant.initial],
-                                    'transition': [t.json() for t in invariant.transition]}})
+                    'input': {'initial': [str(v) for v in invariant.initial],
+                              'transition': [t.json() for t in invariant.transition]},
+                    'certificate': {'invariant': invariant.invariant.json()}})
 
     # --- affine / lattice / modular witnesses (p1, p2, p7, p4) -------------
     A, B, c = [[1, 2], [0, 1]], [[3, -1], [2, 4]], [5, -3]
