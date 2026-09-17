@@ -1,0 +1,56 @@
+{
+  "what": "Every integral affine witness in the prototype bundle, emitted as Int data for Forge.Checker.Affine, with negative controls. Each verdict is checked by the prototype's check_affine_witness(require_integral=True) and by an integer mirror of AffineCert.check before emission, and again by the Lean kernel when AffineCorpus.lean is elaborated.",
+  "generated_lean": "lean/Forge/Checker/AffineCorpus.lean",
+  "checked_by": "kernel reduction via `decide`; native_decide is not used",
+  "certificates": [
+    {
+      "id": "integral_affine",
+      "equations": 2,
+      "witness_coordinates": 2,
+      "parameters": 2,
+      "negative_controls": [
+        {
+          "control": "mutation_offset0",
+          "prototype_accepts": false,
+          "shapeOK": true,
+          "rowsOK": false
+        },
+        {
+          "control": "linear_entry",
+          "prototype_accepts": false,
+          "shapeOK": true,
+          "rowsOK": false
+        },
+        {
+          "control": "offset_long",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "linear_row_long",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "linear_extra_row",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "c_extra",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": false
+        },
+        {
+          "control": "half_offset",
+          "prototype_accepts": false,
+          "lean": "not representable: entries are Int"
+        }
+      ]
+    }
+  ]
+}

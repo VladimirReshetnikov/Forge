@@ -1,0 +1,141 @@
+{
+  "what": "Recurrence-family certificates (Polynomial recurrence, Conserved invariant) exported to Forge.Checker.Recurrence with denominators cleared; re-checked in Python by the prototype checker and by a mirror of the Lean checker, then by the Lean kernel.",
+  "generated_lean": "lean/Forge/Checker/RecurrenceCorpus.lean",
+  "checked_by": "kernel reduction via `decide`; native_decide is not used",
+  "certificates": [
+    {
+      "id": "power_sum_0",
+      "family": "Polynomial recurrence",
+      "scale": 1,
+      "input_scale": 1,
+      "source": "bundle"
+    },
+    {
+      "id": "power_sum_1",
+      "family": "Polynomial recurrence",
+      "scale": 2,
+      "input_scale": 1,
+      "source": "bundle"
+    },
+    {
+      "id": "power_sum_2",
+      "family": "Polynomial recurrence",
+      "scale": 6,
+      "input_scale": 1,
+      "source": "bundle"
+    },
+    {
+      "id": "power_sum_3",
+      "family": "Polynomial recurrence",
+      "scale": 4,
+      "input_scale": 1,
+      "source": "bundle"
+    },
+    {
+      "id": "power_sum_4",
+      "family": "Polynomial recurrence",
+      "scale": 30,
+      "input_scale": 1,
+      "source": "bundle"
+    },
+    {
+      "id": "param_linear_control",
+      "family": "Polynomial recurrence",
+      "scale": 1,
+      "input_scale": 1,
+      "source": "synthesize_recurrence (not in bundle)"
+    },
+    {
+      "id": "cubic_accumulator",
+      "family": "Conserved invariant",
+      "scale": 4,
+      "source": "bundle"
+    }
+  ],
+  "negative_controls": [
+    {
+      "label": "power_sum_0_bundle_mutation_0",
+      "family": "Polynomial recurrence",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_1_bundle_mutation_0",
+      "family": "Polynomial recurrence",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_2_bundle_mutation_0",
+      "family": "Polynomial recurrence",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_3_bundle_mutation_0",
+      "family": "Polynomial recurrence",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_4_bundle_mutation_0",
+      "family": "Polynomial recurrence",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_1_off_by_one",
+      "family": "Polynomial recurrence",
+      "breaks": "step",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_2_wrong_step",
+      "family": "Polynomial recurrence",
+      "breaks": "step",
+      "prototype": "rejects"
+    },
+    {
+      "label": "power_sum_1_zero_scale",
+      "family": "Polynomial recurrence",
+      "breaks": "scale",
+      "prototype": "not expressible"
+    },
+    {
+      "label": "power_sum_0_initial_mentions_index",
+      "family": "Polynomial recurrence",
+      "breaks": "initial_free_of_index",
+      "prototype": "not expressible"
+    },
+    {
+      "label": "cubic_accumulator_bundle_mutation_0",
+      "family": "Conserved invariant",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "cubic_accumulator_perturbed_transition",
+      "family": "Conserved invariant",
+      "breaks": "step",
+      "prototype": "rejects"
+    },
+    {
+      "label": "cubic_accumulator_wrong_initial",
+      "family": "Conserved invariant",
+      "breaks": "base",
+      "prototype": "rejects"
+    },
+    {
+      "label": "cubic_accumulator_short_initial",
+      "family": "Conserved invariant",
+      "breaks": "arity_initial",
+      "prototype": "rejects"
+    },
+    {
+      "label": "cubic_accumulator_zero_scale",
+      "family": "Conserved invariant",
+      "breaks": "scale",
+      "prototype": "not expressible"
+    }
+  ]
+}
