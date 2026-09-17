@@ -77,10 +77,24 @@ def insertTerm (m : Mono) (c : Int) : Poly → Poly
   | [] => [(m, c)]
   | (m', c') :: p => if m = m' then (m', c + c') :: p else (m', c') :: insertTerm m c p
 
-/-- Collect like terms. -/
+/-- Drop trailing zero exponents, so `[2]` and `[2, 0]` become the same list.
+
+Without this `collect` compared monomials by list equality, and
+`isZero [([2], 1), ([2, 0], -1)]` returned `false` for a polynomial that is
+identically zero. That never affected soundness -- a `false` only rejects -- but
+it was a real completeness defect, invisible while every producer emitted
+fixed-width vectors, and the first thing a reification tactic would have hit. -/
+def trimMono : Mono → Mono
+  | [] => []
+  | e :: es =>
+    match trimMono es with
+    | [] => if e = 0 then [] else [e]
+    | t => e :: t
+
+/-- Collect like terms, identifying monomials up to trailing zeros. -/
 def collect : Poly → Poly
   | [] => []
-  | (m, c) :: p => insertTerm m c (collect p)
+  | (m, c) :: p => insertTerm (trimMono m) c (collect p)
 
 /-- Decide whether a polynomial is identically zero. -/
 def isZero (p : Poly) : Bool := (collect p).all (fun t => t.2 == 0)
@@ -173,10 +187,31 @@ theorem eval_insertTerm (x : Env) (m : Mono) (c : Int) :
         simp only [eval, eval_insertTerm x m c p]
         int_ring
 
+theorem monoEvalFrom_trimMono (x : Env) :
+    ∀ (i : Nat) (m : Mono), monoEvalFrom x i (trimMono m) = monoEvalFrom x i m
+  | _, [] => rfl
+  | i, e :: es => by
+    have ih := monoEvalFrom_trimMono x (i + 1) es
+    simp only [trimMono]
+    split
+    · next h =>
+        rw [h] at ih
+        simp only [monoEvalFrom] at ih
+        split
+        · next he => simp [monoEvalFrom, he, ← ih]
+        · simp [monoEvalFrom, ← ih]
+    · next t ht =>
+        simp only [monoEvalFrom]
+        rw [← ih]
+
+theorem monoEval_trimMono (x : Env) (m : Mono) :
+    monoEval x (trimMono m) = monoEval x m :=
+  monoEvalFrom_trimMono x 0 m
+
 theorem eval_collect (x : Env) : ∀ p : Poly, eval x (collect p) = eval x p
   | [] => by simp [collect]
   | (m, c) :: p => by
-    simp only [collect, eval_insertTerm, eval_collect x p, eval]
+    simp only [collect, eval_insertTerm, eval_collect x p, eval, monoEval_trimMono]
 
 theorem eval_eq_zero_of_coeffs (x : Env) :
     ∀ p : Poly, (∀ t ∈ p, t.2 = 0) → eval x p = 0
