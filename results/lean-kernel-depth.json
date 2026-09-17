@@ -1,0 +1,51 @@
+{
+  "what": "Why the kernel check of cone certificates stops at ~1600 expanded terms, and what does and does not fix it.",
+  "lean": "leanprover/lean4 v4.34.0, decide +kernel",
+  "measurements": [
+    {
+      "test": "mul q45 q45 (2025 products), length",
+      "default_limit": "pass"
+    },
+    {
+      "test": "q45 ++ mul q45 q45 (2070), length",
+      "default_limit": "pass"
+    },
+    {
+      "test": "collect (mul q45 q45) -> 89 distinct",
+      "default_limit": "pass"
+    },
+    {
+      "test": "isZero (sub (mul q45 q45) (mul q45 q45)) (4050 flat)",
+      "default_limit": "FAIL: (kernel) deep recursion"
+    },
+    {
+      "test": "collect-as-you-go multiplication (fold, collecting each row), k = 45 and k = 100",
+      "default_limit": "FAIL: deep recursion",
+      "why": "The kernel evaluates lazily; the fold's accumulator stays an unevaluated thunk, so collection is deferred to the end and nests exactly as deep."
+    },
+    {
+      "test": "collect-as-you-go, 2 variables, 30 terms (900 products)",
+      "default_limit": "pass (within the old limit anyway)"
+    },
+    {
+      "test": "isZero (sub (mul q45 q45) (mul q45 q45)) with maxRecDepth 20000",
+      "result": "PASS",
+      "cost": {
+        "seconds": 148,
+        "peak_working_set_gb": 4.47
+      },
+      "note": "Measured under a guard that kills the process above 6 GB or 600 s."
+    },
+    {
+      "test": "k = 200 (80000 products) with maxRecDepth 1000000",
+      "result": "ABANDONED",
+      "note": "Unguarded; its memory pressure contributed to the machine's C: drive reaching 0.04 GB free, and it was killed. Recorded so nobody repeats it without a guard."
+    }
+  ],
+  "conclusions": [
+    "The limit is Lean's recursion guard, not a hard wall: raising maxRecDepth lifts it.",
+    "A tail-recursive `collect` is NOT the fix. Under lazy kernel evaluation, tail calls with an accumulator build deferred thunks of the same depth. The checker README previously called it 'the obvious fix'; that was wrong and has been corrected.",
+    "Raising maxRecDepth inside forge_cone is NOT safe to ship: time and memory grow with the expanded product count (148 s and 4.47 GB at 2025 products).",
+    "The fix that scales is algorithmic: Kronecker substitution, checking the identity as a few GMP integer operations at one large point with a proved coefficient bound, so the kernel never expands products. Not implemented: whether it is needed depends on whether real problems exceed the limit, which the tactic head-to-head measures first."
+  ]
+}

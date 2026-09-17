@@ -188,9 +188,14 @@ without the fix it was meant to guard.
 
 ## Known limits
 
-- **Size.** Checks fail beyond roughly 1600 terms of expanded identity, because
-  `collect` and the list operations are structurally recursive. A tail-recursive
-  `collect` is the obvious fix and has not been attempted.
+- **Size.** Checks fail beyond roughly 1600 terms of expanded identity with
+  Lean's default recursion limit. Measured in `results/lean-kernel-depth.json`:
+  raising `maxRecDepth` lifts it, but at 148 s and 4.5 GB for 2025 products, so it
+  is not shipped. A tail-recursive `collect` does **not** help -- an earlier
+  version of this file called it the obvious fix -- because the kernel evaluates
+  lazily and the accumulator stays a deferred thunk of the same depth. The fix
+  that scales is Kronecker substitution (check the identity with GMP integers at
+  one large point, with a proved coefficient bound); it is not implemented.
 - **Integers.** `Env` assigns integers; lifting to ℝ needs Mathlib.
 - **The prototype's data model.** A conserved-invariant record carries its
   problem inside the certificate, so the certificate chooses what it certifies.
