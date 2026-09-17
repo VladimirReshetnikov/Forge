@@ -6,9 +6,11 @@ that checking it establishes the mathematical claim — and, since Gate 2, a
 tactic that applies it to an ordinary goal and an oracle protocol that finds it.
 
 Everything here is **core Lean only**. No Mathlib, no `ring`, no `nlinarith`.
-That is a deliberate constraint: 58 of this repository's 101 `.lean` files depend
-on Mathlib and **none of them has ever been checked by anything**. A checker in
-that bucket would have been one more uncompiled claim.
+That was a deliberate constraint: 58 of this repository's `.lean` files are
+delivered Mathlib-dependent files that **nothing has ever checked**, and a checker
+in that bucket would have been one more uncompiled claim. The one exception is
+`lean/Forge/Real/`, below, which lifts soundness to the reals with Mathlib and is
+itself checked.
 
 ## What is here
 
@@ -124,6 +126,32 @@ is not usable, and the bridge is what makes the difference.
 - Soundness is relative to `eval` being the right semantics for `Poly`. That is
   a definition, not a theorem, and a reader should look at it.
 
+## Over the reals
+
+`Cert.sound` concludes nonnegativity at integer points, because core Lean has no
+reals. But a certificate asserts a polynomial *identity*, which holds in every
+commutative ring, so the same Boolean check should prove the real statement.
+[`lean/Forge/Real/Cone.lean`](../Real/Cone.lean) proves exactly that:
+
+```lean
+theorem Cert.sound_real (c : Cert) (p : Poly) (ineqs eqs : List Poly)
+    (hcheck : c.check p ineqs eqs = true) (x : ℕ → ℝ)
+    (hge : ∀ g ∈ ineqs, 0 ≤ evalR x g)
+    (hz  : ∀ f ∈ eqs,   evalR x f = 0) : 0 ≤ evalR x p
+```
+
+No new checker and no new certificates: the corpus's existing `_checks` theorems
+transfer as they are. [`Examples.lean`](../Real/Examples.lean) restates all three
+prototype certificates over ℝ, including `x + y = 1 ⇒ 1 ≤ 2x² + 2y²`, which over
+the reals is tight at `x = y = 1/2`.
+
+Both files import Mathlib and are compiled by `tools/build_real.py` with Lean
+v4.32 (the only built Mathlib here), under the same memory guard as the
+head-to-head: exit 0, no errors, no warnings. Their theorems depend on `propext`,
+`Classical.choice` and `Quot.sound` — `Classical.choice` because Mathlib's reals
+are built on it, unlike the core files. Recorded in
+[`results/lean-real.json`](../../../results/lean-real.json).
+
 ## The tactic
 
 ```lean
@@ -196,7 +224,9 @@ without the fix it was meant to guard.
   lazily and the accumulator stays a deferred thunk of the same depth. The fix
   that scales is Kronecker substitution (check the identity with GMP integers at
   one large point, with a proved coefficient bound); it is not implemented.
-- **Integers.** `Env` assigns integers; lifting to ℝ needs Mathlib.
+- **Integers in the tactic.** `forge_cone` states goals over `Int`. The same
+  certificates are sound over ℝ — see **Over the reals** — but no tactic applies
+  them to a real-valued goal yet; the real theorems are stated by hand.
 - **The prototype's data model** used to let a conserved-invariant record carry
   its problem inside the certificate, so the certificate chose what it
   certified. Fixed: the problem now lives in `input`, and the decoder refuses a

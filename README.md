@@ -199,8 +199,10 @@ and
 [`results/lean-closure-elaboration.json`](results/lean-closure-elaboration.json).
 
 That is 28 of the 29 Mathlib-free files — counting transitively, so a file
-importing a sibling that is itself Mathlib-free counts as Mathlib-free. The
-other 58 depend on Mathlib and **nothing has ever checked any of them** — and
+importing a sibling that is itself Mathlib-free counts as Mathlib-free. Of the
+60 that depend on Mathlib, two are Forge's own reals layer, which **is** checked
+(at Lean v4.32, the only built Mathlib here); the other 58 were delivered by the
+proposals and **nothing has ever checked any of them** — and
 the one time this merge looked inside that bucket for a reason unrelated to
 Mathlib, it found a second broken file. `r6`'s `FlowTargets.lean` puts a module
 docstring above its `import`, which Lean 4 rejects at parse time whether or not

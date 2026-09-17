@@ -1348,7 +1348,7 @@ Python, and then accepted by the Lean kernel through \code{decide} rather than
 \code{sorryAx}. \code{ForgeCore} now builds as a library.
 
 Three constraints shaped it. It is core Lean only, because fifty-eight of this
-repository's ninety Lean files depend on Mathlib and none has ever been
+repository's ninety Lean files then depended on Mathlib and none had ever been
 checked --- a checker in that bucket would have been one more uncompiled claim.
 Coefficients are integers, because \code{Int} is in core and \code{Rat}'s
 lemmas are not; clearing denominators is a change of representation, and every
@@ -1648,6 +1648,17 @@ returning no candidate, including $(x-y)^4$ written out and $x+y=2 \Rightarrow x
 were its degree bound. None was a size refusal: the kernel limit measured earlier
 did not bind here. When both succeeded, Forge was slower, because its oracle is a
 separate process.
+
+One restriction of that design was lifted afterwards. Soundness was proved at
+integer points only, because core Lean has no reals; but a certificate asserts a
+polynomial identity, which holds in every commutative ring, so the same Boolean
+check proves the real statement. A Mathlib file proves exactly that, reusing
+every existing check unchanged, and restates the prototype's three certificates
+over the reals --- among them $x + y = 1 \Rightarrow 2x^2 + 2y^2 \ge 1$, which is
+tight at $x = y = \tfrac12$. It is the first Mathlib-dependent file in this
+repository that anything has checked, compiled with the same toolchain as the
+head-to-head; its theorems depend on \code{Classical.choice} as well, because
+Mathlib's reals do.
 
 The comparison was run to decide whether the search deserves a planner built
 around it. It does. But the same run shows the search's gaps plainly, and those

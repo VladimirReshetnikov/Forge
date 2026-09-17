@@ -1,0 +1,78 @@
+{
+  "what": "Soundness of cone certificates over the reals: lean/Forge/Real/.",
+  "toolchain": "v4.32.0",
+  "mathlib_root": "C:\\ProveIt",
+  "forge_pins": "leanprover/lean4:v4.34.0 (core modules compile unchanged on v4.32)",
+  "compiled": true,
+  "steps": [
+    {
+      "module": "Checker/Poly",
+      "exit_code": 0,
+      "seconds": 2.0,
+      "peak_rss_gb": 0.28,
+      "killed": null,
+      "errors": 0,
+      "first_errors": []
+    },
+    {
+      "module": "Checker/Cone",
+      "exit_code": 0,
+      "seconds": 2.0,
+      "peak_rss_gb": 0.09,
+      "killed": null,
+      "errors": 0,
+      "first_errors": []
+    },
+    {
+      "module": "Checker/Corpus",
+      "exit_code": 0,
+      "seconds": 2.0,
+      "peak_rss_gb": 0.27,
+      "killed": null,
+      "errors": 0,
+      "first_errors": []
+    },
+    {
+      "module": "Real/Cone",
+      "exit_code": 0,
+      "seconds": 46.5,
+      "peak_rss_gb": 3.26,
+      "killed": null,
+      "errors": 0,
+      "first_errors": []
+    },
+    {
+      "module": "Real/Examples",
+      "exit_code": 0,
+      "seconds": 42.6,
+      "peak_rss_gb": 3.11,
+      "killed": null,
+      "errors": 0,
+      "first_errors": []
+    }
+  ],
+  "axioms": {
+    "Forge.Checker.Real.Cert.sound_real": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Forge.Checker.Real.Examples.hidden_quadratic_real": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Forge.Checker.Real.Examples.guard_product_real": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Forge.Checker.Real.Examples.equality_constrained_real": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "axioms_beyond_propext_choice_quotsound": {},
+  "note": "Mathlib's reals are built with Classical.choice, so these theorems use propext, Classical.choice and Quot.sound, unlike the core files."
+}

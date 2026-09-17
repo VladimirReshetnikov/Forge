@@ -154,7 +154,7 @@ scanner reported a file as defective because the file's header says it has no
 `sorry`; with that fixed, all 86 Lean files scan clean.
 
 That is the whole claim. It is not an axiom audit, it says nothing about the
-58 Mathlib-dependent files, it does not establish that any checker is
+58 delivered Mathlib-dependent files, it does not establish that any checker is
 correct, it is not a comparison against any tactic, and it does not change what
 any of those files says.
 

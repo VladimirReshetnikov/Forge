@@ -211,9 +211,9 @@ now builds as a library rather than elaborating file by file.
 Five things are worth saying about what this did and did not require.
 
 \emph{It is core Lean only, and that was the binding constraint.} Fifty-eight of
-this repository's hundred and one Lean files depend on Mathlib and not one of them
-has ever been checked by anything. A checker in that bucket would have been one
-more uncompiled claim, so there is no \code{ring} and no \code{nlinarith} here;
+this repository's Lean files were delivered depending on Mathlib, and not one of
+them has ever been checked by anything. A checker in that bucket would have been
+one more uncompiled claim, so there is no \code{ring} and no \code{nlinarith} here;
 coefficients are integers because \code{Int} is in core and \code{Rat}'s
 lemmas are not. Clearing denominators is a change of representation, not a
 weakening: every multiplier introduced is positive, so the constraint hypotheses

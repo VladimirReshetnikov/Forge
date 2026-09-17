@@ -5,9 +5,9 @@
   "sorry_rule": "Lean comments are stripped, with a depth counter because block comments nest, before a word-boundary search. A token appearing only in prose is recorded separately and is not a defect.",
   "elaboration_run": false,
   "counts": {
-    "files_total": 101,
+    "files_total": 103,
     "mathlib_free": 40,
-    "mathlib_dependent": 58,
+    "mathlib_dependent": 60,
     "lakefiles": 3,
     "unresolved": 0,
     "real_sorry_or_sorryAx": 0,
@@ -251,6 +251,20 @@
       "real_sorry": false,
       "sorry_token_in_comments_only": true,
       "lines": 116
+    },
+    {
+      "file": "lean/Forge/Real/Cone.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 215
+    },
+    {
+      "file": "lean/Forge/Real/Examples.lean",
+      "depends_on": "mathlib",
+      "real_sorry": false,
+      "sorry_token_in_comments_only": false,
+      "lines": 65
     },
     {
       "file": "lean/Forge.lean",

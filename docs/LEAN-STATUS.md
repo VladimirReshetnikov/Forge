@@ -237,9 +237,11 @@ nonnegativity at integer points. The identity holds in every commutative ring;
 lifting the conclusion to ℝ needs an ordered field and therefore Mathlib, and is
 therefore exactly the kind of file this repository has never been able to check.
 
-**Why core-only.** Because 58 of the 90 files here depend on Mathlib and none
-of them has ever been checked by anything. A checker in that bucket would have
-been one more uncompiled claim.
+**Why core-only.** Because when it was built, 58 of the 90 files here depended
+on Mathlib and none of them had ever been checked by anything. A checker in that
+bucket would have been one more uncompiled claim. Since then the soundness
+theorem has been lifted to the reals in `Forge/Real/`, which imports Mathlib and
+IS checked — the first Mathlib-dependent files in this repository to be.
 
 ### The fourth round
 
@@ -308,14 +310,14 @@ empty.
 - It is not a transitive axiom audit. Where no `#print axioms` line exists, the
   file's dependencies are simply unknown; where one does, it covers that
   declaration and not the file.
-- It says nothing about the 58 files that depend on Mathlib. Nothing has ever
-  checked any of them — and the one time this merge looked inside that bucket
+- It says nothing about the 58 delivered files that depend on Mathlib. Nothing
+  has ever checked any of them — and the one time this merge looked inside that bucket
   for a reason unrelated to Mathlib, it found `r6`'s file, which cannot parse.
 - **An uncompiled file is worth what its author's care is worth.** Twenty-six
   proposals ship `.lean` files carrying `#print axioms` commands that were
   never executed. Two of the three that were finally compiled were fine; one
   was not. Before this round there was no way to tell those cases apart, and
-  for the 58 Mathlib-dependent files there still is not.
+  for the 58 delivered Mathlib-dependent files there still is not.
 - It does not establish that any certificate checker is correct. The contracts
   are *types*; a type is not a proof that an implementation satisfies it.
 - It is not a comparison against any Lean tactic. A hand-written example that
