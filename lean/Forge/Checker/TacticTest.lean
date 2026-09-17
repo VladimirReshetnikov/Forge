@@ -377,4 +377,62 @@ example (x y : Int) (hfalse : 0 ≤ x * y) : 0 ≤ x * y := by
   fail_if_success forge_cone (atoms := [y, x]) using square_atom_cert
   exact hfalse
 
+/-! ## Regressions from adversarial review
+
+Each of these pins a defect a reviewer reproduced. None was unsound -- the kernel
+checked everything -- but each made the tactic say or do something it should not. -/
+
+/-- (R1, size) The check runs through `decide +kernel`. Plain `decide` reduced
+in Meta and hit `maxRecDepth` near 100 squares. This square has 36 terms, so the
+expanded identity has 71 + 1296 = 1367 terms, under the measured limit. -/
+theorem at_measured_size (x : Int) :
+    0 ≤ 1 * x^0 + 2 * x^1 + 3 * x^2 + 4 * x^3 + 5 * x^4 + 6 * x^5 + 7 * x^6 + 8 * x^7 + 9 * x^8 + 10 * x^9 + 11 * x^10 + 12 * x^11 + 13 * x^12 + 14 * x^13 + 15 * x^14 + 16 * x^15 + 17 * x^16 + 18 * x^17 + 19 * x^18 + 20 * x^19 + 21 * x^20 + 22 * x^21 + 23 * x^22 + 24 * x^23 + 25 * x^24 + 26 * x^25 + 27 * x^26 + 28 * x^27 + 29 * x^28 + 30 * x^29 + 31 * x^30 + 32 * x^31 + 33 * x^32 + 34 * x^33 + 35 * x^34 + 36 * x^35 + 35 * x^36 + 34 * x^37 + 33 * x^38 + 32 * x^39 + 31 * x^40 + 30 * x^41 + 29 * x^42 + 28 * x^43 + 27 * x^44 + 26 * x^45 + 25 * x^46 + 24 * x^47 + 23 * x^48 + 22 * x^49 + 21 * x^50 + 20 * x^51 + 19 * x^52 + 18 * x^53 + 17 * x^54 + 16 * x^55 + 15 * x^56 + 14 * x^57 + 13 * x^58 + 12 * x^59 + 11 * x^60 + 10 * x^61 + 9 * x^62 + 8 * x^63 + 7 * x^64 + 6 * x^65 + 5 * x^66 + 4 * x^67 + 3 * x^68 + 2 * x^69 + 1 * x^70 := by
+  forge_cone using ({ scale := 1, squares := [{ weight := 1, powers := [], poly := [([0], 1), ([1], 1), ([2], 1), ([3], 1), ([4], 1), ([5], 1), ([6], 1), ([7], 1), ([8], 1), ([9], 1), ([10], 1), ([11], 1), ([12], 1), ([13], 1), ([14], 1), ([15], 1), ([16], 1), ([17], 1), ([18], 1), ([19], 1), ([20], 1), ([21], 1), ([22], 1), ([23], 1), ([24], 1), ([25], 1), ([26], 1), ([27], 1), ([28], 1), ([29], 1), ([30], 1), ([31], 1), ([32], 1), ([33], 1), ([34], 1), ([35], 1)] }], multipliers := [] } : Cert)
+
+#print axioms at_measured_size
+
+set_option maxHeartbeats 1000000 in
+/-- (R1, size) 45 terms: 89 + 2025 = 2114, past what the kernel checks. The
+certificate is VALID; the tactic must fail -- and must say it could not check,
+not that it rejected. (The raised heartbeat limit is for elaborating this
+89-term STATEMENT twice, which exceeds the default before the tactic runs.) -/
+example (x : Int) (hfalse : 0 ≤ 1 * x^0 + 2 * x^1 + 3 * x^2 + 4 * x^3 + 5 * x^4 + 6 * x^5 + 7 * x^6 + 8 * x^7 + 9 * x^8 + 10 * x^9 + 11 * x^10 + 12 * x^11 + 13 * x^12 + 14 * x^13 + 15 * x^14 + 16 * x^15 + 17 * x^16 + 18 * x^17 + 19 * x^18 + 20 * x^19 + 21 * x^20 + 22 * x^21 + 23 * x^22 + 24 * x^23 + 25 * x^24 + 26 * x^25 + 27 * x^26 + 28 * x^27 + 29 * x^28 + 30 * x^29 + 31 * x^30 + 32 * x^31 + 33 * x^32 + 34 * x^33 + 35 * x^34 + 36 * x^35 + 37 * x^36 + 38 * x^37 + 39 * x^38 + 40 * x^39 + 41 * x^40 + 42 * x^41 + 43 * x^42 + 44 * x^43 + 45 * x^44 + 44 * x^45 + 43 * x^46 + 42 * x^47 + 41 * x^48 + 40 * x^49 + 39 * x^50 + 38 * x^51 + 37 * x^52 + 36 * x^53 + 35 * x^54 + 34 * x^55 + 33 * x^56 + 32 * x^57 + 31 * x^58 + 30 * x^59 + 29 * x^60 + 28 * x^61 + 27 * x^62 + 26 * x^63 + 25 * x^64 + 24 * x^65 + 23 * x^66 + 22 * x^67 + 21 * x^68 + 20 * x^69 + 19 * x^70 + 18 * x^71 + 17 * x^72 + 16 * x^73 + 15 * x^74 + 14 * x^75 + 13 * x^76 + 12 * x^77 + 11 * x^78 + 10 * x^79 + 9 * x^80 + 8 * x^81 + 7 * x^82 + 6 * x^83 + 5 * x^84 + 4 * x^85 + 3 * x^86 + 2 * x^87 + 1 * x^88) :
+    0 ≤ 1 * x^0 + 2 * x^1 + 3 * x^2 + 4 * x^3 + 5 * x^4 + 6 * x^5 + 7 * x^6 + 8 * x^7 + 9 * x^8 + 10 * x^9 + 11 * x^10 + 12 * x^11 + 13 * x^12 + 14 * x^13 + 15 * x^14 + 16 * x^15 + 17 * x^16 + 18 * x^17 + 19 * x^18 + 20 * x^19 + 21 * x^20 + 22 * x^21 + 23 * x^22 + 24 * x^23 + 25 * x^24 + 26 * x^25 + 27 * x^26 + 28 * x^27 + 29 * x^28 + 30 * x^29 + 31 * x^30 + 32 * x^31 + 33 * x^32 + 34 * x^33 + 35 * x^34 + 36 * x^35 + 37 * x^36 + 38 * x^37 + 39 * x^38 + 40 * x^39 + 41 * x^40 + 42 * x^41 + 43 * x^42 + 44 * x^43 + 45 * x^44 + 44 * x^45 + 43 * x^46 + 42 * x^47 + 41 * x^48 + 40 * x^49 + 39 * x^50 + 38 * x^51 + 37 * x^52 + 36 * x^53 + 35 * x^54 + 34 * x^55 + 33 * x^56 + 32 * x^57 + 31 * x^58 + 30 * x^59 + 29 * x^60 + 28 * x^61 + 27 * x^62 + 26 * x^63 + 25 * x^64 + 24 * x^65 + 23 * x^66 + 22 * x^67 + 21 * x^68 + 20 * x^69 + 19 * x^70 + 18 * x^71 + 17 * x^72 + 16 * x^73 + 15 * x^74 + 14 * x^75 + 13 * x^76 + 12 * x^77 + 11 * x^78 + 10 * x^79 + 9 * x^80 + 8 * x^81 + 7 * x^82 + 6 * x^83 + 5 * x^84 + 4 * x^85 + 3 * x^86 + 2 * x^87 + 1 * x^88 := by
+  fail_if_success
+    forge_cone using ({ scale := 1, squares := [{ weight := 1, powers := [], poly := [([0], 1), ([1], 1), ([2], 1), ([3], 1), ([4], 1), ([5], 1), ([6], 1), ([7], 1), ([8], 1), ([9], 1), ([10], 1), ([11], 1), ([12], 1), ([13], 1), ([14], 1), ([15], 1), ([16], 1), ([17], 1), ([18], 1), ([19], 1), ([20], 1), ([21], 1), ([22], 1), ([23], 1), ([24], 1), ([25], 1), ([26], 1), ([27], 1), ([28], 1), ([29], 1), ([30], 1), ([31], 1), ([32], 1), ([33], 1), ([34], 1), ([35], 1), ([36], 1), ([37], 1), ([38], 1), ([39], 1), ([40], 1), ([41], 1), ([42], 1), ([43], 1), ([44], 1)] }], multipliers := [] } : Cert)
+  exact hfalse
+
+/-- (R2, metavariables) Atom matching must never assign a metavariable of the
+user's goal. Before the fix, `?m` was unified with `x` during reification and the
+goal closed, choosing the witness for the user. Now `?m` is its own atom, the
+certificate does not fit, and the tactic fails with `?m` still unassigned. -/
+example (x : Int) (hx : 0 ≤ x) : 0 ≤ x := by
+  apply Int.le_trans (b := _)
+  rotate_left
+  fail_if_success forge_cone using ({ scale := 1, squares := [], multipliers := [] } : Cert)
+  exact Int.le_refl x
+  exact hx
+
+set_option warn.classDefReducibility false in
+/-- (R3, numerals) A numeral built from a nonstandard `OfNat` instance is an
+ATOM, not the literal it displays as.
+
+A first version of this test only checked that the tactic fails on such a goal.
+It would have passed without the fix too -- before the fix the final
+definitional check also rejected the goal -- so it pinned nothing. What the fix
+changes is what the reifier REPORTS, and therefore what the oracle is sent:
+before, this goal was described as one atom and `x^2` (the reviewer's
+observation); now the weird `2` is a second atom, beside a genuine constant `2`.
+That output is pinned below. -/
+def weirdTwo : OfNat Int 2 := ⟨7⟩
+
+/--
+info: {"atoms":["x","2"],"equalities":[],"inequalities":[],"p":{"n":2,"terms":[[[0,0],"2"],[[0,1],"-1"],[[2,0],"1"]]}}
+-/
+#guard_msgs in
+example (x : Int) (hfalse : 0 ≤ x * x - (@OfNat.ofNat Int (nat_lit 2) weirdTwo) + 2) :
+    0 ≤ x * x - (@OfNat.ofNat Int (nat_lit 2) weirdTwo) + 2 := by
+  forge_reify
+  exact hfalse
+
 end Forge.Checker.TacticTest

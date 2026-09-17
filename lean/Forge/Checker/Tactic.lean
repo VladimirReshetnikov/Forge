@@ -91,6 +91,37 @@ def intNumeral? (e : Expr) : Option Nat :=
 
 def isIntZero (e : Expr) : Bool := intNumeral? e == some 0
 
+/-- `natLit?`, but an `OfNat.ofNat Nat n inst` is accepted only when `inst` is
+the standard `instOfNatNat n`. Without this check a numeral built from a
+nonstandard instance (say `⟨7⟩ : OfNat Int 2`) was reified as `2`: never
+unsound -- the final definitional check rejected the goal -- but `forge_reify`
+and the oracle request then described a DIFFERENT problem from the goal.
+Found by adversarial review. A numeral that fails this check becomes an atom. -/
+def natLitChecked? (e : Expr) : MetaM (Option Nat) := do
+  match e.consumeMData with
+  | .lit (.natVal n) => return some n
+  | e =>
+    let some n := natLit? e | return none
+    if e.isAppOfArity ``OfNat.ofNat 3 then
+      let std := mkApp (mkConst ``instOfNatNat) (mkRawNatLit n)
+      unless ← withNewMCtxDepth (withReducibleAndInstances (isDefEq e.appArg! std)) do
+        return none
+    return some n
+
+/-- `intNumeral?`, with the same instance check (`instOfNat n` for `Int`). -/
+def intNumeralChecked? (e : Expr) : MetaM (Option Nat) := do
+  let e := e.consumeMData
+  if e.isAppOfArity ``OfNat.ofNat 3 then
+    let some n := intNumeral? e | return none
+    let std := mkApp (mkConst ``instOfNat) (mkRawNatLit n)
+    unless ← withNewMCtxDepth (withReducibleAndInstances (isDefEq e.appArg! std)) do
+      return none
+    return some n
+  else if e.isAppOfArity ``Int.ofNat 1 then natLitChecked? e.appArg!
+  else return none
+
+def isIntZeroChecked (e : Expr) : MetaM Bool := return (← intNumeralChecked? e) == some 0
+
 /-- The canonical numeral `(n : Int)`, as `OfNat.ofNat Int n (instOfNat n)`. -/
 def mkIntNumeral (n : Nat) : Expr :=
   mkApp3 (mkConst ``OfNat.ofNat [0]) intTy (mkRawNatLit n)
@@ -107,12 +138,16 @@ private def stdHPow : Expr :=
     (mkApp2 (mkConst ``instPowNat [0]) intTy (mkConst ``Int.instNatPow))
 
 private def instOk (inst std : Expr) : MetaM Bool :=
-  withReducibleAndInstances (isDefEq inst std)
+  withNewMCtxDepth (withReducibleAndInstances (isDefEq inst std))
 
 def atomIndex (e : Expr) : ReifyM Nat := do
   let atoms ← get
   for h : i in [0:atoms.size] do
-    if ← withReducible (isDefEq atoms[i] e) then return i
+    -- `withNewMCtxDepth`: comparing atoms must never ASSIGN a metavariable of
+    -- the user's goal. Without it, a goal `?m ≤ x` had `?m := x` chosen by atom
+    -- matching, taking the witness out of the user's hands (found by review;
+    -- sound, since the kernel checked the result, but not ours to decide).
+    if ← withNewMCtxDepth (withReducible (isDefEq atoms[i] e)) then return i
   set (atoms.push e)
   return atoms.size
 
@@ -122,7 +157,7 @@ def mkAtom (e : Expr) : ReifyM R := do
 
 partial def reify (e : Expr) : ReifyM R := do
   let e := e.consumeMData
-  if let some n := intNumeral? e then
+  if let some n ← intNumeralChecked? e then
     return ⟨.const n, mkApp (mkConst ``IExpr.const) (mkIntNumeral n)⟩
   let args := e.getAppArgs
   let bin (ctor : Name) (mk : IExpr → IExpr → IExpr) : ReifyM R := do
@@ -144,7 +179,7 @@ partial def reify (e : Expr) : ReifyM R := do
   if e.isAppOfArity ``HPow.hPow 6 && args[0]!.isConstOf ``Int
       && args[1]!.isConstOf ``Nat && args[2]!.isConstOf ``Int then
     if ← instOk args[3]! stdHPow then
-      if let some n := natLit? (← instantiateMVars args[5]!) then
+      if let some n ← natLitChecked? (← instantiateMVars args[5]!) then
         let a ← reify args[4]!
         return ⟨.pow a.val n, mkApp2 (mkConst ``IExpr.pow) a.term (mkNatLit n)⟩
   mkAtom e
@@ -174,8 +209,8 @@ def shapeOf? (ty : Expr) : MetaM (Option Shape) := do
 
 /-- Reify two sides in textual order; a literal-zero side is not reified. -/
 def reifyPair (a b : Expr) : ReifyM (Option R × Option R) := do
-  let ra ← if isIntZero a then pure none else some <$> reify a
-  let rb ← if isIntZero b then pure none else some <$> reify b
+  let ra ← if ← isIntZeroChecked a then pure none else some <$> reify a
+  let rb ← if ← isIntZeroChecked b then pure none else some <$> reify b
   return (ra, rb)
 
 private def zeroR : R := ⟨.const 0, mkApp (mkConst ``IExpr.const) (mkIntNumeral 0)⟩
@@ -332,17 +367,37 @@ def runForgeCone (seed : Array Expr) (hyps : Array Expr) (certStx : Term) : Tact
       (mkApp4 (mkConst ``Cert.check) cert (mkApp (mkConst ``IExpr.toPoly) tp.term)
         (mapToPoly gs) (mapToPoly fs))
       (mkConst ``Bool.true)
-    -- The certificate check, by kernel-checkable `decide`.
+    -- The certificate check, by `decide +kernel`: the kernel evaluates the
+    -- `Bool`, with no elaborator-side reduction first. Plain `decide` reduced in
+    -- Meta and hit `maxRecDepth` near 100 squares, far below the bounds the
+    -- oracle protocol advertised; `+kernel` checks the same proposition with the
+    -- same trust (no extra axiom -- see #print axioms in the tests) and got
+    -- through 1000 squares in review. `tryCatchRuntimeEx` because a runtime
+    -- limit is NOT caught by `try`/`catch`, and it used to escape this tactic's
+    -- error message entirely.
     let hcheckMVar ← mkFreshExprSyntheticOpaqueMVar checkProp
-    try
-      let rest ← Tactic.run hcheckMVar.mvarId! (evalTactic (← `(tactic| decide)))
-      unless rest.isEmpty do throwError "decide left goals"
-    catch ex =>
-      throwError "forge_cone: certificate REJECTED. `Cert.check` did not evaluate to \
+    tryCatchRuntimeEx
+      (do
+        let rest ← Tactic.run hcheckMVar.mvarId! (evalTactic (← `(tactic| decide +kernel)))
+        unless rest.isEmpty do throwError "decide left goals")
+      (fun ex => do
+        -- A resource limit is not a verdict. Before this split, a VALID certificate
+        -- too large for the kernel was reported as "certificate REJECTED".
+        let msg ← ex.toMessageData.toString
+        let hit (s : String) : Bool := (msg.splitOn s).length > 1
+        if ex.isRuntime || hit "deep recursion" || hit "maximum recursion" then
+          throwError m!"forge_cone: the certificate could NOT BE CHECKED: the kernel \
+            reached its recursion limit while evaluating `Cert.check`. This is NOT a \
+            verdict on the certificate. The limit tracks the length of the expanded \
+            identity (target, plus each square's product with its constraint powers, \
+            plus each multiplier times its equality); see \
+            `Forge.Checker.Oracle.measuredCheckLimit` for the measured figure.\n\
+            Underlying error: {ex.toMessageData}"
+        throwError m!"forge_cone: certificate REJECTED. `Cert.check` did not evaluate to \
         `true` on the reified problem (target, {prob.ineqs.size} inequality and \
         {prob.eqs.size} equality constraint(s), atoms {prob.atoms.toList}).\n\
         Check that the certificate is for this goal, in this atom order and this \
-        hypothesis order.\nUnderlying error: {ex.toMessageData}"
+        hypothesis order.\nUnderlying error: {ex.toMessageData}")
     let hcheck ← instantiateMVars hcheckMVar
     let hg := conjProof ``AllNonneg (intLe (mkIntNumeral 0)) x prob.ineqs
     let hf := conjProof ``AllZero (fun d => intEq d (mkIntNumeral 0)) x prob.eqs
@@ -359,7 +414,7 @@ def runForgeCone (seed : Array Expr) (hyps : Array Expr) (certStx : Term) : Tact
       throwError "forge_cone: internal proof term does not type-check (a hypothesis \
         is not definitionally its reified form): {ex.toMessageData}"
     let proofTy ← inferType proof
-    unless ← isDefEq proofTy goalTy do
+    unless ← withNewMCtxDepth (isDefEq proofTy goalTy) do
       throwError "forge_cone: the reified statement{indentExpr proofTy}\nis not \
         definitionally the goal{indentExpr goalTy}"
     goal.assign proof

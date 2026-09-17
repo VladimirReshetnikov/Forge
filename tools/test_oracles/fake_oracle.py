@@ -78,6 +78,15 @@ def mutate(mode: str, raw: bytes) -> tuple[str, int]:
 
     if mode == "identity":
         pass
+    elif mode == "oversize_valid":                # a VALID certificate past checkSize
+        # Zero-weight squares change nothing about the identity, so a checker with
+        # no size limit would accept this; each 45-term square adds 2025 to the
+        # expanded size. The decoder must refuse it BEFORE checking, and say that
+        # the refusal is a resource limit, not a verdict.
+        n = json.loads(raw)["target"]["n"]
+        big = {"n": n, "terms": [[[j] + [0] * (n - 1), 1] for j in range(45)]}
+        cert["squares"].append({"weight": 0, "powers": [0] * len(cert["squares"][0]["powers"]),
+                                "poly": big})
     elif mode == "negweight":                     # (a)
         s = first_nonzero_square(cert)
         s["weight"] = -s["weight"]

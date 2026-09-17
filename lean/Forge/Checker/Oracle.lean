@@ -77,6 +77,32 @@ register_option forge.oracle.reportTime : Bool := {
 
 def maxSquares : Nat := 1000
 def maxTerms : Nat := 1000
+
+/-- The length of the term list `collect` receives when `Cert.check` runs on this
+certificate and problem: the target, plus each square's product with its
+constraint powers, plus each multiplier times its equality. Every list
+operation in the checker is structurally recursive over this list, so it -- and
+not the number of squares -- is what the kernel's recursion limit tracks.
+
+Review showed why this matters: 1000 zero-weight squares with empty polynomials
+check in seconds, while ONE square with 45 terms (2025 products) does not. -/
+def checkSize (c : Cert) (p : Poly) (ineqs eqs : List Poly) : Nat :=
+  let powers (es : List Nat) : Nat :=
+    (es.zip ineqs).foldl (fun acc eg => acc * eg.2.length ^ eg.1) 1
+  let cone := c.squares.foldl
+    (fun acc s => acc + powers s.powers * (s.poly.length * s.poly.length)) 0
+  let mults := (c.multipliers.zip eqs).foldl (fun acc hf => acc + hf.1.length * hf.2.length) 0
+  p.length + cone + mults
+
+/-- MEASURED, NOT DERIVED. On leanprover/lean4 v4.34.0 with `decide +kernel`, a
+univariate square with k terms against its expanded target checked at k = 40
+(size 79 + 1600 = 1679) and failed with "(kernel) deep recursion detected" at
+k = 45 (size 89 + 2025 = 2114). The limit is set below the largest size seen to
+pass. Other shapes may differ; a certificate over this limit is refused BEFORE
+checking, with that reason, rather than reported as rejected. The previous
+decoder bounds (1000 squares, 1000 terms per polynomial) were structural caps
+that the checker could not in fact meet -- review measured the gap. -/
+def measuredCheckLimit : Nat := 1600
 def maxDigits : Nat := 100
 def maxExponent : Nat := 64
 def maxVariables : Nat := 64
@@ -134,6 +160,12 @@ def ancestors (d : System.FilePath) : Nat → List System.FilePath
 def resolveToken (cwd : System.FilePath) (tok : String) : IO String := do
   let fp : System.FilePath := tok
   if tok.startsWith "-" || fp.isAbsolute then return tok
+  -- Only tokens that are visibly PATHS are resolved against the working directory
+  -- and its ancestors. A bare program name such as `python` is left for the
+  -- operating system to find on PATH; before this, a stray file named `python`
+  -- in the working directory or any of four ancestors silently replaced the
+  -- interpreter (found by review).
+  unless tok.any (fun ch => ch == '/' || ch == '\\') do return tok
   for d in ancestors cwd 4 do
     let cand := d / fp
     if ← cand.pathExists then
@@ -400,6 +432,13 @@ elab_rules : tactic
       | .error e =>
         oracleFail m!"MALFORMED oracle reply rejected at the data boundary \
           (exit code {code}): {e}{stderrNote}"
+    let size := checkSize cert (IExpr.toPoly prob.targetR.val)
+      (prob.ineqs.map (fun h => IExpr.toPoly h.expr.val)).toList
+      (prob.eqs.map (fun h => IExpr.toPoly h.expr.val)).toList
+    if size > measuredCheckLimit then
+      oracleFail m!"the oracle's certificate decoded, but its expanded identity has \
+        {size} terms, above the {measuredCheckLimit} that `decide +kernel` was \
+        MEASURED to check. It was NOT checked; this is not a verdict on the certificate."
     let text := certText cert
     let certStx ← match Parser.runParserCategory (← getEnv) `term text with
       | .ok s => pure s
@@ -409,6 +448,10 @@ elab_rules : tactic
     try
       runForgeCone seed hyps certTerm
     catch e =>
+      let msg ← e.toMessageData.toString
+      if (msg.splitOn "could NOT BE CHECKED").length > 1 then
+        oracleFail m!"the oracle's certificate DECODED but could NOT BE CHECKED \
+          (a resource limit, not a verdict):\n{e.toMessageData}"
       oracleFail m!"the oracle's certificate DECODED but was REJECTED by the \
         kernel-checked path of forge_cone:\n{e.toMessageData}"
     let t1 ← IO.monoMsNow

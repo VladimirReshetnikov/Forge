@@ -517,6 +517,16 @@ example (x : Int) : 0 ≤ x ^ 2 := by
   fails_with "could not run the oracle command" => forge_cone?
   forge_cone using ({ scale := 1, squares := [{ weight := 1, powers := [], poly := [([1], 1)] }], multipliers := [] } : Cert)
 
+/- (R1, size, at the data boundary) A VALID certificate padded with a zero-weight
+45-term square. The identity still holds, so a checker with no size limit would
+accept it; the decoder must refuse it BEFORE checking, and say it is a resource
+limit and not a verdict. -/
+set_option forge.oracle.cmd "python tools/test_oracles/fake_oracle.py oversize_valid" in
+example (x : Int) : 0 ≤ x ^ 2 := by
+  fail_if_success forge_cone?
+  fails_with "MEASURED to check" => forge_cone?
+  forge_cone using ({ scale := 1, squares := [{ weight := 1, powers := [], poly := [([1], 1)] }], multipliers := [] } : Cert)
+
 end Mutations
 
 end Forge.Checker.OracleTest

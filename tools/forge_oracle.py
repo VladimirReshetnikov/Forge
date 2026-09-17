@@ -51,8 +51,17 @@ BOUNDS (input is rejected with status "error" beyond these):
   MAX_CONSTRAINTS   8         inequalities, and separately equalities
   MAX_COEFF_DIGITS  60        decimal digits per input coefficient
 and a certificate is replaced by "unknown" if it exceeds the OUTPUT bounds the
-Lean decoder enforces (MAX_OUT_* below), so a well-behaved oracle never emits
-something the consumer is bound to reject for size.
+Lean decoder enforces (MAX_OUT_* below), or if its estimated checkable size
+exceeds MAX_CHECK_SIZE.
+
+An earlier version said this meant "a well-behaved oracle never emits something
+the consumer is bound to reject for size". That was false: review showed the
+Lean checker could not check certificates far inside MAX_OUT_SQUARES and
+MAX_OUT_TERMS, because the kernel's limit tracks the EXPANDED identity, not the
+counts. MAX_CHECK_SIZE mirrors Lean's measured limit. The estimate here uses the
+COLLECTED polynomials this process is sent, which can be shorter than the
+unnormalised lists Lean multiplies, so it is a lower bound: the Lean decoder's
+`checkSize` is authoritative and may still refuse.
 
 TIME. `--timeout SECONDS` (default 20) is enforced on the whole search by a
 watchdog: the search runs in a daemon thread, and if it has not finished the
@@ -87,6 +96,7 @@ SEARCH_DEGREE_CAP = 4
 DEFAULT_TIMEOUT = 20.0
 
 # Output bounds: must not exceed the Lean decoder's (Oracle.lean).
+MAX_CHECK_SIZE = 1600      # mirrors Forge.Checker.Oracle.measuredCheckLimit
 MAX_OUT_SQUARES = 1000
 MAX_OUT_TERMS = 1000
 MAX_OUT_DIGITS = 100
@@ -338,6 +348,25 @@ def within_output_bounds(out) -> str | None:
     return None
 
 
+def check_size(out, target, ineqs, eqs) -> int:
+    """Mirror of Forge.Checker.Oracle.checkSize: the length of the list the Lean
+    checker's `collect` receives. Uses the collected polynomials this process was
+    sent, so it can UNDER-estimate Lean's figure; Lean's check is authoritative."""
+    def size(poly) -> int:
+        return len(poly)        # parse_problem yields lists of (monomial, coeff)
+
+    total = size(target)
+    for sq in out["squares"]:
+        product = 1
+        for e, g in zip(sq["powers"], ineqs):
+            product *= size(g) ** e
+        q = len(sq["poly"]["terms"])
+        total += product * q * q
+    for h, f in zip(out["multipliers"], eqs):
+        total += len(h["terms"]) * size(f)
+    return total
+
+
 def dumps(obj) -> str:
     return json.dumps(obj, separators=(",", ":"))
 
@@ -359,6 +388,12 @@ def solve_problem(n, target, ineqs, eqs, timeout=DEFAULT_TIMEOUT) -> dict:
     bad = within_output_bounds(out)
     if bad is not None:
         return {"status": "unknown", "reason": "certificate exceeds output bounds: " + bad}
+    size = check_size(out, target, ineqs, eqs)
+    if size > MAX_CHECK_SIZE:
+        return {"status": "unknown",
+                "reason": "certificate found, but its expanded identity (%d terms) exceeds "
+                          "the %d that Lean's kernel check was measured to handle" %
+                          (size, MAX_CHECK_SIZE)}
     return out
 
 
