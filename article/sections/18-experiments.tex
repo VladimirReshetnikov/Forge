@@ -1652,7 +1652,28 @@ separate process.
 The comparison was run to decide whether the search deserves a planner built
 around it. It does. But the same run shows the search's gaps plainly, and those
 are cheaper to close, measurable with the same harness, and inherited by any
-planner --- so they come before Gate~1.
+planner --- so they came before Gate~1.
+
+\subsubsection*{Closing the gaps, and running it again}
+
+The six search failures had two causes. The dictionary proposed only binomial
+squares guessed from the target's even monomials, so $1 - xy$ never suggested
+$(x-y)^2$; offering all binomial squares removes that. And no dictionary proposes
+a trinomial with specific coefficients, such as $(x^2 - 2xy + y^2)^2$ for
+$(x-y)^4$. For that a Gram-matrix search was added: the linear constraints on a
+Gram matrix are solved exactly, a positive semidefinite point is found
+numerically by alternating projections --- no semidefinite solver is available
+--- and a rational matrix is reconstructed exactly from it, decomposed by exact
+$LDL^\top$ and checked. The degree bound rose from four to six.
+
+On the same twenty problems, \code{forge\_cone?} then solved eighteen, fourteen of
+them solved by no Mathlib tactic tried; Mathlib's counts were identical in both
+runs. The two failures left are Motzkin's polynomial, which is not a sum of
+squares, and Schur's inequality, which needs reasoning outside this certificate
+family. One caveat outweighs the rest: the search was improved in response to the
+first run's failures on these same problems, so the second run shows the fixes
+work where they were aimed, not how the search generalises. That needs a problem
+set chosen after the fixes.
 
 \subsection{What the evidence establishes}
 

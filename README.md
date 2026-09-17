@@ -37,10 +37,11 @@ first gate anything in this repository has reached. See
 
 **Is it useful?** On 20 well-known polynomial inequalities it did not choose,
 `forge_cone?` solved 12; bare `nlinarith` solved 3, `positivity` 1, `grind` and
-`omega` none. Eight were solved by Forge alone and none by Mathlib alone. The
-comparison is small and its caveats matter — `nlinarith` gets no hints by design,
-most `positivity` failures are about goal form, and Forge's own search missed
-textbook cases such as `(x−y)⁴` — see
+`omega` none. That run also showed Forge's search missing textbook cases such as
+`(x−y)⁴`; after fixing those gaps it solves **18 of 20**, fourteen of them solved
+by no Mathlib tactic tried. The caveats matter — `nlinarith` gets no hints by
+design, most `positivity` failures are about goal form, and the second run
+measures fixes made against the first run's failures on the same problems — see
 [`lean/Forge/Checker/README.md`](lean/Forge/Checker/README.md).
 
 Three adversarial reviews made 85+ attempts to get it to accept something false

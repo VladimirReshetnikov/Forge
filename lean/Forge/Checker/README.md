@@ -218,65 +218,67 @@ cd lean && LEAN_PATH=.lake/build/lib lean Forge/Checker/Corpus.lean
 `tools/compare_tactics.py` runs `forge_cone?`, `nlinarith`, `positivity`,
 `grind` and `omega` on the 20 well-known inequalities in
 [`bench/tactics/problems.json`](../../../bench/tactics/problems.json), each
-checked true on an integer grid before any Lean ran. Full data in
+checked true on an integer grid before any Lean ran. Every success below is a
+kernel-checked proof: failures and errors match one-for-one, and no `sorry`.
+
+It was run twice, and the difference between the runs is the point.
+
+| Problem | `forge_cone?` first run | `forge_cone?` after search fixes | `nlinarith` | `positivity` |
+| --- | --- | --- | --- | --- |
+| AM-GM, 2 variables | ok | ok | fails | form |
+| 1 + x² ≥ 2x | ok | ok | ok | form |
+| x²+y²+z² ≥ xy+yz+zx | ok | ok | fails | form |
+| (x+y)² ≤ 2(x²+y²) | ok | ok | fails | form |
+| x² − xy + y² ≥ 0 | ok | ok | ok | fails |
+| (x−1)²+(y−1)² ≥ 0, expanded | ok | ok | fails | form |
+| PSD tridiagonal form, 3 vars | ok | ok | fails | fails |
+| Cauchy–Schwarz, 2D | ok | ok | fails | form |
+| a⁴+b⁴ ≥ a³b+ab³ | none found | **ok** | fails | form |
+| (x−y)⁴ ≥ 0, expanded | none found | **ok** | fails | fails |
+| x⁴+y⁴+z⁴ ≥ x²y²+y²z²+z²x² | ok | ok | fails | form |
+| a⁴+b⁴+c⁴ ≥ abc(a+b+c) | none found | **ok** | fails | form |
+| x³+y³ ≥ x²y+xy² for x,y ≥ 0 | none found | **ok** (8.2 s) | fails | form |
+| (x−1)(y−1) ≥ 0 for x,y ≥ 1 | ok | ok | ok | form |
+| x+y = 2 ⇒ xy ≤ 1 | none found | **ok** | fails | form |
+| x+y+z = 3 ⇒ x²+y²+z² ≥ 3 | ok | ok | fails | form |
+| Schur, t = 1 | none found | none found | fails | fails |
+| xyz ≥ 0 for x,y,z ≥ 0 | ok | ok | fails | ok |
+| Motzkin (not SOS, degree 6) | degree bound | none found — correct | fails | fails |
+| (x³−y³)² expanded, degree 6 | degree bound | **ok** | fails | form |
+| **Solved** | **12** | **18** | **3** | **1** |
+
+`grind` and `omega` solved none in either run. Mathlib's counts were identical in
+both runs. Solved by Forge and no Mathlib tactic: 8, then **14**. Solved by a
+Mathlib tactic and not Forge: 0 both times. Data:
+[`results/tactic-headtohead-before-search-fixes.json`](../../../results/tactic-headtohead-before-search-fixes.json),
 [`results/tactic-headtohead.json`](../../../results/tactic-headtohead.json).
 
-| Problem | `forge_cone?` | `nlinarith` | `positivity` |
-| --- | --- | --- | --- |
-| AM-GM, 2 variables | **ok** 0.6 s | fails | form |
-| 1 + x² ≥ 2x | ok 0.3 s | ok 0.6 s | form |
-| x²+y²+z² ≥ xy+yz+zx | **ok** 0.3 s | fails | form |
-| (x+y)² ≤ 2(x²+y²) | **ok** 0.3 s | fails | form |
-| x² − xy + y² ≥ 0 | ok 0.3 s | ok 0.1 s | fails |
-| (x−1)²+(y−1)² ≥ 0, expanded | **ok** 0.4 s | fails | form |
-| PSD tridiagonal form, 3 vars | **ok** 0.3 s | fails | fails |
-| Cauchy–Schwarz, 2D | **ok** 1.9 s | fails | form |
-| a⁴+b⁴ ≥ a³b+ab³ | *search found none* | fails | form |
-| (x−y)⁴ ≥ 0, expanded | *search found none* | fails | fails |
-| x⁴+y⁴+z⁴ ≥ x²y²+y²z²+z²x² | **ok** 2.1 s | fails | form |
-| a⁴+b⁴+c⁴ ≥ abc(a+b+c) | *search found none* | fails | form |
-| x³+y³ ≥ x²y+xy² for x,y ≥ 0 | *search found none* | fails | form |
-| (x−1)(y−1) ≥ 0 for x,y ≥ 1 | ok 2.2 s | ok 0.2 s | form |
-| x+y = 2 ⇒ xy ≤ 1 | *search found none* | fails | form |
-| x+y+z = 3 ⇒ x²+y²+z² ≥ 3 | **ok** 2.9 s | fails | form |
-| Schur, t = 1 | *search found none* | fails | fails |
-| xyz ≥ 0 for x,y,z ≥ 0 | ok 2.0 s | fails | ok 0.1 s |
-| Motzkin (not SOS, degree 6) | *degree bound* | fails | fails |
-| (x³−y³)² expanded, degree 6 | *degree bound* | fails | form |
-| **Solved** | **12** | **3** | **1** |
-
-**Solved by `forge_cone?` and by no Mathlib tactic tried: 8.** Solved by a
-Mathlib tactic and not by `forge_cone?`: 0. `grind` and `omega` solved none,
-as the calibration probes predicted. Bold marks the eight.
+**What the fixes were.** The first run showed Forge's dictionary search missing
+textbook sums of squares, for two reasons. It only proposed binomial squares it
+could guess from the target's even monomials, so `1 − xy` never led it to
+`(x−y)²`; it now offers all of them. And no dictionary proposes a trinomial with
+specific coefficients, such as `(x² − 2xy + y²)²` for `(x−y)⁴`; a Gram-matrix
+search with exact rational reconstruction (`prototype/forge/gram.py`) now does,
+without an SDP solver, and the degree bound rose from 4 to 6. The two problems
+still unsolved are the right two: Motzkin's polynomial is not a sum of squares,
+and Schur's inequality needs reasoning this certificate family does not express.
 
 **Read before quoting.**
-- *Every `nlinarith` failure was genuine and fast* (50–600 ms, "linarith failed
-  to find a contradiction"), not a heartbeat timeout. It received no hints,
-  deliberately: `nlinarith [sq_nonneg (x - y)]` is handing it the certificate,
-  which is exactly what `forge_cone?` has to find. With the right hint it
-  succeeds (see the earlier comparison) — so what this measures is *finding*
-  the certificate, not *checking* it.
-- *"form" is not a capability result.* `positivity` rejects every goal not of the
-  form `0 ≤ e` as "not a positivity goal"; 14 of its 20 rows are that. On the six
-  goals that ARE of that form it genuinely tried, and solved one (`xyz ≥ 0`).
-  Those six are marked "fails" or "ok", not "form".
-- *Forge's failures are its own and are visible.* Six are its search returning
-  no candidate — including `(x−y)⁴` and `x+y=2 ⇒ xy≤1`, both textbook sums of
-  squares — and two are its degree bound of 4. None was a size refusal: the
-  kernel's ~1600-term limit did not bind on this set.
-- *Forge is slower when both succeed*: its oracle is a separate Python process,
-  0.3–2.9 s per success against 0.1–0.6 s for `nlinarith`.
-- *Twenty curated problems is a small sample*, over `Int`, degree ≤ 4 apart from
-  two deliberate probes, on Lean v4.32 with Mathlib (the only built Mathlib
-  here; Forge's core compiles unchanged on it).
-- All 16 successes were checked to be real proofs: 84 failures produced exactly
-  84 errors, and there were no `sorry` warnings.
-
-**What it decided.** The question was whether Forge's search is worth building a
-planner around. It solves problems the baselines cannot, so Gate 1 is justified.
-But the same run shows the search missing textbook sums of squares — a gap that
-is cheaper to close than Gate 1, measurable with this harness before and after,
-and one the planner would inherit. So the search's gaps come first, then Gate 1.
+- *`nlinarith` gets no hints, by design.* Given the certificate's squares it
+  succeeds (see the earlier comparison), so what this measures is *finding* the
+  certificate. Every `nlinarith` failure was a genuine refutation failure in
+  under a second, never a timeout.
+- *"form" is not a capability result.* `positivity` rejects goals not of the form
+  `0 ≤ e`; 14 of its 20 rows are that. On the six it attempted it solved one.
+- *Forge is slower when both succeed* — its oracle is a separate Python process —
+  and one fixed problem now takes 8.2 s.
+- *The problem set was fixed before either run*, but the search was improved in
+  response to the first run's failures on that same set. The second run shows
+  the fixes work on the problems that motivated them; it is not independent
+  evidence of how the search generalises. A fresh problem set is the way to get
+  that.
+- *Twenty curated problems, over `Int`, on Lean v4.32 with Mathlib* — the only
+  built Mathlib here; Forge's core compiles unchanged on it.
 
 ## Does Lean already do this?
 

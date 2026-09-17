@@ -511,7 +511,7 @@
       "record": "results/tactic-headtohead.json",
       "problems": 20,
       "solved": {
-        "forge_cone?": 12,
+        "forge_cone?": 18,
         "nlinarith": 3,
         "positivity": 1,
         "grind": 0,
@@ -520,26 +520,53 @@
       "forge_only": [
         "amgm2",
         "cauchy_schwarz2",
+        "fourth_power",
+        "nonneg_cubic",
+        "quartic_2",
+        "quartic_abc",
         "quartic_sq_sum3",
+        "sextic_sos",
         "shifted_squares",
         "sq_sum_cross3",
+        "sum_fixed_product",
         "sum_fixed_squares3",
         "sum_sq_bound",
         "tridiagonal3"
       ],
       "mathlib_only": [],
       "forge_failures": {
-        "search_found_no_candidate": 6,
-        "degree_bound": 2,
-        "size_refusal": 0
+        "not_a_sum_of_squares": [
+          "motzkin"
+        ],
+        "outside_certificate_family": [
+          "schur_t1"
+        ]
       },
       "caveats": [
         "nlinarith received no hints, deliberately; with the certificate as a hint it succeeds",
         "positivity rejects goals not of the form 0 <= e; most of its failures are about form",
         "Forge is slower when both succeed: 0.3-2.9 s against 0.1-0.6 s",
-        "20 curated problems, Int, degree <= 4 bar two probes; Lean v4.32 with Mathlib"
+        "20 curated problems, Int, degree <= 4 bar two probes; Lean v4.32 with Mathlib",
+        "the second run measures fixes made in response to the first run on the SAME problems; it is not independent evidence of generalisation"
       ],
-      "decision": "Gate 1 is justified by the result, but the search missed textbook sums of squares, including (x-y)^4 and x+y=2 => xy<=1. Closing those gaps is cheaper, measurable with the same harness, and inherited by any planner, so it comes first."
+      "decision": "The search gaps the first run exposed are closed: 18 of 20, and the two left are not sums of squares or outside the certificate family. By the decision recorded after the first run, Gate 1 is next.",
+      "first_run": {
+        "record": "results/tactic-headtohead-before-search-fixes.json",
+        "solved": {
+          "forge_cone?": 12,
+          "nlinarith": 3,
+          "positivity": 1,
+          "grind": 0,
+          "omega": 0
+        },
+        "forge_only": 8,
+        "mathlib_only": 0
+      },
+      "search_fixes": [
+        "all binomial squares offered to the LP, not only those guessed from even monomials",
+        "Gram-matrix SOS search with exact rational reconstruction (prototype/forge/gram.py)",
+        "oracle degree bound raised from 4 to 6"
+      ]
     }
   }
 }
