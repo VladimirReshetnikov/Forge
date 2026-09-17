@@ -48,7 +48,10 @@ AXIOM_FREE = "does not depend on any axioms"
 
 
 def collect(root: Path) -> list[Path]:
-    return sorted(p for p in root.rglob("*.lean") if ".git" not in p.parts)
+    """Source files only: `.lake/` holds build output and GENERATED files (the
+    tactic head-to-head writes one there), which are not repository Lean."""
+    return sorted(p for p in root.rglob("*.lean")
+                  if ".git" not in p.parts and ".lake" not in p.parts)
 
 
 def module_table(root: Path, files: list[Path]) -> dict[str, set[Path]]:
