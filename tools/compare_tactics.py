@@ -179,6 +179,7 @@ def main() -> int:
     ap.add_argument("--mem-gb", type=float, default=12.0)
     ap.add_argument("--seconds", type=int, default=3600)
     ap.add_argument("--only", nargs="*", help="problem ids to run")
+    ap.add_argument("--problems", type=Path, default=BENCH / "problems.json")
     ap.add_argument("--out", type=Path, default=ROOT / "results" / "tactic-headtohead.json")
     args = ap.parse_args()
 
@@ -190,7 +191,7 @@ def main() -> int:
     lean = toolchain_lean(args.toolchain)
     build_core(lean)
 
-    problems = json.loads((BENCH / "problems.json").read_text(encoding="utf-8"))["problems"]
+    problems = json.loads(args.problems.read_text(encoding="utf-8"))["problems"]
     if args.only:
         problems = [p for p in problems if p["id"] in args.only]
     GEN.mkdir(parents=True, exist_ok=True)
@@ -225,7 +226,7 @@ def main() -> int:
     size_refusals = [p["id"] for p in problems
                      if "MEASURED to check" in results.get(p["id"], {}).get("forge_cone?", {}).get("reason", "")]
     out = {
-        "what": "forge_cone? versus Mathlib and core tactics on bench/tactics/problems.json.",
+        "what": "forge_cone? versus Mathlib and core tactics on %s." % args.problems.relative_to(ROOT).as_posix(),
         "environment": {"toolchain": args.toolchain, "mathlib_root": str(args.mathlib_root),
                         "mathlib_toolchain": mathlib_toolchain, "max_heartbeats": args.heartbeats,
                         "forge_pins": "leanprover/lean4:v4.34.0 (core modules compile unchanged on v4.32)"},

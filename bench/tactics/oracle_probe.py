@@ -66,9 +66,9 @@ def problem_input(problem: dict) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--only", nargs="*")
+    ap.add_argument("--problems", type=Path, default=ROOT / "bench" / "tactics" / "problems.json")
     args = ap.parse_args()
-    problems = json.loads((ROOT / "bench" / "tactics" / "problems.json")
-                          .read_text(encoding="utf-8"))["problems"]
+    problems = json.loads(args.problems.read_text(encoding="utf-8"))["problems"]
     if args.only:
         problems = [p for p in problems if p["id"] in args.only]
     found = 0
