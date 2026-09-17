@@ -435,4 +435,38 @@ example (x : Int) (hfalse : 0 ≤ x * x - (@OfNat.ofNat Int (nat_lit 2) weirdTwo
   forge_reify
   exact hfalse
 
+/-! ## Composition with a stock leaf tactic
+
+Gate 2 of the design says this stage "already adds useful nonlinear facts to a
+stock `grind` leaf". That is tested here as COMPOSITION through `have`, which is
+all that exists: `grind` does not call `forge_cone`, and nothing is automatic.
+
+The goal wraps linear bookkeeping (`b = a + 7`, `c = 2 * b`) around a nonlinear
+core (`0 ≤ a`). Neither `grind` nor `omega` proves it alone -- `grind` cannot
+prove that a square is nonnegative -- and both finish it once `forge_cone` has
+supplied the one nonlinear fact.
+
+A first draft of this test used a hypothesis `3 ≤ a + 3`, from which `0 ≤ a`
+follows LINEARLY; `grind` proved it unaided and the test measured nothing. The
+`fail_if_success` lines below are what keep the example honest. -/
+
+def composeCert : Cert :=
+  { scale := 1, squares := [{ weight := 1, powers := [], poly := [([1], 1), ([0, 1], -1)] }],
+    multipliers := [] }
+
+theorem compose_with_grind (x y a b c : Int) (ha : a = x * x + y * y - 2 * (x * y))
+    (hb : b = a + 7) (hc : c = 2 * b) : 14 ≤ c := by
+  fail_if_success grind
+  have h : 2 * (x * y) ≤ x * x + y * y := by forge_cone using composeCert
+  grind
+
+theorem compose_with_omega (x y a b c : Int) (ha : a = x * x + y * y - 2 * (x * y))
+    (hb : b = a + 7) (hc : c = 2 * b) : 14 ≤ c := by
+  fail_if_success omega
+  have h : 2 * (x * y) ≤ x * x + y * y := by forge_cone using composeCert
+  omega
+
+#print axioms compose_with_grind
+#print axioms compose_with_omega
+
 end Forge.Checker.TacticTest
