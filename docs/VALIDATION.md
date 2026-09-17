@@ -226,7 +226,7 @@ Three more from the extension round belong in the same list:
 | Core Lean elaboration, design-round proposals | 3 of 3 core-only files (never scanned before) |
 | Core Lean elaboration, third round | 2 of 3 core-only files; **1 fails to parse** |
 | Core Lean elaboration, fourth round | 2 of 2 files |
-| Core Lean elaboration, all rounds | **28 of 29** Mathlib-free files (transitively) |
+| Core Lean elaboration, all rounds | **39 of 40** Mathlib-free files (transitively) |
 | **`Forge.Checker` soundness proved** | **yes** — `Cert.sound`, `propext` + `Quot.sound` only |
 | **Prototype certificates checked by the Lean kernel** | **3 of 3** cone certificates, via `decide` |
 | Mathlib-importing file that also fails to parse | **1** (`r6`), found by sweeping all 86 files |
@@ -236,6 +236,10 @@ Three more from the extension round belong in the same list:
 | **`sorry` audit, all 90 Lean files** | **0 real occurrences**; 26 mentions, all in comments denying them |
 | **Certificate benchmark** | 30/30 verified; **6/6 negative controls rejected** |
 | **`grind` on the same 30** | 0/30 — and it cannot prove `0 ≤ x^2`, so this measures its scope |
+| **Axiom audit, every `Forge.Checker` theorem** | **593 theorems**, all within `propext`/`Quot.sound` but one documented, necessary exemption; the audit fails the build otherwise |
+| **Adversarial review of Gate 2** | 85+ attacks across three reviews; **0 false statements accepted**; findings fixed and pinned |
+| **Mutation rejection at the data boundary** | every `forge_cone?` corruption case rejected; the id-injection attack refused by every exporter |
+| **`forge_cone` facts composed with `grind`** | a goal neither `grind` nor `omega` proves alone, closed after one `have` |
 | Extension suite re-run | 9 of 9 suites pass; 9 of 9 recorded counts reproduced |
 | Bibliography deduplication | ~215 entries under ~100 keys reduced to 56 |
 | Certificate corpus float scan | 1 float found across all nine design-round runs; it is a timing field |

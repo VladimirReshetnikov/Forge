@@ -174,11 +174,14 @@ which was compiled here rather than by any author. The gap closes only by
 writing the Lean implementation described in Section~\ref{sec:integration} and
 running the evaluation described in Section~\ref{sec:evaluation}.
 
-\subsection{One certificate family, closed}
+\subsection{Gate 2, reached out of order}
 
-That last sentence stood unanswered for four rounds. It is now partly answered,
-for one family, and the size of what was required is the most useful thing to
-report.
+That last sentence stood unanswered for four rounds. It is now partly answered.
+What exists is most of Gate~2 of Section~\ref{sec:integration} --- exact
+algebraic replay --- and none of Gate~1, which the design puts first. The order
+was deliberate: a checked checker is useful without a planner, and a planner is
+not useful without one. The size of what each step required is the most useful
+thing to report, starting with the first family.
 
 \code{Forge.Checker} is a checker for cone certificates --- sums of squares,
 products of the inequality constraints, and equality multipliers --- together
@@ -205,10 +208,10 @@ denominators, and accepted by the Lean kernel through \code{decide} rather than
 on \code{propext} and \code{Quot.sound} and nothing else. \code{ForgeCore}
 now builds as a library rather than elaborating file by file.
 
-Three things are worth saying about what this did and did not require.
+Five things are worth saying about what this did and did not require.
 
 \emph{It is core Lean only, and that was the binding constraint.} Fifty-eight of
-this repository's ninety Lean files depend on Mathlib and not one of them
+this repository's hundred and one Lean files depend on Mathlib and not one of them
 has ever been checked by anything. A checker in that bucket would have been one
 more uncompiled claim, so there is no \code{ring} and no \code{nlinarith} here;
 coefficients are integers because \code{Int} is in core and \code{Rat}'s
@@ -223,10 +226,41 @@ arithmetic. Without that bridge the checker proves things about its own data
 structure, which is a different and much less useful achievement --- and the
 distance between the two is small but not zero.
 
-\emph{It is a checker, not a tactic.} Applying a certificate is a generated
-\code{have} and a \code{simp}; nothing here searches. The honest description
-of what now exists is one rung of the ladder in
-Section~\ref{sec:integration}, not the ladder.
+\emph{The bridge is now a theorem.} The generated arithmetic statement was
+first connected to the certificate by a generated \code{have}/\code{simp}/
+\code{omega} script, and that script is where the first real bug lived: a
+monomial emitted left-associated where evaluation builds it to the right.
+Gate~2's typed reification replaced it. \code{eval\_toPoly} proves that
+evaluating a reified expression's polynomial is its denotation, and the
+\code{forge\_cone} tactic closes an ordinary integer goal through that theorem,
+with the kernel re-checking that each hypothesis and the goal are what the
+metaprogram says they are. \code{forge\_cone?} goes one step further and asks the
+prototype's search, run as an untrusted process through a bounded protocol, and
+leaves behind a proof that never mentions it. Affine-witness, Farkas,
+polynomial-recurrence and conserved-invariant checkers followed, each with its
+soundness proved, and an audit now fails the build if any of their 593 theorems
+uses an axiom outside \code{propext} and \code{Quot.sound} beyond one documented
+exemption.
+
+\emph{Adversarial review found nothing false, and several things wrong.} Three
+reviewers made more than eighty-five attempts to make these checkers or tactics
+accept a false statement, and none succeeded. Every defect they found was
+\emph{outside} the kernel-checked part, which is the part with no theorem
+attached: a record id in the certificate data could close a Lean comment and
+inject an \code{axiom}, in every exporter including the one written first; the
+advertised size bounds were far beyond what the kernel check can reach, and a
+valid certificate past the real limit was reported as rejected; atom matching
+could assign the user's metavariables; an exporter's documentation claimed a
+certificate cannot choose the problem it certifies, which for conserved
+invariants is false. All are fixed and pinned by tests. One test had to be
+rewritten because it passed with or without the fix it was meant to guard.
+
+\emph{It is still not the design.} \code{forge\_cone} is a tactic for one
+certificate family. Nothing decides which family a goal needs, decomposes a goal,
+or orchestrates workers; that is Gates~1 and~3. Composition with \code{grind} is
+a \code{have}, not an integration. The honest description of what now exists is
+one gate of the ladder in Section~\ref{sec:integration}, reached first, and the
+most self-contained of them.
 
 What has changed across the rounds is not the gap but the honesty about it. The
 first round shipped three thousand lines of Lean that had never met a compiler

@@ -138,17 +138,19 @@ Produced as Lean source, never checked by a compiler — with one exception.
 - Power-sum and affine-witness replays
 - Hand-written arithmetic, lattice, residue, cross-theory and mixed specimens
 
-**The exceptions.** Twenty-nine files are Mathlib-free, and **28 of them
-elaborate** against `leanprover/lean4:v4.34.0`: seven in the merged tree, four
-in the new `Forge.Checker`, three in the design-round proposals, ten across the
+**The exceptions.** Forty files are Mathlib-free, and **39 of them
+elaborate** against `leanprover/lean4:v4.34.0`: eight in the merged tree,
+fourteen in the new `Forge.Checker`, three in the design-round proposals, ten across the
 extension proposals, two of the third round's three, and both of the fourth
 round's two. Twelve print `does not depend on any axioms` for every theorem they
 expose.
 
-**And one of them is no longer a specimen.** `Forge.Checker` is a certificate
-checker with a proved soundness theorem, and the prototype's own cone
-certificates are accepted by the Lean kernel through it. That is the one item
-on this page that moved from proposed to implemented.
+**And fourteen of them are no longer specimens.** `Forge.Checker` implements
+most of Gate 2 of the design: certificate checkers with proved soundness for the
+cone, affine-witness, Farkas, recurrence and invariant families; typed
+reification with a proved bridge; the `forge_cone` tactic; and `forge_cone?`,
+which calls the prototype's search through a bounded data protocol. Gate 1, the
+orchestration layer the design puts first, has not been started.
 
 **And two files that do not compile.** The third round's third core-only file
 defines `prefix`, a reserved keyword. And `r6`'s `FlowTargets.lean` places a

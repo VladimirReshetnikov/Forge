@@ -1,22 +1,55 @@
-# `Forge.Checker` — a certificate checker that is actually checked
+# `Forge.Checker` — Gate 2 of the design, in core Lean
 
-This is the first part of this repository that closes the loop the project is
-named for: a certificate a search produced, checked by Lean, with a *proof*
-that checking it establishes the mathematical claim.
+This is the part of the repository that closes the loop the project is named
+for: a certificate a search produced, checked by the Lean kernel, with a *proof*
+that checking it establishes the mathematical claim — and, since Gate 2, a
+tactic that applies it to an ordinary goal and an oracle protocol that finds it.
 
 Everything here is **core Lean only**. No Mathlib, no `ring`, no `nlinarith`.
-That is a deliberate constraint and not a limitation of the method: 59 of this
-repository's 86 `.lean` files import Mathlib or a sibling module and **none of
-them has ever been checked by anything**. A checker in that bucket would have
-been one more uncompiled claim.
+That is a deliberate constraint: 58 of this repository's 101 `.lean` files depend
+on Mathlib and **none of them has ever been checked by anything**. A checker in
+that bucket would have been one more uncompiled claim.
 
 ## What is here
 
+Gate 2 of the design (article §17) calls for: typed reification and cone replay
+in Lean; the quadratic and finite-cone oracles called through a bounded data
+protocol; the affine/Farkas and recurrence certificate reconstructions. Exit
+criteria: Lean checking of every end-to-end example, mutation rejection at the
+data boundary, recorded axiom dependencies.
+
 | File | What it is |
 | --- | --- |
-| `Poly.lean` | Sparse multivariate polynomials over `Int`. Evaluation is proved to be a ring homomorphism, and `isZero` is proved to decide identical vanishing. |
-| `Cone.lean` | The certificate type, the checker `Cert.check`, and `Cert.sound`. |
-| `Corpus.lean` | **Generated** from the prototype's own certificate bundle by `tools/export_lean_cone.py`. Do not edit. |
+| `Poly.lean` | Sparse `Int` polynomials. Evaluation is proved a ring homomorphism; `isZero` is proved to decide identical vanishing, up to trailing zeros. |
+| `Cone.lean` | Cone certificates: `Cert.check` and `Cert.sound`. |
+| `Corpus.lean` | **Generated** from the prototype's cone certificates. |
+| `Bench.lean` | **Generated** benchmark: 36 problems, 6 negative controls. |
+| `Reify.lean` | `IExpr`, `denote`, `toPoly`, and **`eval_toPoly`, proved** — the bridge from a certificate to a goal is a theorem, not a generated script. |
+| `Tactic.lean` | `forge_cone [hyps] using cert` and `forge_reify`. |
+| `Oracle.lean` | `forge_cone?`: runs the prototype's search as a separate process through a bounded JSON protocol, decodes strictly, closes the goal by the same kernel path, and suggests an oracle-free proof. |
+| `TacticTest.lean`, `OracleTest.lean` | Positive tests, negative tests, review regressions, mutation rejection at the data boundary. `OracleTest` needs `python`. |
+| `Affine.lean`, `AffineCorpus.lean` | Integral affine witnesses: `AffineCert.sound`, and `check_iff` (exact, not only sound). |
+| `Farkas.lean` | Farkas linear-infeasibility certificates with soundness. **No prototype family corresponds**: the prototype code labelled Farkas is an implication certificate. |
+| `Recurrence.lean`, `RecurrenceCorpus.lean` | Polynomial recurrences (`RecCert.sound`, all `n`) and conserved invariants (`InvCert.sound`, every reachable state), with substitution proved. |
+| `../../AxiomAudit.lean` | Fails to compile if any theorem under `Forge.Checker` uses an axiom outside `propext`, `Quot.sound` beyond documented, necessary exemptions. |
+
+Generated corpora are written only through `tools/lean_emit_guard.py`; see
+**The data boundary** below.
+
+## Where Gate 2 stands, against its own exit criteria
+
+| Criterion | Status |
+| --- | --- |
+| Typed reification | **Met.** `eval_toPoly` proved. |
+| Cone replay in Lean | **Met.** |
+| Oracles through a bounded data protocol | **Met** for the cone family: size, time, output and decoding bounds, all tested. |
+| Affine/Farkas reconstruction | **Met, with a caveat**: one affine record in the bundle; Farkas has no prototype family and is tested on hand-written systems. |
+| Recurrence reconstruction | **Met**: all 5 power sums and the one conserved invariant. |
+| Every end-to-end example checked | **Met.** |
+| Mutation rejection at the data boundary | **Met — after a hole was found and closed** (see below). |
+| Recorded axiom dependencies | **Met**, and enforced by `AxiomAudit.lean`. |
+| "Adds useful nonlinear facts to a stock `grind` leaf" | **Met as composition only**: `compose_with_grind` shows a goal neither `grind` nor `omega` proves alone, closed after `forge_cone` supplies one fact via `have`. Nothing calls `forge_cone` automatically. |
+| Gate 1 (trustworthy orchestration), its prerequisite | **Not started.** Gate 2 was built out of order, on the reasoning that a checked checker is useful without a planner and the planner is not useful without one. |
 
 ## The theorem
 
@@ -81,13 +114,87 @@ is not usable, and the bridge is what makes the difference.
   at integer points. The *identity* the checker verifies holds in every
   commutative ring; lifting the conclusion to ℝ needs an ordered field and
   therefore Mathlib.
-- This is a checker, **not a tactic**. There is no `forge` tactic. Applying a
-  certificate to a goal is a generated `have` and a `simp`/`omega`, not
-  automation that finds the certificate for you.
+- `forge_cone` and `forge_cone?` are tactics **for one certificate family**.
+  There is still no `forge` planner tactic — nothing decides which family to try,
+  decomposes a goal, or orchestrates workers (that is Gate 1 and Gate 3).
+  `forge_cone?` finds certificates only by calling the prototype's Python search
+  as an untrusted process; the proof it leaves behind does not depend on it.
 - The checker is proved sound. It is **not** proved complete, and nothing here
   says a certificate exists for any particular problem.
 - Soundness is relative to `eval` being the right semantics for `Poly`. That is
   a definition, not a theorem, and a reader should look at it.
+
+## The tactic
+
+```lean
+theorem hidden_quadratic_concrete' (x0 x1 : Int) :
+    0 ≤ 147 + (-168) * x1 + 99 * x1^2 + (-126) * x0 + (-26) * (x0 * x1) + 78 * x0^2 := by
+  forge_cone (atoms := [x0, x1]) using hidden_quadratic_cert
+```
+
+`forge_cone` reifies the goal and hypotheses into `IExpr`, proves the check by
+`decide +kernel`, and closes the goal with `cone_denote`, which is `Cert.sound`
+transported through `eval_toPoly`. The metaprogram is untrusted: the kernel
+re-checks the hypotheses' and goal's correspondence with their reified forms by
+definitional equality. Atom order is: explicit `atoms`, then the goal left to
+right, then the hypotheses in list order; certificates are expressed in it.
+
+`forge_cone?` does the same after asking an oracle. It serialises the reified
+problem, runs `tools/forge_oracle.py` (configurable via `forge.oracle.cmd`),
+bounds its time and output, decodes the reply strictly, and emits
+`Try this: forge_cone … using {…}` so the saved proof never mentions Python.
+
+Measured on an isolated call: about 420 ms for the oracle round trip and 150 ms
+for the kernel check. Inside a test file the per-call figure reads ~4.5 s,
+because Lean elaborates theorems in parallel and ten oracle processes contend.
+
+## The data boundary
+
+Every exporter used to paste the bundle's record id into a Lean doc comment. An
+id containing `-/` closes the comment, and what follows is compiled. Review
+produced a generated corpus that compiles cleanly and proves `(1 : Int) = 2` from
+an injected `axiom`; the same attack then worked on `tools/export_lean_cone.py`.
+The real theorems were never affected, but a generated `axiom … : False` poisons
+everything that imports it.
+
+`tools/lean_emit_guard.py` is the single fix: ids must be plain identifiers
+(collisions and empty ids refused), and every emitted file is audited, with
+comments stripped, for `axiom`, `sorry`, `native_decide`, `unsafe`, `opaque`,
+`macro`, `#eval` and the like before it is written. All corpora regenerate
+byte-identical through it; the injection is refused by every exporter.
+
+## Adversarial review
+
+Three skeptics reviewed Gate 2, each told to make it accept something false, and
+to report only findings they had reproduced.
+
+| Scope | Attacks | False statements accepted | Findings |
+| --- | ---: | ---: | --- |
+| Tactic and oracle | 45, including a hostile oracle | 0 | 4 minor, all fixed and pinned by regression tests |
+| Affine and Farkas | 20 + a 4000-case differential fuzz against Python | 0 | 1 major (the injection), minor exporter gaps |
+| Recurrence | 20+ | 0 | 1 major (a false claim in prose), 4 minor |
+
+Fixed as a result: the injection hole; untrue size bounds (the kernel's limit
+tracks the *expanded* identity, measured at about 1600 terms, and a valid
+certificate past it is now reported as "could NOT BE CHECKED", not "REJECTED");
+goal metavariables assigned by atom matching; numerals read without checking
+their instance, so the oracle could be sent a different problem; the command
+resolver replacing `python` with a stray file; an exporter docstring claiming the
+certificate cannot choose the problem, which review showed it can for conserved
+invariants; a scale conjunct that guaranteed nothing; two exporter crashes.
+
+One test had to be rewritten because it pinned nothing: it passed with or
+without the fix it was meant to guard.
+
+## Known limits
+
+- **Size.** Checks fail beyond roughly 1600 terms of expanded identity, because
+  `collect` and the list operations are structurally recursive. A tail-recursive
+  `collect` is the obvious fix and has not been attempted.
+- **Integers.** `Env` assigns integers; lifting to ℝ needs Mathlib.
+- **The prototype's data model.** A conserved-invariant record carries its
+  problem inside the certificate, so the certificate chooses what it certifies.
+- **Farkas** has no prototype family, and affine has one record.
 
 ## Regenerating
 

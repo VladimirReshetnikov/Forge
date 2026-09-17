@@ -9,8 +9,8 @@ frozen under `proposals/<slug>/results/` and `proposals/<slug>/lean/`.
 **No proposal compiled any Lean.** All thirty-six recorded `NOT_RUN` for the
 same reason: no `lean` or `lake` executable in the authoring environment.
 Consequently none performed a kernel check, an axiom audit, or any comparison
-against a Lean tactic. All three of those have now been done here, for one
-certificate family — see **The checker** below. One of them — `r9` — responded by shipping no Lean at
+against a Lean tactic. All three of those have now been done here — see **The
+checker** below, which is now most of Gate 2 of the design. One of them — `r9` — responded by shipping no Lean at
 all, saying it "deliberately contains no placeholder theorem files presented as
 implemented proofs".
 
@@ -25,11 +25,11 @@ through it and accepted by the Lean kernel. Core Lean only; `decide`, not
 `ForgeCore` also now **builds as a library** — nine modules with real imports —
 rather than only elaborating file by file.
 
-**This merge compiled twenty-eight files, and two others failed.** The merge
+**This merge compiled thirty-nine files, and two others failed.** The merge
 environment has `elan`, which installed the pinned `leanprover/lean4:v4.34.0`.
-This repository holds 90 `.lean` files. **29 of them are Mathlib-free** — not
+This repository holds 101 `.lean` files. **40 of them are Mathlib-free** — not
 merely free of a direct `import Mathlib`, but free of one anywhere in their
-dependency cone — and **28 of those 29 elaborate with no errors**. Twelve print
+dependency cone — and **39 of those 40 elaborate with no errors**. Twelve print
 `does not depend on any axioms` for every theorem they expose.
 
 Regenerate these figures with `python tools/lean_inventory.py` rather than
@@ -38,13 +38,13 @@ they had been derived by hand and carried forward.
 
 | Where | Mathlib-free | Elaborate |
 | --- | ---: | ---: |
-| Merged tree (incl. the `ForgeCore` root) | 7 | 7 |
-| **`Forge.Checker` (new)** | **4** | **4** |
+| Merged tree (incl. `ForgeCore` and `AxiomAudit`) | 8 | 8 |
+| **`Forge.Checker` (new)** | **14** | **14** |
 | Design-round proposals `p1`–`p9` | 3 | 3 |
 | Extension proposals `e1`–`e9` | 10 | 10 |
 | Third round `r1`–`r9` | 3 | 2 |
 | Fourth round `s1`–`s9` | 2 | 2 |
-| **Total** | **29** | **28** |
+| **Total** | **40** | **39** |
 
 The transitive reading matters and the earlier figures did not use it. They
 counted 48 files as importing Mathlib directly and 11 as importing a sibling,
@@ -201,6 +201,17 @@ than a description of one.
 | `Forge/Checker/Cone.lean` | elaborates; `Cert.sound` proved |
 | `Forge/Checker/Corpus.lean` | elaborates; generated, 3 real certificates accepted |
 | `Forge/Checker/Bench.lean` | elaborates in 11.7 s; 36 generated problems, 6 of them negative controls |
+| `Forge/Checker/Reify.lean` | elaborates; `eval_toPoly` proved (`propext` only) |
+| `Forge/Checker/Tactic.lean`, `TacticTest.lean` | elaborate; `forge_cone`, `forge_reify`; review regressions pinned |
+| `Forge/Checker/Oracle.lean`, `OracleTest.lean` | elaborate; `forge_cone?`; data-boundary tests need `python` |
+| `Forge/Checker/Affine.lean`, `AffineCorpus.lean` | elaborate; `AffineCert.sound`, `check_iff` |
+| `Forge/Checker/Farkas.lean` | elaborates; `FarkasCert.sound`; no prototype family |
+| `Forge/Checker/Recurrence.lean`, `RecurrenceCorpus.lean` | elaborate; `RecCert.sound`, `InvCert.sound` |
+| `AxiomAudit.lean` | elaborates, and FAILS if any `Forge.Checker` theorem leaks an axiom (593 theorems) |
+
+The per-file status, the three adversarial reviews, and Gate 2 measured against
+its own exit criteria are in
+[`../lean/Forge/Checker/README.md`](../lean/Forge/Checker/README.md).
 
 **What is proved.**
 

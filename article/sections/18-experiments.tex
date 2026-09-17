@@ -1524,6 +1524,82 @@ repository exist because claims of that kind are wrong at a rate that intuition
 underestimates.
 \end{remark}
 
+\subsection{Gate 2 in core Lean, and what reviewing it found}
+
+After the cone checker, the rest of Gate~2 was built as four streams --- typed
+reification and a tactic, the oracle protocol, the affine and Farkas families,
+and the recurrence families --- and then reviewed adversarially before any of it
+was described as working.
+
+\subsubsection*{What was built}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}p{0.34\linewidth}p{0.58\linewidth}@{}}
+\toprule
+Component & Proved or measured \\
+\midrule
+Typed reification & \code{eval\_toPoly}: evaluation of a reified polynomial is its denotation \\
+\code{forge\_cone} & closes $0 \le e$ and $a \le b$ goals from a certificate via \code{cone\_denote} \\
+\code{forge\_cone?} & oracle round trip $\approx$420\,ms, kernel check $\approx$150\,ms, isolated \\
+Affine witness & \code{AffineCert.sound}, and \code{check\_iff}: the check is exact \\
+Farkas & \code{FarkasCert.sound}; no prototype family corresponds \\
+Polynomial recurrence & \code{RecCert.sound} for every $n$; five power sums \\
+Conserved invariant & \code{InvCert.sound} at every reachable state \\
+Axiom audit & 593 theorems within \code{propext}, \code{Quot.sound}, one exemption \\
+\bottomrule
+\end{tabular}
+\caption{Lean v4.34.0, core only. The oracle figures are isolated calls; inside
+a test file they read ten times higher because parallel elaboration starts ten
+oracle processes at once.}
+\label{tab:gate2}
+\end{table}
+
+\subsubsection*{Review}
+
+Three reviewers were each asked to make one part accept something false and to
+report only what they had reproduced. The tactic and oracle review ran
+forty-five attacks, including a hostile oracle of its own; the affine and Farkas
+review ran twenty attacks and a 4000-case differential fuzz against the Python
+checker, with no disagreement; the recurrence review ran more than twenty. None
+produced a false acceptance. The printed proof terms show certificates entering
+only as closed literals that the kernel re-checks.
+
+Every defect found lay outside the kernel-checked part.
+
+\emph{Injection at the data boundary.} Every exporter wrote the bundle's record
+id into a Lean comment. An id containing the comment terminator closed it, and a
+generated corpus compiled cleanly while proving $1 = 2$ from an injected axiom.
+The real theorems never depended on it, but a generated \code{axiom \ldots{} :
+False} poisons whatever imports it, and Gate~2 names mutation rejection at the
+data boundary as an exit criterion. A shared emission guard now refuses
+non-identifier ids and audits every generated file before writing it; all
+corpora regenerate byte-identical through it.
+
+\emph{Untrue bounds.} The oracle protocol advertised a thousand squares and a
+thousand terms per polynomial. Measurement shows the kernel's limit tracks the
+\emph{expanded} identity instead: a thousand trivial squares check in seconds,
+while one square of forty-five terms does not. A univariate square passed at an
+expanded size of 1679 and failed at 2114, and the limit is now set at 1600,
+documented as measured. A valid certificate beyond it is refused before checking
+and reported as not checked, where before it was reported as rejected.
+
+\emph{Smaller defects.} Atom matching could assign metavariables in the user's
+goal; numerals were read without checking their instance, so the oracle could be
+sent a different problem from the goal; the command resolver could replace the
+Python interpreter with a stray file of the same name; the conserved-invariant
+scale guaranteed nothing its documentation implied; and an exporter claimed a
+certificate cannot choose the problem it certifies, which review disproved by
+exporting a copy with a different initial point.
+
+\emph{Composition with \code{grind}.} Gate~2 says this stage adds useful
+nonlinear facts to a stock \code{grind} leaf. A goal wrapping linear
+bookkeeping around a nonlinear core is proved by neither \code{grind} nor
+\code{omega} alone, and by both once \code{forge\_cone} supplies the one fact
+through a \code{have}. A first draft of that test included a hypothesis from
+which the fact followed linearly; \code{grind} proved it unaided, and the
+\code{fail\_if\_success} line that exposed this is kept in the test.
+
 \subsection{What the evidence establishes}
 
 It establishes that the implementations actually synthesise certificates in the

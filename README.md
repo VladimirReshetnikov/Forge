@@ -2,7 +2,7 @@
 
 **A certificate-producing proof-planning layer above Lean's `grind`.**
 
-Start with **[`article/forge.pdf`](article/forge.pdf)** (150 pages). Its editable
+Start with **[`article/forge.pdf`](article/forge.pdf)** (151 pages). Its editable
 source is in [`article/`](article/).
 
 ---
@@ -21,18 +21,32 @@ Alongside the design are Python prototypes of its central algorithms, the
 certificates they produced, and the recorded evidence of thirty-six separate
 runs.
 
-And, new, **one certificate family implemented in Lean end to end**: a checker,
-a proof that the checker is sound, and the prototype's own certificates run
-through it and accepted by the Lean kernel. See
-[`lean/Forge/Checker/`](lean/Forge/Checker/). It is a small part of the design.
-It is the part that is no longer a proposal.
+And, new, **most of Gate 2 of the design implemented in core Lean** — the
+first gate anything in this repository has reached. See
+[`lean/Forge/Checker/`](lean/Forge/Checker/):
+
+- a cone-certificate checker with a proved soundness theorem;
+- typed reification with its bridge **proved** (`eval_toPoly`), and a tactic,
+  `forge_cone`, that closes ordinary integer goals from a certificate;
+- `forge_cone?`, which runs the prototype's own search as an untrusted process
+  through a bounded data protocol and leaves an oracle-free proof behind;
+- affine-witness, Farkas, polynomial-recurrence and conserved-invariant
+  checkers, each with soundness proved;
+- an axiom audit that fails the build if any of its 593 theorems uses an axiom
+  outside `propext` and `Quot.sound` beyond one documented exemption.
+
+Three adversarial reviews made 85+ attempts to get it to accept something false
+and found none. They did find a code-injection hole in every exporter, untrue
+size bounds, and a false claim in prose; all are fixed. Gate 1 — the planner and
+orchestration the design puts first — has not been started.
 
 ## What this is not
 
-**`forge` is not an implemented Lean tactic.** Nothing here installs one.
-`Forge.Checker` is a checker with a soundness proof, which is a different and
-smaller thing: applying a certificate to a goal is a generated `have` and a
-`simp`/`omega`, not automation that finds the certificate for you.
+**`forge` is not an implemented Lean tactic.** Nothing here decides which kind
+of certificate a goal needs, decomposes it, or orchestrates workers. What exists
+is `forge_cone`, a tactic for **one** certificate family, and `forge_cone?`,
+which finds such certificates only by calling a Python search. Their proofs are
+kernel-checked; their reach is one family.
 
 None of the thirty-six contributing efforts had a Lean executable available;
 none of them compiled any Lean source, and none measured any comparison against
@@ -49,10 +63,10 @@ article --- and it is a comparison on a handful of problems, not a benchmark.
 The Python checkers are research code. They are not formally verified, they
 share representation code with the searches they audit, and they are not
 hardened against hostile input. **A passing Python check is not a Lean-kernel
-proof.** The one exception is the cone family: those certificates are now
-re-checked by the Lean kernel in
-[`lean/Forge/Checker/Corpus.lean`](lean/Forge/Checker/Corpus.lean), by
-`decide` rather than `native_decide`, so nothing there rests on the compiler.
+proof.** The exceptions are the cone, affine-witness, polynomial-recurrence and
+conserved-invariant families, whose bundled certificates are now re-checked by
+the Lean kernel in `lean/Forge/Checker/`, by `decide` rather than
+`native_decide`, so nothing there rests on the compiler.
 The other twelve families are Python-checked only.
 
 A bounded search that finds nothing returns **unknown**. It never means the
