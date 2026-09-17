@@ -467,17 +467,17 @@
       "typed_reification": "met -- eval_toPoly proved",
       "cone_replay": "met",
       "oracle_through_bounded_protocol": "met for the cone family",
-      "affine_farkas_reconstruction": "met; one affine bundle record; Farkas has no prototype family",
+      "affine_farkas_reconstruction": "met; three affine and three Farkas bundle records, each exported with negative controls (results/lean-affine-corpus.json, results/lean-farkas-corpus.json)",
       "recurrence_reconstruction": "met; 5 power sums and 1 conserved invariant",
       "end_to_end_examples_checked": "met",
       "mutation_rejection_at_data_boundary": "met, after an id-injection hole was found and closed",
       "axiom_dependencies_recorded": "met and enforced by AxiomAudit.lean",
       "nonlinear_facts_for_grind_leaf": "met as composition via `have` only; no automatic integration",
-      "gate_1_prerequisite": "NOT STARTED -- Gate 2 was built out of order"
+      "gate_1_prerequisite": "first milestone only (see gate_1) -- Gate 2 was built first"
     },
     "axiom_audit": {
       "file": "lean/AxiomAudit.lean",
-      "theorems": 593,
+      "theorems": 673,
       "allowed": [
         "propext",
         "Quot.sound"
@@ -651,7 +651,7 @@
         "checks that source assumptions are preserved",
         "parallel workers"
       ],
-      "axiom_audit": "AxiomAudit.lean still covers Forge.Checker (593 theorems); the frontend's tests pin their axioms themselves"
+      "axiom_audit": "AxiomAudit.lean still covers Forge.Checker (673 theorems); the frontend's tests pin their axioms themselves"
     }
   }
 }

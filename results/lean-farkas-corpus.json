@@ -1,0 +1,153 @@
+{
+  "what": "Every Farkas refutation in the prototype bundle, emitted as Int data for Forge.Checker.Farkas, with negative controls. Each verdict is checked by the prototype's check_farkas and by an integer mirror of FarkasCert.check before emission, and again by the Lean kernel when FarkasCorpus.lean is elaborated.",
+  "generated_lean": "lean/Forge/Checker/FarkasCorpus.lean",
+  "checked_by": "kernel reduction via `decide`; native_decide is not used",
+  "certificates": [
+    {
+      "id": "strict_cycle",
+      "variables": 3,
+      "constraints": 3,
+      "multipliers": [
+        1,
+        1,
+        1
+      ],
+      "negative_controls": [
+        {
+          "control": "mutation_mult0",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "combination"
+          ]
+        },
+        {
+          "control": "mutation_bounds",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "strictness"
+          ]
+        },
+        {
+          "control": "zero_multipliers",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "strictness"
+          ]
+        },
+        {
+          "control": "extra_multiplier",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "count"
+          ]
+        },
+        {
+          "control": "negated",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "sign",
+            "strictness"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resource_overrun",
+      "variables": 2,
+      "constraints": 3,
+      "multipliers": [
+        1,
+        2,
+        3
+      ],
+      "negative_controls": [
+        {
+          "control": "mutation_mult0",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "combination",
+            "strictness"
+          ]
+        },
+        {
+          "control": "mutation_bounds",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "strictness"
+          ]
+        },
+        {
+          "control": "zero_multipliers",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "strictness"
+          ]
+        },
+        {
+          "control": "extra_multiplier",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "count"
+          ]
+        },
+        {
+          "control": "negated",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "sign",
+            "strictness"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mixed_three_var",
+      "variables": 3,
+      "constraints": 4,
+      "multipliers": [
+        9,
+        8,
+        27,
+        22
+      ],
+      "negative_controls": [
+        {
+          "control": "mutation_mult0",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "combination"
+          ]
+        },
+        {
+          "control": "mutation_bounds",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "strictness"
+          ]
+        },
+        {
+          "control": "zero_multipliers",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "strictness"
+          ]
+        },
+        {
+          "control": "extra_multiplier",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "count"
+          ]
+        },
+        {
+          "control": "negated",
+          "prototype_accepts": false,
+          "failing_conjuncts": [
+            "sign",
+            "strictness"
+          ]
+        }
+      ]
+    }
+  ]
+}

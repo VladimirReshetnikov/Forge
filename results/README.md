@@ -184,7 +184,7 @@ those numbers belong to it alone:
 | | |
 | --- | --- |
 | `python -m pytest -q` | 776 passed |
-| `python -S bin/verify.py` | 35 certificates rechecked, 53 mutations rejected |
+| `python -S bin/verify.py` | 40 certificates rechecked, 61 mutations rejected |
 | Environment | Python 3.14.4, NumPy 2.4.4, SciPy 1.17.1, SymPy 1.14.0 |
 
 That environment differs from the thirty-six runs' (Python 3.13.5, NumPy 2.3.5,
@@ -218,8 +218,8 @@ replay evidence worth anything: that the whole of it, search included, runs
 under `python -S`. They stay under `proposals/`, run from there, and their
 counts are theirs.
 
-The 35 certificates are a deliberately small regression corpus covering every
-family once, not a re-run of any proposal's benchmark. Thirteen of them are the
+The 40 certificates are a deliberately small regression corpus covering every
+family at least once, not a re-run of any proposal's benchmark. Thirteen of them are the
 closure and antichain families, and six of those are negative: two separating
 words, a constructor counterexample and three Kripke countermodels. They are
 results, not failures. Nothing here supersedes the recorded runs, and nothing

@@ -1543,10 +1543,10 @@ Typed reification & \code{eval\_toPoly}: evaluation of a reified polynomial is i
 \code{forge\_cone} & closes $0 \le e$ and $a \le b$ goals from a certificate via \code{cone\_denote} \\
 \code{forge\_cone?} & oracle round trip $\approx$420\,ms, kernel check $\approx$150\,ms, isolated \\
 Affine witness & \code{AffineCert.sound}, and \code{check\_iff}: the check is exact \\
-Farkas & \code{FarkasCert.sound}; no prototype family corresponds \\
+Farkas & \code{FarkasCert.sound}; three prototype refutations, generated \\
 Polynomial recurrence & \code{RecCert.sound} for every $n$; five power sums \\
 Conserved invariant & \code{InvCert.sound} at every reachable state \\
-Axiom audit & 593 theorems within \code{propext}, \code{Quot.sound}, one exemption \\
+Axiom audit & 673 theorems within \code{propext}, \code{Quot.sound}, one exemption \\
 \bottomrule
 \end{tabular}
 \caption{Lean v4.34.0, core only. The oracle figures are isolated calls; inside

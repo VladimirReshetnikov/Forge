@@ -206,9 +206,9 @@ than a description of one.
 | `Forge/Checker/Oracle.lean`, `OracleTest.lean` | elaborate; `forge_cone?`; data-boundary tests need `python` |
 | `Forge/Frontend.lean`, `FrontendTest.lean` | elaborate; `forge` (Gate 1 first milestone); exit criteria pinned with `#guard_msgs` |
 | `Forge/Checker/Affine.lean`, `AffineCorpus.lean` | elaborate; `AffineCert.sound`, `check_iff` |
-| `Forge/Checker/Farkas.lean` | elaborates; `FarkasCert.sound`; no prototype family |
+| `Forge/Checker/Farkas.lean`, `FarkasCorpus.lean` | elaborate; `FarkasCert.sound`; the prototype's three Farkas refutations, generated, with 15 negative controls |
 | `Forge/Checker/Recurrence.lean`, `RecurrenceCorpus.lean` | elaborate; `RecCert.sound`, `InvCert.sound` |
-| `AxiomAudit.lean` | elaborates, and FAILS if any `Forge.Checker` theorem leaks an axiom (593 theorems) |
+| `AxiomAudit.lean` | elaborates, and FAILS if any `Forge.Checker` theorem leaks an axiom (673 theorems) |
 
 The per-file status, the three adversarial reviews, and Gate 2 measured against
 its own exit criteria are in

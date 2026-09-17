@@ -32,7 +32,7 @@ first gate anything in this repository has reached. See
   through a bounded data protocol and leaves an oracle-free proof behind;
 - affine-witness, Farkas, polynomial-recurrence and conserved-invariant
   checkers, each with soundness proved;
-- an axiom audit that fails the build if any of its 593 theorems uses an axiom
+- an axiom audit that fails the build if any of its 673 theorems uses an axiom
   outside `propext` and `Quot.sound` beyond one documented exemption.
 
 **Is it useful?** On 20 well-known polynomial inequalities it did not choose,

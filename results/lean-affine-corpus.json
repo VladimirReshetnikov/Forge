@@ -51,6 +51,104 @@
           "lean": "not representable: entries are Int"
         }
       ]
+    },
+    {
+      "id": "unimodular_3x3",
+      "equations": 3,
+      "witness_coordinates": 3,
+      "parameters": 2,
+      "negative_controls": [
+        {
+          "control": "mutation_offset0",
+          "prototype_accepts": false,
+          "shapeOK": true,
+          "rowsOK": false
+        },
+        {
+          "control": "linear_entry",
+          "prototype_accepts": false,
+          "shapeOK": true,
+          "rowsOK": false
+        },
+        {
+          "control": "offset_long",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "linear_row_long",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "linear_extra_row",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "c_extra",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": false
+        },
+        {
+          "control": "half_offset",
+          "prototype_accepts": false,
+          "lean": "not representable: entries are Int"
+        }
+      ]
+    },
+    {
+      "id": "underdetermined_2x3",
+      "equations": 2,
+      "witness_coordinates": 3,
+      "parameters": 3,
+      "negative_controls": [
+        {
+          "control": "mutation_offset0",
+          "prototype_accepts": false,
+          "shapeOK": true,
+          "rowsOK": false
+        },
+        {
+          "control": "linear_entry",
+          "prototype_accepts": false,
+          "shapeOK": true,
+          "rowsOK": false
+        },
+        {
+          "control": "offset_long",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "linear_row_long",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "linear_extra_row",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": true
+        },
+        {
+          "control": "c_extra",
+          "prototype_accepts": false,
+          "shapeOK": false,
+          "rowsOK": false
+        },
+        {
+          "control": "half_offset",
+          "prototype_accepts": false,
+          "lean": "not representable: entries are Int"
+        }
+      ]
     }
   ]
 }

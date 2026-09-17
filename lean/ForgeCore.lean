@@ -38,6 +38,7 @@ import Forge.Checker.Oracle
 import Forge.Checker.Affine
 import Forge.Checker.AffineCorpus
 import Forge.Checker.Farkas
+import Forge.Checker.FarkasCorpus
 import Forge.Checker.Recurrence
 import Forge.Checker.RecurrenceCorpus
 import Forge.Frontend

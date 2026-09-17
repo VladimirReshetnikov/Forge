@@ -31,6 +31,7 @@ from forge.recurrence import (synthesize_recurrence, additive_invariant,  # noqa
 from forge.univariate import univariate_search, univariate_json  # noqa: E402
 from forge.witness import lattice, modular                     # noqa: E402
 from forge.witness.affine import synthesize_affine_witness     # noqa: E402
+from forge.witness.farkas import synthesize_farkas             # noqa: E402
 from forge.io import lean                                      # noqa: E402
 
 
@@ -142,12 +143,36 @@ def build() -> list[dict]:
                     'certificate': {'invariant': invariant.invariant.json()}})
 
     # --- affine / lattice / modular witnesses (p1, p2, p7, p4) -------------
-    A, B, c = [[1, 2], [0, 1]], [[3, -1], [2, 4]], [5, -3]
-    w = synthesize_affine_witness(A, B, c, True)
-    records.append({'id': 'integral_affine', 'family': 'Integral affine witness',
-                    'input': {'A': A, 'B': B, 'c': c},
-                    'certificate': {'linear': [[str(v) for v in row] for row in w.linear],
-                                    'offset': [str(v) for v in w.offset]}})
+    for name, A, B, c in [
+            ('integral_affine', [[1, 2], [0, 1]], [[3, -1], [2, 4]], [5, -3]),
+            # unimodular 3x3: the witness exists for every parameter value
+            ('unimodular_3x3', [[1, 1, 0], [0, 1, 1], [0, 0, 1]],
+             [[2, 0], [1, -3], [0, 5]], [4, 0, -2]),
+            # more unknowns than equations: a choice among many integral witnesses
+            ('underdetermined_2x3', [[1, 0, 2], [0, 1, -1]], [[1, 1, 1], [0, 2, -1]], [3, 7])]:
+        w = synthesize_affine_witness(A, B, c, True)
+        if w is None:
+            raise RuntimeError('affine regression: ' + name)
+        records.append({'id': name, 'family': 'Integral affine witness',
+                        'input': {'A': A, 'B': B, 'c': c},
+                        'certificate': {'linear': [[str(v) for v in row] for row in w.linear],
+                                        'offset': [str(v) for v in w.offset]}})
+
+    # --- Farkas refutations of linear systems a . x <= b --------------------
+    for name, rows, bounds in [
+            # x0 < x1 < x2 < x0 over the integers, as x_i - x_j <= -1
+            ('strict_cycle', [[1, -1, 0], [0, 1, -1], [-1, 0, 1]], [-1, -1, -1]),
+            # 2x + 3y <= 12 with x >= 4 and y >= 2
+            ('resource_overrun', [[2, 3], [-1, 0], [0, -1]], [12, -4, -2]),
+            # four mixed constraints in three variables; no row is redundant
+            ('mixed_three_var', [[3, -2, 0], [0, 5, -4], [-1, 0, 2], [0, -1, -1]],
+             [1, 2, -6, 0])]:
+        f = synthesize_farkas(rows, bounds)
+        if f is None:
+            raise RuntimeError('farkas regression: ' + name)
+        records.append({'id': name, 'family': 'Farkas refutation',
+                        'input': {'n': len(rows[0]), 'rows': rows, 'bounds': bounds},
+                        'certificate': {'multipliers': list(f.multipliers)}})
 
     for name, mat, rhs in [('bezout_6_10', [[6, 10]], [2]),
                            ('coupled_system', [[6, 10, 15], [2, -4, 3]], [7, -1])]:

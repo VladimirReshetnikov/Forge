@@ -6,13 +6,13 @@ import Forge.Checker.Affine
   λ_i ≥ 0 with  Σ λ_i a_i = 0  and  Σ λ_i b_i < 0: summing the constraints with
   those weights would give  0 ≤ Σ λ_i b_i < 0.
 
-  PROVENANCE. The prototype has NO family of this shape in
-  prototype/results/certificates.json. Its only "Farkas" code is
-  `check_witness` in prototype/forge/witness/affine.py, which certifies an
-  IMPLICATION (affine goals follow from affine hypotheses, with nonnegative
-  multipliers and slacks) rather than infeasibility, and which is not exported
-  in the bundle. This file is written against the textbook statement, not
-  against a prototype record.
+  PROVENANCE. This file was written against the textbook statement, before the
+  prototype had a family of this shape. It now has one:
+  prototype/forge/witness/farkas.py, whose `check_farkas` mirrors
+  `FarkasCert.check`, and whose three bundle records are exported to
+  `FarkasCorpus.lean` by tools/export_lean_farkas.py. (The prototype's older
+  `check_witness` in witness/affine.py certifies an IMPLICATION, not
+  infeasibility, and is still not exported.)
 
   PROVED. `FarkasCert.sound`: if the check passes, no integer vector x satisfies
   every constraint. (The certificate in fact refutes rational and real solutions

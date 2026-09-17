@@ -31,6 +31,7 @@ from ..certificates import (ConeTerm, ConeCertificate, check_cone,
 from ..recurrence import check_recurrence
 from ..univariate import UnivariateCertificate, check_univariate
 from ..witness.affine import AffineWitness, check_affine_witness
+from ..witness.farkas import FarkasCertificate, check_farkas
 from ..witness import lattice as lattice_witness
 from ..witness import modular as modular_witness
 from .. import terms as terms_module
@@ -48,7 +49,8 @@ REQUIRED_FAMILIES = ('Quadratic SOS', 'Bernstein box', 'List induction',
                      'CDCL(T) refutation', 'Observable closure',
                      'Finite cover', 'Integer projection',
                      'Kripke countermodel', 'Ore common multiple',
-                     'Coverability frontier', 'Backward-closed basis')
+                     'Coverability frontier', 'Backward-closed basis',
+                     'Farkas refutation')
 
 
 class DecodeError(ValueError):
@@ -267,6 +269,21 @@ def verify(record) -> bool:
         cert = AffineWitness(tuple(tuple(rational(v) for v in r) for r in c['linear']),
                              tuple(rational(v) for v in c['offset']))
         return check_affine_witness(inp['A'], inp['B'], inp['c'], cert, True)
+    if family == 'Farkas refutation':
+        if set(c) != {'multipliers'} or set(inp) != {'n', 'rows', 'bounds'}:
+            raise DecodeError('a Farkas refutation needs n, rows, bounds and multipliers')
+        big = 10 ** 18
+
+        def ints(v, limit):
+            if not isinstance(v, list) or len(v) > limit:
+                raise DecodeError('Farkas list limit')
+            return [integer(e, -big, big) for e in v]
+        rows = inp['rows']
+        if not isinstance(rows, list) or len(rows) > 1000:
+            raise DecodeError('Farkas row limit')
+        return check_farkas(integer(inp['n'], 0, 1000), [ints(r, 1000) for r in rows],
+                            ints(inp['bounds'], 1000),
+                            FarkasCertificate(tuple(ints(c['multipliers'], 1000))))
     if family == 'Univariate with zeros':
         cert = UnivariateCertificate(polynomial(c['square']), polynomial(c['residual']),
                                      tuple(polynomial(p) for p in c['chain']))
@@ -450,6 +467,13 @@ def mutations(record) -> list:
     elif family == 'Integral affine witness':
         bad = copy.deepcopy(record)
         bad['certificate']['offset'][0] = str(Q(bad['certificate']['offset'][0]) + 1)
+        out.append(bad)
+    elif family == 'Farkas refutation':
+        bad = copy.deepcopy(record)
+        bad['certificate']['multipliers'][0] += 1
+        out.append(bad)
+        bad = copy.deepcopy(record)
+        bad['input']['bounds'] = [b + 1000 for b in bad['input']['bounds']]
         out.append(bad)
     elif family == 'Integer lattice':
         bad = copy.deepcopy(record)

@@ -236,7 +236,7 @@ Three more from the extension round belong in the same list:
 | **`sorry` audit, all 90 Lean files** | **0 real occurrences**; 26 mentions, all in comments denying them |
 | **Certificate benchmark** | 30/30 verified; **6/6 negative controls rejected** |
 | **`grind` on the same 30** | 0/30 — and it cannot prove `0 ≤ x^2`, so this measures its scope |
-| **Axiom audit, every `Forge.Checker` theorem** | **593 theorems**, all within `propext`/`Quot.sound` but one documented, necessary exemption; the audit fails the build otherwise |
+| **Axiom audit, every `Forge.Checker` theorem** | **673 theorems**, all within `propext`/`Quot.sound` but one documented, necessary exemption; the audit fails the build otherwise |
 | **Adversarial review of Gate 2** | 85+ attacks across three reviews; **0 false statements accepted**; findings fixed and pinned |
 | **Mutation rejection at the data boundary** | every `forge_cone?` corruption case rejected; the id-injection attack refused by every exporter |
 | **Head-to-head, 20 inequalities Forge did not choose** | first run: `forge_cone?` 12, `nlinarith` 3, `positivity` 1, `grind` 0, `omega` 0; after search fixes: `forge_cone?` **18**, others unchanged; 14 Forge-only, 0 Mathlib-only; see caveats in the checker README |

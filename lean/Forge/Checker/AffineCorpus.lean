@@ -124,6 +124,213 @@ theorem integral_affine_c_extra_halves :
     rowsOK (integral_affine_c_extra_B.headD []).length integral_affine_c_extra_cert.linear integral_affine_c_extra_cert.offset integral_affine_c_extra_A integral_affine_c_extra_B integral_affine_c_extra_c = false := by decide
 #guard integral_affine_c_extra_cert.check integral_affine_c_extra_A integral_affine_c_extra_B integral_affine_c_extra_c = false
 
+/-! ### `unimodular_3x3` --- 3 equations, 3 witness coordinates, 2 parameters -/
+
+def unimodular_3x3_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_c : List Int := [4, 0, (-2)]
+def unimodular_3x3_cert : AffineCert := { linear := [[1, 8], [1, (-8)], [0, 5]], offset := [2, 2, (-2)] }
+
+/-- The checker accepts, by kernel reduction. -/
+theorem unimodular_3x3_checks : unimodular_3x3_cert.check unimodular_3x3_A unimodular_3x3_B unimodular_3x3_c = true := by decide
+
+/-- For every `x`, `w = W x + d` solves `A w = B x + c`. -/
+theorem unimodular_3x3_sound (x : List Int) :
+    mulVec unimodular_3x3_A (unimodular_3x3_cert.apply x) = vadd (mulVec unimodular_3x3_B x) unimodular_3x3_c :=
+  AffineCert.sound _ _ _ _ unimodular_3x3_checks x
+
+/-- The same fact in ordinary arithmetic, with the witness substituted. -/
+theorem unimodular_3x3_concrete (x0 x1 : Int) :
+    1 * (1 * x0 + (8 * x1) + 2) + (1 * (1 * x0 + ((-8) * x1) + 2) + (0 * (0 * x0 + (5 * x1) + (-2)))) = (2 * x0 + (0 * x1)) + 4 ∧
+    0 * (1 * x0 + (8 * x1) + 2) + (1 * (1 * x0 + ((-8) * x1) + 2) + (1 * (0 * x0 + (5 * x1) + (-2)))) = (1 * x0 + ((-3) * x1)) ∧
+    0 * (1 * x0 + (8 * x1) + 2) + (0 * (1 * x0 + ((-8) * x1) + 2) + (1 * (0 * x0 + (5 * x1) + (-2)))) = (0 * x0 + (5 * x1)) + (-2) := by
+  have h := unimodular_3x3_sound [x0, x1]
+  simp only [unimodular_3x3_A, unimodular_3x3_B, unimodular_3x3_c, unimodular_3x3_cert, AffineCert.apply, mulVec_cons, mulVec_nil,
+    dot_cons_cons, dot_nil_right, vadd_cons_cons, vadd_nil_left,
+    Int.add_zero, List.cons.injEq] at h
+  obtain ⟨h0, h1, h2, -⟩ := h
+  exact ⟨h0, h1, h2⟩
+
+/-- Integral Skolem form: for all parameters there is an integer solution. -/
+theorem unimodular_3x3_exists (x0 x1 : Int) :
+    ∃ w0 w1 w2 : Int, 1 * w0 + (1 * w1 + (0 * w2)) = (2 * x0 + (0 * x1)) + 4 ∧ 0 * w0 + (1 * w1 + (1 * w2)) = (1 * x0 + ((-3) * x1)) ∧ 0 * w0 + (0 * w1 + (1 * w2)) = (0 * x0 + (5 * x1)) + (-2) :=
+  ⟨(1 * x0 + (8 * x1) + 2), (1 * x0 + ((-8) * x1) + 2), (0 * x0 + (5 * x1) + (-2)), unimodular_3x3_concrete x0 x1⟩
+
+/-- NEGATIVE CONTROL `mutation_offset0`: the bundle's own mutation, `offset[0] + 1`; breaks `A d = c`.
+shapeOK = true, rowsOK = false (checked in Python and below). -/
+def unimodular_3x3_mutation_offset0_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_mutation_offset0_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_mutation_offset0_c : List Int := [4, 0, (-2)]
+def unimodular_3x3_mutation_offset0_cert : AffineCert := { linear := [[1, 8], [1, (-8)], [0, 5]], offset := [3, 2, (-2)] }
+theorem unimodular_3x3_mutation_offset0_rejected : unimodular_3x3_mutation_offset0_cert.check unimodular_3x3_mutation_offset0_A unimodular_3x3_mutation_offset0_B unimodular_3x3_mutation_offset0_c = false := by decide
+theorem unimodular_3x3_mutation_offset0_halves :
+    shapeOK unimodular_3x3_mutation_offset0_A unimodular_3x3_mutation_offset0_B unimodular_3x3_mutation_offset0_c unimodular_3x3_mutation_offset0_cert = true ∧
+    rowsOK (unimodular_3x3_mutation_offset0_B.headD []).length unimodular_3x3_mutation_offset0_cert.linear unimodular_3x3_mutation_offset0_cert.offset unimodular_3x3_mutation_offset0_A unimodular_3x3_mutation_offset0_B unimodular_3x3_mutation_offset0_c = false := by decide
+#guard unimodular_3x3_mutation_offset0_cert.check unimodular_3x3_mutation_offset0_A unimodular_3x3_mutation_offset0_B unimodular_3x3_mutation_offset0_c = false
+
+/-- NEGATIVE CONTROL `linear_entry`: `W[0][0] + 1`, a column of `A` that is not zero; breaks `A W = B`.
+shapeOK = true, rowsOK = false (checked in Python and below). -/
+def unimodular_3x3_linear_entry_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_linear_entry_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_linear_entry_c : List Int := [4, 0, (-2)]
+def unimodular_3x3_linear_entry_cert : AffineCert := { linear := [[2, 8], [1, (-8)], [0, 5]], offset := [2, 2, (-2)] }
+theorem unimodular_3x3_linear_entry_rejected : unimodular_3x3_linear_entry_cert.check unimodular_3x3_linear_entry_A unimodular_3x3_linear_entry_B unimodular_3x3_linear_entry_c = false := by decide
+theorem unimodular_3x3_linear_entry_halves :
+    shapeOK unimodular_3x3_linear_entry_A unimodular_3x3_linear_entry_B unimodular_3x3_linear_entry_c unimodular_3x3_linear_entry_cert = true ∧
+    rowsOK (unimodular_3x3_linear_entry_B.headD []).length unimodular_3x3_linear_entry_cert.linear unimodular_3x3_linear_entry_cert.offset unimodular_3x3_linear_entry_A unimodular_3x3_linear_entry_B unimodular_3x3_linear_entry_c = false := by decide
+#guard unimodular_3x3_linear_entry_cert.check unimodular_3x3_linear_entry_A unimodular_3x3_linear_entry_B unimodular_3x3_linear_entry_c = false
+
+/-- NEGATIVE CONTROL `offset_long`: `offset` with an extra trailing 0; the truncating row identities still hold.
+shapeOK = false, rowsOK = true (checked in Python and below). -/
+def unimodular_3x3_offset_long_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_offset_long_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_offset_long_c : List Int := [4, 0, (-2)]
+def unimodular_3x3_offset_long_cert : AffineCert := { linear := [[1, 8], [1, (-8)], [0, 5]], offset := [2, 2, (-2), 0] }
+theorem unimodular_3x3_offset_long_rejected : unimodular_3x3_offset_long_cert.check unimodular_3x3_offset_long_A unimodular_3x3_offset_long_B unimodular_3x3_offset_long_c = false := by decide
+theorem unimodular_3x3_offset_long_halves :
+    shapeOK unimodular_3x3_offset_long_A unimodular_3x3_offset_long_B unimodular_3x3_offset_long_c unimodular_3x3_offset_long_cert = false ∧
+    rowsOK (unimodular_3x3_offset_long_B.headD []).length unimodular_3x3_offset_long_cert.linear unimodular_3x3_offset_long_cert.offset unimodular_3x3_offset_long_A unimodular_3x3_offset_long_B unimodular_3x3_offset_long_c = true := by decide
+#guard unimodular_3x3_offset_long_cert.check unimodular_3x3_offset_long_A unimodular_3x3_offset_long_B unimodular_3x3_offset_long_c = false
+
+/-- NEGATIVE CONTROL `linear_row_long`: `W[0]` with an extra trailing 0; only the row-width test fails.
+shapeOK = false, rowsOK = true (checked in Python and below). -/
+def unimodular_3x3_linear_row_long_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_linear_row_long_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_linear_row_long_c : List Int := [4, 0, (-2)]
+def unimodular_3x3_linear_row_long_cert : AffineCert := { linear := [[1, 8, 0], [1, (-8)], [0, 5]], offset := [2, 2, (-2)] }
+theorem unimodular_3x3_linear_row_long_rejected : unimodular_3x3_linear_row_long_cert.check unimodular_3x3_linear_row_long_A unimodular_3x3_linear_row_long_B unimodular_3x3_linear_row_long_c = false := by decide
+theorem unimodular_3x3_linear_row_long_halves :
+    shapeOK unimodular_3x3_linear_row_long_A unimodular_3x3_linear_row_long_B unimodular_3x3_linear_row_long_c unimodular_3x3_linear_row_long_cert = false ∧
+    rowsOK (unimodular_3x3_linear_row_long_B.headD []).length unimodular_3x3_linear_row_long_cert.linear unimodular_3x3_linear_row_long_cert.offset unimodular_3x3_linear_row_long_A unimodular_3x3_linear_row_long_B unimodular_3x3_linear_row_long_c = true := by decide
+#guard unimodular_3x3_linear_row_long_cert.check unimodular_3x3_linear_row_long_A unimodular_3x3_linear_row_long_B unimodular_3x3_linear_row_long_c = false
+
+/-- NEGATIVE CONTROL `linear_extra_row`: `W` with an extra zero row; only the row-count test fails.
+shapeOK = false, rowsOK = true (checked in Python and below). -/
+def unimodular_3x3_linear_extra_row_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_linear_extra_row_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_linear_extra_row_c : List Int := [4, 0, (-2)]
+def unimodular_3x3_linear_extra_row_cert : AffineCert := { linear := [[1, 8], [1, (-8)], [0, 5], [0, 0]], offset := [2, 2, (-2)] }
+theorem unimodular_3x3_linear_extra_row_rejected : unimodular_3x3_linear_extra_row_cert.check unimodular_3x3_linear_extra_row_A unimodular_3x3_linear_extra_row_B unimodular_3x3_linear_extra_row_c = false := by decide
+theorem unimodular_3x3_linear_extra_row_halves :
+    shapeOK unimodular_3x3_linear_extra_row_A unimodular_3x3_linear_extra_row_B unimodular_3x3_linear_extra_row_c unimodular_3x3_linear_extra_row_cert = false ∧
+    rowsOK (unimodular_3x3_linear_extra_row_B.headD []).length unimodular_3x3_linear_extra_row_cert.linear unimodular_3x3_linear_extra_row_cert.offset unimodular_3x3_linear_extra_row_A unimodular_3x3_linear_extra_row_B unimodular_3x3_linear_extra_row_c = true := by decide
+#guard unimodular_3x3_linear_extra_row_cert.check unimodular_3x3_linear_extra_row_A unimodular_3x3_linear_extra_row_B unimodular_3x3_linear_extra_row_c = false
+
+/-- NEGATIVE CONTROL `c_extra`: `c` with an extra entry; the rows of `A`, `B`, `c` no longer run out together.
+shapeOK = false, rowsOK = false (checked in Python and below). -/
+def unimodular_3x3_c_extra_A : List (List Int) := [[1, 1, 0], [0, 1, 1], [0, 0, 1]]
+def unimodular_3x3_c_extra_B : List (List Int) := [[2, 0], [1, (-3)], [0, 5]]
+def unimodular_3x3_c_extra_c : List Int := [4, 0, (-2), 0]
+def unimodular_3x3_c_extra_cert : AffineCert := { linear := [[1, 8], [1, (-8)], [0, 5]], offset := [2, 2, (-2)] }
+theorem unimodular_3x3_c_extra_rejected : unimodular_3x3_c_extra_cert.check unimodular_3x3_c_extra_A unimodular_3x3_c_extra_B unimodular_3x3_c_extra_c = false := by decide
+theorem unimodular_3x3_c_extra_halves :
+    shapeOK unimodular_3x3_c_extra_A unimodular_3x3_c_extra_B unimodular_3x3_c_extra_c unimodular_3x3_c_extra_cert = false ∧
+    rowsOK (unimodular_3x3_c_extra_B.headD []).length unimodular_3x3_c_extra_cert.linear unimodular_3x3_c_extra_cert.offset unimodular_3x3_c_extra_A unimodular_3x3_c_extra_B unimodular_3x3_c_extra_c = false := by decide
+#guard unimodular_3x3_c_extra_cert.check unimodular_3x3_c_extra_A unimodular_3x3_c_extra_B unimodular_3x3_c_extra_c = false
+
+/-! ### `underdetermined_2x3` --- 2 equations, 3 witness coordinates, 3 parameters -/
+
+def underdetermined_2x3_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_c : List Int := [3, 7]
+def underdetermined_2x3_cert : AffineCert := { linear := [[1, 1, 1], [0, 2, (-1)], [0, 0, 0]], offset := [3, 7, 0] }
+
+/-- The checker accepts, by kernel reduction. -/
+theorem underdetermined_2x3_checks : underdetermined_2x3_cert.check underdetermined_2x3_A underdetermined_2x3_B underdetermined_2x3_c = true := by decide
+
+/-- For every `x`, `w = W x + d` solves `A w = B x + c`. -/
+theorem underdetermined_2x3_sound (x : List Int) :
+    mulVec underdetermined_2x3_A (underdetermined_2x3_cert.apply x) = vadd (mulVec underdetermined_2x3_B x) underdetermined_2x3_c :=
+  AffineCert.sound _ _ _ _ underdetermined_2x3_checks x
+
+/-- The same fact in ordinary arithmetic, with the witness substituted. -/
+theorem underdetermined_2x3_concrete (x0 x1 x2 : Int) :
+    1 * (1 * x0 + (1 * x1 + (1 * x2)) + 3) + (0 * (0 * x0 + (2 * x1 + ((-1) * x2)) + 7) + (2 * (0 * x0 + (0 * x1 + (0 * x2))))) = (1 * x0 + (1 * x1 + (1 * x2))) + 3 ∧
+    0 * (1 * x0 + (1 * x1 + (1 * x2)) + 3) + (1 * (0 * x0 + (2 * x1 + ((-1) * x2)) + 7) + ((-1) * (0 * x0 + (0 * x1 + (0 * x2))))) = (0 * x0 + (2 * x1 + ((-1) * x2))) + 7 := by
+  have h := underdetermined_2x3_sound [x0, x1, x2]
+  simp only [underdetermined_2x3_A, underdetermined_2x3_B, underdetermined_2x3_c, underdetermined_2x3_cert, AffineCert.apply, mulVec_cons, mulVec_nil,
+    dot_cons_cons, dot_nil_right, vadd_cons_cons, vadd_nil_left,
+    Int.add_zero, List.cons.injEq] at h
+  obtain ⟨h0, h1, -⟩ := h
+  exact ⟨h0, h1⟩
+
+/-- Integral Skolem form: for all parameters there is an integer solution. -/
+theorem underdetermined_2x3_exists (x0 x1 x2 : Int) :
+    ∃ w0 w1 w2 : Int, 1 * w0 + (0 * w1 + (2 * w2)) = (1 * x0 + (1 * x1 + (1 * x2))) + 3 ∧ 0 * w0 + (1 * w1 + ((-1) * w2)) = (0 * x0 + (2 * x1 + ((-1) * x2))) + 7 :=
+  ⟨(1 * x0 + (1 * x1 + (1 * x2)) + 3), (0 * x0 + (2 * x1 + ((-1) * x2)) + 7), (0 * x0 + (0 * x1 + (0 * x2))), underdetermined_2x3_concrete x0 x1 x2⟩
+
+/-- NEGATIVE CONTROL `mutation_offset0`: the bundle's own mutation, `offset[0] + 1`; breaks `A d = c`.
+shapeOK = true, rowsOK = false (checked in Python and below). -/
+def underdetermined_2x3_mutation_offset0_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_mutation_offset0_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_mutation_offset0_c : List Int := [3, 7]
+def underdetermined_2x3_mutation_offset0_cert : AffineCert := { linear := [[1, 1, 1], [0, 2, (-1)], [0, 0, 0]], offset := [4, 7, 0] }
+theorem underdetermined_2x3_mutation_offset0_rejected : underdetermined_2x3_mutation_offset0_cert.check underdetermined_2x3_mutation_offset0_A underdetermined_2x3_mutation_offset0_B underdetermined_2x3_mutation_offset0_c = false := by decide
+theorem underdetermined_2x3_mutation_offset0_halves :
+    shapeOK underdetermined_2x3_mutation_offset0_A underdetermined_2x3_mutation_offset0_B underdetermined_2x3_mutation_offset0_c underdetermined_2x3_mutation_offset0_cert = true ∧
+    rowsOK (underdetermined_2x3_mutation_offset0_B.headD []).length underdetermined_2x3_mutation_offset0_cert.linear underdetermined_2x3_mutation_offset0_cert.offset underdetermined_2x3_mutation_offset0_A underdetermined_2x3_mutation_offset0_B underdetermined_2x3_mutation_offset0_c = false := by decide
+#guard underdetermined_2x3_mutation_offset0_cert.check underdetermined_2x3_mutation_offset0_A underdetermined_2x3_mutation_offset0_B underdetermined_2x3_mutation_offset0_c = false
+
+/-- NEGATIVE CONTROL `linear_entry`: `W[0][0] + 1`, a column of `A` that is not zero; breaks `A W = B`.
+shapeOK = true, rowsOK = false (checked in Python and below). -/
+def underdetermined_2x3_linear_entry_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_linear_entry_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_linear_entry_c : List Int := [3, 7]
+def underdetermined_2x3_linear_entry_cert : AffineCert := { linear := [[2, 1, 1], [0, 2, (-1)], [0, 0, 0]], offset := [3, 7, 0] }
+theorem underdetermined_2x3_linear_entry_rejected : underdetermined_2x3_linear_entry_cert.check underdetermined_2x3_linear_entry_A underdetermined_2x3_linear_entry_B underdetermined_2x3_linear_entry_c = false := by decide
+theorem underdetermined_2x3_linear_entry_halves :
+    shapeOK underdetermined_2x3_linear_entry_A underdetermined_2x3_linear_entry_B underdetermined_2x3_linear_entry_c underdetermined_2x3_linear_entry_cert = true ∧
+    rowsOK (underdetermined_2x3_linear_entry_B.headD []).length underdetermined_2x3_linear_entry_cert.linear underdetermined_2x3_linear_entry_cert.offset underdetermined_2x3_linear_entry_A underdetermined_2x3_linear_entry_B underdetermined_2x3_linear_entry_c = false := by decide
+#guard underdetermined_2x3_linear_entry_cert.check underdetermined_2x3_linear_entry_A underdetermined_2x3_linear_entry_B underdetermined_2x3_linear_entry_c = false
+
+/-- NEGATIVE CONTROL `offset_long`: `offset` with an extra trailing 0; the truncating row identities still hold.
+shapeOK = false, rowsOK = true (checked in Python and below). -/
+def underdetermined_2x3_offset_long_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_offset_long_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_offset_long_c : List Int := [3, 7]
+def underdetermined_2x3_offset_long_cert : AffineCert := { linear := [[1, 1, 1], [0, 2, (-1)], [0, 0, 0]], offset := [3, 7, 0, 0] }
+theorem underdetermined_2x3_offset_long_rejected : underdetermined_2x3_offset_long_cert.check underdetermined_2x3_offset_long_A underdetermined_2x3_offset_long_B underdetermined_2x3_offset_long_c = false := by decide
+theorem underdetermined_2x3_offset_long_halves :
+    shapeOK underdetermined_2x3_offset_long_A underdetermined_2x3_offset_long_B underdetermined_2x3_offset_long_c underdetermined_2x3_offset_long_cert = false ∧
+    rowsOK (underdetermined_2x3_offset_long_B.headD []).length underdetermined_2x3_offset_long_cert.linear underdetermined_2x3_offset_long_cert.offset underdetermined_2x3_offset_long_A underdetermined_2x3_offset_long_B underdetermined_2x3_offset_long_c = true := by decide
+#guard underdetermined_2x3_offset_long_cert.check underdetermined_2x3_offset_long_A underdetermined_2x3_offset_long_B underdetermined_2x3_offset_long_c = false
+
+/-- NEGATIVE CONTROL `linear_row_long`: `W[0]` with an extra trailing 0; only the row-width test fails.
+shapeOK = false, rowsOK = true (checked in Python and below). -/
+def underdetermined_2x3_linear_row_long_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_linear_row_long_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_linear_row_long_c : List Int := [3, 7]
+def underdetermined_2x3_linear_row_long_cert : AffineCert := { linear := [[1, 1, 1, 0], [0, 2, (-1)], [0, 0, 0]], offset := [3, 7, 0] }
+theorem underdetermined_2x3_linear_row_long_rejected : underdetermined_2x3_linear_row_long_cert.check underdetermined_2x3_linear_row_long_A underdetermined_2x3_linear_row_long_B underdetermined_2x3_linear_row_long_c = false := by decide
+theorem underdetermined_2x3_linear_row_long_halves :
+    shapeOK underdetermined_2x3_linear_row_long_A underdetermined_2x3_linear_row_long_B underdetermined_2x3_linear_row_long_c underdetermined_2x3_linear_row_long_cert = false ∧
+    rowsOK (underdetermined_2x3_linear_row_long_B.headD []).length underdetermined_2x3_linear_row_long_cert.linear underdetermined_2x3_linear_row_long_cert.offset underdetermined_2x3_linear_row_long_A underdetermined_2x3_linear_row_long_B underdetermined_2x3_linear_row_long_c = true := by decide
+#guard underdetermined_2x3_linear_row_long_cert.check underdetermined_2x3_linear_row_long_A underdetermined_2x3_linear_row_long_B underdetermined_2x3_linear_row_long_c = false
+
+/-- NEGATIVE CONTROL `linear_extra_row`: `W` with an extra zero row; only the row-count test fails.
+shapeOK = false, rowsOK = true (checked in Python and below). -/
+def underdetermined_2x3_linear_extra_row_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_linear_extra_row_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_linear_extra_row_c : List Int := [3, 7]
+def underdetermined_2x3_linear_extra_row_cert : AffineCert := { linear := [[1, 1, 1], [0, 2, (-1)], [0, 0, 0], [0, 0, 0]], offset := [3, 7, 0] }
+theorem underdetermined_2x3_linear_extra_row_rejected : underdetermined_2x3_linear_extra_row_cert.check underdetermined_2x3_linear_extra_row_A underdetermined_2x3_linear_extra_row_B underdetermined_2x3_linear_extra_row_c = false := by decide
+theorem underdetermined_2x3_linear_extra_row_halves :
+    shapeOK underdetermined_2x3_linear_extra_row_A underdetermined_2x3_linear_extra_row_B underdetermined_2x3_linear_extra_row_c underdetermined_2x3_linear_extra_row_cert = false ∧
+    rowsOK (underdetermined_2x3_linear_extra_row_B.headD []).length underdetermined_2x3_linear_extra_row_cert.linear underdetermined_2x3_linear_extra_row_cert.offset underdetermined_2x3_linear_extra_row_A underdetermined_2x3_linear_extra_row_B underdetermined_2x3_linear_extra_row_c = true := by decide
+#guard underdetermined_2x3_linear_extra_row_cert.check underdetermined_2x3_linear_extra_row_A underdetermined_2x3_linear_extra_row_B underdetermined_2x3_linear_extra_row_c = false
+
+/-- NEGATIVE CONTROL `c_extra`: `c` with an extra entry; the rows of `A`, `B`, `c` no longer run out together.
+shapeOK = false, rowsOK = false (checked in Python and below). -/
+def underdetermined_2x3_c_extra_A : List (List Int) := [[1, 0, 2], [0, 1, (-1)]]
+def underdetermined_2x3_c_extra_B : List (List Int) := [[1, 1, 1], [0, 2, (-1)]]
+def underdetermined_2x3_c_extra_c : List Int := [3, 7, 0]
+def underdetermined_2x3_c_extra_cert : AffineCert := { linear := [[1, 1, 1], [0, 2, (-1)], [0, 0, 0]], offset := [3, 7, 0] }
+theorem underdetermined_2x3_c_extra_rejected : underdetermined_2x3_c_extra_cert.check underdetermined_2x3_c_extra_A underdetermined_2x3_c_extra_B underdetermined_2x3_c_extra_c = false := by decide
+theorem underdetermined_2x3_c_extra_halves :
+    shapeOK underdetermined_2x3_c_extra_A underdetermined_2x3_c_extra_B underdetermined_2x3_c_extra_c underdetermined_2x3_c_extra_cert = false ∧
+    rowsOK (underdetermined_2x3_c_extra_B.headD []).length underdetermined_2x3_c_extra_cert.linear underdetermined_2x3_c_extra_cert.offset underdetermined_2x3_c_extra_A underdetermined_2x3_c_extra_B underdetermined_2x3_c_extra_c = false := by decide
+#guard underdetermined_2x3_c_extra_cert.check underdetermined_2x3_c_extra_A underdetermined_2x3_c_extra_B underdetermined_2x3_c_extra_c = false
+
 /-! ### Integrality
 
 `A = [[2]]`, `B = [[2]]`, `c = [1]`. Over the rationals `W = [[1]]`, `d = [1/2]`
@@ -165,6 +372,26 @@ theorem integrality_no_certificate (w : AffineCert) :
 #print axioms integral_affine_linear_row_long_rejected
 #print axioms integral_affine_linear_extra_row_rejected
 #print axioms integral_affine_c_extra_rejected
+#print axioms unimodular_3x3_checks
+#print axioms unimodular_3x3_sound
+#print axioms unimodular_3x3_concrete
+#print axioms unimodular_3x3_exists
+#print axioms unimodular_3x3_mutation_offset0_rejected
+#print axioms unimodular_3x3_linear_entry_rejected
+#print axioms unimodular_3x3_offset_long_rejected
+#print axioms unimodular_3x3_linear_row_long_rejected
+#print axioms unimodular_3x3_linear_extra_row_rejected
+#print axioms unimodular_3x3_c_extra_rejected
+#print axioms underdetermined_2x3_checks
+#print axioms underdetermined_2x3_sound
+#print axioms underdetermined_2x3_concrete
+#print axioms underdetermined_2x3_exists
+#print axioms underdetermined_2x3_mutation_offset0_rejected
+#print axioms underdetermined_2x3_linear_entry_rejected
+#print axioms underdetermined_2x3_offset_long_rejected
+#print axioms underdetermined_2x3_linear_row_long_rejected
+#print axioms underdetermined_2x3_linear_extra_row_rejected
+#print axioms underdetermined_2x3_c_extra_rejected
 #print axioms integrality_no_certificate
 
 end Forge.Checker.AffineCorpus

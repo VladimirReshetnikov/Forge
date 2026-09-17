@@ -45,7 +45,7 @@ Generated corpora are written only through `tools/lean_emit_guard.py`; see
 | Typed reification | **Met.** `eval_toPoly` proved. |
 | Cone replay in Lean | **Met.** |
 | Oracles through a bounded data protocol | **Met** for the cone family: size, time, output and decoding bounds, all tested. |
-| Affine/Farkas reconstruction | **Met, with a caveat**: one affine record in the bundle; Farkas has no prototype family and is tested on hand-written systems. |
+| Affine/Farkas reconstruction | **Met.** Three affine records and three Farkas refutations in the bundle, each exported with negative controls (`AffineCorpus.lean`, `FarkasCorpus.lean`); the corpus is still small. |
 | Recurrence reconstruction | **Met**: all 5 power sums and the one conserved invariant. |
 | Every end-to-end example checked | **Met.** |
 | Mutation rejection at the data boundary | **Met — after a hole was found and closed** (see below). |
@@ -231,7 +231,9 @@ without the fix it was meant to guard.
   its problem inside the certificate, so the certificate chose what it
   certified. Fixed: the problem now lives in `input`, and the decoder refuses a
   certificate that names an initial point or transition.
-- **Farkas** has no prototype family, and affine has one record.
+- **Affine and Farkas data are small**: three bundle records each. The Farkas
+  family used to have none; it now has a prototype search and checker
+  (`prototype/forge/witness/farkas.py`) and a generated corpus.
 
 ## Regenerating
 
@@ -241,6 +243,16 @@ python tools/export_lean_cone.py
 
 ```bash
 cd lean && LEAN_PATH=.lake/build/lib lean Forge/Checker/Corpus.lean
+```
+
+The affine and Farkas corpora are generated the same way:
+
+```bash
+python tools/export_lean_affine.py
+```
+
+```bash
+python tools/export_lean_farkas.py
 ```
 
 ## Head-to-head on problems Forge did not choose
